@@ -5,7 +5,7 @@
 /resources
 /releases
 /.vscode
-
+*/.vscode
 
 # Compiled Object files
 *.slo

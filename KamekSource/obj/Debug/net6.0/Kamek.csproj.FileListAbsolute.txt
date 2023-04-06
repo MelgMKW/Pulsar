@@ -1,0 +1,14 @@
+D:\Modding\Coding\Kamek\Kamek\bin\Debug\net6.0\Kamek.exe
+D:\Modding\Coding\Kamek\Kamek\bin\Debug\net6.0\Kamek.dll.config
+D:\Modding\Coding\Kamek\Kamek\bin\Debug\net6.0\Kamek.deps.json
+D:\Modding\Coding\Kamek\Kamek\bin\Debug\net6.0\Kamek.runtimeconfig.json
+D:\Modding\Coding\Kamek\Kamek\bin\Debug\net6.0\Kamek.dll
+D:\Modding\Coding\Kamek\Kamek\bin\Debug\net6.0\Kamek.pdb
+D:\Modding\Coding\Kamek\Kamek\obj\Debug\net6.0\Kamek.csproj.AssemblyReference.cache
+D:\Modding\Coding\Kamek\Kamek\obj\Debug\net6.0\Kamek.GeneratedMSBuildEditorConfig.editorconfig
+D:\Modding\Coding\Kamek\Kamek\obj\Debug\net6.0\Kamek.csproj.CoreCompileInputs.cache
+D:\Modding\Coding\Kamek\Kamek\obj\Debug\net6.0\Kamek.dll
+D:\Modding\Coding\Kamek\Kamek\obj\Debug\net6.0\refint\Kamek.dll
+D:\Modding\Coding\Kamek\Kamek\obj\Debug\net6.0\Kamek.pdb
+D:\Modding\Coding\Kamek\Kamek\obj\Debug\net6.0\Kamek.genruntimeconfig.cache
+D:\Modding\Coding\Kamek\Kamek\obj\Debug\net6.0\ref\Kamek.dll
