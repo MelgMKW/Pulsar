@@ -1,5 +1,11 @@
 # Prerequisites
 *.d
+/cw
+/testing
+/resources
+/releases
+/.vscode
+
 
 # Compiled Object files
 *.slo
@@ -10,6 +16,8 @@
 # Precompiled Headers
 *.gch
 *.pch
+*.editorconfig
+BuildTesting.bat
 
 # Compiled Dynamic libraries
 *.so
