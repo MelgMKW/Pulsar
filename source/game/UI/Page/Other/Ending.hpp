@@ -4,18 +4,18 @@
 #include <game/UI/Page/Page.hpp>
 
 //_sinit_ at 805cd91c
-class StaffRollControl : public LayoutUIControl {
+class StaffRollControl: public LayoutUIControl {
     //no ctor
     ~StaffRollControl() override; //805cae24 vtable 808b8558
     void InitSelf() override; //0x18 805caf30
     int GetRuntimeTypeInfo() const override; //0x28 805cd880
-    const char *GetClassName() const override; //0x2c 805caddc
+    const char* GetClassName() const override; //0x2c 805caddc
 }; //0x174
 
 class StaffRollText {
     StaffRollText(); //805cb074
     ~StaffRollText(); //805cb0d0
-    void Load(const char *ctrName, const char *variant); //805cae7c inlined
+    void Load(const char* ctrName, const char* variant); //805cae7c inlined
     void AppearAnimated();  //805caf68 slides from the outside inlined
     void DisappearAnimated(); //805cafa0 slides to the outside inlined
 
@@ -23,20 +23,20 @@ class StaffRollText {
     StaffRollControl developpers;
 }; //0x2e8
 
-class EndingMovieControl : public LayoutUIControl {
+class EndingMovieControl: public LayoutUIControl {
     EndingMovieControl(); //805cbb0c
     ~EndingMovieControl() override; //805cbb48 vtable 808b84a0
     void InitSelf() override; //0x18 805cbc98
     int GetRuntimeTypeInfo() const override; //0x28 805cd868
-    const char *GetClassName() const override; //0x2c 805cbafc
-    void Load(const char *variant); //805cbba0
+    const char* GetClassName() const override; //0x2c 805cbafc
+    void Load(const char* variant); //805cbba0
     void FadeIn(); //805cbcd0
     void FadeOut(); //805cbd08
     bool IsCurrentAnimation1Or2(); //805cbd40 idk
 }; //0x174
 
 namespace Pages {
-class StaffRoll : public Page { //ID 0X3d
+class StaffRoll: public Page { //ID 0X3d
     StaffRoll(); //805cafd8
     ~StaffRoll() override; //805cb144 vtable 808b84dc
     void OnInit() override; //0x28 805cb1c4
@@ -51,7 +51,7 @@ class StaffRoll : public Page { //ID 0X3d
     PtmfHolder_0A<StaffRoll, void> onClickHandler; //0x44
     PageManipulatorManager manipulatorManager; //0x58
     StaffRollText staffRolls[3]; //0x19c center, top and bottom
-    u32 *bmgIds; //a54
+    u32* bmgIds; //a54
     u32 rollCount; //a58
     u32 maxDuration; //0x5c
     u32 curRollId; //0xa60
@@ -64,7 +64,7 @@ size_assert(StaffRoll, 0xa68);
 
 
 
-class EndingMovie : public Page { //ID 0x3e
+class EndingMovie: public Page { //ID 0x3e
     EndingMovie(); //805cbd88
     ~EndingMovie() override; //805cbe24 vtable 808b8424
     void OnInit() override; //0x28 805cbea4 

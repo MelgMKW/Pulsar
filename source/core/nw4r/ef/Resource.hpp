@@ -24,7 +24,7 @@ struct TextureProject { //BREFT
 
 class Resource {
 public:
-    EffectProject *Add(u8 *data);
+    EffectProject* Add(u8* data);
     ut::List BREFFList;
     u32 emitterCount;
     ut::List BREFTList;

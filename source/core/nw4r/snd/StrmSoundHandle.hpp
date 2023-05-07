@@ -5,7 +5,7 @@
 
 namespace nw4r {
 namespace snd {
-class StrmSoundHandle : SoundHandle {
+class StrmSoundHandle: SoundHandle {
     //basic Sound becomes strmsound obviously
 };  //total size 0x4
 }//namespace snd

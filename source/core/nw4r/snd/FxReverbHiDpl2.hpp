@@ -8,7 +8,7 @@ namespace snd {
 class FxReverbHiDpl2 {
     FxReverbHiDpl2(); //80095120
     virtual ~FxReverbHiDpl2(); //800869a0 vtable 80274450
-    bool SetParam(const detail::FxReverbHiParam &param); //80095420
+    bool SetParam(const detail::FxReverbHiParam& param); //80095420
     ut::LinkListNode fxLink; //0x4
     bool isActive; //0xc
     u8 padding[3];

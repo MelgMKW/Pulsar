@@ -42,7 +42,7 @@ struct ResAnmTexPatData { //https://wiki.tockdom.com/wiki/PAT0_(File_Format)
     //data
 };
 
-class ResAnmTexPat : public ResCommon<ResAnmTexPatData> {};
+class ResAnmTexPat: public ResCommon<ResAnmTexPatData> {};
 
 }//namespace g3d 
 }//namespace nw4r

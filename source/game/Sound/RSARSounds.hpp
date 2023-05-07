@@ -18,10 +18,10 @@ so stuff like the position tracker, the lap transition sound, the roulette spinn
 
 class RSARSoundsPlayer {
 public:
-    static RSARSoundsPlayer *GetStaticInstance(u32 type); //80713e90 1 = menu
-    static RSARSoundsPlayer *DestroyStaticInstance(); //807140b4
-    static RSARSoundsPlayer *sInstance; //809c2850
-    static void PlaySoundById(u32 soundId, u32 r4, Page *page); //807146a8 page unused
+    static RSARSoundsPlayer* GetStaticInstance(u32 type); //80713e90 1 = menu
+    static RSARSoundsPlayer* DestroyStaticInstance(); //807140b4
+    static RSARSoundsPlayer* sInstance; //809c2850
+    static void PlaySoundById(u32 soundId, u32 r4, Page* page); //807146a8 page unused
     virtual void Close(); //0x8 8071412c vtable 808c90e8
     virtual void OnDeactivate(); //0xc 80714184 sets state to 2, and child classes check variables like if the player is a ghost
     virtual void Stop(); //0x10 80714190
@@ -43,7 +43,7 @@ public:
 };//0x18
 size_assert(RSARSoundsPlayer, 0x18);
 
-class MenuRSARSoundsPlayer : public RSARSoundsPlayer {
+class MenuRSARSoundsPlayer: public RSARSoundsPlayer {
 public:
     //ctor? 80715a98 inlined
     void Close() override; //0x8 80715b7c vtable 808c90e8
@@ -54,7 +54,7 @@ public:
     void func_0x28() override; //80715c98
 };
 
-class RaceRSARSoundsPlayer : public RSARSoundsPlayer {
+class RaceRSARSoundsPlayer: public RSARSoundsPlayer {
 public:
     void Close() override; //0x8 80716404 vtable 808c9088
     void OnDeactivate() override; //0xc 80715e24

@@ -2,7 +2,8 @@
 #define _OSCONTEXT_
 #include <types.hpp>
 
-struct OSContext {
+namespace OS {
+struct Context {
     u32 gpr[32]; //from 0 to c8
     u32 cr;
     u32 lr; //0x84
@@ -18,13 +19,15 @@ struct OSContext {
     u32 unknown_0x1C4;
     f64 pairedSinglesRegisters[32];
 }; //total size 0x2C8
+size_assert(Context, 0x2c8);
 
 extern "C" {
-    void OSSetCurrentContext(OSContext *context);
-    OSContext *OSGetCurrentContext(); //801a1ecc
-    u32 OSSaveContext(OSContext *context);
-    void OSLoadContext(OSContext *context);
-    void OSClearContext(OSContext *context);
-    void OSInitContext(OSContext *context, u32 pc, u32 sp);
+    void SetCurrentContext(Context* context);
+    Context* GetCurrentContext(); //801a1ecc
+    u32 SaveContext(Context* context);
+    void LoadContext(Context* context);
+    void ClearContext(Context* context);
+    void InitContext(Context* context, u32 pc, u32 sp);
 }
+} //namespace OS
 #endif

@@ -139,14 +139,14 @@ struct Pane { //https://wiki.tockdom.com/wiki/BRLYT_(File_Format)#pan1
     float height;
 }; //0x4C
 
-struct Picture : Pane { //pic1
+struct Picture: Pane { //pic1
     u32 vertexColours[4]; //top left, top right, bottom left, bottom right
     u16 materialId;
     u8 texCoordNum; //number of uv sets
     u8 padding;
 };
 
-struct TextBox : Pane { //txt1
+struct TextBox: Pane { //txt1
     u16 stringSize;
     u16 maxStringSize;
     u16 materialId;
@@ -162,7 +162,7 @@ struct TextBox : Pane { //txt1
     float lineSpace;
 };
 
-struct Window : Pane { //wnd1
+struct Window: Pane { //wnd1
     float leftPos;
     float rightPos;
     float topPos;
@@ -184,7 +184,7 @@ struct WindowFrame {
     u8 padding;
 };
 
-struct Bounding : Pane {}; //bnd1
+struct Bounding: Pane {}; //bnd1
 
 struct Group {
     DataBlockHeader blockHeader; //grp1

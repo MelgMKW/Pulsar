@@ -9,9 +9,9 @@ namespace lyt {
 class TexMap {
 public:
     void ReplaceImage(TPLPalettePtr pal, u32 id = 0); //80082550
-    void Set(const GXTexObj &texObj); //80082400
-    void *image; //0
-    void *palette; //4
+    void Set(const GXTexObj& texObj); //80082400
+    void* image; //0
+    void* palette; //4
     u16   width; //8
     u16   height;
     float   minLOD; //c

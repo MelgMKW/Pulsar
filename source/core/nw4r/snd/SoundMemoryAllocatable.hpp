@@ -9,7 +9,7 @@ namespace snd {
 class SoundMemoryAllocatable {
 public:
     virtual ~SoundMemoryAllocatable() {}
-    virtual void *Alloc(u32 size) = 0;
+    virtual void* Alloc(u32 size) = 0;
 };
 }//namespace snd
 }//namespace nw4r

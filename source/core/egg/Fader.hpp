@@ -11,7 +11,7 @@ enum EStatus {
     CAN_FADE_IN = 0, //unsure
     CAN_FADE_OUT = 1, //is currently doing something
     FADE_IN = 2,
-    FADE_OUT = 3,
+    FADE_OUT = 3
 };
 }
 

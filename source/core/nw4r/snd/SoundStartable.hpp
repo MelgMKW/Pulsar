@@ -28,19 +28,19 @@ public:
         START_ERR_UNKNOWN = 255
     };
     virtual ~SoundStartable() {};
-    virtual StartResult detail_SetupSound(SoundHandle *handle, u32 soundId, bool holdFlag, SoundArchive::SoundInfo *soundInfo) = 0;
-    virtual u32 ConvertLabelStringToSoundId(const char *label) = 0;
+    virtual StartResult detail_SetupSound(SoundHandle* handle, u32 soundId, bool holdFlag, SoundArchive::SoundInfo* soundInfo) = 0;
+    virtual u32 ConvertLabelStringToSoundId(const char* label) = 0;
 
     //Plays the sound with the specified sound number
-    StartResult detail_StartSound(SoundHandle *handle, u32 soundId, const StartInfo *startInfo); //800a3e80
-    StartResult detail_StartSound(SoundHandle *handle, const char *soundName, const StartInfo *startInfo); //800a3ee0
+    StartResult detail_StartSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo); //800a3e80
+    StartResult detail_StartSound(SoundHandle* handle, const char* soundName, const StartInfo* startInfo); //800a3ee0
 
     //Plays the sound with the specified sound number for 1 frame (then it auto stops)
-    StartResult detail_HoldSound(SoundHandle *handle, u32 soundId, const StartInfo *startInfo); //800a3f90
-    StartResult detail_HoldSound(SoundHandle *handle, const char *soundName, const StartInfo *startInfo); //800a4040
+    StartResult detail_HoldSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo); //800a3f90
+    StartResult detail_HoldSound(SoundHandle* handle, const char* soundName, const StartInfo* startInfo); //800a4040
 
     //Plays the sound with the specified sound number
-    StartResult detail_PrepareSound(SoundHandle *handle, u32 soundId, const StartInfo *startInfo); //800a4130
+    StartResult detail_PrepareSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo); //800a4130
 
 }; //total size 0x4
 size_assert(SoundStartable, 0x4);

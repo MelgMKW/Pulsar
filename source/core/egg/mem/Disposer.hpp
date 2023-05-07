@@ -12,17 +12,17 @@ protected:
     virtual ~Disposer(); //8021a144 vtable 802a2b48
 
 private:
-    Heap *heap;
+    Heap* heap;
     nw4r::ut::LinkListNode link; //the heap traverses the link list on destruction and calls all the dtors
 }; // Total size 0x10
 
 template<class T>
-class TDisposer : public Disposer {
+class TDisposer: public Disposer {
 public:
     //code for the dtor
     ~TDisposer() override;
     /*code for it
-        T::sInstance = NULL;
+        T::sInstance = nullptr;
         delete(t);
         Disposer::~Disposer();
     */

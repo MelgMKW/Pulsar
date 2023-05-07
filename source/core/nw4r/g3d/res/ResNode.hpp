@@ -47,10 +47,10 @@ struct ResNodeData { //BONES https://wiki.tockdom.com/wiki/MDL0_(File_Format)#Se
     math::MTX34 invModelMtx;
 }; //0xD0
 
-class ResNode : public ResCommon<ResNodeData> {
+class ResNode: public ResCommon<ResNodeData> {
 public:
-    void PatchChrAnmResult(ChrAnmResult *result) const; //80052af0
-    void CalcChrAnmResult(ChrAnmResult *result) const; //80052c90
+    void PatchChrAnmResult(ChrAnmResult* result) const; //80052af0
+    void CalcChrAnmResult(ChrAnmResult* result) const; //80052c90
     void SetScale(f32 x, f32 y, f32 z); //80052e00
     void SetTranslate(f32 x, f32 y, f32 z); //80052eb0
     void SetRotate(f32 x, f32 y, f32 z); //80052f40

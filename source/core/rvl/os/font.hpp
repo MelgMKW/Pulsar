@@ -2,7 +2,8 @@
 #define _OS_FONT_
 #include <types.hpp>
 
-struct OSFontHeader {
+namespace OS {
+struct FontHeader {
     u16 fontType;
     u16 firstChar;
     u16 lastChar;
@@ -24,5 +25,6 @@ struct OSFontHeader {
     u32 sheetFullSize;
     u8 unknown[4];
 };
+} //namespace OS
 
 #endif

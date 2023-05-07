@@ -16,9 +16,8 @@ enum AnmType {
     ANMTYPE_CLR = 0x1,
     ANMTYPE_TEXSRT = 0x2,
     ANMTYPE_TEXPAT = 0x3,
-    ANMTYPE_SHP = 0x4,
+    ANMTYPE_SHP = 0x4
 };
-
 using namespace nw4r;
 
 class AnmHolder;
@@ -26,8 +25,8 @@ class AnmHolder;
 class AnmBlendHolder {
 public:
     virtual ~AnmBlendHolder(); //0x8
-    virtual void AttachNew(AnmHolder *first, AnmHolder *second, bool changeUpdateRate) = 0; //0xc
-    virtual void Attach(AnmHolder *obj, int idx) = 0; //0x10
+    virtual void AttachNew(AnmHolder* first, AnmHolder* second, bool changeUpdateRate) = 0; //0xc
+    virtual void Attach(AnmHolder* obj, int idx) = 0; //0x10
     virtual bool ShouldDetachFromParent() = 0; //0x14
     virtual void DetachAll() = 0; //0x18
     virtual void vf_0x1c() = 0; //0x1c
@@ -35,14 +34,14 @@ public:
     virtual float GetWeight(int idx) const = 0; //0x24
     AnmType type;
     float unknown_0x8;
-    g3d::AnmObj *anmBlend; //0xC AnmObjChrBlend, AnmObjTexPatOverride, etc..
+    g3d::AnmObj* anmBlend; //0xC AnmObjChrBlend, AnmObjTexPatOverride, etc..
     ut::Link link;
 };
 
-class AnmTexPatOverrideHolder : public AnmBlendHolder {
+class AnmTexPatOverrideHolder: public AnmBlendHolder {
     ~AnmTexPatOverrideHolder() override; //80558794 vtable 808b4368
-    void AttachNew(AnmHolder *first, AnmHolder *second, bool changeUpdateRate) override; //8055886c detaches old
-    void Attach(AnmHolder *obj, int idx) override; //80558ab0
+    void AttachNew(AnmHolder* first, AnmHolder* second, bool changeUpdateRate) override; //8055886c detaches old
+    void Attach(AnmHolder* obj, int idx) override; //80558ab0
     bool ShouldDetachFromParent() override; //80558d00 potential better name, ResetAnm?
     void DetachAll() override; //80558ecc
     void vf_0x1c() override; //80558bb0
@@ -50,10 +49,10 @@ class AnmTexPatOverrideHolder : public AnmBlendHolder {
     float GetWeight(int idx) const override; //8055881c
 }; //0x18
 
-class AnmChrBlendHolder : public AnmBlendHolder {
+class AnmChrBlendHolder: public AnmBlendHolder {
     ~AnmChrBlendHolder() override; //80559eec vtable 808b4458
-    void AttachNew(AnmHolder *first, AnmHolder *second, bool changeUpdateRate) override; //8055a07c detaches old
-    void Attach(AnmHolder *obj, int idx) override; //8055a2c0
+    void AttachNew(AnmHolder* first, AnmHolder* second, bool changeUpdateRate) override; //8055a07c detaches old
+    void Attach(AnmHolder* obj, int idx) override; //8055a2c0
     bool ShouldDetachFromParent() override; //8055a510 potential better name, ResetAnm?
     void DetachAll() override; //8055a6dc
     void vf_0x1c() override; //8055a3c0
@@ -73,12 +72,12 @@ public:
     virtual u32 IsLooped() const; //0x20 80557b20
     u32 idx;
     u32 exists; //-1 = empty anm holder
-    g3d::AnmObj *anmObjRes; //0xC AnmObjChrRes, AnmObjTexPatRes etc...
+    g3d::AnmObj* anmObjRes; //0xC AnmObjChrRes, AnmObjTexPatRes etc...
     ut::Link link; //0x10
-    snd::detail::AnimSoundFile *rawBRASD; //0x18 NULL for all but chr
+    snd::detail::AnimSoundFile* rawBRASD; //0x18 nullptr for all but chr
 }; //0x1c
 
-class AnmChrHolder : public AnmHolder {
+class AnmChrHolder: public AnmHolder {
 public:
     //ctor inlined
     float GetFrameCount() const override; //8055ae90 vtable 808b4430
@@ -88,10 +87,10 @@ public:
     float GetUpdateRate() const override; //8055af78
     void SetUpdateRate(float rate) override; //8055af8c
     u32 IsLooped() const override; //8055af14
-    g3d::AnmObj *anmObjRes2; //0x1C
+    g3d::AnmObj* anmObjRes2; //0x1C
 };
 
-class AnmTexPatHolder : public AnmHolder {
+class AnmTexPatHolder: public AnmHolder {
 public:
     //ctor inlined
     float GetFrameCount() const override; //8055a9a4 vtable 808b4340
@@ -101,7 +100,7 @@ public:
     float GetUpdateRate() const override; //8055aa8c
     void SetUpdateRate(float rate) override; //8055aaa0
     u32 IsLooped() const override; //8055aa28
-    g3d::AnmObj *anmObjRes2; //0x1C
+    g3d::AnmObj* anmObjRes2; //0x1C
 };
 
 #endif

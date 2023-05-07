@@ -1,13 +1,15 @@
-#include <game/System/Archive.hpp>
+#include <game/Archive/ArchiveRoot.hpp>
 #include <game/Race/RaceData.hpp>
 #include <game/UI/SectionMgr/SectionMgr.hpp>
 #include <game/UI/Page/Other/GhostManager.hpp>
 #include <game/UI/Page/Menu/CupSelect.hpp>
 #include <game/UI/Page/Menu/CourseSelect.hpp>
 #include <game/UI/Page/Other/Votes.hpp>
-#include <Pulsar.hpp>
+#include <SlotExpansion/CupsDef.hpp>
 
+#include <game/GlobalFunctions.hpp>
 
+namespace Pulsar {
 
 //TrackSlot
 //Patches course buttons IDs so that it goes vertical than horizontal rather than the opposite
@@ -18,10 +20,10 @@ kmWrite32(0x8084182c, 0x5400103A);
 kmWrite32(0x80841830, 0x60000000);
 
 //CourseSelect::LoadNextPage patch mentioned above
-int UpdateSlot(Pages::CourseSelect *page, CtrlMenuCourseSelectCourse *control, PushButton *button) {
-    Pulsar *pulsar = Pulsar::sInstance;
-    pulsar->SaveSelectedCourse(button);
-    return pulsar->GetCorrectTrackSlot();
+int UpdateSlot(Pages::CourseSelect* page, CtrlMenuCourseSelectCourse* control, PushButton* button) {
+    CupsDef* system = CupsDef::sInstance;
+    system->SaveSelectedCourse(*button);
+    return system->GetCorrectTrackSlot();
 }
 
 asm void UpdateSlotWrapper() {
@@ -36,37 +38,35 @@ asm void UpdateSlotWrapper() {
 }
 kmCall(0x80840858, UpdateSlotWrapper);
 
-void SetVotedTrack(Pages::Vote *vote) {
-    vote->SetVotedCourseId(Pulsar::sInstance->selectedCourse);
+void SetVotedTrack(Pages::Vote* vote) { //cast because we actually want to transmit a pulsarId
+    vote->SetVotedCourseId(static_cast<CourseId>(CupsDef::sInstance->selectedCourse));
 }
 kmCall(0x8084099c, SetVotedTrack);
 
 //CtrlMenuCupSelectCup::OnCupButtonClick patch that updates lastSelectCup so that the game remembers it in btw races
-void UpdateLastSelCup(Pages::CupSelect *page, CtrlMenuCupSelectCup *cups, PushButton *button, u32 hudSlotId) {
-    Pulsar *pulsar = Pulsar::sInstance;
-    if (button->buttonId != pulsar->lastSelectedCup) {
-        pulsar->lastSelectedCup = button->buttonId;
-        pulsar->selectedCourse = (CourseId)(pulsar->lastSelectedCup * 4);
+void UpdateLastSelCup(Pages::CupSelect* page, CtrlMenuCupSelectCup& cups, PushButton& button, u32 hudSlotId) {
+    CupsDef* system = CupsDef::sInstance;
+    if(button.buttonId != system->lastSelectedCup) {
+        system->lastSelectedCup = static_cast<PulsarCupId>(button.buttonId);
+        system->selectedCourse = CupsDef::ConvertTrack_PulsarCupToTrack(system->lastSelectedCup);
     }
-    PushButton **buttons = (PushButton **)cups->childrenGroup.controlArray;
-    for (int i = 0; i < 8; i++) if (buttons[i] == button) pulsar->lastSelectedButtonIdx = i;
+    PushButton** buttons = reinterpret_cast<PushButton**>(cups.childrenGroup.controlArray);
+    for(int i = 0; i < 8; ++i) if(buttons[i] == &button) system->lastSelectedCupButtonIdx = i;
     page->LoadNextPage(cups, button, hudSlotId);
-    RaceData::sInstance->menusScenario.settings.cupId = pulsar->lastSelectedCup % 8;
+    RaceData::sInstance->menusScenario.settings.cupId = system->lastSelectedCup % 8;
 }
 kmCall(0x807e5da8, UpdateLastSelCup);
 
 
 
 //Loads correct file
-void FormatTrackPath(char *path, u32 length, const char *format, const char *fileName) {
-    Pulsar *pulsar = Pulsar::sInstance;
-    GameMode gamemode = RaceData::sInstance->menusScenario.settings.gamemode;
-    CourseId pulsarId = pulsar->winningCourse; //fileName already set through racedata's courseId, which has been set to realId before
-    if (gamemode == MODE_BATTLE || gamemode == MODE_PUBLIC_BATTLE || gamemode == MODE_PRIVATE_BATTLE
-        || gamemode == MODE_AWARD || pulsar->IsReg(pulsarId)) snprintf(path, 0x80, format, fileName);
+void FormatTrackPath(char* path, u32 length, const char* format, const char* fileName) {
+    const CupsDef* system = CupsDef::sInstance;
+    const PulsarId pulsarId = system->winningCourse; //fileName already set through racedata's courseId, which has been set to realId before
+    if(IsBattle() || CupsDef::IsReg(pulsarId)) snprintf(path, 0x80, format, fileName);
     else {
-        CourseId realId = pulsar->ConvertTrack_PulsarIdToRealId(pulsarId);
-        if (pulsar->hasOddCups && realId >= (pulsar->GetCtsTrackCount() - 4)) realId = (CourseId)(realId % 4);
+        CourseId realId = CupsDef::ConvertTrack_PulsarIdToRealId(pulsarId);
+        if(system->hasOddCups && realId >= (system->GetCtsTrackCount() - 4)) realId = static_cast<CourseId>(realId % 4);
         snprintf(path, 0x80, "Race/Course/%d", realId);
     }
 }
@@ -76,34 +76,18 @@ kmCall(0x80541bc4, FormatTrackPath);
 kmWrite32(0x80531fbc, 0x38800000); //fix incorrect courseId array read
 
 
-void FixGrandPrix(Pages::CupSelect *page, SectionId nextSection, PushButton *button) {
-    Pulsar::sInstance->winningCourse = (CourseId)(button->buttonId * 4);
+void FixGrandPrix(Pages::CupSelect* page, SectionId nextSection, PushButton& button) {
+    CupsDef::sInstance->winningCourse = CupsDef::ConvertTrack_PulsarCupToTrack(static_cast<PulsarCupId>(button.buttonId));
     page->ChangeSectionById(SECTION_VS_RACE_PANORAMA, button);
 };
 kmCall(0x80841854, FixGrandPrix);
 
-/*
-using Pulsar::extSlotToTrackId;
-using Pulsar::winningCourse;
-asm void GetCorrectSlotArray(){
-   ASM(
-      lis r5, winningCourse@ha;
-      lwz r6, winningCourse@l(r5);
-      add r6, r6, r4;
-      stw r6, winningCourse@l(r5);
-      lis r5, extSlotToTrackId@h;
-      ori r5, r5, extSlotToTrackId@l;
-   )
-};
-kmBranch(0x8052f210, GetCorrectSlotArray);
-kmPatchExitPoint(GetCorrectSlotArray, 0x8052f214);
-*/
 
 //Fixes GP since it usually uses racedata's courseId which only holds the slot
-RacedataScenario *UseCorrectCourse(RacedataScenario *scenario) {
-    Pulsar *pulsar = Pulsar::sInstance;
-    pulsar->winningCourse = (CourseId)(pulsar->lastSelectedCup * 4 + scenario->settings.raceNumber);
-    scenario->settings.courseId = pulsar->GetCorrectTrackSlot();
+RacedataScenario* UseCorrectCourse(RacedataScenario* scenario) {
+    CupsDef* system = CupsDef::sInstance;
+    system->winningCourse = CupsDef::ConvertTrack_PulsarCupToTrack(system->lastSelectedCup) + static_cast<u32>(scenario->settings.raceNumber);
+    scenario->settings.courseId = system->GetCorrectTrackSlot();
     return scenario;
 };
 kmWrite32(0x8052f220, 0x60000000);
@@ -124,48 +108,49 @@ kmBranch(0x8052f224, UseCorrectCourseWrapper);
 kmPatchExitPoint(UseCorrectCourseWrapper, 0x8052f228);
 
 //Badly written, but does the job even though it can in theory hang forever, as unlikely as it is
-void VSRaceRandomFix(SectionMgr98 *m98) { //properly randomizes tracks and sets the first one
+void VSRaceRandomFix(SectionParams* m98) { //properly randomizes tracks and sets the first one
     m98->vsRaceLimit = 32;
-    Pulsar *pulsar = Pulsar::sInstance;
+    CupsDef* system = CupsDef::sInstance;
     Random random;
-    CourseId id;
+    PulsarId id;
     bool isRepeat;
-    for (int i = 0; i < 32; i++) {
+    for(int i = 0; i < 32; ++i) {
         do {
-            id = pulsar->RandomizeTrack(&random);
+            id = system->RandomizeTrack(random);
             isRepeat = false;
-            for (int j = 0; j < i; j++) {
-                if (m98->vsTracks[j] == id) {
+            for(int j = 0; j < i; ++j) {
+                if(m98->vsTracks[j] == id) {
                     isRepeat = true;
                     break;
                 }
             }
-        } while (isRepeat);
-        m98->vsTracks[i] = id;
+        } while(isRepeat);
+        m98->vsTracks[i] = static_cast<CourseId>(id);
     }
 
-    pulsar->winningCourse = m98->vsTracks[0];
-    RaceData::sInstance->menusScenario.settings.courseId = pulsar->GetCorrectTrackSlot();
+    system->winningCourse = static_cast<PulsarId>(m98->vsTracks[0]);
+    RaceData::sInstance->menusScenario.settings.courseId = system->GetCorrectTrackSlot();
 };
 kmBranch(0x805e32ec, VSRaceRandomFix);
 kmWrite32(0x8084e5e4, 0x60000000); //nop racedata courseId store since it's done in the function
 
 //Same as GP, racedata only ever has courseId
-void VSRaceOrderedFix(SectionMgr98 *m98) {
+void VSRaceOrderedFix(SectionParams* m98) {
     m98->vsRaceLimit = 32;
-    Pulsar *pulsar = Pulsar::sInstance;
-    CourseId initial = pulsar->winningCourse;
-    u32 cupId = initial / 4;
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 4; j++) m98->vsTracks[i * 4 + j] = (CourseId)(cupId * 4 + j);
-        cupId = pulsar->GetNextCupId(cupId, 1);
+    const CupsDef* system = CupsDef::sInstance;
+    const PulsarId initial = system->winningCourse;
+    PulsarCupId cupId = CupsDef::ConvertCup_PulsarTrackToCup(initial);
+    for(int i = 0; i < 8; ++i) {
+        for(int j = 0; j < 4; ++j) m98->vsTracks[i * 4 + j] = static_cast<CourseId>(cupId * 4 + j);
+        cupId = system->GetNextCupId(cupId, 1);
     }
 };
 kmCall(0x80840a24, VSRaceOrderedFix);
 
-CourseId VSNextTrackFix(CourseId id) {//properly sets the next track
-    Pulsar *pulsar = Pulsar::sInstance;
-    pulsar->winningCourse = id;
-    return pulsar->GetCorrectTrackSlot();
+CourseId VSNextTrackFix(PulsarId pulsarId) {//properly sets the next track
+    CupsDef* system = CupsDef::sInstance;
+    system->winningCourse = pulsarId;
+    return system->GetCorrectTrackSlot();
 }
 kmBranch(0x808606cc, VSNextTrackFix);
+}//namespace Pulsar

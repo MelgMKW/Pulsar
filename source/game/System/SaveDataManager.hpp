@@ -3,6 +3,7 @@
 #include <kamek.hpp>
 #include <core/egg/mem/Disposer.hpp>
 #include <core/rvl/DWC/DWC.hpp>
+#include <game/UI/SectionMgr/SectionPad.hpp>
 #include <game/System/Timer.hpp>
 #include <game/System/identifiers.hpp>
 #include <game/System/Ghost.hpp>
@@ -20,7 +21,7 @@ struct TimeEntry {
     Timer timer; //0x4C
     CharacterId character; //0x58
     KartId kart;
-    u32 controllerType;
+    ControllerType controllerType;
 }; //total size 0x64;
 size_assert(TimeEntry, 0x64);
 
@@ -66,8 +67,8 @@ size_assert(RKSYS, 0x28000);
 class LicenseManager {
 public:
     LicenseManager(); //8054400c
-    TimeEntry *GetTimeEntry(u32 index, CourseId id); //80548e30
-    void StoreTimeEntry(TimeEntry *entry, u32 index, CourseId id); //80548e90
+    TimeEntry* GetTimeEntry(u32 index, CourseId id); //80548e30
+    void StoreTimeEntry(const TimeEntry& entry, u32 index, CourseId id); //80548e90
     wchar_t miiName[10];
     u8 unknown_0x14[2];
     u8 miiAvatarID1;
@@ -87,17 +88,17 @@ size_assert(LicenseManager, 0x93f0);
 
 class SaveDataManager {
 public:
-    static SaveDataManager *sInstance; //809bd748
+    static SaveDataManager* sInstance; //809bd748
     void SaveLicenses(); //80544c2c
-    bool CheckLicenseMagic(u8 licenseId); //80544d10
+    bool CheckLicenseMagic(u8 licenseId) const; //80544d10
     EGG::TDisposer<SaveDataManager> disposer; //80543d18 vtable 808b3c98
     virtual ~SaveDataManager(); //8054460c vtable 808b3c80
-    RKSYS *rksysRaw; //0x14
-    RKG *rkgBuffer;
+    RKSYS* rksysRaw; //0x14
+    RKG* rkgBuffer;
     u8 unknown_0x1C[0x36 - 0x1C];
     u16 curLicenseId;
     LicenseManager licenses[4];
     u8 unknown_0x24ff8[0x25004 - 0x24FF8]; //raw at 244ffc too
-    u32 error;
+    u32 error; //0x25004
 }; //total size 0x25008
 #endif

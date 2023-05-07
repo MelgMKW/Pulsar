@@ -1,9 +1,8 @@
 #include <kamek.hpp>
-#include <game/Network/RKNetSelect.hpp>
+#include <game/RKNet/Select.hpp>
 
-#define SELECTTRACKOFFSET 0x44
-
-namespace PulsarSELECT {
+namespace Pulsar {
+namespace Network {
 
 struct PlayerData { //+0x18 to all offsets
     u16 pulCourseVote; //0x0 swapped with rank
@@ -11,11 +10,12 @@ struct PlayerData { //+0x18 to all offsets
     u8 character; //0x4
     u8 kart; //0x5
     u8 prevRaceRank; //0x6 swapped with coursevote
-    u8 starRank; //0x8
+    u8 starRank; //0x8 1st bit of 2nd p is also used to specify customPacket
 }; //total size 0x8
 size_assert(PlayerData, 0x8);
 
-struct Packet {
+
+struct CustomSELECTPacket {
     u64 timeSender;
     u64 timeReceived;
     PlayerData pulSELPlayerData[2]; //0x10
@@ -24,20 +24,20 @@ struct Packet {
     u32 teams : 24; //0x25 idk how to do an array of 2 bits variables
     u8 playerIdToAid[12]; //0x28
     u16 pulWinningCourse; //0x34
-    //u8 phase; //0x35, usually 
-    u8 phase : 4; //0x36 0 prepare, 1 wait, 2 lottery merged with voterAid
-    u8 winningVoterAid : 4; //0x36
-    u8 engineClass; //0 one, 100, 150, mirror
+    u8 winningVoterAid; //0x36
+    u8 phase : 4; //0x37 0 prepare, 1 wait, 2 lottery merged with voterAid
+    u8 engineClass : 4; //0x37 
 }; //total size 0x38
-size_assert(Packet, 0x38);
+size_assert(CustomSELECTPacket, 0x38);
 
-class Handler { //Exists just for functions purposes
+
+class CustomSELECTHandler { //Exists just for functions purposes
 public:
-    static Handler *sInstance; //0x809c2100   
-    OnlineMode mode; //from page 0x90 OnInit SectionId Switch
+    static CustomSELECTHandler* sInstance; //0x809c2100   
+    RKNet::OnlineMode mode; //from page 0x90 OnInit SectionId Switch
     u32 unknown_0x4;
-    Packet toSendPacket; //0x8
-    Packet receivedPackets[12]; //0x40
+    CustomSELECTPacket toSendPacket; //0x8
+    CustomSELECTPacket receivedPackets[12]; //0x40
     u8 lastSentToAid; //0x2e0
     u8 unknown_0x2e4[7];
     u64 lastSentTime; //0x2e8
@@ -52,7 +52,8 @@ public:
     u8 unknown_0x3F4[4];
 }; //total size 0x3F8
 
-}//namespace PulsarSELECT
+}//namespace Network
+}//namespace Pulsar
 
 
 
@@ -62,15 +63,15 @@ public:
 asm void StorePhase##addr(){ \
     ASM( \
         nofralloc;\
-        lbz r12, off + 1 (r##srcReg);\
+        lbz r12, off + 2 (r##srcReg);\
         rlwimi r12, r##destReg, 4, 24, 27;\
-        stb r12, off + 1 (r##srcReg);\
+        stb r12, off + 2 (r##srcReg);\
         blr;\
     )};\
 kmCall(##addr, StorePhase##addr);
 
-#define StoreWinningAid(addr, off, destReg, srcReg) \
-asm void StoreWinningAid##addr(){ \
+#define StoreEngine(addr, off, destReg, srcReg) \
+asm void StoreEngine##addr(){ \
     ASM( \
         nofralloc;\
         lbz r12, off (r##srcReg);\
@@ -78,25 +79,25 @@ asm void StoreWinningAid##addr(){ \
         stb r12, off (r##srcReg);\
         blr;\
     )};\
-kmCall(##addr, StoreWinningAid##addr);
+kmCall(##addr, StoreEngine##addr);
 
 #define GetPhase(addr, off, destReg, srcReg) \
 asm void GetPhase##addr(){ \
     ASM( \
         nofralloc;\
-        lbz r##destReg, off + 1 (r##srcReg);\
+        lbz r##destReg, off + 2 (r##srcReg);\
         rlwinm r##destReg, r##destReg, 28, 28, 31;\
         blr;\
     )};\
 kmBranch(##addr, GetPhase##addr);\
 kmPatchExitPoint(GetPhase##addr, ##addr+4);
 
-#define GetWinningAid(addr, off, destReg, srcReg) \
-asm void GetWinningAid##addr(){ \
+#define GetEngine(addr, off, destReg, srcReg) \
+asm void GetEngine##addr(){ \
     ASM( \
         nofralloc;\
         lbz r##destReg, off (r##srcReg);\
         rlwinm r##destReg, r##destReg, 0, 28, 31;\
         blr;\
     )};\
-kmCall(##addr, GetWinningAid##addr);
+kmCall(##addr, GetEngine##addr);

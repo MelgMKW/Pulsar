@@ -7,7 +7,7 @@ namespace db {
 namespace detail {
 
 struct ConsoleHead {
-    void *textBuffer;
+    void* textBuffer;
     u16 width; //4
     u16 height; //0x6
     u16 priority; //0x8
@@ -22,8 +22,8 @@ struct ConsoleHead {
     u16 viewLines; //0x20
     bool isVisible; //0x22 
     u8 padding;
-    void *writer; //0x24
-    ConsoleHead *next; //0x28
+    void* writer; //0x24
+    ConsoleHead* next; //0x28
 };
 
 }//namespace detail

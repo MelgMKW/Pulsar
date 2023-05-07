@@ -30,7 +30,7 @@ struct ResAnmShpData { //https://wiki.tockdom.com/wiki/SHP0_(File_Format)
     //data
 };
 
-class ResAnmShp : public ResCommon<ResAnmShpData> {};
+class ResAnmShp: public ResCommon<ResAnmShpData> {};
 
 }//namespace g3d   
 }//namespace nw4r

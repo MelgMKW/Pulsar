@@ -3,7 +3,7 @@
 #include <kamek.hpp>
 
 struct BMGHeader { //https://wiki.tockdom.com/wiki/BMG_(File_Format)
-    char magic[8]; //MESGbmg1
+    u64 magic; //MESGbmg1
     u32 fileLength; //0x8
     u32 dataBlocksNum; //0xC
     u8 encodingFormat; //0=Undefined, 1=OneByte (CP1252), 2=TwoBytes (UTF-16), 3=SJIS (Shift-JIS), 4=UTF8. UTF16 in MKWii.

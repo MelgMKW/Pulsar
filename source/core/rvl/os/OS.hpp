@@ -3,23 +3,26 @@
 #include <types.hpp>
 #include <core/rvl/gx/GX.hpp>
 
+//it's not namespaced in the actual game but this makes it more readable
 
-typedef struct {
+namespace OS {
+
+struct CalendarTime {
     int sec, min, hour, mday, mon, year, wday, yday, msec, usec;
-} OSCalendarTime;
-void OSTicksToCalendarTime(u64 time, OSCalendarTime *result);
+};
+void TicksToCalendarTime(u64 time, CalendarTime* result);
 
-extern "C" {
-    void OSReport(const char *format, ...);
-    u64 OSGetTime();
-    u32 OSGetTick();
-    void OSFatal(GXColor foreground, GXColor background, const char *message);
-    void OSLaunchTitle(UnkType r3, UnkType r4);
-    int OSCalcCRC32(void *data, u32 length);
-    int OSDisableInterrupts(); //801a65ac
-    int OSEnableInterrupts(); //801a65c0
-    int OSRestoreInterrupts(int level); //801a65d4
-    int OSDisableScheduler();
-    void OSRestart(u32 resetCode);
-}
+void Report(const char* format, ...);
+u64 GetTime();
+u32 GetTick();
+void Fatal(GXColor foreground, GXColor background, const char* message);
+void LaunchTitle(UnkType r3, UnkType r4);
+int CalcCRC32(void* data, u32 length);
+int DisableInterrupts(); //801a65ac
+int EnableInterrupts(); //801a65c0
+int RestoreInterrupts(int level); //801a65d4
+int DisableScheduler();
+void Restart(u32 resetCode);
+}//namespace OS
+
 #endif

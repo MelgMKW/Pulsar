@@ -64,11 +64,11 @@ struct CompressedRKG {
 class RKG {
 public:
     void ClearBuffer(); //8051c088
-    bool CheckHeader(); //8051c094 inlined checks magic, character, kart, year, day, month
-    bool CheckValidity(); //8051c120
-    void DecompressTo(RKG *copyBuffer);
-    bool CompressTo(RKG *copyBuffer);
-    int GetLength(RKG *src); //8051d388 only if valid
+    bool CheckHeader() const; //8051c094 inlined checks magic, character, kart, year, day, month
+    bool CheckValidity() const; //8051c120
+    void DecompressTo(RKG& copyBuffer) const; //8051d1b4
+    bool CompressTo(RKG& copyBuffer) const; //8051d0e0
+    int GetLength() const; //8051d388 only if valid
     RKGHeader header;
     RKGInputData data;
     u32 uncompressedCRC32;

@@ -8,13 +8,15 @@
 
 class KartModelsMgr {
 public:
-    static KartModelsMgr *sInstance; //809c2f38
-    static KartModelsMgr *GetStaticInstance(); //8079c9e8
+    static KartModelsMgr* sInstance; //809c2f38
+    static KartModelsMgr* GetStaticInstance(); //8079c9e8
     static void DestroyStaticInstance(); //8078ca38
+    static Random* GetRaceInfoRandom(); //807bd718
+    static bool IsPlayerComputer(u8 playerId); //807bd5bc
     KartModelsMgr(); //8078ca5c
     ~KartModelsMgr(); //8078ce24
     void Update(); //8078d824
-    void SetKartModel(u8 playerIdx, KartModel *model); //8078cf4c
+    void SetKartModel(u8 playerIdx, KartModel* model); //8078cf4c
 
     static void SetParams(); //807bd1d0
     static void InitiateKartModelBoneNames(); //807c71d8 stores a bunch of pointers to strings, too lazy to declare them
@@ -27,9 +29,9 @@ public:
     static float unknown_float; //809c38d0 only on gcn cookie gba battle course 3snes battle course 4 block plaza, read by KartModel
     static bool isDKJP; //809c38d4
     EGG::TDisposer<KartModelsMgr> disposer; //8078c960 vtable 808d1850
-    KartModel *models[12]; //8078cf4c stored by KartModel::Init
+    KartModel* models[12]; //8078cf4c stored by KartModel::Init
     //Position3D positions[12]; //0x40
-    Vec3 *targetingItemPosition[12]; //related to items 8078da90
+    Vec3* targetingItemPosition[12]; //related to items 8078da90
     u32 frameCounter[12]; //0x100 related to something about the model
     u32 invertedFrameCounter[12]; //0x130  decrements
     bool isAwardLoss; //0x160

@@ -19,31 +19,31 @@ struct CalcPanParam {
 
 class Sound3DManager;
 
-class Sound3DEngine : public detail::Sound3DEngineInterface {
+class Sound3DEngine: public detail::Sound3DEngineInterface {
     ~Sound3DEngine() override; //8009d510 vtable 80274948
     virtual void UpdateAmbientParam(    //8009d220
-        const Sound3DManager *sound3DManager,
-        const Sound3DParam *sound3DParam,
+        const Sound3DManager* sound3DManager,
+        const Sound3DParam* sound3DParam,
         u32 soundId,
         u32 updateFlag,
-        SoundAmbientParam *ambientParam
+        SoundAmbientParam* ambientParam
     );
     virtual int GetRequiredVoiceOutCount( //8009d280
-        const Sound3DManager *sound3DManager,
-        const Sound3DParam *sound3DParam,
+        const Sound3DManager* sound3DManager,
+        const Sound3DParam* sound3DParam,
         u32 soundId
     );
     virtual int GetAmbientPriority( //8009d500
-        const Sound3DManager *sound3DManager,
-        const Sound3DParam *sound3DParam,
+        const Sound3DManager* sound3DManager,
+        const Sound3DParam* sound3DParam,
         u32 soundId
     );
     virtual void UpdateAmbientParam( //8009d0a0
-        const Sound3DManager *sound3DManager,
-        const Sound3DParam *sound3DParam,
+        const Sound3DManager* sound3DManager,
+        const Sound3DParam* sound3DParam,
         u32 soundId,
         int voiceOutCount,
-        SoundAmbientParam *ambientParam
+        SoundAmbientParam* ambientParam
     );
     CalcPanParam calcPanParam;
 };

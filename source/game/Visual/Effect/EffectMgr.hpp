@@ -118,9 +118,8 @@ enum kartEffects {
     rk_wheelSpin2_L,
     rk_wheelSpin0_R,
     rk_wheelSpin1_R,
-    rk_wheelSpin2_R,
+    rk_wheelSpin2_R
 };
-
 enum bikeEffects {
     rk_jumpSmokeBikeL,
     rk_jumpSmokeBikeS,
@@ -129,7 +128,7 @@ enum bikeEffects {
     rk_wheelSpin0,
     rk_wheelSpin1,
     rk_wheelSpin2,
-    rk_wheelie,
+    rk_wheelie
 };
 
 enum kartDriftEffects { //_L and _R aren't part of the actual emitter name
@@ -199,37 +198,36 @@ enum bikeDriftEffects { //_L and _R aren't part of the actual emitter name
     rk_start2,
     rk_brakeSmk,
     rk_driftEffect_27,
-    rk_driftEffect_28,
+    rk_driftEffect_28
 };
-
 
 
 
 class MenuEffects {
     MenuEffects(); //806ec7c8
     virtual ~MenuEffects(); //806ec914 vtable 808c7668
-    EGG::Effect *GetEffectByIdx(u32 idx); //806ec994
-    EGG::EffectResource *menuEffects; //0x4
-    EGG::Effect *rk_cursors[4]; //0x8 has RKMenu BREFF and BREFT, EGG::Effects for all the relevant rk_ emitters
-    EGG::Effect *effects[10];
+    EGG::Effect* GetEffectByIdx(u32 idx); //806ec994
+    EGG::EffectResource* menuEffects; //0x4
+    EGG::Effect* rk_cursors[4]; //0x8 has RKMenu BREFF and BREFT, EGG::Effects for all the relevant rk_ emitters
+    EGG::Effect* effects[10];
 }; //total size 0x58
 
 class MGWhiteFogEffect { //rk_kinokoClouds
     MGWhiteFogEffect(); //8067b318
     virtual ~MGWhiteFogEffect(); //8067b388 vtable 808c0f20
-    EGG::Effect *rk_kinokoClouds; //only if slot is MG
+    EGG::Effect* rk_kinokoClouds; //only if slot is MG
 }; //total size 0x8
 
 class ItemEffects {
     ItemEffects(); //8068cedc
-    void CreateBananaEffect(const Mtx34 &mtx, float scale); //8068d848
-    EGG::Effect **rk_kouraTailG; //length capacity 8068cfb8
-    EGG::Effect **rk_kouraTailR; //length capacity
-    EGG::Effect **rk_kouraTailB; //length capacity
-    EGG::Effect **rk_bombHeiSpark; //length capacity 0xC
-    EGG::Effect **rk_kaminariGumoPre; //length capacity 0x10
-    EGG::Effect **rk_kaminariGumoVan; //length capacity 0x10
-    EGG::Effect **rk_kaminariGumoVanS; //length capacity 0x10
+    void CreateBananaEffect(const Mtx34& mtx, float scale); //8068d848
+    EGG::Effect** rk_kouraTailG; //length capacity 8068cfb8
+    EGG::Effect** rk_kouraTailR; //length capacity
+    EGG::Effect** rk_kouraTailB; //length capacity
+    EGG::Effect** rk_bombHeiSpark; //length capacity 0xC
+    EGG::Effect** rk_kaminariGumoPre; //length capacity 0x10
+    EGG::Effect** rk_kaminariGumoVan; //length capacity 0x10
+    EGG::Effect** rk_kaminariGumoVanS; //length capacity 0x10
     u32 greenShellCapacity; //0x1C
     u32 redShellCapacity;
     u32 blueShellCapacity; //+4 if online gamemode
@@ -246,13 +244,13 @@ class ItemEffects {
 
 class EffectsMgr {
 public:
-    static EffectsMgr *sInstance; //809c21d0
-    static EffectsMgr *CreateStaticInstance(EGG::Heap *heap); //8067b4c8
+    static EffectsMgr* sInstance; //809c21d0
+    static EffectsMgr* CreateStaticInstance(EGG::Heap* heap); //8067b4c8
     void Init(u32 sceneId); //8067b580
     void CreatePlayerEffects(); //8067c4f4
     void Reset(); //8067b8f0
     void Update(); //8067cb88
-    EGG::Effect *GetMenuEffectByIdx(u32 idx); //8067daa8
+    EGG::Effect* GetMenuEffectByIdx(u32 idx); //8067daa8
     u32 playerCount; //from racedata 8067b580
     u32 localPlayerCount; //0x4
     u16 unknown_0x8;
@@ -273,11 +271,11 @@ public:
     bool isGV; //0x40
     bool isMT; //0x41
     u8 unknown_0x42[2];
-    EGG::EffectResource *resources[9]; //0x44
-    PlayerEffects **playersEffects; //0x68
-    MenuEffects *menuEffect; //0x6C
-    MGWhiteFogEffect *mgWhiteFog;
-    ItemEffects *itemEffects; //0x74
+    EGG::EffectResource* resources[9]; //0x44
+    PlayerEffects** playersEffects; //0x68
+    MenuEffects* menuEffect; //0x6C
+    MGWhiteFogEffect* mgWhiteFog;
+    ItemEffects* itemEffects; //0x74
     u8 unknown_0x78[0x9f4 - 0x78];
     //related to local playerCount 9d8 8067b6d8
 }; //total size 0x9f4

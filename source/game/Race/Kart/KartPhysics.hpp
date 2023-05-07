@@ -14,9 +14,8 @@ public:
     void InitInertia1(); //805b4e84
     void Reset(); //805b4d24
     void Update(float one, float maxSpeed, bool unknown); //805b5170
-    void ApplyWheelSuspension(Vec3 *unk0, Vec3 *normalAcceleration, Vec3 *unk1, bool unk2); //805b6150
-    //vtable 808b7314
-    virtual ~KartPhysics(); //8059f678
+    void ApplyWheelSuspension(const Vec3& unk0, const Vec3& normalAcceleration, const Vec3& unk1, bool unk2); //805b6150
+    virtual ~KartPhysics(); //8059f678 vtable 808b7314
     virtual void Stabilize(); //805b5b68
     virtual int Unknown_0x2();
     Mtx34 inertiaTensor;
@@ -48,22 +47,20 @@ public:
     u8 unknown_0x180[0x1b4 - 0x188];
 }; //Total size 0x1b4
 
-class KartPhysicsBike : public KartPhysics {
+class KartPhysicsBike: public KartPhysics {
 public:
-    ~KartPhysicsBike() override; //805b66e4
+    ~KartPhysicsBike() override; //805b66e4 vtable 808b7300
     void Stabilize() override; //805b6448
-    //vtable 808b7300
 }; //Total size 0x1b4
 
 class KartPhysicsHolder {
 public:
-    KartPhysicsHolder(bool isBike, StatsAndBsp *statsAndBsp, void *arg_r5, u32 wheelCount); //805a04a0
+    KartPhysicsHolder(bool isBike, StatsAndBsp* statsAndBsp, void* arg_r5, u32 wheelCount); //805a04a0
     void Init(bool isBike); //8059f5bc
     void ResetQuaternions(); //805a0410
-    //vtable 808b69e8
-    virtual void Unknown_vtable();
-    KartPhysics *kartPhysics;
-    HitboxGroup *hitboxGroup;
+    virtual void Unknown_vtable(); //vtable 808b69e8
+    KartPhysics* kartPhysics;
+    HitboxGroup* hitboxGroup;
     u8 unknown_0xc[0x18 - 0xc];
     Vec3 position;
     Quat unknown_0x24[6];

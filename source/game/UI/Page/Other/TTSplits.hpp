@@ -7,7 +7,7 @@
 
 //_sinit_TTSplitsPAGE_cpp; //80856264
 namespace Pages {
-class TTSplits : public Page { //ID 0x2D
+class TTSplits: public Page { //ID 0x2D
 public:
     TTSplits(); //808556e4
     ~TTSplits() override; //80855864 vtable 808da5dc
@@ -18,8 +18,8 @@ public:
     void AfterControlUpdate() override; //0x4c 80855adc
     int GetRuntimeTypeInfo() const override; //0x60 80856228
     void Unload(); //80855854 inlined
-    static void TriggerAction(PtmfHolder_1A<TTSplits, void, u32> *triggeredHandler, u32 hudSlotId); //80856234
-    CtrlRaceTime **ctrlRaceTimeArray; //size splitsRowCount
+    static void TriggerAction(PtmfHolder_1A<TTSplits, void, u32>& triggeredHandler, u32 hudSlotId); //80856234
+    CtrlRaceTime** ctrlRaceTimeArray; //size splitsRowCount
     u8 splitsRowCount; //0x48, lap count + 1 for total time
     u8 unknown_0x49[3]; //padding
     u32 maxActiveFrames; //0x4C set to 600, frames until timeout

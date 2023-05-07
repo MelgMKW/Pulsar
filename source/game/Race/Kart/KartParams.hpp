@@ -13,9 +13,9 @@ typedef StatsParamEntry KartStats;
 
 class StatsAndBsp {
 public:
-    static KartStats *Compute(KartId kartId, CharacterId characterId); //80591fa4
-    KartStats *stats; //http://wiki.tockdom.com/wiki/KartParam.bin
-    BSP *bsp; //http://wiki.tockdom.com/wiki/BSP_(File_Format)
+    static KartStats* Compute(KartId kartId, CharacterId characterId); //80591fa4
+    KartStats* stats; //http://wiki.tockdom.com/wiki/KartParam.bin
+    BSP* bsp; //http://wiki.tockdom.com/wiki/BSP_(File_Format)
 }; //Total size 0x8
 
 class GpStats {
@@ -33,9 +33,9 @@ public:
 
 class KartValues {
 public:
-    KartValues(u32 playerIdx, KartId kart, CharacterId character, bool isBike, StatsAndBsp *statsAndBsp,
-        void *unknown, UnkType *kartDriverDispParams, UnkType *kartPartsDispParams,
-        UnkType *bikePartsDispParams, UnkType *driverDispParams); //80592fc0
+    KartValues(u32 playerIdx, KartId kart, CharacterId character, bool isBike, const StatsAndBsp& statsAndBsp,
+        void* unknown, UnkType* kartDriverDispParams, UnkType* kartPartsDispParams,
+        UnkType* bikePartsDispParams, UnkType* driverDispParams); //80592fc0
     u32 isBike;
     KartId kart;
     CharacterId character;
@@ -43,21 +43,21 @@ public:
     u16 wheelCount1;
     u8 playerIdx;
     u8 unknown_0x11[2];
-    StatsAndBsp *statsAndBsp;
-    int *unknown_0x18;
-    UnkType *kartDriverDispParams;
-    UnkType *kartPartsDispParams; //http://wiki.tockdom.com/wiki/KartPartsDispParam.bin
-    UnkType *bikePartsDispParams; //http://wiki.tockdom.com/wiki/BikePartsDispParam.bin
-    UnkType *driverDispParams;
+    const StatsAndBsp* statsAndBsp;
+    int* unknown_0x18;
+    UnkType* kartDriverDispParams;
+    UnkType* kartPartsDispParams; //http://wiki.tockdom.com/wiki/KartPartsDispParam.bin
+    UnkType* bikePartsDispParams; //http://wiki.tockdom.com/wiki/BikePartsDispParam.bin
+    UnkType* driverDispParams;
     float wheelCountRecip;
     float wheelCountPlusOneRecip; //1.0f / (wheelCount + 1.0f)
-    GpStats *gpStats;
+    GpStats* gpStats;
     u8 unknown_0x38[0x3C - 0x38];
 }; //Total size 0x3c
 
 class DriverParams {
 public:
-    static DriverParams *sInstance; //809c191c
+    static DriverParams* sInstance; //809c191c
     u32 wheelCount;
     KartType type;
     u32 weightClass;
@@ -91,7 +91,7 @@ public:
 
 class KartParams {
 public:
-    static KartParams *sInstance; //809c1918
+    static KartParams* sInstance; //809c1918
     u32 wheelCount;
     KartType type;
     u32 weightClass;

@@ -2,7 +2,7 @@
 #define _MENUSCENE_
 #include <game/Scene/BaseScene.hpp>
 
-class MenuScene : public GameScene {
+class MenuScene: public GameScene {
 public:
     MenuScene(); //80554fa4
     ~MenuScene() override; //80554fe8 vtable 808b4280

@@ -26,10 +26,10 @@ struct ResTexData { //https://wiki.tockdom.com/wiki/TEX0_(File_Format)
     s32 offsetTooriginal_path;
     s32 offsetToResUserData;
 };
-class ResTex : public ResCommon<ResTexData> {
+class ResTex: public ResCommon<ResTexData> {
     void Init(); //80052ae0
-    bool GetTexObjParam(void **image_ptr, u16 *width, u16 *height, GXTexFmt *format, float *min_lod, float *max_lod, bool *mipmap) const; //80052930
-    bool GetTexObjCIParam(void **image_ptr, u16 *width, u16 *height, GXTexFmt *format, float *min_lod, float *max_lod, bool *mipmap) const; //800529f0
+    bool GetTexObjParam(void** image_ptr, u16* width, u16* height, GXTexFmt* format, float* min_lod, float* max_lod, bool* mipmap) const; //80052930
+    bool GetTexObjCIParam(void** image_ptr, u16* width, u16* height, GXTexFmt* format, float* min_lod, float* max_lod, bool* mipmap) const; //800529f0
 };
 }//namespace g3d
 }//namespace nw4r

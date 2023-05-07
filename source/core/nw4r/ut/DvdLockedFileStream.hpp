@@ -5,7 +5,7 @@
 
 namespace nw4r {
 namespace ut {
-class DvdLockedFileStream : public DvdFileStream {
+class DvdLockedFileStream: public DvdFileStream {
 public:
     DvdLockedFileStream(u32 entryNum); //800b00d0 
     ~DvdLockedFileStream() override; //80274ca8

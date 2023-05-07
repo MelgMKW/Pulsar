@@ -22,13 +22,13 @@ public:
     };
     SoundArchive(); //8009de00 vtable 802749c0
     bool IsAvailable(); //8009de70
-    bool ReadSoundInfo(u32 id, SoundInfo *soundInfo); //8009df40
-    bool ReadStrmSoundInfo(u32 id, StrmSoundInfo *soundInfo); //8009df60
+    bool ReadSoundInfo(u32 id, SoundInfo* soundInfo); //8009df40
+    bool ReadStrmSoundInfo(u32 id, StrmSoundInfo* soundInfo); //8009df60
     virtual ~SoundArchive(); //8009de30
-    u32 ConvertLabelStringToSoundId(const char *string) const; //8009df00
-    u32 ConvertLabelStringToGroupId(const char *string) const; //8009df10
+    u32 ConvertLabelStringToSoundId(const char* string) const; //8009df00
+    u32 ConvertLabelStringToGroupId(const char* string) const; //8009df10
     SoundType GetSoundType(u32 soundId) const; //8009df30
-    detail::SoundArchiveFileReader *fileReader;
+    detail::SoundArchiveFileReader* fileReader;
     char extFileRoot[256];
 
 }; //total size 0x108
@@ -52,8 +52,8 @@ struct SoundArchive::StrmSoundInfo { //https://wiki.tockdom.com/wiki/BRSAR_(File
 }; //total size 0x8
 
 struct SeqSoundInfo {
-    void *seqDataAddress;
-    char *startLocationLabel;
+    void* seqDataAddress;
+    char* startLocationLabel;
 }; //total size 0x8
 }//namespace snd
 }//namespace nw4r

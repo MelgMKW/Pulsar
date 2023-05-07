@@ -60,18 +60,18 @@ public:
     };
     class AmbientArgAllocaterCallback {
         virtual ~AmbientArgAllocaterCallback() = 0;
-        virtual void *detail_AllocAmbientArg(u32 argSize) = 0;
+        virtual void* detail_AllocAmbientArg(u32 argSize) = 0;
     };
     class AmbientArgUpdateCallback {
     public:
         virtual ~AmbientArgUpdateCallback() {}
-        virtual void detail_UpdateAmbientArg(void *arg, const detail::BasicSound *sound) = 0;
+        virtual void detail_UpdateAmbientArg(void* arg, const detail::BasicSound* sound) = 0;
     };
     struct AmbientInfo {
-        AmbientParamUpdateCallback *paramUpdateCallback; //1c
-        AmbientArgUpdateCallback *argUpdateCallback; //20
-        AmbientArgAllocaterCallback *argAllocaterCallback; //24
-        void *arg; //28
+        AmbientParamUpdateCallback* paramUpdateCallback; //1c
+        AmbientArgUpdateCallback* argUpdateCallback; //20
+        AmbientArgAllocaterCallback* argAllocaterCallback; //24
+        void* arg; //28
         u32 argSize; //2c
     };
     enum PauseState {
@@ -88,18 +88,18 @@ public:
     virtual bool IsAttachedTempSpecialHandle() = 0;
     virtual void  DetachTempSpecialHandle() = 0;
     virtual void InitParam(); //8008e1c4
-    virtual BasicPlayer *GetBasicPlayer() const = 0;
-    virtual BasicPlayer *GetBasicPlayer() = 0;
+    virtual BasicPlayer* GetBasicPlayer() const = 0;
+    virtual BasicPlayer* GetBasicPlayer() = 0;
     virtual void OnUpdatePlayerPriority() = 0;
     virtual void UpdateMoveValue() = 0;
     virtual void UpdateParam() = 0;
     void Stop(int fadeOutFrames); //8008e330
-    PlayerHeap *playerHeap; //4
-    SoundHandle *generalHandle; //8
-    SoundHandle *tempGeneralHandler; //c
-    SoundPlayer *soundPlayer; //10
-    SoundActor *soundActor; //14
-    ExternalSoundPlayer *extSoundPlayer; //18
+    PlayerHeap* playerHeap; //4
+    SoundHandle* generalHandle; //8
+    SoundHandle* tempGeneralHandler; //c
+    SoundPlayer* soundPlayer; //10
+    SoundActor* soundActor; //14
+    ExternalSoundPlayer* extSoundPlayer; //18
     AmbientInfo ambientInfo;  //1c
     SoundParam ambientParam; //0x30
     SoundActorParam actorParam; //0x4c

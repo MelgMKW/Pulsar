@@ -2,17 +2,20 @@
 #include <game/UI/Page/Other/FriendRoom.hpp>
 
 
-namespace PulsarUI {
+namespace Pulsar {
+namespace UI {
 
-class ExpFroomMessages : public Pages::FriendRoomMessages {
+class ExpFroomMessages: public Pages::FriendRoomMessages {
 public:
     static bool isOnModeSelection;
-    void OnModeButtonClick(PushButton *button, u32 hudSlotId);
-    void OnCourseButtonClick(PushButton *button, u32 hudSlotId);
+    static u32 clickedButtonIdx;
+    void OnModeButtonClick(PushButton& button, u32 hudSlotId);
+    void OnCourseButtonClick(PushButton& button, u32 hudSlotId);
 };
 
 
-}//namespace PulsarUI
+}//namespace UI
+}//namespace Pulsar
 
 
 

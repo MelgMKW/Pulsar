@@ -4,15 +4,17 @@
 #include <kamek.hpp>
 #include <game/Race/Kart/KartPhysics.hpp>
 #include <game/Race/Kart/KartBase.hpp>
+#include <game/Collision/Collision.hpp>
 
 class KartPointers;
 
 class KartCollision {
 public:
     KartCollision(); //8056e56c
-    void ProcessMovingRoad(CollisionData *collisionData, UnkType *kclFlags); //8056e930
-    void ProcessFloor(CollisionData *collisionData, Hitbox *hitbox, void *unk, UnkType *kclFlags, bool allowBoostPanels); //8056ea04
-    void CheckKartCollision(KartBase *otherKart); //8056f7f0
+    void ProcessMovingRoad(CollisionData& collisionData, const KCLTypeHolder& kclFlags); //8056e930
+    void ProcessFloor(CollisionData& collisionData, Hitbox* hitbox, void* unk,
+        const KCLTypeHolder& kclFlags, bool allowBoostPanels); //8056ea04
+    void CheckKartCollision(const Kart& otherKart); //8056f7f0
     void CheckObjectCollision(); //80571f10
     void CheckOOB(); //80571634
     void CheckItemCollision(); //8057257c
@@ -27,10 +29,13 @@ public:
     int HandleFibCollision(); //8057325c
     void ActivateOob(int unk0, int unk1, int unk2, int unk3); //80573b00
     void UpdateRespawn(); //80573ed4
-    void UpdateCollisionsInner(float unk0, float unk1, u32 playerIdx, KartPhysics *kartPhysics, UnkType *collisionGroup, Quat *rotation, Vec3 *scale, bool enableHwg, Vec3 *unk2); //805b6724
+    void UpdateCollisionsInner(float unk0, float unk1, u32 playerIdx, KartPhysics& kartPhysics, UnkType* collisionGroup,
+        Quat* rotation, const Vec3& scale, bool enableHwg, Vec3* unk2); //805b6724
 
-    virtual void ProcessKartBodyCollision(CollisionData *collisionData, Hitbox *hitbox, void *unk, UnkType *kclFlags); //8056e764 vtable 808b56a8
-    virtual void ProcessWheelCollision(CollisionData *collisionData, Hitbox *hitbox, void *unk, UnkType *kclFlags); //8056e8d4
+    virtual void ProcessKartBodyCollision(CollisionData& collisionData, Hitbox& hitbox,
+        void* unk, const KCLTypeHolder& kclFlags); //8056e764 vtable 808b56a8
+    virtual void ProcessWheelCollision(CollisionData& collisionData, Hitbox& hitbox,
+        void* unk, const KCLTypeHolder& kclFlags); //8056e8d4
     virtual ~KartCollision(); //80573ff0
     KartBase base;
     u8 unknown_0x10[0x2c - 0x10];

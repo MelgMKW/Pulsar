@@ -5,23 +5,26 @@
 #include <game/System/Identifiers.hpp>
 #include <game/Race/Kart/KartPointers.hpp>
 
-class ItemPlayer;
+namespace Item {
+class Player;
 
-class PlayerItemPoint {
+class Point {
 public:
     u8 ITPT;
     u8 unknown_0x1[3];
     Vec3 position;
 };//Total Size 0x10
 
-class PlayerRoulette {
+class PlayerRoulette { //only exists for local players
 public:
-    ItemPlayer *itemPlayer;
+    bool Update(); //807ba37c returns true when the roulette just ended
+    void OnRouletteEnd(); //807ba2d8
+    Player* itemPlayer;
     u32 isTheRouletteSpinning;
-    u32 frames; //how many frames have the roulette been spinning for
+    u32 frames; //how many frames has the roulette been spinning for
     u32 totalSpinDuration;
     float unknown_0x10[2];
-    u32 currentItem;
+    u32 currentItem; //0x18
     u32 nextItem;
     ItemId nextItemId;
     u32 unknown_0x24;
@@ -36,7 +39,7 @@ public:
     void Update(); //807bc6e8
     void SetItem(ItemId id, u8 r5); //807bc940
     void RemoveItems(u32 count); //807bc97c if count would be 0 after removing count items, clears the inventory
-    ItemPlayer *itemPlayer;
+    Player* itemPlayer;
     ItemId currentItemId;
     u32 currentItemCount;
     u8 unknown_0xC[0x1C - 0xC];
@@ -46,19 +49,19 @@ public:
     u8 unknown_0x24[0x2C - 0x24];
 }; //Total Size 0x2C
 
-class ItemPlayerSub {
+class PlayerSub {
 public:
-    static Ptmf_0A<ItemPlayerSub, void> OnActivateHandler[5]; //808d1900, on per use type
+    static Ptmf_0A<PlayerSub, void> OnActivateHandlers[5]; //808d1900, on per use type
     void OnTrailActivate(); //80792c68
     void OnTripleTrailActivate(); //8079356c
     void OnSpinActivate(); //80794694
     void Update(); //80795668
     void ActivateItem(); //8079231c spawns item, plays sounds and animations
     void UseItem(bool r4); //80791914 r4 might be isRemote?
-    KartPointers *kartPointers;
-    ItemPlayer *itemPlayer;
+    KartPointers* kartPointers;
+    Player* itemPlayer;
     u8 unknown_0x8[4];
-    ItemPlayer *itemPlayer2;
+    Player* itemPlayer2;
     u8 id; //0x10
     u8 unknown0x11[0x14 - 0x11];
     ItemObjId itemObjId; //0x14 seems to only change for items you can hold "behind" (including triple shells)
@@ -87,9 +90,9 @@ public:
     u16 spawnedObjs[3]; //0x174
     u8 unknown_0x17a[0x180 - 0x17a];
 }; //Total Size 0x180
-size_assert(ItemPlayerSub, 0x180);
+size_assert(PlayerSub, 0x180);
 
-class ItemPlayer {
+class Player {
 public:
     void Update(); //80797928
     void UseBlooper(); //807a81b4
@@ -103,24 +106,25 @@ public:
     void UseThunder(); //807b7b7c
     void ActivateMegaMushroom(); //807986b4
 
-    KartPointers *kartPointers;
-    KartModel *model;
+    KartPointers* kartPointers;
+    KartModel* model;
     u8 unknown_0x8[0x18 - 0x8];
     u8 id;
     bool isHuman;
     bool isRemote;
     bool isBike;
-    Kart *kart;
-    KartModel *model2;
+    Kart* kart;
+    KartModel* model2;
     Vec3 unknown_0x24;
     u8 unknown_0x30[0x44 - 0x30];
-    PlayerItemPoint itemPoint;
+    Point itemPoint;
     PlayerRoulette roulette; //0x54
     PlayerInventory inventory; //0x88
-    ItemPlayerSub itemPlayerSub; //b4
+    PlayerSub itemPlayerSub; //b4
     u32 localPlayerNum;
     u8 unknown_0x238[0x248 - 0x238];
 }; //Total Size 0x248
-size_assert(ItemPlayer, 0x248);
+size_assert(Player, 0x248);
+}//namespace Item
 
 #endif

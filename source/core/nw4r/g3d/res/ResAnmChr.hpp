@@ -40,7 +40,7 @@ struct ResAnmChrData { //https://wiki.tockdom.com/wiki/CHR0_(File_Format)
     //data
 };
 
-class ResAnmChr : public ResCommon<ResAnmChrData> {};
+class ResAnmChr: public ResCommon<ResAnmChrData> {};
 
 }//namespace g3d
 }//namespace nw4r

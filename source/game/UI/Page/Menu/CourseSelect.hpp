@@ -9,38 +9,38 @@
 
 //_sinit_ at 80840dd8
 namespace Pages {
-class CourseSelect : public MenuInteractable { //ID 0x6F    
+class CourseSelect: public MenuInteractable { //ID 0x6F    
 public:
     CourseSelect(); //80627bd8
     ~CourseSelect() override; //80840ce0 vtable 808d9450
-    void OnInit() override; //808402f4 0x28
-    void OnActivate() override; //808404a0 0x30
-    void OnDeactivate() override; //80840b78 0x34
-    void BeforeEntranceAnimations() override; //808405c0 0x38
-    void BeforeExitAnimations() override; //80840b1c 0x40
-    void AfterControlUpdate() override; //8084060c 0x4c
-    int GetRuntimeTypeInfo() const override; //80840dcc 0x60
-    void OnExternalButtonSelect(PushButton *button, u32 hudSlotId) override; //80840aac 0x64 
-    int GetActivePlayerBitfield() const override; //80840c7c 0x68
-    int GetPlayerBitfield() const; //80840c74 0x6C override;
-    ManipulatorManager *GetManipulatorManager() override;; //807e4f74 0x70
-    UIControl *CreateExternalControl(u32 externControlId) override; //80840390 0x84
-    UIControl *CreateControl(u32 controlId) override; //80840398 0x88
-    void SetButtonHandlers(PushButton *button) override; //80840c84 0x8C
+    void OnInit() override; //0x28 808402f4
+    void OnActivate() override; //0x30 808404a0
+    void OnDeactivate() override; //0x34 80840b78
+    void BeforeEntranceAnimations() override; //0x38 808405c0
+    void BeforeExitAnimations() override; //0x40 80840b1c
+    void AfterControlUpdate() override; //0x4c 8084060c
+    int GetRuntimeTypeInfo() const override; //0x60 80840dcc
+    void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64  80840aac
+    int GetActivePlayerBitfield() const override; //0x68 80840c7c
+    int GetPlayerBitfield() const override; //0x6C 80840c74
+    ManipulatorManager& GetManipulatorManager() override; //0x70 807e4f74
+    UIControl* CreateExternalControl(u32 externControlId) override; //0x84 80840390
+    UIControl* CreateControl(u32 controlId) override; //0x88 80840398
+    void SetButtonHandlers(PushButton& button) override; //0x8C 80840c84
 
-    void OnButtonClick(PushButton *button, u32 hudSlotId); //80840a44
-    void OnButtonDeselect(PushButton *button, u32 hudSlotId); //80840ab0
+    void OnButtonClick(PushButton& button, u32 hudSlotId); //80840a44
+    void OnButtonDeselect(PushButton& button, u32 hudSlotId); //80840ab0
     void OnBackPress(u32 hudSlotId); //80840ab4
-    void UpdateBottomText(CtrlMenuCourseSelectCourse *course, PushButton *button, u32 hudSlotId); //80840728
+    void UpdateBottomText(CtrlMenuCourseSelectCourse& course, PushButton& button, u32 hudSlotId); //80840728
     void OnTimeout(); //80840ba0 ends page and loads 0x92 (course votes)
-    void LoadNextPage(CtrlMenuCourseSelectCourse *control, PushButton *courseButton, u32 hudSlotId); //80840830
-    static Page *GetPageById(PageId id = PAGE_COURSE_SELECT); //808401e4
+    void LoadNextPage(CtrlMenuCourseSelectCourse& control, PushButton& courseButton, u32 hudSlotId); //80840830
+    static Page* GetPageById(PageId id = PAGE_COURSE_SELECT); //808401e4
     //here the button refers to the back button as the course buttons are handled via extern controls
-    //onButtonClick 0x658 vtable 808bd054 80840a44
-    //onButtonSelect 0x66C vtable 808bd054 virtual 0x64
-    //onButtonDeselect 0x680 vtable 808bd054 80840ab0
-    //onBackPress  0x694 vtable 808bd048 80840ab4
-    //onStartPress 0x6A8 vtable 808bd048 virtual off 0x7C
+    //onButtonClick     vtable = 0x808bd054 function = 80840a44
+    //onButtonSelect    vtable = 0x808bd054 offset   = 0x64 call is virtual
+    //onButtonDeselect  vtable = 0x808bd054 function = 80840ab0
+    //onBackPress       vtable = 0x808bd048 function = 80840ab4
+    //onStartPress      vtable = 0x808bd048 offset   = 0x7c call is virtual Handler
 
     u32 unknown_0x6C4;
     CtrlMenuCourseSelectCup ctrlMenuCourseSelectCup; //0x6c8

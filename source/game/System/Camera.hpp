@@ -26,7 +26,7 @@ public:
     u8 unknown_0x0[0x38 - 0x0]; //bunch of inherited structs
     virtual void func_vtable(); //808b4c20
     u8 unknown_0x3C[0x6C - 0x3C];
-    UnkCameraStruct *unkStruct;
+    UnkCameraStruct* unkStruct;
     u8 unknown_0x70[0x10C - 0x70];
 }; //total size 0x10C
 
@@ -37,7 +37,7 @@ public:
     static CameraHandler sInstance;
     virtual void func_vtable();
     u32 hudCount;
-    RaceCameraManager **cameraArray; //one per hudSlot, actually also exists outside of races
+    RaceCameraManager** cameraArray; //one per hudSlot, actually also exists outside of races
 };
 
 #endif

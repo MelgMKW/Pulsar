@@ -7,7 +7,7 @@
 //https://wiki.tockdom.com/wiki/Filesystem/Race/Common.szs/GeoHitTableItemObj.bin
 //how items interact with objects
 
-enum GeoHitItemID {
+enum GeoHitItemId {
     GEO_HIT_GREEN_SHELL,
     GEO_HIT_RED_SHELL,
     GEO_HIT_BANANA,
@@ -28,7 +28,7 @@ enum GeoHitItemID {
 enum ObjToItemInteraction {
     OBJ_ITEM_INTERACTION_CLIPS,
     OBJ_ITEM_INTERACTION_BOUNCES,
-    OBJ_ITEM_INTERACTION_BREAKS,
+    OBJ_ITEM_INTERACTION_BREAKS
 };
 
 enum ItemToObjInteraction {

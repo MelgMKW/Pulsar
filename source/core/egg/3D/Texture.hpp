@@ -21,15 +21,15 @@ public:
     GXTexFilter min_filt;
     GXTexFilter max_filt;
     u8 unknown_0xA[2];
-    void *image_ptr; //0xC
+    void* image_ptr; //0xC
     virtual ~CPUTexture(); //80218178 vtable 802a2b10
     virtual void Configure(); //80218b98
-    virtual void InitTexObj(GXTexObj *obj); //802181e8
+    virtual void InitTexObj(GXTexObj* obj); //802181e8
 
 
 };
 
-class MatTexture : public CPUTexture {
+class MatTexture: public CPUTexture {
 public:
     u8 unknown_0x14[0x28 - 0x14];
 };

@@ -18,7 +18,7 @@ enum RaceState {
     RACE_STATE_FINISHED = 0x7
 };
 
-struct CourseNbrToCourseID {
+struct CourseIdxToCourseID {
     CourseId courseID;
 };
 
@@ -28,23 +28,23 @@ struct CourseIDToMusicID {
 
 class RaceAudioMgr {
 public:
-    static RaceAudioMgr *sInstance; //0x809c27f8
-    static RaceAudioMgr *GetStaticInstance(); //807104d0
-    static void *DestroyStaticInstance(); //80710520
+    static RaceAudioMgr* sInstance; //0x809c27f8
+    static RaceAudioMgr* GetStaticInstance(); //807104d0
+    static void* DestroyStaticInstance(); //80710520
     static u32 GetCourseSoundId(); //807101f4
     static u32 trackToMusicIDTable[42]; //808a1d80 battle
     RaceAudioMgr(); //0x80710688
     ~RaceAudioMgr(); //807108e8
     void ChangeMusic(RaceState raceState);
-    void SetKartSound(KartSound *sound); //80713754
+    void SetKartSound(KartSound* sound); //80713754
     void Init(); //80710a00
     void Calc(); //80710ca0
     void UpdateLocalPlayerParams(); //80711514
     void CheckRaceState(); //807125d4 can play final lap jingle, the winning/losing music etc...
-    EGG::TDisposer<RaceAudioMgr> disposer; //80710340 vtable 0x808c8fdc
+    EGG::TDisposer<RaceAudioMgr> disposer; //80710340 vtable 808c8fdc
     CourseId courseId;
     u8 unknown_0x14[4];
-    KartSound *kartSounds[4]; //0x18
+    KartSound* kartSounds[4]; //0x18
     u8 lastUsedKartSoundSlot;
     u8 totalKartSounds;
     u8 unknown_0x28[0x30 - 0x2a];
@@ -66,8 +66,8 @@ public:
     Mtx34 playerMats[4]; //0x84 not completely sure
     Vec3ZeroInit vec3s[4]; //0x144
     u8 unknown_0x174[4];
+    static CourseIdxToCourseID trackIdxToCourseID[42];
 };//Total Size 0x178
 size_assert(RaceAudioMgr, 0x178);
-extern CourseNbrToCourseID trackNbrToCourseID[42];
 
 #endif

@@ -14,10 +14,10 @@ enum ScnType {
     SCTYPE_3
 };
 class ModelDirector;
-class ScnManager : public EGG::Disposer {
+class ScnManager: public EGG::Disposer {
 public:
     static u32 pageCount; //808b4bf0 copied from racedata
-    static ScnManager *sInstance; //809c1850 there are multiple there, set with Register
+    static ScnManager* sInstance; //809c1850 there are multiple there, set with Register
     ScnManager(); //80561f40
     ~ScnManager() override; //805620bc vtable 808b4ad0
     virtual void vf_0xC();  //0xC 80564228
@@ -36,25 +36,25 @@ public:
     virtual void vf_0x40(); //0x40 80562444
     virtual void vf_0x44(); //0x44 80562f60
     void Register(u32 idx); //8056539c
-    void AppendModelDirector1(ModelDirector *mdlDirector); //805635b4 list 1
-    void AppendModelDirector2(ModelDirector *mdlDirector); //805635cc list 2
+    void AppendModelDirector1(ModelDirector* mdlDirector); //805635b4 list 1
+    void AppendModelDirector2(ModelDirector* mdlDirector); //805635cc list 2
     void Update(); //805635e4
-    EGG::Heap *heap; //0x10
-    EGG::Heap *heap2; //0x14
-    EGG::Allocator *allocator; //0x18
-    EGG::Allocator *allocator2; //0x1c
-    EGG::Allocator *mem2Allocator; //0x20
-    nw4r::g3d::ScnRoot *curScnRoot; //0x24
-    nw4r::g3d::ScnRoot *scnRoot[2]; //0x28
-    EGG::ScnRenderer *scnRender; //0x30
-    FogManager *fogManager; //0x38
+    EGG::Heap* heap; //0x10
+    EGG::Heap* heap2; //0x14
+    EGG::Allocator* allocator; //0x18
+    EGG::Allocator* allocator2; //0x1c
+    EGG::Allocator* mem2Allocator; //0x20
+    nw4r::g3d::ScnRoot* curScnRoot; //0x24
+    nw4r::g3d::ScnRoot* scnRoot[2]; //0x28
+    EGG::ScnRenderer* scnRender; //0x30
+    FogManager* fogManager; //0x38
     u8 unknown_0x3c[0x58 - 0x3c];
     nw4r::ut::List modelDirectors1; //0x58
     nw4r::ut::List modelDirectors2; //0x64
     u8 unknown_0x64[0x98 - 0x64];
 };
 
-class ScnManagerRace : public ScnManager {
+class ScnManagerRace: public ScnManager {
 public:
     ScnManagerRace(); //805b1300
     ~ScnManagerRace(); //805b1354 vtable 808b70b0

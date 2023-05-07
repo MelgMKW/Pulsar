@@ -4,8 +4,8 @@
 #include <game/Objects/KCL/ExternalKCL/ObjectExternKCL.hpp>
 
 namespace Objects {
-class Crane : public ObjectExternKCL { //0x1fb
-    explicit Crane(KMP::GOBJHolder *gobjHolder); //807fe658
+class Crane: public ObjectExternKCL { //0x1fb
+    explicit Crane(const KMP::GOBJHolder& gobjHolder); //807fe658
     ~Crane() override; //807feb28 vtable 808d49e8
     void Update() override; //0x14 807fe7ec
     bool HasLod() override; //0x2c 807feb20

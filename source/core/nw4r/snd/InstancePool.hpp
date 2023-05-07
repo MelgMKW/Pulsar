@@ -6,7 +6,7 @@ namespace nw4r {
 namespace snd {
 namespace detail {
 struct PoolImpl {
-    PoolImpl *next;
+    PoolImpl* next;
 };
 }//namespace detail
 }//namespace snd

@@ -9,7 +9,7 @@ namespace snd {
 namespace detail {
 class MmlSeqTrackAllocator {
     virtual void func_vtable();
-    UnkType *ptr;
+    UnkType* ptr;
     PoolImpl trackPool;
 }; //total size 0xC	
 }//namespace detail

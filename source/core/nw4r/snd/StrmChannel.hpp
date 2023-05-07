@@ -6,7 +6,7 @@ namespace snd {
 namespace detail {
 class StrmBufferPool {
 public:
-    void *buffer; //0
+    void* buffer; //0
     u32 bufferSize; //4
     u32 blockSize; //8
     int blockCount; //c

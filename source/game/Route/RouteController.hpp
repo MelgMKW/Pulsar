@@ -14,11 +14,11 @@ class RouteController {
     virtual void SetPercent(float percent) = 0; //0x1c 806c63a8
     virtual float GetSpeed() const = 0; //0x20
     virtual void vf_0x24() = 0; //0x24
-    virtual void vf_0x28(u16 &pointId, float &distance) = 0; //0x28
+    virtual void vf_0x28(u16& pointId, float& distance) = 0; //0x28
     virtual float GetDistanceToNextPoint() const = 0; //0x2c
     u16 routeId; //0x4
     u16 pointCount; //0x6
-    RoutePoint *pointsArray; //0x8
+    RoutePoint* pointsArray; //0x8
     bool isNotCylic; //0xC
     u8 padding[3];
     float baseSpeed; //0x10
@@ -37,7 +37,7 @@ class RouteController {
     u8 padding3;
 }; //0x4C
 
-class RouteStraightController : public RouteController {
+class RouteStraightController: public RouteController {
     RouteStraightController(u16 routeId, float unknown); //806efdc4
     ~RouteStraightController() override; //806f094c vtable 808c7738
     void SetParams() override; //0xC 806efe50 sets pointsArray/point count...but already done by ctor
@@ -46,14 +46,14 @@ class RouteStraightController : public RouteController {
     void UpdateSpeed(float speed) override; //0x18 806efff4
     float GetSpeed() const override; //0x20 806f0944
     void vf_0x24() override; //0x24 806f02ec
-    void vf_0x28(u16 &pointId, float &distance) override; //0x28 806f041c
+    void vf_0x28(u16& pointId, float& distance) override; //0x28 806f041c
     float GetDistanceToNextPoint() const override; //0x2c 806f050c
     Vec3 toNextPoint; //0x4C
-    RouteSegment *segmentArray; //0x58
+    RouteSegment* segmentArray; //0x58
 
 }; //0x5c
 
-class RouteCurvedController : public RouteController {
+class RouteCurvedController: public RouteController {
     RouteCurvedController(); //806ee830
     ~RouteCurvedController() override; //806ef944 vtable 808c76d8 
     void SetParams() override; //0xC 806eead8
@@ -62,11 +62,11 @@ class RouteCurvedController : public RouteController {
     void UpdateSpeed(float speed) override; //0x18 806eeb94
     float GetSpeed() const override; //0x20 806ef93c
     void vf_0x24() override; //0x24 806eeebc
-    void vf_0x28(u16 &pointId, float &distance) override; //0x28 806eefa0
+    void vf_0x28(u16& pointId, float& distance) override; //0x28 806eefa0
     float GetDistanceToNextPoint() const override; //0x2c 806ef09c
-    RouteArc *arcArray; //0x4C
+    RouteArc* arcArray; //0x4C
     u32 pointsPerArc; //0x50
     float percentPerArc; //0x54
-    float *percentFromOriginArrays; //0x58
+    float* percentFromOriginArrays; //0x58
 }; //0x5c
 #endif

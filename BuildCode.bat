@@ -2,6 +2,7 @@
 SETLOCAL EnableDelayedExpansion
 
 cls
+del build\*.o
 
 :: Destination (change as necessary)
 SET "SOURCE=Pulsar"
@@ -9,9 +10,11 @@ SET "RIIVO=D:\Documents\Dolphin Emulator\Load\Pulsar"
 SET "RELEASE=D:\Modding\Coding\Kamek\Pulsar\releases"
 echo %RIIVO%
 
+
 :: CPP compilation settings
 SET CC="../engine/cw/mwcceppc.exe"
-SET CFLAGS=-I- -i "../engine/engine" -i "../engine/source" -i "../engine/source/game" -i code -gcc_extensions on -Cpp_exceptions off -enum int -O4,s -use_lmw_stmw on -fp hard -rostr -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 -rtti off
+SET CFLAGS=-I- -i "../engine/engine" -i "../engine/source" -i "../engine/source/game" -i code -O2,p^
+  -opt loop,peep,schedule  -inline auto -enum int -proc 750 -fp hard -rostr -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 -rtti off 
 SET DEFINE=
 
 :: CPP Sources
@@ -29,16 +32,14 @@ FOR %%H IN (%CPPFILES%) DO (
 )
 
 :: Link
-echo Linking...
-"../engine/KamekSource/bin/Debug/Kamek" "build/kamek.o" %OBJECTS% -dynamic -externals="../engine/source/symbols.txt" -versions="../engine/source/versions.txt" -output-kamek=build\$KV$.bin
-
+echo Linking... %time%
+"../engine/Kamek" "build/kamek.o" %OBJECTS% -dynamic -externals="../engine/source/symbols.txt" -versions="../engine/source/versions.txt" -output-kamek=build\$KV$.bin >nul
 
 if %ErrorLevel% equ 0 (
-    xcopy /Y build\*.bin "%RELEASE%\Binaries"
-	del build\*.o
-
-    cd "D:\Modding\Coding\Kamek\Pulsar\resources"
-    xcopy /Y /S "%RELEASE%\Binaries" "%RIIVO%\Binaries"
+    xcopy /Y build\*.bin "%RELEASE%\Binaries" >nul
+    cd "D:\Modding\Coding\Kamek\Pulsar\resources" >nul
+    xcopy /Y /S "%RELEASE%\Binaries" "%RIIVO%\Binaries" >nul
+    xcopy /Y /S "%RELEASE%\Binaries" "D:\Documents\Dolphin Emulator\Load\varietypack\Binaries" >nul
     echo Binaries copied
 )
 

@@ -17,6 +17,7 @@ struct BinaryFileHeader {
     u16 headerSize;
     u16 dataBlocks;
 };
+size_assert(BinaryFileHeader, 0x10);
 
 }//namespace ut
 }//namespace nw4r

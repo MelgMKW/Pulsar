@@ -4,18 +4,20 @@
 #include <game/UI/Page/Other/Options.hpp>
 
 //Extends Options to add a settings button
-namespace PulsarUI {
-class ExpOptions : public Pages::Options {
+namespace Pulsar {
+namespace UI {
+class ExpOptions: public Pages::Options {
 public:
     ExpOptions() {
-        this->onButtonClickHandler.ptmf = static_cast<void (Options:: *)(PushButton *, u32)> (&ExpOptions::ExpandedOnButtonClick);
+        this->onButtonClickHandler.ptmf = &ExpOptions::ExpandedOnButtonClick;
     }
     void OnInit() override;
 private:
-    void ExpandedOnButtonClick(PushButton *pushButton, u32 hudSlotId);
+    void ExpandedOnButtonClick(PushButton& pushButton, u32 hudSlotId);
     PushButton settingsButton;
 public:
     PageId topSettingsPage;
 };
-}//namespace PulsarUI
+}//namespace UI
+}//namespace Pulsar
 #endif

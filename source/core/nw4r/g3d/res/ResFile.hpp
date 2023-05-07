@@ -32,33 +32,33 @@ struct ResFileData {
     ResTopLevelDictData dict;
 };
 
-class ResFile : public ResCommon<ResFileData> { //BRRES
+class ResFile: public ResCommon<ResFileData> { //BRRES
 public:
     bool CheckRevision() const; //8004d900
     void Init(); //8004d630
     bool Bind(ResFile rhs); //8004d1f0
-    ResMdl GetResMdl(const char *name) const; //8004c240
+    ResMdl GetResMdl(const char* name) const; //8004c240
     ResMdl GetResMdl(int idx) const; //8004c240
     ResMdl GetResMdl(u32 idx) const; //8004c350
     u32 GetResMdlNumEntries() const; //8004c3f0
 
-    ResAnmChr GetResAnmChr(const char *str) const; //8004c780
+    ResAnmChr GetResAnmChr(const char* str) const; //8004c780
     ResAnmChr GetResAnmChr(const ResName name) const; //8004c890
     u32 GetResAnmChrNumEntries() const; //8004c890
 
-    ResAnmClr GetResAnmClr(const char *str) const; //8004c900
+    ResAnmClr GetResAnmClr(const char* str) const; //8004c900
     ResAnmClr GetResAnmClr(const ResName name) const; //8004c970
     u32 GetResAnmClrNumEntries() const; //8004ca10
 
-    ResAnmTexPat GetResAnmTexPat(const char *str) const; //8004ca80
+    ResAnmTexPat GetResAnmTexPat(const char* str) const; //8004ca80
     ResAnmTexPat GetResAnmTexPat(const ResName name) const; //8004caf0
     u32 GetResAnmTexPatNumEntries() const; //8004cb90
 
-    ResAnmTexSrt GetResAnmTexSrt(const char *str) const; //8004cc00
+    ResAnmTexSrt GetResAnmTexSrt(const char* str) const; //8004cc00
     ResAnmTexSrt GetResAnmTexSrt(const ResName name) const; //8004cc70
     u32 GetResAnmTexSrtNumEntries() const; //8004cd10
 
-    ResAnmShp GetResAnmShp(const char *str) const; //8004cd80
+    ResAnmShp GetResAnmShp(const char* str) const; //8004cd80
     ResAnmShp GetResAnmShp(const ResName name) const; //8004cdf0
     u32 GetResAnmShpNumEntries() const; //8004ce90
 

@@ -7,7 +7,7 @@
 namespace nw4r {
 namespace g3d {
 
-class AnmObjTexSrt : public AnmObj {
+class AnmObjTexSrt: public AnmObj {
 };
 
 }//namespace g3d

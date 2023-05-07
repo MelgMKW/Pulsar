@@ -866,9 +866,9 @@ typedef enum _GXTevRegID {
 
 /*cullmode Backface culling mode*/
 typedef enum _GXCullMode {
-    GX_CULL_NONE,		/*Do not cull any primitives. *
-    GX_CULL_FRONT,		/*Cull front-facing primitives.
-    GX_CULL_BACK,		/*Cull back-facing primitives.
+    GX_CULL_NONE,		/*Do not cull any primitives. */
+    GX_CULL_FRONT,		/*Cull front-facing primitives.*/
+    GX_CULL_BACK,		/*Cull back-facing primitives.*/
     GX_CULL_ALL			/*Cull all primitives. */
 } GXCullMode;
 

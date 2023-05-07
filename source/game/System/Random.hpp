@@ -19,6 +19,10 @@ public:
     s32 NextLimited(int limit); // 805555cc
     float NextFloat(); //80555628
     float NextFloatLimited(float limit); //805556a8
+    template<typename T>
+    T NextLimited(int limit) { return static_cast<T>(NextLimited(limit)); }
+
+
     u8 unknown_0x4[0x8 - 0x4];
     s32 lastResult; //0x8 stored by next
     s32 lastResult2; //0xC gets init with the tbl

@@ -17,10 +17,10 @@ struct ResNameData {
 template<class T>
 class ResCommon {
 public:
-    T *data;
+    T* data;
 };
 
-class ResName : public ResCommon<const ResNameData> {
+class ResName: public ResCommon<const ResNameData> {
 public:
     bool operator==(const ResName rhs) const;
 };

@@ -2,7 +2,6 @@
 #define _COUNTDOWNTIMERPAGE_
 #include <kamek.hpp>
 #include <game/UI/Page/Page.hpp>
-#include <game/network/network.hpp>
 #include <game/Visual/Mii.hpp>
 #include <game/UI/Ctrl/CountDown.hpp>
 #include <game/UI/Page/Other/Message.hpp>
@@ -32,11 +31,11 @@ struct PlayerInfo {
 };//total size0xC
 
 namespace Pages {
-class CountDownTimer : public Page { //ID 0x90
+class CountDownTimer: public Page { //ID 0x90
 public:
     CountDownTimer(); //8064fbdc 
-    ~CountDownTimer() override; //8064fc70 vtable 0x808c069c
-    int IsHomeMenuWorking() override; //0x14 80651ba8 return 3, so home is disabled
+    ~CountDownTimer() override; //8064fc70 vtable 808c069c
+    int IsHomeMenuWorking() const override; //0x14 80651ba8 return 3, so home is disabled
     void OnInit() override; //0x28 8064fcfc
     void OnDispose() override; //0x2c 8064fe30
     void OnActivate() override; //0x30 8064fe34   
@@ -53,10 +52,10 @@ public:
     u32 GetBattleType() const; //80650b90
     void PrepareRace(); //80650e24 using RKNetSelect, sets stuff like racedata etc..
     void UpdateFriendParams(); //806515cc to rename
-    void OnDisconnect(MessageBox *messageBox); //806517b0
+    void OnDisconnect(MessageBox& messageBox); //806517b0
     void SetModeTypes(); //80651854 from RKNetSELECT
-    static void TriggerPtmf(PtmfHolder_1A<CountDownTimer, void, MessageBox *>, MessageBox *); //80651bbc
-    PtmfHolder_1A<CountDownTimer, void, MessageBox *> onDisconnectHandler; //0x44, 0x806517b0, selects next page
+    static void TriggerPtmf(PtmfHolder_1A<CountDownTimer, void, MessageBox&>, MessageBox&); //80651bbc
+    PtmfHolder_1A<CountDownTimer, void, MessageBox&> onDisconnectHandler; //0x44, 0x806517b0, selects next page
     ManipulatorManager manipulatorManager;
     CountDownPageStatus status; //0x68
     CountDown countdown; //0x6C
@@ -114,7 +113,7 @@ does stuff with miis, updates status to 2
 Checks status:
 if 2:
     model renderer page 805f57b8
-    currentRaceNumber mgr98:
+    currentRaceNumber params:
     if 0 add VRPage, update status to 3
     else add cupselectPage update status to 4
     sets initial countdown and isActive

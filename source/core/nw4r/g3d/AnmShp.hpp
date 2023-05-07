@@ -7,7 +7,7 @@
 namespace nw4r {
 namespace g3d {
 
-class AnmObjShp : public AnmObj {
+class AnmObjShp: public AnmObj {
 };
 }//namespace g3d
 }//namespace nw4r

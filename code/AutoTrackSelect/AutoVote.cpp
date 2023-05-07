@@ -1,28 +1,29 @@
-#include <Pulsar.hpp>
-#include <Settings/PlayerData.hpp>
+#include <PulsarSystem.hpp>
+
+#include <Settings/Settings.hpp>
 #include <AutoTrackSelect/AutoVote.hpp>
 #include <SlotExpansion/Network/PulSELECT.hpp>
-namespace PulsarUI {
 
-
+namespace Pulsar {
+namespace UI {
 //If ever there is a need for more custom sections, CustomSectionBuilder should be easy to make
-void BuildCustomSection(Section *section, SectionId id) {
-    //u32 raceCount = SectionMgr::sInstance->sectionMgr98->currentRaceNumber; 
-    if (id != SECTION_P1_WIFI_FROOM_VS_VOTING || !Pulsar::sInstance->hasHAW) section->CreateSectionPages(id);
+void BuildCustomSection(Section& section, SectionId id) {
+    if(id < SECTION_P1_WIFI_FROOM_VS_VOTING || id > SECTION_P2_WIFI_FROOM_COIN_VOTING
+        || !Info::IsHAW(false)) section.CreateSectionPages(id);
     else {
-        section->CreateAndInitPage(PAGE_ACTION_LESS);
-        section->CreateAndInitPage(PAGE_MESSAGEBOX);
-        AutoVote *autoVote = new(AutoVote);
-        section->Set(autoVote, PAGE_COUNTDOWN);
+        section.CreateAndInitPage(PAGE_AUTO_ENDING2);
+        section.CreateAndInitPage(PAGE_MESSAGEBOX);
+        AutoVote* autoVote = new(AutoVote);
+        section.Set(autoVote, PAGE_COUNTDOWN);
         autoVote->Init(PAGE_COUNTDOWN);
     }
 }
 kmCall(0x80622088, BuildCustomSection);
 
-void AddCustomLayers(Section *section, SectionId id) {
-    //u32 raceCount = SectionMgr::sInstance->sectionMgr98->currentRaceNumber;
-    if (id != SECTION_P1_WIFI_FROOM_VS_VOTING || !Pulsar::sInstance->hasHAW) section->AddInitialLayers(id);
-    else section->AddPageLayer(PAGE_COUNTDOWN);
+void AddCustomLayers(Section& section, SectionId id) {
+    if(id < SECTION_P1_WIFI_FROOM_VS_VOTING || id > SECTION_P2_WIFI_FROOM_COIN_VOTING
+        || !Info::IsHAW(false)) section.AddInitialLayers(id);
+    else section.AddPageLayer(PAGE_COUNTDOWN);
 }
 kmCall(0x8062213c, AddCustomLayers);
 
@@ -37,76 +38,79 @@ void AutoVote::OnInit() {
 }
 
 void AutoVote::OnDispose() {
-    RKNetSELECTHandler::DestroyStaticInstance();
+    RKNet::SELECTHandler::DestroyStaticInstance();
 }
 
 void AutoVote::OnUpdate() {
-    PulsarSELECT::Handler *select = (PulsarSELECT::Handler *)RKNetSELECTHandler::sInstance;
-    Pulsar *pulsar = Pulsar::sInstance;
-    SectionMgr *sectionMgr = SectionMgr::sInstance;
-    if (status == 6) {
-        Pages::MessageBox *messageBox = sectionMgr->curSection->Get<Pages::MessageBox>(PAGE_MESSAGEBOX);
+    Network::CustomSELECTHandler* select = reinterpret_cast<Network::CustomSELECTHandler*>(RKNet::SELECTHandler::sInstance);
+    CupsDef* cups = CupsDef::sInstance;
+    const SectionMgr* sectionMgr = SectionMgr::sInstance;
+    if(status == 6) {
+        Pages::MessageBox* messageBox = sectionMgr->curSection->Get<Pages::MessageBox>(PAGE_MESSAGEBOX);
         messageBox->Reset();
         messageBox->SetMessageWindowText(0xfb2);
-        messageBox->masterPageOnClickHandler = (PtmfHolder_1A<Page, void, Pages::Click *> *) & this->onDisconnectHandler;
+        const PtmfHolder_1A<Page, void, Pages::Click&>& onMessageClickPtmf = this->onDisconnectHandler;
+        messageBox->masterPageOnClickHandler = &onMessageClickPtmf;
         this->AddPageLayer(PAGE_MESSAGEBOX, 0);
         this->status = COUNTDOWN_STATUS_DISCONNECT_MSG;
     }
-    if (((RKNetSELECTHandler *)select)->IsPrepared() && status == 2) {
-        RKNetController *controller = RKNetController::sInstance;
-        RKNetControllerSub *sub = &controller->subs[controller->currentSub];
-        u8 hostAid = sub->hostAid;
-        u8 localAid = sub->localAid;
-        CourseId vote;
-        if (hostAid == localAid) {
-            vote = (CourseId)(pulsar->winningCourse + SELECTTRACKOFFSET);
+    if(reinterpret_cast<RKNet::SELECTHandler*>(select)->IsPrepared() && status == 2) {
+        const RKNet::Controller* controller = RKNet::Controller::sInstance;
+        const RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
+        const u8 hostAid = sub.hostAid;
+        const u8 localAid = sub.localAid;
+        PulsarId vote;
+        if(hostAid == localAid) {
+            vote = cups->winningCourse;
             select->toSendPacket.pulWinningCourse = vote;
             select->toSendPacket.winningVoterAid = hostAid;
         }
         else {
-            CourseId hostVote = (CourseId)select->receivedPackets[hostAid].pulSELPlayerData[0].pulCourseVote;
-            if (hostVote != 0x43) {
+            const PulsarId hostVote = static_cast<PulsarId>(select->receivedPackets[hostAid].pulSELPlayerData[0].pulCourseVote);
+            if(hostVote != 0x43) {
                 vote = hostVote;
-                pulsar->winningCourse = hostVote;
-                select->toSendPacket.pulWinningCourse = hostVote;
+                cups->winningCourse = hostVote;
+                select->toSendPacket.pulWinningCourse = vote;
                 select->toSendPacket.winningVoterAid = hostAid;
                 select->toSendPacket.phase = 2;
             }
-            else vote = LUIGI_CIRCUIT;
+            else vote = PULSARID_FIRSTREG;
         }
-        SectionMgr98 *mgr98 = sectionMgr->sectionMgr98;
-        for (int i = 0; i < mgr98->localPlayerCount; i++) {
-            PlayerCombo *combo = &mgr98->combos[i];
-            ((RKNetSELECTHandler *)select)->SetPlayerData(combo->selCharacter, combo->selKart, vote, i, combo->starRank);
+        const SectionParams* params = sectionMgr->sectionParams;
+        for(int i = 0; i < params->localPlayerCount; ++i) {
+            const PlayerCombo& combo = params->combos[i];
+            reinterpret_cast<RKNet::SELECTHandler*>(select)->SetPlayerData(combo.selCharacter, combo.selKart,
+                static_cast<CourseId>(vote), i, combo.starRank);
         }
         bool isReady = true;
-        if (sub->connectionCount == 1 || this->duration > 720) {
+        if(sub.connectionCount == 1 || this->duration > 1800) {
             isReady = false;
             this->status = COUNTDOWN_STATUS_DISCONNECTED; //6
         }
-        else if (hostAid == localAid) {
-            u8 phase = 2;
-            for (int i = 0; i < sub->connectionCount; i++) {
-                if (i != hostAid) {
-                    if (select->receivedPackets[i].phase != 2) {
+        else if(hostAid == localAid) {
+            for(int i = 0; i < sub.connectionCount; ++i) {
+                if(i != hostAid) {
+                    if(select->receivedPackets[i].phase != 2) {
+                        //check winning course
                         isReady = false;
-                        phase = select->toSendPacket.phase;
                     }
                 }
             }
             select->toSendPacket.phase = 2;
         }
-        else if (select->receivedPackets[hostAid].phase != 2) isReady = false;
-        if (isReady) {
-            ((RKNetSELECTHandler *)select)->AllocatePlayerIdsToAids();
+        else if(select->receivedPackets[hostAid].phase != 2) isReady = false;
+        if(isReady) ++readyDuration;
+        if(readyDuration > 60) {
+            reinterpret_cast<RKNet::SELECTHandler*>(select)->AllocatePlayerIdsToAids();
             this->status = COUNTDOWN_STATUS_VOTES_PAGE;
-            ArchiveRoot::sInstance->RequestLoadCourseAsync(pulsar->winningCourse);
+            ArchiveRoot::sInstance->RequestLoadCourseAsync(static_cast<CourseId>(cups->winningCourse));
             this->SetModeTypes();
             this->PrepareRace();
             this->UpdateFriendParams();
-            this->ChangeSectionBySceneChange(SECTION_P1_WIFI_FRIEND_VS, 0, 0.0f);
+            this->ChangeSectionBySceneChange(static_cast<SectionId>(sectionMgr->curSection->sectionId + 0x10), 0, 0.0f);
         }
     }
 }
 
-}//namespace PulsarUI
+}//namespace UI
+}//namespace Pulsar

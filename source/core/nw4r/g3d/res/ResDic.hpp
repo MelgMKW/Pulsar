@@ -20,7 +20,7 @@ struct ResDicData {
 
 };
 
-class ResDic : public ResCommon<ResDicData> {
+class ResDic: public ResCommon<ResDicData> {
 public:
 
 };

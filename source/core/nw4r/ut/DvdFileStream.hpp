@@ -6,19 +6,19 @@
 
 namespace nw4r {
 namespace ut {
-class DvdFileStream : public FileStream {
+class DvdFileStream: public FileStream {
 public:
     class DvdFileStreamInfo {
         DVDFileInfo dvdInfo;
-        DvdFileStream *stream;
+        DvdFileStream* stream;
     };
     DvdFileStream(u32 entryNum); //800b00d0 
     ~DvdFileStream() override; //80274c40
     void Seek(u32 begin, u32 r5);
-    int Read(void *buffer, u32 size);
+    int Read(void* buffer, u32 size);
     FilePosition position; //14
     IOStreamCallback cancelCallback; //1c
-    void *cancelArg; //20
+    void* cancelArg; //20
     volatile bool isCancelling;
     u8 padding[3];
     DvdFileStreamInfo fileInfo; //28

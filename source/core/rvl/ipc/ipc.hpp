@@ -2,19 +2,18 @@
 #define _IPC_
 #include <types.hpp>
 
-#define IPCMAXPATH 64
-#define IPCMAXFILENAME 13 //counts the /0 at th ened
-
-
 namespace IOS {
-typedef char IPCFileName[IPCMAXFILENAME];
-typedef char IPCPath[IPCMAXPATH];
+const int ipcMaxPath = 64;
+const int ipcMaxFileName = 13;
+typedef char IPCFileName[ipcMaxFileName];
+typedef char IPCPath[ipcMaxPath];
+
 enum Error {
     ERROR_PERMISSION_DENIED = -1,
     ERROR_FILE_EXISTS = -2,
     ERROR_INVALID_ARG = -4,
     ERROR_FILE_NOT_FOUND = -6,
-    ERROR_BUSY = -8,
+    ERROR_BUSY = -8
 };
 
 enum Mode {
@@ -47,18 +46,18 @@ enum SeekType {
 };
 
 struct IOCtlvRequest {
-    void *address;
+    void* address;
     u32 size;
 };
 
 struct RenameFile {
-    char oldName[IPCMAXPATH];
-    char newName[IPCMAXPATH];
+    char oldName[ipcMaxPath];
+    char newName[ipcMaxPath];
 };
 struct Attr {
     u32 uid;
     u16 gid;
-    char filepath[IPCMAXPATH];
+    char filepath[ipcMaxPath];
     u8 userperms;
     u8 groupperms;
     u8 otherperms;
@@ -83,7 +82,7 @@ struct FileStats {
 struct Request
 {
     union {
-        char path[IPCMAXPATH];
+        char path[ipcMaxPath];
         RenameFile rename;
         Attr attr;
         ReadDirectory readDir;
@@ -92,14 +91,14 @@ struct Request
     };
 }; //total size 0x80
 
-s32 Open(char *path, Mode mode);
-s32 Read(s32 fd, void *buffer, s32 length);
-s32 Write(s32 fd, void *buffer, s32 length);
+s32 Open(char* path, Mode mode);
+s32 Read(s32 fd, void* buffer, s32 length);
+s32 Write(s32 fd, void* buffer, s32 length);
 s32 Seek(s32 fd, s32 offset, SeekType whence); //returns length until the end, best to get file length
 s32 Close(s32 fd);
-s32 IOCtl(s32 fd, IOCtlType ioctl, void *buffer_in, s32 len_in, void *buffer_io, s32 len_io);
-s32 IOCtlv(s32 fd, IOCtlType ioctl, s32 countIv, s32 countIO, IOCtlvRequest *argv);
-s32 Open2ndInst(char *path, Mode mode);
+s32 IOCtl(s32 fd, IOCtlType ioctl, void* buffer_in, s32 len_in, void* buffer_io, s32 len_io);
+s32 IOCtlv(s32 fd, IOCtlType ioctl, s32 countIv, s32 countIO, IOCtlvRequest* argv);
+s32 Open2ndInst(char* path, Mode mode);
 extern s32 fs_fd;
 
 

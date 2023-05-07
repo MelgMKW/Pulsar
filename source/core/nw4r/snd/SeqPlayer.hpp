@@ -5,7 +5,7 @@
 namespace nw4r {
 namespace snd {
 namespace detail {
-class SeqPlayer : BasicPlayer {
+class SeqPlayer: BasicPlayer {
     SeqPlayer(); //80098db0
     ~SeqPlayer() override; //80098ef0
     bool Start() override; //800994c0

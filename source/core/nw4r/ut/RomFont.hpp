@@ -7,7 +7,7 @@
 namespace nw4r {
 namespace ut {
 
-class RomFont : public Font {
+class RomFont: public Font {
 public:
     RomFont(); //800b1a20
     ~RomFont() override; //800b1a80 vtable 80274dac
@@ -23,16 +23,16 @@ public:
     GXTexFmt GetTextureFormat() const override; //0x30 800b1bc0
     int GetLineFeed() const override; //0x34 800b1bd0
     const CharWidths GetDefaultCharWidths() const override; //0x38 800b1be0
-    void SetDefaultCharWidths(const CharWidths &widths) override; //0x3c 800b11c00
+    void SetDefaultCharWidths(const CharWidths& widths) override; //0x3c 800b11c00
     bool SetAlternateChar(u16 code) override; //0x40 800b11c20
     void SetLineFeed(int linefeed) override; //0x44 800b11cb0
     int GetCharWidth(u16 code) const override; //0x48 800b11cc0
     const CharWidths GetCharWidths(u16 code) const override; //0x4c 800b1d50
-    void GetGlyph(Glyph *glyphPtr, u16 code) const override; //0x50 800b1da0
+    void GetGlyph(Glyph* glyphPtr, u16 code) const override; //0x50 800b1da0
     bool HasGlyph(u16 c) const override; //0x54 800b1ea0
     FontEncoding GetEncoding() const override; //0x58 800b1f66
 
-    OSFontHeader *fontHeader; //0x10
+    OSFontHeader* fontHeader; //0x10
     CharWidths defaultWidths;  //0x14
     u16 altChar; //0x18
 }; //0x1c

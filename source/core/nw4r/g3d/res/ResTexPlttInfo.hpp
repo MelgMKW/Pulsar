@@ -14,7 +14,7 @@ struct ResTexPlttInfoOffsetData { //https://wiki.tockdom.com/wiki/MDL0_(File_For
     }vec[1]; //array of
 };
 
-class ResTexPlttInfoOffset : public ResCommon<ResTexPlttInfoOffsetData> {
+class ResTexPlttInfoOffset: public ResCommon<ResTexPlttInfoOffsetData> {
 public:
 
 };

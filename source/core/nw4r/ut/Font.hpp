@@ -20,7 +20,7 @@ struct CharWidths {
 };
 
 struct Glyph {
-    const void *texture;
+    const void* texture;
     CharWidths  widths;
     u8  height;
     GXTexFmt exFormat;
@@ -52,12 +52,12 @@ public:
     virtual GXTexFmt GetTextureFormat() const = 0; //0x30
     virtual int GetLineFeed() const = 0; //0x34
     virtual const CharWidths GetDefaultCharWidths() const = 0; //0x38
-    virtual void SetDefaultCharWidths(const CharWidths &widths) = 0; //0x3c
+    virtual void SetDefaultCharWidths(const CharWidths& widths) = 0; //0x3c
     virtual bool SetAlternateChar(u16 code) = 0; //0x40
     virtual void SetLineFeed(int linefeed) = 0; //0x44
     virtual int GetCharWidth(u16 code) const = 0; //0x48
     virtual const CharWidths GetCharWidths(u16 code) const = 0; //0x4c
-    virtual void GetGlyph(Glyph *glyphPtr, u16 code) const = 0; //0x50
+    virtual void GetGlyph(Glyph* glyphPtr, u16 code) const = 0; //0x50
     virtual bool HasGlyph(u16 c) const = 0; //0x54
     virtual FontEncoding GetEncoding() const = 0; //0x58
 

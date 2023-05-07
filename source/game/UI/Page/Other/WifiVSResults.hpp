@@ -9,16 +9,16 @@
 namespace Pages {
 
 //_sinit_ at 806467ac
-class WifiAwardResultItem : public LayoutUIControl {
+class WifiAwardResultItem: public LayoutUIControl {
 public:
     WifiAwardResultItem(); //806455dc
     ~WifiAwardResultItem(); //80645618 vtable 808bf854
     void InitSelf() override; //0x18 806457e8
     int GetRuntimeTypeInfo() const override; //0x28 80646764
-    const char *GetClassName() const override; //0x2c 806455cc
+    const char* GetClassName() const override; //0x2c 806455cc
     void Load(u8 idx, bool hasTwoColumns); //80645670 bools depends on isTeamVS and localPlayerCount
 };
-class WiFiVSResults : public Page { //ID 0x44
+class WiFiVSResults: public Page { //ID 0x44
 public:
     WiFiVSResults(); //80645bc8
     ~WiFiVSResults() override; //80645c8c vtable 808bf7e4
@@ -32,7 +32,7 @@ public:
     int GetRuntimeTypeInfo() const override; //0x60 80646758
 
     void OnClick(u32 hudSlotId); //80646200
-    Ptmf_1A<WiFiVSResults, void, u32> onClickHandler; //0x44 80646200
+    PtmfHolder_1A<WiFiVSResults, void, u32> onClickHandler; //0x44 80646200
     PageManipulatorManager pageManipulatorManager; //0x58
     LayoutUIControl modeName; //0x19c
     LayoutUIControl congratulations; //0x310 "Better luck next time!"

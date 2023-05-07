@@ -92,10 +92,10 @@ class LightMgr;
 
 
 class LightTextureBinary { //probably not abstract, can't find the vtable
-    void Mount(BinaryLightTex *raw); //8022f3e8
+    void Mount(BinaryLightTex* raw); //8022f3e8
     virtual void MountImpl() = 0;
     virtual void SaveImpl() = 0;
-    virtual char *GetMagic() = 0;
+    virtual char* GetMagic() = 0;
     virtual void vf_0x14() = 0;
     virtual void vf_0x18(); //8022e780
     virtual void vf_0x1c(); //8022e77c
@@ -108,10 +108,10 @@ class LightTextureBinary { //probably not abstract, can't find the vtable
     u16 unknown_0x18;
     u8 unknown_0x1a[2];
     u32 type;
-    float *clrIntensityArr;
-    int *gradientRefs;
+    float* clrIntensityArr;
+    int* gradientRefs;
     char name[32]; //0x28
-    LightMapBinary *lmap; //0x48
+    LightMapBinary* lmap; //0x48
     u8 status; //0x4c
     u8 tevStageCount;
     u8 indStageCount;
@@ -122,8 +122,8 @@ class LightTextureBinary { //probably not abstract, can't find the vtable
     u8 padding2[2];
 }; //0x58
 
-class CapTexture : public MatTexture, public LightTextureBinary {
-    CapTexture(u16 r4, const char *name, LightMapBinary *lightMapBinary); //8022d730
+class CapTexture: public MatTexture, public LightTextureBinary {
+    CapTexture(u16 r4, const char* name, LightMapBinary* lightMapBinary); //8022d730
 
     //CPUTexture vtable 802a3148 at 0x10
     ~CapTexture() override; //8022d9ac
@@ -132,35 +132,35 @@ class CapTexture : public MatTexture, public LightTextureBinary {
     //LightTextureBinary
     void MountImpl() override;  //thunk 8022e79c func 8022e4d4 vtable 802a315c
     void SaveImpl() override;   //thunk 8022e7a4 func 8022e6dc
-    char *GetMagic() override;  //thunk 8022e7ac func 8022e4c4
+    char* GetMagic() override;  //thunk 8022e7ac func 8022e4c4
     void vf_0x14() override;    //thunk 8022e7b4 func 8022e788
 }; //0x80
 
 class LightMapBinary {
-    explicit LightMapBinary(LightMgr *mgr); //8022e7bc
-    virtual void Mount(BLMAP *raw); //8022f2a8 vtable 802a3190
+    explicit LightMapBinary(LightMgr* mgr); //8022e7bc
+    virtual void Mount(BLMAP* raw); //8022f2a8 vtable 802a3190
     virtual void Save(); //8022f358
-    virtual char *GetMagic(); //8022f298
+    virtual char* GetMagic(); //8022f298
     virtual void vf_0x14(); //8022f708
     virtual void vf_0x18(); //8022f3e0
     virtual void vf_0x1c(); //8022f3dc
-    void CreateCapTexturesByPrefix(const char *prefix, ScnMdlEx *scnMdlEx); //8022eaa4
+    void CreateCapTexturesByPrefix(const char* prefix, ScnMdlEx* scnMdlEx); //8022eaa4
     u8 unknown_0x4[0x6 - 0x4];
     u16 ltexCount; //0x6
-    CapTexture **capTextures; //0x8
-    LightMgr *mgr; //0xC
+    CapTexture** capTextures; //0x8
+    LightMgr* mgr; //0xC
     u8 unknown_0x10[0x2C - 0x10];
 }; //0x2C
 
 class LightObject {
     LightObject(); //8022b6d4
-    virtual void LoadImpl(BinaryLIGHTObject *raw); //8022c2b4 vtable 802a3128
+    virtual void LoadImpl(BinaryLIGHTObject* raw); //8022c2b4 vtable 802a3128
     virtual void Save(); //8022c958
-    virtual void *GetLobjPtr(); //8022c2a4
+    virtual void* GetLobjPtr(); //8022c2a4
     virtual void vf_0x14(); //8022b664
     virtual void vf_0x18(); //8022d0f0
     virtual void DoubleMount(); //8022ca4c
-    void Load(BinaryLIGHTObject *raw); //8022b414
+    void Load(BinaryLIGHTObject* raw); //8022b414
     u16 ambLightIdx; //0x4
     u16 unknown_0x6;
     Vector3f dest; //0x8
@@ -190,9 +190,9 @@ class AmbientLight {
 
 class LightMgr {
     LightMgr(u16 lightObjCount, u16 ambLightCount, u8 pageCount); //8022a38c
-    virtual void Mount(BLIGHT *rawBLIGHT); //8022a8f0 vtable 802a3100
+    virtual void Mount(BLIGHT* rawBLIGHT); //8022a8f0 vtable 802a3100
     virtual void Save(); //8022aee4
-    virtual BLIGHT *GetStaticBLIGHT(); //8022a8e0
+    virtual BLIGHT* GetStaticBLIGHT(); //8022a8e0
     virtual void vf_0x14(); //8022b6ac
     virtual void vf_0x18(); //8022b6cc
     virtual void DoubleMount(); //8022afd8
@@ -203,8 +203,8 @@ class LightMgr {
     u16 ambLightCount;
     u16 maxLightObjCount; //0x8
     u16 maxAmbLightCount; //0xA
-    LightObject **lightObjs; //0xC
-    AmbientLight *ambientLights; //0x10
+    LightObject** lightObjs; //0xC
+    AmbientLight* ambientLights; //0x10
     GXColor ambBlackColor; //0x14
     u8 unknown_0x18[0x20 - 0x18];
     LightMapBinary binary; //0x20

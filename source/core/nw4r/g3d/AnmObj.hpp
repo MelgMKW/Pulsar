@@ -8,7 +8,7 @@ namespace nw4r {
 namespace g3d {
 
 
-class AnmObj : public G3dObj { //abstract class for animation classes
+class AnmObj: public G3dObj { //abstract class for animation classes
 public:
     virtual void SetFrame(float frame) = 0; //0x1c
     virtual float GetFrame() const = 0; //0x20
@@ -29,7 +29,7 @@ class FrameCtrl {
     float updateRate;
     float startFrame;
     float endFrame;
-    void *playPolicyFunc;
+    void* playPolicyFunc;
 }; //0x14
 }//namespace g3d   
 }//namespace nw4r

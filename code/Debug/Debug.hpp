@@ -9,31 +9,32 @@
 #include <core/rvl/os/Error.hpp>
 #include <core/rvl/os/thread.hpp>
 #include <core/egg/Exception.hpp>
-#include <File/File.hpp>
-#include <Pulsar.hpp>
 
+namespace Pulsar {
 namespace Debug {
+
+void FatalError(const char* string);
 void LaunchSoftware();
 struct GPR {
-    void Set(const OSContext *context, u8 idx) {
-        gpr = context->gpr[idx];
-        name = 0x7230303a + ((idx / 10) % 10) * 0x10000 + (idx % 10) * 0x100;
+    void Set(const OS::Context& context, u32 idx, u32 regValue){
+        gpr = context.gpr[idx];
+        name = 'r00:' + regValue;
     }
     u32 name;
     u32 gpr;
 };
 
 struct FPR {
-    void Set(const OSContext *context, u8 idx) {
-        fpr = context->fpr[idx];
-        name = 0x6630303a + ((idx / 10) % 10) * 0x10000 + (idx % 10) * 0x100;
+    void Set(const OS::Context& context, u32 idx, u32 regValue){
+        fpr = context.fpr[idx];
+        name = 'f00:' + regValue;
     }
     u32 name;
     f64 fpr;
 };
 
 struct StackFrame {
-    StackFrame(): spName(0x73703A20), sp(0), lrName(0x6C723A20), lr(0) {};
+    StackFrame() : spName('sp: '), sp(0), lrName('lr: '), lr(0) {};
     u32 spName;
     u32 sp;
     u32 lrName;
@@ -41,10 +42,10 @@ struct StackFrame {
 };
 
 struct ExceptionFile {
-    explicit ExceptionFile(const OSContext *context);
+    explicit ExceptionFile(const OS::Context& context);
 
     u32 magic;
-    OSError error;
+    OS::Error error;
     GPR srr0;
     GPR srr1;
     GPR msr;
@@ -57,6 +58,6 @@ struct ExceptionFile {
 };
 
 }//namespace Debug
-
+}//namespace Pulsar
 
 #endif

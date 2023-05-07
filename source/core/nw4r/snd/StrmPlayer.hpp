@@ -13,6 +13,15 @@ namespace snd {
 namespace detail {
 class StrmPlayer : public BasicPlayer {
 public:
+    static const int maxTrackCount = 8;
+    static const int maxBlockSize = 8 * 1024; //That can be played
+    static const int maxChannelCount = 16;
+    static const int channelsPerTrack = 2;
+    static const int maxBlockBufferCount = 32;
+    static const int concurrentChannelLoad = 2; // The number of channels that load simultaneously.
+    static const int bufferSize = maxBlockSize * concurrentChannelLoad; //0x4000
+    static u8 sLoadBuffer[bufferSize]; //802ed260
+
     enum StartOffsetType {
         STARTOFFSETTYPE
     };
@@ -22,9 +31,9 @@ public:
         ~StrmHeaderLoadTask() override; //800a5960 80274ae8
         void Execute() override; //800a8070
         void Cancel() override; //800a80c0
-        void OnCancel() override; //800a80c0
-        StrmPlayer *strmPlayer;
-        DVDSoundArchive::DVDFileStream *stream; //0x14
+        void OnCancel() override; //800a80d0
+        StrmPlayer* strmPlayer;
+        DVDSoundArchive::DVDFileStream* stream; //0x14
         StartOffsetType type; //copied from 0x168 of the strm player
         s32 startOffset;
     }; //total size 0x20
@@ -37,8 +46,8 @@ public:
         void Execute() override; //800a81d0
         void Cancel() override; //800a82a0
         void OnCancel() override; //800a8330
-        StrmPlayer *strmPlayer;
-        ut::FileStream *fileStream;
+        StrmPlayer* strmPlayer;
+        ut::FileStream* fileStream;
         u32 size;
         s32 offset;
         u32 blockSize;
@@ -48,7 +57,7 @@ public:
     }; //0x34
 
     class StrmChannel {
-        void *buffer; //allocated from pool
+        void* buffer; //allocated from pool
         u8 unknown_0x4[0x30];
     }; //0x34
 
@@ -60,24 +69,26 @@ public:
     bool IsActive() const override; //800a8430
     bool IsStarted() const override; //800a8420
     bool IsPause() const override; //800a8410
-    int Setup(StrmBufferPool *buffer, int, u16, int); //800a5b20
+    int Setup(StrmBufferPool* buffer, int, u16, int); //800a5b20
     void Shutdown(); //800a5d40
-    int Prepare(ut::FileStream *stream, StrmPlayer::StartOffsetType type, int);  //800a5dd0
+    int Prepare(ut::FileStream* stream, StrmPlayer::StartOffsetType type, int startOffset);  //800a5dd0
     void InitParam(); //800a6530
-    void LoadHeader(ut::FileStream *stream, StartOffsetType type, int); //800a6670
-    void LoadStreamData(ut::FileStream *stream, int offset, u32 blockSize, u32 r7, int r8, bool r9); //800a6970
+    void LoadHeader(ut::FileStream* stream, StartOffsetType type, int startOffset); //800a6670
+    void LoadStreamData(ut::FileStream* stream, int offset, u32 blockSize, u32 r7, int r8, bool r9); //800a6970
     bool SetupPlayer(); //800a6be0
     void Update(); //800a6ed0
-    void UpdateVoiceParams(StrmTrack *track); //800a7090
+    void UpdateVoiceParams(StrmTrack* track); //800a7090
     void UpdateBuffer(); //800a7410
     void UpdateLoopAddress(u32 start, u32 end); //800a75b0
-    PlayerTrack *SetTrackVolume(float volume, u32 index); //800a7fc0
-    PlayerTrack *GetPlayerTrack(u32 index); //800a8050
+    void SetLoopEndToZeroBuffer(int endBufferBlockIndex); //800a7a20
+    void UpdateLoadingBlockIndex(); //800a7b10
+    PlayerTrack* SetTrackVolume(float volume, u32 index); //800a7fc0
+    PlayerTrack* GetPlayerTrack(u32 index); //800a8050
     void OnUpdateFrameSoundThread(); //800a83e0
     void OnUpdateVoiceSoundThread(); //800a83f0
     void OnShutdownSoundThread(); //800a8400
     nw4r::ut::LinkListNode node1; //0xd0
-    void *callBackvtable; //80274aac d8
+    void* callBackvtable; //80274aac d8
     StrmFileReader::StrmInfo strmInfo; //0xDC copied from HEAD
     u8 unknown_0x11C;
     bool isNotMuted;
@@ -105,14 +116,17 @@ public:
     StrmHeaderLoadTask task; //0x170
     ut::LinkList<StrmDataLoadTask, offsetof(StrmDataLoadTask, link)> strmDataLoadTasklist; //0x20
     u32 unknown_0x19c; //some kind of list thing, idk
-    StrmDataLoadTask dataTasks[0x20]; //0x1a0 800a8180 ctor size 0x34, one per track?
-    StrmBufferPool *strmBufferPool; //0x820
-    DVDSoundArchive::DVDFileStream *stream; //0x824
-    u32 streamCount; //channel / 2 0x828
+    StrmDataLoadTask dataTasks[maxBlockBufferCount]; //0x1a0 800a8180 ctor size 0x34, one per track?
+    StrmBufferPool* strmBufferPool; //0x820
+    ut::FileStream* stream; //0x824 mostly DVDFileStream
+    u32 trackCount; //channel / 2 0x828
     u32 channelsNeeded; //0x82c sound ID dependant
     u32 unknown_0x830;
-    StrmChannel channels[16]; //channel count active 
-    StrmTrack tracks[8]; //0xb74 0x38 struct
+    StrmChannel channels[maxChannelCount]; //channel count active 
+    StrmTrack tracks[maxTrackCount]; //0xb74 0x38 struct
+
+
+
 }; // total size 0xd34
 
 size_assert(StrmPlayer, 0xd34);

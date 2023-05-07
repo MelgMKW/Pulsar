@@ -4,6 +4,6 @@
 
 
 extern "C" {
-    void *VIGetNextFrameBuffer(); //801bab24
+    void* VIGetNextFrameBuffer(); //801bab24
 }
 #endif

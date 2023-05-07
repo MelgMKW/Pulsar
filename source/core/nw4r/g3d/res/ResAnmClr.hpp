@@ -28,7 +28,7 @@ struct ResAnmClrData { //https://wiki.tockdom.com/wiki/CLR0_(File_Format)
     //data
 };
 
-class ResAnmClr : public ResCommon<ResAnmClrData> {};
+class ResAnmClr: public ResCommon<ResAnmClrData> {};
 
 }//namespace g3d
 }//namespace nw4r

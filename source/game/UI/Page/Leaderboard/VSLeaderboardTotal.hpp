@@ -6,7 +6,7 @@
 
 //_sinit_ at 8085e644
 namespace Pages {
-class VSLeaderboardTotal : public VSLeaderboardUpdate { //ID 0x30
+class VSLeaderboardTotal: public VSLeaderboardUpdate { //ID 0x30
 public:
     VSLeaderboardTotal(); //806252a8
     ~VSLeaderboardTotal() override; //8085e540 vtable 808daba4

@@ -6,7 +6,7 @@
 
 class KartPart {
 public:
-    KartPart(KartValues *kartParams, u32 unknown); //80592848
+    KartPart(const KartValues& kartValues, u32 unknown); //80592848
     KartBase base;
     virtual ~KartPart(); //0xc 8056c0cc vtable 808b6450
 

@@ -14,14 +14,14 @@
 class KartPointers;
 class KartSub {
 public:
-    explicit KartSub(KartValues *values); //80595d48
+    explicit KartSub(const KartValues& values); //80595d48
     void Update(); //80596480
     KartBase base;
     virtual void unknown_vtable(); //0xc vtable 808b659c
-    KartMovement *kartMovement;
-    KartDamage *kartDamage;
-    KartCollision *kartCollision; //contains kart body collision data
-    KartStatus *kartStatus; //contains input-related state
+    KartMovement* kartMovement;
+    KartDamage* kartDamage;
+    KartCollision* kartCollision; //contains kart body collision data
+    KartStatus* kartStatus; //contains input-related state
     u8 unknown_0x20[0x9c - 0x20];
 }; //Total size 0x9c
 

@@ -1,7 +1,7 @@
 #ifndef _GAMESCENE_
 #define _GAMESCENE_
 #include <core/RK/RKSceneManager.hpp>
-#include <game/System/Archive.hpp>
+#include <game/Archive/ArchiveRoot.hpp>
 
 enum SceneId {
     SCENE_ID_MENU = 0x1,
@@ -17,13 +17,13 @@ enum SceneId {
     SCENE_ID_UNK11 = 0xb
 };
 
-class GameSceneCreator : public RKSceneCreator { //also creates the rootscene
+class GameSceneCreator: public RKSceneCreator { //also creates the rootscene
 public:
-    Scene *create(u32 sceneId) override; //8054aa64 vtable 808b3cb0
+    Scene* create(u32 sceneId) override; //8054aa64 vtable 808b3cb0
     void destroy(u32 sceneId) override;  //8054ab28
 };
 
-class BaseScene : public RKScene { //used by RootScene only?
+class BaseScene: public RKScene { //used by RootScene only?
 public:
     ~BaseScene() override; //8051a368 vtable 808b2d10
     void calc() override;   //0xc  8051c02c
@@ -37,13 +37,13 @@ public:
 
 class ArchiveLink {
     nw4r::ut::Link link;
-    ArchivesHolder *holder;
+    ArchivesHolder* holder;
     ArchiveSource source;
 };
 
-class GameScene : public BaseScene {
+class GameScene: public BaseScene {
 public:
-    static const GameScene *GetCurrent(); //8051bed0, gets current scene from SceneManager and if id != 0 and != 5, returns it
+    static const GameScene* GetCurrent(); //8051bed0, gets current scene from SceneManager and if id != 0 and != 5, returns it
     GameScene(); //8051a1e0
     ~GameScene() override; //8051a3c0 vtable 808b2c98
     void calc() override;   //0xc  8051b3c8
@@ -67,7 +67,7 @@ public:
     virtual void vf_0x5c(); //0x5c 8051b9d0
 
     void FinalizeEnter(); //8051a4dc calls OnEnterEnd
-    void AddArchiveHolder(ArchivesHolder *archive, ArchiveSource source); //80540450
+    void AddArchiveHolder(ArchivesHolder& archive, ArchiveSource source); //88051aa58
     void FadeIn(); //8051a41c inlined
     void FadeOutToNewScene(); //8051a480 inlined
     void FadeOutToReinit(); //8051b094
@@ -77,12 +77,12 @@ public:
     void Reset(); //8051b0f4 called on reinit
     void CreateChildScene(u32 sceneId); //8051b0e0
 
-    ExpHeap *someSoundHeap; //0xc70
+    ExpHeap* someSoundHeap; //0xc70
     nw4r::ut::List archivesLinkList; //0xc74 list of archive links
-    ExpHeap *archiveHeapMem1; //0xc80, adjusted to the size of the archives, so not usable
-    ExpHeap *archiveHeapMem2; //0xc84
-    ExpHeap *structsMem1; //0xc88 used for stuff like controls, pages, sections, Kart etc...
-    ExpHeap *structsMem2; //0xc8c
+    ExpHeap* archiveHeapMem1; //0xc80, adjusted to the size of the archives, so not usable
+    ExpHeap* archiveHeapMem2; //0xc84
+    ExpHeap* structsMem1; //0xc88 used for stuff like controls, pages, sections, Kart etc...
+    ExpHeap* structsMem2; //0xc8c
     u32 unknown_0xc90;
     ExpHeapGroup structsHeaps; //0xc94
     u8 unknown_0x18a0[0x18d4 - 0x18a0];
@@ -90,12 +90,13 @@ public:
     u8 unknown_0x24e0[0x2514 - 0x24e0];
     u32 someRandomThing; //0x2514 8051ac44
     u32 someRandomThing2; //0x2518 8051ac44
-    void *randomTimes32; //0x251c
-    void *random2Times32; //0x2520
+    void* randomTimes32; //0x251c
+    void* random2Times32; //0x2520
     bool unknown_0x2530[2];
     u8 unknown_0x2532[0x2544 - 0x2532];
     u32 nextId; //0x2544
     u8 unknown_0x2548[0x254c - 0x2548];
 
 };
+
 #endif

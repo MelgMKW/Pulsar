@@ -4,16 +4,16 @@
 #include <game/Objects/Collidable/ObjectCollidable.hpp>
 
 namespace Objects {
-class Cannon : public ObjectCollidable { //378 StarRing, 601 DonkyCannonGC, 607 DonkyCannon_wii, 609 tree_cannon
+class Cannon: public ObjectCollidable { //378 StarRing, 601 DonkyCannonGC, 607 DonkyCannon_wii, 609 tree_cannon
 public:
     enum Type {
         DonkyCannon_wii = 0,
         DonkyCannonGC = 1,
         tree_cannon = 2,
-        StarRing = 3,
+        StarRing = 3
     };
     static u8 cannonCount; //0x809c2248
-    explicit Cannon(KMP::GOBJHolder *gobjHolder); //806bfb14
+    explicit Cannon(const KMP::GOBJHolder& gobjHolder); //806bfb14
     ~Cannon() override; //806bfd90 vtable 808c2fa0
     void OnStart() override; //0xC 806bfddc
     void Update() override; //0x14 806bfed0

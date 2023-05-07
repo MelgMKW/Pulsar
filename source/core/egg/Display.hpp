@@ -29,7 +29,7 @@ public:
     float unknown_0x24;
 }; //0x28
 
-class AsyncDisplay : public Display {
+class AsyncDisplay: public Display {
 public:
     AsyncDisplay(u8 timeBtwFrames); //8020fd18
     void beginFrame() override; //8020fe24 vtable 802a26e0
@@ -39,7 +39,7 @@ public:
     static void VIRetraceCallback(u32 retraceCount); //8020fcd4
 
     u8 unknown_0x28[0x58 - 0x28];
-    OSMessageQueue messageQueue; //0x58
+    OS::MessageQueue messageQueue; //0x58
     u32 unknown_0x78[2];
     u32 postVITick; //0x80
     u32 unknown_0x84;

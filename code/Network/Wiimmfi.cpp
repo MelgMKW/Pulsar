@@ -13,7 +13,7 @@
 extern "C" {
 
     extern char Patch_LoginPrintHeader[], Patch_WiimmfiURLs[];
-    extern const char *Patch_AuthserverHosts[3];
+    extern const char* Patch_AuthserverHosts[3];
 
     extern s32 DWC_AuthServer, SSL_Initialised;
     void NETSHA1Init();
@@ -22,7 +22,7 @@ extern "C" {
 
 }
 
-u32 expectedHash[] = { 0x0FFF1F07, 0x00E638C9, 0x49FBEFFA, 0x79022D3A, 0x84AB134F };
+u32 expectedHash[] ={ 0x0FFF1F07, 0x00E638C9, 0x49FBEFFA, 0x79022D3A, 0x84AB134F };
 
 static asm void wiimmfiAsm1() {
     ASM(
@@ -148,34 +148,34 @@ end:
 
 kmCall(0x801d4efc, wiimmfiAsm2);
 
-static void patchURL(u32 offset, const char *string)
+static void patchURL(u32 offset, const char* string)
 {
     strcpy(&Patch_WiimmfiURLs[offset], string);
 }
 
 static int stringPatch()
 {
-    strcpy(Patch_LoginPrintHeader, "Skill Issue Pack"); // set patcher name
+    strcpy(Patch_LoginPrintHeader, "Pulsar"); // set patcher name
 
     Patch_AuthserverHosts[0] = "http://ca.nas.wiimmfi.de/ca";
     Patch_AuthserverHosts[1] = "http://naswii.wiimmfi.de/ac";
 
     // Get path
-    const char *path;
-    switch (*(char *)0x80000003)
+    const char* path;
+    switch(*(char*)0x80000003)
     {
-    case 'E':
-        Patch_AuthserverHosts[2] = "https://main.nas.wiimmfi.de/pe";
-        break;
-    case 'J':
-        Patch_AuthserverHosts[2] = "https://main.nas.wiimmfi.de/pj";
-        break;
-    case 'P':
-        Patch_AuthserverHosts[2] = "https://main.nas.wiimmfi.de/pp";
-        break;
-    case 'K':
-        Patch_AuthserverHosts[2] = "https://main.nas.wiimmfi.de/pk";
-        break;
+        case 'E':
+            Patch_AuthserverHosts[2] = "https://main.nas.wiimmfi.de/pe";
+            break;
+        case 'J':
+            Patch_AuthserverHosts[2] = "https://main.nas.wiimmfi.de/pj";
+            break;
+        case 'P':
+            Patch_AuthserverHosts[2] = "https://main.nas.wiimmfi.de/pp";
+            break;
+        case 'K':
+            Patch_AuthserverHosts[2] = "https://main.nas.wiimmfi.de/pk";
+            break;
     }
 
     patchURL(0xA8, "://naswii.wiimmfi.de/pr");

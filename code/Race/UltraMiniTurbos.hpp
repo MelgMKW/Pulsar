@@ -3,6 +3,9 @@
 #include <kamek.hpp>
 #include <game/visual/effect/EffectMgr.hpp>
 
+
+namespace Pulsar {
+namespace Race {
 /*Implements UMTs. This is a fully custom version so it has its own rules:
 -It takes 550 frames to charge (300 for a SMT)
 -It lasts 1.33x as long as a SMT
@@ -11,7 +14,6 @@
 -In effect though, that last perk is mostly only useful for charging a MT/SMT on a boost panel that was hit after releasing a UMT
 */
 
-#define UMTEFFECTSCOUNT 8
 enum UMTeffects { //Chips are not implemented currently due to pure laziness
     rk_driftSpark3L_Spark00,
     rk_driftSpark3L_Spark01,
@@ -28,20 +30,23 @@ enum UMTeffects { //Chips are not implemented currently due to pure laziness
     //rk_driftSpark3L1T_Spark01,
     //rk_driftSpark3R1T_Chip00,
     //rk_driftSpark3R1T_Spark00,
-    //rk_driftSpark3R1T_Spark01,
+    //rk_driftSpark3R1T_Spark01
 };
 
-class ExpPlayerEffects : public PlayerEffects {
+class ExpPlayerEffects: public PlayerEffects {
 public:
-    explicit ExpPlayerEffects(Kart *kart): PlayerEffects(kart) { };
+    static const int UmtEffectsCount = 8;
+    explicit ExpPlayerEffects(Kart* kart): PlayerEffects(kart) { };
     ~ExpPlayerEffects() override {
-        EGG::Effect **array = rk_purpleMT;
-        if (array != NULL && isBike == false) {
-            for (int i = 0; i < UMTEFFECTSCOUNT; i++) delete(array[i]);
+        EGG::Effect** array = rk_purpleMT;
+        if(array != nullptr && isBike == false) {
+            for(int i = 0; i < UmtEffectsCount; ++i) delete(array[i]);
             delete[] array;
         }
     }
-    EGG::Effect **rk_purpleMT;
-    static const char *UMTNames[8];
+    EGG::Effect** rk_purpleMT;
+    static const char* UMTNames[8];
 };
 #endif
+}//namespace Race
+}//namespace Pulsar

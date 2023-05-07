@@ -30,7 +30,7 @@ extern "C" {
     void GXLoadPosMtxImm(const float mtx[3][4], u32 pnidx);
     void GXSetCurrentMtx(u32 mtx);
     void GXLoadPosMtxIndx(u32 indx);
-    OSThread *GetCurrentGXThread(); //8016d39c
+    OS::Thread* GetCurrentGXThread(); //8016d39c
     void GXSetDrawSync(u16 token); //sets a token, which will be stored in a reg when it reaches the end of the pipeline
     u16 GXReadDrawSync(); //if matches token set with, geometry has been rendered
 }

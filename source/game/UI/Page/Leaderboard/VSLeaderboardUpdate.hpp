@@ -7,7 +7,7 @@
 
 //_sinit_ at 8085e644
 namespace Pages {
-class VSLeaderboardUpdate : public Leaderboard { //ID 0x2f
+class VSLeaderboardUpdate: public Leaderboard { //ID 0x2f
 public:
     VSLeaderboardUpdate(); //8062526c
     ~VSLeaderboardUpdate() override; //8085e5bc vtable 808dac18
@@ -19,7 +19,7 @@ public:
     void func_0x6c() override; //0x6c 8085c5a0
     int GetRowCount() const override; //0x70, 8085c4f4 simply playerCount
 
-    CtrlRaceResult **results; //0x1A0, size of the array = row count
+    CtrlRaceResult** results; //0x1A0, size of the array = row count
     u8 unknown_0x1A4[0x1A8 - 0x1A4];
 }; //total size 0x1A8
 size_assert(VSLeaderboardUpdate, 0x1A8);

@@ -24,7 +24,7 @@ struct StatsParamEntry { //https://wiki.tockdom.com/wiki/KartParam.bin
     float float_0xC;
     float weight; //10
     float bumpDeviationLevel;
-    float baseSpeed;
+    float baseSpeed; //0x18
     float handlingSpeedMultiplier;
     float tilt;
     float standard_acceleration_as[4];

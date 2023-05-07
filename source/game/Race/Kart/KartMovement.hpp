@@ -20,9 +20,9 @@ public:
     void Reset(); //80588d74
     bool Activate(u32 type, s16 frames); //80588db0
     void CancelAll(); //80588e18
-    bool Update(bool *unk0); //80588e24
-    //vtable 808b5fd8
-    virtual ~KartBoost(); //8057811c
+    bool Update(bool* unk0); //80588e24
+
+    virtual ~KartBoost(); //8057811c vtable 808b5fd8
     s16 mtFrames; //0x4
     s16 starFrames; //0x6
     s16 mushroomBoostPanelFrames; //8
@@ -52,15 +52,13 @@ enum TrickType {
     FLIP_TRICK_Y_LEFT = 3,
     FLIP_TRICK_Y_RIGHT = 4,
     Kart_FLIP_TRICK_Z = 5,
-    BIKE_SIDE_STUNT_TRICK = 6,
+    BIKE_SIDE_STUNT_TRICK = 6
 };
-
 enum TrickCategory {
     STUNT = 0,
     SINGLE_FLIP = 1,
-    DOUBLE_FLIP = 2,
+    DOUBLE_FLIP = 2
 };
-
 struct TrickProperties {
     float initialAngleDiff;
     float minAngleDiff;
@@ -72,13 +70,13 @@ class KartTrick {
 public:
     KartTrick(); //80575a44
     void UpdateNext(); //80575b38
-    void TryStart(Vec3 *left); //80575d7c
+    void TryStart(const Vec3& left); //80575d7c
     void Update(); //805763e4
     void End(); //805766b8
 
     KartBase base;
     virtual ~KartTrick(); //0xC 80575aa8 vtable 808b58b0
-    virtual void Start(Vec3 *left); //80575ee8
+    virtual void Start(const Vec3& left); //80575ee8
     virtual void StartInner(TrickCategory category); //8057616c
     virtual void Unknown_1();
     virtual void Unknown_2();
@@ -89,7 +87,7 @@ public:
     u8 unknown_0x19;
     s16 nextTimer;
     float rotDir;
-    TrickProperties *properties;
+    TrickProperties* properties;
     float angle;
     float angleDiff;
     float angleDiffMul;
@@ -99,16 +97,15 @@ public:
     bool boostRampEnabled;
     u8 unknown_0x3b;
     Quat rot;
-    KartMovement *kartMovement;
+    KartMovement* kartMovement;
 }; //total size 0x50
 
-class KartTrickBike : public KartTrick {
+class KartTrickBike: public KartTrick {
 public:
     ~KartTrickBike() override; //0xC 80576afc vtable 808b5890
-    void Start(Vec3 *left) override; //80576758 
+    void Start(const Vec3& left) override; //80576758 
     void StartInner(TrickCategory category) override; //8057689c
     void UpdateRot() override; //80576994
-    //vtable 808b5890
 }; //total size 0x50
 
 class KartZipper {
@@ -151,7 +148,7 @@ public:
     void UpdateBoost(); //80582694, always inlined
     void ReleaseMt(int unk0, int unk1); //80582f9c
     void UpdateStickyRoad(); //80583b88
-    void SetInitialPhysicsValues(Vec3 *position, Vec3 *angles); //80584044
+    void SetInitialPhysicsValues(const Vec3& position, const Vec3& angles); //80584044
     void DoRespawn(); //80584334
     void EnterCannon(); //8058498c
     void UpdateCannon(); //80584d58
@@ -159,7 +156,7 @@ public:
     void UpdateDiving(); //805869dc
     void UpdateSlipstream(); //80586fa8
     void UpdateSpecialFloor(); //80587590, always inlined
-    float ComputeWallCollisionSpeedFactor(float &unknown);  //8057b108
+    float ComputeWallCollisionSpeedFactor(float unknown);  //8057b108
     KartBase base;
     virtual ~KartMovement(); //0xC 80587b78 vtable 808b5f60
     virtual void Unknown_1();
@@ -207,9 +204,9 @@ public:
     Vec3 dirDiff;
     bool hasLandingDir;
     u8 unknown_0x99[0x9c - 0x99];
-    float outsideDriftAngle;
-    float landingAngle;
-    Vec3 outsideDriftLastDir;
+    float outsideDriftAngle; //0x9c
+    float landingAngle; //0xa0
+    Vec3 outsideDriftLastDir; //0xa4
     float speedRatioCapped; //to 1
     float speedRatio;
     float kclSpeedFactor;
@@ -231,7 +228,7 @@ public:
     s16 smtCharge;
     s16 mtBoost;
     float outsideDriftBonus;
-    KartBoost boost;
+    KartBoost boost; //0x108
     s16 zipperBoost;
     s16 zipperBoostMax;
     u8 unknown_0x130[0x148 - 0x130];
@@ -276,8 +273,8 @@ public:
       4 jump pad
     */
     u8 unknown_0x254[0x258 - 0x254];
-    KartTrick *trick;
-    KartZipper *zipper;
+    KartTrick* trick;
+    KartZipper* zipper;
     u8 unknown_0x260[0x288 - 0x260];
     float rawTurn;
     float unknown_0x28c;
@@ -285,17 +282,17 @@ public:
     u8 unknown_0x292[2];
 }; //Total size 0x294
 
-class KartMovementRemove : public KartMovement {
+class KartMovementRemove: public KartMovement {
 public:
     //vtable 808b5d90
 }; //Total size 0x294
 
-class KartMovementRealLocal : public KartMovement {
+class KartMovementRealLocal: public KartMovement {
 public:
     //vtable 808b5e78
 }; //Total size 0x294
 
-class KartMovementBike : public KartMovement {
+class KartMovementBike: public KartMovement {
 public:
     KartMovementBike(); //80587b30
 
@@ -321,15 +318,15 @@ public:
     u16 wheelietimer2; //from what i know the same as wheelieTimer, but stored as a ushort
     u16 wheelieCooldown;
     u8 unknown_0x254[0x2c0 - 0x2b8];
-    void *turnParams;
+    void* turnParams;
 }; //Total size 0x2c4
 
-class KartMovementBikeRemote : public KartMovement {
+class KartMovementBikeRemote: public KartMovement {
 public:
     //vtable 808b5d18
 }; //Total size 0x2c4
 
-class KartMovementBikeRealLocal : public KartMovement {
+class KartMovementBikeRealLocal: public KartMovement {
 public:
     //vtable 808b5e00
 }; //Total size 0x2c4

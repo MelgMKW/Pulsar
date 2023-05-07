@@ -36,8 +36,8 @@ class Hitbox {
 public:
     Hitbox(); //805b7f48
     void Reset(); //808b7f84
-    void Update(float scale0, float scale1, Vec3 *scale, Quat *rotation, Vec3 *centerPosition); //805b7fbc
-    BSP::Hitbox *bspHitbox;
+    void Update(float scale0, float scale1, const Vec3& scale, Quat* rotation, const Vec3& centerPosition); //805b7fbc
+    BSP::Hitbox* bspHitbox;
     float radius;
     s32 unknown_0x8;
     Vec3 position;
@@ -48,15 +48,15 @@ public:
 class HitboxGroup {
 public:
     HitboxGroup(); //805b82bc
-    explicit HitboxGroup(UnkType *hitboxes); //805b84c0
-    HitboxGroup(float radius, Vec3 *position); //805b875c
+    explicit HitboxGroup(const BSP::Hitbox& hitboxes); //805b84c0
+    HitboxGroup(float radius, const Vec3& position); //805b875c
     void UpdateBoundingRadius(); //805b883c
     void Reset(); //805b8330
     u16 hitboxCount;
     //padding 0x2 - 0x3
     float boundingRadius;
     CollisionData collisionData;
-    Hitbox *hitboxes;
+    Hitbox* hitboxes;
     u32 unknown_0x90;
     float unknown_0x94;
     float unknown_0x98;

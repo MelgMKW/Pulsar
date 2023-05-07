@@ -13,9 +13,9 @@ namespace detail {
 template <class T>
 class SoundInstanceManager {
 public:
-    SoundInstanceManager *nextInstance;
+    SoundInstanceManager* nextInstance;
     ut::LinkList<T, offsetof(T, priorityLink)> priorityList;
-    OSMutex mutex; //0x10
+    OS::Mutex mutex; //0x10
 }; //total size 0x28
 
 class SeqSound;

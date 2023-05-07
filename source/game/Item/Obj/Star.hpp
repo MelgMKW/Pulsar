@@ -4,11 +4,12 @@
 #include <game/Item/Obj/ItemObj.hpp>
 
 //_sinit_ at 807b70dc
-class ItemObjStar : public ItemObj {
+namespace Item{
+class ObjStar: public Obj {
 public:
-    static ItemObj **CreateArray(u32 count); //807b6ff0
+    static Obj** CreateArray(u32 count); //807b6ff0
     void InitSelf() override; //0x8 807b70c0 vtable 808d2698
 };
-size_assert(ItemObjStar, 0x1a0);
-
+size_assert(ObjStar, 0x1a0);
+}//namespace Item
 #endif

@@ -23,7 +23,7 @@ public:
 
 class ProcessBar {
 public:
-    ProcessBar(nw4r::ut::Color color, float yOrigin, float ySize): xOrigin(0.0), xSize(0.0), tickBegin(0),
+    ProcessBar(nw4r::ut::Color color, float yOrigin, float ySize) : xOrigin(0.0), xSize(0.0), tickBegin(0),
         tickEnd(0), color(color), yOrigin(yOrigin), ySize(ySize), bitfield(0) {}; //inlined
     float xOrigin;
     float xSize;
@@ -40,7 +40,7 @@ size_assert(ProcessBar, 0x28);
 
 class CpuMonitor { //red bar
 public:
-    CpuMonitor(const nw4r::ut::Color color, float yOrigin): bar(color, yOrigin, 1.0f) {}; //inlined
+    CpuMonitor(const nw4r::ut::Color color, float yOrigin) : bar(color, yOrigin, 1.0f) {}; //inlined
     virtual void show(); //0x8 80238750 vtable 802a3d60
     virtual void hide();  //0xc 80238760
     virtual void measureBegin(); //0x10 802386dc
@@ -49,14 +49,14 @@ public:
 }; //0x2c
 size_assert(CpuMonitor, 0x2c);
 
-class CpuGpMonitor : public CpuMonitor { //cpumonitor's bar is the green
+class CpuGpMonitor: public CpuMonitor { //cpumonitor's bar is the green
 public:
     struct Next {
-        void *gxFifoWritePtr; //from GXGetFifoPtrs
+        void* gxFifoWritePtr; //from GXGetFifoPtrs
         u16 curGXDrawSyncToken;
         u8 padding[2];
-        Next *next;
-        CpuGpMonitor *cpuGpMonitor;
+        Next* next;
+        CpuGpMonitor* cpuGpMonitor;
     }; //0x10
     CpuGpMonitor(const nw4r::ut::Color color, float yOrigin); //inlined
     void show() override; //80238804 vtable 802a3d48
@@ -66,17 +66,17 @@ public:
     ProcessBar blueBar;
     u16 unknown_0x54;
     u8 padding[2];
-    ProcessMeter *processMeter; //0x58
+    ProcessMeter* processMeter; //0x58
     Next begin;
     Next end;
 }; //0x7c
 size_assert(CpuGpMonitor, 0x7c);
 
-class ProcessMeter : public Thread, public PerformanceView {
+class ProcessMeter: public Thread, public PerformanceView {
 public:
     explicit ProcessMeter(u32 r4); //0x8023883c
     ~ProcessMeter() override; //80239628 vtable 802a3ce0
-    void *Run() override; //80238d8c
+    void* Run() override; //80238d8c
 
 
     //0x48, vtable parent 2 802a3cf8
@@ -89,18 +89,18 @@ public:
     void setVisible(bool isVisible) override;   //0x24 thunk 80239688 func 80238f14
     void isVisible() override;                  //0x28 thunk 80239680 func 80238f3c
 
-    void append(CpuMonitor *cpuMonitor); //80238f48
-    void append(CpuGpMonitor *cpuGpMonitor); //80238f54
+    void append(CpuMonitor* cpuMonitor); //80238f48
+    void append(CpuGpMonitor* cpuGpMonitor); //80238f54
     void callbackDrawSyncStatic(); //80234a04
-    void SetDrawSync(CpuGpMonitor::Next *next); //80238e38
+    void SetDrawSync(CpuGpMonitor::Next* next); //80238e38
     void drawSetting(float width, float height); //802393e0
     void draw(u32 videoTicks, float width, float height);
 
     nw4r::ut::Color lineColor; //0x4c
     float unknown_0x50[4];
     nw4r::ut::List processBarList; //0x60
-    CpuGpMonitor::Next *beginNext;
-    CpuGpMonitor::Next *endNext;
+    CpuGpMonitor::Next* beginNext;
+    CpuGpMonitor::Next* endNext;
     ProcessBar bgBar; //0x74
     CpuMonitor cpuMonitor; //0x9c
     CpuGpMonitor cpuGpMonitor; //0xc8

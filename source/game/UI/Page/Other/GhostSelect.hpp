@@ -8,6 +8,7 @@
 #include <game/Visual/Mii.hpp>
 #include <game/UI/Ctrl/SheetSelect.hpp>
 #include <game/UI/Ctrl/GhostInfoControl.hpp>
+#include <game/UI/Ctrl/Menu/CtrlMenuText.hpp>
 
 /*
 Contributors:
@@ -17,7 +18,7 @@ Contributors:
 //_sinit_ at 8063a570
 
 namespace Pages {
-class GhostSelectSupporting : public Page { //ID 0x70
+class GhostSelectSupporting: public Page { //ID 0x70
     GhostSelectSupporting(); //80638e88
     ~GhostSelectSupporting() override; //80638ecc vtable 808becd8
     PageId GetNextPage() const override; //8063a4cc
@@ -36,7 +37,7 @@ class GhostSelectSupporting : public Page { //ID 0x70
 size_assert(GhostSelectSupporting, 0x5C);
 
 
-class GhostSelect : public Page { //ID 0x71
+class GhostSelect: public Page { //ID 0x71
 public:
     GhostSelect(); //0x806395ec vtable 808bec2c
     ~GhostSelect() override; //0x8063982c
@@ -47,10 +48,10 @@ public:
     void OnResume() override; //80639d6c
     int GetRuntimeTypeInfo() const override; //8063a4c0
 
-    void OnChallengeGhostPress(PushButton *button, u32 hudSlotId);
-    void OnWatchReplayPress(PushButton *button, u32 hudSlotId);
-    void OnRightArrowPress(SheetSelectControl *control, u32 hudSlotId); //8063a1a4
-    void OnLeftArrowPress(SheetSelectControl *control, u32 hudSlotId); //8063a2a4
+    void OnChallengeGhostPress(PushButton& button, u32 hudSlotId);
+    void OnWatchReplayPress(PushButton& button, u32 hudSlotId);
+    void OnRightArrowPress(SheetSelectControl& control, u32 hudSlotId); //8063a1a4
+    void OnLeftArrowPress(SheetSelectControl& control, u32 hudSlotId); //8063a2a4
     void OnBackPress(u32 hudSlotId); //8063a444
     ControlsManipulatorManager manipulatorManager; //0x44
     CtrlMenuPageTitleText ctrlMenuPageTitleText; //0x268
@@ -62,17 +63,17 @@ public:
     PushButton watchReplayButton; //0x1174
     PushButton soloTTButton; //0x13c8
     CtrlMenuBackButton backButton; //0x161c
-    GhostInfoControl *info; //0x1880 they alternate even and odd pages
-    GhostInfoControl *info2;
+    GhostInfoControl* info; //0x1880 they alternate even and odd pages
+    GhostInfoControl* info2;
     u32 selectedButtonId; //0x1888
-    PtmfHolder_2A<Page, void, SheetSelectControl *, u32> onRightArrowPressHandler;  //8063a1a4 0x188c
-    PtmfHolder_2A<Page, void, SheetSelectControl *, u32> onLeftArrowPressHandler;  //8063a2a4 0x18a0
-    PtmfHolder_2A<Page, void, PushButton *, u32> onChallengeGhostClickHandler;  //8063a3a0 0x18B4
-    PtmfHolder_2A<Page, void, PushButton *, u32> onWatchReplayClickHandler;  //8063a3c0 0x18C8
-    PtmfHolder_2A<Page, void, PushButton *, u32> onSoloTimeTrialClickHandler; //8063a3e0 0x18DC
-    PtmfHolder_2A<Page, void, CtrlMenuBackButton *, u32> onBackButtonClickHandler; //8063a444 0x18F0
+    PtmfHolder_2A<Page, void, SheetSelectControl&, u32> onRightArrowPressHandler;  //8063a1a4 0x188c
+    PtmfHolder_2A<Page, void, SheetSelectControl&, u32> onLeftArrowPressHandler;  //8063a2a4 0x18a0
+    PtmfHolder_2A<Page, void, PushButton&, u32> onChallengeGhostClickHandler;  //8063a3a0 0x18B4
+    PtmfHolder_2A<Page, void, PushButton&, u32> onWatchReplayClickHandler;  //8063a3c0 0x18C8
+    PtmfHolder_2A<Page, void, PushButton&, u32> onSoloTimeTrialClickHandler; //8063a3e0 0x18DC
+    PtmfHolder_2A<Page, void, CtrlMenuBackButton&, u32> onBackButtonClickHandler; //8063a444 0x18F0
     PtmfHolder_1A<Page, void, u32> onBackPress; //8063a400 0x1904
-    GhostList *ghostList; //0x1918 from page 0xA7
+    GhostList* ghostList; //0x1918 from page 0xA7
     u32 page; //0x191C
     PageId nextPageId; //0x1920
 }; //total size 0x1924

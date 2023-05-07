@@ -1,51 +1,37 @@
 #include <UI/CtrlRaceBase/Speedometer.hpp>
 
-namespace PulsarUI {
+namespace Pulsar {
+namespace UI {
 u32 CtrlRaceSpeedo::Count() {
     u32 localPlayerCount = RaceData::sInstance->racesScenario.localPlayerCount;
-    SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
-    if (sectionId >= SECTION_WATCH_GHOST_FROM_CHANNEL && sectionId <= SECTION_WATCH_GHOST_FROM_MENU) localPlayerCount += 1;
+    const SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
+    if(sectionId >= SECTION_WATCH_GHOST_FROM_CHANNEL && sectionId <= SECTION_WATCH_GHOST_FROM_MENU) localPlayerCount += 1;
     return localPlayerCount;
 }
-void CtrlRaceSpeedo::Create(Page *page, u32 index) {
-    u32 localPlayerCount = RaceData::sInstance->racesScenario.localPlayerCount;
-    SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
-    if (sectionId >= SECTION_WATCH_GHOST_FROM_CHANNEL && sectionId <= SECTION_WATCH_GHOST_FROM_MENU) localPlayerCount += 1;
-    u8 speedoType = (localPlayerCount == 3) ? 4 : localPlayerCount;
-    for (int i = 0; i < localPlayerCount; i++) {
-        CtrlRaceSpeedo *som = new(CtrlRaceSpeedo);
-        page->AddControl(index + i, som, 0);
+void CtrlRaceSpeedo::Create(Page& page, u32 index, u32 count) {
+    u8 speedoType = (count == 3) ? 4 : count;
+    for(int i = 0; i < count; ++i) {
+        CtrlRaceSpeedo* som = new(CtrlRaceSpeedo);
+        page.AddControl(index + i, *som, 0);
         char variant[0x20];
-        snprintf(variant, 0x20, "CtrlRaceSpeedo_%1d_%1d", speedoType, i);
+        snprintf(variant, 0x20, "Speedo_%1d_%1d", speedoType, i);
         som->Load(variant, i);
     }
 }
 static CustomCtrlBuilder SOM(CtrlRaceSpeedo::Count, CtrlRaceSpeedo::Create);
 
-void CtrlRaceSpeedo::Load(const char *variant, u8 id) { //blatant copy
+void CtrlRaceSpeedo::Load(const char* variant, u8 id) {
     this->hudSlotId = id;
     ControlLoader loader(this);
-    const char *anims[16] = { "eHundreds", "texture_pattern_0_9_0", NULL,
-     "eTens", "texture_pattern_0_9_1", NULL,
-     "eUnits", "texture_pattern_0_9_2", NULL,
-     "eDot", "texture_pattern_0_9_3",NULL,
-     "eDecimals", "texture_pattern_0_9_4",NULL, NULL };
+    const char* anims[16] ={ "Hundreds", "Hundreds", nullptr,
+     "Tens", "Tens", nullptr,
+     "Units", "Units", nullptr,
+     "Dot", "Dot",nullptr,
+     "Decimals", "Decimals",nullptr, nullptr };
 
-    loader.Load("game_image", "speedometer", variant, anims);
-    AnimationGroup *paneGroup = this->animator.GetAnimationGroupById(0);
-    paneGroup->PlayAnimationAtFrameAndDisable(0, 0.0f);
+    loader.Load(UI::raceFolder, "speedometer", variant, anims);
 
-    paneGroup = this->animator.GetAnimationGroupById(1);
-    paneGroup->PlayAnimationAtFrameAndDisable(0, 0.0f);
-
-    paneGroup = this->animator.GetAnimationGroupById(2);
-    paneGroup->PlayAnimationAtFrameAndDisable(0, 0.0f);
-
-    paneGroup = this->animator.GetAnimationGroupById(3);
-    paneGroup->PlayAnimationAtFrameAndDisable(0, 0.0f);
-
-    paneGroup = this->animator.GetAnimationGroupById(4);
-    paneGroup->PlayAnimationAtFrameAndDisable(0, 0.0f);
+    this->Animate();
     return;
 }
 
@@ -62,55 +48,48 @@ void CtrlRaceSpeedo::Init() {
 
 void CtrlRaceSpeedo::OnUpdate() {
     this->UpdatePausePosition();
-    u8 id = this->GetPlayerId();
-
-    KartPointers *pointers = &KartHolder::sInstance->karts[id]->pointers;
-    KartPhysicsHolder *physicsHolder = pointers->kartBody->kartPhysicsHolder;
-    KartPhysics *physics = physicsHolder->kartPhysics;
+    const KartPointers& pointers = KartHolder::sInstance->karts[this->GetPlayerId()]->pointers;
+    const KartPhysics* physics = pointers.kartBody->kartPhysicsHolder->kartPhysics;
 
     Vec3 sum;
-    PSVECAdd(static_cast<Vec *>(&physics->engineSpeed), &physics->speed2, &sum);
+    PSVECAdd(&physics->engineSpeed, &physics->speed2, &sum);
     PSVECAdd(&physics->speed3, &sum, &sum);
     float speed = PSVECMag(&sum);
-    float speedCap = pointers->kartMovement->hardSpeedLimit;
-    if (speed > speedCap) speed = speedCap;
+    float speedCap = pointers.kartMovement->hardSpeedLimit;
+    if(speed > speedCap) speed = speedCap;
+    const u32 speedValue = static_cast<u32>(speed * 10.0f);
 
-
-    u32 engineSpeed = (u32)(speed * 10.0f);
-
-    float decimals = (float)(engineSpeed % 10 / 1);
-    float dot = 11.0f;
-    float units = (float)(engineSpeed % 100 / 10);
-    float tens = (float)(engineSpeed % 1000 / 100);
-    float hundreds = (float)(engineSpeed % 10000 / 1000);
-    if (engineSpeed < 100) {
+    u32 decimals =speedValue % 10 / 1;
+    u32 dot = 11;
+    u32 units = speedValue % 100 / 10;
+    u32 tens = speedValue % 1000 / 100;
+    u32 hundreds = speedValue % 10000 / 1000;
+    if(speedValue < 100) {
         hundreds = units;
         tens = dot;
         units = decimals;
-        dot = 10.0f;
-        decimals = 10.0f;
+        dot = 10;
+        decimals = 10;
     }
-    else if (engineSpeed < 1000) {
+    else if(speedValue < 1000) {
         hundreds = tens;
         tens = units;
         units = dot;
         dot = decimals;
-        decimals = 10.0f;
+        decimals = 10;
     }
-    AnimationGroup *paneGroup = this->animator.GetAnimationGroupById(3);
-    paneGroup->PlayAnimationAtFrameAndDisable(0, decimals);
-
-    paneGroup = this->animator.GetAnimationGroupById(4);
-    paneGroup->PlayAnimationAtFrameAndDisable(0, dot);
-
-    paneGroup = this->animator.GetAnimationGroupById(2); //third digit
-    paneGroup->PlayAnimationAtFrameAndDisable(0, units);
-
-    paneGroup = this->animator.GetAnimationGroupById(1); //second digit
-    paneGroup->PlayAnimationAtFrameAndDisable(0, tens);
-
-    paneGroup = this->animator.GetAnimationGroupById(0); //first digit
-    paneGroup->PlayAnimationAtFrameAndDisable(0, hundreds);
+    SpeedArg args(hundreds, tens, units, dot, decimals);
+    this->Animate(&args);
     return;
 }
-}//namespace PulsarUI
+
+void CtrlRaceSpeedo::Animate(const SpeedArg* args) {
+    for(int i = 0; i < 5; ++i) {
+        AnimationGroup& group = this->animator.GetAnimationGroupById(i);
+        float frame = 0.0f;
+        if(args != nullptr) frame = static_cast<float>(args->values[i]);
+        group.PlayAnimationAtFrameAndDisable(0, frame);
+    }
+}
+}//namespace UI
+}//namespace Pulsar

@@ -1,8 +1,9 @@
 #include <Settings/UI/SettingsPanel.hpp>
-#include <UI/BMG.hpp>
+#include <UI/UI.hpp>
 
-namespace PulsarUI {
-void AddSettingsPage(Section *section, PageId id) {
+namespace Pulsar {
+namespace UI {
+void AddSettingsPage(Section* section, PageId id) {
     section->CreateAndInitPage(id);
     section->CreateAndInitPage(PAGE_VS_SETTINGS);
 }
@@ -14,19 +15,19 @@ kmCall(0x8062e228, AddSettingsPage);
 kmCall(0x8062e3cc, AddSettingsPage);
 
 //buttonsPerRow/optionsPerScroller are sheet dependant
-Page *CreateSettingsPage() {
-    Section *section = SectionMgr::sInstance->curSection;
-    SectionId id = section->sectionId;
-    if ((id == SECTION_OPTIONS) || (id == SECTION_P1_WIFI) || (id == SECTION_P1_WIFI_GLOBE_DISCONNECT) || (id == SECTION_P1_WIFI_FROM_FIND_FRIEND)
+Page* CreateSettingsPage() {
+    Section* section = SectionMgr::sInstance->curSection;
+    const SectionId id = section->sectionId;
+    if((id == SECTION_OPTIONS) || (id == SECTION_P1_WIFI) || (id == SECTION_P1_WIFI_GLOBE_DISCONNECT) || (id == SECTION_P1_WIFI_FROM_FIND_FRIEND)
         || (id == SECTION_P2_WIFI) || (id == SECTION_P2_WIFI_GLOBE_DISCONNECT)) {
-        u8 buttonsPerRow[8] = { 2, 2, 2, 2, 4, 4, 4 ,4 };
-        u8 optionsPerScroller[8] = { 4, 4, 4, 4, 4 , 4, 4, 4 };
+        u8 buttonsPerRow[8] ={ 2, 2, 2, 2, 4, 4, 4 ,4 };
+        u8 optionsPerScroller[8] ={ 4, 4, 4, 4, 4 , 4, 4, 4 };
 
-        Page *settings = new(SettingsPanel)(4, 0, buttonsPerRow, optionsPerScroller, 1); //race settings
+        Page* settings = new(SettingsPanel)(4, 0, buttonsPerRow, optionsPerScroller, 1); //race settings
         section->Set(settings, PAGE_VS_TEAMS_VIEW);
         settings->Init(PAGE_VS_TEAMS_VIEW);
 
-        buttonsPerRow[1] = 3;
+        buttonsPerRow[1] = 4;
         optionsPerScroller[0] = 7;
         settings = new(SettingsPanel)(2, 1, buttonsPerRow, optionsPerScroller, 2); //host settings
         section->Set(settings, PAGE_BATTLE_MODE_SELECT);
@@ -42,186 +43,161 @@ kmCall(0x80623e1c, CreateSettingsPage);
 kmWrite32(0x80623e10, 0x60000000); //nop the original new
 
 //SETTINGS PANEL
-SettingsPanel::SettingsPanel(u32 radioButtonsCount, u32 scrollerButtonsCount, const u8 buttonsPerRow[8], const u8 optionsPerScroller[8], u32 sheetId) {
+SettingsPanel::SettingsPanel(u32 radioButtonsCount, u32 scrollerButtonsCount, const u8 buttonsPerRow[8],
+    const u8 optionsPerScroller[8], u32 sheetId):
+    radioCount(radioButtonsCount), scrollersCount(scrollerButtonsCount), sheetIdx(sheetId)
+{
+    memcpy(this->buttonsPerRow, buttonsPerRow, 8);
+    memcpy(this->optionsPerScroller, optionsPerScroller, 8);
     externControlCount = 3;
     internControlCount = radioButtonsCount + scrollerButtonsCount;
     hasBackButton = false;
     nextPageId = PAGE_NONE;
-    SectionId id = SectionMgr::sInstance->curSection->sectionId;
-    if (id == SECTION_OPTIONS) prevPageId = PAGE_OPTIONS;
-    else if ((id == SECTION_P1_WIFI) || (id == SECTION_P1_WIFI_GLOBE_DISCONNECT) || (id == SECTION_P1_WIFI_FROM_FIND_FRIEND)
-        || (id == SECTION_P2_WIFI) || (id == SECTION_P2_WIFI_GLOBE_DISCONNECT)) prevPageId = PAGE_WFC_MAIN;
-    nextSection = SECTION_NONE;
-    controlSources = 2;
-    onMessageBoxClickHandler.ptmf = (&MenuInteractable::ChangeToPrevSection);
-    //initThpPtmf.ptmf.vtableOffset = 0; //virtual func to be defined
+    titleBmg = BMG_SETTINGS_TITLE + this->sheetIdx + 1;
+    activePlayerBitfield = 1;
     movieStartFrame = -1;
     extraControlNumber = 0;
     isLocked = false;
     controlCount = 0;
+    nextSection = SECTION_NONE;
+    controlSources = 2;
+
+    SectionId id = SectionMgr::sInstance->curSection->sectionId;
+    if(id == SECTION_OPTIONS) prevPageId = PAGE_OPTIONS;
+    else if((id == SECTION_P1_WIFI) || (id == SECTION_P1_WIFI_GLOBE_DISCONNECT) || (id == SECTION_P1_WIFI_FROM_FIND_FRIEND)
+        || (id == SECTION_P2_WIFI) || (id == SECTION_P2_WIFI_GLOBE_DISCONNECT)) prevPageId = PAGE_WFC_MAIN;
+
+    onMessageBoxClickHandler.ptmf = &Menu::ChangeToPrevSection;
 
     onRadioButtonChangeHandler.subject = this;
-    onRadioButtonChangeHandler.ptmf = static_cast<void (Page:: *)(RadioButtonControl *, u32, u32)>(&SettingsPanel::OnRadioButtonChange);
+    onRadioButtonChangeHandler.ptmf = &SettingsPanel::OnRadioButtonChange;
 
     onUpDownClickHandler.subject = this;
-    onUpDownClickHandler.ptmf = static_cast<void (Page:: *)(UpDownControl *, u32)>(&SettingsPanel::OnUpDownClick);
+    onUpDownClickHandler.ptmf = &SettingsPanel::OnUpDownClick;
     onUpDownSelectHandler.subject = this;
-    onUpDownSelectHandler.ptmf = static_cast<void (Page:: *)(UpDownControl *, u32)>(&SettingsPanel::OnUpDownSelect);
+    onUpDownSelectHandler.ptmf = &SettingsPanel::OnUpDownSelect;
 
     onTextChangeHandler.subject = this;
-    onTextChangeHandler.ptmf = static_cast<void (Page:: *)(TextUpDownValueControl::TextControl *, u32)>(&SettingsPanel::OnTextChange);
+    onTextChangeHandler.ptmf = &SettingsPanel::OnTextChange;
 
     onButtonSelectHandler.subject = this;
-    onButtonSelectHandler.ptmf = static_cast<void (MenuInteractable:: *)(PushButton *, u32)> (&SettingsPanel::OnExternalButtonSelect);
+    onButtonSelectHandler.ptmf = &SettingsPanel::OnExternalButtonSelect;
     onButtonDeselectHandler.subject = this;
-    onButtonDeselectHandler.ptmf = static_cast<void (MenuInteractable:: *)(PushButton *, u32)> (&Pages::VSSettings::OnButtonDeselect);
+    onButtonDeselectHandler.ptmf = &Pages::VSSettings::OnButtonDeselect;
     onBackPressHandler.subject = this;
-    onBackPressHandler.ptmf = static_cast<void (MenuInteractable:: *)(u32)> (&SettingsPanel::OnBackPress);
+    onBackPressHandler.ptmf = &SettingsPanel::OnBackPress;
     onStartPressHandler.subject = this;
-    onStartPressHandler.ptmf = (&MenuInteractable::HandleStartPress);
+    onStartPressHandler.ptmf = &MenuInteractable::HandleStartPress;
 
     onButtonClickHandler.subject = this;
-    onButtonClickHandler.ptmf = static_cast<void (MenuInteractable:: *)(PushButton *, u32)> (&SettingsPanel::OnSaveButtonClick);
+    onButtonClickHandler.ptmf = &SettingsPanel::OnSaveButtonClick;
     onRightButtonClickHandler.subject = this;
-    onRightButtonClickHandler.ptmf = static_cast<void (MenuInteractable:: *)(PushButton *, u32)> (&SettingsPanel::OnRightButtonClick);
+    onRightButtonClickHandler.ptmf = &SettingsPanel::OnRightButtonClick;
     onLeftButtonClickHandler.subject = this;
-    onLeftButtonClickHandler.ptmf = static_cast<void (MenuInteractable:: *)(PushButton *, u32)> (&SettingsPanel::OnLeftButtonClick);
-
-    sheetIdx = sheetId;
-    titleBmg = BMG_SETTINGS_TITLE + this->sheetIdx + 1;
+    onLeftButtonClickHandler.ptmf = &SettingsPanel::OnLeftButtonClick;
 
     this->controlsManipulatorManager.Init(1, false);
-    this->SetManipulatorManager(&controlsManipulatorManager);
-    this->controlsManipulatorManager.SetGlobalHandler(START_PRESS, (PtmfHolder_1A<Page, void, u32>*) & onStartPressHandler, false, false);
-    this->controlsManipulatorManager.SetGlobalHandler(BACK_PRESS, (PtmfHolder_1A<Page, void, u32>*) & onBackPressHandler, false, false);
-    activePlayerBitfield = 1;
-    radioCount = radioButtonsCount;
-    memcpy(this->buttonsPerRow, buttonsPerRow, 8);
-    scrollersCount = scrollerButtonsCount;
-    memcpy(this->optionsPerScroller, optionsPerScroller, 8);
+    this->SetManipulatorManager(controlsManipulatorManager);
+    this->controlsManipulatorManager.SetGlobalHandler(START_PRESS, onStartPressHandler, false, false);
+    this->controlsManipulatorManager.SetGlobalHandler(BACK_PRESS, onBackPressHandler, false, false);
 };
-
 
 SettingsPanel::~SettingsPanel() {
     delete[] radioButtonControls;
     delete[] upDownControls;
-    delete[] textUpDownwID;
+    delete[] textUpDown;
 }
-
 
 void SettingsPanel::OnInit() {
-
     radioButtonControls = new RadioButtonControl[this->radioCount];
     upDownControls = new UpDownControl[this->scrollersCount];
-    textUpDownwID = new TextUpDownValueControlwID[this->scrollersCount];
+    textUpDown = new TextUpDownValueControl[this->scrollersCount];
     MenuInteractable::OnInit();
     this->SetTransitionSound(0, 0);
-    //this->titleText->SetText(titleBmg);
-    this->externControls[1]->SetMsgId(BMG_SETTINGS_PAGE + (this->sheetIdx + 1) % SETTINGSPAGECOUNT);
-    this->externControls[2]->SetMsgId(BMG_SETTINGS_PAGE + (this->sheetIdx + 2) % SETTINGSPAGECOUNT);
+    this->externControls[1]->SetMsgId(BMG_SETTINGS_PAGE + this->GetNextIdx(1));
+    this->externControls[2]->SetMsgId(BMG_SETTINGS_PAGE + this->GetNextIdx(2));
 };
 
-UIControl *SettingsPanel::CreateExternalControl(u32 id) {
-    PushButton *button = new(PushButton);
-    char *variant;
-    switch (id) {
-    case(0):
-        variant = "ButtonSAVE";
-        break;
-    case(1):
-        variant = "ButtonRIGHT";
-        break;
-    case(2):
-        variant = "ButtonLEFT";
-        break;
-    }
-    this->AddControl(this->controlCount, button, 0);
-    this->controlCount++;
-    button->Load(Pulsar::buttonFolder, "Settings", variant, this->activePlayerBitfield, 0, false);
+UIControl* SettingsPanel::CreateExternalControl(u32 id) {
+    PushButton* button = new(PushButton);
+    const char* variant = "SAVE";
+    if(id == 1) variant = "RIGHT";
+    else if(id == 2) variant = "LEFT";
+    this->AddControl(this->controlCount++, *button, 0);
+    button->Load(UI::buttonFolder, "Settings", variant, this->activePlayerBitfield, 0, false);
     return button;
-    //has BMG 0x7D0 for OK
 };
 
-UIControl *SettingsPanel::CreateControl(u32 id) {
-    Settings *data = Settings::GetInstance();
-    if (id < this->radioCount) {
-        RadioButtonControl *radioButtonControl = &this->radioButtonControls[id];
-        this->AddControl(this->controlCount, radioButtonControl, 0);
-        this->controlCount++;
-        char *variant = "RadioRow0";
+UIControl* SettingsPanel::CreateControl(u32 id) {
+    if(id < this->radioCount) {
+        RadioButtonControl& radioButtonControl = this->radioButtonControls[id];
+        this->AddControl(this->controlCount++, radioButtonControl, 0);
 
-        const char *optionVariantsRow0[5] = { "Row0Option0", "Row0Option1", "Row0Option2", "Row0Option3", NULL };
-        const char *optionVariantsRow1[5] = { "Row1Option0", "Row1Option1", "Row1Option2", "Row1Option3", NULL };
-        const char *optionVariantsRow2[5] = { "Row2Option0", "Row0Option1", "Row2Option2", "Row2Option3", NULL };
-        const char *optionVariantsRow3[5] = { "Row3Option0", "Row3Option1", "Row3Option2", "Row3Option3", NULL };
-        const char **optionVariants = optionVariantsRow0;
-        if (id == 1) {
-            variant = "RadioRow1";
-            optionVariants = optionVariantsRow1;
-        }
-        else if (id == 2) {
-            variant = "RadioRow2";
-            optionVariants = optionVariantsRow2;
-        }
-        else if (id == 3) {
-            variant = "RadioRow3";
-            optionVariants = optionVariantsRow3;
-        }
-        radioButtonControl->Load(this->buttonsPerRow[id], data->GetSettings()->pages[this->sheetIdx].radioSetting[id], Pulsar::controlFolder, "SettingsRadioBase", variant, "SettingsRadioOption", optionVariants, 1, 0, 0);
-        radioButtonControl->SetOnChangeHandler(&this->onRadioButtonChangeHandler);
-        radioButtonControl->id = id;
+        char variant[12];
+        char option0Variant[12];
+        char option1Variant[12];
+        char option2Variant[12];
+        char option3Variant[12];
+        snprintf(variant, 12, "Row%d", id);
+        snprintf(option0Variant, 12, "%sOption%d", variant, 0);
+        snprintf(option1Variant, 12, "%sOption%d", variant, 1);
+        snprintf(option2Variant, 12, "%sOption%d", variant, 2);
+        snprintf(option3Variant, 12, "%sOption%d", variant, 3);
+
+        const char* optionVariants[5] ={ option0Variant, option1Variant, option2Variant, option3Variant, nullptr };
+        radioButtonControl.Load(this->buttonsPerRow[id], Settings::GetSettingValue(static_cast<SettingsType>(this->sheetIdx), id),
+            UI::controlFolder, "RadioBase", variant, "RadioOption", optionVariants, 1, 0, 0);
+        radioButtonControl.SetOnChangeHandler(this->onRadioButtonChangeHandler);
+        radioButtonControl.id = id;
         u32 bmgCategory = BMG_RADIO_SETTINGS + (this->sheetIdx << 12);
-        radioButtonControl->SetMsgId(id + bmgCategory);
-        for (int i = 0; i < radioButtonControl->buttonsCount; i++) radioButtonControl->optionButtonsArray[i].SetMsgId((id + 1 << 4) + i + bmgCategory);
+        radioButtonControl.SetMsgId(id + bmgCategory);
+        for(int i = 0; i < radioButtonControl.buttonsCount; ++i) {
+            radioButtonControl.optionButtonsArray[i].SetMsgId((id + 1 << 4) + i + bmgCategory);
+        }
     }
-    else if (id < (this->radioCount + this->scrollersCount)) {
+    else if(id < (this->radioCount + this->scrollersCount)) {
         id -= this->radioCount;
-        UpDownControl *upDownControl = &this->upDownControls[id];
+        UpDownControl& upDownControl = this->upDownControls[id];
         this->AddControl(this->controlCount, upDownControl, 0);
-        this->controlCount++;
+        ++this->controlCount;
 
-        char *variant = "UpDown0";
-        if (id == 1) variant = "UpDown1";
-        upDownControl->Load(this->optionsPerScroller[id], data->GetSettings()->pages[this->sheetIdx].scrollSetting[id], Pulsar::controlFolder, "SettingsUpDownBase", variant, "SettingsUpDownButtonR", "RightButton",
-            "SettingsUpDownButtonL", "LeftButton", (UpDownDisplayedText *)&this->textUpDownwID[id], 1, 0, false, true, true);
-        upDownControl->SetOnClickHandler(&this->onUpDownClickHandler);
-        upDownControl->SetOnSelectHandler(&this->onUpDownSelectHandler);
-        upDownControl->id = id;
+        char variant[12];
+        snprintf(variant, 12, "UpDown%d", id);
 
+        upDownControl.Load(this->optionsPerScroller[id], Settings::GetSettingValue(static_cast<SettingsType>(this->sheetIdx), id + 6),
+            UI::controlFolder, "UpDownBase", variant, "UpDownR", "Right", "UpDownL",
+            "Left", &this->textUpDown[id], 1, 0, false, true, true);
+        upDownControl.SetOnClickHandler(this->onUpDownClickHandler);
+        upDownControl.SetOnSelectHandler(this->onUpDownSelectHandler);
+        upDownControl.id = id;
 
-        TextUpDownValueControlwID *valueControl = &this->textUpDownwID[id];
-
-        valueControl->Load(Pulsar::controlFolder, "SettingsUpDownValue", "Value", "SettingsUpDownText", "Text");
-        valueControl->SetOnTextChangeHandler(&this->onTextChangeHandler);
-        valueControl->id = id;
+        TextUpDownValueControl& valueControl = this->textUpDown[id];
+        valueControl.Load(UI::controlFolder, "UpDownValue", "Value", "UpDownText", "Text");
+        valueControl.SetOnTextChangeHandler(this->onTextChangeHandler);
         u32 bmgCategory = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12);
-        upDownControl->SetMsgId(id + bmgCategory);
-        valueControl->activeTextValueControl->SetMsgId((id + 1 << 4) + bmgCategory);
-
+        upDownControl.SetMsgId(id + bmgCategory);
+        valueControl.activeTextValueControl->SetMsgId((id + 1 << 4) + bmgCategory);
     }
-    return NULL;
+    return nullptr;
 }
 
-void SettingsPanel::SetButtonHandlers(PushButton *button) {
-    PtmfHolder_2A<Page, void, PushButton *, u32> *onClickHandler = (PtmfHolder_2A<Page, void, PushButton *, u32>*) & this->onButtonClickHandler;
-    if (button->buttonId == 1) onClickHandler = (PtmfHolder_2A<Page, void, PushButton *, u32>*) & this->onRightButtonClickHandler;
-    else if (button->buttonId == 2) onClickHandler = (PtmfHolder_2A<Page, void, PushButton *, u32>*) & this->onLeftButtonClickHandler;
-
-    button->SetOnClickHandler(onClickHandler, 0);
-    button->SetOnSelectHandler((PtmfHolder_2A<Page, void, PushButton *, u32>*) & this->onButtonSelectHandler);
-    button->SetOnDeselectHandler((PtmfHolder_2A<Page, void, PushButton *, u32>*) & this->onButtonDeselectHandler);
+void SettingsPanel::SetButtonHandlers(PushButton& button) {
+    PtmfHolder_2A<MenuInteractable, void, PushButton&, u32>* onClickHandler = &this->onButtonClickHandler;
+    if(button.buttonId == 1) onClickHandler = &this->onRightButtonClickHandler;
+    else if(button.buttonId == 2) onClickHandler = &this->onLeftButtonClickHandler;
+    button.SetOnClickHandler(*onClickHandler, 0);
+    button.SetOnSelectHandler(this->onButtonSelectHandler);
+    button.SetOnDeselectHandler(this->onButtonDeselectHandler);
 }
 
 void SettingsPanel::OnActivate() {
-    Settings::Binary::Page *page = &Settings::GetInstance()->GetSettings()->pages[this->sheetIdx];
-
-    for (RadioButtonControl *radio = this->radioButtonControls; radio < &this->radioButtonControls[this->radioCount]; radio++) {
-        u8 setting = page->radioSetting[radio->id];
+    for(RadioButtonControl* radio = this->radioButtonControls; radio < &this->radioButtonControls[this->radioCount]; radio++) {
+        const u8 setting = Settings::GetSettingValue(static_cast<SettingsType>(this->sheetIdx), radio->id);
         radio->chosenButtonId = setting;
         radio->selectedButtonId = setting;
     }
-    for (UpDownControl *scroller = this->upDownControls; scroller < &this->upDownControls[this->scrollersCount]; scroller++) {
-        scroller->curSelectedOption = page->scrollSetting[scroller->id];
+    for(UpDownControl* scroller = this->upDownControls; scroller < &this->upDownControls[this->scrollersCount]; scroller++) {
+        scroller->curSelectedOption = Settings::GetSettingValue(static_cast<SettingsType>(this->sheetIdx), scroller->id + 6);
     }
     MenuInteractable::OnActivate();
 }
@@ -230,20 +206,12 @@ int SettingsPanel::GetRuntimeTypeInfo() const {
     return VSSettingsStaticAddr;
 }
 
-void SettingsPanel::OnExternalButtonSelect(PushButton *button, u32 r5) {
-    u32 bmgId = 0;
-
-    switch (button->buttonId) {
-    case(0):
-        bmgId = BMG_SETTINGS_BOTTOM;
-        break;
-    case(1):
-        bmgId = BMG_SETTINGS_BOTTOM + 1 + (this->sheetIdx + 1) % SETTINGSPAGECOUNT;
-        break;
-    case(2):
-        bmgId = BMG_SETTINGS_BOTTOM + 1 + (this->sheetIdx + 2) % SETTINGSPAGECOUNT;
-    }
-    this->bottomText->SetMsgId(bmgId, 0);
+void SettingsPanel::OnExternalButtonSelect(PushButton& button, u32 r5) {
+    u32 bmgId = BMG_SETTINGS_BOTTOM;
+    const u32 id = button.buttonId;
+    if(id == 1) bmgId += 1 + this->GetNextIdx(1);
+    else if(id == 2) bmgId += 1 + this->GetNextIdx(2);
+    this->bottomText->SetMsgId(bmgId);
 }
 
 int SettingsPanel::GetActivePlayerBitfield() const {
@@ -254,16 +222,16 @@ int SettingsPanel::GetPlayerBitfield() const {
     return this->playerBitfield;
 }
 
-ManipulatorManager *SettingsPanel::GetManipulatorManager() {
-    return &this->controlsManipulatorManager;
+ManipulatorManager& SettingsPanel::GetManipulatorManager() {
+    return this->controlsManipulatorManager;
 }
 
-void SettingsPanel::LoadPrevMenuAndSaveSettings(PushButton *button) {
+void SettingsPanel::LoadPrevMenuAndSaveSettings(PushButton& button) {
     this->LoadPrevPage(button);
-    Section *section = SectionMgr::sInstance->curSection;
-    if (this->prevPageId == PAGE_OPTIONS) section->Get<ExpOptions>(PAGE_OPTIONS)->topSettingsPage = this->pageId;
-    else if (this->prevPageId == PAGE_WFC_MAIN) section->Get<ExpWFCMain>(PAGE_WFC_MAIN)->topSettingsPage = this->pageId;
-    else if (this->prevPageId == PAGE_FRIEND_ROOM) {
+    const Section* section = SectionMgr::sInstance->curSection;
+    if(this->prevPageId == PAGE_OPTIONS) section->Get<ExpOptions>(PAGE_OPTIONS)->topSettingsPage = this->pageId;
+    else if(this->prevPageId == PAGE_WFC_MAIN) section->Get<ExpWFCMain>(PAGE_WFC_MAIN)->topSettingsPage = this->pageId;
+    else if(this->prevPageId == PAGE_FRIEND_ROOM) {
         section->Get<ExpFroom>(PAGE_WFC_MAIN)->topSettingsPage = this->pageId;
         this->nextPageId = PAGE_NONE; //FriendRoom's OnResume is important
     }
@@ -272,82 +240,84 @@ void SettingsPanel::LoadPrevMenuAndSaveSettings(PushButton *button) {
 
 //On Save Click/Back Press, is called and updates PulsarSettings
 void SettingsPanel::SaveSettings() {
-    Section *section = SectionMgr::sInstance->curSection;
-    Settings *settings = Settings::GetInstance();
-    for (int count = 0; count < SETTINGSPAGECOUNT; count++) {
-        SettingsPanel *panel = section->Get<SettingsPanel>((PageId)(PAGE_VS_SETTINGS + count));
-        Settings::Binary::Page *settingsPage = &settings->GetSettings()->pages[panel->sheetIdx];
-        for (RadioButtonControl *radio = panel->radioButtonControls; radio < &panel->radioButtonControls[panel->radioCount]; radio++) {
-            settingsPage->radioSetting[radio->id] = radio->chosenButtonId;
+    const Section* section = SectionMgr::sInstance->curSection;
+    Settings* settings = Settings::sInstance;
+    for(int count = 0; count < pageCount; count++) {
+        SettingsPanel* panel = section->Get<SettingsPanel>((PageId)(PAGE_VS_SETTINGS + count));
+        for(const RadioButtonControl* radio = panel->radioButtonControls; radio < &panel->radioButtonControls[panel->radioCount]; radio++) {
+            settings->SetSettingValue(static_cast<SettingsType>(panel->sheetIdx), radio->id, radio->chosenButtonId);
         }
-        for (UpDownControl *scroller = panel->upDownControls; scroller < &panel->upDownControls[panel->scrollersCount]; scroller++) {
-            settingsPage->scrollSetting[scroller->id] = scroller->curSelectedOption;
+        for(const UpDownControl* scroller = panel->upDownControls; scroller < &panel->upDownControls[panel->scrollersCount]; scroller++) {
+            settings->SetSettingValue(static_cast<SettingsType>(panel->sheetIdx), scroller->id + 6, scroller->curSelectedOption);
         }
     }
     settings->Update();
 }
 
-
 void SettingsPanel::OnBackPress(u32 hudSlotId) {
-    PushButton *okButton = this->externControls[0];
-    okButton->SelectFocus();
+    PushButton& okButton = *this->externControls[0];
+    okButton.SelectFocus();
     this->LoadPrevMenuAndSaveSettings(okButton);
 }
 
-void SettingsPanel::OnSaveButtonClick(PushButton *button, u32 hudSlotId) {
+void SettingsPanel::OnSaveButtonClick(PushButton& button, u32 hudSlotId) {
     this->LoadPrevMenuAndSaveSettings(button);
 }
 
-void SettingsPanel::OnRightButtonClick(PushButton *button, u32 hudSlotId) {
-    PageId id = (PageId)(0x73 + (this->sheetIdx + 1) % SETTINGSPAGECOUNT);
+void SettingsPanel::OnRightButtonClick(PushButton& button, u32 hudSlotId) {
+    this->OnButtonClick(button, 1);
+}
+
+void SettingsPanel::OnLeftButtonClick(PushButton& button, u32 hudSlotId) {
+    this->OnButtonClick(button, 2);
+}
+
+void SettingsPanel::OnButtonClick(PushButton& button, u32 direction) {
+    const PageId id = (PageId)(PAGE_VS_SETTINGS + this->GetNextIdx(direction));
+    SettingsPanel* nextPanel = SectionMgr::sInstance->curSection->Get<SettingsPanel>(id);
     this->LoadPrevPageById(id, button);
-    SettingsPanel *nextPanel = SectionMgr::sInstance->curSection->Get<SettingsPanel>(id);
     nextPanel->externControls[0]->SelectInitialButton(0);
     nextPanel->bottomText->SetMsgId(BMG_SETTINGS_BOTTOM);
 }
 
-void SettingsPanel::OnLeftButtonClick(PushButton *button, u32 hudSlotId) {
-    PageId id = (PageId)(0x73 + (this->sheetIdx + 2) % SETTINGSPAGECOUNT);
-    this->LoadPrevPageById(id, button);
-    SettingsPanel *nextPanel = SectionMgr::sInstance->curSection->Get<SettingsPanel>(id);
-    nextPanel->externControls[0]->SelectInitialButton(0);
-    nextPanel->bottomText->SetMsgId(BMG_SETTINGS_BOTTOM);
+void SettingsPanel::OnRadioButtonChange(RadioButtonControl& radioButtonControl, u32 hudSlotId, u32 optionId) {
+    this->bottomText->SetMsgId(BMG_RADIO_SETTINGS + (this->sheetIdx << 12) + (radioButtonControl.id + 1 << 8) + optionId);
 }
 
-void SettingsPanel::OnRadioButtonChange(RadioButtonControl *radioButtonControl, u32 hudSlotId, u32 optionId) {
-    this->bottomText->SetMsgId(BMG_RADIO_SETTINGS + (this->sheetIdx << 12) + (radioButtonControl->id + 1 << 8) + optionId);
+void SettingsPanel::OnUpDownClick(UpDownControl& upDownControl, u32 hudSlotId) {
+    PushButton& okButton = *this->externControls[0];
+    okButton.Select(0);
 }
 
-
-void SettingsPanel::OnUpDownClick(UpDownControl *upDownControl, u32 hudSlotId) {
-    PushButton *okButton = this->externControls[0];
-    okButton->Select(0); //0 is the id
-    //HandleOnRadioButtonSelect__19CustomSettingsPanelFP18RadioButtonControlUiUi = 0x8085389c do stuff with bmg IDs
-    return;
-}
-
-void SettingsPanel::OnTextChange(TextUpDownValueControl::TextControl *text, u32 optionId) {
-    TextUpDownValueControlwID *valueControl = (TextUpDownValueControlwID *)text->parentGroup->parentControl;
-
-    u32 bmgId = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12) + optionId;
-    text->SetMsgId(bmgId + (valueControl->id + 1 << 4));
-    this->bottomText->SetMsgId(bmgId + (valueControl->id + 1 << 8));
-    //TEXT HERE 80853a10
-    return;
+void SettingsPanel::OnTextChange(TextUpDownValueControl::TextControl& text, u32 optionId) {
+    const u32 bmgId = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12) + optionId;
+    u32 id = this->GetTextId(text);
+    this->bottomText->SetMsgId(bmgId + (id + 1 << 8));
+    text.SetMsgId(bmgId + (id + 1 << 4));   
 };
 
-void SettingsPanel::OnUpDownSelect(UpDownControl *upDownControl, u32 hudSlotId) {
-    u32 bmgId = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12) + (upDownControl->id + 1 << 8) + upDownControl->curSelectedOption;
+void SettingsPanel::OnUpDownSelect(UpDownControl& upDownControl, u32 hudSlotId) {
+    const u32 bmgId = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12) + (upDownControl.id + 1 << 8) + upDownControl.curSelectedOption;
     this->bottomText->SetMsgId(bmgId);
-    return;
 }
 
-void TextUpDownValueControlwID::SetMessage(u32 optionId) {
-    TextUpDownValueControl::TextControl *text = this->activeTextValueControl;
-    u32 bmgId = BMG_SCROLLER_SETTINGS + (((PulsarUI::SettingsPanel *)this->parentGroup->parentPage)->sheetIdx << 12) + (this->id + 1 << 4) + optionId;
+int SettingsPanel::GetNextIdx(u32 direction) {
+    return (this->sheetIdx + direction) % pageCount;
+}
+
+/*
+void TextUpDownValueControl::SetMessage(u32 optionId) {
+    TextUpDownValueControl::TextControl* text = this->activeTextValueControl;
+    u32 id = this->GetTextId(text);
+    const u32 bmgId = BMG_SCROLLER_SETTINGS +
+        (this->parentGroup->GetParentPage<UI::SettingsPanel>()->sheetIdx << 12) + (this->id + 1 << 4) + optionId;
     text->SetMsgId(bmgId);
 }
-}//namespace PulsarUI
+*/
+
+
+}//namespace UI
+}//namespace Pulsar
 
 
 

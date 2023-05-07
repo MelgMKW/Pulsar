@@ -1,9 +1,13 @@
-#ifndef _SIPLEADERBOARD_
-#define _SIPLEADERBOARD_
+#ifndef _PUL_LEADERBOARD_
+#define _PUL_LEADERBOARD_
 #include <kamek.hpp>
-#include <File/Folder.hpp>
-#include <Pulsar.hpp>
+#include <game/UI/SectionMgr/SectionPad.hpp>
+#include <IO/Folder.hpp>
+#include <PulsarSystem.hpp>
 
+
+namespace Pulsar {
+namespace Ghosts {
 //Implements a leaderboard file; it is divided in one sub leaderboard per TT modes which holds 11 entries (top 10 + flap)
 #define LDBVersion 1
 
@@ -18,9 +22,9 @@ enum EntryLaps {
     ENTRY_8TH,
     ENTRY_9TH,
     ENTRY_10TH,
-    ENTRY_FLAP,
+    ENTRY_FLAP
 };
-#pragma(pack, 1)
+#pragma pack(push, 1)
 struct PULTimeEntry {
     PULTimeEntry() {
         minutes = 0;
@@ -33,53 +37,47 @@ struct PULTimeEntry {
     u32 rkgCRC32; //0x4C
     u16 minutes; //0x50
     u8 seconds; //0x52
+    u8 padding2[1];
     u16 milliseconds; //0x54
     bool isActive; //0x56
+    u8 padding3[1];
     CharacterId character; //0x58
     KartId kart; //0x5C
-    u32 controllerType; //0x60
+    ControllerType controllerType; //0x60
 };//total size 0x64
-#pragma(pop)
+#pragma pack(pop)
 
-class PULLeaderboard {
+//Should be fine having "affecting" functions public as this class can only be access through a const getter in manager (or from manager itself)
+class alignas(0x20) Leaderboard {
 public:
-    PULLeaderboard();
-    PULLeaderboard(const char *folderPath, u32 crc32);
+    Leaderboard();
+    Leaderboard(const char* folderPath, u32 crc32);
     //void SwapEntries(LeaderboardEntry *entry1, LeaderboardEntry *entry2);
-    s32 GetPosition(Timer *timer) const;
-    void Update(u32 position, TimeEntry *entry, u32 crc32);
-    void Save(const char *folderPath);
-    void AddTrophy() { this->hasTrophy[Pulsar::sInstance->ttMode] = true; }
-    const PULTimeEntry &GetEntry(EntryLaps lap) const { return this->entries[Pulsar::sInstance->ttMode][lap]; }
-    void EntryToTimer(Timer &timer, u8 id) const {
-        TTMode mode = Pulsar::sInstance->ttMode;
-        timer.minutes = this->entries[mode][id].minutes;
-        timer.seconds = this->entries[mode][id].seconds;
-        timer.milliseconds = this->entries[mode][id].milliseconds;
-        timer.isActive = this->entries[mode][id].isActive;
-    }
-    void EntryToTimeEntry(TimeEntry &entry, u8 id) {
-        this->EntryToTimer(entry.timer, id);
-        TTMode mode = Pulsar::sInstance->ttMode;
-        memcpy(&entry.mii, &this->entries[mode][id].mii, sizeof(RawMii));
-        entry.character = this->entries[mode][id].character;
-        entry.kart = this->entries[mode][id].kart;
-        entry.controllerType = this->entries[mode][id].controllerType;
-    }
-    static void CreateFile(void *crc32);
-
+    s32 GetPosition(const Timer& other) const;
+    void Update(u32 position, const TimeEntry& entry, u32 crc32);
+    void Save(const char* folderPath);
+    void AddTrophy() { this->hasTrophy[System::sInstance->ttMode] = true; }
+    const PULTimeEntry& GetPulEntry(EntryLaps lap) const { return this->entries[System::sInstance->ttMode][lap]; }
+    void EntryToTimer(Timer& dest, u8 id) const;
+    void EntryToTimeEntry(TimeEntry& dest, u8 id) const;
+    static void CreateFile(u32 crc32);
+    static const TimeEntry* GetEntry(u32 index); //pointer as the game expects as such
+    static int ExpertBMGDisplay();
 private:
-    char magic[4]; //PULL
+    u32 magic; //PULL
     u32 version;
     u32 crc32; //of the track
     bool hasTrophy[4];
     u32 reserved[8];
     PULTimeEntry entries[4][11]; //0x30 to 0x44C 11th = flap
-}__attribute((aligned(0x20)));
+    static const u32 fileMagic = 'PULL';
+};
+
+PULTimeEntry* GetPULTimeEntry(u32 index);
+
+}//namespace Ghosts
+}//namespace Pulsar
 
 
 
-
-
-PULTimeEntry *GetPULTimeEntry(u32 index);
 #endif

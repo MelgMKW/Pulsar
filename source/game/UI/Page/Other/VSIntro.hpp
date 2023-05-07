@@ -3,7 +3,8 @@
 #include <kamek.hpp>
 #include <game/UI/Page/Page.hpp>
 namespace Pages {
-class VSRaceIntro : public Page { //ID 0x8
+//_sinit_ at 808556d0
+class VSRaceIntro: public Page { //ID 0x8
     VSRaceIntro(); //80624690
     ~VSRaceIntro() override; //80855644 vtable 808da568
     void OnInit() override; //80855200

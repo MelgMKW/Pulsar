@@ -1,12 +1,12 @@
-et#ifndef _ITEMBOX_
+#ifndef _ITEMBOX_
 #define _ITEMBOX_
 #include <kamek.hpp>
 #include <game/Objects/Collidable/ObjectCollidable.hpp>
 
 namespace Objects {
 
-class Itembox : public ObjectCollidable, public ObjectCycleManager { //0x65 = 101
-    explicit Itembox(KMP::GOBJHolder *gobjHolder); //808285b0
+class Itembox: public ObjectCollidable, public ObjectCycleManager { //0x65 = 101
+    explicit Itembox(const KMP::GOBJHolder& gobjHolder); //808285b0
 
     ~Itembox() override; //806c4f74 vtable 808d7bc0
     void Update() override; //0x14 80828860
@@ -15,8 +15,8 @@ class Itembox : public ObjectCollidable, public ObjectCycleManager { //0x65 = 10
     void UpdateModelMatrix() override; //0x6c 806c69e4
     void UpdateShadow() override; //0x70 806c6a84
     void UpdateModelScale() override; //0x78 806c69e0
-    ObjToKartHit OnCollision(Kart *kart, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80828cb8
-    void OnWallCollision(Kart *kart, Vec3ZeroInit position) override; //0xc8 806c69dc
+    ObjToKartHit OnCollision(const Kart& kart, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80828cb8
+    void OnWallCollision(const Kart& kart, Vec3ZeroInit position) override; //0xc8 806c69dc
     bool IsSolid() const override; //806c69d4
     virtual bool IsActive() const; //806c69c0
 

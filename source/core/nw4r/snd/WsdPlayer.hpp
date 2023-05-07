@@ -8,7 +8,7 @@
 namespace nw4r {
 namespace snd {
 namespace detail {
-class WsdPlayer : public BasicPlayer {
+class WsdPlayer: public BasicPlayer {
     WsdPlayer(); //800add80
     ~WsdPlayer(); //800ad510 vtable 80274bb8
     bool Start() override; //800ae040

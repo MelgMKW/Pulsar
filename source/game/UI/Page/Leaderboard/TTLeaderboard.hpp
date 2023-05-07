@@ -5,7 +5,7 @@
 #include <game/UI/Page/Leaderboard/VSLeaderboardUpdate.hpp>
 
 namespace Pages {
-class TTLeaderboard : public VSLeaderboardUpdate { //ID 0x2E unsure why it inherits from VSLeaderboardUpdate, might be wrong and could be an intermediate class
+class TTLeaderboard: public VSLeaderboardUpdate { //ID 0x2E unsure why it inherits from VSLeaderboardUpdate, might be wrong and could be an intermediate class
 public:
     TTLeaderboard(); //80625134
     ~TTLeaderboard() override; //8085e438 vtable 808daabc

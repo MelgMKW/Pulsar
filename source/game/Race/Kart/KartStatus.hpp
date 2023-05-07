@@ -10,13 +10,12 @@ class KartPointers;
 
 class KartStatus {
 public:
-    explicit KartStatus(KartValues *values); //805943b4
+    explicit KartStatus(const KartValues& values); //805943b4
     void UpdateFromInput(); //8059487c
     UnkType ComputeStartBoost(); //805959d4
     UnkType ApplyStartBoost(int startBoostIdx); //80595af8
     UnkType UpdateCollisions(); //80594bd4
-    //vtable 808b6534
-    virtual void Unknown_vtable();
+    virtual void Unknown_vtable(); //vtable 808b6534
     u32 bitfield0; //bit flags: //0x4
     /*
        0 accelerate
@@ -91,7 +90,7 @@ public:
        4 automatic drift
        6 ghost
     */
-    KartBase *base; //0x18
+    KartBase* base; //0x18
     u32 airtime;
     u8 unknown_0x20[0x28 - 0x20];
     Vec3 floorNor;

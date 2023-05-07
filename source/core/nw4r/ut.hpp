@@ -9,6 +9,7 @@
 #include <core/nw4r/ut/IOStream.hpp>
 #include <core/nw4r/ut/LinkList.hpp>
 #include <core/nw4r/ut/List.hpp>
+#include <core/nw4r/ut/Misc.hpp>
 #include <core/nw4r/ut/Rect.hpp>
 #include <core/nw4r/ut/TagProcessorBase.hpp>
 

@@ -28,8 +28,8 @@ struct ResTevColorDL {
 struct ResTexPlttInfoData { //https://wiki.tockdom.com/wiki/MDL0_(File_Format)#Layers
     s32 offsetToTexName;             // Offset from the start of the structure to the texture name
     s32 offsetToPlttName;            // Offset from the start of the structure to the palette name (0 if it doesn't exist)
-    ResTexData *pTexData;
-    void *pPlttData;
+    ResTexData* pTexData;
+    void* pPlttData;
     GXTexMapID mapID;               // GXTexMapID in which data is to be loaded (reflected in the array indices of ResMatData::texObj)
     GXTlut tlutID;              // Palette address in which data is to be loaded
     GXTexWrapMode wrap_s;              // Set to GXTexObj
@@ -95,12 +95,12 @@ struct TexSrtTypedef {
     };
 };
 
-class ResMat : public ResCommon<ResMatData> {
+class ResMat: public ResCommon<ResMatData> {
 public:
 
 };
 
-class ResMatTevColor : public ResCommon<ResTevColorDL> {
+class ResMatTevColor: public ResCommon<ResTevColorDL> {
 public:
 
 };

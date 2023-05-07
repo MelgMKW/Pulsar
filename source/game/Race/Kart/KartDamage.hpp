@@ -17,7 +17,7 @@ public:
     void UpdateCollisionSpeed(); //80567ce4
     void RemoteDestroy();
     KartBase base;
-    virtual void Func_vtable1(); //0xC vtable 0x808B5008
+    virtual void Func_vtable1(); //0xC vtable 808B5008
     virtual void Update(DamageType newDamage, UnkType r5, int r6, u32 r7, u32  r8, u32 r9); //805675dc
     float unknown_0x10[3];
     DamageType currentDamage;

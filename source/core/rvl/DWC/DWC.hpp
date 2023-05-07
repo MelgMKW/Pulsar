@@ -4,9 +4,12 @@
 
 //Credit Seeky
 
-namespace DWC { //this is probably C, but don't care
+namespace DWC { //this is C, but don't care
 
-static char loginRegion[8]; //80384fd0
+extern char loginRegion[8]; //80384fd0
+
+
+
 
 struct LoginID {
     u64 userId;
@@ -22,6 +25,11 @@ struct UserData { //https://wiki.tockdom.com/wiki/Rksys.dat#DWC_User_Data
     u32 gamecode; //always RMCJ
     u32 unknown_0x28[0x3c - 0x28];
     u32 crc32;
+};
+
+struct ConnectionUserData {
+    u8 localPlayerCount;
+    u8 unknown_0x1[3];
 };
 
 struct Friend {

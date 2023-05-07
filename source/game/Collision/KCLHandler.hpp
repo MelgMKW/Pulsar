@@ -5,11 +5,11 @@
 
 class KCLHandler {
 public:
-    explicit KCLHandler(KCL *raw); //807bdc5c
-    Vec3 *vertices; //0
-    Vec3 *normals; //4
-    Vec3 *trianglesMinus0x10; //8
-    u32 *octree; //0xc
+    explicit KCLHandler(const KCL& raw); //807bdc5c
+    Vec3* vertices; //0
+    Vec3* normals; //4
+    Vec3* trianglesMinus0x10; //8
+    u32* octree; //0xc
     float thickness; //0x10
     Vec3 firstCood; //0x14
     u32 xMask; //0x20
@@ -21,7 +21,7 @@ public:
     float maximumRadius; //0x38
     u8 unknown_0x3C[0x6c - 0x3C];
     u32 triangleCount; //determined via the length of the triangleArray
-    KCLTriangle *triangles;
+    KCLTriangle* triangles;
     u8 unknown_0x74[0x80 - 0x74];
     Vec3 firstVertice; //0x80
     u8 unknown_0x8c[0x2A4 - 0x8c];

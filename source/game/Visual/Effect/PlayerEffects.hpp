@@ -13,14 +13,17 @@ public:
 
 class PlayerEffects {
 public:
-    explicit PlayerEffects(Kart *kart); //0x8068df98
+    explicit PlayerEffects(Kart* kart); //0x8068df98
     virtual ~PlayerEffects(); //0x8068e888 vtable 808c1f64
     void LoadEffects(); //8068f044 4932 lines long
-    void DisplayPrimaryEffects(EGG::Effect **effectsArray, u32 firstEffectIndex, u32 lastEffectIndex, Mtx34 *playerMat2, Vec3 *wheelPos, bool r9); //r5 first Id and r6 second Id maybe?
-    void DisplaySecondaryEffects(EGG::Effect **effectsArray, u32 firstEffectIndex, u32 lastEffectIndex, Mtx34 *playerMat2, Vec3 *wheelPos, bool r9);
-    void FadeEffects(EGG::Effect **effectsArray, u32 firstEffectIndex, u32 lastEffectIndex, Mtx34 *playerMat2, Vec3 *wheelPos, bool r9); //80697788
-    void DisplayEffects2(EGG::Effect **effectsArray, u32 firstEffectIndex, u32 lastEffectIndex, bool r7);
-    void FadeEffects2(EGG::Effect **effectsArray, u32 firstEffectIndex, u32 lastEffectIndex, bool r7);
+    void DisplayPrimaryEffects(EGG::Effect** effectsArray, u32 firstEffectIndex, u32 lastEffectIndex,
+        const Mtx34& playerMat2, const Vec3& wheelPos, bool r9); //806975d4 r5 first Id and r6 second Id maybe?
+    void DisplaySecondaryEffects(EGG::Effect** effectsArray, u32 firstEffectIndex, u32 lastEffectIndex,
+        const Mtx34& playerMat2, const Vec3& wheelPos, bool r9); //806979f0
+    void FadeEffects(EGG::Effect** effectsArray, u32 firstEffectIndex, u32 lastEffectIndex,
+        const Mtx34& playerMat2, const Vec3& wheelPos, bool r9); //80697788
+    void DisplayEffects2(EGG::Effect** effectsArray, u32 firstEffectIndex, u32 lastEffectIndex, bool r7);
+    void FadeEffects2(EGG::Effect** effectsArray, u32 firstEffectIndex, u32 lastEffectIndex, bool r7); //806a1b68
     bool unknown_0x4;
     u8 unknown_0x5[0xB - 0x5]; //0x8068ea78, init func maybe
     bool hasOnlyOnePage; //ScnManager pageCoutn if <2 then true
@@ -138,7 +141,7 @@ public:
     u8 unknown_0x10D;
     bool isAcceleratingAtStart; //0x10e
     u8 unknown_0x10F[0x118 - 0x10f];
-    Kart *kart; //0x118
+    Kart* kart; //0x118
     KartId kartId; //0x11c
     CharacterId characterId; //0x120
     u32 isBike; //yes it's a word 124
@@ -184,9 +187,9 @@ public:
     bool isBlueTeam; //0x155
     bool isBattle; //0x156 
     bool effectHolder_0x1A; //0x157
-    ModelDirector *pochaModel; //0x158
-    ModelDirector *pochaYoganModel; //0x15C
-    ModelDirector *iceModel; //for rSL 0x160
+    ModelDirector* pochaModel; //0x158
+    ModelDirector* pochaYoganModel; //0x15C
+    ModelDirector* iceModel; //for rSL 0x160
     u32 unknown_0x164[12]; //ends at 0x194
     UnkEffectClass class_0x194[16];
     UnkEffectClass class_0x1d4[4]; //0x1d4
@@ -194,7 +197,7 @@ public:
     UnkEffectClass class_0x1ec[1];
 
 
-    EGG::Effect *rk_raceEffects[92]; //use enum
+    EGG::Effect* rk_raceEffects[92]; //use enum
 
     bool hasLoaded_1[0x38c - 0x360]; //0x360 check from crash to hitA
     bool hasLoaded_2[0x39A - 0x38C]; //rk_koukasen to rk_effect_0x2D4
@@ -206,20 +209,20 @@ public:
     float unk_emission_value_0x4A4[16]; //806b0e5c related to gasSmoke ends at 4E4
     float unk_emission_value_0x4E4[18]; //related to dirtSmoke to stone2 ends at 52c
 
-    EGG::Effect **kartEffects; //0x52c 8069188c 8 elements use kartEffects enum
-    EGG::Effect **kartDriftEffects; //8069189c 36 elements use driftEffects enum
+    EGG::Effect** kartEffects; //0x52c 8069188c 8 elements use kartEffects enum
+    EGG::Effect** kartDriftEffects; //8069189c 36 elements use driftEffects enum
     bool hasLoaded_5[8]; //0x534 8 elements in the 52c array
     bool hasLoaded_6[36]; //0x53C 36 elements in the 530 array
     float unk_emission_value_0x560[8]; //ends at 580
     float unk_emission_value_0x580[36]; // ends at 610
-    EGG::Effect **bikeEffects; //0x610
-    EGG::Effect **bikeDriftEffects; //0x614
+    EGG::Effect** bikeEffects; //0x610
+    EGG::Effect** bikeDriftEffects; //0x614
     bool hasLoaded_7[8]; //0x618 for the array above 600
     bool hasLoaded_8[28]; //0x620, for the array at 614
     float unk_emission_value_0x63C[8]; //0x63C ends at 65c
     float unk_emission_value_0x65C[28]; //ends at 0x6CC, for the array at 614
 
-    u32 *bikePartsAndParam_field; //0x6cc, field 0x58 if bike, 0xf8 if kart
+    u32* bikePartsAndParam_field; //0x6cc, field 0x58 if bike, 0xf8 if kart
     Vec3 playerPosition; //0x6d0 from kartPhysics 80693eb0
     Vec3 speed; //0x6dc from kartPhysics
     float speedNorm; //0x6e8 calculed from speed vector

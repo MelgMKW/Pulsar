@@ -4,7 +4,7 @@
 #include <core/nw4r/ut/IOStream.hpp>
 namespace nw4r {
 namespace ut {
-class FileStream : public IOStream {
+class FileStream: public IOStream {
 public:
     class FilePosition {
     public:

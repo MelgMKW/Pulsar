@@ -7,7 +7,7 @@
 namespace nw4r {
 namespace g3d {
 
-class AnmObjMatClr : public AnmObj {
+class AnmObjMatClr: public AnmObj {
 };
 }//namespace g3d
 }//namespace nw4r

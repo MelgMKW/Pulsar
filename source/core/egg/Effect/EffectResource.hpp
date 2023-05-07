@@ -7,15 +7,15 @@
 
 using namespace nw4r;
 namespace EGG {
-class EffectResource : public EGG::Disposer {
+class EffectResource: public EGG::Disposer {
 public:
-    EffectResource(void *breff, void *breft); //80225c98
+    EffectResource(void* breff, void* breft); //80225c98
     ~EffectResource() override; //80225d34 vtable 802a2f70
-    virtual void SetResource(void *breff, void *breft); //80225de8
+    virtual void SetResource(void* breff, void* breft); //80225de8
     virtual void ResetResource(); //80225e74
     void Initialize();
-    ef::EffectProject *breff; //0x10
-    ef::TextureProject *breft;  //0x14
+    ef::EffectProject* breff; //0x10
+    ef::TextureProject* breft;  //0x14
     ut::Link resourceLink; //0x18
 
 }; //total size 0x20

@@ -6,9 +6,9 @@
 
 // Contributors: Melg
 namespace Pages {
-class TTInterface : public RaceHUD { //ID 0xd
+class TTInterface: public RaceHUD { //ID 0xD
     TTInterface();//806247cc
-    ~TTInterface() override; //80633c04 0x808be478
+    ~TTInterface() override; //80633c04 vtable 808be478
     int GetRuntimeTypeInfo() const override; //0x60 80633c70
     PageId GetPausePageId() const override; //0x64 80633bb8
     int GetEnabledCtrlRaceBases() const override; //0x68 80633bb0

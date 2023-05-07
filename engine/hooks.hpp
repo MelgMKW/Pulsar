@@ -61,7 +61,7 @@
 
 // kmBranchDefCpp, kmBranchDefAsm
 //   Set up a branch (b) from a specific instruction to a function defined
-//   directly underneath. If exitPoint is not NULL, the function will
+//   directly underneath. If exitPoint is not nullptr, the function will
 //   branch to exitPoint when done; otherwise, it executes blr as normal
 #define kmBranchDefInt(counter, addr, exitPoint, returnType, ...) \
 		static returnType kmIdentifier(UserFunc, counter) (__VA_ARGS__); \
@@ -105,8 +105,8 @@
 extern char gameID[4];
 template <u32 address, u32 instruction, char region>
 int PatchRegion() {
-    if (gameID[3] == region) {
-        register u32 *addressPtr = (u32 *)address;
+    if(gameID[3] == region) {
+        register u32* addressPtr = (u32*)address;
         *addressPtr = instruction;
         asm{
             ASM(

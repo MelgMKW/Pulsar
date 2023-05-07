@@ -4,11 +4,11 @@
 
 typedef struct BRCTR;
 struct BRCTRAnimSubHeader {
-    u16 firstGroupOffset;
-    u16 groupsCount;
-    u16 firstAnimOffset;
-    u16 animationsCount;
-};
+    u16 firstGroupOffset; //0x0
+    u16 groupsCount; //0x2
+    u16 firstAnimOffset; //0x4
+    u16 animationsCount; //0x6
+};//0x8
 
 struct BRCTRAnimGroup {
     u16 offsetToName;

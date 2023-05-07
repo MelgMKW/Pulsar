@@ -1,7 +1,35 @@
 #ifndef _TYPES_
 #define _TYPES_
-#define NULL 0
+
+#pragma inline_depth(8)
+#pragma inline_max_auto_size(0)
+#pragma inline_max_size(256)
+#pragma inline_max_total_size(10000)
+#pragma opt_unroll_loops off
+
+#pragma fp_contract on
 #pragma cpp1x on
+#pragma arg_dep_lookup on
+#pragma enumsalwaysint on
+#pragma use_lmw_stmw on
+#pragma instmgr_file on
+#pragma no_static_dtors on
+#pragma exceptions off
+#pragma extended_errorcheck on
+#pragma Cpp_exceptions off
+#pragma float_constants on
+#pragma readonly_strings on
+#pragma RTTI off
+#pragma warn_illpragma on
+#pragma warn_extracomma on
+#pragma warn_possunwant on
+#pragma warn_illtokenpasting off
+
+#pragma gcc_extensions on
+
+
+
+
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
@@ -24,42 +52,38 @@ typedef volatile f64 vf64;
 typedef volatile f32 vf32;
 typedef int UnkType;
 typedef int BOOL; //any non-zero = true
-typedef unsigned long size_t;
 
+
+
+#ifdef __INTELLISENSE__
+typedef unsigned long long size_t;
+#else
+typedef unsigned long size_t;
+#endif
 
 struct RGBA16 {
     u16 red, green, blue, alpha;
 };
 
-template<typename T>
-inline T Min(T a, T b) { return a < b ? a : b; }
-template<typename T>
-inline T Max(T a, T b) { return a > b ? a : b; }
-
-#define abs __abs
-
-#define foreach(item, array, length) \
-for(decltype(&array[0]) ite = (&array[0]), (item) = ite; ite < (&(array)[length]); ite++, (item) = ite)
-
 #define offsetof(st, m) \
-    ((u32)&(((st *)0)->m))
+    ((const u32)&(((const st *)0)->m))
 
 #ifdef __INTELLISENSE__
 #define ASM(...)
-#define asm 
-#define __attribute(...)
-#define __abs(n) n
-
+#define volatile(...) {}
+#define asm
 #define __sync(...)
 #define __isync(...)
 #define size_assert(type, num) static_assert(sizeof(type)==(num),"type")
-#define size_assert static_assert
 #define static_assert(...)
 #else
+#define abs __abs
+#define alignas(value) __attribute((aligned(value)))
 #define ASM(...) __VA_ARGS__
 #define override
 #define size_assert(type, num) static_assert(sizeof(type) ==num,#type)
 #endif
 
 #endif
+
 

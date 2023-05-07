@@ -1,16 +1,18 @@
 #include <kamek.hpp>
 #include <game/Sound/AudioManager.hpp>
 
+namespace Pulsar {
+namespace Audio {
 /*Allows players to avoid multi BRSTMs if they desire. When a sound trigger KCL that'd lead to a channel switch is encountered,
 the game will check the BRASR's entry channel count against the current BRSTM's, and if the latter has fewert than needed,
 the channel switch will not happen*/
 
-int CheckChannelCount(AudioStreamsMgr *streamMgr, u32 channel, nw4r::snd::detail::BasicSound *sound) {
-    u32 id = sound->soundId;
-    if (AudioManager::sInstance->soundArchivePlayer->soundArchive->GetSoundType(id) != SOUND_TYPE_STRM) return id;
-    nw4r::snd::detail::StrmSound *strmSound = (nw4r::snd::detail::StrmSound *)sound;
-    u32 need = strmSound->strmPlayer.channelsNeeded;
-    u32 channelCount = strmSound->strmPlayer.strmInfo.channelCount;
+int CheckChannelCount(const AudioStreamsMgr&, u32 channel, const nw4r::snd::detail::BasicSound& sound) {
+    const u32 id = sound.soundId;
+    if(AudioManager::sInstance->soundArchivePlayer->soundArchive->GetSoundType(id) != SOUND_TYPE_STRM) return id;
+    const nw4r::snd::detail::StrmSound& strmSound = static_cast<const  nw4r::snd::detail::StrmSound&>(sound);
+    const u32 need = strmSound.strmPlayer.channelsNeeded;
+    const u32 channelCount = strmSound.strmPlayer.strmInfo.channelCount;
     return (channelCount < need) ? -1 : id;
 }
 
@@ -29,3 +31,5 @@ asm int ConditionalChannelSwitch() {
     );
 }
 kmCall(0x806fab78, ConditionalChannelSwitch);
+}//namespace Audio
+}//namespace Pulsar

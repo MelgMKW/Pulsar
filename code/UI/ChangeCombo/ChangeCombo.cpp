@@ -1,183 +1,140 @@
-#include <Pulsar.hpp>
+#include <core/nw4r/ut/Misc.hpp>
+#include <game/GlobalFunctions.hpp>
+#include <game/Race/RaceData.hpp>
+#include <UI/UI.hpp>
 #include <UI/ChangeCombo/ChangeCombo.hpp>
 
-u8 kartsSortedByWeight[3][12] = {
-    {STANDARD_KART_S, BABY_BOOSTER, MINI_BEAST, CHEEP_CHARGER, RALLY_ROMPER, BLUE_FALCON, STANDARD_BIKE_S, BULLET_BIKE, BIT_BIKE, QUACKER, MAGIKRUISER, JET_BUBBLE},
-    {STANDARD_KART_M, CLASSIC_DRAGSTER, WILD_WING, SUPER_BLOOPER, ROYAL_RACER, SPRINTER, STANDARD_BIKE_M, MACH_BIKE, BON_BON, RAPIDE, NITROCYCLE, DOLPHIN_DASHER},
-    {STANDARD_KART_L,  OFFROADER, FLAME_FLYER, PIRANHA_PROWLER, JETSETTER, HONEYCOUPE, STANDARD_BIKE_L, BOWSER_BIKE, WARIO_BIKE, SHOOTING_STAR, SPEAR, PHANTOM},
-};
+namespace Pulsar {
+namespace UI {
 
-namespace PulsarUI {
 kmWrite32(0x806508d4, 0x60000000); //Add VR screen outside of 1st race in frooms
 kmWrite32(0x806240e0, 0x60000000); //nop the new
-Pages::VR *AddComboPages() {
-    SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
-
-    if (sectionId == SECTION_P1_WIFI_VS_VOTING || sectionId == SECTION_P1_WIFI_FROOM_VS_VOTING
-        || sectionId == SECTION_P1_WIFI_FROOM_TEAMVS_VOTING || sectionId == SECTION_P1_WIFI_BATTLE_VOTING
-        || sectionId == SECTION_P1_WIFI_FROOM_BALLOON_VOTING || sectionId == SECTION_P1_WIFI_FROOM_COIN_VOTING) {
-        return new(ExpVR);
-    }
-    return new(Pages::VR);
+Pages::VR* AddComboPages() {
+    return new(ExpVR);
 }
 kmCall(0x806240ec, AddComboPages);
 
 
-ExpVR::ExpVR(): comboButtonState(0) {
+ExpVR::ExpVR() : comboButtonState(0) {
     this->onRandomComboClick.subject = this;
     this->onRandomComboClick.ptmf = &ExpVR::RandomizeCombo;
     this->onChangeComboClick.subject = this;
     this->onChangeComboClick.ptmf = &ExpVR::ChangeCombo;
 }
 
-void TempKillInitControl(Pages::VR *page, u32 controlCount) {
-    SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
-    if (sectionId == SECTION_P1_WIFI_VS_VOTING || sectionId == SECTION_P1_WIFI_FROOM_VS_VOTING
-        || sectionId == SECTION_P1_WIFI_FROOM_TEAMVS_VOTING || sectionId == SECTION_P1_WIFI_BATTLE_VOTING
-        || sectionId == SECTION_P1_WIFI_FROOM_BALLOON_VOTING || sectionId == SECTION_P1_WIFI_FROOM_COIN_VOTING) return;
-    page->InitControlGroup(controlCount);
-}
-kmCall(0x8064a61c, TempKillInitControl);
-//kmWrite32(0x8064a61c, 0x60000000); //nop initControlGroup
+kmWrite32(0x8064a61c, 0x60000000); //nop initControlGroup
 
+kmWrite24(0x808998b3, 'PUL'); //WifiMemberConfirmButton -> PULiMemberConfirmButton
 void ExpVR::OnInit() {
     this->InitControlGroup(0x11);
     VR::OnInit();
 
-    PushButton *button = &this->randomComboButton;
-    this->AddControl(0xF, button, 0);
-    button->Load(Pulsar::buttonFolder, "WifiMemberButtons", "ButtonRandom", 1, 0, false);
-    button->SetOnClickHandler((PtmfHolder_2A<Page, void, PushButton *, u32>*) & this->onRandomComboClick, 0);
+    this->AddControl(0xF, this->randomComboButton, 0);
+    this->randomComboButton.Load(UI::buttonFolder, "PULiMemberConfirmButton", "Random", 1, 0, false);
+    this->randomComboButton.SetOnClickHandler(this->onRandomComboClick, 0);
 
-    button = &this->changeComboButton;
-    this->AddControl(0x10, button, 0);
-    button->Load(Pulsar::buttonFolder, "WifiMemberButtons", "ButtonChange", 1, 0, false);
-    button->SetOnClickHandler((PtmfHolder_2A<Page, void, PushButton *, u32>*) & this->onChangeComboClick, 0);
-    button->manipulator.SetAction(START_PRESS, &button->onClickHandlerObj, 0);
+    this->AddControl(0x10, this->changeComboButton, 0);
+    this->changeComboButton.Load(UI::buttonFolder, "PULiMemberConfirmButton", "Change", 1, 0, false);
+    this->changeComboButton.SetOnClickHandler(this->onChangeComboClick, 0);
+    this->changeComboButton.manipulator.SetAction(START_PRESS, this->changeComboButton.onClickHandlerObj, 0);
 
-    Section *section = SectionMgr::sInstance->curSection;
+    const Section* section = SectionMgr::sInstance->curSection;
 
-    Pages::CountDownTimer *countdownPage = section->Get<Pages::CountDownTimer>(PAGE_COUNTDOWN);
-    CountDown *timer = &countdownPage->countdown;
+    Pages::CountDownTimer* countdownPage = section->Get<Pages::CountDownTimer>(PAGE_COUNTDOWN);
+    CountDown* timer = &countdownPage->countdown;
 
-    Pages::CharacterSelect *charPage = section->Get<Pages::CharacterSelect>(PAGE_CHARACTER_SELECT);
+    Pages::CharacterSelect* charPage = section->Get<Pages::CharacterSelect>(PAGE_CHARACTER_SELECT);
     charPage->timer = timer;
     charPage->ctrlMenuCharSelect.timer = timer;
 
-    Pages::KartSelect *kartPage = section->Get<Pages::KartSelect>(PAGE_KART_SELECT);
-    if (kartPage != NULL) kartPage->timer = timer;
+    Pages::KartSelect* kartPage = section->Get<Pages::KartSelect>(PAGE_KART_SELECT);
+    if(kartPage != nullptr) kartPage->timer = timer;
 
-    Pages::BattleKartSelect *kartBattlePage = section->Get<Pages::BattleKartSelect>(PAGE_BATTLE_KART_SELECT);
-    if (kartBattlePage != NULL) kartBattlePage->timer = timer;
+    Pages::BattleKartSelect* kartBattlePage = section->Get<Pages::BattleKartSelect>(PAGE_BATTLE_KART_SELECT);
+    if(kartBattlePage != nullptr) kartBattlePage->timer = timer;
 
-    Pages::MultiKartSelect *multiKartPage = section->Get<Pages::MultiKartSelect>(PAGE_MULTIPLAYER_KART_SELECT);
-    if (multiKartPage != NULL) multiKartPage->timer = timer;
+    Pages::MultiKartSelect* multiKartPage = section->Get<Pages::MultiKartSelect>(PAGE_MULTIPLAYER_KART_SELECT);
+    if(multiKartPage != nullptr) multiKartPage->timer = timer;
 
-    Pages::DriftSelect *driftPage = section->Get<Pages::DriftSelect>(PAGE_DRIFT_SELECT);
-    if (driftPage != NULL) driftPage->timer = timer;
+    Pages::DriftSelect* driftPage = section->Get<Pages::DriftSelect>(PAGE_DRIFT_SELECT);
+    if(driftPage != nullptr) driftPage->timer = timer;
 
-    Pages::MultiDriftSelect *multiDriftPage = section->Get<Pages::MultiDriftSelect>(PAGE_MULTIPLAYER_DRIFT_SELECT);
-    if (multiDriftPage != NULL) multiDriftPage->timer = timer;
-}
-
-void UseCorrectOKButtonBRCTR(PushButton *okButton, const char *folderName, const char *ctrName, const char *variant, u32 localPlayerCount, u32 r8, bool inaccessible) {
-    SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
-    if (sectionId == SECTION_P1_WIFI_VS_VOTING || sectionId == SECTION_P1_WIFI_FROOM_VS_VOTING
-        || sectionId == SECTION_P1_WIFI_FROOM_TEAMVS_VOTING || sectionId == SECTION_P1_WIFI_BATTLE_VOTING
-        || sectionId == SECTION_P1_WIFI_FROOM_BALLOON_VOTING || sectionId == SECTION_P1_WIFI_FROOM_COIN_VOTING) {
-        ctrName = "WifiMemberButtons";
+    Pages::MultiDriftSelect* multiDriftPage = section->Get<Pages::MultiDriftSelect>(PAGE_MULTIPLAYER_DRIFT_SELECT);
+    if(multiDriftPage != nullptr) {
+        multiDriftPage->nextSectionOnButtonClick = SECTION_NONE;
+        multiDriftPage->timer = timer;
     }
-    okButton->Load(folderName, ctrName, variant, localPlayerCount, r8, inaccessible);
 }
-kmCall(0x8064a6e8, UseCorrectOKButtonBRCTR);
 
-void ExpVR::RandomizeCombo(PushButton *randomComboButton, u32 hudSlotId) {
+
+
+
+void ExpVR::RandomizeCombo(PushButton& randomComboButton, u32 hudSlotId) {
+    this->comboButtonState = 1;
+    this->EndStateAnimated(randomComboButton.GetAnimationFrameSize(), 0);
     Random random;
+    const SectionMgr* sectionMgr = SectionMgr::sInstance;
+    const Section* section = sectionMgr->curSection;
+    SectionParams* sectionParams = sectionMgr->sectionParams;
+    for(int hudId = 0; hudId < sectionParams->localPlayerCount; hudId++) {
+        const CharacterId character = random.NextLimited<CharacterId>(24);
+        const u32 randomizedKartPos = random.NextLimited(12);
+        const KartId kart = kartsSortedByWeight[CharacterIDToWeightClass(character)][randomizedKartPos];
 
+        sectionParams->characters[hudId] = character;
+        sectionParams->karts[hudId] = kart;
+        sectionParams->combos[hudId].selCharacter = character;
+        sectionParams->combos[hudId].selKart = kart;
 
-    SectionMgr *menu = SectionMgr::sInstance;
-    SectionMgr98 *sectionMgr98 = menu->sectionMgr98;
-    for (int hudId = 0; hudId < sectionMgr98->localPlayerCount; hudId++) {
-        CharacterId character = (CharacterId)random.NextLimited(24);
-        u32 randomizedKartPos = random.NextLimited(12);
-        KartId kart = (KartId)(kartsSortedByWeight[CharacterIDToWeightClass(character)][randomizedKartPos]);
+        ExpCharacterSelect* charSelect = section->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT); //guaranteed to exist on this page
+        charSelect->randomizedCharIdx[hudId] = character;
+        charSelect->rolledCharIdx[hudId] = character;
+        charSelect->rouletteCounter = ExpVR::randomDuration;
+        charSelect->ctrlMenuCharSelect.selectedCharacter = character;
 
-        sectionMgr98->characters[hudId] = character;
-        sectionMgr98->karts[hudId] = kart;
-        sectionMgr98->combos[hudId].selCharacter = character;
-        sectionMgr98->combos[hudId].selKart = kart;
+        ExpBattleKartSelect* battleKartSelect = section->Get<ExpBattleKartSelect>(PAGE_BATTLE_KART_SELECT);
+        if(battleKartSelect != nullptr) battleKartSelect->selectedKart = random.NextLimited(2);
 
-        Section *section = menu->curSection;
-        ExpCharacterSelect *charSelect = section->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT); //guaranteed to exist on this page
-        for (int i = 0; i < 24; i++) {
-            if (buttonIdToCharacterId[i] == character) {
-                charSelect->randomizedCharId = i;
-                charSelect->rolledCharId = i;
-                charSelect->rouletteCounter = 0x50;
-                charSelect->ctrlMenuCharSelect.selectedCharacter = character;
-                break;
-            }
-        }
-
-        ExpBattleKartSelect *battleKartSelect = section->Get<ExpBattleKartSelect>(PAGE_BATTLE_KART_SELECT);
-        if (battleKartSelect != NULL) battleKartSelect->selectedKart = random.NextLimited(2);
-
-        ExpKartSelect *kartSelect = section->Get<ExpKartSelect>(PAGE_KART_SELECT);
-        if (kartSelect != NULL) {
-            kartSelect->rouletteCounter = 0x50;
+        ExpKartSelect* kartSelect = section->Get<ExpKartSelect>(PAGE_KART_SELECT);
+        if(kartSelect != nullptr) {
+            kartSelect->rouletteCounter = ExpVR::randomDuration;
             kartSelect->randomizedKartPos = randomizedKartPos;
             kartSelect->rolledKartPos = randomizedKartPos;
+
         }
 
-        ExpMultiKartSelect *multiKartSelect = section->Get<ExpMultiKartSelect>(PAGE_MULTIPLAYER_KART_SELECT);
-        if (multiKartSelect != NULL) {
-            multiKartSelect->rouletteCounter = 0x50;
+        ExpMultiKartSelect* multiKartSelect = section->Get<ExpMultiKartSelect>(PAGE_MULTIPLAYER_KART_SELECT);
+        if(multiKartSelect != nullptr) {
+            multiKartSelect->rouletteCounter = ExpVR::randomDuration;
             multiKartSelect->rolledKartPos[0] = randomizedKartPos;
             u32 options = 12;
-            SectionId sectionId = section->sectionId;
-            if (sectionId == SECTION_P2_WIFI_BATTLE_VOTING || sectionId == SECTION_P2_WIFI_FROOM_BALLOON_VOTING || sectionId == SECTION_P2_WIFI_FROOM_COIN_VOTING) {
-                options = 2;
-            }
+            if(IsBattle()) options = 2;
             multiKartSelect->rolledKartPos[1] = random.NextLimited(options);
         }
     }
-    this->comboButtonState = 1;
-    this->EndStateAnimated(randomComboButton->GetAnimationFrameSize(), 0);
 }
 
-void ExpVR::ChangeCombo(PushButton *changeComboButton, u32 hudSlotId) {
+void ExpVR::ChangeCombo(PushButton& changeComboButton, u32 hudSlotId) {
     this->comboButtonState = 2;
-    this->EndStateAnimated(changeComboButton->GetAnimationFrameSize(), 0);
+    this->EndStateAnimated(changeComboButton.GetAnimationFrameSize(), 0);
 }
 
-void AddChangeComboPages(Section *section, PageId id) {
+void AddChangeComboPages(Section* section, PageId id) {
     section->CreateAndInitPage(id);
     section->CreateAndInitPage(PAGE_CHARACTER_SELECT);
-    switch (section->sectionId) {
-    case(SECTION_P1_WIFI_VS_VOTING):
-    case(SECTION_P1_WIFI_FROOM_VS_VOTING):
-    case(SECTION_P1_WIFI_FROOM_TEAMVS_VOTING):
-        section->CreateAndInitPage(PAGE_KART_SELECT);
-        section->CreateAndInitPage(PAGE_DRIFT_SELECT);
-        break;
-    case(SECTION_P1_WIFI_BATTLE_VOTING):
-    case(SECTION_P1_WIFI_FROOM_BALLOON_VOTING):
-    case(SECTION_P1_WIFI_FROOM_COIN_VOTING):
-        section->CreateAndInitPage(PAGE_BATTLE_KART_SELECT);
-        section->CreateAndInitPage(PAGE_DRIFT_SELECT);
-        break;
-    case(SECTION_P2_WIFI_VS_VOTING):
-    case(SECTION_P2_WIFI_FROOM_VS_VOTING):
-    case(SECTION_P2_WIFI_FROOM_TEAMVS_VOTING):
-    case(SECTION_P2_WIFI_BATTLE_VOTING):
-    case(SECTION_P2_WIFI_FROOM_BALLOON_VOTING):
-    case(SECTION_P2_WIFI_FROOM_COIN_VOTING):
-        section->CreateAndInitPage(PAGE_MULTIPLAYER_KART_SELECT);
-        section->CreateAndInitPage(PAGE_MULTIPLAYER_DRIFT_SELECT);
-        break;
+    bool isBattle = IsBattle();
+    PageId kartPage  = PAGE_KART_SELECT;
+    PageId driftPage = PAGE_DRIFT_SELECT;
+    if(SectionMgr::sInstance->sectionParams->localPlayerCount == 2) {
+        kartPage = PAGE_MULTIPLAYER_KART_SELECT;
+        driftPage = PAGE_MULTIPLAYER_DRIFT_SELECT;
     }
-
+    else if(isBattle) kartPage = PAGE_BATTLE_KART_SELECT;
+    section->CreateAndInitPage(kartPage);
+    section->CreateAndInitPage(driftPage);
 }
+
+//58 59 5e 5f 60 61
 //P1
 kmCall(0x8062e09c, AddChangeComboPages); //0x58 can't do this more efficiently because supporting page 0x7F breaks kart images
 kmCall(0x8062e7e0, AddChangeComboPages); //0x60
@@ -195,146 +152,139 @@ kmCall(0x8062ec18, AddChangeComboPages); //0x67
 
 
 kmWrite32(0x80623d50, 0x60000000);
-ExpCharacterSelect *AddCharSelect() {
+ExpCharacterSelect* AddCharSelect() {
     return new(ExpCharacterSelect);
 }
 kmCall(0x80623d5c, AddCharSelect);
 
 void ExpCharacterSelect::BeforeControlUpdate() {
-    CtrlMenuCharacterSelect::ButtonDriver *array = this->ctrlMenuCharSelect.driverButtonsArray;
-    s32 roulette = this->rouletteCounter;
-    if (roulette == 0x50) {
-        for (CtrlMenuCharacterSelect::ButtonDriver *button = &array[0]; button < &array[0x1A]; button++) {
-            button->manipulator.inaccessible = true;
-            button->HandleDeselect(0, 0);
+    //CtrlMenuCharacterSelect::ButtonDriver* array = this->ctrlMenuCharSelect.driverButtonsArray;
+    const s32 roulette = this->rouletteCounter;
+    if(roulette > 0) {
+        --this->rouletteCounter;
+        this->controlsManipulatorManager.inaccessible = true;
+    }
+    for(int hudId = 0; hudId < SectionMgr::sInstance->sectionParams->localPlayerCount; ++hudId) {
+        if(roulette > 15) {
+            const CharacterId prevChar = this->rolledCharIdx[hudId];
+            Random random;
+            const bool isGoodFrame = roulette % 4 == 1;
+            if(roulette == 1) this->rolledCharIdx[hudId] = this->randomizedCharIdx[hudId];
+            else if(isGoodFrame) while(this->rolledCharIdx[hudId] == prevChar) {
+                this->rolledCharIdx[hudId] = static_cast<CharacterId>(random.NextLimited(24));
+            }
+            if(isGoodFrame) {
+                this->ctrlMenuCharSelect.GetButtonDriver(prevChar)->HandleDeselect(hudId, -1);
+                CtrlMenuCharacterSelect::ButtonDriver* nextButton = this->ctrlMenuCharSelect.GetButtonDriver(rolledCharIdx[hudId]);
+                nextButton->HandleSelect(hudId, -1);
+                nextButton->Select(0);
+                //array[prevChar].HandleDeselect(0, -1);
+                //array[this->rolledCharIdx].HandleSelect(0, -1);
+                //array[this->rolledCharIdx].Select(0);
+            }
         }
+        else if(roulette == 0) this->ctrlMenuCharSelect.GetButtonDriver(randomizedCharIdx[hudId])->HandleClick(hudId, -1);
     }
-    if (roulette > 0) {
-        u32 prevChar = this->rolledCharId;
-        Random random;
-        if (roulette == 1) this->rolledCharId = this->randomizedCharId;
-        else while (this->rolledCharId == prevChar) this->rolledCharId = random.NextLimited(24);
-        array[prevChar].HandleDeselect(0, -1);
-        array[this->rolledCharId].HandleSelect(0, -1);
-        array[this->rolledCharId].Select(0);
-        this->rouletteCounter--;
-    }
-    else if (roulette == 0) {
-        this->rouletteCounter = -1;
 
-        array[this->randomizedCharId].HandleClick(0, -1);
-    }
+    //array[this->randomizedCharIdx].HandleClick(0, -1);
 }
-//store correct buttons in sectionMgr98
+//store correct buttons in sectionParams
 
 kmWrite32(0x80623e58, 0x60000000);
-ExpBattleKartSelect *AddBattleKartSelect() {
+ExpBattleKartSelect* AddBattleKartSelect() {
     return new(ExpBattleKartSelect);
 }
 kmCall(0x80623e64, AddBattleKartSelect);
 
 void ExpBattleKartSelect::BeforeControlUpdate() {
-    s32 kart = this->selectedKart;
-    if (kart >= 0 && this->currentState == 0x4) {
-        PushButton *kartButton = (PushButton *)this->controlGroup.controlArray[kart];
+
+    const s32 kart = this->selectedKart;
+    if(kart >= 0 && this->currentState == 0x4) {
+        this->controlsManipulatorManager.inaccessible = true;
+        this->selectedKart = -1;
+        PushButton* otherButton = this->controlGroup.GetControl<PushButton>(kart ^ 1);
+        PushButton* kartButton = this->controlGroup.GetControl<PushButton>(kart);
+        otherButton->HandleDeselect(0, -1);
         kartButton->HandleSelect(0, -1);
         kartButton->Select(0);
         kartButton->HandleClick(0, -1);
-        PushButton *otherButton = (PushButton *)this->controlGroup.controlArray[kart ^ 1];
-        otherButton->HandleDeselect(0, -1);
-        this->selectedKart = -1;
     }
 }
 
 
 kmWrite32(0x80623d68, 0x60000000);
-ExpKartSelect *AddKartSelect() {
+ExpKartSelect* AddKartSelect() {
     return new(ExpKartSelect);
 }
 kmCall(0x80623d74, AddKartSelect);
 
 void ExpKartSelect::BeforeControlUpdate() {
     s32 roulette = this->rouletteCounter;
-    if (roulette >= 0) {
-        LayoutUIControl *globalButtonHolder = (LayoutUIControl *)this->controlGroup.controlArray[2]; //holds the 6 controls that each hold a pair of buttons
-        ButtonMachine *randomizedButton = (ButtonMachine *)globalButtonHolder->childrenGroup.controlArray[this->randomizedKartPos / 2]->childrenGroup.controlArray[this->randomizedKartPos % 2];
-        if (roulette == 0x50) {
 
-            LayoutUIControl *buttonHolder;
-            for (buttonHolder = (LayoutUIControl *)globalButtonHolder->childrenGroup.controlArray[0];
-                buttonHolder <= (LayoutUIControl *)globalButtonHolder->childrenGroup.controlArray[6]; buttonHolder++) {
+    if(roulette > 0) {
+        this->controlsManipulatorManager.inaccessible = true;
+        Random random;
+        const u32 prevRoll = this->rolledKartPos;
+        ButtonMachine* prevButton = this->GetKartButton(prevRoll);
+        prevButton->HandleDeselect(0, -1);
 
-                ButtonMachine *leftButton = (ButtonMachine *)buttonHolder->childrenGroup.controlArray[0];
-                leftButton->manipulator.inaccessible = true;
-                leftButton->HandleDeselect(0, 0);
-
-                ButtonMachine *rightButton = (ButtonMachine *)buttonHolder->childrenGroup.controlArray[1];
-                rightButton->manipulator.inaccessible = true;
-                rightButton->HandleDeselect(0, 0);
-            }
-            this->curButtonId = randomizedButton->buttonId;
-        }
-        if (roulette > 0) {
-            Random random;
-            int prevKart = this->rolledKartPos;
-            ButtonMachine *prevButton = (ButtonMachine *)globalButtonHolder->childrenGroup.controlArray[prevKart / 2]->childrenGroup.controlArray[prevKart % 2];
-            prevButton->HandleDeselect(0, -1);
-
-            int nextKart = prevKart;
-            if (roulette == 1) nextKart = this->randomizedKartPos;
-            else while (nextKart == prevKart) nextKart = random.NextLimited(12);
-            ButtonMachine *nextButton = (ButtonMachine *)globalButtonHolder->childrenGroup.controlArray[nextKart / 2]->childrenGroup.controlArray[nextKart % 2];
+        u32 nextRoll = prevRoll;
+        const bool isGoodFrame = roulette % 4 == 1;
+        if(roulette == 1) nextRoll = this->randomizedKartPos;
+        else if(isGoodFrame) while(nextRoll == prevRoll) nextRoll = random.NextLimited(12);
+        if(isGoodFrame) {
+            ButtonMachine* nextButton = this->GetKartButton(nextRoll);
             nextButton->HandleSelect(0, -1);
             nextButton->Select(0);
-            this->rolledKartPos = nextKart;
-            this->rouletteCounter--;
+            this->rolledKartPos = nextRoll;
         }
-        else if (roulette == 0) {
-            this->rouletteCounter = -1;
-            randomizedButton->HandleClick(0, -1);
-        }
+        this->rouletteCounter--;
     }
+    else if(roulette == 0) {
+        this->rouletteCounter = -1;
+        this->GetKartButton(this->randomizedKartPos)->HandleClick(0, -1);
+    }
+
+}
+
+ButtonMachine* ExpKartSelect::GetKartButton(u32 idx) const {
+    const UIControl* globalButtonHolder = this->controlGroup.GetControl(2); //holds the 6 controls (6 rows) that each hold a pair of buttons
+    return globalButtonHolder->childrenGroup.GetControl(idx / 2)->childrenGroup.GetControl<ButtonMachine>(idx % 2);
 }
 
 kmWrite32(0x80623f60, 0x60000000);
-ExpMultiKartSelect *AddMultiKartSelect() {
+ExpMultiKartSelect* AddMultiKartSelect() {
     return new(ExpMultiKartSelect);
 }
 kmCall(0x80623f6c, AddMultiKartSelect);
 void ExpMultiKartSelect::BeforeControlUpdate() {
-    s32 roulette = this->rouletteCounter;
     Random random;
-    SectionMgr *menudata = SectionMgr::sInstance;
-    for (int i = 0; i < menudata->sectionMgr98->localPlayerCount; i++) { //in all likelihood always 2
-        if (roulette >= 0) {
-
-            if (roulette == 0x50) {
-                this->arrows[i].manipulator.inaccessible = true;
-                SectionId sectionId = menudata->curSection->sectionId;
-                u32 options = 12;
-                if (sectionId == SECTION_P2_WIFI_BATTLE_VOTING || sectionId == SECTION_P2_WIFI_FROOM_BALLOON_VOTING || sectionId == SECTION_P2_WIFI_FROOM_COIN_VOTING) {
-                    options = 2;
-                }
-                this->arrows[i].SelectInitial(options, this->rolledKartPos[i]);
-            }
-            if (roulette > 0) {
-                if (random.NextLimited(2) == 0) this->arrows[i].HandleRightPress(i, -1);
-                else this->arrows[i].HandleLeftPress(i, 0);
-            }
-            else if (roulette == 0) this->arrows[i].HandleClick(i, -1);
-        }
+    const s32 roulette = this->rouletteCounter;
+    if(roulette > 0) {
+        this->rouletteCounter--;
+        this->controlsManipulatorManager.inaccessible = true;
     }
-    this->rouletteCounter--;
+    for(int hudId = 0; hudId < SectionMgr::sInstance->sectionParams->localPlayerCount; ++hudId) { //in all likelihood always 2
+        if(roulette == ExpVR::randomDuration) this->arrows[hudId].SelectInitial(this->rolledKartPos[hudId]);
+        if(roulette > 8) {
+            const bool isGoodFrame = roulette % 4 == 1;
+            if(isGoodFrame) {
+                if(random.NextLimited(2) == 0) this->arrows[hudId].HandleRightPress(hudId, -1);
+                else this->arrows[hudId].HandleLeftPress(hudId, 0);
+            }
+        }
+        else if(roulette == 0) this->arrows[hudId].HandleClick(hudId, -1);
+    }
+
 }
 
-
-
-void DriftSelectBeforeControlUpdate(Pages::DriftSelect *driftSelect) {
-    ExpCharacterSelect *charSelect = SectionMgr::sInstance->curSection->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT);
-    if (charSelect->rouletteCounter != -1 && driftSelect->currentState == 0x4) {
-        PushButton *autoButton = (PushButton *)driftSelect->controlGroup.controlArray[1];
+void DriftSelectBeforeControlUpdate(Pages::DriftSelect* driftSelect) {
+    ExpCharacterSelect* charSelect = SectionMgr::sInstance->curSection->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT);
+    if(charSelect->rouletteCounter != -1 && driftSelect->currentState == 0x4) {
+        driftSelect->controlsManipulatorManager.inaccessible = true;
+        PushButton* autoButton = driftSelect->controlGroup.GetControl<PushButton>(1);
+        PushButton* manualButton = driftSelect->controlGroup.GetControl<PushButton>(0);
         autoButton->HandleDeselect(0, -1);
-        PushButton *manualButton = (PushButton *)driftSelect->controlGroup.controlArray[0];
         manualButton->HandleSelect(0, -1);
         manualButton->Select(0);
         manualButton->HandleClick(0, -1);
@@ -343,13 +293,16 @@ void DriftSelectBeforeControlUpdate(Pages::DriftSelect *driftSelect) {
 }
 kmWritePointer(0x808D9DF8, DriftSelectBeforeControlUpdate);
 
-void MultiDriftSelectBeforeControlUpdate(Pages::MultiDriftSelect *multiDriftSelect) {
-    ExpCharacterSelect *charSelect = SectionMgr::sInstance->curSection->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT);;
-    if (charSelect->rouletteCounter != -1 && multiDriftSelect->currentState == 0x4) {
-        for (int i = 0; i < SectionMgr::sInstance->sectionMgr98->localPlayerCount; i++) {
-            PushButton *autoButton = multiDriftSelect->externControls[0 + 2 * i];
+void MultiDriftSelectBeforeControlUpdate(Pages::MultiDriftSelect* multiDriftSelect) {
+
+    SectionMgr* sectionMgr = SectionMgr::sInstance;
+    ExpCharacterSelect* charSelect = sectionMgr->curSection->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT);
+    if(charSelect->rouletteCounter != -1 && multiDriftSelect->currentState == 0x4) {
+        multiDriftSelect->controlsManipulatorManager.inaccessible = true;
+        for(int i = 0; i < sectionMgr->sectionParams->localPlayerCount; ++i) {
+            PushButton* autoButton = multiDriftSelect->externControls[0 + 2 * i];
+            PushButton* manualButton = multiDriftSelect->externControls[1 + 2 * i];
             autoButton->HandleDeselect(i, -1);
-            PushButton *manualButton = multiDriftSelect->externControls[1 + 2 * i];
             manualButton->HandleSelect(i, -1);
             manualButton->Select(i);
             manualButton->HandleClick(i, -1);
@@ -357,18 +310,38 @@ void MultiDriftSelectBeforeControlUpdate(Pages::MultiDriftSelect *multiDriftSele
         charSelect->rouletteCounter = -1;
     }
 }
-kmWritePointer(0x808D9C10, DriftSelectBeforeControlUpdate);
+kmWritePointer(0x808D9C10, MultiDriftSelectBeforeControlUpdate);
 
-void AddCharSelectLayer(Pages::CountDownTimer *page, PageId id, u32 r5) {
-    Section *section = SectionMgr::sInstance->curSection;
-    SectionId sectionId = section->sectionId;
-    if (sectionId == SECTION_P1_WIFI_VS_VOTING || sectionId == SECTION_P1_WIFI_FROOM_VS_VOTING
-        || sectionId == SECTION_P1_WIFI_FROOM_TEAMVS_VOTING || sectionId == SECTION_P1_WIFI_BATTLE_VOTING
-        || sectionId == SECTION_P1_WIFI_FROOM_BALLOON_VOTING || sectionId == SECTION_P1_WIFI_FROOM_COIN_VOTING) {
-        ExpVR *votingPage = section->Get<ExpVR>(PAGE_VR); //always present when 0x90 is present
-        if (votingPage->comboButtonState != 0) id = PAGE_CHARACTER_SELECT;
-    }
+void AddCharSelectLayer(Pages::CountDownTimer* page, PageId id, u32 r5) {
+    const ExpVR* votingPage = SectionMgr::sInstance->curSection->Get<ExpVR>(PAGE_VR); //always present when 0x90 is present
+    if(votingPage->comboButtonState != 0) id = PAGE_CHARACTER_SELECT;
     return page->AddPageLayer(id, r5);
 }
 kmCall(0x806509d0, AddCharSelectLayer);
-}//namespace PulsarUI
+
+asm void LoadCorrectPageAfterDrift() { //r0 has gamemode
+    ASM(
+        nofralloc;
+    cmpwi r0, MODE_PUBLIC_BATTLE;
+    beq - isBattle;
+    cmpwi r0, MODE_PRIVATE_BATTLE;
+    bne + end;
+isBattle:
+    li r0, 3;
+end:
+    cmpwi r0, 3;
+    blr;
+    )
+}
+kmCall(0x8084e670, LoadCorrectPageAfterDrift);
+
+void LoadCorrectPageAfterMultiDrift(Pages::MultiDriftSelect* page, u32 animDirection, float animLength) {
+    page->EndStateAnimated(animLength, animDirection);
+    if(SectionMgr::sInstance->curSection->Get<ExpVR>(PAGE_VR) != nullptr) {
+        page->nextPageId = IsBattle() ? PAGE_BATTLE_CUP_SELECT : PAGE_CUP_SELECT;
+    }
+}
+kmCall(0x8084b68c, LoadCorrectPageAfterMultiDrift);
+
+}//namespace UI
+}//namespace Pulsar

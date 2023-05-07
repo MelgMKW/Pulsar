@@ -25,17 +25,17 @@ enum CharacterSoundType {
     CHARACTER_SOUND_HITBY_FIRE = 0x14,
     CHARACTER_SOUND_HITBY_BANANA = 0x15,
     CHARACTER_SOUND_RESPAWN = 0x1A,
-    CHARACTER_SOUND_DRAFT = 0x1C,
-
+    CHARACTER_SOUND_DRAFT = 0x1C
 };
+
 class CharacterSound;
-class RandomCharacterSoundPicker : public RandomSoundPicker { //one per type
+class RandomCharacterSoundPicker: public RandomSoundPicker { //one per type
     RandomCharacterSoundPicker(); //808676e0
     ~RandomCharacterSoundPicker() override; //808639e8 vtable 808dbe18
-    CharacterSound *sound; //2c
+    CharacterSound* sound; //2c
 }; //0x30
 
-class CharacterSound : public RaceAnimAudioActor {
+class CharacterSound: public RaceAnimAudioActor {
     CharacterSound(); //80863928
 
     //AUDIOACTOR
@@ -45,7 +45,7 @@ class CharacterSound : public RaceAnimAudioActor {
     //~CharacterSound thunk 80866d0c func 80866c08
 
     //LinkedRaceActor vtable 808dbc6c at 0x94 
-    void Link(void *pointer, u16 objectId) override; //thunk 80866d3c func 80863a9c pointer is KartModel
+    void Link(void* pointer, u16 objectId) override; //thunk 80866d3c func 80863a9c pointer is KartModel
     void Unlink() override; //thunk 80866d34 func 80863ff8
     void Update() override; //thunk 80866d2c func 80864000
     bool StartSound(u32 soundId) override; //40 thunk 80866d24 func 80865618
@@ -60,7 +60,7 @@ class CharacterSound : public RaceAnimAudioActor {
     u32 delay; //0x100 if request, delay until request is executed
     u8 unknown_0x104[0x150 - 0x104];
     RandomCharacterSoundPicker randomSoundPickers[0x1D]; //0x150 use type enum
-    KartModel *model; //0x6c0
+    KartModel* model; //0x6c0
     u8 unknown_0x6c4[4];
     CharacterSoundType prevType; //0x6c8
     u8 unknown_0x6cc[0x708 - 0x6cc];

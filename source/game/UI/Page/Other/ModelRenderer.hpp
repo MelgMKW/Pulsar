@@ -7,8 +7,9 @@ enum BackGroundModelType {
     BACKGROUND_STOPWATCH,
     BACKGROUND_TROPHY,
     BACKGROUND_FLAG,
-    BACKGROUND_BALOON,
+    BACKGROUND_BALOON
 };
+
 struct ModelRendererParams {
     void Reset();
     CharacterId character;
@@ -40,13 +41,13 @@ struct ModelRendererValuesFormat {
 
 class ModelRendererValuesHolder {
     void Init(); //805f5ffc
-    ModelRendererValues *GetValues(CharacterId id, u32 variantType, u32 type); //805f5fa4 variant type from model control
+    ModelRendererValues* GetValues(CharacterId id, u32 variantType, u32 type); //805f5fa4 variant type from model control
     ModelRendererValuesFormat modelRendererValuesFormat[2]; //widePage vs non wide page
     u8 alignment[48]; //0x1950 48 for 48 characters, 0 default, 1 centered, idk others
 }; //total size 0x1980
 
 namespace Pages {
-class ModelRenderer : public Page { //ID 0x7f
+class ModelRenderer: public Page { //ID 0x7f
 public:
     ModelRenderer(); //805f4fd0
     ~ModelRenderer() override; //805f51c8 vtable 808b9c00
@@ -64,8 +65,8 @@ public:
     void LoadKartModelsByCharacter(u8 hudSlotId, CharacterId id); //805f570c loads the models for a character, called when a character is selected
     static u32 GetVariantType(u8 hudSlotId); //805f5a98 depends on section Id
     static u32 GetModelCount(SectionId sectionId); //805f5d58
-    GXTexObj *GetModelTexObj(u8 hudSlotId); //805f5a4c for karts and characters
-    GXTexObj *GetBackgroundModelTexObj() const; //805f5a70
+    GXTexObj* GetModelTexObj(u8 hudSlotId); //805f5a4c for karts and characters
+    GXTexObj* GetBackgroundModelTexObj() const; //805f5a70
     ManipulatorManager manipulatorManager; //0x44
     ModelRendererParams params[4]; //one per local player
     u8 modelCount; //0x84

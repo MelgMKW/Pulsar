@@ -1,43 +1,46 @@
 #include <kamek.hpp>
 #include <core/rvl/DWC/DWC.hpp>
 #include <core/System/SystemManager.hpp>
-#include <game/Network/RKNetController.hpp>
-#include <Pulsar.hpp>
+#include <game/RKNet/RKNetController.hpp>
+#include <Info.hpp>
+#include <PulsarSystem.hpp>
 
-
+namespace Pulsar {
+namespace Network {
 //Region Patch (Leseratte)
-
-
 void PatchLoginRegion() {
-    u32 region = Pulsar::sInstance->GetWiimmfiRegion();
-    char path[0x7];
-    snprintf(path, 0x7, "%d", region + 0x100000);
-    strncpy(DWC::loginRegion, path, 0x7);
+    u32 region = Info::GetWiimmfiRegion();
+    char path[0x9];
+    snprintf(path, 0x9, "%08d", region + 100000);
+    for(int i = 0; i < 8; ++i) {
+        DWC::loginRegion[i] = path[i];
+    }
 }
-BootHook LoginRegion(PatchLoginRegion, 5);
+BootHook LoginRegion(PatchLoginRegion, 2);
 
-void PatchSearchRegion(char *dest, u32 length, const char *format, char *arg, u32 region) {
-    snprintf(dest, length, format, arg, Pulsar::sInstance->GetWiimmfiRegion());
-}
-kmCall(0x8065921c, PatchSearchRegion);
-kmCall(0x80659270, PatchSearchRegion);
-kmCall(0x80659734, PatchSearchRegion);
-kmCall(0x80659788, PatchSearchRegion);
 
-kmWrite32(0x8065a038, 0x7C050378);
-kmWrite32(0x8065a084, 0x7C050378);
-int GetFriendsSearchType(int curType, u32 regionId, u8 friendRegionId) {
-    u8 region = (u8)Pulsar::sInstance->GetWiimmfiRegion();
-    if (region != friendRegionId) return curType;
-    else if (curType == 7) return 6;
+PatchRegion(0x8065920c);
+PatchRegion(0x80659260);
+PatchRegion(0x80659724);
+PatchRegion(0x80659778);
+
+
+//kmWrite32(0x8065a038, 0x7C050378);
+//kmWrite32(0x8065a084, 0x7C050378);
+int GetFriendsSearchType(int curType, u32 regionId) {
+    register u8 friendRegionId;
+    asm volatile(mr friendRegionId, r0;);
+    u8 region = Info::GetWiimmfiRegion();
+    if(region != friendRegionId) return curType;
+    else if(curType == 7) return 6;
     else return 9;
 }
-kmCall(0x8065a03c, GetFriendsSearchType);
-kmCall(0x8065a088, GetFriendsSearchType);
+kmBranch(0x8065a03c, GetFriendsSearchType);
+kmBranch(0x8065a088, GetFriendsSearchType);
 
 
 void PatchRKNetControllerRegion() {
-    RKNetController::sInstance->localStatusData.regionId = Pulsar::sInstance->GetWiimmfiRegion();
+    RKNet::Controller::sInstance->localStatusData.regionId = Info::GetWiimmfiRegion();
 }
 kmCall(0x80653690, PatchRKNetControllerRegion);
 kmCall(0x80653700, PatchRKNetControllerRegion);
@@ -45,3 +48,6 @@ kmCall(0x80653700, PatchRKNetControllerRegion);
 
 //kmWrite32(0x8065A034, 0x3880008E);
 //kmWrite32(0x8065A080, 0x3880008E);
+
+}//namespace Network
+}//namespace Pulsar

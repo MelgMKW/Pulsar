@@ -3,7 +3,7 @@
 #include <core/egg/Math/Matrix.hpp>
 #include <game/Math/Vector.hpp>
 
-struct Mtx34 : EGG::Matrix34f {
+struct Mtx34: EGG::Matrix34f {
     Vec3 GetColumnByIdx(u32 idx); //80537b80
 };
 

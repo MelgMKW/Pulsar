@@ -5,17 +5,17 @@
 #include <game/UI/Ctrl/Menu/CtrlMenuText.hpp>
 #include <game/UI/Page/Other/Message.hpp>
 
-class VoteControl : public LayoutUIControl {
+class VoteControl: public LayoutUIControl {
 public:
     VoteControl(); //80642aac
     ~VoteControl() override; //80642ae8 808bf67c
     void InitSelf() override; //80642bec
     void OnUpdate() override; //80642ca0
     int GetRuntimeTypeInfo() const override; //80644658
-    const char *GetClassName() const override; //80642aa0
+    const char* GetClassName() const override; //80642aa0
     void StartRoulette(); //806441e8
     void Load(u32 index); //80642b40
-    void Fill(bool isCourseIdInvalid, u32 bmgId, MiiGroup *miiGroup, u32 playerId, bool isLocalPlayer, u32 team); //80642ca4 
+    void Fill(bool isCourseIdInvalid, u32 bmgId, const MiiGroup& miiGroup, u32 playerId, bool isLocalPlayer, u32 team); //80642ca4 
     void AnimateDeselect(); //80642e68 inlined removes yellow border
     void AnimateSelect(); //80642e14 inlined, yellow border + text + sound
     void AnimateChose(u32 bmgId); //80642ea0 inlined bmg id needed if vote is random
@@ -26,7 +26,7 @@ public:
 };
 
 namespace Pages {
-class Vote : public Page { //ID 0x92
+class Vote: public Page { //ID 0x92
 public:
     Vote(); //80642f90
     ~Vote() override; //806430bc vtable 808bf60c
@@ -40,8 +40,8 @@ public:
     void SetVotedCourseId(CourseId course); //80643f48
     void FillVoteControls(u32 id);  //80643f8c
     void FillVotesCounter(); //80644430
-    void OnMessageBoxClick(MessageBox *messageBox);
-    PtmfHolder_1A<Vote, void, MessageBox *> onMessageBoxClick; //806445a8 disconnected message box
+    void OnMessageBoxClick(MessageBox& messageBox);
+    PtmfHolder_1A<Vote, void, MessageBox*> onMessageBoxClick; //806445a8 disconnected message box
     ManipulatorManager manipulatorManager; //0x48
     CourseId votedCourse; //0x68  
     CtrlMenuPageTitleText titleText; //0x6c
