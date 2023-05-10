@@ -279,7 +279,7 @@ Update__Q23EGG6EffectFv = 0x80223f58
 
 #ProcessMeter
 vf_0x1c__Q23EGG15PerformanceViewFv = 0x80234a00
-__ct__Q23EGG12ProcessMeterFUi = 0x8023883c
+__ct__Q23EGG12ProcessMeterFb = 0x8023883c
 __dt__Q23EGG12ProcessMeterFv = 0x80239628
 Run__Q23EGG12ProcessMeterFv = 0x80238d8c
 
@@ -292,12 +292,12 @@ callbackDrawSync__Q23EGG12ProcessMeterFUs  = 0x80238d40
 draw__Q23EGG12ProcessMeterFv               = 0x80239338
 setVisible__Q23EGG12ProcessMeterFb         = 0x80238f14
 isVisible__Q23EGG12ProcessMeterFv          = 0x80238f3c
-append__Q23EGG12ProcessMeterFPQ23EGG10CpuMonitor = 0x80238f48
-__vt__Q23EGG10CpuMonitor = 0x802a3d60
-show__Q23EGG10CpuMonitorFv = 0x80238750 
-hide__Q23EGG10CpuMonitorFv = 0x80238760
-measureBegin__Q23EGG10CpuMonitorFv = 0x802386dc
-measureEnd__Q23EGG10CpuMonitorFv = 0x80238750
+append__Q23EGG12ProcessMeterFPQ33EGG12ProcessMeter10CpuMonitor = 0x80238f48
+__vt__Q33EGG12ProcessMeter10CpuMonitor = 0x802a3d60
+show__Q33EGG12ProcessMeter10CpuMonitorFv = 0x80238750 
+hide__Q33EGG12ProcessMeter10CpuMonitorFv = 0x80238760
+measureBegin__Q33EGG12ProcessMeter10CpuMonitorFv = 0x802386dc
+measureEnd__Q33EGG12ProcessMeter10CpuMonitorFv = 0x80238750
 
 #Thread
 OnEnter__Q23EGG6ThreadFv = 0x80008e80
@@ -336,7 +336,7 @@ CheckValidity__3RKGCFv = 0x8051c120
 DecompressTo__3RKGCFR3RKG = 0x8051d1b4
 CompressTo__3RKGCFR3RKG = 0x8051d0e0
 
-#GhostHeader
+#GhostData
 __ct__9GhostDataFv = 0x8051c270
 __ct__9GhostDataFRC3RKG = 0x8051c398
 __dt__9GhostDataFv = 0x8051cf90
@@ -346,10 +346,14 @@ CreateRKG__9GhostDataCFR3RKG = 0x8051ca80
 
 #InputManager
 sInstance__Q25Input7Manager = 0x809bd70c
+InitGhostController__Q25Input7ManagerFUcPCQ25Input9RKGInputsb = 0x8052453c
+
+#RealControllerHolder
 SetController__Q25Input20RealControllerHolderFPCQ25Input10ControllerPUi = 0x80521554
-InitGhostController__9InputDataFUcP12RKGInputDatab = 0x8052453c
+EndGhostWriting__Q25Input20RealControllerHolderFv = 0x80521688
 
 #GhostWriter
+CopyToRKGInputBuffer__Q25Input11GhostWriterFPQ25Input9RKGInputs = 0x80524d20
 WriteFrame__Q25Input11GhostWriterFUsUcUcUc = 0x80524e74
 
 

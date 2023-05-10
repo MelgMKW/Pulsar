@@ -1,0 +1,93 @@
+#include <kamek.hpp>
+#include <game/RKNet/ROOM.hpp>
+#include <game/RKNet/RKNetController.hpp>
+#include <Settings/UI/SettingsPanel.hpp>
+#include <Settings/Settings.hpp>
+
+namespace Pulsar {
+namespace Network {
+
+//Implements the ability for a host to send a message, allowing for custom host settings
+
+//ROOMPacket bits arrangement: 0-4 GPraces
+//u8 racesPerGP = 0;
+
+void ConvertROOMPacketToData(u16 param) {
+    u8 raceCount;
+    switch(param & 0xE) {
+        case(0x2):
+            raceCount = 7;
+            break;
+        case(0x4):
+            raceCount = 11;
+            break;
+        case(0x6):
+            raceCount = 23;
+            break;
+        case(0x8):
+            raceCount = 31;
+            break;
+        case(0xA):
+            raceCount = 63;
+            break;
+        case(0xC):
+            raceCount = 1;
+            break;
+        default:
+            raceCount = 3;
+    }
+    System* system = System::sInstance;
+    system->racesPerGP = raceCount;
+    system->hasHAW = (param & 0x1);
+}
+
+//Adds the settings to the free bits of the packet, only called for the host, msgType1 has 14 free bits as the game only has 4 gamemodes
+void SetAllToSendPackets(RKNet::ROOMHandler& roomHandler, u32 packetArg) {
+    RKNet::ROOMPacketReg packetReg ={ packetArg };
+    const RKNet::Controller* controller = RKNet::Controller::sInstance;
+    const u8 localAid = controller->subs[controller->currentSub].localAid;
+    if((packetReg.packet.messageType) == 1 && localAid == controller->subs[controller->currentSub].hostAid) {
+        const u8 hostParam = Info::IsHAW(true);
+        packetReg.packet.message |= hostParam << 2; //uses bit 0 of message
+
+        const u8 gpParam = Settings::GetSettingValue(SETTINGSTYPE_HOST, SETTINGHOST_SCROLL_GP_RACES);
+        packetReg.packet.message |= gpParam << 3; //uses bits 1-3
+        ConvertROOMPacketToData(packetReg.packet.message >> 2); //4 right now + 4 reserved
+        packetReg.packet.message |= (System::sInstance->SetPackROOMMsg() << 0xA & 0b1111110000000000); //6 bits for packs
+
+    }
+    for(int i = 0; i < 12; ++i) if(i != localAid) roomHandler.toSendPackets[i] = packetReg.packet;
+}
+kmBranch(0x8065ae70, SetAllToSendPackets);
+//kmCall(0x805dce34, SetAllToSendPackets);
+//kmCall(0x805dcd2c, SetAllToSendPackets);
+//kmCall(0x805d9fe8, SetAllToSendPackets);
+
+//Non-hosts extract the setting, store it and then return the packet without these bits
+RKNet::ROOMPacket GetParamFromPacket(u32 packetArg, u8 aidOfSender) {
+    RKNet::ROOMPacketReg packetReg ={ packetArg };
+    if(packetReg.packet.messageType == 1) {
+        const RKNet::Controller* controller = RKNet::Controller::sInstance;
+        //Seeky's code to prevent guests from start the GP
+        if(controller->subs[controller->currentSub].hostAid != aidOfSender) packetReg.packet.messageType = 0;
+        else {
+            ConvertROOMPacketToData((packetReg.packet.message & 0b0000001111111100) >> 2);
+            System::sInstance->ParsePackROOMMsg(packetReg.packet.message >> 2 & 0b111111);
+        }
+        packetReg.packet.message &= 0x4;
+        Page* topPage = SectionMgr::sInstance->curSection->GetTopLayerPage();
+        PageId topId = topPage->pageId;
+        if(topId == PAGE_VS_SETTINGS || topId == PAGE_VS_TEAMS_VIEW || topId == PAGE_BATTLE_MODE_SELECT) {
+            UI::SettingsPanel* panel = static_cast<UI::SettingsPanel*>(topPage);
+            panel->OnBackPress(0);
+        }
+    }
+    return packetReg.packet;
+}
+kmBranch(0x8065af70, GetParamFromPacket);
+
+//Implements that setting
+kmCall(0x806460B8, System::GetRaceCount);
+kmCall(0x8064f51c, System::GetRaceCount);
+}//namespace Network
+}//namespace Pulsar

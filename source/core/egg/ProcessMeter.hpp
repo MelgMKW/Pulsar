@@ -21,60 +21,59 @@ public:
     virtual void isVisible();           //0x28
 };
 
-class ProcessBar {
+class ProcessMeter : public Thread, public PerformanceView {
 public:
-    ProcessBar(nw4r::ut::Color color, float yOrigin, float ySize) : xOrigin(0.0), xSize(0.0), tickBegin(0),
-        tickEnd(0), color(color), yOrigin(yOrigin), ySize(ySize), bitfield(0) {}; //inlined
-    float xOrigin;
-    float xSize;
-    u32 tickBegin;
-    u32 tickEnd;
-    nw4r::ut::Color color; //0x10
-    float yOrigin; //0x14
-    float ySize;
-    u8 bitfield; //0x1c, 1 to disable
-    u8 padding[3];
-    nw4r::ut::Link processBarLink; //0x20
-}; //0x28
-size_assert(ProcessBar, 0x28);
+    class ProcessBar {
+    public:
 
-class CpuMonitor { //red bar
-public:
-    CpuMonitor(const nw4r::ut::Color color, float yOrigin) : bar(color, yOrigin, 1.0f) {}; //inlined
-    virtual void show(); //0x8 80238750 vtable 802a3d60
-    virtual void hide();  //0xc 80238760
-    virtual void measureBegin(); //0x10 802386dc
-    virtual void measureEnd(); //0x14 80238714
-    ProcessBar bar;
-}; //0x2c
-size_assert(CpuMonitor, 0x2c);
+        ProcessBar(nw4r::ut::Color color, float yOrigin, float ySize): xOrigin(0.0), xSize(0.0), tickBegin(0),
+            tickEnd(0), color(color), yOrigin(yOrigin), ySize(ySize), bitfield(0) {}; //inlined
+        float xOrigin;
+        float xSize;
+        u32 tickBegin;
+        u32 tickEnd;
+        nw4r::ut::Color color; //0x10
+        float yOrigin; //0x14
+        float ySize;
+        u8 bitfield; //0x1c, 1 to disable
+        u8 padding[3];
+        nw4r::ut::Link processBarLink; //0x20
+    }; //0x28
 
-class CpuGpMonitor: public CpuMonitor { //cpumonitor's bar is the green
-public:
-    struct Next {
-        void* gxFifoWritePtr; //from GXGetFifoPtrs
-        u16 curGXDrawSyncToken;
+    class CpuMonitor { //red bar
+    public:
+        CpuMonitor(const nw4r::ut::Color color, float yOrigin): bar(color, yOrigin, 1.0f) {}; //inlined
+        
+        virtual void show(); //0x8 80238750 vtable 802a3d60
+        virtual void hide();  //0xc 80238760
+        virtual void measureBegin(); //0x10 802386dc
+        virtual void measureEnd(); //0x14 80238714
+        ProcessBar bar;
+    }; //0x2c
+
+    class CpuGpMonitor : public CpuMonitor { //cpumonitor's bar is the green
+    public:
+        struct Next {
+            void* gxFifoWritePtr; //from GXGetFifoPtrs
+            u16 curGXDrawSyncToken;
+            u8 padding[2];
+            Next* next;
+            CpuGpMonitor* cpuGpMonitor;
+        }; //0x10
+        CpuGpMonitor(const nw4r::ut::Color color, float yOrigin); //inlined
+        void show() override; //80238804 vtable 802a3d48
+        void hide() override;  //80238820
+        void measureBegin() override; //80238770
+        void measureEnd() override; //802387bc
+        ProcessBar blueBar;
+        u16 unknown_0x54;
         u8 padding[2];
-        Next* next;
-        CpuGpMonitor* cpuGpMonitor;
-    }; //0x10
-    CpuGpMonitor(const nw4r::ut::Color color, float yOrigin); //inlined
-    void show() override; //80238804 vtable 802a3d48
-    void hide() override;  //80238820
-    void measureBegin() override; //80238770
-    void measureEnd() override; //802387bc
-    ProcessBar blueBar;
-    u16 unknown_0x54;
-    u8 padding[2];
-    ProcessMeter* processMeter; //0x58
-    Next begin;
-    Next end;
-}; //0x7c
-size_assert(CpuGpMonitor, 0x7c);
+        ProcessMeter* processMeter; //0x58
+        Next begin;
+        Next end;
+    }; //0x7c
 
-class ProcessMeter: public Thread, public PerformanceView {
-public:
-    explicit ProcessMeter(u32 r4); //0x8023883c
+    explicit ProcessMeter(bool r4); //0x8023883c
     ~ProcessMeter() override; //80239628 vtable 802a3ce0
     void* Run() override; //80238d8c
 
@@ -111,6 +110,10 @@ public:
     bool visible; //0x152
     u8 unknown_0x153;
 }; //0x154
+size_assert(ProcessMeter::ProcessBar, 0x28);
+size_assert(ProcessMeter::CpuGpMonitor, 0x7c);
+size_assert(ProcessMeter::CpuMonitor, 0x2c);
 size_assert(ProcessMeter, 0x154);
+
 }//namespace EGG
 #endif

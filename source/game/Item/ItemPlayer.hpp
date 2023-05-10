@@ -121,7 +121,7 @@ public:
     PlayerRoulette roulette; //0x54
     PlayerInventory inventory; //0x88
     PlayerSub itemPlayerSub; //b4
-    u32 localPlayerNum;
+    u32 hudSlotId;
     u8 unknown_0x238[0x248 - 0x238];
 }; //Total Size 0x248
 size_assert(Player, 0x248);

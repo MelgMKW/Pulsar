@@ -126,7 +126,7 @@ struct Material {
 
 struct Pane { //https://wiki.tockdom.com/wiki/BRLYT_(File_Format)#pan1
     DataBlockHeader header; //pan1
-    u8 basePosition; //1 isVisible, 2 influenced alpha, 4 isWidePage
+    u8 basePosition; //1 isVisible, 2 influenced alpha, 4 isWideScreen
     u8 originType;
     u8 alpha;
     u8 padding;

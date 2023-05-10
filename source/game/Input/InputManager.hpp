@@ -23,12 +23,20 @@ public:
     static void destroyStaticInstance(); //8052318c
     Manager(); //805232f0
     virtual ~Manager(); //805231dc vtable 808b2fc8
+
+    void Init(); //80523690 called everytime a game scene is created
+    void SetFSStickClamp(s8 min, s8 max); //80522358
+    static void InitKPAD(); //80522690
+
+    void StartGhostReading(); //80524580
+    void EndGhostWriting(u8 hudSlotId); //805245cc
+
     void Update(); //805238f0
     void InitControllerHolders(); //805242d8
     void UpdateControllers(u8 isPaused); //805237e8
     void ResetRealController(u8 id); //80524264
     void ResetDummyController(); //80523eac
-    void InitGhostController(u8 id, const RKGInputData& rawInputs, bool isAuto); //8052453c
+    void InitGhostController(u8 id, const RKGInputs* rawInputs, bool isAuto); //8052453c
     bool SyncWiimotes(); //80524788 returns true if all wiimotes are connected
     void UpdateGCNInputs(u8 id, PAD::Status* status);
     static int ConvertType(ControllerType type); //80523a58 if wiimote based, returns 0, gcn returns 1, other returns 3

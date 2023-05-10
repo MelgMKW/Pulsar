@@ -192,7 +192,6 @@ void loadKamekBinary(loaderFunctions* funcs, const void* binary, u32 binaryLengt
             // Relative address
             address += text;
         }
-
         switch(cmd) {
             case kAddr32:
                 input = kHandleAddr32(input, text, address);

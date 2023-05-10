@@ -226,7 +226,7 @@ public:
     u8 UpdatePrevFromCur(); //80531ce4 return new race number
 
     u8 GetHudSlotId(u8 playerId) const; //80531f18
-    u8 GetPlayerIdOfLocalPlayer(u8 hudSlotId) const;
+    u32 GetPlayerIdOfLocalPlayer(u8 hudSlotId) const; //80531f70
     void SetGhost(RKG* rkg); //80531f2c
     void LoadNextGPTrack(); //80531f80
     bool IsTTReplay() const; //80532030

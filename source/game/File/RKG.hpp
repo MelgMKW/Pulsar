@@ -2,6 +2,7 @@
 #define _RKG_
 #include <kamek.hpp>
 #include <game/File/RawMii.hpp>
+#include <game/Input/GhostWriter.hpp>
 
 enum GhostType {
     GHOST_NONE = 0x0,
@@ -46,14 +47,7 @@ struct RKGHeader {
     RawMii miiData; //0x3C to 
     u16 miiCRC16;
 }; //total size 0x88
-
-struct RKGInputData {
-    u16 faceButtonInputsCount;
-    u16 directionInputsCount;
-    u16 trickInputsCount;
-    u16 unknown_0x6; //padding
-    u8 unknown_0x8[0x2774 - 0x8]; //idk how to do that in c++
-}; //total size 0x2774
+size_assert(RKGHeader, 0x88);
 
 struct CompressedRKG {
     RKGHeader header;
@@ -70,8 +64,9 @@ public:
     bool CompressTo(RKG& copyBuffer) const; //8051d0e0
     int GetLength() const; //8051d388 only if valid
     RKGHeader header;
-    RKGInputData data;
+    Input::RKGInputs inputs;
     u32 uncompressedCRC32;
 };//total size 0x2800
+size_assert(RKG, 0x2800);
 
 #endif

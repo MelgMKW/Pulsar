@@ -16,7 +16,7 @@ enum ScnType {
 class ModelDirector;
 class ScnManager: public EGG::Disposer {
 public:
-    static u32 pageCount; //808b4bf0 copied from racedata
+    static u32 screenCount; //808b4bf0 copied from racedata
     static ScnManager* sInstance; //809c1850 there are multiple there, set with Register
     ScnManager(); //80561f40
     ~ScnManager() override; //805620bc vtable 808b4ad0

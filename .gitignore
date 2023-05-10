@@ -6,7 +6,9 @@
 /releases
 /.vscode
 */.vscode
-
+/.vs
+/PulsarPackCreator/bin
+/PulsarPackCreator/obj
 # Compiled Object files
 *.slo
 *.lo
@@ -35,6 +37,6 @@ BuildTesting.bat
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
+Pulsar Pack Creator.sln

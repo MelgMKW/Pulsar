@@ -13,13 +13,13 @@ public:
 };
 size_assert(ObjPow, 0x1a0);
 
-class PowPage { //one per Page
-    PowPage(u32 pageId); //807b2540
+class PowScreen { //one per Screen
+    PowScreen(u32 screenId); //807b2540
     ModelDirector* powModel; //0x0
-    u32 pageId; //0x4
+    u32 screenId; //0x4
     u8 unknown_0x8[0x10 - 0x8];
 }; //0x10
-size_assert(PowPage, 0x10);
+size_assert(PowScreen, 0x10);
 
 class PowMgr {
 public:
@@ -29,9 +29,9 @@ public:
     PowMgr(); //807b1d18 inlined
     void DeployBlooper(u8 playerId); //807a9128 that player used a blooper which will deploy the blooper model from the character
     u32 unknown_0x0;
-    u32 pageCount; //0x4
+    u32 screenCount; //0x4
     u8 unknown_0x8[0x18 - 0x8];
-    PowPage* powPages[4]; //0x18
+    PowScreen* powScreens[4]; //0x18
 };//Total Size 0x54
 size_assert(PowMgr, 0x28);
 }//namespace Item

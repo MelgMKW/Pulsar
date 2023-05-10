@@ -46,7 +46,7 @@ size_assert(SELECTPacket, 0x38);
 
 class SELECTHandler {
 public:
-    static SELECTHandler* sInstance; //0x809c2100
+    static SELECTHandler* sInstance; //809c2100
     static SELECTHandler* GetStaticInstance(OnlineMode mode); //8065fe8c
     static void DestroyStaticInstance(); //8065ff60
     SELECTHandler(); //8066076c inlined

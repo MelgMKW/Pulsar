@@ -15,11 +15,11 @@ public:
 size_assert(ObjGesso, 0x1a0);
 
 class GessoScreen { //one per Screen
-    GessoScreen(u32 pageId); //807a8460
+    GessoScreen(u32 screenId); //807a8460
     ~GessoScreen(); //807a85f4
     u32 unknown_0x0;
     ModelDirector* gessoModel; //0x4
-    u32 pageId; //0x8
+    u32 screenId; //0x8
     u8 unknown_0xc[0x1c - 0xc];
     bool isTwilightHouse;
     u8 padding[3];
@@ -35,9 +35,9 @@ public:
     static void DestroyStaticInstance(); //807a8fa0
     GessoMgr(); //807a90a0 inlined
     void DeployBlooper(u8 playerId); //807a9128 that player used a blooper which will deploy the blooper model from the character
-    u32 pageCount; //0x0
+    u32 screenCount; //0x0
     u8 unknown_0x4[0x44 - 0x4];
-    GessoScreen* gessoPages[4]; //0x44
+    GessoScreen* gessoScreens[4]; //0x44
 };//Total Size 0x54
 size_assert(GessoMgr, 0x54);
 }//namespace Item

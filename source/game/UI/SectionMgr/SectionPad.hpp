@@ -17,7 +17,7 @@ struct PadInfo {
     u32 controllerID; //0x0, new pads will be there, so this is kind of an "old ID" variable
     u32 controllerIDActive; //0x4
     Status status; //0x8 if it's 1, controllerHolder will be held at 0 until input is pressed
-    Input::ControllerHolder* controllerHolder; //0xc
+    Input::RealControllerHolder* controllerHolder; //0xc
 }; //0x10
 
 class SectionPad {
@@ -35,8 +35,8 @@ public:
     void ResetPadsStatus(); //8061b9a0
     void ResetPadsStatusAndSet0x54(); //8061b338
     s32 GetFirstDeactivatedPad(); //8061b9bc returns hudslotId of 1st player with no active pad, -1 if every local player has a pad
-    Input::ControllerHolder* GetControllerHolder(u32 hudSlotId) const; //8061b398 returns 0 if active type != stored type
-    Input::ControllerHolder* GetControllerHolderByIdx(u32 idx); //8061bdbc doesn't care if not active
+    Input::RealControllerHolder* GetControllerHolder(u32 hudSlotId) const; //8061b398 returns 0 if active type != stored type
+    Input::RealControllerHolder* GetControllerHolderByIdx(u32 idx); //8061bdbc doesn't care if not active
 
     void SetDriftType(u32 hudSlotId, u16 isDriftAuto) const; //8061b420
     bool IsDriftAuto(u32 hudSlotId) const; //8061b440

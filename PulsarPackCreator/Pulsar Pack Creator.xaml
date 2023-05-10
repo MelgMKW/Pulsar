@@ -1,0 +1,339 @@
+﻿<Window x:Class="PulsarPackCreator.MainWindow"
+        Name="MainSoftWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PulsarPackCreator"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="Pulsar Pack Creator Alpha 0.1" Height="500" Width="900" Background="#FD353535"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        AllowDrop="True"
+        Drop="OnDropFile">
+
+    <DockPanel x:Name="Dock">
+        <StackPanel Orientation = "Horizontal" DockPanel.Dock="Bottom" Background="#FFDDE0DD">
+            <Button x:Name = "ImportBin"  Content = "Import Bin" Width = "90" Height = "20" Click="OnImportBinClick"/>
+            <Button x:Name = "BuildBin" Content = "Build Bin" Width = "90" Height = "20" Click="OnBuildBinClick"/>
+            <Button x:Name = "BuildPack" Content = "Build Full Pack" Width = "90" Height = "20" Click="OnBuildFullPackClick"/>
+            <Button x:Name = "Alphabetize" Content = "Alphabetize" Width = "90" Height = "20" Click="OnAlphabetizeClick"/>
+            <Button x:Name = "MassImport" Content = "Mass Import Names" Width = "120" Height = "20" Click="OnMassImportClick"/>
+            <Button x:Name = "Crash" Content = "Check Crash" Width = "90" Height = "20" Click="OnCrashClick"/>
+        </StackPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="71*"/>
+                <ColumnDefinition Width="154*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="CupCount" 
+                     Margin="72,0,0,0" Width="117" HorizontalAlignment="Left" VerticalAlignment="Center"
+                     TextAlignment="Center" PreviewTextInput="NumbersOnlyBox" TextChanged="OnCupCountChange"  />
+            <TextBlock x:Name="CupCountLabel"
+                Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
+                Text="Cup Count" TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" />
+            <TextBlock x:Name="CupIdLabel" Grid.Column="1"
+                       Margin="79,-1,363,1" Foreground="White"
+                       Text="Cup 1" FontSize="18" TextAlignment="Center" FontWeight="Bold" TextDecorations="Underline"/>
+
+        </Grid>
+
+
+        <TabControl Name="TabController" Background="#FD353535">
+            <TabItem Name="Cups" Header="Cups">
+                <DockPanel>
+                    <Button DockPanel.Dock="Left" Content="&lt;" FontWeight="Bold" FontSize="18" Click="OnLeftArrowClick" />
+                    <Button DockPanel.Dock="Right" Content="&gt;" FontWeight="Bold" FontSize="18" Click="OnRightArrowClick" />
+                    <Grid x:Name="CupsGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock x:Name="CupsLabel1" Grid.Row="0" Grid.Column="0"
+                            Margin="20,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
+                            Text="Track1" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock x:Name="CupsLabel2" Grid.Row="1" Grid.Column="0"
+                            Margin="20,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
+                            Text="Track2" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock x:Name="CupsLabel3" Grid.Row="2" Grid.Column="0"
+                            Margin="20,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
+                            Text="Track3" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock x:Name="CupsLabel4" Grid.Row="3" Grid.Column="0"
+                            Margin="20,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
+                            Text="Track4" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
+
+                        <TextBox x:Name="File1"  Grid.Row="0" Grid.Column="1" 
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
+                        <TextBox x:Name="File2" Grid.Row="1" Grid.Column="1" 
+                                 Margin="16,35,16,16" Width="120"  VerticalContentAlignment="Center"   
+                                 Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
+                        <TextBox x:Name="File3" Grid.Row="2" Grid.Column="1" 
+                                 Margin="16,35,16,16" Width="120"  VerticalContentAlignment="Center"   
+                                 Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
+                        <TextBox x:Name="File4" Grid.Row="3" Grid.Column="1" 
+                                 Margin="16,35,16,16" Width="120"  VerticalContentAlignment="Center"   
+                                 Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
+
+                        <TextBox x:Name="Name1" Grid.Row="0" Grid.Column="2"
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
+                        <TextBox x:Name="Name2" Grid.Row="1" Grid.Column="2"
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
+                        <TextBox x:Name="Name3" Grid.Row="2" Grid.Column="2"
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
+                        <TextBox x:Name="Name4" Grid.Row="3" Grid.Column="2"
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
+
+                        <TextBox x:Name="Author1" Grid.Row="0" Grid.Column="3" 
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
+                        <TextBox x:Name="Author2" Grid.Row="1" Grid.Column="3" 
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
+                        <TextBox x:Name="Author3" Grid.Row="2" Grid.Column="3" 
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
+                        <TextBox x:Name="Author4" Grid.Row="3" Grid.Column="3" 
+                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                                 Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
+
+                        <ComboBox x:Name="Slot1" Grid.Row="0" Grid.Column="4"
+                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                  SelectionChanged="OnSlotChange"/>
+                        <ComboBox x:Name="Slot2" Grid.Row="1" Grid.Column="4"
+                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                  SelectionChanged="OnSlotChange"/>
+                        <ComboBox x:Name="Slot3" Grid.Row="2" Grid.Column="4"
+                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                  SelectionChanged="OnSlotChange"/>
+                        <ComboBox x:Name="Slot4" Grid.Row="3" Grid.Column="4"
+                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                  SelectionChanged="OnSlotChange"/>
+
+                        <TextBlock x:Name="Slot1Label" Grid.Row="0" Grid.Column="4"
+                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
+                                   Text="Slot1"/>
+                        <TextBlock x:Name="Slot2Label" Grid.Row="1" Grid.Column="4"
+                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
+                                   Text="Slot2"/>
+                        <TextBlock x:Name="Slot3Label" Grid.Row="2" Grid.Column="4"
+                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
+                                   Text="Slot3"/>
+                        <TextBlock x:Name="Slot4Label" Grid.Row="3" Grid.Column="4"
+                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
+                                   Text="Slot4"/>
+
+                        <ComboBox x:Name="Music1"  Grid.Row="0" Grid.Column="5"
+                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                   SelectionChanged="OnMusicChange"/>
+                        <ComboBox x:Name="Music2"  Grid.Row="1" Grid.Column="5"
+                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                   SelectionChanged="OnMusicChange"/>
+                        <ComboBox x:Name="Music3"  Grid.Row="2" Grid.Column="5"
+                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                   SelectionChanged="OnMusicChange"/>
+                        <ComboBox x:Name="Music4"  Grid.Row="3" Grid.Column="5"
+                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                   SelectionChanged="OnMusicChange"/>
+
+                        <TextBlock x:Name="Music1Label" Grid.Row="0" Grid.Column="5"
+                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
+                                   Text="Music1"/>
+                        <TextBlock x:Name="Music2Label" Grid.Row="1" Grid.Column="5"
+                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
+                                   Text="Music2"/>
+                        <TextBlock x:Name="Music3Label" Grid.Row="2" Grid.Column="5"
+                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
+                                   Text="Music3"/>
+                        <TextBlock x:Name="Music4Label" Grid.Row="3" Grid.Column="5"
+                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
+                                   Text="Music4"/>
+
+                    </Grid>
+                </DockPanel>
+            </TabItem>
+            <TabItem Name="Options" Header="Options">
+
+                <Canvas>
+                    <TextBlock HorizontalAlignment="Left" Margin="32,76,0,0" TextWrapping="Wrap" Text="Misc Settings" VerticalAlignment="Top" Foreground="White" TextDecorations="Underline" Grid.Column="1"/>
+                    <StackPanel Margin="17,97,622,157">
+                        <ComboBox x:Name="Regs" Width="165" Height="20" SelectionChanged="OnRegsChange" HorizontalAlignment="Left"/>
+                        <CheckBox x:Name="TTTrophies" FontSize="14" Content="Time Trials Trophies" Checked="OnTrophiesToggle" Unchecked="OnTrophiesToggle" Foreground="White"/>
+                        <CheckBox x:Name="CC200" FontSize="14" Content="200cc" Checked="On200CCToggle" Unchecked="On200CCToggle" Foreground="White"/>
+                        <CheckBox x:Name="UMT" FontSize="14" Content="Ultra Mini-Turbos" Checked="OnUMTToggle" Unchecked="OnUMTToggle" Foreground="White"/>
+                        <CheckBox x:Name="Feather" FontSize="14" Content="Feather"  Checked="OnFeatherToggle" Unchecked="OnFeatherToggle" Foreground="White"/>
+                        <CheckBox x:Name="MegaTC" FontSize="14" Content="Mega Thunder Cloud" Checked="OnMegaTCToggle" Unchecked="OnMegaTCToggle" Foreground="White"/>
+                    </StackPanel>
+                    <TextBlock HorizontalAlignment="Left" Margin="199,76,0,0" TextWrapping="Wrap" Text="CC Distribution Online" VerticalAlignment="Top" Foreground="White" TextDecorations="Underline" Grid.Column="1"/>
+                    <StackPanel Canvas.Left="193" Canvas.Top="97" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBox x:Name="CC100" FontSize="14" TextAlignment="Center" PreviewTextInput="NumbersOnlyBox" TextChanged="On100ccChange" Width="27" Height="22"/>
+                        <TextBox x:Name="CC150" FontSize="14" TextAlignment="Center" PreviewTextInput="NumbersOnlyBox" TextChanged="On150ccChange" Height="22"/>
+                        <TextBox x:Name="CCMirror" FontSize="14" TextAlignment="Center" PreviewTextInput="NumbersOnlyBox" IsReadOnly="True" Height="22"/>
+                    </StackPanel>
+                    <StackPanel Canvas.Left="224" Canvas.Top="97" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock x:Name="CC100Label" FontSize="14" Text="% 100cc" Foreground="White" Height="23"/>
+                        <TextBlock Text="% 150cc" FontSize="14" Foreground="White" Height="22"/>
+                        <TextBlock Text="% Mirror" FontSize="14" Foreground="White"/>
+                    </StackPanel>
+                    <TextBox x:Name="ModFolder" FontSize="14" TextAlignment="Center" HorizontalAlignment="Left" Margin="379,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" Grid.Column="1" TextChanged="OnModFolderChange"/>
+                    <TextBlock HorizontalAlignment="Left" FontSize="14" TextWrapping="Wrap" Text="Mod Folder Name" VerticalAlignment="Center" Foreground="White" Grid.Column="1" Canvas.Left="264" Canvas.Top="25"/>
+                    <ComboBox x:Name="TrackBlocking" Canvas.Left="104" Canvas.Top="319"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" Width="43" Height="19"    
+                                HorizontalContentAlignment="Center"
+                                SelectionChanged="OnTrackBlockingChange"/>
+                    <TextBlock x:Name="TrackBlockingLabel" Canvas.Left="14" Canvas.Top="319"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"
+                                Text="Track Blocking" TextWrapping="Wrap" />
+                    <DatePicker xml:lang="en-GB" x:Name="dateSelector" Language="en-GB" HorizontalAlignment="Left" Margin="429,76,0,0" VerticalAlignment="Top" SelectedDateChanged="OnDateChange" Grid.Column="1"/>
+                    <TextBox x:Name="Wiimmfi" 
+                             Canvas.Left="104" Canvas.Top="297" Width="43" HorizontalAlignment="Center" VerticalAlignment="Top"  
+                             TextWrapping="Wrap" Text=""
+                             TextChanged="OnWiimmfiRegionChange" PreviewTextInput="NumbersOnlyBox" />
+                    <TextBlock HorizontalAlignment="Center"  
+                               Canvas.Left="14" Canvas.Top="299" VerticalAlignment="Top" Foreground="White"
+                               TextWrapping="Wrap" Text="Wiimmfi Region"  />
+
+
+
+
+                </Canvas>
+            </TabItem>
+            <TabItem Name="Ghosts" Header="Ghosts">
+                <DockPanel>
+                    <Button DockPanel.Dock="Left" Content="&lt;" FontWeight="Bold" FontSize="18" Click="OnLeftArrowClick" />
+                    <Button DockPanel.Dock="Right" Content="&gt;" FontWeight="Bold" FontSize="18" Click="OnRightArrowClick" />
+                    <Grid Name="GhostGrid" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*" />
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="Ghost11" Grid.Row="1" Grid.Column="1"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost12" Grid.Row="1" Grid.Column="2"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost13" Grid.Row="1" Grid.Column="3"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost14" Grid.Row="1" Grid.Column="4"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+
+                        <TextBox x:Name="Ghost21" Grid.Row="2" Grid.Column="1"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost22" Grid.Row="2" Grid.Column="2"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost23" Grid.Row="2" Grid.Column="3"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost24" Grid.Row="2" Grid.Column="4"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+
+
+                        <TextBox x:Name="Ghost31" Grid.Row="3" Grid.Column="1"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost32" Grid.Row="3" Grid.Column="2"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost33" Grid.Row="3" Grid.Column="3"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost34" Grid.Row="3" Grid.Column="4"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+
+                        <TextBox x:Name="Ghost41" Grid.Row="4" Grid.Column="1"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost42" Grid.Row="4" Grid.Column="2"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost43" Grid.Row="4" Grid.Column="3"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost44" Grid.Row="4" Grid.Column="4"
+                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
+                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
+                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+
+
+                        <TextBlock Grid.Column="2" Grid.ColumnSpan="2"
+                                   Margin="0,4,0,0" Width="244" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"
+                                   TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" Text="Optional Expert Files (no .rkg extension)" TextAlignment="Center" />
+
+                        <TextBlock Name="GhostTrackName1" Grid.Row="1" Grid.ColumnSpan="2"
+                                   Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
+                                  Text="Track 1"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
+                        <TextBlock Name="GhostTrackName2" Grid.Row="2" Grid.ColumnSpan="2"
+                                   Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
+                                  Text="Track 2"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
+                        <TextBlock Name="GhostTrackName3" Grid.Row="3" Grid.ColumnSpan="2"
+                                   Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
+                                  Text="Track 3"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
+                        <TextBlock Name="GhostTrackName4" Grid.Row="4" Grid.ColumnSpan="2"
+                                   Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
+                                  Text="Track 4"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
+                        
+                 
+                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="150cc" TextAlignment="Center" Margin="0,29,0,0"/>
+                        <TextBlock Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="200cc" TextAlignment="Center" Margin="0,29,0,0"/>
+                        <TextBlock Grid.Column="3" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="150cc Feather" TextAlignment="Center" Margin="0,29,0,0"/>
+                        <TextBlock Grid.Column="4" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="200cc Feather" TextAlignment="Center" Margin="0,29,0,0"/>
+                    </Grid>
+                </DockPanel>
+
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
+</Window>

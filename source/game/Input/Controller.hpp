@@ -13,6 +13,7 @@ Contributors:
 #include <core/rvl/kpad.hpp>
 #include <core/rvl/wpad.hpp>
 #include <game/Input/InputState.hpp>
+#include <game/Input/GhostWriter.hpp>
 
 enum ControllerType {
     WHEEL = 0x0, //0xCHANNEL11
@@ -142,12 +143,19 @@ size_assert(GCNController, 0xb0);
 
 class GhostController : public Controller {
     GhostController(); //80520730
-    ~GhostController() override; //80520924 vtable 808b2e00oh
+    ~GhostController() override; //80520924 vtable 808b2e00
     void UpdateImpl(State& state, UIState& uiState) override; //80520b9c
     ControllerType GetType() const override; //0x10 8052282c returns 4
+    double func_0x24() override; //0x24 80520a60
+    void SetDriftType(bool isDriftAuto); //0x38 80522828
     void Init(bool isDriftAuto) override; //0x44 80520998
-
-    u8 unknown_0x0[0xa8 - 0x90];
+    RKGInputs* ghostInputs; //0x90
+    GhostActionStream* actionStream; //0x94
+    GhostDirectionStream* directionStream; //0x98
+    GhostTrickStream* trickStream; //0x9c
+    u8 unknown_0xa0[6];
+    bool isReadingGhost; //0xa6 will not read if set to false
+    u8 padding;
 };//total size 0xa8
 
 class MotionControllerSub {

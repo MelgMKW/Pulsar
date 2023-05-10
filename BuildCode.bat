@@ -13,13 +13,13 @@ echo %RIIVO%
 
 :: CPP compilation settings
 SET CC="../engine/cw/mwcceppc.exe"
-SET CFLAGS=-I- -i "../engine/engine" -i "../engine/source" -i "../engine/source/game" -i code -O2,p^
+SET CFLAGS=-I- -i "../engine/engine" -i "../engine/source" -i "../engine/source/game" -i Pulsar -O2,p^
   -opt loop,peep,schedule  -inline auto -enum int -proc 750 -fp hard -rostr -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 -rtti off 
 SET DEFINE=
 
 :: CPP Sources
 SET CPPFILES=
-for /R code %%f in (*.cpp) do SET "CPPFILES=%%f !CPPFILES!"
+for /R Pulsar %%f in (*.cpp) do SET "CPPFILES=%%f !CPPFILES!"
 
 :: Compile CPP
 %CC% %CFLAGS% -c -o "build/kamek.o" "D:\Modding\Coding\Kamek\Engine\engine\kamek.cpp"

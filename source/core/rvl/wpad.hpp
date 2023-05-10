@@ -5,19 +5,19 @@
 namespace WPAD { //Wireless PAD, low-level wii remote library
 
 enum Buttons {
-    WPAD_BUTTON_LEFT = 0x1,
-    WPAD_BUTTON_RIGHT = 0x2,
-    WPAD_BUTTON_DOWN = 0x4,
-    WPAD_BUTTON_UP = 0x8,
-    WPAD_BUTTON_PLUS = 0x10,
-    WPAD_BUTTON_2 = 0x100,
-    WPAD_BUTTON_1 = 0x200,
-    WPAD_BUTTON_B = 0x400,
-    WPAD_BUTTON_A = 0x800,
-    WPAD_BUTTON_MINUS = 0x1000,
-    WPAD_BUTTON_Z = 0x2000,
-    WPAD_BUTTON_C = 0x4000,
-    WPAD_BUTTON_HOME = 0x8000
+    WPAD_BUTTON_LEFT    = 0x1,
+    WPAD_BUTTON_RIGHT   = 0x2,
+    WPAD_BUTTON_DOWN    = 0x4,
+    WPAD_BUTTON_UP      = 0x8,
+    WPAD_BUTTON_PLUS    = 0x10,
+    WPAD_BUTTON_2       = 0x100,
+    WPAD_BUTTON_1       = 0x200,
+    WPAD_BUTTON_B       = 0x400,
+    WPAD_BUTTON_A       = 0x800,
+    WPAD_BUTTON_MINUS   = 0x1000,
+    WPAD_BUTTON_Z       = 0x2000,
+    WPAD_BUTTON_C       = 0x4000,
+    WPAD_BUTTON_HOME    = 0x8000
 };
 
 enum ClButtons {

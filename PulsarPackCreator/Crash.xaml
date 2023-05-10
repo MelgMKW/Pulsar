@@ -1,0 +1,21 @@
+﻿<Window x:Class="PulsarPackCreator.CrashWindow"
+        Name="Crash"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="Crash Summary" Height="810" Width="900" Background="#FD353535"
+        HorizontalAlignment="Center" VerticalAlignment="Center"
+        AllowDrop="True"
+        Drop="OnDropFile">
+    <Border BorderBrush="Black" BorderThickness="3">
+        <Grid Background="#FD202020" x:Name="GridCrash">
+            <TextBox Name="CrashText" Text="Temp" IsReadOnly="True"
+                       Margin="10,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderThickness="0"
+                       FontFamily="Courier New" Foreground="White" FontSize="16" />
+            <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Crash Summary" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" TextDecorations="Underline"/>
+        </Grid>
+    </Border>
+</Window>

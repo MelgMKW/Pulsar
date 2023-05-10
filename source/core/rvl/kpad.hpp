@@ -114,7 +114,7 @@ struct UnifiedWpadStatus {
 };
 size_assert(UnifiedWpadStatus, 0x38);
 
-
+void SetFSStickClamp(s8 min, s8 max); //801950a0
 void SetPosParam(s32 channel, float play_radius, float sensitivity); //801950b4
 void SetHoriParam(s32 channel, float play_radius, float sensitivity); //801950d0
 void SetDistParam(s32 channel, float play_radius, float sensitivity); //801950ec

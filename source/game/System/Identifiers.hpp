@@ -132,7 +132,7 @@ enum ItemId {
     TRIPLE_RED_SHELL = 0x11,
     TRIPLE_BANANA = 0x12,
     UNKNOWN_0X13 = 0x13,
-    NONE = 0x14
+    ITEM_NONE = 0x14
 };
 
 

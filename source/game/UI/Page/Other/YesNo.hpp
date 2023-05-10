@@ -64,7 +64,7 @@ public:
 }; //total size 0xba0
 size_assert(YesNoPopUp, 0xba0);
 
-class YesNoFull: public YesNo { //ID 0x53 not displayed on top fo another screen, takes the whole space
+class YesNoFull: public YesNo { //ID 0x53 not displayed on top of another page, takes the whole space
 public:
     YesNoFull(); //80652d7c
     ~YesNoFull() override; //80652e4c vtable 808c07d8

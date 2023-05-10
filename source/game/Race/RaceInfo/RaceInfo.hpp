@@ -66,7 +66,7 @@ public:
     void UpdateCheckPoint(float completion, u16 cpId, bool isDrivingBackwards);
 
     u8 unknown_0x4[0x8 - 0x4];
-    u8 id;
+    u8 id; //0x8
     u8 unknown_0x9; //might be padding
     u16 checkpoint;
     float raceCompletion; //fraction of way through a lap (ex. 1.0 is the start of lap 1, 2.5 is half way through lap 2)
@@ -97,7 +97,7 @@ public:
     Timer* lapSplits; //array of lapCount length
     Timer* raceFinishTime; //0x40
     u32 status;
-    Input::ControllerHolder* controllerHolder; //0x48
+    Input::RealControllerHolder* realControllerHolder; //0x48
     u8 unknown_0x4c[0x54 - 0x4c];
 }; //Total size 0x54
 
@@ -124,6 +124,7 @@ public:
     int GetBattleDuration(); //805326ec
     void ComputeDelfinoPierTideState(); //805330c0 inlined
     void CloneTimer(Timer* dest); //80535ca0
+    void EndPlayerRace(u8 playerId); //80533c6c
 
     Random* random;
     Random* onlineAndTTRandom;

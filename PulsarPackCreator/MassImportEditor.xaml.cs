@@ -1,0 +1,172 @@
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Pulsar_Pack_Creator;
+using System.Buffers.Binary;
+using System.Globalization;
+using static PulsarPackCreator.MainWindow;
+using System.ComponentModel;
+
+namespace PulsarPackCreator
+{
+    /// <summary>
+    /// Interaction logic for parent.xaml
+    /// </summary>
+    public partial class MassImportWindow : Window
+    {
+        public static MainWindow parent;
+
+
+        public MassImportWindow(MainWindow parentWindow)
+        {
+            parent = parentWindow;
+            InitializeComponent();
+        }
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
+        }
+
+        private void OnSaveImportClick(object sender, RoutedEventArgs e)
+        {
+            //Need to add checks here i.e. slot validity, number of lines in each text box
+
+            string[] namesImport = NamesImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+            string[] authorsImport = AuthorsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+            string[] slotsImport = SlotsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+            string[] musicSlotsImport = MusicSlotsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+
+            string[][] importStringArrays = { namesImport, authorsImport, slotsImport, musicSlotsImport };
+
+            TextBox[] imports = new TextBox[] { NamesImport, AuthorsImport, SlotsImport, MusicSlotsImport };
+            TextBlock[] labels = new TextBlock[] { NamesImportLabel, AuthorsImportLabel, SlotsImportLabel, MusicSlotsImportLabel };
+
+            List<TextBox> emptyBoxes = imports.Where(x => x.Text.Length == 0).ToList();
+
+            if (emptyBoxes.Count > 0)
+            {
+                string message = "";
+                for (int i = 0; i < emptyBoxes.Count; i++)
+                {
+                    if (i != 0)
+                    {
+                        message += ", ";
+                    }
+                    int emptyBoxIdx = Array.IndexOf(imports, emptyBoxes[i]);
+
+                    message += labels[emptyBoxIdx].Text;
+                }
+                if (emptyBoxes.Count == 1)
+                {
+                    message += " is empty";
+                }
+                else
+                {
+                    message += " are empty";
+                }
+                MessageBox.Show(message);
+                return;
+            }
+
+            List<int> differentLengthIdxs = new List<int>();
+            int baseLength = importStringArrays[0].Length;
+            for (int i = 0; i < imports.Length; i++)
+            {
+                if (importStringArrays[i].Length != baseLength)
+                {
+                    differentLengthIdxs.Add(Array.IndexOf(imports, imports[i]));
+                }
+            }
+
+            if (differentLengthIdxs.Count > 0)
+            {
+                string message = "";
+
+                foreach (int idx in differentLengthIdxs)
+                {
+                    int curLength = importStringArrays[idx].Length;
+                    string plural = "";
+                    if (Math.Abs(curLength - baseLength) > 1) plural = "s";
+                    if (curLength > baseLength)
+                    {
+                        message += $"{labels[idx].Text} has {curLength - baseLength} line{plural} too many.\n";
+                    }
+                    else
+                    {
+                        message += $"{labels[idx].Text} is missing {baseLength - curLength} line{plural}.\n";
+                    }
+                }
+                MessageBox.Show(message);
+                return;
+            }
+
+            //NamesImport
+            int row = 0;
+            int cupIdx = parent.curCup;
+            for (int line = 0; line < namesImport.Length; line++)
+            {
+                byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
+                if (slotIdx == 0xFF)
+                {
+                    MessageBox.Show($"Track Slot {importStringArrays[2][line]} (Line {line}) is invalid.");
+                    return;
+                }
+                byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line]);
+                if (musicSlotIdx == 0xFF)
+                {
+                    MessageBox.Show($"Music Slot {importStringArrays[3][line]} (Line {line}) is invalid.");
+                    return;
+                }
+            }
+
+            Hide();
+
+            for (int line = 0; line < namesImport.Length; line++)
+            {
+                if (cupIdx == parent.ctsCupCount)
+                {
+                    MessageBox.Show("Tracklist exceeded existing number of cups.");
+                    return;
+                }
+                byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
+                byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line]);
+                parent.cups[cupIdx].trackNames[row] = importStringArrays[0][line];
+                parent.cups[cupIdx].authorNames[row] = importStringArrays[1][line];
+                parent.cups[cupIdx].slots[row] = idxToGameId[slotIdx];
+                parent.cups[cupIdx].musicSlots[row] = idxToGameId[musicSlotIdx];
+                if (cupIdx == parent.curCup)
+                {
+                    TextBox nameBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 2) as TextBox;
+                    nameBox.Text = importStringArrays[0][line];
+                    TextBox authorBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 3) as TextBox;
+                    authorBox.Text = importStringArrays[1][line];
+                    ComboBox slotBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 4) as ComboBox;
+                    slotBox.SelectedIndex = slotIdx;
+                    ComboBox musicSlotBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 5) as ComboBox;
+                    musicSlotBox.SelectedIndex = musicSlotIdx;
+                }
+                row++;
+                if (row == 4)
+                {
+                    row = 0;
+                    cupIdx++;
+                }
+            }
+        }
+
+        private byte FindSlotIndex(string slot)
+        {
+            byte slotIdx = (byte)Array.FindIndex(idxToFullNames, x => x == slot);
+            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(idxToAbbrev, x => x == slot);
+            return slotIdx;
+        }
+    }
+}

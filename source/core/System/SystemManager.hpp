@@ -26,9 +26,9 @@ public:
 
 
     u8 unknown_0x50[0x58 - 0x50];
-    u32 isWidePage; //0x58
+    u32 isWideScreen; //0x58
     u32 gameLanguage; //0x5C
-    u32 strapPageLanguage;
+    u32 strapScreenLanguage;
     u32 isProgressiveScan;
     u32 isRGB60;
     u32 unknown_0x6c[2];

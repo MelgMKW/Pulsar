@@ -189,7 +189,7 @@ class AmbientLight {
 };
 
 class LightMgr {
-    LightMgr(u16 lightObjCount, u16 ambLightCount, u8 pageCount); //8022a38c
+    LightMgr(u16 lightObjCount, u16 ambLightCount, u8 screenCount); //8022a38c
     virtual void Mount(BLIGHT* rawBLIGHT); //8022a8f0 vtable 802a3100
     virtual void Save(); //8022aee4
     virtual BLIGHT* GetStaticBLIGHT(); //8022a8e0

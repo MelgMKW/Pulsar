@@ -31,7 +31,7 @@ public:
     virtual ~FogMgr();
     u8 unknown_0x4;
     u8 padding[3];
-    u16 fogCount; //0x8 = pageCount
+    u16 fogCount; //0x8 = screenCount
     u16 fogCount2; //0xA
     u8 padding2[2];
     Fog** fogs; //0xC

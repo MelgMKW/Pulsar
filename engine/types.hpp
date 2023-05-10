@@ -20,6 +20,7 @@
 #pragma float_constants on
 #pragma readonly_strings on
 #pragma RTTI off
+#pragma warn_unusedvar on 
 #pragma warn_illpragma on
 #pragma warn_extracomma on
 #pragma warn_possunwant on

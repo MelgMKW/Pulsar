@@ -52,7 +52,7 @@ public:
 
 //_sinit_ at 805e272c
 namespace Pages {
-class GhostManager: public Page { //ID 0xA7
+class GhostManager : public Page { //ID 0xA7
 public:
     GhostManager(); //805e0c38 vtable 808b9258
     ~GhostManager() override; //0x805e0cb8
