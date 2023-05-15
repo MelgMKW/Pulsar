@@ -9,9 +9,11 @@ namespace EGG {
 //https://wiki.tockdom.com/wiki/BLIGHT_(File_Format)
 //https://wiki.tockdom.com/wiki/BLMAP_(File_Format)
 
-class CPUTexture {
+class CpuTexture {
 public:
-    CPUTexture(u16 width, u16 height); //80218098
+    CpuTexture(); //8021805c
+    CpuTexture(u16 width, u16 height); //80218098
+    CpuTexture(GXTexObj texObj); //802180d0
     u16 width;
     u16 height;
     u8 unknown_0x4;
@@ -22,14 +24,12 @@ public:
     GXTexFilter max_filt;
     u8 unknown_0xA[2];
     void* image_ptr; //0xC
-    virtual ~CPUTexture(); //80218178 vtable 802a2b10
+    virtual ~CpuTexture(); //80218178 vtable 802a2b10
     virtual void Configure(); //80218b98
     virtual void InitTexObj(GXTexObj* obj); //802181e8
-
-
 };
 
-class MatTexture: public CPUTexture {
+class MatTexture: public CpuTexture {
 public:
     u8 unknown_0x14[0x28 - 0x14];
 };

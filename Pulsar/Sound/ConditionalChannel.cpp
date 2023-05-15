@@ -1,5 +1,6 @@
 #include <kamek.hpp>
 #include <game/Sound/AudioManager.hpp>
+#include <game/Sound/Other/AudioStreamsMgr.hpp>
 
 namespace Pulsar {
 namespace Audio {

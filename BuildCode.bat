@@ -7,14 +7,13 @@ del build\*.o
 :: Destination (change as necessary)
 SET "SOURCE=Pulsar"
 SET "RIIVO=D:\Documents\Dolphin Emulator\Load\Pulsar"
-SET "RELEASE=D:\Modding\Coding\Kamek\Pulsar\releases"
 echo %RIIVO%
 
 
 :: CPP compilation settings
 SET CC="../engine/cw/mwcceppc.exe"
 SET CFLAGS=-I- -i "../engine/engine" -i "../engine/source" -i "../engine/source/game" -i Pulsar -O2,p^
-  -opt loop,peep,schedule  -inline auto -enum int -proc 750 -fp hard -rostr -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 -rtti off 
+  -opt loop,peep,schedule  -inline auto -enum int -proc gekko -fp hard -rostr -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 -rtti off 
 SET DEFINE=
 
 :: CPP Sources
@@ -36,10 +35,8 @@ echo Linking... %time%
 "../engine/Kamek" "build/kamek.o" %OBJECTS% -dynamic -externals="../engine/source/symbols.txt" -versions="../engine/source/versions.txt" -output-kamek=build\$KV$.bin >nul
 
 if %ErrorLevel% equ 0 (
-    xcopy /Y build\*.bin "%RELEASE%\Binaries" >nul
-    cd "D:\Modding\Coding\Kamek\Pulsar\resources" >nul
-    xcopy /Y /S "%RELEASE%\Binaries" "%RIIVO%\Binaries" >nul
-    xcopy /Y /S "%RELEASE%\Binaries" "D:\Documents\Dolphin Emulator\Load\varietypack\Binaries" >nul
+    xcopy /Y build\*.bin "%RIIVO%\Binaries" >nul
+    xcopy /Y /S "%RIIVO%\Binaries" "D:\Documents\Dolphin Emulator\Load\varietypack\Binaries" >nul
     echo Binaries copied
 )
 

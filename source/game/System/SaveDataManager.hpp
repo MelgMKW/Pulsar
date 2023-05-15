@@ -4,6 +4,7 @@
 #include <core/egg/mem/Disposer.hpp>
 #include <core/rvl/DWC/DWC.hpp>
 #include <game/UI/SectionMgr/SectionPad.hpp>
+#include <game/Mii/Mii.hpp>
 #include <game/System/Timer.hpp>
 #include <game/System/identifiers.hpp>
 #include <game/System/Ghost.hpp>
@@ -16,8 +17,7 @@ Contributors:
 struct TimeEntry {
     TimeEntry(); //80544358
     ~TimeEntry(); //8054437c
-    RawMii mii;
-    u8 unknown_0x4A[2];
+    RFL::StoreData miiData;
     Timer timer; //0x4C
     CharacterId character; //0x58
     KartId kart;
@@ -33,8 +33,8 @@ struct FriendData {
     u16 wins; //0x14
     u16 vr; //0x16
     u16 br; //0x18
-    RawMii friendMii; //0x1a
-    u8 unknown_0x64[4];
+    RFL::StoreData friendMii; //0x1a
+    u8 padding[2];
     u8 countryID; //0x68
     u8 regionID; //0x69
     u16 unknown_0x6A;

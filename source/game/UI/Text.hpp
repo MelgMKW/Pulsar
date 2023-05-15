@@ -3,7 +3,8 @@
 #include <kamek.hpp>
 #include <core/nw4r/lyt/TextBox.hpp>
 #include <game/File/BMG.hpp>
-#include <game/Visual/Mii.hpp>
+#include <game/Mii/MiiGroup.hpp>
+
 using namespace nw4r;
 
 class CharacterInfo {

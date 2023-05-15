@@ -2,7 +2,7 @@
 #define _COUNTDOWNTIMERPAGE_
 #include <kamek.hpp>
 #include <game/UI/Page/Page.hpp>
-#include <game/Visual/Mii.hpp>
+#include <game/Mii/MiiGroup.hpp>
 #include <game/UI/Ctrl/CountDown.hpp>
 #include <game/UI/Page/Other/Message.hpp>
 

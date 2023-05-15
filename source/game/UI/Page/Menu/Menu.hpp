@@ -94,7 +94,7 @@ public:
     SectionId nextSection; //0x3f4
     u32 controlSources; //0x80836cc8 3f8
     PtmfHolder_1A<Menu, void, Pages::Click*> onMessageBoxClickHandler; //0x3fc
-    PtmfHolder_1A<Menu, void, u32> onMovieActivate; //0x410
+    PtmfHolder_1A<Menu, void, u32> onMoviePrepared; //0x410
     u32 movieStartFrame; //0x424
     u32 extraControlNumber; //depends on the amount of local players and the page
     bool isLocked; //0x42c

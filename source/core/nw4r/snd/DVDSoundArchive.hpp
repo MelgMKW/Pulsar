@@ -6,9 +6,9 @@
 
 namespace nw4r {
 namespace snd {
-class DVDSoundArchive: public SoundArchive {
+class DVDSoundArchive : public SoundArchive {
 public:
-    class DVDFileStream: public ut::DvdLockedFileStream {
+    class DVDFileStream : public ut::DvdLockedFileStream {
     public:
         DVDFileStream(); //inlined 8009132c
         virtual void func_vtable(); //802742b0

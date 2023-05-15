@@ -5,7 +5,7 @@ namespace Pulsar {
 namespace UI {
 
 u8 SettingsPanel::radioButtonCount[SettingsPanel::pageCount] ={ 1, 4, 2 };
-u8 SettingsPanel::scrollerCount[SettingsPanel::pageCount] ={ 2, 0, 1 };
+u8 SettingsPanel::scrollerCount[SettingsPanel::pageCount] ={ 1, 0, 1 };
 
 u8 SettingsPanel::buttonsPerPagePerRow[SettingsPanel::pageCount][8] = //first row is SettingsType, 2nd is rowIdx of radio
 {
@@ -18,7 +18,7 @@ u8 SettingsPanel::optionsPerPagePerScroller[SettingsPanel::pageCount][8] =
 {
     { 5, 7, 0, 0, 0, 0, 0, 0 },
     { 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 7, 0, 0, 0, 0, 0, 0, 0 },
+    { 0, 0, 0, 0, 0, 0, 0, 0 },
 };
 
 inline void SettingsPanel::CreatePanels(Section* section) {

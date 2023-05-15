@@ -1,7 +1,7 @@
 #ifndef _LAKITUCONTROLLER_
 #define _LAKITUCONTROLLER_
 #include <kamek.hpp>
-
+#include <game/Mii/MiiHeadsModel.hpp>
 
 /*
 Contributors:

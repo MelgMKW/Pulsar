@@ -109,11 +109,11 @@ public:
     KartPointers* kartPointers;
     KartModel* model;
     u8 unknown_0x8[0x18 - 0x8];
-    u8 id;
+    u8 id; //0x18
     bool isHuman;
     bool isRemote;
     bool isBike;
-    Kart* kart;
+    Kart* kart; //0x1c
     KartModel* model2;
     Vec3 unknown_0x24;
     u8 unknown_0x30[0x44 - 0x30];

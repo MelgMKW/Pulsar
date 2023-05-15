@@ -18,7 +18,7 @@ Leaderboard::Leaderboard(const char* folderPath, u32 crc32) {
     snprintf(filePath, IOS::ipcMaxPath, "%s/ldb.bin", folderPath);
     IO::File* file = IO::File::sInstance;
     s32 ret = file->Open(filePath, IO::FILE_MODE_READ_WRITE);
-    if(ret > 0) ret = file->Read(this, sizeof(Leaderboard));
+    if(ret > 0) ret = file->Read(sizeof(Leaderboard), this);
 
     if(ret <= 0 || this->crc32 != crc32 || magic != fileMagic) {
         System::sInstance->taskThread->Request(&Leaderboard::CreateFile, crc32, 0);
@@ -58,7 +58,7 @@ void Leaderboard::Update(u32 position, const TimeEntry& entry, u32 crc32) {
         for(int i = ENTRY_10TH; i > position; i--) memcpy(&this->entries[mode][i], &this->entries[mode][i - 1], sizeof(PULTimeEntry));
         this->entries[mode][position].rkgCRC32 = crc32;
     }
-    memcpy(&this->entries[mode][position].mii, &entry.mii, sizeof(RawMii));
+    memcpy(&this->entries[mode][position].mii, &entry.miiData, sizeof(RFL::StoreData));
     this->entries[mode][position].minutes = entry.timer.minutes;
     this->entries[mode][position].seconds = entry.timer.seconds;
     this->entries[mode][position].milliseconds = entry.timer.milliseconds;
@@ -89,7 +89,7 @@ void Leaderboard::EntryToTimer(Timer& dest, u8 id) const {
 void Leaderboard::EntryToTimeEntry(TimeEntry& dest, u8 id) const {
     this->EntryToTimer(dest.timer, id);
     TTMode mode = System::sInstance->ttMode;
-    memcpy(&dest.mii, &this->entries[mode][id].mii, sizeof(RawMii));
+    memcpy(&dest.miiData, &this->entries[mode][id].mii, sizeof(RFL::StoreData));
     dest.character = this->entries[mode][id].character;
     dest.kart = this->entries[mode][id].kart;
     dest.controllerType = this->entries[mode][id].controllerType;

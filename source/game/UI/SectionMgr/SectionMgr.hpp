@@ -50,7 +50,7 @@ public:
     void UpdateDVDStatus(bool forceResume); //80635e08 inlined, forceResume regardless of Pages' isDvdEnabled
 
     Section* curSection; /* http://wiki.tockdom.com/wiki/List_of_Identifiers#Menu_Identifiers */
-    SectionId bootSectionId; //usually set by SavedGhostHandler::Init, for example Creating new save/Corrupted save etc...
+    SectionId bootSectionId; //0x4 usually set by SavedGhostHandler::Init, for example Creating new save/Corrupted save etc...
     SectionId unknownSectionId;
     SectionId nextSectionId; //0xc
     SectionId prevSectionId;

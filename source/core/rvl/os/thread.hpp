@@ -64,11 +64,11 @@ void SelectThread(Thread* thread);
 
 
 //Stops a thread then terminates it
-void CancelThread(Thread* thread); 
+void CancelThread(Thread* thread);
 //sets state to moribund (ie it gets detached from the runFunc, for ex EGG::Thread) and sleeps the thread; it can be destroyed
-void DetachThread(Thread* thread); 
+void DetachThread(Thread* thread);
 //sleeps the current thread until the arg's runFunc has finished executing (which might be never). It can be destroyed if returns true
-BOOL JoinThread(Thread* thread); 
+BOOL JoinThread(Thread* thread);
 
 //Sleeps the current thread, adds it to the queue. It'll be woken up with WakeUpThread
 void SleepThread(ThreadQueue* queue);

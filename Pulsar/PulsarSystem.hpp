@@ -75,7 +75,7 @@ private:
     void Init(const Binary& bin);
     void InitInstances(const Binary& bin) {
         CupsDef::sInstance = new CupsDef(bin.GetSection<CupsHolder>().cups);
-        Info::sInstance    = new Info(bin.GetSection<InfoHolder>().info);
+        Info::sInstance = new Info(bin.GetSection<InfoHolder>().info);
         this->InitIO();
         this->InitSettings(&bin.GetSection<CupsHolder>().cups.trophyCount[0]);
     }
@@ -102,9 +102,9 @@ public:
     //BMG
     const BMGHolder& GetBMG() const { return customBmgs; }
 
-    //Constants
     EGG::ExpHeap* const heap;
     EGG::TaskThread* const taskThread;
+    //Constants
 
 private:
     char modFolderName[IOS::ipcMaxFileName + 1];

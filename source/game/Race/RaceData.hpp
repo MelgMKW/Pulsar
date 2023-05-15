@@ -15,8 +15,10 @@ References:
 #define _RACEDATA_
 #include <kamek.hpp>
 #include <core/RK/ParameterFile.hpp>
-#include <game/Visual/Mii.hpp>
+#include <game/Mii/Mii.hpp>
+#include <game/File/RKG.hpp>
 #include <game/System/Identifiers.hpp>
+#include <game/Input/Controller.hpp>
 
 enum PlayerType {
     PLAYER_REAL_LOCAL,
@@ -206,7 +208,7 @@ public:
     //this causes a 2nd vtable after RKParameterFile which is a copy of RKParameter file and would contain any new virtual function in RaceData
 };
 
-class RaceData: public EmptyRaceDataParent, public RKParameterFile {
+class RaceData : public EmptyRaceDataParent, public RKParameterFile {
 public:
     static RaceData* sInstance; //0x809bd728 presumably private 
     static RaceData* GetStaticInstance(); //8052fe58

@@ -2,6 +2,7 @@
 #include <game/RKNet/RKNetController.hpp>
 #include <game/RKNet/Select.hpp>
 #include <game/System/random.hpp>
+#include <game/Archive/ArchiveRoot.hpp>
 #include <SlotExpansion/Network/PulSELECT.hpp>
 #include <SlotExpansion/CupsDef.hpp>
 #include <PulsarSystem.hpp>

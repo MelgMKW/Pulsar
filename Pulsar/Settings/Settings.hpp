@@ -35,9 +35,9 @@ struct Trophies {
 };
 namespace UI { class SettingsPanel; }
 
-class alignas(0x20) Settings {
+class Settings {
 protected: //so that it can be inherited from
-    class Binary {
+    class alignas(0x20) Binary {
         struct Page {
             union {
                 struct {

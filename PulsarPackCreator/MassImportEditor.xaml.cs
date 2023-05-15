@@ -41,8 +41,8 @@ namespace PulsarPackCreator
 
             string[] namesImport = NamesImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
             string[] authorsImport = AuthorsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
-            string[] slotsImport = SlotsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
-            string[] musicSlotsImport = MusicSlotsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+            string[] slotsImport = SlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
+            string[] musicSlotsImport = MusicSlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
 
             string[][] importStringArrays = { namesImport, authorsImport, slotsImport, musicSlotsImport };
 
@@ -144,6 +144,8 @@ namespace PulsarPackCreator
                 parent.cups[cupIdx].musicSlots[row] = idxToGameId[musicSlotIdx];
                 if (cupIdx == parent.curCup)
                 {
+                    parent.UpdateCurCup(0);
+                    /*
                     TextBox nameBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 2) as TextBox;
                     nameBox.Text = importStringArrays[0][line];
                     TextBox authorBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 3) as TextBox;
@@ -152,6 +154,9 @@ namespace PulsarPackCreator
                     slotBox.SelectedIndex = slotIdx;
                     ComboBox musicSlotBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 5) as ComboBox;
                     musicSlotBox.SelectedIndex = musicSlotIdx;
+                    */
+                    
+                    
                 }
                 row++;
                 if (row == 4)

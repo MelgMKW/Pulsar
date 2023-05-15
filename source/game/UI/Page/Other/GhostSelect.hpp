@@ -5,7 +5,7 @@
 #include <game/UI/Page/Page.hpp>
 
 #include <game/UI/Page/Other/GhostManager.hpp>
-#include <game/Visual/Mii.hpp>
+#include <game/Mii/MiiGroup.hpp>
 #include <game/UI/Ctrl/SheetSelect.hpp>
 #include <game/UI/Ctrl/GhostInfoControl.hpp>
 #include <game/UI/Ctrl/Menu/CtrlMenuText.hpp>

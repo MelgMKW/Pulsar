@@ -72,7 +72,7 @@ class EndingMovie: public Page { //ID 0x3e
     void AfterEntranceAnimations() override; //0x3c 805cc1b8
     void AfterControlUpdate() override; //0x4c 805cc1bc
     int GetRuntimeTypeInfo() const override; //0x60 805cd85c
-    PtmfHolder_1A<Page, void, u32> onMovieActivate; //0x44 805cc2ec no idea r4
+    PtmfHolder_1A<Page, void, u32> onMoviePrepared; //0x44 805cc2ec no idea r4
     ManipulatorManager manipulatorManager; //0x58
     EndingMovieControl endingMovieControls[2]; //0x68 top and bottom
     u32 unknown_0x350; //0x350 if set to -1, it'll not transition between the two controls  

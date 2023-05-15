@@ -83,7 +83,7 @@ namespace PulsarPackCreator
                     }
                     }
                     File.WriteAllLines(files[0], lines);
-                }*/
+                }
 
                 else
                 {
@@ -119,6 +119,7 @@ namespace PulsarPackCreator
 
                     }
                 }
+                */
             }
         }
         private void OnSZSDrop(object sender, DragEventArgs e)

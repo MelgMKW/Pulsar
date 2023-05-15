@@ -7,8 +7,8 @@ namespace IO {
 File* File::sInstance = nullptr;
 File* File::CreateStaticInstance(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread) {
     File* file;
-    if(type != IOType_RIIVO) file = new(heap) File(type, taskThread);
-    else file = new (heap) RiivoFile(taskThread);
+    if(type != IOType_RIIVO) file = new(heap) File(type, heap, taskThread);
+    else file = new (heap) RiivoFile(heap, taskThread);
     File::sInstance = file;
     return file;
 }
@@ -41,10 +41,11 @@ s32 File::GetDevice_fd() const {
     return IOS::fs_fd;
 }
 
-s32 File::Read(void* buffer, u32 length) {
+s32 File::Read(u32 size, void* bufferIn) {     
     if(this->fd < 0) return -1;
-    return IOS::Read(this->fd, buffer, length);
+    return IOS::Read(this->fd, bufferIn, size);
 }
+
 
 s32 File::Write(u32 length, const void* buffer) {
     if(this->fd < 0) return -1;

@@ -1,7 +1,7 @@
 #ifndef _CHARACTERSOUND_
 #define _CHARACTERSOUND_
 #include <kamek.hpp>
-#include <game/Sound/RandomAudioMgr.hpp>
+#include <game/Sound/Other/RandomAudioMgr.hpp>
 #include <game/Sound/Actors/RaceActor.hpp>
 
 using namespace nw4r;

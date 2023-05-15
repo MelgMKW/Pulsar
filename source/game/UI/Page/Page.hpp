@@ -8,6 +8,7 @@ Melg
 #ifndef _PAGE_
 #define _PAGE_
 #include <kamek.hpp>
+#include <game/System/Identifiers.hpp>
 #include <game/UI/Ctrl/UIControl.hpp>
 #include <game/UI/Ctrl/Manipulator.hpp>
 

@@ -2,7 +2,7 @@
 #define _SECTIONPARAMS_
 #include <kamek.hpp>
 #include <game/System/Identifiers.hpp>
-#include <game/Visual/Mii.hpp>
+#include <game/MII/MiiGroup.hpp>
 
 struct PlayerCombo {
     CharacterId selCharacter;

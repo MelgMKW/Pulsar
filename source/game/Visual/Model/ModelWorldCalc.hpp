@@ -3,18 +3,18 @@
 #include <kamek.hpp>
 #include <game/Visual/Model/ModelDirector.hpp>
 
-class CalcWorldUnknownBase {
-    CalcWorldUnknownBase(ModelDirector* director, u32 r5); //8055f8d0
+class ModelWorldCalcBase {
+    ModelWorldCalcBase(ModelDirector* director, u32 r5); //8055f8d0
     ModelDirector* mdlDirector;
 };
 
 class EmptyCalcWorldParent {
 public:
     EmptyCalcWorldParent() {};
-    //this causes a 2nd vtable after RKParameterFile which is a copy of RKParameter file and would contain any new virtual function in RaceData
+    //this causes a 2nd vtable
 };
 
-class ModelWorldCalc: public CalcWorldUnknownBase, public EmptyCalcWorldParent, public g3d::ICalcWorldCallback {
+class ModelWorldCalc : public ModelWorldCalcBase, public EmptyCalcWorldParent, public g3d::ICalcWorldCallback {
     ~ModelWorldCalc() override; //806cce80 vtable 808c4700, 808c46f8 for empty
     void ExecCallbackA(g3d::ChrAnmResult* result, g3d::ResMdl mdl, g3d::FuncObjCalcWorld* obj) override; //806cc9e8
     void ExecCallbackB(g3d::WorldMtxManip* manip, g3d::ResMdl mdl, g3d::FuncObjCalcWorld* obj) override; //806cce78

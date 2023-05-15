@@ -11,9 +11,61 @@ class SoundArchiveFileReader;
 
 class SoundArchive {
 public:
+    typedef u32 SoundId;
+    typedef u32 GroupId;
+    typedef u32 PlayerId;
+    typedef u32 BankId;
+    typedef u32 StringId;
+    typedef u32 FileId;
+
     struct SoundInfo;
     struct StrmSoundInfo;
-    struct SeqInfo;
+    struct SeqSoundInfo;
+    struct WaveSoundInfo;
+    struct BankInfo { FileId fileId; };
+
+    struct FileInfo {
+        u32 fileSize;
+        u32 waveDataFileSize;
+        const char* extFilePath;
+        u32 filePosCount;
+    };
+
+    struct PlayerInfo;
+
+    struct FilePos {
+        GroupId groupId;
+        u32 index;
+    };
+
+    struct GroupInfo {
+        u32 itemCount;
+        const char* extFilePath;
+        u32 offset;
+        u32 size;
+        u32 waveDataOffset;
+        u32 waveDataSize;
+    };
+
+    struct GroupItemInfo {
+        FileId fileId;
+        u32 offset;
+        u32 size;
+        u32 waveDataOffset;
+        u32 waveDataSize;
+    };
+
+    struct SoundArchivePlayerInfo {
+        int seqSoundCount;
+        int seqTrackCount;
+        int strmSoundCount;
+        int strmTrackCount;
+        int strmChannelCount;
+        int waveSoundCount;
+        int waveTrackCount;
+    };
+
+    struct Sound3DParam;
     enum SoundType {
         SOUND_TYPE_INVALID = 0,
         SOUND_TYPE_SEQ,
@@ -22,12 +74,42 @@ public:
     };
     SoundArchive(); //8009de00 vtable 802749c0
     bool IsAvailable(); //8009de70
+    void Shutdown(); //8009dea0
+    void Setup(detail::SoundArchiveFileReader* fileReader); //8009de90
+    u32 GetPlayerCount() const; //8009dec0
+    u32 GetGroupCount() const; //8009ded0
+    const char* GetGroupLabelString(GroupId groupId) const; //8009dee0
+    const char* GetBankLabelString(BankId groupId) const; //8009def0
+    SoundId ConvertLabelStringToSoundId(const char* label) const; //8009df00
+    GroupId ConvertLabelStringToGroupId(const char* label) const; //8009df10
+
+    u32 GetSoundUserParam(SoundId soundId) const; //8009df20
+    SoundType GetSoundType(SoundId soundId) const; //8009df30
+
+
+    bool ReadSoundInfo(SoundArchive::SoundId soundId, SoundArchive::SoundInfo* info) const; //8009df40
+    bool detail_ReadSeqSoundInfo(SoundArchive::SoundId soundId, SoundArchive::SeqSoundInfo* info) const; //8009df50
+    bool detail_ReadStrmSoundInfo(SoundArchive::SoundId soundId, SoundArchive::StrmSoundInfo* info) const; //8009df60
+    bool detail_ReadWaveSoundInfo(SoundArchive::SoundId soundId, SoundArchive::WaveSoundInfo* info) const; //8009df70
+    bool ReadPlayerInfo(SoundArchive::PlayerId playerId, SoundArchive::PlayerInfo* info) const; //8009df80
+    bool ReadSoundArchivePlayerInfo(SoundArchive::SoundArchivePlayerInfo* info) const; //8009df90
+    bool ReadSound3DParam(SoundArchive::SoundId soundId, SoundArchive::Sound3DParam* param) const; //8009dfa0
+    bool ReadBankInfo(SoundArchive::BankId bankId, SoundArchive::BankInfo* info) const; //8009dfb0
+    bool ReadGroupInfo(SoundArchive::GroupId groupId, SoundArchive::GroupInfo* info) const; //8009dfc0
+    bool detail_ReadGroupItemInfo(SoundArchive::GroupId groupId, unsigned long index, SoundArchive::GroupItemInfo* info) const; //8009dfd0
+    u32 detail_GetFileCount() const; //8009dfe0
+    bool detail_ReadFileInfo(SoundArchive::FileId fileId, SoundArchive::FileInfo* info) const; //8009ff0
+    bool detail_ReadFilePos(SoundArchive::FileId fileId, unsigned long index, SoundArchive::FilePos* info) const; //8009e000
+
+
+
+    u32 ConvertLabelStringToId(const void* stringTree, const char* str) const; //8009f740
+
+
     bool ReadSoundInfo(u32 id, SoundInfo* soundInfo); //8009df40
     bool ReadStrmSoundInfo(u32 id, StrmSoundInfo* soundInfo); //8009df60
+
     virtual ~SoundArchive(); //8009de30
-    u32 ConvertLabelStringToSoundId(const char* string) const; //8009df00
-    u32 ConvertLabelStringToGroupId(const char* string) const; //8009df10
-    SoundType GetSoundType(u32 soundId) const; //8009df30
     detail::SoundArchiveFileReader* fileReader;
     char extFileRoot[256];
 

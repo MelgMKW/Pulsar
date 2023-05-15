@@ -16,7 +16,7 @@ Stebler, CLF (main documentation), Melg
 
 class KartModel;
 
-namespace Item{
+namespace Item {
 class Player;
 class Manager {
 public:
@@ -35,7 +35,7 @@ public:
     u8 unknown_0x11[3];
     Player* players; //0x14
     Player* otherLocalOnlinePlayersplayer[12];
-    ObjHolder itemObjolders[0xF]; //One per objId 0x48
+    ObjHolder itemObjHolders[0xF]; //One per objId 0x48
     Obj* curItemObj[16]; //0x264
     ObjBase dummyObj; //base one? dummy?
     u8 unknown_0x418[0x430 - 0x418];

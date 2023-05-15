@@ -34,12 +34,14 @@
 typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
+typedef unsigned long ul;
 typedef unsigned long long u64;
 typedef signed char s8;
 typedef signed short s16;
 typedef signed int s32;
 typedef signed long long s64;
 typedef float f32;
+
 typedef double f64;
 typedef volatile s64 vs64;
 typedef volatile s32 vs32;
@@ -58,8 +60,10 @@ typedef int BOOL; //any non-zero = true
 
 #ifdef __INTELLISENSE__
 typedef unsigned long long size_t;
+typedef float PS[2];
 #else
 typedef unsigned long size_t;
+typedef __vec2x32float__ PS;
 #endif
 
 struct RGBA16 {

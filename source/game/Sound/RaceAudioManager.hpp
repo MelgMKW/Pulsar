@@ -4,6 +4,7 @@
 #include <core/nw4r/ut/List.hpp>
 #include <game/Race/racedata.hpp>
 #include <game/System/timer.hpp>
+#include <game/Sound/Other/AudioVolume.hpp>
 #include <game/Sound/Actors/KartSound.hpp>
 /*
 Contributors:

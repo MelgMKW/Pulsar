@@ -60,11 +60,11 @@ enum BatteryLevel {
 
 enum DeviceType {
     WPAD_DEV_CORE           = 0,
-    WPAD_DEV_NUNCHUK        = 1, //FREESTYLE
+    WPAD_DEV_NUNCHUK        = 1,   //FREESTYLE
     WPAD_DEV_CLASSIC        = 2,
-    WPAD_DEV_MPLUS          = 5, //not supported in mkwii
-    WPAD_DEV_MPLUS_NUNCHUK  = 6, //not supported in mkwii
-    WPAD_DEV_MPLUS_CLASSIC  = 7, //not supported in mkwii
+    WPAD_DEV_MPLUS          = 5,   //not supported in mkwii
+    WPAD_DEV_MPLUS_NUNCHUK  = 6,   //not supported in mkwii
+    WPAD_DEV_MPLUS_CLASSIC  = 7,   //not supported in mkwii
     WPAD_DEV_MPLS_FUTURE    = 250, //not supported in mkwii
     WPAD_DEV_FUTURE         = 251,
     WPAD_DEV_NOT_SUPPORTED  = 252,

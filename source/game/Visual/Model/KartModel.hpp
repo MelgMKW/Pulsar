@@ -4,7 +4,7 @@
 #include <core/nw4r/g3d/res/ResNode.hpp>
 #include <game/Race/Kart/KartBase.hpp>
 #include <game/Visual/Model/ModelDirector.hpp>
-#include <game/Visual/Mii.hpp>
+#include <game/Mii/MiiHeadsModel.hpp>
 #include <game/Sound/Actors/CharacterSound.hpp>
 using namespace nw4r;
 class IKParams { //Inverse kinematics

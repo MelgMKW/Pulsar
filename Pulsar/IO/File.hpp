@@ -1,6 +1,7 @@
 #ifndef _PUL_FILELOADER_
 #define _PUL_FILELOADER_
 #include <kamek.hpp> 
+#include <core/nw4r/ut/Misc.hpp>
 #include <core/egg/Mem/ExpHeap.hpp>
 #include <core/egg/Thread.hpp>
 #include <core/RK/RKSystem.hpp>
@@ -121,19 +122,23 @@ class File {
 public:
     static File* sInstance;
     static File* CreateStaticInstance(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread);
-    File(IOType type, EGG::TaskThread* taskThread) : type(type), fd(-1), taskThread(taskThread) { memset(&this->path, 0, IOS::ipcMaxPath); }
+    File(IOType type, EGG::Heap* heap, EGG::TaskThread* taskThread) : type(type), fd(-1), heap(heap), taskThread(taskThread) { memset(&this->path, 0, IOS::ipcMaxPath); }
     virtual s32 Open(const char* path, u32 mode);
     virtual s32 CreateAndOpen(const char* path, u32 mode);
     virtual s32 GetDevice_fd() const;
     virtual void GetCorrectPath(char* realPath, const char* path) const;
     //virtual void Delete();
+    template<typename T>
+    T* Alloc(u32 size) { return EGG::Heap::alloc<T>(nw4r::ut::RoundUp(size, 0x20), 0x20, this->heap); }
     int GetFileSize() const { return this->fileSize; }
-    s32 Read(void* bufferIn, u32 size);
+    s32 Read(u32 size, void* bufferIn);
+
     s32 Write(u32 length, const void* buffer);
     s32 Overwrite(u32 length, const void* buffer);
     void Close();
     const IOType type;
 protected:
+    EGG::Heap* heap;
     EGG::TaskThread* const taskThread;
     s32 fd;
     s32 fileSize;
@@ -143,7 +148,7 @@ protected:
 
 class RiivoFile : public File {
 public:
-    RiivoFile(EGG::TaskThread* taskThread) : File(IOType_RIIVO, taskThread) {};
+    RiivoFile(EGG::Heap* heap, EGG::TaskThread* taskThread) : File(IOType_RIIVO, heap, taskThread) {};
     s32 Open(const char* path, u32 mode) override;
     s32 GetDevice_fd() const override;
     s32 CreateAndOpen(const char* path, u32 mode) override;

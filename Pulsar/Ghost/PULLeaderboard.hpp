@@ -2,6 +2,8 @@
 #define _PUL_LEADERBOARD_
 #include <kamek.hpp>
 #include <game/UI/SectionMgr/SectionPad.hpp>
+#include <game/System/SaveDataManager.hpp>
+#include <game/System/Timer.hpp>
 #include <IO/Folder.hpp>
 #include <PulsarSystem.hpp>
 
@@ -32,8 +34,7 @@ struct PULTimeEntry {
         milliseconds = 0;
         rkgCRC32 = 0;
     }
-    RawMii mii;
-    u8 padding[2];
+    RFL::StoreData mii;
     u32 rkgCRC32; //0x4C
     u16 minutes; //0x50
     u8 seconds; //0x52
@@ -72,6 +73,7 @@ private:
     PULTimeEntry entries[4][11]; //0x30 to 0x44C 11th = flap
     static const u32 fileMagic = 'PULL';
 };
+static_assert(sizeof(Leaderboard) % 0x20 == 0, "Leaderboard Size Check");
 
 PULTimeEntry* GetPULTimeEntry(u32 index);
 

@@ -23,6 +23,9 @@ int EnableInterrupts(); //801a65c0
 int RestoreInterrupts(int level); //801a65d4
 int DisableScheduler();
 void Restart(u32 resetCode);
+
+void* OSGetArenaLo(); //801a10cc
+
 }//namespace OS
 
 #endif

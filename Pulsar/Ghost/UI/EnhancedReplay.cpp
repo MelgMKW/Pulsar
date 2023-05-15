@@ -4,6 +4,7 @@
 #include <game/UI/Page/RaceHUD/RaceHUD.hpp>
 #include <game/UI/Page/RaceMenu/GhostReplayPause.hpp>
 #include <game/Race/Kart/KartHolder.hpp>
+#include <game/Mii/MiiHeadsModel.hpp>
 #include <UI/UI.hpp>
 
 
@@ -104,7 +105,7 @@ bool PatchOpacity(ComboIDs* comboIDs, GFX44* gfx44, bool isGhost, u8 playerId) {
 kmCall(0x8058e2b8, PatchOpacity);
 kmCall(0x807c7870, PatchOpacity);
 
-void* PatchMiiHeadsOpacity(MiiHeadsModel& model, Mii* mii, ModelDirector* driverModel, u32 r6, nw4r::g3d::ScnMdl::BufferOption option,
+void* PatchMiiHeadsOpacity(MiiHeadsModel& model, Mii* mii, MiiDriverModel* driverModel, u32 r6, nw4r::g3d::ScnMdl::BufferOption option,
     u32 r8, u32 id) {
     if(id == 0) model.isTransparent = false;
     return model.InitModel(mii, driverModel, r6, option, r8, id);

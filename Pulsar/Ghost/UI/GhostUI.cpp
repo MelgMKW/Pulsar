@@ -3,7 +3,6 @@
 #include <game/Input/InputManager.hpp>
 #include <Ghost/UI/GhostUI.hpp>
 #include <Ghost/GhostManager.hpp>
-#include <PulsarSystem.hpp>
 #include <UI/UI.hpp>
 
 namespace  Pulsar {
@@ -56,8 +55,9 @@ void ExpGhostSelect::OnActivate() {
     GhostSelect::OnActivate();
     const System* system = System::sInstance;
     if(Info::HasTrophies()) {
-        const TextInfo text = GetCourseBottomText(static_cast<CourseId>(CupsDef::sInstance->winningCourse));
-        this->bottomText.SetMsgId(BMG_TT_BOTTOM_COURSE, &text);
+        u32 bmgId;
+        const TextInfo text = GetCourseBottomText(CupsDef::sInstance->winningCourse, &bmgId);
+        this->bottomText.SetMsgId(bmgId, &text);
     }
     this->ctrlMenuPageTitleText.SetMsgId(BMG_CHOOSE_GHOST_DATA);
     this->Reset();
@@ -158,7 +158,7 @@ void BeforeEntranceAnimations(Pages::TTSplits* page) {
     entry.kart = RaceData::sInstance->racesScenario.players[0].kartId;
     entry.controllerType = sectionMgr->pad.GetType(sectionMgr->pad.GetCurrentID(0));
     const Mii* mii = m98->playerMiis.GetMii(0);
-    Mii::ComputeRawMii(entry.mii, mii->texMap);
+    Mii::ComputeRFLStoreData(entry.miiData, &mii->createId);
 
     //Find which lap is the best
     RaceInfoPlayer* raceInfoPlayer = RaceInfo::sInstance->players[0];
@@ -224,20 +224,17 @@ void BeforeEntranceAnimations(Pages::TTSplits* page) {
 kmWritePointer(0x808DA614, BeforeEntranceAnimations);
 
 
-
-
-
 void TrophyBMG(CtrlMenuInstructionText& bottomText, u32 bmgId) {
-
     TextInfo text;
     const System* system = System::sInstance;
     const Settings* settings = Settings::GetInstance();
-    if(Info::HasTrophies()) {
-        text.intToPass[0] = settings->GetTrophyCount(system->ttMode);
-        text.intToPass[1] = settings->GetTotalTrophyCount(system->ttMode);
-        text.bmgToPass[0] = BMG_TT_MODE_BOTTOM_CUP + system->ttMode;
-        bmgId = BMG_TT_BOTTOM_CUP;
-    }
+    u32 trophyCount = settings->GetTrophyCount(system->ttMode);
+    u32 totalCount = settings->GetTotalTrophyCount(system->ttMode);
+    text.intToPass[0] = trophyCount;
+    text.intToPass[1] = totalCount;
+    text.bmgToPass[0] = BMG_TT_MODE_BOTTOM_CUP + system->ttMode;
+    bmgId = BMG_TT_BOTTOM_CUP_NOTROPHY;
+    if(totalCount > 0 && Info::HasTrophies()) bmgId = BMG_TT_BOTTOM_CUP;
     bottomText.SetMsgId(bmgId, &text);
 }
 kmCall(0x8084144c, TrophyBMG);
@@ -247,24 +244,27 @@ void IndividualTrophyBMG(Pages::CourseSelect& courseSelect, CtrlMenuCourseSelect
         courseSelect.UpdateBottomText(course, button, hudSlotId);
     }
     else {
-        if(Info::HasTrophies()) {
-            const TextInfo text = GetCourseBottomText((CourseId)button.buttonId);
-            courseSelect.bottomText->SetMsgId(BMG_TT_BOTTOM_COURSE, &text);
-        }
-        else courseSelect.bottomText->SetMsgId(BMG_TIME_TRIALS);
+        u32 bmgId;
+        const TextInfo text = GetCourseBottomText(CupsDef::ConvertTrack_PulsarCupToTrack(CupsDef::sInstance->lastSelectedCup)
+            + button.buttonId, &bmgId);
+        courseSelect.bottomText->SetMsgId(bmgId, &text);
     }
 }
 kmCall(0x807e54ec, IndividualTrophyBMG);
 
 //Global function as it is also used by CourseSelect
-const TextInfo GetCourseBottomText(CourseId id) {
+const TextInfo GetCourseBottomText(PulsarId id, u32* bmgId) {
     const System* system = System::sInstance;
+    const Settings* settings = Settings::GetInstance();
+    if(settings->GetTotalTrophyCount(system->ttMode) > 0) *bmgId = BMG_TT_BOTTOM_COURSE;
+    else *bmgId = BMG_TT_BOTTOM_COURSE_NOTROPHY;
+
     bool hasTrophy = Settings::GetInstance()->HasTrophy(id, system->ttMode);
     TextInfo text;
     text.bmgToPass[0] = BMG_TT_MODE_BOTTOM_CUP + system->ttMode;
-    u32 bmgId = BMG_NO_TROPHY;
-    if(hasTrophy) bmgId = BMG_TROPHY;
-    text.bmgToPass[1] = bmgId;
+    u32 passedBmgId = BMG_NO_TROPHY;
+    if(hasTrophy) passedBmgId = BMG_TROPHY;
+    text.bmgToPass[1] = passedBmgId;
     return text;
 }
 

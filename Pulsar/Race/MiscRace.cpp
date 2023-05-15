@@ -78,6 +78,7 @@ const char* ChangeItemWindowPane(ItemId id, u32 itemCount) {
     else paneName = GetItemIconPaneName(id, itemCount);
     return paneName;
 }
+kmCall(0x807f3648, ChangeItemWindowPane);
 kmCall(0x807ef168, ChangeItemWindowPane);
 kmCall(0x807ef3e0, ChangeItemWindowPane);
 kmCall(0x807ef444, ChangeItemWindowPane);

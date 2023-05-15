@@ -418,8 +418,9 @@ namespace PulsarPackCreator
                 {
                     File.Copy($"input/{name}.szs", $"{modFolder}/Tracks/{idx * 4 + i}.szs", true);
                     crcToFile.WriteLine($"{name} = {crc32:X8}");
-                    string crc32Folder = crc32.ToString("X");
-                    Directory.CreateDirectory($"{modFolder}/Ghosts/{crc32Folder}");
+                    string crc32Folder = $"{modFolder}/Ghosts/{crc32.ToString("X")}";
+                    
+                    Directory.CreateDirectory(crc32Folder);
                     for (int expert = 0; expert < 4; expert++)
                     {
                         string expertName = cup.expertFileNames[i, expert];
@@ -438,7 +439,8 @@ namespace PulsarPackCreator
 
                             rkg.BaseStream.Position = 0;
                             byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
-                            using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{modFolder}/Ghosts/{crc32Folder}/{ttModeFolders[expert]}/expert.rkg"));
+                            Directory.CreateDirectory($"{crc32Folder}/{ttModeFolders[expert]}");
+                            using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{crc32Folder}/{ttModeFolders[expert]}/expert.rkg"));
                             rkgBytes[0xC] = (byte)(newC >> 8);
                             rkgBytes[0xD] = (byte)(newC & 0xFF);
                             finalRkg.Write(rkgBytes);

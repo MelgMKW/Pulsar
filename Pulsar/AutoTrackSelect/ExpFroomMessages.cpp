@@ -88,7 +88,7 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
     register const ExpFroomMessages* messages;
     asm volatile(mr messages, r19;);
     if(Info::IsHAW(true) && !messages->isOnModeSelection) {
-        if(messages->clickedButtonIdx >= 2){
+        if(messages->clickedButtonIdx >= 2) {
             return BMG_BATTLE + messages->curPageIdx * 4 + rowIdx;
         }
         else return GetTrackBMG(CupsDef::ConvertTrack_PulsarCupToTrack(CupsDef::ConvertCup_IdxToPulsarId(messages->curPageIdx)) + rowIdx);

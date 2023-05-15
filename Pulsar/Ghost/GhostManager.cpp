@@ -33,6 +33,7 @@ void Manager::DestroyInstance() {
 Cornerstone function; Creates the folders if they have been deleted somehow,
 reads them, fetches the leaderboard, creates GhostDatas based on the rkgs, sets the expert time
 */
+
 void Manager::Init(PulsarId id) {
     this->Reset();
     this->pulsarId = id;
@@ -41,11 +42,11 @@ void Manager::Init(PulsarId id) {
     const CupsDef* cups = CupsDef::sInstance;
     cups->GetTrackGhostFolder(folderPath, id);
 
-    bool exists = folder->FolderExists(folderPath); //Create "Ghosts" folder
+    bool exists = folder->FolderExists(folderPath); //Create CRC32 folder
     if(!exists) folder->RequestCreateFolder(folderPath);
     char folderModePath[IOS::ipcMaxPath];
-    snprintf(folderModePath, IOS::ipcMaxPath, "%s/%s", folderPath, System::ttModeFolders[system->ttMode]); //Creates Mode Folder
-    exists = folder->FolderExists(folderModePath);
+    snprintf(folderModePath, IOS::ipcMaxPath, "%s/%s", folderPath, System::ttModeFolders[system->ttMode]);
+    exists = folder->FolderExists(folderModePath); //Create 150/150F etc..
     if(!exists) folder->RequestCreateFolder(folderModePath);
     else folder->ReadFolder(folderModePath); //Reads all files contained in the folder
 
@@ -140,7 +141,7 @@ void Manager::LoadAllGhosts(u32 maxGhosts, bool isGhostRace) {
                 if(this->rkg.header.compressed) this->rkg.DecompressTo(dest); //0x2800
                 else memcpy(&dest, &this->rkg, sizeof(RKG));
                 racedata->menusScenario.players[position + isGhostRace].playerType = PLAYER_GHOST;
-                SectionMgr::sInstance->sectionParams->playerMiis.AddMii(position + isGhostRace, &dest.header.miiData);
+                SectionMgr::sInstance->sectionParams->playerMiis.LoadMii(position + isGhostRace, &dest.header.miiData);
                 ++position;
             }
         }

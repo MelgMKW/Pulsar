@@ -179,10 +179,14 @@ Seek__4NANDFPQ24NAND8FileInfoii = 0x8019b964
 #OS
 Report__2OSFPCce = 0x801A25D0
 Fatal__2OSF8_GXColor8_GXColorPCc = 0x801a4ec4
+GetTick__2OSFv = 0x801aad74
 OSGetTime = 0x801aad5c
+OSGetArenaLo__Fv = 0x801a10cc
 LaunchTitle__2OSFii = 0x801ada00
 DCFlushRange = 0x801a162c
+DCInvalidateRange__FPvUi = 0x801a1600
 ICInvalidateRange = 0x801a1710
+DCStoreRange__FPvUi = 0x801a165c
 OSCalcCRC32 = 0x801d1ca0
 OSDisableInterrupts = 0x801a65ac
 OSRestoreInterrupts = 0x801a65d4
@@ -269,6 +273,7 @@ LoadToMainRAM__Q23EGG9DvdRipperFPCcPvPQ23EGG4HeapQ33EGG9DvdRipper15EAllocDirecti
 alloc__Q23EGG4HeapFUiiPQ23EGG4Heap = 0x80229814
 free__Q23EGG4HeapFPvPQ23EGG4Heap = 0x80229b84
 BecomeCurrentHeap__Q23EGG4HeapCFv = 0x80229d74
+getTotalFreeSize__Q23EGG7ExpHeapFv = 0x80226c88
 
 #Effect
 __ct__Q23EGG6EffectFPCci = 0x80222ccc
@@ -291,7 +296,7 @@ measureEndRender__Q23EGG12ProcessMeterFv   = 0x80238d30
 callbackDrawSync__Q23EGG12ProcessMeterFUs  = 0x80238d40
 draw__Q23EGG12ProcessMeterFv               = 0x80239338
 setVisible__Q23EGG12ProcessMeterFb         = 0x80238f14
-isVisible__Q23EGG12ProcessMeterFv          = 0x80238f3c
+isVisible__Q23EGG12ProcessMeterCFv          = 0x80238f3c
 append__Q23EGG12ProcessMeterFPQ33EGG12ProcessMeter10CpuMonitor = 0x80238f48
 __vt__Q33EGG12ProcessMeter10CpuMonitor = 0x802a3d60
 show__Q33EGG12ProcessMeter10CpuMonitorFv = 0x80238750 
@@ -394,14 +399,14 @@ LinkAnimation__13ModelDirectorFUiRQ34nw4r3g3d7ResFilePCc7AnmTypebPCc13ArchiveSou
 
 #Mii
 #MiiHeadsModel
-InitModel__13MiiHeadsModelFP3MiiP13ModelDirectorUiQ44nw4r3g3d6ScnMdl12BufferOptionUiUi =0x8055c580
+InitModel__13MiiHeadsModelFP3MiiP14MiiDriverModelUiQ44nw4r3g3d6ScnMdl12BufferOptionUiUi =0x8055c580
 
 #MiiGroup
-AddMii__8MiiGroupFUcP6RawMii= 0x805fa610
+LoadMii__8MiiGroupFUcPQ23RFL9StoreData = 0x805fa610
 GetMii__8MiiGroupFUc = 0x805fa930
 
 #Mii
-ComputeRawMii__3MiiFR6RawMiiRC9MiiTexMap = 0x8052758c
+ComputeRFLStoreData__3MiiFRQ23RFL9StoreDataPCUi = 0x8052758c
 
 
 
@@ -755,6 +760,7 @@ IsActive__12CtrlRaceBaseFv = 0x807ec3b0
 HasStarted__12CtrlRaceBaseFv = 0x807ec3c4
 GetPlayerId__12CtrlRaceBaseCFv = 0x807ec7f8
 HudSlotColorEnable__12CtrlRaceBaseFPCcb = 0x807ebf20
+IsOnlineVS__12CtrlRaceTimeFRC8RaceData = 0x807f83a4
 
 #RaceBalloons
 maxDistanceNames__12RaceBalloons = 0x808d3e14
@@ -1185,6 +1191,7 @@ SetItem__Q24Item15PlayerInventoryF6ItemIdUc = 0x807bc940
 #ItemObj
 LoadGraphics__Q24Item3ObjFPCcPCcPCcUcPQ34Item7ObjBase8AnmParamQ44nw4r3g3d6ScnMdl12BufferOptionPvUi = 0x807a0040
 LoadGraphicsImplicitBRRES__Q24Item3ObjFPCcPCcUcPQ34Item7ObjBase8AnmParamQ44nw4r3g3d6ScnMdl12BufferOptionPv = 0x8079ffdc
+LoadGraphicsImplicitBRRESNoFunc__Q24Item3ObjFPCcPCcPQ34Item7ObjBase8AnmParamQ44nw4r3g3d6ScnMdl12BufferOptionUi = 0x8079ff5c
 __ct__Q24Item13ObjPropertiesFRCQ24Item13ObjProperties = 0x80790e7c
 DeployBlooper__Q24Item8GessoMgrFUc = 0x807a9128
 AddEVENTEntry__Q24Item7ObjBaseF9ItemObjIdUc = 0x8079c220

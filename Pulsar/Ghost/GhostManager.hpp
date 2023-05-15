@@ -66,17 +66,15 @@ private:
     static char folderPath[IOS::ipcMaxPath];
 
 
-
-
     GhostData* files;
     PulsarId pulsarId;
     Timer expertGhost;
     u32 rkgCount;
-    u32 padding[20];
     u32 mainGhostIndex; //from the watch replay;
     u32 selGhostsIndex[3];
     u32 lastUsedSlot;
     bool areGhostsSaving;
+    u32 padding[20];
     alignas(0x20) RKG rkg; //aligned for file operations
     alignas(0x20) Leaderboard leaderboard; //aligned for file operations
 

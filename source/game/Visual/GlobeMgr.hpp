@@ -4,7 +4,7 @@
 #include <core/egg/mem/Disposer.hpp>
 #include <core/egg/Effect/Effect.hpp>
 #include <game/System/Random.hpp>
-#include <game/Visual/Mii.hpp>
+#include <game/Mii/MiiHeadsModel.hpp>
 #include <game/Visual/Model/ModelDirector.hpp>
 
 

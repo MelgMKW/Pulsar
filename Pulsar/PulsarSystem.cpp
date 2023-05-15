@@ -14,6 +14,7 @@
 #include <SlotExpansion/CupsDef.hpp>
 
 namespace Pulsar {
+
 System* System::sInstance = nullptr;
 System::Inherit* System::inherit = nullptr;
 
@@ -61,7 +62,9 @@ void System::CreateSystem() {
     EGG::Heap* heap = RKSystem::mInstance.EGGSystem;
     const EGG::Heap* prev = heap->BecomeCurrentHeap();
     System* system;
-    if(inherit != nullptr)  system = inherit->Create();
+    if(inherit != nullptr) {
+        system = inherit->Create();
+    }
     else system = new System();
     System::sInstance = system;
     u32 readBytes;
@@ -98,6 +101,7 @@ void System::Init(const Binary& bin) {
 void System::InitIO() {
     IO::IOType type = IO::IOType_ISO;
     s32 ret = IO::Open("file", IOS::MODE_NONE);
+
     if(ret >= 0) {
         type = IO::IOType_RIIVO;
         IOS::Close(ret);

@@ -50,6 +50,7 @@ namespace PulsarPackCreator
         {
             bin.BaseStream.Position += 3;
             region = bin.ReadChar();
+            bin.BaseStream.Position += 4;
             UInt32 error = bin.ReadUInt32();
             UInt32 srr0 = ReadNext(bin);
             UInt32 srr1 = ReadNext(bin);

@@ -1,7 +1,7 @@
 #ifndef _MANIPULATOR_
 #define _MANIPULATOR_
 #include <kamek.hpp>
-#include <core/egg/egg.hpp>
+#include <core/egg/List.hpp>
 #include <game/UI/Ctrl/UIControl.hpp>
 #include <game/Input/ControllerHolder.hpp>
 

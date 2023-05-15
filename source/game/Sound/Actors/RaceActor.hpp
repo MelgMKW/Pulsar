@@ -3,14 +3,16 @@
 #include <core/nw4r/ut/List.hpp>
 #include <core/nw4r/snd/AnimSound.hpp>
 #include <core/nw4r/snd/AnimSoundFile.hpp>
+#include <core/egg/Audio/Audio3DActor.hpp>
 #include <game/Sound/AudioManager.hpp>
+#include <game/Sound/AudioHandle.hpp>
 #include <kamek.hpp>
 
 
 using namespace nw4r;
 
 template <int handleNum>
-class AudioActor: public EGG::Audio3DActor { //value for <4>||<2>||<1>
+class AudioActor : public EGG::Audio3DActor { //value for <4>||<2>||<1>
 public:
     //ctor always inlined
     //Sound3DActor vtable 808c7fa0||808c86c8||808c8408
@@ -22,20 +24,20 @@ public:
     //these check if any of the handles are set
     virtual AudioHandle* TryStartSound(u32 soundId); //0x18 807017f8||80706364||8070578c
     virtual AudioHandle* TryStopAndStartSound(u32 soundId, u32 handleIdToStop); //0x1c 807019d0||8070653c||80705964 stops handleToStop sound and starts a new one
-    virtual AudioHandle* TryStartSound(u32 soundId) const; //0x20 80701884||807063f0||80705818
-    virtual AudioHandle* TryStopAndStartSound(u32 soundId, u32 handleIdToStop) const; //0x24 80701a64||807065d0||807059f8
+    virtual AudioHandle* TryStartSound(ul soundId); //0x20 80701884||807063f0||80705818
+    virtual AudioHandle* TryStopAndStartSound(ul soundId, u32 handleIdToStop); //0x24 80701a64||807065d0||807059f8
     virtual AudioHandle* TryStartSound(const char* soundName); //0x28 80701910||8070647c||807058a4
     virtual AudioHandle* TryStopAndStartSound(const char* soundName); //0x2c 80701af8||80706664||80705a8c stops current sound and starts a new one
     virtual AudioHandle* TryHoldSound(u32 soundId); //0x30 80701bb4||80706720||80705b48
     virtual AudioHandle* TryHoldSound(u32 soundId, u32 handleId); //0x34 80701ea0||80706a0c||80705e34
-    virtual AudioHandle* TryHoldSound(u32 soundId) const; //0x38 80701fc9c||80706808||80705c30
-    virtual AudioHandle* TryHoldSound(u32 soundId, u32 handleId) const; //0x3c 80701f08||80706a74||80705e9c
+    virtual AudioHandle* TryHoldSound(ul soundId); //0x38 80701fc9c||80706808||80705c30
+    virtual AudioHandle* TryHoldSound(ul soundId, u32 handleId); //0x3c 80701f08||80706a74||80705e9c
     virtual AudioHandle* TryHoldSound(const char* soundName); //0x40 80701d84||807068f0||80705d18
     virtual AudioHandle* TryHoldSound(const char* soundName, u32 handleId); //0x44 80701f70||80706adc||80705f04
     virtual AudioHandle* TryPrepareSound(u32 soundId); //0x48 80702014||80706b80||80705fa8
     virtual AudioHandle* TryStopAndPrepareSound(u32 soundId, u32 handleIdToStop); //0x4c 807021ec||80706d58||80706180
-    virtual AudioHandle* TryPrepareSound(u32 soundId) const; //0x50 807020a0||80706c0c||80706034
-    virtual AudioHandle* TryStopAndPrepareSound(u32 soundId, u32 handleIdToStop) const; //0x54 80702280||80706dec||80706214
+    virtual AudioHandle* TryPrepareSound(ul soundId); //0x50 807020a0||80706c0c||80706034
+    virtual AudioHandle* TryStopAndPrepareSound(ul soundId, u32 handleIdToStop); //0x54 80702280||80706dec||80706214
     virtual AudioHandle* TryPrepareSound(const char* soundName); //0x58 8070212c||80706c98||807060c0
     virtual AudioHandle* TryStopAndPrepareSound(const char* soundName, u32 handleIdTopStop); //0x5c 80702314||80706e80||807062a8
     AudioHandle handles[handleNum]; //0x80
@@ -89,7 +91,7 @@ class LinkedRaceActor { //actors managed by RaceAudioManager //nw4r has a simila
     u8 id; //hudslotid, item id, depends on actor
 }; //0x20
 
-class RaceAudioActor: public AudioActor<4>, public LinkedRaceActor {
+class RaceAudioActor : public AudioActor<4>, public LinkedRaceActor {
     //no ctor
     //AUDIOACTOR
     //Sound3DActor vtable 808c7d60
@@ -122,7 +124,7 @@ class RaceAudioActor: public AudioActor<4>, public LinkedRaceActor {
 
 }; //0xb4
 
-class SimpleRaceAudioActor: public RaceAudioActor { //for actors without BRASD support
+class SimpleRaceAudioActor : public RaceAudioActor { //for actors without BRASD support
     //no ctor
     //AUDIOACTOR
     //Sound3DActor vtable 808C8A68
@@ -139,11 +141,11 @@ class SimpleRaceAudioActor: public RaceAudioActor { //for actors without BRASD s
 }; //0xb4
 
 
-class AnimAudio: public snd::detail::AnimSoundImpl { //BRASD for example penguins
+class AnimAudio : public snd::detail::AnimSoundImpl { //BRASD for example penguins
     snd::detail::AnimEventPlayer players[2];
 }; //0x40
 
-class RaceAnimAudioActor: public RaceAudioActor {
+class RaceAnimAudioActor : public RaceAudioActor {
     RaceAnimAudioActor(); //80701018
     //AUDIOACTOR
     //SoundActor vtable 808c7b00

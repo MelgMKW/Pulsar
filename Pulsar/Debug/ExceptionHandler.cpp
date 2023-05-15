@@ -123,8 +123,6 @@ void DumpContextToFile(u16 error, const OS::Context* context, u32 dsisr, u32 dar
         outcome);
     db::PrintContext_(error, context, dsisr, dar);
 
-
-
 }
 kmCall(0x80023484, DumpContextToFile);
 
@@ -136,11 +134,10 @@ void CreateCrashFile(s32 channel, KPAD::Status buff[], u32 count) {
     if(file == nullptr) exit = true; //should always exist if the crash is after strap 
     else {
         KPAD::Read(channel, buff, count);
-        u16 wiimoteExtension = buff[0].extension;
-        u32 buttonsPressed = buff[0].trig;
-        if(wiimoteExtension < WPAD::WPAD_DEV_FUTURE && buff[0].error == WPAD::WPAD_ERR_NONE &&
-            (wiimoteExtension == WPAD::WPAD_DEV_CLASSIC && buttonsPressed & WPAD::WPAD_CL_BUTTON_A
-                || buttonsPressed & WPAD::WPAD_BUTTON_A)) exit = true;
+        u8 wiimoteExtension = buff[0].extension;
+        if(buff[0].error == WPAD::WPAD_ERR_NONE && wiimoteExtension < WPAD::WPAD_DEV_FUTURE &&
+            (wiimoteExtension == WPAD::WPAD_DEV_CLASSIC && buff[0].extStatus.cl.trig & WPAD::WPAD_CL_BUTTON_A
+                || buff[0].trig & WPAD::WPAD_BUTTON_A)) exit = true;
         else {
             PAD::Status padStatus[4];
             PAD::Read(&padStatus[0]);

@@ -62,7 +62,8 @@ public:
     bool pauseGame;
     bool controllerDcPause;
     bool isPaused;
-    u8 unknown_0x38C[0x390 - 0x38C];
+    u8 unknown_0x38C[3];
+    bool isInitializing; //0x38f
     nw4r::lyt::DrawInfo drawInfo; //0x390
     EGG::Allocator* layoutAllocator; //0x3e4
     LayoutResourceAccessorList* resourceAccessorList; //0x3E8

@@ -158,11 +158,6 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
     }
 }
 
-void Func(ChooseNextTrack *a){
-    a->UpdateButtonInfo(1);
-}
-kmCall(0x80001500, Func);
-
 void ChooseNextTrack::OnButtonClick(PushButton& button, u32 hudSlotId) {
     CupsDef* cups = CupsDef::sInstance;
     cups->winningCourse = static_cast<PulsarId>(button.buttonId);

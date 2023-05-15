@@ -16,8 +16,16 @@
 
 namespace nw4r {
 namespace snd {
+namespace detail {
+class SoundArchivePlayer_FileManager {
+public:
+    virtual const void* GetFileAddress(SoundArchive::FileId fileId) const = 0;
+    virtual const void* GetFileWaveDataAddress(SoundArchive::FileId fileId) const = 0;
+};
+}//namespace detail
+
 class SoundActor;
-class SoundArchivePlayer: public detail::DisposeCallback, public SoundStartable {
+class SoundArchivePlayer : public detail::DisposeCallback, public SoundStartable {
 public:
     class SeqNoteOnCallBack {
         virtual ~SeqNoteOnCallBack(); //800a0630 vtable 80274a20
@@ -52,16 +60,16 @@ public:
     bool LoadGroup(const char* groupName, SoundMemoryAllocatable* allocater, u32 loadBlockSize = 0); //800a2a20
     bool IsAvailable(); //800a08f0
     const SoundArchive& GetSoundArchive() const; //800a1540
-    bool LoadGroup(u32 groupId, SoundMemoryAllocatable* allocater, u32 loadBlockSize); //800a28b0
+    bool LoadGroup(SoundArchive::GroupId groupId, SoundMemoryAllocatable* allocater, u32 loadBlockSize); //800a28b0
     SoundPlayer& GetSoundPlayer(u32 playerId); //800a1550
     template<typename T>
     T* AllocSound(
-        detail::SoundInstanceManager<T>* manager, u32 soundId, int priority, int ambientPriority,
+        detail::SoundInstanceManager<T>* manager, SoundArchive::SoundId soundId, int priority, int ambientPriority,
         detail::BasicSound::AmbientInfo* ambientArgInfo); //inlined in setupsound
 
     SoundArchive* soundArchive; //start of it 10 most times storing a dvdsoundarchive instead
     u32* groupTable;
-    u32* fileManager; //18
+    detail::SoundArchivePlayer_FileManager* fileManager; //18
     SeqNoteOnCallBack seqCallBack; //1c actually a vtable 
     WsdCallback wsdCallBack; //24
     detail::MmlSeqTrackAllocator* seqTrackAllocator; //2C

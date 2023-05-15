@@ -30,7 +30,7 @@ struct Sound3DParam {
 };
 class Sound3DEngine;
 
-class Sound3DManager: public detail::BasicSound::AmbientParamUpdateCallback, public detail::BasicSound::AmbientArgAllocaterCallback {
+class Sound3DManager : public detail::BasicSound::AmbientParamUpdateCallback, public detail::BasicSound::AmbientArgAllocaterCallback {
     Sound3DManager(); //8009d8a0
     //paramUpdate vtable 80274968
     ~Sound3DManager() override; //8009db40
@@ -43,13 +43,12 @@ class Sound3DManager: public detail::BasicSound::AmbientParamUpdateCallback, pub
     detail::PoolImpl paramPool; //8
     ut::LinkList<Sound3DListener, offsetof(Sound3DListener, link)> listenerList; //0xc
     detail::Sound3DEngineInterface* sound3DEngine; //18
-    s32 biquadFilterType; //24
-    float panRange; //1c
-    float sonicVelocity; //20
-}; //total size 0x28
+    s32 maxPriorityReduction; //0x1c
+    float panRange; //20
+    float sonicVelocity; //24
+}; //total size 0x2c
 
-
-
+extern Sound3DEngine engine; //802d5ba8
 
 }//namespace snd
 }//namespace nw4r

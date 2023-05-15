@@ -5,14 +5,14 @@
 
 namespace Pulsar {
 namespace IO {
-class Folder { //Wraps around Handler and is also able to Create/Read folders
+class Folder { //Wraps around File and is also able to Create/Read folders
 public:
     struct CreateRequest {
-        CreateRequest(): isFree(true) {};
+        CreateRequest() : isFree(true) {};
         bool isFree;
         char path[IOS::ipcMaxPath];
     };
-    Folder(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread): isBusy(false), fileCount(0), fileNames(nullptr),
+    Folder(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread) : isBusy(false), fileCount(0), fileNames(nullptr),
         heap(heap), taskThread(taskThread), type(type) {}
     ~Folder() {
         this->CloseFolder();
@@ -35,6 +35,7 @@ public:
     const int GetFileCount() const { return this->fileCount; }
     void GetFilePath(char* dest, u32 index) const;
     s32 ReadFile(void* buffer, u32 index, u32 mode, u32 maxLength);
+
     void CloseFile() { this->curFile->Close(); }
 
 protected:
@@ -49,9 +50,9 @@ protected:
     CreateRequest requests[2];
 };
 
-class RiivoFolder: public Folder {
+class RiivoFolder : public Folder {
 public:
-    RiivoFolder(EGG::Heap* heap, EGG::TaskThread* const taskThread): Folder(IOType_RIIVO, heap, taskThread) {}
+    RiivoFolder(EGG::Heap* heap, EGG::TaskThread* const taskThread) : Folder(IOType_RIIVO, heap, taskThread) {}
     bool FolderExists(const char* path) override;
     void CreateFolder(const char* path) override;
     //virtual void GetFilePath(char *path, u32 index);

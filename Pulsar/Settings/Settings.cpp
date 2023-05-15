@@ -1,9 +1,7 @@
 #include <Settings/Settings.hpp>
 #include <PulsarSystem.hpp>
 #include <SlotExpansion/CupsDef.hpp>
-
-
-
+#include <Debug/Debug.hpp>
 
 namespace Pulsar {
 
@@ -29,11 +27,11 @@ void Settings::Init(const u16* totalTrophyCount, const char* path/*, const char 
 
     u32 size = this->GetSettingsBinSize();
     System* system = System::sInstance;
-    Settings::Binary* buffer = EGG::Heap::alloc<Settings::Binary>(size, 0x20, system->heap);
     IO::File* file = IO::File::sInstance;
+    Settings::Binary* buffer = file->Alloc<Settings::Binary>(size);
     file->CreateAndOpen(this->filePath, IO::FILE_MODE_READ_WRITE);
 
-    file->Read(buffer, size);
+    file->Read(size, buffer);
     for(int i = 0; i < 4; ++i) {
         u32 curTotalCount = this->GetTotalTrophyCount(static_cast<TTMode>(i));
         if(buffer->trophiesHolder.trophyCount[i] > curTotalCount) buffer->trophiesHolder.trophyCount[i] = curTotalCount;
@@ -90,8 +88,8 @@ void Settings::UpdateTrackList() {
 
     EGG::Heap* heap = System::sInstance->heap;
     u16* missingCRCIndex = new (heap) u16[trackCount];
-    u16* toberemovedCRCIndex = new (heap) u16[oldTrackCount];
     memset(missingCRCIndex, 0xFFFF, sizeof(u16) * trackCount);
+    u16* toberemovedCRCIndex = new (heap) u16[oldTrackCount];
     memset(toberemovedCRCIndex, 0xFFFF, sizeof(u16) * oldTrackCount);
 
     TrackTrophy* trophies = binary->trophiesHolder.trophies;

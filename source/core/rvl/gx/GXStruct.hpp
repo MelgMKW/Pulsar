@@ -1,6 +1,8 @@
 #ifndef _GXSTRUCT_
 #define _GXSTRUCT_
 #include <types.hpp>
+#include <core/rvl/VI/VI.hpp>
+
 typedef struct _GXColor {
     union {
         struct { u8 r, g, b, a; };
@@ -14,7 +16,7 @@ typedef struct _GXColorS10 {
 
 typedef struct _GXTexObj {
     u32 dummy[8];
-} GXTexObj;
+} GXTexObj; //0x24
 
 typedef struct _GXTlutObj {
     u32 dummy[3];
@@ -23,5 +25,21 @@ typedef struct _GXTlutObj {
 typedef struct _GXLightObj {
     u32 dummy[16];
 } GXLightObj;
+
+struct GXRenderModeObj{
+    VI::TVMode viTVmode;
+    u16 fbWidth; 
+    u16 efbHeight;
+    u16 xfbHeight;
+    u16 viXOrigin;
+    u16 viYOrigin;
+    u16 viWidth;
+    u16 viHeight;
+    VI::XFBMode xFBmode;
+    u8 field_rendering;
+    u8 aa;
+    u8 sample_pattern[12][2];
+    u8 vfilter[7];
+};
 
 #endif

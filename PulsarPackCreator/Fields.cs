@@ -158,7 +158,6 @@ namespace PulsarPackCreator
             CC150.Text = $"{parameters.prob150cc}";
             CCMirror.Text = $"{parameters.probMirror}";
             CupCount.Text = $"{ctsCupCount}";
-
             if (!Directory.Exists("input"))
             {
                 Directory.CreateDirectory("input");

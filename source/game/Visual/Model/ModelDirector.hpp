@@ -6,15 +6,14 @@
 #include <game/Archive/ArchiveRoot.hpp>
 #include <game/Visual/ScnManager.hpp>
 #include <game/Visual/Model/ModelTransformator.hpp>
-#include <game/Visual/ClipInfoMgr.hpp>
 
 /*
 Contributors:
 -kHacker35000vr, Melg
 */
-
+class ClipInfo;
 using namespace nw4r;
-
+ 
 class ModelDirector {
 public:
     static g3d::ResFile GetBRRES(ArchiveSource type, const char* brresName); //8055b5fc

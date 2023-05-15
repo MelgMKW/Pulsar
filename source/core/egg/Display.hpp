@@ -18,14 +18,14 @@ public:
     virtual void getTickPerFrame(); //80219eb0
     void copyEFBtoXFB(); //80219fb4
     void CalcFrequency(); //8021a06c
-    u8 timeBtwFrames;
+    u8 timeBtwFrames; //0x8
     u8 unknown_0x9;
     u8 padding2[2];
-    u32 unknown_0xc;
+    u32 unknown_0xc; //0xC
     u32 frameCount;
     u32 unknown_0x14[2];
-    u32 tick;
-    u32 frequency;
+    u32 tick; //0x1c
+    u32 frequency; //0x20
     float unknown_0x24;
 }; //0x28
 

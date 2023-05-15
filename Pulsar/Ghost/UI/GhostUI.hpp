@@ -5,12 +5,13 @@
 #include <game/UI/Ctrl/SheetSelect.hpp>
 #include <game/UI/SectionMgr/SectionMgr.hpp>
 #include <UI/ToggleButton.hpp>
+#include <PulsarSystem.hpp>
 
 namespace Pulsar {
 namespace UI {
 
 //Extends GhostSelect by adding a ToggleButton to select ghosts and a BottomText
-class ExpGhostSelect: public Pages::GhostSelect {
+class ExpGhostSelect : public Pages::GhostSelect {
 public:
     ExpGhostSelect();
     void OnInit() override;
@@ -32,7 +33,7 @@ private:
     u8 selectedGhostsCount;
 };
 
-const TextInfo GetCourseBottomText(CourseId id);
+const TextInfo GetCourseBottomText(PulsarId id, u32* bmgId);
 
 }//namespace UI
 }//namespace Pulsar

@@ -114,11 +114,21 @@ u32 ConditionalBlooperTimer(u32 timer) {
 }
 kmCall(0x807bba64, ConditionalBlooperTimer);
 
+/* for spraying, useless
 void ConditionalFeatherBRRES(g3d::ResFile& file, ArchiveSource type, const char* brresName) {
     if(Info::IsFeather()) brresName = "feather.brres";
     ModelDirector::BindBRRES(file, type, brresName);
 }
 kmCall(0x807a84c8, ConditionalFeatherBRRES);
+*/
+
+void LoadCorrectFeatherBRRES(Item::ObjGesso& objKumo, const char* mdlName, const char* shadowSrc, u8 whichShadowListToUse,
+    Item::ObjBase::AnmParam* anmParam) {
+    if(Info::IsFeather()) objKumo.LoadGraphics("feather.brres", mdlName, shadowSrc, 0, 0,
+        static_cast<nw4r::g3d::ScnMdl::BufferOption>(0), nullptr, 0);
+    else objKumo.LoadGraphicsImplicitBRRESNoFunc(mdlName, shadowSrc, 0, static_cast<nw4r::g3d::ScnMdl::BufferOption>(0), 0);
+}
+kmBranch(0x807a8390, LoadCorrectFeatherBRRES);
 
 void ConditionalNoBlooperAnimation(ModelDirector* mdl, u32 id, g3d::ResFile& brres, const char* name, AnmType type, bool hasBlend,
     const char* brasd, ArchiveSource source, u8 kartArchiveIdx) {

@@ -2,7 +2,7 @@
 #define _RKSYSTEM_
 #include <types.hpp>
 #include <core/egg/mem/ExpHeap.hpp>
-#include <core/egg/Audio.hpp>
+#include <core/egg/Audio/AudioMgr.hpp>
 #include <core/egg/ProcessMeter.hpp>
 #include <core/egg/Display.hpp>
 #include <core/RK/RKSceneManager.hpp>
@@ -21,14 +21,13 @@ public:
     static RKSystem* sInstance; //80385fc8
     static RKSystem* GetStaticInstance(); //80008e84
     RKSystem(); //not a true ctor 800099cc
-    virtual void func_vtable(); //80270bf0
     virtual Video* GetVideo(); //0x8
     virtual EGG::Heap* GetHeapSystem2(); //0xC
     virtual EGG::AsyncDisplay* GetDisplay(); //0x10
     virtual void* GetXFBManager(); //0x14
     virtual EGG::PerformanceView* GetPerformanceView(); //0x18
     virtual SceneManager* GetSceneManager(); //0x1C
-    virtual EGG::ExpAudioMgr* GetAudioManager(); //0x20
+    virtual EGG::ExpAudioMgr<EGG::SoundHeapMgr>* GetAudioManager(); //0x20
     void* MEM1ArenaLo;
     void* MEM1ArenaHi;
     void* MEM2ArenaLo;
@@ -44,7 +43,7 @@ public:
     u32 sysHeapSize;
     u32 gxFifoBufSize;
     GXRModeObj* mode;
-    EGG::ExpAudioMgr* audioManager; //0x40
+    EGG::ExpAudioMgr<EGG::SoundHeapMgr>* audioManager; //0x40
     Video* video; //0x44
     void* xfbManager; //0x48
     EGG::AsyncDisplay* asyncDisplay; //0x4c

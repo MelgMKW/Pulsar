@@ -18,7 +18,7 @@ public:
     virtual void vf_0x1c();             //0x1c 80234a00
     virtual void draw();                //0x20
     virtual void setVisible(bool isVisible);          //0x24
-    virtual void isVisible();           //0x28
+    virtual void isVisible() const;           //0x28
 };
 
 class ProcessMeter : public Thread, public PerformanceView {
@@ -43,7 +43,7 @@ public:
     class CpuMonitor { //red bar
     public:
         CpuMonitor(const nw4r::ut::Color color, float yOrigin): bar(color, yOrigin, 1.0f) {}; //inlined
-        
+
         virtual void show(); //0x8 80238750 vtable 802a3d60
         virtual void hide();  //0xc 80238760
         virtual void measureBegin(); //0x10 802386dc
@@ -86,7 +86,7 @@ public:
     void callbackDrawSync(u16 token) override;  //0x18 thunk 80239698 func 80238d40
     void draw() override;                       //0x20 thunk 80239690 func 80239338
     void setVisible(bool isVisible) override;   //0x24 thunk 80239688 func 80238f14
-    void isVisible() override;                  //0x28 thunk 80239680 func 80238f3c
+    void isVisible() const override;                  //0x28 thunk 80239680 func 80238f3c
 
     void append(CpuMonitor* cpuMonitor); //80238f48
     void append(CpuGpMonitor* cpuGpMonitor); //80238f54
@@ -96,7 +96,10 @@ public:
     void draw(u32 videoTicks, float width, float height);
 
     nw4r::ut::Color lineColor; //0x4c
-    float unknown_0x50[4];
+    float xOrigin; //0x50
+    float yOrigin;
+    float xSize;
+    float ySize;
     nw4r::ut::List processBarList; //0x60
     CpuGpMonitor::Next* beginNext;
     CpuGpMonitor::Next* endNext;
@@ -107,7 +110,7 @@ public:
     float bgYSize; //0x148
     u8 unknown_0x14C[4];
     u16 drawSyncToken; //0x150
-    bool visible; //0x152
+    u8 bitField; //0x152 0x1 = isVisible
     u8 unknown_0x153;
 }; //0x154
 size_assert(ProcessMeter::ProcessBar, 0x28);

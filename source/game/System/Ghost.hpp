@@ -5,6 +5,7 @@
 #include <core/egg/mem/Heap.hpp>
 #include <game/File/RKG.hpp>
 #include <game/Input/Controller.hpp>
+#include <game/Mii/Mii.hpp>
 #include <game/System/identifiers.hpp>
 #include <game/System/Timer.hpp>
 
@@ -35,9 +36,9 @@ public:
 
     bool isValid; //0x0
     u8 padding;
-    wchar_t userData[11]; //emulating wide chars
-    RawMii miiData; //0x4A
-    u8 lapCount;
+    wchar_t userData[11]; //0x4 emulating wide chars
+    RFL::StoreData miiData; //0x18 0x4A
+    u8 lapCount; //0x64
     u8 unknown_0x65[3];
     Timer lapTimes[5]; //0x68
     Timer finishTime; //0xA4
@@ -56,6 +57,7 @@ public:
     u32 inputSize; //0xD0
     void* inputs; //0xD4
 }; //total size 0xd8
+size_assert(GhostData, 0xd8);
 
 class GhostGroup {
 public:

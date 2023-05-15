@@ -96,8 +96,7 @@ namespace PulsarPackCreator
             {
                 int idx = Grid.GetRow(box);
                 cups[curCup].trackNames[idx] = box.Text;
-                TextBlock ghostLabel = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == idx + 1 && Grid.GetColumn(x) == 0) as TextBlock;
-                ghostLabel.Text = box.Text == "Name" ? $"Track {idx + 1}" : box.Text;
+                SetGhostLabelName(idx, box.Text);
             }
         }
 
@@ -130,7 +129,7 @@ namespace PulsarPackCreator
         {
             UpdateCurCup(1);
         }
-        private void UpdateCurCup(Int16 direction)
+        public void UpdateCurCup(Int16 direction)
         {
             curCup = (UInt16)((curCup + ctsCupCount + direction) % ctsCupCount);
             if (curCup + 1 <= ctsCupCount)
@@ -150,25 +149,14 @@ namespace PulsarPackCreator
                 Author3.Text = cup.authorNames[2];
                 Author4.Text = cup.authorNames[3];
 
-                Ghost11.Text = UpdateExpert(cup, 0, 0);
-                Ghost12.Text = UpdateExpert(cup, 0, 1);
-                Ghost13.Text = UpdateExpert(cup, 0, 2);
-                Ghost14.Text = UpdateExpert(cup, 0, 3);
-
-                Ghost21.Text = UpdateExpert(cup, 1, 0);
-                Ghost22.Text = UpdateExpert(cup, 1, 1);
-                Ghost23.Text = UpdateExpert(cup, 1, 2);
-                Ghost24.Text = UpdateExpert(cup, 1, 3);
-
-                Ghost31.Text = UpdateExpert(cup, 2, 0);
-                Ghost32.Text = UpdateExpert(cup, 2, 1);
-                Ghost33.Text = UpdateExpert(cup, 2, 2);
-                Ghost34.Text = UpdateExpert(cup, 2, 3);
-
-                Ghost41.Text = UpdateExpert(cup, 3, 0);
-                Ghost42.Text = UpdateExpert(cup, 3, 1);
-                Ghost43.Text = UpdateExpert(cup, 3, 2);
-                Ghost44.Text = UpdateExpert(cup, 3, 3);
+                for(int row = 0; row < 4; row++)
+                {
+                    SetGhostLabelName(row, cup.trackNames[row]);
+                    for (int col = 0; col < 4; col++)
+                    {
+                        SetExpertName(cup.expertFileNames[row, col], row, col);                       
+                    }
+                }
 
                 Slot1.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.slots[0])];
                 Slot2.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.slots[1])];
@@ -229,28 +217,6 @@ namespace PulsarPackCreator
             cups = sortedCups;
             UpdateCurCup(0);
             MessageBox.Show("Tracks have been sorted alphabetically.");
-        }
-
-        private string UpdateExpert(Cup cup, int row, int col)
-        {
-            if (cup.expertFileNames[row, col] == "") return "RKG File";
-            else return cup.expertFileNames[row, col];
-        }
-        private void OnGhostChange(object sender, TextChangedEventArgs e)
-        {
-            TextBox box = sender as TextBox;
-            if (box.IsKeyboardFocused)
-            {
-                int row = Grid.GetRow(box) - 1;
-                int col = Grid.GetColumn(box) - 1;
-                string oldText = cups[curCup].expertFileNames[row, col];
-                cups[curCup].expertFileNames[row, col] = box.Text;
-                if (box.Text != "RKG File" && box.Text != "" && (oldText == "RKG File" || oldText == ""))
-                {
-                    trophyCount[col]++;
-                }
-                else if (trophyCount[col] > 0) trophyCount[col]--;
-            }
         }
     }
 }

@@ -1,7 +1,7 @@
 #ifndef _RKG_
 #define _RKG_
 #include <kamek.hpp>
-#include <game/File/RawMii.hpp>
+#include <core/rvl/RFL.hpp>
 #include <game/Input/GhostWriter.hpp>
 
 enum GhostType {
@@ -44,8 +44,7 @@ struct RKGHeader {
     u8 stateCode;
     u16 locationCode;
     u32 unknown_0x6; //0x38
-    RawMii miiData; //0x3C to 
-    u16 miiCRC16;
+    RFL::StoreData miiData; //0x3C to 
 }; //total size 0x88
 size_assert(RKGHeader, 0x88);
 
