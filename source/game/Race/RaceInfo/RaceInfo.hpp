@@ -68,24 +68,24 @@ public:
     u8 unknown_0x4[0x8 - 0x4];
     u8 id; //0x8
     u8 unknown_0x9; //might be padding
-    u16 checkpoint;
-    float raceCompletion; //fraction of way through a lap (ex. 1.0 is the start of lap 1, 2.5 is half way through lap 2)
-    float raceCompletionMax;
-    float firstKcpLapCompletion;
-    float nextCheckpointLapCompletion;
-    float nextCheckpointLapCompletionMax;
-    u8 position;
-    u8 respawn;
-    u16 battleScore;
-    u16 currentLap;
-    u8 maxLap;
+    u16 checkpoint; //0xa
+    float raceCompletion; //0xc fraction of way through a lap (ex. 1.0 is the start of lap 1, 2.5 is half way through lap 2)
+    float raceCompletionMax; //0x10
+    float firstKcpLapCompletion; //0x14
+    float nextCheckpointLapCompletion; //0x18
+    float nextCheckpointLapCompletionMax; //0x1c
+    u8 position; //0x20
+    u8 respawn; //0x21
+    u16 battleScore; //0x22
+    u16 currentLap; //0x24
+    u8 maxLap; //0x26
     u8 currentKCP;
-    u8 maxKCP;
+    u8 maxKCP; //0x28
     u8 unknown_0x29[0x2c - 0x29];
-    u32 frameCounter;
-    u32 framesInFirst;
+    u32 frameCounter; //0x2c
+    u32 framesInFirst; //0x30
     u8 unknown_0x34[0x38 - 0x34];
-    u32 stateFlags; //bit flags:
+    u32 stateFlags; //0x38 bit flags:
     /*
       0x40 is coming last animation?
       0x20 is finishing the race?
@@ -94,12 +94,13 @@ public:
       0x2 is end of race camera
       0x1 is in race?
     */
-    Timer* lapSplits; //array of lapCount length
+    Timer* lapSplits; //0x3c array of lapCount length
     Timer* raceFinishTime; //0x40
-    u32 status;
+    u32 status; //0x44
     Input::RealControllerHolder* realControllerHolder; //0x48
     u8 unknown_0x4c[0x54 - 0x4c];
 }; //Total size 0x54
+size_assert(RaceInfoPlayer, 0x54);
 
 class RaceInfo {
 public:

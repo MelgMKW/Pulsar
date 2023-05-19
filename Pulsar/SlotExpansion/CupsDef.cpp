@@ -1,4 +1,5 @@
-#include <game/Sound/RaceAudioManager.hpp>
+#include <game/Sound/Race/AudioItemAlterationMgr.hpp>
+#include <game/Sound/RaceAudioMgr.hpp>
 #include <game/RKNet/RKNetController.hpp>
 #include <game/GlobalFunctions.hpp>
 #include <SlotExpansion/CupsDef.hpp>
@@ -45,7 +46,7 @@ int CupsDef::GetCorrectMusicSlot() const {
         realId = ConvertTrack_PulsarIdToRealId(this->winningCourse);
         if(!IsReg(this->winningCourse)) realId = (CourseId)cups[realId / 4].tracks[realId % 4].musicSlot;
     }
-    return RaceAudioMgr::trackToMusicIDTable[realId];
+    return AudioItemAlterationMgr::courseToSoundIdTable[realId];
 }
 
 int CupsDef::GetCRC32(PulsarId pulsarId) const {

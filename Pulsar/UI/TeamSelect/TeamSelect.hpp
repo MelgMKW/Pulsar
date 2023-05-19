@@ -10,7 +10,7 @@
 namespace Pulsar {
 namespace UI {
 
-class TeamSelect: public Pages::MenuInteractable {
+class TeamSelect : public Pages::MenuInteractable {
 public:
     TeamSelect();
     void OnInit() override;
@@ -22,9 +22,9 @@ public:
     UIControl* CreateExternalControl(u32 id) override; //0x84
     UIControl* CreateControl(u32 id) override; //0x88
     void SetButtonHandlers(PushButton& button) override; //80853aac 0x8C
+    static inline Team GetPlayerTeam(u8 playerId) { return static_cast<Team>(teams[playerId]); }
 
 private:
-
     void OnArrowClick(PushButton& button, u32 hudSlotId);
     void OnArrowSelect(PushButton& button, u32 hudSlotId);
     void OnArrowDeselect(PushButton& button, u32 hudSlotId) {};
@@ -36,6 +36,7 @@ private:
     void SetColours(u32 idx, u8 team);
     static void RotateArrow(PushButton& button);
     static void RotateArrowPane(PushButton& button, const char* pane);
+
     PtmfHolder_2A<TeamSelect, void, PushButton&, u32> onArrowClickHandler;
     PtmfHolder_2A<TeamSelect, void, PushButton&, u32> onArrowSelectHandler;
     PtmfHolder_2A<TeamSelect, void, PushButton&, u32> onArrowDeselectHandler;
@@ -45,13 +46,17 @@ private:
     MiiName name;
     MiiGroup* miiGroup; //take friendroom's
     u8 arrowMiiIdx[12];
-
-public:
     ToggleButton toggle;
-    static u8 teams[12];
-    static bool isEnabled;
+
     static const char* miiBg;
     static const char* border;
+    static u8 teams[12];
+
+public:
+    static bool isEnabled;
+
+
+
 };
 }//namespace UI
 }//namespace Pulsar

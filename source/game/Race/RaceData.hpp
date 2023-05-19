@@ -31,7 +31,8 @@ enum PlayerType {
 
 enum Team {
     TEAM_RED,
-    TEAM_BLUE
+    TEAM_BLUE,
+    TEAM_NONE
 };
 
 enum BattleType {

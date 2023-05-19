@@ -74,7 +74,7 @@ RKNet::ROOMPacket GetParamFromPacket(u32 packetArg, u8 aidOfSender) {
             ConvertROOMPacketToData((packetReg.packet.message & 0b0000001111111100) >> 2);
             System::sInstance->ParsePackROOMMsg(packetReg.packet.message >> 2 & 0b111111);
         }
-        packetReg.packet.message &= 0x4;
+        packetReg.packet.message &= 0x3;
         Page* topPage = SectionMgr::sInstance->curSection->GetTopLayerPage();
         PageId topId = topPage->pageId;
         if(topId == PAGE_VS_SETTINGS || topId == PAGE_VS_TEAMS_VIEW || topId == PAGE_BATTLE_MODE_SELECT) {

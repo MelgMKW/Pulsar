@@ -19,14 +19,16 @@ class PlayerRoulette { //only exists for local players
 public:
     bool Update(); //807ba37c returns true when the roulette just ended
     void OnRouletteEnd(); //807ba2d8
+    //r4 is the GOBJ setting (either player or CPU based on isHuman bool), position means different things based on gamemode ofc
+    void DecideItem(u16 itemBoxType, u8 position, bool isHuman, u32 lotteryType); //807b9fb0
     Player* itemPlayer;
     u32 isTheRouletteSpinning;
     u32 frames; //how many frames has the roulette been spinning for
     u32 totalSpinDuration;
     float unknown_0x10[2];
-    u32 currentItem; //0x18
-    u32 nextItem;
-    ItemId nextItemId;
+    ItemId currentRandomItem; //0x18
+    ItemId nextRandomItem; //0x1c
+    ItemId nextItemId; //0x20
     u32 unknown_0x24;
     u16 setting;
     u8 position;
@@ -105,6 +107,9 @@ public:
     void UseStar(); //807b706c
     void UseThunder(); //807b7b7c
     void ActivateMegaMushroom(); //807986b4
+    //r4, r5 straight from GOBJ, r6 also from GOBJ but transform the setting into values depending on duration
+    void DecideItem(u16 playerItemBoxType, u16 cpuItemBoxType, u32 lotteryType); //80798c38 
+    bool HasTripleItems(u8 checkRouletteOrInventory); //80798dbc r4 == 1 -> checks inventory
 
     KartPointers* kartPointers;
     KartModel* model;

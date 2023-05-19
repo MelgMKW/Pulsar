@@ -91,7 +91,7 @@ void ExpGhostSelect::OnSelectGhostChange(ToggleButton& button, u32) {
     Ghosts::Manager* mgr = Ghosts::Manager::sInstance;
     const GhostListEntry& entry = this->ghostList->entries[this->page];
 
-    if(button.state == true) {
+    if(button.GetState() == true) {
         u32 index = mgr->lastUsedSlot;
         if(mgr->EnableGhost(entry, false)) {
             this->selectedGhostsPages[index] = this->page;
@@ -123,17 +123,17 @@ void ExpGhostSelect::OnLeftArrowPress(SheetSelectControl& control, u32 hudSlotId
 void ExpGhostSelect::OnNewPage() {
     ToggleButton& button = this->selectGhostButton;
     if(this->page == this->selectedGhostsPages[0] || this->page == this->selectedGhostsPages[1] || this->page == this->selectedGhostsPages[2]) {
-        if(button.state == false) {
+        if(button.GetState() == false) {
             button.ToggleState(true);
         }
     }
-    else if(button.state == true) button.ToggleState(false);
+    else if(button.GetState() == true) button.ToggleState(false);
     this->SetToggleBMG();
 }
 
 void ExpGhostSelect::SetToggleBMG() {
     ToggleButton& button = this->selectGhostButton;
-    const u32 bmgId = button.state == false ? BMG_SELECT_GHOST : BMG_GHOST_SELECTED;
+    const u32 bmgId = button.GetState() == false ? BMG_SELECT_GHOST : BMG_GHOST_SELECTED;
     button.SetMsgId(bmgId);
 }
 

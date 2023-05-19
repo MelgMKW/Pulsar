@@ -38,7 +38,7 @@ public:
     virtual void vf_0xec() = 0; //0xec
     virtual void vf_0xf0() = 0; //0xf0
     virtual void vf_0xf4() = 0; //0xf4
-    virtual bool CheckOOBCollision(float radius, const Vec3& position, const Vec3& lastPosition,
+    virtual bool CheckTriggerCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime) = 0; //0xf8
     virtual void vf_0xfc() = 0; //0xfc
     virtual bool ProcessCollision(float radius, const Vec3& position, const Vec3& lastPosition,

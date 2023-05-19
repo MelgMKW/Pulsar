@@ -28,10 +28,13 @@ public:
     virtual void Calc(); //0x14 807141f8
     virtual void OnNewPageLayer(PageId pageId, PageState state); //0x18 80714370
     virtual bool Prepare() = 0;
-    virtual bool PlaySound(u32 soundId, u32 r5); //0x20 8071497c
+    virtual bool PlaySound(u32 soundId, u8 hudslotid); //0x20 8071497c
     virtual bool HoldSound(u32 soundId); //80715624 for continuous sounds like the OK after clicking "solo tt"
     virtual void func_0x28(); //80715a70
     virtual void Reset(); //80715a74
+    static bool HasFinishedLoadingGroups(); //807141ec on Stop, leads to DVDCancelAll if it returns false
+    static bool IsDemo(); //80713dcc
+    static SectionId curSection; //809c26ac
     u8 unknown_0x4[4];
     u32 state; //01 before load, 02 after, 0x3 after pressing next race -> setting it to 3 midrace mutes most BRSAR sounds
     u8 unknown_0xC; //checks if it's 1 after pressing next race
@@ -43,7 +46,7 @@ public:
 };//0x18
 size_assert(RSARSoundsPlayer, 0x18);
 
-class MenuRSARSoundsPlayer: public RSARSoundsPlayer {
+class MenuRSARSoundsPlayer : public RSARSoundsPlayer {
 public:
     //ctor? 80715a98 inlined
     void Close() override; //0x8 80715b7c vtable 808c90e8
@@ -54,18 +57,19 @@ public:
     void func_0x28() override; //80715c98
 };
 
-class RaceRSARSoundsPlayer: public RSARSoundsPlayer {
+class RaceRSARSoundsPlayer : public RSARSoundsPlayer {
 public:
     void Close() override; //0x8 80716404 vtable 808c9088
     void OnDeactivate() override; //0xc 80715e24
     void Stop() override; //0x10 80715e64
     void Calc() override; //0x14 8071646c
     bool Prepare() override; //80716028
-    bool PlaySound(u32 soundId, u32 r5) override; //0x20 80716608
+    bool PlaySound(u32 soundId, u8 hudslotid) override; //0x20 80716608
     bool HoldSound(u32 soundId) override; //8071677c
     void func_0x28() override; //807162b4
 
     void PlayEndRaceMenuButtonClickSound(); //80715ff0 sound ID d5
+    void LoadCharacterGroups(); //80716170
     u8 unknown_0x18[4]; //probably for other types of sounds
 }; //total size 0x1C
 

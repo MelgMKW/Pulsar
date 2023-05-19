@@ -2,9 +2,12 @@
 #include <game/RKNet/RKNetController.hpp>
 #include <game/RKNet/Select.hpp>
 #include <game/System/random.hpp>
+#include <game/Race/RaceData.hpp>
+#include <game/UI/SectionMgr/SectionMgr.hpp>
 #include <Settings/Settings.hpp>
 #include <SlotExpansion/Network/PulSELECT.hpp>
 #include <Info.hpp>
+#include <UI/TeamSelect/TeamSelect.hpp>
 
 namespace Pulsar {
 namespace Network {
@@ -38,5 +41,22 @@ void DecideCC(CustomSELECTHandler& handler) {
 
 }
 kmCall(0x80661404, DecideCC);
+
+//Sets Team using the TeamSelectPage if it has been enabled by the host; verifies the validity of the teams
+void SetTeams(CustomSELECTHandler* handler, u32& teams) {
+    //RKNet::Controller* controller = RKNet::Controller::sInstance; //check if this only called for the host
+    //RKNet::ControllerSub* sub = &controller->subs[controller->currentSub];
+    bool isValid = false;
+    Team firstTeam = UI::TeamSelect::GetPlayerTeam(0);
+    if(handler->mode == RKNet::ONLINEMODE_PRIVATE_VS /*&& sub->localAid == sub->hostAid*/ && UI::TeamSelect::isEnabled) {
+        for(int i = 0; i < 12; i++) {
+            Team curSlotTeam = UI::TeamSelect::GetPlayerTeam(i);
+            if(curSlotTeam != firstTeam) isValid = true;
+            teams = teams | (curSlotTeam & 1) << i;
+        }
+    }
+    if(!isValid) reinterpret_cast<RKNet::SELECTHandler*>(handler)->DecidePrivateTeams(teams);
+};
+kmCall(0x806619d8, SetTeams);
 }//namespace Network
 }//namespace Pulsar

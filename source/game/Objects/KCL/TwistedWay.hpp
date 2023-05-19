@@ -37,7 +37,7 @@ class TwistedWay: public ObjectKCL { //0x1fe = 510
     void vf_0xec() override; //0xec 80814888
     void vf_0xf0() override; //0xf0 80814898
     void vf_0xf4() override; //0xf4 80814858
-    bool CheckOOBCollision(float radius, const Vec3& position, const Vec3& lastPosition,
+    bool CheckTriggerCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime) override; //0xf8 8081485c
     void vf_0xfc() override; //0xfc 80814860
     bool ProcessCollision(float radius, const Vec3& position, const Vec3& lastPosition,

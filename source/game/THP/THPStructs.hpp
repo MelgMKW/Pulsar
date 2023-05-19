@@ -64,9 +64,9 @@ struct Player {
     s32 prevCount; //0xd0
     s32 curCount; //0xd4
     s32 videoDecodeCount; //0xd8
-    f32 curVolume; //0xdc
-    f32 targetVolume; //0xe0
-    f32 deltaVolume; //0xe4
+    float curVolume; //0xdc
+    float targetVolume; //0xe0
+    float deltaVolume; //0xe4
     s32 rampCount; //0xe8
     s32 curAudioTrack; //0xec
     s32 curVideoNumber; //0xf0

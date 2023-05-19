@@ -1,7 +1,7 @@
 #ifndef _ELINEMANAGER_
 #define _ELINEMANAGER_
 #include <kamek.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 
 /* Temporal chaining of elines:Every "frames until next controller", the game switches to the next controller, meaning it is the one used;
 That means the "enter/do not enter" flag can be switched at will that way */

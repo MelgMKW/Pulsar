@@ -1148,8 +1148,10 @@ PlayBRSARSound__16RaceSoundHandlerFUiUi = 0x80716608
 #RaceAudioManager
 sInstance__12RaceAudioMgr = 0x809c27f8
 ChangeMusic__12RaceAudioMgrF9RaceState = 0x80711ac4
-trackToMusicIDTable__12RaceAudioMgr = 0x808a1d80
 trackIdxToCourseID__12RaceAudioMgr = 0x80895238
+
+#AudioItemAlterationMgr
+courseToSoundIdTable__22AudioItemAlterationMgr = 0x808a1d80
 
 #RSARSoundsPlayer
 sInstance__16RSARSoundsPlayer = 0x809c2850
@@ -1175,6 +1177,9 @@ matNamesMH = 0x808d1860
 sInstance__Q24Item7Manager = 0x809c3618
 Update__Q24Item7ManagerFv = 0x80799850
 
+#ItemSlot
+DecideItem__Q24Item12ItemSlotDataFUsUcbbPQ24Item6Player = 0x807bb42c
+DecideRouletteItem__Q24Item12ItemSlotDataFUsUc6ItemIdb = 0x807bb8d0
 
 #Player
 Update__Q24Item6PlayerFv = 0x80797928
@@ -1216,7 +1221,7 @@ DestroyStaticInstance__Q25RKNet13SELECTHandlerFv = 0x8065ff60
 SetPlayerData__Q25RKNet13SELECTHandlerF11CharacterId6KartId8CourseIdUcUc = 0x80660750
 GetWinningCourse__Q25RKNet13SELECTHandlerCFv = 0x80660450
 DecideTrack__Q25RKNet13SELECTHandlerFv = 0x80661ce8
-DecideTeams__Q25RKNet13SELECTHandlerFRUi = 0x80662588
+DecidePrivateTeams__Q25RKNet13SELECTHandlerFRUi = 0x80662588
 DecideEngineClass__Q25RKNet13SELECTHandlerFv = 0x80661a5c
 GetCourseVote__Q25RKNet13SELECTHandlerCFUcUc = 0x80660574
 IsPrepared__Q25RKNet13SELECTHandlerCFv = 0x80660710
@@ -1232,9 +1237,7 @@ AddEntry__Q25RKNet12EVENTHandlerF9ItemObjIdQ25RKNet11EVENTActionPvUi = 0x8065b78
 #Objects
 Update__12ObjectHolderFv = 0x8082a8f4
 
-##Rel
-
-DecideItem = 0x807bb42c		
+##Rel	
 GetTrackBMGId = 0x80833668							   
 
 

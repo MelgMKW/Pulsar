@@ -27,7 +27,7 @@ public:
     static float maxDistanceNames;
 }; //total size 0xC4
 
-class CtrlRaceNameBalloon: public LayoutUIControl {
+class CtrlRaceNameBalloon : public LayoutUIControl {
     CtrlRaceNameBalloon(); //808588cc
     virtual ~CtrlRaceNameBalloon(); //807f4820 vtable 808d3e58
     virtual void InitSelf(); //0x18 807efec8
@@ -47,7 +47,7 @@ class CtrlRaceNameBalloon: public LayoutUIControl {
     nw4r::lyt::Pane* line; //0x184
 }; //total size 0x188
 
-class CtrlRaceItemBalloon: public LayoutUIControl {
+class CtrlRaceItemBalloon : public LayoutUIControl {
     CtrlRaceItemBalloon(); //8085891c
     virtual ~CtrlRaceItemBalloon(); //807f47bc vtable 808d3e1c
     virtual void InitSelf(); //0x18 807f2118
@@ -62,7 +62,7 @@ class CtrlRaceItemBalloon: public LayoutUIControl {
     u8 unknown_0x177;
     u32 iconPlayerId; //0x178 whose player does the item come from?
     u32 unknown_0x180;
-    float volume; //0x184, might not be volume but definitely related to sound
+    float itemWarningVolume; //0x184, might not be volume but definitely related to sound
     const RaceBalloons* raceBalloons; //0x188 associated with the hud id
     nw4r::lyt::Pane* chase_icon_null; //0x190
     u8 unknown_0x194[0x198 - 0x194]; //807f21f8

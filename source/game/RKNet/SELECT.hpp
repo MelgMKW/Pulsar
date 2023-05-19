@@ -94,7 +94,8 @@ public:
     void DecideTrack(); //80661ce8
     void AllocatePlayerIdsToAids(); //80662034
     bool HasMatchingPlayerIdToAid(const SELECTPacket& lhs, const SELECTPacket& rhs) const; //806621dc
-    void DecideTeams(u32& teams); //80662290
+    void DecidePublicTeams(u32& teams); //80662290
+    void DecidePrivateTeams(u32& teams); //80662588
 
     OnlineMode mode; //from page 0x90 OnInit SectionId Switch
     u32 unknown_0x4;

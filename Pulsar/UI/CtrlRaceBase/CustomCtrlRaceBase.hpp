@@ -10,7 +10,6 @@
 namespace Pulsar {
 namespace UI {
 class CustomCtrlBuilder {
-private:
     typedef u32(CountFunc)();
     typedef void (CreateFunc)(Page& page, u32 initialIdx, u32);
 public:

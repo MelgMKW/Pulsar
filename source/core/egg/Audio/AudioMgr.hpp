@@ -45,8 +45,7 @@ class AudioArchivePlayer : public snd::SoundArchivePlayer { //non-official name
 };
 size_assert(AudioArchivePlayer, 0xe0);
 
-template<class HeadImpl>
-class SimpleAudioMgr : public IAudioMgr, public HeadImpl, public ArcPlayer {
+class SimpleAudioMgr : public IAudioMgr, public SoundHeapMgr, public ArcPlayer {
 public:
     class SimpleAudioMgrArg : public Arg {
     public:
@@ -65,9 +64,9 @@ public:
     //snd::SoundHeapMgr vtable 802a2878
     //ArcPlayer vtable 802a288c
     ~SimpleAudioMgr() override; //thunk 802136a4 function 802133d4
-    void* OpenDVDArchive(char* filePath, snd::SoundHeap* heap) override; //thunk 802119fc function 8021361c
-    void* OpenNANDArchive(char* filePath, snd::SoundHeap* heap) override; //thunk 802119f4 function 80213624
-    void* OpenMemoryArchive(char* filePath, ARCHandle* handle, snd::SoundHeap* heap) override; //thunk 802119ec function 8021362c
+    void* OpenDVDArchive(const char* filePath, snd::SoundHeap* heap) override; //thunk 802119fc function 8021361c
+    void* OpenNANDArchive(const char* filePath, snd::SoundHeap* heap) override; //thunk 802119f4 function 80213624
+    void* OpenMemoryArchive(const char* filePath, ARCHandle* handle, snd::SoundHeap* heap) override; //thunk 802119ec function 8021362c
     int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap) override; //thunk 802119a4 function 80213634
     void CloseArchive() override; //thunk 8021199c function 8021363c
     //void Calc() override; //thunk 802119b4 func 802135d0
@@ -75,14 +74,13 @@ public:
     AudioArchivePlayer archivePlayer; //0x5dc 
 
 }; //total size 0x6bc
-size_assert(SimpleAudioMgr<SoundHeapMgr>, 0x6bc);
+size_assert(SimpleAudioMgr, 0x6bc);
 
-template<class T>
-class ExpAudioMgr : public SimpleAudioMgr<T> {
+class ExpAudioMgr : public SimpleAudioMgr {
 public:
     static AudioArchivePlayer* audioArchivePlayer; //80386d98
     static snd::Sound3DManager* sound3DManagerInstance; //80386d9c
-    class ExpAudioMgrArg : public SimpleAudioMgr<T>::SimpleAudioMgrArg {
+    class ExpAudioMgrArg : public SimpleAudioMgrArg {
         ExpAudioMgrArg();  //80211460
         u32 maxPriorityReduction;
         float interiorSizes[4]; //0x24
@@ -99,7 +97,7 @@ public:
     bool LoadState(u32 level) override; //thunk 802119ac func 80211900
     //ArcPlayer vtable 802a27b4
     ~ExpAudioMgr() override; //thunk 80211a0c func 802113b8
-    void* OpenArchive(char* filePath, snd::SoundHeap* heap, u32 type, ARCHandle* handle) override; //thunk 80211a04 func 802115dc
+    void* OpenArchive(const char* filePath, snd::SoundHeap* heap, u32 type, ARCHandle* handle) override; //thunk 80211a04 func 802115dc
     int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap) override; //thunk 802119dc 8021167c
     int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap, s32 r6) override; //thunk 802119e4 func 8021198c
     void CloseArchive() override; //thunk 802119d4 func 80211718

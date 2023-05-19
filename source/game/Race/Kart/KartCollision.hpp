@@ -16,7 +16,7 @@ public:
         const KCLTypeHolder& kclFlags, bool allowBoostPanels); //8056ea04
     void CheckKartCollision(const Kart& otherKart); //8056f7f0
     void CheckObjectCollision(); //80571f10
-    void CheckOOB(); //80571634
+    void CheckTriggersOOB(); //80571634
     void CheckItemCollision(); //8057257c
     void UpdateCollisions(); //80572c20
     int HandleNoopCollision(); //80573170
@@ -32,6 +32,7 @@ public:
     void UpdateCollisionsInner(float unk0, float unk1, u32 playerIdx, KartPhysics& kartPhysics, UnkType* collisionGroup,
         Quat* rotation, const Vec3& scale, bool enableHwg, Vec3* unk2); //805b6724
 
+    void ProcessTriggers(const KCLTypeHolder& kclFlags); //8056f510
     virtual void ProcessKartBodyCollision(CollisionData& collisionData, Hitbox& hitbox,
         void* unk, const KCLTypeHolder& kclFlags); //8056e764 vtable 808b56a8
     virtual void ProcessWheelCollision(CollisionData& collisionData, Hitbox& hitbox,

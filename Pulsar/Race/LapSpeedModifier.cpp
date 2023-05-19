@@ -1,7 +1,7 @@
 #include <kamek.hpp>
 #include <game/Race/racedata.hpp>
 #include <game/Race/RaceInfo/RaceInfo.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 #include <game/Race/Kart/KartParams.hpp>
 #include <game/Race/Kart/KartMovement.hpp>
 #include <game/Race/lakitucontroller.hpp>

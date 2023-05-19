@@ -11,10 +11,9 @@ namespace Pulsar {
 namespace UI {
 
 u8 TeamSelect::teams[12] ={ 0 };
-bool TeamSelect::isEnabled = true;
+bool TeamSelect::isEnabled = false;
 const char* TeamSelect::border = "border";
 const char* TeamSelect::miiBg = "bg";
-
 
 TeamSelect::TeamSelect() {
     hasBackButton = true;
@@ -28,7 +27,6 @@ TeamSelect::TeamSelect() {
     nextSection = SECTION_NONE;
     movieStartFrame = -1;
     isLocked = false;
-    isEnabled = false;
     activePlayerBitfield = 1;
 
     onArrowClickHandler.subject = this;
@@ -67,9 +65,9 @@ void TeamSelect::OnInit() {
 
 void TeamSelect::BeforeEntranceAnimations() {
     Pages::Menu::BeforeEntranceAnimations();
-    if(this->toggle.state != this->isEnabled) this->toggle.ToggleState(this->isEnabled);
+    if(this->toggle.GetState() != this->isEnabled) this->toggle.ToggleState(this->isEnabled);
     this->toggle.SelectInitialButton(0);
-    const u32 bmgId = this->toggle.state == false ? BMG_TEAMS_DISABLED : BMG_TEAMS_ENABLED;
+    const u32 bmgId = this->toggle.GetState() == false ? BMG_TEAMS_DISABLED : BMG_TEAMS_ENABLED;
     this->toggle.SetMsgId(bmgId);
     this->isLocked = false;
     for(int idx = 0; idx < 12; idx++) {
@@ -161,8 +159,8 @@ void TeamSelect::OnArrowSelect(PushButton& button, u32 hudSlotId) {
 }
 
 void TeamSelect::OnToggleButtonClick(ToggleButton& button, u32) {
-    const u32 bmgId = button.state == false ? BMG_TEAMS_DISABLED : BMG_TEAMS_ENABLED;
-    this->isEnabled = button.state;
+    const u32 bmgId = button.GetState() == false ? BMG_TEAMS_DISABLED : BMG_TEAMS_ENABLED;
+    this->isEnabled = button.GetState();
     button.SetMsgId(bmgId);
 }
 

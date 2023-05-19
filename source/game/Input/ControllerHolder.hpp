@@ -25,8 +25,8 @@ public:
     virtual void Init(); //80521110
     virtual int unknown3();//805226f4
     virtual RKGInputs* GetRKGInputs() const;//8051ce84
-    virtual int  GetInputsCount();//8051ce8c
-    virtual int  unknown6();//80520ebc
+    virtual int GetInputsCount();//8051ce8c
+    virtual int unknown6();//80520ebc
     //vtable 808b2dd8
     Controller* curController; //0x4
     Controller* prevController;

@@ -45,7 +45,7 @@ class ObjectExternKCL: public ObjectKCL { //for objects whose KCL is provided by
     void vf_0xec() override; //0xec 80680c84
     void vf_0xf0() override; //0xf0 80680d3c
     void vf_0xf4() override; //0xf4 806807f0
-    bool CheckOOBCollision(float radius, const Vec3& position, const Vec3& lastPosition,
+    bool CheckTriggerCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime) override; //0xf8 806808fc
     void vf_0xfc() override; //0xfc 80680a08
 

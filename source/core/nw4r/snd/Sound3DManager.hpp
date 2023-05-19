@@ -31,6 +31,7 @@ struct Sound3DParam {
 class Sound3DEngine;
 
 class Sound3DManager : public detail::BasicSound::AmbientParamUpdateCallback, public detail::BasicSound::AmbientArgAllocaterCallback {
+public:
     Sound3DManager(); //8009d8a0
     //paramUpdate vtable 80274968
     ~Sound3DManager() override; //8009db40

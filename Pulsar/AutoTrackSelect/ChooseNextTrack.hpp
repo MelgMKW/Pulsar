@@ -29,9 +29,12 @@ public:
     const char* GetButtonsBRCTRName() const override;
     void OnRightArrowSelect(SheetSelectControl& control, u32 hudSlotId);
     void OnLeftArrowSelect(SheetSelectControl& control, u32 hudSlotId);
-    void UpdateButtonInfo(s32 direction);
     void OnButtonClick(PushButton& button, u32 hudSlotId); //0x8085a0f4
 
+private:
+    void UpdateButtonInfo(s32 direction);
+
+public:
     const bool isBattle;
     const bool isHost;
     bool hasReceivedHostTrack[12]; //for the host to send confirmation once everyone has sent their confirmation

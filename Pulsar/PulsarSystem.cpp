@@ -3,7 +3,7 @@
 #include <core/nw4r/ut/Misc.hpp>
 #include <core/rvl/dvd/dvd.hpp>
 #include <core/egg/dvd/DvdRipper.hpp>
-#include <game/Sound/RaceAudioManager.hpp>
+#include <game/Sound/RaceAudioMgr.hpp>
 #include <PulsarSystem.hpp>
 
 #include <Settings/Settings.hpp>

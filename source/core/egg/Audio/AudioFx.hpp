@@ -16,11 +16,11 @@ class AudioFx {
 public:
     AudioFx(); //80211a14
     ~AudioFx(); //80211a28
-    bool CreateFxReverbHiDpl2(u32 r4, nw4r::snd::detail::FxReverbHiParam, u32 type); //80212748
+    bool CreateFxReverb(u32 r4, nw4r::snd::detail::FxReverbStdParam, u32 type); //80212748
     bool CreateFx(u32 type, void* fxParam); //80211a94
-    snd::FxReverbHiDpl2* fxReverbHiDpl2;
+    snd::FxReverbStdDpl2* fxReverb;
     u32 unknown_0x4;
-    nw4r::snd::detail::FxReverbHiParam* reverbHiParam;
+    nw4r::snd::detail::FxReverbStdParam* reverbHiParam;
     u32 type;
     Heap* heap;
     UnkType* array_0x14;
@@ -31,7 +31,8 @@ public:
     AudioFxMgr(); //80211c14
     ~AudioFxMgr(); //80211c74
     bool InitalizeFx(snd::SoundHeap* heap, u32* sizeArray); //80211cd8
-    bool CreateFxReverbHiDpl2(u32 idx); //80211d84
+    bool CreateFxReverb(snd::AuxBus bus); //80211d84
+    void ClearFx(snd::AuxBus bus, int fadeOutFrames); //80211d94
     AudioFx array[3];
 }; //total size 0x48
 

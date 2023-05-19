@@ -19,7 +19,7 @@ public:
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime); //8078f140
     bool ProcessEntityCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime); //8078f784
-    bool CheckOOBCollision(float radius, const Vec3& position, const Vec3& lastPosition,
+    bool CheckTriggerCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime); //807903bc                
 
     ModelDirector* courseModel; //course MDL0

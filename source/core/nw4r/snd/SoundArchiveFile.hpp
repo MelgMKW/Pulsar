@@ -27,12 +27,12 @@ public:
 
     struct StrmSoundInfo {
         u32 startPosition;
-        u16 allocChannelCount; // Prior to version 0x0104, this was a bit flag
+        u16 allocChannelCount;
         u16 allocTrackFlag;
         u32 reserved;
     };
 
-    struct WaveSoundInfo {
+    struct WaveSoundInfo { //for example title screen
         s32 subNo;
         u32 allocTrack;
         u8 channelPriority;
@@ -160,7 +160,7 @@ public:
     bool ReadBankInfo(SoundArchive::BankId bankId, SoundArchive::BankInfo* info) const; //8009ed80
     bool ReadPlayerInfo(SoundArchive::PlayerId playerId, SoundArchive::PlayerInfo* info) const; //8009ee30
     bool ReadGroupInfo(SoundArchive::GroupId groupId, SoundArchive::GroupInfo* info) const; //8009eef0
-    bool ReadGroupItemInfo(SoundArchive::GroupId groupId, unsigned long index, SoundArchive::GroupItemInfo* info) const; //8009f000
+    bool ReadGroupItemInfo(SoundArchive::GroupId groupId, u32 index, SoundArchive::GroupItemInfo* info) const; //8009f000
     bool ReadSoundArchivePlayerInfo(SoundArchive::SoundArchivePlayerInfo* info) const; //8009f138
     u32 GetPlayerCount() const; //8009f1d0
     u32 GetGroupCount() const; //8009f210
@@ -169,7 +169,7 @@ public:
     u32 GetSoundUserParam(SoundArchive::SoundId soundId) const; //8009f420
     u32 GetFileCount() const; //8009f4e0
     bool ReadFileInfo(SoundArchive::FileId fileId, SoundArchive::FileInfo* info) const; //8009f520
-    bool ReadFilePos(SoundArchive::FileId fileId, unsigned long index, SoundArchive::FilePos* info) const; //8009f620
+    bool ReadFilePos(SoundArchive::FileId fileId, u32 index, SoundArchive::FilePos* info) const; //8009f620
     u32 ConvertLabelStringToId(const void* stringTree, const char* str) const; //8009f740
     SoundArchiveFile::SoundInfoRef impl_GetSoundInfoOffset(); //8009f890
 

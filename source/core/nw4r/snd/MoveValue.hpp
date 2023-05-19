@@ -4,11 +4,11 @@
 
 
 template< typename ValueType, typename CountType >
-class MoveValue {
-    ValueType mOrigin;
-    ValueType mTarget;
-    CountType mFrame;
-    CountType mCounter;
-}; //0x10
+class MoveValue { //used for fades (volume for ex)
+    ValueType initialValue;
+    ValueType targetValue;
+    CountType frame;
+    CountType counter;
+}; //ValueType * 2 + CountType * 2
 
 #endif

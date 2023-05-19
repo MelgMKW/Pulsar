@@ -51,9 +51,9 @@ class ResNode: public ResCommon<ResNodeData> {
 public:
     void PatchChrAnmResult(ChrAnmResult* result) const; //80052af0
     void CalcChrAnmResult(ChrAnmResult* result) const; //80052c90
-    void SetScale(f32 x, f32 y, f32 z); //80052e00
-    void SetTranslate(f32 x, f32 y, f32 z); //80052eb0
-    void SetRotate(f32 x, f32 y, f32 z); //80052f40
+    void SetScale(float x, float y, float z); //80052e00
+    void SetTranslate(float x, float y, float z); //80052eb0
+    void SetRotate(float x, float y, float z); //80052f40
 };
 
 

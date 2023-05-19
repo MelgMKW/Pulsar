@@ -4,7 +4,7 @@
 #include <kamek.hpp>
 #include <game/File/KRT.hpp>
 #include <game/System/Timer.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 #include <game/RKNet/RH2.hpp>
 
 class RaceInfo;

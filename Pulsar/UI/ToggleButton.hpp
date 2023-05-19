@@ -7,7 +7,7 @@
 
 class ToggleButton : public PushButton {
 public:
-    ToggleButton() : state(false){}
+    ToggleButton() : state(false) {}
     void Load(u32 localPlayerBitfield, const char* folderName, const char* ctrName, const char* variant);
     void ToggleState(bool state); //changes the state without an animation
     void OnClick() override {
@@ -19,10 +19,11 @@ public:
             float frameSize = static_cast<float>(choiceGroup.animations[curAnimation].transform->GetFrameSize());
             choiceGroup.PlayAnimationAtPercent(1, 1.0f - 75.0f / frameSize);
         }
-        else if(curState == true  && curAnimation == 2) choiceGroup.PlayAnimationAtFrame(3, 0.0f);
+        else if(curState == true && curAnimation == 2) choiceGroup.PlayAnimationAtFrame(3, 0.0f);
         else if(curState == false && curAnimation == 0) choiceGroup.PlayAnimationAtFrame(1, 0.0f);
     }
-public:
+    inline bool GetState() const { return this->state; }
+private:
     bool state;
 };
 #endif

@@ -8,16 +8,10 @@ namespace Ghosts {
 Manager* Manager::sInstance = nullptr;
 char Manager::folderPath[IOS::ipcMaxPath] = "";
 
-
-
-Manager::~Manager() {
-    delete[] this->files; //in case Reset wasn't called before
-}
-
 Manager* Manager::CreateInstance() {
     Manager* holder = Manager::sInstance;
     if(holder == nullptr) {
-        holder = new(System::sInstance->heap) Manager;
+        holder = new(System::sInstance->heap, 0x20) Manager;
         Manager::sInstance = holder;
     }
     holder->Reset();

@@ -2,7 +2,7 @@
 #include <game/Race/Kart/KartHolder.hpp>
 #include <game/Race/RaceInfo/RaceInfo.hpp>
 #include <game/Sound/RSARSounds.hpp>
-#include <game/Sound/RaceAudioManager.hpp>
+#include <game/Sound/RaceAudioMgr.hpp>
 #include <game/Sound/Actors/KartSound.hpp>
 #include <game/UI/Ctrl/CtrlRace/CtrlRaceGhostDiffTime.hpp>
 #include <Settings/Settings.hpp>

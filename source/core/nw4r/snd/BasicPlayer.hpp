@@ -1,6 +1,7 @@
 #ifndef _NW4R_SNDBASICPLAYER_
 #define _NW4R_SNDBASICPLAYER_
 #include <types.hpp>
+
 namespace  nw4r {
 namespace snd {
 namespace detail {
@@ -10,7 +11,7 @@ public:
     virtual ~BasicPlayer(); //8008e0a0 vtable 80274250
     virtual bool Start() = 0;
     virtual void Stop() = 0;
-    virtual void Pause(bool flag) = 0;
+    virtual void Pause(bool pauseOrRestart) = 0;
     virtual bool IsActive() const = 0;
     virtual bool IsStarted() const = 0;
     virtual bool IsPause() const = 0;
@@ -37,9 +38,7 @@ public:
 }; //total size 0xD0
 size_assert(BasicPlayer, 0xD0);
 }//namespace detail
-class PlayerTrack {
-    u8 unknown[0x38];
-};
+
 }//namespace snd
 }//namespace nw4r
 #endif

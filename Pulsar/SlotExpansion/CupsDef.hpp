@@ -88,17 +88,10 @@ public:
     static PulsarId ConvertTrack_RealIdToPulsarId(CourseId id); //ONLY FOR REGS 
     PulsarId ConvertTrack_IdxToPulsarId(u32 idx) const; //Bad Function
     static inline PulsarId ConvertTrack_PulsarCupToTrack(PulsarCupId pulsarCupId) { return static_cast<PulsarId>(pulsarCupId * 4); }
-    
     static const u8 idToCourseId[32];
 
-private:
-    const u8 regsMode;
-    u32 definedCTsCupCount;
-    u32  ctsCupCount;
-
-    u16  trophyCount[4];
 public:
-    bool            hasOddCups;
+    bool hasOddCups;
     //To memorize
     bool hasRegs;
 
@@ -108,6 +101,10 @@ public:
     PulsarCupId     lastSelectedCup;
     u32             lastSelectedCupButtonIdx;
 private:
+    const u8 regsMode;
+    u32 definedCTsCupCount;
+    u32  ctsCupCount;
+    u16  trophyCount[4];
     Cup* cups;
 };
 

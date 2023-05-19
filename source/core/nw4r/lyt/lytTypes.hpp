@@ -36,9 +36,6 @@ struct IndirectStage {
     u8 scaleS;
     u8 scaleT;
 };
-template<typename T>
-const T* ConvertOffsToPtr(const void* baseAddress, unsigned int offset); //80080130 for res::TexMap
-
 
 class AnimTransform;
 

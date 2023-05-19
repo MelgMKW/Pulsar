@@ -41,7 +41,7 @@ s32 File::GetDevice_fd() const {
     return IOS::fs_fd;
 }
 
-s32 File::Read(u32 size, void* bufferIn) {     
+s32 File::Read(u32 size, void* bufferIn) {
     if(this->fd < 0) return -1;
     return IOS::Read(this->fd, bufferIn, size);
 }

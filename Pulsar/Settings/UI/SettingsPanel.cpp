@@ -9,16 +9,16 @@ u8 SettingsPanel::scrollerCount[SettingsPanel::pageCount] ={ 1, 0, 1 };
 
 u8 SettingsPanel::buttonsPerPagePerRow[SettingsPanel::pageCount][8] = //first row is SettingsType, 2nd is rowIdx of radio
 {
-    { 2, 0, 0, 0, 0, 0, 0, 0 },
-    { 2, 2, 2, 2, 0, 0, 0, 0 },
-    { 2, 4, 0, 0, 0, 0, 0, 0 },
+    { 2, 0, 0, 0, 0, 0, 0, 0 }, //Menu 
+    { 2, 2, 2, 2, 0, 0, 0, 0 }, //Race
+    { 2, 4, 0, 0, 0, 0, 0, 0 }, //Host
 };
 
 u8 SettingsPanel::optionsPerPagePerScroller[SettingsPanel::pageCount][8] =
 {
-    { 5, 7, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0 },
-    { 0, 0, 0, 0, 0, 0, 0, 0 },
+    { 5, 7, 0, 0, 0, 0, 0, 0 }, //Menu 
+    { 0, 0, 0, 0, 0, 0, 0, 0 }, //Race
+    { 7, 0, 0, 0, 0, 0, 0, 0 }, //Host
 };
 
 inline void SettingsPanel::CreatePanels(Section* section) {

@@ -62,7 +62,7 @@ public:
       30 on a trickable surface
       31 in a star
     */
-    u32 bitfield2; //bit flags:
+    u32 bitfield2; //0xC bit flags:
     /*
        0 charging a slipstream
        1 in a slipstream

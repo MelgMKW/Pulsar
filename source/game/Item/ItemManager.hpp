@@ -8,7 +8,7 @@ Stebler, CLF (main documentation), Melg
 #include <game/Item/Obj/ItemObj.hpp>
 #include <game/Item/ItemPlayer.hpp>
 #include <game/Race/Kart/KartPointers.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 #include <game/System/Identifiers.hpp>
 
 

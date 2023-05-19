@@ -28,7 +28,7 @@ public:
     const GhostData& GetGhostData(u32 idx) const { return this->files[idx]; }
     const PulsarId GetPulsarId() const { return this->pulsarId; }
     const Timer& GetExpert() const { return this->expertGhost; }
-    void ToggleGhostSaving(bool savingIsEnabled){
+    void ToggleGhostSaving(bool savingIsEnabled) {
         areGhostsSaving = savingIsEnabled;
     }
     static void InsertCustomGroupToList(GhostList* list, CourseId id);
@@ -47,12 +47,14 @@ public:
         if(rkg.header.compressed) length = reinterpret_cast<const CompressedRKG*>(&rkg)->dataLength + sizeof(RKGHeader) + 0x4 + 0x4;
         return length;
     }
-private: 
+private:
     Manager() : pulsarId(PULSARID_NONE), files(nullptr), areGhostsSaving(true) {
-        RaceData *racedata = RaceData::sInstance;
-        for(int i = 0; i<4; ++i) racedata->ghosts[i].ClearBuffer();
+        RaceData* racedata = RaceData::sInstance;
+        for(int i = 0; i < 4; ++i) racedata->ghosts[i].ClearBuffer();
     }
-    ~Manager();
+    ~Manager() {
+        delete[] this->files; //in case Reset wasn't called before
+    }
     static Manager* sInstance;
     void Init(PulsarId id);
     void Reset();
@@ -65,7 +67,7 @@ private:
     static void CreateAndSaveFiles(Manager* manager);
     static char folderPath[IOS::ipcMaxPath];
 
-
+public:
     GhostData* files;
     PulsarId pulsarId;
     Timer expertGhost;
@@ -75,15 +77,16 @@ private:
     u32 lastUsedSlot;
     bool areGhostsSaving;
     u32 padding[20];
-    alignas(0x20) RKG rkg; //aligned for file operations
-    alignas(0x20) Leaderboard leaderboard; //aligned for file operations
+    RKG rkg; //aligned for file operations
+    Leaderboard leaderboard; //aligned for file operations
 
-public:
+
     TimeEntry entry;
-    
+
     friend class UI::ExpGhostSelect; //UI backend
     friend class Leaderboard;
     friend void UI::BeforeEntranceAnimations(Pages::TTSplits* page); //not formally part of ExpGhostSelect but calls "SaveGhost"
+
 };
 
 

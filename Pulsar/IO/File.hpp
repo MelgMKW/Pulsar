@@ -16,7 +16,7 @@ const int maxFileCount = 100;
 
 typedef char FileName[255];
 enum RiivoIOCtlType {
-    RIIVO_IOCTL_INITDISC = 0X30,
+    RIIVO_IOCTL_INITDISC    = 0x30,
     RIIVO_IOCTL_MOUNT,
     RIIVO_IOCTL_UNMOUNT,
     RIIVO_IOCTL_MOUNTPOINT,
@@ -24,32 +24,32 @@ enum RiivoIOCtlType {
     RIIVO_IOCTL_SETLOGFS,
     RIIVO_IOCTL_GETLOGFS,
     RIIVO_IOCTL_EPOCH,
-    RIIVO_IOCTL_STAT = 0X40,
+    RIIVO_IOCTL_STAT        = 0x40,
     RIIVO_IOCTL_CREATEFILE,
     RIIVO_IOCTL_DELETE,
     RIIVO_IOCTL_RENAME,
     RIIVO_SEEK_TELL,
     RIIVO_SEEK_SYNC,
-    RIIVO_IOCTL_CREATEDIR = 0X50,
+    RIIVO_IOCTL_CREATEDIR   = 0X50,
     RIIVO_IOCTL_OPENDIR,
     RIIVO_IOCTL_NEXTDIR,
     RIIVO_IOCTL_CLOSEDIR,
-    RIIVO_IOCTL_SHORTEN = 0X60,
-    RIIVO_IOCTL_LOG = 0X61,
-    RIIVO_IOCTL_CONTEXT = 0X62,
+    RIIVO_IOCTL_SHORTEN     = 0X60,
+    RIIVO_IOCTL_LOG         = 0X61,
+    RIIVO_IOCTL_CONTEXT     = 0X62,
     RIIVO_IOCTL_CHECKPHYS,
     RIIVO_IOCTL_GETFREESPACE,
     RIIVO_IOCTL_SETSLOTLED
 };
 
 enum RiivoMode {
-    RIIVO_MODE_READ = 0x0,      //open for reading only
-    RIIVO_MODE_WRITE = 0x1,     //open for writing only
-    RIIVO_MODE_READWRITE = 0x2, //open for reading and writing
-    RIIVO_MODE_APPEND = 0x8,    //writes done at eof
-    RIIVO_MODE_CREATE = 0x100,  //create and open file
-    RIIVO_MODE_TRUNC = 0x200,   //open and truncate
-    RIIVO_MODE_EXCL = 0x400,    //open only if file doesn't already exist
+    RIIVO_MODE_READ         = 0x0, //open for reading only
+    RIIVO_MODE_WRITE        = 0x1, //open for writing only
+    RIIVO_MODE_READWRITE    = 0x2, //open for reading and writing
+    RIIVO_MODE_APPEND       = 0x8, //writes done at eof
+    RIIVO_MODE_CREATE       = 0x100,  //create and open file
+    RIIVO_MODE_TRUNC        = 0x200,   //open and truncate
+    RIIVO_MODE_EXCL         = 0x400,    //open only if file doesn't already exist
     RIIVO_MODE_TEXT,
     RIIVO_MODE_BINARY,
     RIIVO_MODE_TEMPORARY,
@@ -59,50 +59,51 @@ enum RiivoMode {
 };
 
 enum RiivoError {
-    RIIVO_ERROR_SUCCESS = 0,
-    RIIVO_ERROR_UNRECOGNIZED = -128,
-    RIIVO_ERROR_NOTMOUNTED = -129,
-    RIIVO_ERROR_DISKNOTSTART = -144,
+    RIIVO_ERROR_SUCCESS         = 0,
+    RIIVO_ERROR_UNRECOGNIZED    = -128,
+    RIIVO_ERROR_NOTMOUNTED      = -129,
+    RIIVO_ERROR_DISKNOTSTART    = -144,
     RIIVO_ERROR_DISKNOTINSERTED = -145,
-    RIIVO_ERROR_DISKNOTMOUNTED = -146,
-    RIIVO_ERROR_OUTOFMEMORY = -65,
-    RIIVO_ERROR_NOTOPENED = -64,
-    RIIVO_ERROR_EPERM = 1,
-    RIIVO_ERROR_ENOENT = 2,
-    RIIVO_ERROR_ESRCH = 3,
-    RIIVO_ERROR_EINTR = 4,
-    RIIVO_ERROR_EIO = 5,
-    RIIVO_ERROR_ENXIO = 6,
-    RIIVO_ERROR_E2BIG = 7,
-    RIIVO_ERROR_ENOEXEC = 8,
-    RIIVO_ERROR_EBADF = 9,
-    RIIVO_ERROR_ECHILD = 10,
-    RIIVO_ERROR_EAGAIN = 11,
-    RIIVO_ERROR_ENOMEM = 12,
-    RIIVO_ERROR_EACCES = 13,
-    RIIVO_ERROR_EFAULT = 14,
-    RIIVO_ERROR_EBUSY = 16,
-    RIIVO_ERROR_EEXIST = 17,
-    RIIVO_ERROR_EXDEV = 18,
-    RIIVO_ERROR_ENODEV = 19,
-    RIIVO_ERROR_ENOTDIR = 20,
-    RIIVO_ERROR_EISDIR = 21,
-    RIIVO_ERROR_ENFILE = 23,
-    RIIVO_ERROR_EMFILE = 24,
-    RIIVO_ERROR_ENOTTY = 25,
-    RIIVO_ERROR_EFBIG = 27,
-    RIIVO_ERROR_ENOSPC = 28,
-    RIIVO_ERROR_ESPIPE = 29,
-    RIIVO_ERROR_EROFS = 30,
-    RIIVO_ERROR_EMLINK = 31,
-    RIIVO_ERROR_EPIPE = 32,
-    RIIVO_ERROR_EDOM = 33,
-    RIIVO_ERROR_EDEADLK = 36,
-    RIIVO_ERROR_ENAMETOOLONG = 38,
-    RIIVO_ERROR_ENOLCK = 39,
-    RIIVO_ERROR_ENOSYS = 40,
-    RIIVO_ERROR_ENOTEMPTY = 41
+    RIIVO_ERROR_DISKNOTMOUNTED  = -146,
+    RIIVO_ERROR_OUTOFMEMORY     = -65,
+    RIIVO_ERROR_NOTOPENED       = -64,
+    RIIVO_ERROR_EPERM           = 1,
+    RIIVO_ERROR_ENOENT          = 2,
+    RIIVO_ERROR_ESRCH           = 3,
+    RIIVO_ERROR_EINTR           = 4,
+    RIIVO_ERROR_EIO             = 5,
+    RIIVO_ERROR_ENXIO           = 6,
+    RIIVO_ERROR_E2BIG           = 7,
+    RIIVO_ERROR_ENOEXEC         = 8,
+    RIIVO_ERROR_EBADF           = 9,
+    RIIVO_ERROR_ECHILD          = 10,
+    RIIVO_ERROR_EAGAIN          = 11,
+    RIIVO_ERROR_ENOMEM          = 12,
+    RIIVO_ERROR_EACCES          = 13,
+    RIIVO_ERROR_EFAULT          = 14,
+    RIIVO_ERROR_EBUSY           = 16,
+    RIIVO_ERROR_EEXIST          = 17,
+    RIIVO_ERROR_EXDEV           = 18,
+    RIIVO_ERROR_ENODEV          = 19,
+    RIIVO_ERROR_ENOTDIR         = 20,
+    RIIVO_ERROR_EISDIR          = 21,
+    RIIVO_ERROR_ENFILE          = 23,
+    RIIVO_ERROR_EMFILE          = 24,
+    RIIVO_ERROR_ENOTTY          = 25,
+    RIIVO_ERROR_EFBIG           = 27,
+    RIIVO_ERROR_ENOSPC          = 28,
+    RIIVO_ERROR_ESPIPE          = 29,
+    RIIVO_ERROR_EROFS           = 30,
+    RIIVO_ERROR_EMLINK          = 31,
+    RIIVO_ERROR_EPIPE           = 32,
+    RIIVO_ERROR_EDOM            = 33,
+    RIIVO_ERROR_EDEADLK         = 36,
+    RIIVO_ERROR_ENAMETOOLONG    = 38,
+    RIIVO_ERROR_ENOLCK          = 39,
+    RIIVO_ERROR_ENOSYS          = 40,
+    RIIVO_ERROR_ENOTEMPTY       = 41
 };
+
 enum IOType {
     IOType_RIIVO = 0,
     IOType_ISO = 1,
@@ -116,7 +117,6 @@ enum FileMode {
     FILE_MODE_READ_WRITE = FILE_MODE_READ | FILE_MODE_WRITE
 };
 
-
 //Simple wrapper around IPC to do file operations on the NAND (dolphin) or the SD (riivolution)
 class File {
 public:
@@ -129,7 +129,7 @@ public:
     virtual void GetCorrectPath(char* realPath, const char* path) const;
     //virtual void Delete();
     template<typename T>
-    T* Alloc(u32 size) { return EGG::Heap::alloc<T>(nw4r::ut::RoundUp(size, 0x20), 0x20, this->heap); }
+    T* Alloc(u32 size) const { return EGG::Heap::alloc<T>(nw4r::ut::RoundUp(size, 0x20), 0x20, this->heap); }
     int GetFileSize() const { return this->fileSize; }
     s32 Read(u32 size, void* bufferIn);
 
@@ -137,7 +137,7 @@ public:
     s32 Overwrite(u32 length, const void* buffer);
     void Close();
     const IOType type;
-protected:
+private:
     EGG::Heap* heap;
     EGG::TaskThread* const taskThread;
     s32 fd;

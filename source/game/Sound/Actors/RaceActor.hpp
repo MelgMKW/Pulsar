@@ -5,11 +5,19 @@
 #include <core/nw4r/snd/AnimSoundFile.hpp>
 #include <core/egg/Audio/Audio3DActor.hpp>
 #include <game/Sound/AudioManager.hpp>
-#include <game/Sound/AudioHandle.hpp>
+#include <game/Sound/SingleSoundPlayer.hpp>
 #include <kamek.hpp>
 
 
 using namespace nw4r;
+enum ActorType {
+    ACTOR_TYPE_OBJECT = 0,
+    ACTOR_TYPE_OBJECT_TYPE2 = 1,
+    ACTOR_TYPE_OBJECT_ANIM = 2,
+    ACTOR_TYPE_ITEM = 3,
+    ACTOR_TYPE_CHARACTER = 3,
+    ACTOR_TYPE_KART = 5,
+};
 
 template <int handleNum>
 class AudioActor : public EGG::Audio3DActor { //value for <4>||<2>||<1>
@@ -45,6 +53,7 @@ public:
 }; //0x94||0x8C||0x88
 
 class LinkedRaceActor { //actors managed by RaceAudioManager //nw4r has a similar "LinkedObject" so names copied
+
     static u16 actorCount; //809c26a0
     LinkedRaceActor(); //80702678
     ~LinkedRaceActor(); //807026cc
@@ -81,13 +90,13 @@ class LinkedRaceActor { //actors managed by RaceAudioManager //nw4r has a simila
     u16 objectId; //0x8 item, kart, etc.. depends on the child class
     bool isUnlinked; //0xa to prevent double removes
     bool isLinked; //0xb to prevent double appends
-    u32 unknown_0xC;
+    ActorType actorType;
     u16 actorIdx; //0x10 count
     u8 padding[2];
     ut::Link actorLink; //0x14
     bool unknown_0x1C;
     bool isDisabled; //0x1D bad name but when true, resets actor velocity; holding at true resets every frame so essentially disables the actor
-    u8 unknown_0x1e;
+    u8 userData; //0x1e for example in kartSound, KCLVariant
     u8 id; //hudslotid, item id, depends on actor
 }; //0x20
 

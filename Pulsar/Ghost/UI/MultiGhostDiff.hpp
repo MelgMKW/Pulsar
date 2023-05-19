@@ -13,6 +13,7 @@ namespace UI {
 class MultiGhostDiff : public UIControl {
 public:
     MultiGhostDiff();
+    ~MultiGhostDiff() override { delete(diffTimes); }
     static MultiGhostDiff* Create(Pages::RaceHUD* page, u8 controlIdx);
     //void Init() override;
 private:

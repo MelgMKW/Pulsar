@@ -19,6 +19,7 @@ public:
     void BeforeControlUpdate() override;
     void OnResume() override;
     void OnUpdate() override;
+private:
     u32 readyDuration;
 };
 }//namespace UI

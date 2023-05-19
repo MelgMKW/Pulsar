@@ -5,7 +5,7 @@
 #include <game/Visual/Model/ModelDirector.hpp>
 #include <game/Race/RaceData.hpp>
 #include <game/File/Tables/ObjFlow.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 
 //A bunch of patches to prevent common slot related crashes
 kmWrite32(0x8068dfc8, 0x60000000);

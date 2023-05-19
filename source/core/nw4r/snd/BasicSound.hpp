@@ -3,12 +3,15 @@
 #include <types.hpp>
 #include <core/nw4r/snd/SoundHandle.hpp>
 #include <core/nw4r/snd/MoveValue.hpp>
+#include <core/nw4r/snd/Misc.hpp>
 #include <core/nw4r/ut/LinkList.hpp>
 
 namespace nw4r {
 namespace snd {
-class PlayerHeap;
+
+class SoundPlayer;
 class SoundActor;
+
 struct VoiceOutParam {
     float volume;
     float pitch;
@@ -49,7 +52,8 @@ struct SoundActorParam {
     float pan;
 };
 
-class SoundPlayer;
+class PlayerHeap;
+class BasicPlayer;
 class ExternalSoundPlayer;
 
 class BasicSound {
@@ -82,21 +86,56 @@ public:
     };
     BasicSound(int priority, int ambientPriority); //8008e0e0, size seems to be headerSize
     virtual int GetRuntimeTypeInfo(); //8008f950 vtable 80274278
-    virtual ~BasicSound(); //8008f910
-    virtual void Shutdown() = 0;
-    virtual bool IsPrepared() = 0;
-    virtual bool IsAttachedTempSpecialHandle() = 0;
-    virtual void  DetachTempSpecialHandle() = 0;
-    virtual void InitParam(); //8008e1c4
-    virtual BasicPlayer* GetBasicPlayer() const = 0;
-    virtual BasicPlayer* GetBasicPlayer() = 0;
-    virtual void OnUpdatePlayerPriority() = 0;
-    virtual void UpdateMoveValue() = 0;
-    virtual void UpdateParam() = 0;
+    virtual ~BasicSound(); //0xc 8008f910
+    virtual void Shutdown(); //0x10 8008f2c0
+    virtual bool IsPrepared() = 0; //0x14
+    virtual bool IsAttachedTempSpecialHandle() = 0; //0x18
+    virtual void  DetachTempSpecialHandle() = 0; //0x1c
+    virtual void InitParam(); //0x20 8008e1c0
+    virtual BasicPlayer& GetBasicPlayer() = 0; //0x28
+    virtual const BasicPlayer& GetBasicPlayer() const = 0; //0x24
+    virtual void OnUpdatePlayerPriority(); //0x2c 8008f520
+    virtual void UpdateMoveValue(); //0x30 8008eee0
+    virtual void UpdateParam(); //0x34 8008ef20
+
     void Stop(int fadeOutFrames); //8008e330
+    void Pause(bool pauseOrRestart, int fadeFrames); //8008e520
+    void SetAutoStopCounter(int frames); //8008e784 frames before autostop
+    void FadeIn(int frames); //8008e7a0
+    bool IsPause() const; //8008e8b0
+    void Update(); //8008e8d0
+    void AttachPlayerHeap(PlayerHeap* heap); //8008f430
+    void DetachPlayerHeap(PlayerHeap* heap); //8008f440
+    void AttachSoundPlayer(SoundPlayer* player); //8008f450
+    void DetachSoundPlayer(SoundPlayer* player); //8008f460
+    void AttachSoundActor(SoundActor* actor); //8008f470
+    void DetachSoundActor(SoundActor* actor); //8008f480
+    void AttachExternalSoundPlayer(ExternalSoundPlayer* externalPlayer); //8008f490
+    void DetachExternalSoundPlayer(ExternalSoundPlayer* externalPlayer); //8008f4a0
+    int GetVoiceOutCount() const; //8008f4b0
+    void SetPlayerPriority(int priority); //8008f4c0
+    void SetInitialVolume(float volume); //8008f530
+    void SetVolume(float volume, int frames); //8008f560
+    void SetPitch(float pitch);  //8008f610
+    void SetPan(float pan); //8008f620
+    void SetLpfFreq(float lpfFreq); //8008f630
+    void SetOutputLine(int lineFlag); //8008f640
+    void SetRemoteOutVolume(int remoteIndex, float volume);//8008f650
+    void SetFxSend(AuxBus bus, float send); //8008f690
+    void SetRemoteFilter(int filter); //8008f6a0
+    void SetPanMode(u32 panMode); //8008f6e0
+    void SetPanCurve(u32 panCurve); //8008f720
+    void SetAmbientInfo(const AmbientInfo& ambientArgInfo); //8008f760
+    int GetAmbientPriority(const AmbientInfo& ambientInfo, u32 soundId); //8008f830
+    bool IsAttachedGeneralHandle(); //8008f870
+    bool IsAttachedTempGeneralHandle(); //8008f890
+    void DetachGeneralHandle(); //8008f8b0
+    void DetachTempGeneralHandle(); //8008f8c0
+    void SetId(u32 id); //8008f8d0
+
     PlayerHeap* playerHeap; //4
     SoundHandle* generalHandle; //8
-    SoundHandle* tempGeneralHandler; //c
+    SoundHandle* tempGeneralHandle; //c
     SoundPlayer* soundPlayer; //10
     SoundActor* soundActor; //14
     ExternalSoundPlayer* extSoundPlayer; //18
@@ -109,7 +148,7 @@ public:
 
     bool startFlag; //0x78
     bool startedFlag;
-    bool autoStopFlag;
+    bool autoStopFlag; //0x7a
     bool fadeOutFlag;
 
     PauseState pauseState; //0x7c
@@ -118,9 +157,10 @@ public:
     s32 autoStopCounter; //0x84
     u32 updateCounter; //0x88 frames since the strm (_n and_f combined) started
 
-    u8 priority;
-    u8 voiceOutCount;
-    u8 biquadFilterType;
+    u8 priority; //0x8c
+    u8 voiceOutCount; //0x8d
+    u8 biquadFilterType; //0x8e
+    u8 padding;
     u32 soundId; //90
     MoveValue<float, int> extMoveVolume; //94
     float initVolume; //a4 ratio

@@ -9,12 +9,12 @@ the game will check the BRASR's entry channel count against the current BRSTM's,
 the channel switch will not happen*/
 
 int CheckChannelCount(const AudioStreamsMgr&, u32 channel, const nw4r::snd::detail::BasicSound& sound) {
-    const u32 id = sound.soundId;
-    if(AudioManager::sInstance->soundArchivePlayer->soundArchive->GetSoundType(id) != SOUND_TYPE_STRM) return id;
-    const nw4r::snd::detail::StrmSound& strmSound = static_cast<const  nw4r::snd::detail::StrmSound&>(sound);
+    if(AudioManager::sInstance->soundArchivePlayer->soundArchive->GetSoundType(sound.soundId) !=
+        snd::SoundArchive::SOUND_TYPE_STRM) return sound.soundId;
+    const nw4r::snd::detail::StrmSound& strmSound = static_cast<const nw4r::snd::detail::StrmSound&>(sound);
     const u32 need = strmSound.strmPlayer.channelsNeeded;
     const u32 channelCount = strmSound.strmPlayer.strmInfo.channelCount;
-    return (channelCount < need) ? -1 : id;
+    return (channelCount < need) ? -1 : sound.soundId;
 }
 
 asm int ConditionalChannelSwitch() {

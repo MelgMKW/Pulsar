@@ -4,7 +4,7 @@
 #include <game/visual/effect/EffectMgr.hpp> 
 #include <game/UI/SectionMgr/SectionMgr.hpp>
 #include <game/Item/Obj/ItemObj.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 #include <game/Race/RaceData.hpp>
 #include <Race/200ccParams.hpp>
 

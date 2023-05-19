@@ -14,7 +14,7 @@ public:
     ut::LinkListNode taskLink;
     volatile bool isBusy;
     u8 padding[3];
-};
+}; //0x10
 }//namespace detail
 }//namespace snd
 }//namespace nw4r

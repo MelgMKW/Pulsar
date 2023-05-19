@@ -1,6 +1,6 @@
 #include <kamek.hpp>
 #include <game/UI/SectionMgr/SectionMgr.hpp>
-#include <game/Sound/RaceAudioManager.hpp>
+#include <game/Sound/RaceAudioMgr.hpp>
 #include <PulsarSystem.hpp>
 #include <AutoTrackSelect/ExpFroomMessages.hpp>
 #include <SlotExpansion/UI/ExpansionUIMisc.hpp>

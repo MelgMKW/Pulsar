@@ -15,17 +15,17 @@ using namespace nw4r;
 class ArcPlayer {
 public:
     ArcPlayer(snd::SoundArchivePlayer* soundArchivePlayer, snd::SoundHeap* heap); //0x80210590
-    virtual ~ArcPlayer(); //80210624 vtable 802a2730
-    virtual void* OpenArchive(char* filePath, snd::SoundHeap* heap, u32 type, ARCHandle* handle); //802106b8 type 0 = dvd, 1 nand, 2 memory
-    virtual void* OpenDVDArchive(char* filePath, snd::SoundHeap* heap); //80210748
-    virtual void* OpenNANDArchive(char* filePath, snd::SoundHeap* heap); //802108bc
-    virtual void* OpenMemoryArchive(char* filePath, ARCHandle* handle, snd::SoundHeap* heap); //80210a30
-    virtual int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap); //80210bd8
-    virtual int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap, s32 r6); //80211048
-    virtual void CloseArchive(); //80210ce4
-    virtual bool LoadGroup(u32 groupId, snd::SoundHeap* heap, u32 loadBlockSize); //80210d70
-    virtual bool LoadGroup(s32 groupId, snd::SoundHeap* heap, u32 loadBlockSize); //80210e3c
-    virtual bool LoadGroup(const char* groupName, snd::SoundHeap* heap, u32 loadBlockSize); //80210f08
+    virtual ~ArcPlayer(); //0x8 80210624 vtable 802a2730
+    virtual void* OpenArchive(const char* filePath, snd::SoundHeap* heap, u32 type, ARCHandle* handle); //0xc 802106b8 type 0 = dvd, 1 nand, 2 memory
+    virtual void* OpenDVDArchive(const char* filePath, snd::SoundHeap* heap); //0x10 80210748
+    virtual void* OpenNANDArchive(const char* filePath, snd::SoundHeap* heap); //0x14 802108bc
+    virtual void* OpenMemoryArchive(const char* filePath, ARCHandle* handle, snd::SoundHeap* heap); //0x18 80210a30
+    virtual int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap); //0x1c 80210bd8
+    virtual int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap, s32 r6); //0x20 80211048
+    virtual void CloseArchive(); //0x24 80210ce4
+    virtual bool LoadGroup(u32 groupId, snd::SoundHeap* heap, u32 loadBlockSize); //0x28 80210d70
+    virtual bool LoadGroup(int groupId, snd::SoundHeap* heap, u32 loadBlockSize); //0x2c 80210e3c
+    virtual bool LoadGroup(const char* groupName, snd::SoundHeap* heap, u32 loadBlockSize); //0x30 80210f08
     virtual void Calc(); //80210fd4
     virtual bool StartSound(snd::SoundHandle* handle, u32 soundId); //802110fc
     virtual bool StartSound(snd::SoundHandle* handle, ul  soundId); //802110c8

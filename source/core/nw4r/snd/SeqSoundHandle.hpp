@@ -7,6 +7,7 @@ namespace nw4r {
 namespace snd {
 class SeqSoundHandle {
     SeqSoundHandle(SoundHandle* handle); //8009acb0
+    void DetachSound(); //8009adc0
     detail::SeqSound* sound;
 };
 }//namespace snd

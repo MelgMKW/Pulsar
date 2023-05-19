@@ -5,7 +5,7 @@
 
 using namespace nw4r;
 class Kart;
-class KartSound: public SimpleRaceAudioActor {
+class KartSound : public SimpleRaceAudioActor {
 public:
     static Vec3 DefaultVelocity; //809c2858 0.0f x3
     KartSound(); //8070722c
@@ -35,6 +35,7 @@ public:
     int GetRoadSound() const; //8070b8f0 actually virtual, but missing the middle class 
     void UpdateLapSounds(); //8070b250, can play sounds by itself based on certain conditions like lap transitions
     void UpdateMTSounds(); //807093c4
+    void ApplyKCLSoundTrigger(u8 soundTriggerVariant); //80708b44
 
     bool isChargingSSMT; //0xb4
     u8 padding[3];

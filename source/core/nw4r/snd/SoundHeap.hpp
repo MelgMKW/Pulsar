@@ -7,6 +7,7 @@
 namespace  nw4r {
 namespace snd {
 class SoundHeap: public SoundMemoryAllocatable {
+public:
     SoundHeap(); //800a2ed0
     ~SoundHeap() override; //800a2f20 vtable 80274a30
     void* Alloc(u32 size) override; //800a2fb0

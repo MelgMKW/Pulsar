@@ -13,13 +13,13 @@ struct KCLTypeHolder {
 };
 
 struct CollisionEntry {
-
+    static bool FindClosestCollisionEntry(UnkType* normals, KCLTypeHolder kcl); //use 809c3bdc after
     static CollisionEntry entriesArray; //809c38d8
     static u32 entryCount; //809c3bd8
     static u32 maxCount; //0x40
-    static CollisionEntry* closestEntry; //809c3bdc accessed with 38d8 + 300 so definitely more complicated
+    static CollisionEntry* closestEntry; //809c3bdc
     KCLTypeHolder type;
-    u16 kclFlag;
+    u16 kclFlag; //0x4
     u8 padding[2];
     float distance;
 };

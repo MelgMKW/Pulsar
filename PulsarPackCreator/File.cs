@@ -280,12 +280,18 @@ namespace PulsarPackCreator
             string[] xml = PulsarRes.XML.Split(delims, StringSplitOptions.RemoveEmptyEntries);
 
             xml[3] = xml[3].Replace("{$pack}", parameters.modFolderName);
+            xml[6] = xml[6].Replace("{$pack}", parameters.modFolderName);
+            xml[11] = xml[11].Replace("{$pack}", parameters.modFolderName);
+            xml[14] = xml[14].Replace("{$pack}", parameters.modFolderName);
+            xml[19] = xml[19].Replace("{$pack}", parameters.modFolderName);              
             xml[24] = xml[24].Replace("{$pack}", parameters.modFolderName);
             xml[25] = xml[25].Replace("{$pack}", parameters.modFolderName);
             xml[26] = xml[26].Replace("{$pack}", parameters.modFolderName);
             xml[27] = xml[27].Replace("{$pack}", parameters.modFolderName);
+            xml[30] = xml[30].Replace("{$pack}", parameters.modFolderName);
             xml[34] = xml[34].Replace("{$pack}", parameters.modFolderName);
-            xml[35] = xml[35].Replace("{$pack}", parameters.modFolderName);
+            xml[35] = xml[34].Replace("{$pack}", parameters.modFolderName);
+            xml[36] = xml[35].Replace("{$pack}", parameters.modFolderName);
 
             bmgReader.Close();
             fileReader.Close();

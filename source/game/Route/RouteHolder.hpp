@@ -1,7 +1,7 @@
 #ifndef _ROUTEHOLDER_
 #define _ROUTEHOLDER_
 #include <kamek.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 #include <game/Route/Route.hpp>
 
 class RouteHolder {

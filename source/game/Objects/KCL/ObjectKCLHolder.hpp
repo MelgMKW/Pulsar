@@ -33,7 +33,7 @@ class ObjectKCLHolder {
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime); //8081c958        
     bool ProcessEntityCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime); //8081bfa0
-    bool CheckOOBCollision(float radius, const Vec3& position, const Vec3& lastPosition,
+    bool CheckTriggerCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime); //8081c6b4
 
 

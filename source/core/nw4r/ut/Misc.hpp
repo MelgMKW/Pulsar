@@ -1,6 +1,7 @@
 #ifndef _NW4R_UT_MISC_
 #define _NW4R_UT_MISC_
 #include <types.hpp>
+#include <core/rvl/OS/OS.hpp>
 
 namespace nw4r {
 namespace ut {
@@ -52,7 +53,7 @@ static inline const void* AddU32ToPtr(const void* pointer, u32 offset) {
     return AddOffsetToPtr(pointer, offset);
 }
 
-inline int GetOffsetFromPtr(const void* start, const void* end){
+inline int GetOffsetFromPtr(const void* start, const void* end) {
     return static_cast<int>(GetIntPtr(end) - GetIntPtr(start));
 }
 
@@ -67,6 +68,14 @@ protected:
 private:
     NonCopyable(const NonCopyable&);
     const NonCopyable& operator=(const NonCopyable&);
+};
+
+class AutoInterruptLock : private NonCopyable {
+public:
+    AutoInterruptLock(): oldState(OS::DisableInterrupts()) {}
+    ~AutoInterruptLock() { (void)OS::RestoreInterrupts(oldState); }
+private:
+    BOOL oldState;
 };
 
 

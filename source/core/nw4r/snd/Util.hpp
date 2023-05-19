@@ -21,7 +21,7 @@ public:
     template<typename T, typename T1 = void, typename T2 = void, typename T3 = void>
     struct DataRef {
         u8 refType;
-        u8 dataType;
+        u8 dataType; //which type t, t1, t2, t3
         u16 reserved;
         u32 value;
     };

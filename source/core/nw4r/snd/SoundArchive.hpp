@@ -1,6 +1,7 @@
 #ifndef _NW4R_SNDARCHIVE_
 #define _NW4R_SNDARCHIVE_
 #include <types.hpp>
+#include <core/nw4r/ut/FileStream.hpp>
 
 //8009dfb0 read bankinfo
 namespace nw4r {
@@ -35,7 +36,7 @@ public:
 
     struct FilePos {
         GroupId groupId;
-        u32 index;
+        u32 groupIndex;
     };
 
     struct GroupInfo {
@@ -49,7 +50,7 @@ public:
 
     struct GroupItemInfo {
         FileId fileId;
-        u32 offset;
+        u32 offset; //from the start of the group
         u32 size;
         u32 waveDataOffset;
         u32 waveDataSize;
@@ -96,18 +97,12 @@ public:
     bool ReadSound3DParam(SoundArchive::SoundId soundId, SoundArchive::Sound3DParam* param) const; //8009dfa0
     bool ReadBankInfo(SoundArchive::BankId bankId, SoundArchive::BankInfo* info) const; //8009dfb0
     bool ReadGroupInfo(SoundArchive::GroupId groupId, SoundArchive::GroupInfo* info) const; //8009dfc0
-    bool detail_ReadGroupItemInfo(SoundArchive::GroupId groupId, unsigned long index, SoundArchive::GroupItemInfo* info) const; //8009dfd0
+    bool detail_ReadGroupItemInfo(SoundArchive::GroupId groupId, u32 index, SoundArchive::GroupItemInfo* info) const; //8009dfd0
     u32 detail_GetFileCount() const; //8009dfe0
     bool detail_ReadFileInfo(SoundArchive::FileId fileId, SoundArchive::FileInfo* info) const; //8009ff0
-    bool detail_ReadFilePos(SoundArchive::FileId fileId, unsigned long index, SoundArchive::FilePos* info) const; //8009e000
-
-
-
+    bool detail_ReadFilePos(SoundArchive::FileId fileId, u32 index, SoundArchive::FilePos* info) const; //8009e000
     u32 ConvertLabelStringToId(const void* stringTree, const char* str) const; //8009f740
-
-
-    bool ReadSoundInfo(u32 id, SoundInfo* soundInfo); //8009df40
-    bool ReadStrmSoundInfo(u32 id, StrmSoundInfo* soundInfo); //8009df60
+    ut::FileStream* detail_OpenFileWaveDataStream(FileId fileId, void* buffer, int size) const; //8009e240
 
     virtual ~SoundArchive(); //8009de30
     detail::SoundArchiveFileReader* fileReader;

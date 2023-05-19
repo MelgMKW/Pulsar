@@ -8,8 +8,9 @@
 
 namespace nw4r {
 namespace snd {
+class WaveSoundHandle;
 namespace detail {
-class WaveSound: public BasicSound {
+class WaveSound : public BasicSound {
 public:
     WaveSound(WaveSoundInstanceManager* manager, int priority, int ambientPriority); //0x800ad4a0
     int GetRuntimeTypeInfo() override; //800ad840
@@ -18,10 +19,19 @@ public:
     bool IsPrepared() override; //800ad830
     bool IsAttachedTempSpecialHandle() override; //800ad7e0
     void DetachTempSpecialHandle() override; //800ad800
-    BasicPlayer* GetBasicPlayer() const override; //800ad810
-    BasicPlayer* GetBasicPlayer() override; //800ad820
+    BasicPlayer& GetBasicPlayer() override; //0x24 800ad810
+    const BasicPlayer& GetBasicPlayer() const override; //0x28 800ad820
     void OnUpdatePlayerPriority() override; //800ad6f0
+
+    bool WaveSound::Prepare(const void* waveSoundBase, s32 waveSoundOffset, WsdPlayer::StartOffsetType startOffsetType, s32 offset,
+        const WsdPlayer::WsdCallback* callback, u32 callbackData); //800ad550
+    void WaveSound::SetChannelPriority(int priority); //800ad6d0
+    void WaveSound::SetReleasePriorityFix(bool fix); //800ad6e0
+
     WsdPlayer wsdPlayer; //0x100
+    WaveSoundHandle* tempSpecialHandle; //0x234
+    SoundInstanceManager<WaveSound>* manager; //0x238
+    bool preparedFlag; //0x23c
 };
 }//namespace detail
 }//namespace snd

@@ -48,7 +48,10 @@ public:
     static bool HasDriverModel(); //80631af8
     static const char* GetPageName(PageId id); //80631bf0 doesn't seem to work
     static const char* GetSectionName(SectionId id); //80631c00 same
-    static u32 GetSoundId(SectionId sectionId); //80631c68
+    static u32 GetSoundId(SectionId sectionId); //80631c68 returns BG sound, intro fanfare etc...
+    static u32 GetGroupId(SectionId sectionId); //80631ef8 group as in brsar group
+    //for example used in 1P where the bg music goes from stream 0 and increases as you go through the pages
+    static u32 GetAudioStreamIdx(PageId pageId); //806321b4 
 
 
     SectionId sectionId;

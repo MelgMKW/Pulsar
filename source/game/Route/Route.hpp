@@ -1,7 +1,7 @@
 #ifndef _ROUTE_
 #define _ROUTE_
 #include <kamek.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 
 
 

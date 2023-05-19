@@ -1,7 +1,7 @@
 #ifndef _OBJECT_
 #define _OBJECT_
 #include <kamek.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 #include <game/File/Tables/GeoHitTable.hpp>
 #include <game/Sound/Actors/ObjectSound.hpp>
 #include <game/Route/RouteController.hpp>

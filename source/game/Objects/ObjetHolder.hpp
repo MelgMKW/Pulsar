@@ -6,7 +6,7 @@
 #include <game/Objects/Object.hpp>
 #include <game/Objects/ObjectCollision.hpp>
 #include <game/Item/Obj/ItemObj.hpp>
-#include <game/KMP/Controller.hpp>
+#include <game/KMP/KMPController.hpp>
 
 
 class ObjFlowHolder {

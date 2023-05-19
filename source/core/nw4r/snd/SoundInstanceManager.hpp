@@ -4,8 +4,9 @@
 #include <core/nw4r/ut/LinkList.hpp>
 #include <core/rvl/os/mutex.hpp>
 #include <core/nw4r/snd/BasicSound.hpp>
+#include <core/nw4r/snd/InstancePool.hpp>
 
-//templated stuff
+
 namespace nw4r {
 namespace snd {
 namespace detail {
@@ -13,7 +14,7 @@ namespace detail {
 template <class T>
 class SoundInstanceManager {
 public:
-    SoundInstanceManager* nextInstance;
+    MemoryPool<T> pool;
     ut::LinkList<T, offsetof(T, priorityLink)> priorityList;
     OS::Mutex mutex; //0x10
 }; //total size 0x28

@@ -62,7 +62,7 @@ void Folder::GetFilePath(char* path, u32 index) const {
 }
 
 //Virtual funcs
-bool Folder::FolderExists(const char* path) {
+bool Folder::FolderExists(const char* path) const {
     char realPath[IOS::ipcMaxPath];
     this->GetCorrectPath(realPath, path);
     u32 count;
@@ -115,30 +115,30 @@ void Folder::ReadFolder(const char* path) {
 }
 
 
-bool RiivoFolder::FolderExists(const char* path) {
+bool RiivoFolder::FolderExists(const char* path) const {
     s32 riivo_fd = this->curFile->GetDevice_fd();
     alignas(0x20) s32 folder_fd = IOS::IOCtl(riivo_fd, static_cast<IOS::IOCtlType>(RIIVO_IOCTL_OPENDIR), (void*)path, strlen(path) + 1, nullptr, 0);
 
-    if(folder_fd < 0) return false;
-    IOS::IOCtl(riivo_fd, static_cast<IOS::IOCtlType>(RIIVO_IOCTL_CLOSEDIR), (void*)&folder_fd, sizeof(s32), nullptr, 0);
+    if(folder_fd >= 0) {
+        IOS::IOCtl(riivo_fd, static_cast<IOS::IOCtlType>(RIIVO_IOCTL_CLOSEDIR), (void*)&folder_fd, sizeof(s32), nullptr, 0);
+    }
     IOS::Close(riivo_fd);
-    return true;
+    return folder_fd >= 0;
 }
 
 void RiivoFolder::CreateFolder(const char* path) {
     this->Bind(path);
     s32 riivo_fd = this->curFile->GetDevice_fd();
-    s32 error = IOS::IOCtl(riivo_fd, static_cast<IOS::IOCtlType>(RIIVO_IOCTL_CREATEDIR), (void*)path, strlen(path) + 1, nullptr, 0);
+    s32 error = IOS::IOCtl(riivo_fd, static_cast<IOS::IOCtlType>(RIIVO_IOCTL_CREATEDIR), (void*)this->folderName, strlen(this->folderName) + 1, nullptr, 0);
     IOS::Close(riivo_fd);
 }
 
-
 void RiivoFolder::ReadFolder(const char* path) {
     s32 riivo_fd = this->curFile->GetDevice_fd();
-    strncpy(this->folderName, path, IOS::ipcMaxPath);
+    this->Bind(path);
     alignas(0x20) IOS::IOCtlvRequest request[3];
     alignas(0x20) s32 folder_fd  = IOS::IOCtl(riivo_fd, static_cast<IOS::IOCtlType>(RIIVO_IOCTL_OPENDIR),
-        (void*)path, strlen(path) + 1, nullptr, 0);
+        (void*)this->folderName, strlen(this->folderName) + 1, nullptr, 0);
     alignas(0x20) char fileName[riivoMaxPath];
     alignas(0x20) RiivoStats stats;
     if(folder_fd >= 0 && !this->isBusy) {
@@ -153,7 +153,7 @@ void RiivoFolder::ReadFolder(const char* path) {
             request[1].size = riivoMaxPath;
             request[2].address = &stats;
             request[2].size = sizeof(RiivoStats);
-            s32 retIOCtlv = IOS::IOCtlv(riivo_fd, (IOS::IOCtlType)RIIVO_IOCTL_NEXTDIR, 1, 2, request);
+            s32 retIOCtlv = IOS::IOCtlv(riivo_fd, static_cast<IOS::IOCtlType>(RIIVO_IOCTL_NEXTDIR), 1, 2, request);
             if(retIOCtlv != 0) break;
             if((stats.Mode & S_IFDIR) == S_IFDIR) continue; //if the next entry is a directory, skip
 
@@ -168,7 +168,7 @@ void RiivoFolder::ReadFolder(const char* path) {
         this->fileNames = namesArray;
         delete[](tmpArray);
 
-        IOS::IOCtl(riivo_fd, (IOS::IOCtlType)RIIVO_IOCTL_CLOSEDIR, (void*)&folder_fd, sizeof(s32), nullptr, 0);
+        IOS::IOCtl(riivo_fd, static_cast<IOS::IOCtlType>(RIIVO_IOCTL_CLOSEDIR), (void*)&folder_fd, sizeof(s32), nullptr, 0);
     }
     IOS::Close(riivo_fd);
     this->isBusy = false;

@@ -111,7 +111,7 @@ public:
 
     void Load(u32 optionCount, u32 initialOptionId, const char* folderName, const char* ctrName, const char* variant,
         const char* buttonRCtrName, const char* buttonRvariant, char* buttonLCtrName, const char* buttonLvariant,
-        UpDownDisplayedText* text, u32 localPlayerBitfield, u8 unk_13, bool isNotSelectable, bool isLooped, bool onClickSendsToNextControl);
+        UpDownDisplayedText* text, u32 localPlayerBitfield, u8 unk_13, bool isNotSelectable, bool isLooped, bool onClickSendsToNextControl); //8063ebdc
     void HandleSelect(u32 hudSlotId, u32 curChildId); //8063f694
     void HandleDeselect(u32 hudSlotId, u32 curChildId); //8063f7c4
     void HandleClick(u32 hudSlotId, u32 curChildId); //8063f8f8

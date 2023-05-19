@@ -39,7 +39,7 @@ public:
     StartResult detail_HoldSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo); //800a3f90
     StartResult detail_HoldSound(SoundHandle* handle, const char* soundName, const StartInfo* startInfo); //800a4040
 
-    //Plays the sound with the specified sound number
+    //Prepares the sound with the specified sound number, it needs to be started with SoundHandle's StartPrepared
     StartResult detail_PrepareSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo); //800a4130
 
 }; //total size 0x4

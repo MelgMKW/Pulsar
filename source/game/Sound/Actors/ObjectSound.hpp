@@ -5,7 +5,7 @@
 
 using namespace nw4r;
 //ObjFlow has 3 sound values, not sure what they do hence the names
-class ObjectSound: public SimpleRaceAudioActor { //type 1 
+class ObjectSound : public SimpleRaceAudioActor { //type 1 
     ObjectSound(); //8070ca8c
 
     //AUDIOACTOR
@@ -30,7 +30,7 @@ class ObjectSound: public SimpleRaceAudioActor { //type 1
 }; //0xb8
 
 
-class ObjectSoundAnim: public RaceAnimAudioActor { //presumably if the object supports BRASDs
+class ObjectSoundAnim : public RaceAnimAudioActor { //type 3 presumably if the object supports BRASDs
     ObjectSoundAnim(); //807029f0
 
     //AUDIOACTOR

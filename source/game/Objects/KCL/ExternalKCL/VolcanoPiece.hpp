@@ -29,7 +29,7 @@ class VolcanoPiece: public ObjectExternKCL { //0x1fc = 508
     void vf_0xec() override; //0xec 80804cd8
     void vf_0xf0() override; //0xf0 80804e20
     void vf_0xf4() override; //0xf4 808045ac
-    bool CheckOOBCollision(float radius, const Vec3& position, const Vec3& lastPosition,
+    bool CheckTriggerCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime) override; //0xf8 80804730
     void vf_0xfc() override; //0xfc 808048b4
     bool ProcessCollision(float radius, const Vec3& position, const Vec3& lastPosition,

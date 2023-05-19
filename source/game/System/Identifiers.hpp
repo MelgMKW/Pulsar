@@ -2,93 +2,93 @@
 #define _IDENTIFIERS_
 
 enum KartId {
-    STANDARD_KART_S = 0X00,
-    STANDARD_KART_M = 0X01,
-    STANDARD_KART_L = 0X02,
-    BABY_BOOSTER = 0X03,
-    CLASSIC_DRAGSTER = 0X04,
-    OFFROADER = 0X05,
-    MINI_BEAST = 0X06,
-    WILD_WING = 0X07,
-    FLAME_FLYER = 0X08,
-    CHEEP_CHARGER = 0X09,
-    SUPER_BLOOPER = 0X0A,
-    PIRANHA_PROWLER = 0X0B,
-    RALLY_ROMPER = 0X0C,
-    ROYAL_RACER = 0X0D,
-    JETSETTER = 0X0E,
-    BLUE_FALCON = 0X0F,
-    SPRINTER = 0X10,
-    HONEYCOUPE = 0X11,
-    STANDARD_BIKE_S = 0X12,
-    STANDARD_BIKE_M = 0X13,
-    STANDARD_BIKE_L = 0X14,
-    BULLET_BIKE = 0X15,
-    MACH_BIKE = 0X16,
-    BOWSER_BIKE = 0X17,
-    BIT_BIKE = 0X18,
-    BON_BON = 0X19,
-    WARIO_BIKE = 0X1A,
-    QUACKER = 0X1B,
-    RAPIDE = 0X1C,
-    SHOOTING_STAR = 0X1D,
-    MAGIKRUISER = 0X1E,
-    NITROCYCLE = 0X1F,
-    SPEAR = 0X20,
-    JET_BUBBLE = 0X21,
-    DOLPHIN_DASHER = 0X22,
-    PHANTOM = 0X23
+    STANDARD_KART_S = 0x00,
+    STANDARD_KART_M = 0x01,
+    STANDARD_KART_L = 0x02,
+    BABY_BOOSTER = 0x03,
+    CLASSIC_DRAGSTER = 0x04,
+    OFFROADER = 0x05,
+    MINI_BEAST = 0x06,
+    WILD_WING = 0x07,
+    FLAME_FLYER = 0x08,
+    CHEEP_CHARGER = 0x09,
+    SUPER_BLOOPER = 0x0A,
+    PIRANHA_PROWLER = 0x0B,
+    RALLY_ROMPER = 0x0C,
+    ROYAL_RACER = 0x0D,
+    JETSETTER = 0x0E,
+    BLUE_FALCON = 0x0F,
+    SPRINTER = 0x10,
+    HONEYCOUPE = 0x11,
+    STANDARD_BIKE_S = 0x12,
+    STANDARD_BIKE_M = 0x13,
+    STANDARD_BIKE_L = 0x14,
+    BULLET_BIKE = 0x15,
+    MACH_BIKE = 0x16,
+    BOWSER_BIKE = 0x17,
+    BIT_BIKE = 0x18,
+    BON_BON = 0x19,
+    WARIO_BIKE = 0x1A,
+    QUACKER = 0x1B,
+    RAPIDE = 0x1C,
+    SHOOTING_STAR = 0x1D,
+    MAGIKRUISER = 0x1E,
+    NITROCYCLE = 0x1F,
+    SPEAR = 0x20,
+    JET_BUBBLE = 0x21,
+    DOLPHIN_DASHER = 0x22,
+    PHANTOM = 0x23
 };
 
 enum CharacterId {
-    MARIO = 0X00,
-    BABY_PEACH = 0X01,
-    WALUIGI = 0X02,
-    BOWSER = 0X03,
-    BABY_DAISY = 0X04,
-    DRY_BONES = 0X05,
-    BABY_MARIO = 0X06,
-    LUIGI = 0X07,
-    TOAD = 0X08,
-    DONKEY_KONG = 0X09,
-    YOSHI = 0X0A,
-    WARIO = 0X0B,
-    BABY_LUIGI = 0X0C,
-    TOADETTE = 0X0D,
-    KOOPA_TROOPA = 0X0E,
-    DAISY = 0X0F,
-    PEACH = 0X10,
-    BIRDO = 0X11,
-    DIDDY_KONG = 0X12,
-    KING_BOO = 0X13,
-    BOWSER_JR = 0X14,
-    DRY_BOWSER = 0X15,
-    FUNKY_KONG = 0X16,
-    ROSALINA = 0X17,
-    MII_S_A_MALE = 0X18,
-    MII_S_A_FEMALE = 0X19,
-    MII_S_B_MALE = 0X1A,
-    MII_S_B_FEMALE = 0X1B,
-    MII_S_C_MALE = 0X1C,
-    MII_S_C_FEMALE = 0X1D,
-    MII_M_A_MALE = 0X1E,
-    MII_M_A_FEMALE = 0X1F,
-    MII_M_B_MALE = 0X20,
-    MII_M_B_FEMALE = 0X21,
-    MII_M_C_MALE = 0X22,
-    MII_M_C_FEMALE = 0X23,
-    MII_L_A_MALE = 0X24,
-    MII_L_A_FEMALE = 0X25,
-    MII_L_B_MALE = 0X26,
-    MII_L_B_FEMALE = 0X27,
-    MII_L_C_MALE = 0X28,
-    MII_L_C_FEMALE = 0X29,
-    MII_M = 0X2A,
-    MII_S = 0X2B,
-    MII_L = 0X2C,
-    PEACH_BIKER = 0X2D,
-    DAISY_BIKER = 0X2E,
-    ROSALINA_BIKER = 0X2F,
+    MARIO = 0x00,
+    BABY_PEACH = 0x01,
+    WALUIGI = 0x02,
+    BOWSER = 0x03,
+    BABY_DAISY = 0x04,
+    DRY_BONES = 0x05,
+    BABY_MARIO = 0x06,
+    LUIGI = 0x07,
+    TOAD = 0x08,
+    DONKEY_KONG = 0x09,
+    YOSHI = 0x0A,
+    WARIO = 0x0B,
+    BABY_LUIGI = 0x0C,
+    TOADETTE = 0x0D,
+    KOOPA_TROOPA = 0x0E,
+    DAISY = 0x0F,
+    PEACH = 0x10,
+    BIRDO = 0x11,
+    DIDDY_KONG = 0x12,
+    KING_BOO = 0x13,
+    BOWSER_JR = 0x14,
+    DRY_BOWSER = 0x15,
+    FUNKY_KONG = 0x16,
+    ROSALINA = 0x17,
+    MII_S_A_MALE = 0x18,
+    MII_S_A_FEMALE = 0x19,
+    MII_S_B_MALE = 0x1A,
+    MII_S_B_FEMALE = 0x1B,
+    MII_S_C_MALE = 0x1C,
+    MII_S_C_FEMALE = 0x1D,
+    MII_M_A_MALE = 0x1E,
+    MII_M_A_FEMALE = 0x1F,
+    MII_M_B_MALE = 0x20,
+    MII_M_B_FEMALE = 0x21,
+    MII_M_C_MALE = 0x22,
+    MII_M_C_FEMALE = 0x23,
+    MII_L_A_MALE = 0x24,
+    MII_L_A_FEMALE = 0x25,
+    MII_L_B_MALE = 0x26,
+    MII_L_B_FEMALE = 0x27,
+    MII_L_C_MALE = 0x28,
+    MII_L_C_FEMALE = 0x29,
+    MII_M = 0x2A,
+    MII_S = 0x2B,
+    MII_L = 0x2C,
+    PEACH_BIKER = 0x2D,
+    DAISY_BIKER = 0x2E,
+    ROSALINA_BIKER = 0x2F,
     CHARACTER_NONE = -1
 };
 
@@ -131,11 +131,9 @@ enum ItemId {
     TRIPLE_GREEN_SHELL = 0x10,
     TRIPLE_RED_SHELL = 0x11,
     TRIPLE_BANANA = 0x12,
-    UNKNOWN_0X13 = 0x13,
+    UNKNOWN_0x13 = 0x13,
     ITEM_NONE = 0x14
 };
-
-
 
 
 enum CourseId {
@@ -306,7 +304,7 @@ enum PageId {
     PAGE_GP_REPLAY_PAUSE                = 0x38,
     PAGE_TT_IMMEDIATE_REPLAYPAUSE       = 0x39,
     PAGE_RESPAWN_FADE_IN_OUT            = 0x3A, //DONE
-    PAGE_PROBABLY_AWARD__INTERFACE      = 0x3B,
+    PAGE_PROBABLY_AWARD_INTERFACE      = 0x3B,
     PAGE_PROBABLY_CONGRATS              = 0x3C,
     PAGE_CREDITS_VS_INTERFACE           = 0x3D,
     PAGE_ENDING                         = 0x3E, //DONE
@@ -314,14 +312,14 @@ enum PageId {
     PAGE_WIFI_RACE_INTERFACE            = 0x40,
     PAGE_P2WIFI_RACE_INTERFACE          = 0x41,
     PAGE_WIFI_VS_INTERFACE              = 0x42, //DONE
-    PAGE_WIFI_TEAMVS__INTERFACE         = 0x43,
+    PAGE_WIFI_TEAMVS_INTERFACE         = 0x43,
     PAGE_WIFI_VS_RESULTS                = 0x44, //DONE
     PAGE_WWRACEEND_COUNTDOWN            = 0x45, //DONE
     PAGE_WWRACEEND_MENU                 = 0x46, //DONE
     PAGE_WWRACEEND_QUIT                 = 0x47, //DONE
     PAGE_WWRACEEND_WAIT                 = 0x48, //DONE
     PAGE_LIVEVS_VIEW_INTERFACE          = 0x49, //DONE
-    PAGE_LIVEBATTLE_VIEW__INTERFACE     = 0x4A,
+    PAGE_LIVEBATTLE_VIEW_INTERFACE     = 0x4A,
     PAGE_START_RACE                     = 0x4B, //DONE
     PAGE_AUTO_ENDING_TRANSPARENT        = 0x4C,
     PAGE_MESSAGE_BOX_TRANSPARENT        = 0x4D, //DONE
@@ -409,13 +407,13 @@ enum PageId {
     PAGE_MKCHANNEL                      = 0xA2,
     PAGE_RANKINGS_MENU                  = 0xA3,
     PAGE_CHANNEL_GHOSTS                 = 0xA4,
-    PAGE_DUMMY_LOADS_0XA6               = 0xA5, //DONE
+    PAGE_DUMMY_LOADS_0xA6               = 0xA5, //DONE
     PAGE_REGISTER_FRIEND                = 0xA6, //DONE
     PAGE_GHOST_MANAGER                  = 0xA7, //DONE
     PAGE_MKCHANNEL_GHOST_HISTOGRAM      = 0xA8,
-    PAGE_MKCHANNEL_BEHIND_0XAD          = 0xAC,
+    PAGE_MKCHANNEL_BEHIND_0xAD          = 0xAC,
     PAGE_MKCHANNEL_GHOST_CHALLENGEWATCH = 0xAD,
-    PAGE_RESIDES_BEHIND_0X4F_LOADS_0XB4 = 0xB3,
+    PAGE_RESIDES_BEHIND_0x4F_LOADS_0xB4 = 0xB3,
     PAGE_MKCHANNEL_DLD_GHOST_LIST       = 0xB4,
     PAGE_MKCHANNEL_ERASE_GHOST          = 0xB5,
     PAGE_COMPETITION_FOR_WHEEL_ONLY     = 0xBA,
@@ -589,6 +587,223 @@ enum SectionId {
     SECTION_BROKEN_MISSION_MODE         = 0x94
 };
 
+enum BRSARGroups {
+    BRSAR_GROUP_CONTROLS        = 1, //PushButton sounds for example
+    BRSAR_GROUP_MK_CHANNEL      = 2,
+    BRSAR_GROUP_WFC             = 3,
+    BRSAR_GROUP_TITLE         = 5, //mostly the wave
+    BRSAR_GROUP_CHANNEL         = 6,
+    BRSAR_GROUP_OFFLINE_MENUS   = 7,
+
+    BRSAR_GROUP_RACE = 0xE,
+
+    //For tracks, simply add 0xF to its ID
+    BRSAR_GROUP_LC      = 0x17,
+    BRSAR_GROUP_MMM     = 0x10,
+    BRSAR_GROUP_MG      = 0x11,
+    BRSAR_GROUP_TF      = 0x13,
+    BRSAR_GROUP_MC      = 0xF,
+    BRSAR_GROUP_CM      = 0x14,
+    BRSAR_GROUP_DKS     = 0x15,
+    BRSAR_GROUP_WGM     = 0x16,
+    BRSAR_GROUP_DC      = 0x18,
+    BRSAR_GROUP_KC      = 0x1E,
+    BRSAR_GROUP_MT      = 0x1A,
+    BRSAR_GROUP_GV      = 0x12,
+    BRSAR_GROUP_DDR     = 0x1D,
+    BRSAR_GROUP_MH      = 0x19,
+    BRSAR_GROUP_BC      = 0x1B,
+    BRSAR_GROUP_RR      = 0x1C,
+    BRSAR_GROUP_rPB     = 0x1F,
+    BRSAR_GROUP_rYF     = 0x23,
+    BRSAR_GROUP_rGV2    = 0x28,
+    BRSAR_GROUP_rMR     = 0x29,
+    BRSAR_GROUP_rSL     = 0x2A,
+    BRSAR_GROUP_rSGB    = 0x2E,
+    BRSAR_GROUP_rDS     = 0x26,
+    BRSAR_GROUP_rWS     = 0x21,
+    BRSAR_GROUP_rDH     = 0x24,
+    BRSAR_GROUP_rBC3    = 0x2D,
+    BRSAR_GROUP_rDKJP   = 0x2C,
+    BRSAR_GROUP_rMC     = 0x20,
+    BRSAR_GROUP_rMC3    = 0x27,
+    BRSAR_GROUP_rPG     = 0x25,
+    BRSAR_GROUP_rDKM    = 0x22,
+    BRSAR_GROUP_rBC     = 0x2B,
+    BRSAR_GROUP_aBP     = 0x30,
+    BRSAR_GROUP_aDP     = 0x2F,
+    BRSAR_GROUP_aFS     = 0x32,
+    BRSAR_GROUP_aCCW    = 0x31,
+    BRSAR_GROUP_aTD     = 0x33,
+    BRSAR_GROUP_arBC4   = 0x36,
+    BRSAR_GROUP_arBC3   = 0x37,
+    BRSAR_GROUP_arS     = 0x38,
+    BRSAR_GROUP_arCL    = 0x34,
+    BRSAR_GROUP_arTH    = 0x35,
+
+    //Add +2 for cannon
+    BRSAR_GROUP_MARIO           = 0x46,
+    BRSAR_GROUP_BABY_PEACH      = 0xE0,
+    BRSAR_GROUP_WALUIGI         = 0x12F,
+    BRSAR_GROUP_BOWSER          = 0x143,
+    BRSAR_GROUP_BABY_DAISY      = 0xED,
+    BRSAR_GROUP_DRY_BONES       = 0x119,
+    BRSAR_GROUP_BABY_MARIO      = 0xBC,
+    BRSAR_GROUP_LUIGI           = 0x56,
+    BRSAR_GROUP_TOAD            = 0x109,
+    BRSAR_GROUP_DONKEY_KONG     = 0x150,
+    BRSAR_GROUP_YOSHI           = 0x6A,
+    BRSAR_GROUP_WARIO           = 0x11B,
+    BRSAR_GROUP_BABY_LUIGI      = 0xCE,
+    BRSAR_GROUP_TOADETTE        = 0xFA,
+    BRSAR_GROUP_KOOPA_TROOPA    = 0x11A,
+    BRSAR_GROUP_DAISY           = 0x86,
+    BRSAR_GROUP_PEACH           = 0x77,
+    BRSAR_GROUP_BIRDO           = 0x93,
+    BRSAR_GROUP_DIDDY_KONG      = 0xAF,
+    BRSAR_GROUP_KING_BOO        = 0x15D,
+    BRSAR_GROUP_BOWSER_JR       = 0xA0,
+    BRSAR_GROUP_DRY_BOWSER      = 0x16B,
+    BRSAR_GROUP_FUNKY_KONG      = 0x15E,
+    BRSAR_GROUP_ROSALINA        = 0x178
+};
+
+enum SoundIDs {
+    SOUND_ID_LC                             = 0x75,
+    SOUND_ID_LC_F                           = 0x76,
+    SOUND_ID_MMM                            = 0x77,
+    SOUND_ID_MMM_F                          = 0x78,
+    SOUND_ID_MG                             = 0x79,
+    SOUND_ID_MG_F                           = 0x7A,
+    SOUND_ID_TF                             = 0x7B,
+    SOUND_ID_TF_F                           = 0x7C,
+
+    SOUND_ID_MC                             = 0x7D,
+    SOUND_ID_MC_F                           = 0x7E,
+    SOUND_ID_CM                             = 0x7F,
+    SOUND_ID_CM_F                           = 0x80,
+    SOUND_ID_DKS                            = 0x81,
+    SOUND_ID_DKS_F                          = 0x82,
+    SOUND_ID_WGM                            = 0x83,
+    SOUND_ID_WGM_F                          = 0x84,
+
+    SOUND_ID_DC                             = 0x87,
+    SOUND_ID_DC_F                           = 0x88,
+    SOUND_ID_KC                             = 0x85,
+    SOUND_ID_KC_F                           = 0x86,
+    SOUND_ID_MT                             = 0x8F,
+    SOUND_ID_MT_F                           = 0x90,
+    SOUND_ID_GV                             = 0x8B,
+    SOUND_ID_GV_F                           = 0x8C,
+
+    SOUND_ID_DDR                            = 0x89,
+    SOUND_ID_DDR_F                          = 0x8A,
+    SOUND_ID_MH                             = 0x8D,
+    SOUND_ID_MH_F                           = 0x8E,
+    SOUND_ID_BC                             = 0x91,
+    SOUND_ID_BC_F                           = 0x92,
+    SOUND_ID_RR                             = 0x93,
+    SOUND_ID_RR_F                           = 0x94,
+
+    SOUND_ID_rPB                            = 0xA5,
+    SOUND_ID_rPB_F                          = 0xA6,
+    SOUND_ID_rYF                            = 0xAD,
+    SOUND_ID_rYF_F                          = 0xAE,
+    SOUND_ID_rMR                            = 0x9F,
+    SOUND_ID_rMR_F                          = 0xA0,
+    SOUND_ID_rGV2                           = 0x97,
+    SOUND_ID_rGV2_F                         = 0x98,
+
+    SOUND_ID_rSL                            = 0x9D,
+    SOUND_ID_rSL_F                          = 0x9E,
+    SOUND_ID_rSGB                           = 0x95,
+    SOUND_ID_rSGB_F                         = 0x96,
+    SOUND_ID_rDS                            = 0xAF,
+    SOUND_ID_rDS_F                          = 0xB0,
+    SOUND_ID_rWS                            = 0xA9,
+    SOUND_ID_rWS_F                          = 0xAA,
+
+
+    SOUND_ID_rDH                            = 0xB1,
+    SOUND_ID_rDH_F                          = 0xB2,
+    SOUND_ID_rBC3                           = 0x9B,
+    SOUND_ID_rBC3_F                         = 0x9C,
+    SOUND_ID_rDKJP                          = 0xA1,
+    SOUND_ID_rDKJP_F                        = 0xA2,
+    SOUND_ID_rMC                            = 0xA7,
+    SOUND_ID_rMC_F                          = 0xA8,
+
+    SOUND_ID_rMC3                           = 0x99,
+    SOUND_ID_rMC3_F                         = 0x9A,
+    SOUND_ID_rPG                            = 0xB3,
+    SOUND_ID_rPG_F                          = 0xB4,
+    SOUND_ID_rDKM                           = 0xAB,
+    SOUND_ID_rDKM_F                         = 0xAC,
+    SOUND_ID_rBC                            = 0xA3,
+    SOUND_ID_rBC_F                          = 0xA4,
+
+    SOUND_ID_aBP                            = 0xB7,
+    SOUND_ID_aBP_F                          = 0xB8,
+    SOUND_ID_aDP                            = 0xB5,
+    SOUND_ID_aDP_F                          = 0xB6,
+    SOUND_ID_aCCW                           = 0xBB,
+    SOUND_ID_aCCW_F                         = 0xBC,
+    SOUND_ID_aFS                            = 0xB9,
+    SOUND_ID_aFS_F                          = 0xBA,
+    SOUND_ID_aTD                            = 0xBD,
+    SOUND_ID_aTD_F                          = 0xBE,
+
+    SOUND_ID_arBC4                          = 0xC3,
+    SOUND_ID_arBC4_F                        = 0xC4,
+    SOUND_ID_arBC3                          = 0xC5,
+    SOUND_ID_arBC3_F                        = 0xC6,
+    SOUND_ID_arS                            = 0xC7,
+    SOUND_ID_arS_F                          = 0xC8,
+    SOUND_ID_arCL                           = 0xBF,
+    SOUND_ID_arCL_F                         = 0xC0,
+    SOUND_ID_arTF                           = 0xC1,
+    SOUND_ID_arTF_F                         = 0xC2,
+
+    SOUND_ID_GALAXY_COLOSSEUM               = 0xC9,
+
+    SOUND_ID_RACE_INTRO                     = 0x56,
+    SOUND_ID_WIFI_RACE_INTRO                = 0x5B,
+    SOUND_ID_BATTLE_INTRO                   = 0x57,
+    SOUND_ID_MISSION_INTRO                  = 0x58,
+    SOUND_ID_ENDING_THEME_CREDITS           = 0xCE,
+    SOUND_ID_BATTLE_RESULTS                 = 0x6E,
+    SOUND_ID_1STPLACE_FINISH_RESULTS        = 0x5C,
+    SOUND_ID_1STPLACE_FINISH_FANFARE        = 0x5D,
+    SOUND_ID_GOOD_FINISH_RESULTS            = 0x5E,
+    SOUND_ID_GOOD_FINISH_FANFARE            = 0x5F,
+    SOUND_ID_BAD_FINISH_RESULTS             = 0x60,
+    SOUND_ID_BAD_FINISH_FANFARE             = 0x61,
+    SOUND_ID_MISSION_BOSS_WIN_FANFARE       = 0x6F,
+    SOUND_ID_MISSION_LOSE_FANFARE           = 0x66,
+    SOUND_ID_MISSION_LOSE_RESULTS           = 0x67,
+    SOUND_ID_MISSION_WIN_RESULTS            = 0x64,
+    SOUND_ID_MISSION_WIN_FANFARE            = 0x65,
+    SOUND_ID_BATTLE_WIN_RESULTS             = 0x62,
+    SOUND_ID_BATTLE_WIN_FANFARE             = 0x63,
+    SOUND_ID_OPTIONS                        = 0x53,
+    SOUND_ID_TT_INTRO_FANFARE               = 0x5A,
+    SOUND_ID_RACE_INTRO_FANFARE             = 0x59,
+    SOUND_ID_GHOST_REPLAY                   = 0xCF,
+    SOUND_ID_TROPHY_SHORT                   = 0xCC,
+    SOUND_ID_TROPHY_LOSE                    = 0xCD,
+    SOUND_ID_TROPHY_NORMAL                  = 0xCB,
+    SOUND_ID_TROPHY_MAIN                    = 0xCA,
+    SOUND_ID_UNLOCKED                       = 0x73,
+
+    SOUND_ID_STAR                           = 0x10e,
+    SOUND_ID_MEGA                           = 0x112,
+    SOUND_ID_GLOBAL_SHOCK                   = 0x114,
+    SOUND_ID_GLOBAL_POW_1STSHAKE            = 0x11d,
+    SOUND_ID_GLOBAL_POW_2NDSHAKE            = 0x11e,
+    SOUND_ID_GLOBAL_POW_3RDSHAKE            = 0x11f,
+    SOUND_ID_aDP_WATER                      = 0x309,
+};
+
 enum DamageType {
     SPINOUT_BANANA          = 0x0,
     SPINOUT_GOOMBA          = 0x1,
@@ -640,44 +855,44 @@ enum KCLTypes {
     KCL_WEAK_WALL               = 0x19,
     KCL_EFFECT_TRIGGER          = 0x1A,
     KCL_ITEM_STATE              = 0x1B,
-    KCL_HALFPIPE_INVISIBLE_WALL = 0x1C,
+    KCL_HALFPIPE_INVIS_WALL = 0x1C,
     KCL_ROULETTE_MOVING_ROAD    = 0x1D,
     KCL_SPECIAL_WALL            = 0x1E,
     KCL_WALL5                   = 0x1F
 };
 
 enum KCLTypesBIT {
-    KCL_BITFIELD_ROAD = 1 << KCL_ROAD,
-    KCL_BITFIELD_SLIPPERY_ROAD = 1 << KCL_SLIPPERY_ROAD,
-    KCL_BITFIELD_WEAK_OFFROAD = 1 << KCL_WEAK_OFFROAD,
-    KCL_BITFIELD_NORMAL_OFFROAD = 1 << KCL_NORMAL_OFFROAD,
-    KCL_BITFIELD_HEAVY_OFFROAD = 1 << KCL_HEAVY_OFFROAD,
-    KCL_BITFIELD_ICY_ROAD = 1 << KCL_ICY_ROAD,
-    KCL_BITFIELD_BOOST_PANEL = 1 << KCL_BOOST_PANEL,
-    KCL_BITFIELD_BOOST_RAMP = 1 << KCL_BOOST_RAMP,
-    KCL_BITFIELD_JUMP_PAD = 1 << KCL_JUMP_PAD,
-    KCL_BITFIELD_ITEM_ROAD = 1 << KCL_ITEM_ROAD,
-    KCL_BITFIELD_SOLID_FALL = 1 << KCL_SOLID_FALL,
-    KCL_BITFIELD_MOVING_WATER = 1 << KCL_MOVING_WATER,
-    KCL_BITFIELD_WALL = 1 << KCL_WALL,
-    KCL_BITFIELD_INVISIBLE_WALL = 1 << KCL_INVISIBLE_WALL,
-    KCL_BITFIELD_ITEM_WALL = 1 << KCL_ITEM_WALL,
-    KCL_BITFIELD_WALL_3 = 1 << KCL_WALL_3,
-    KCL_BITFIELD_FALL_BOUNDARY = 1 << KCL_FALL_BOUNDARY,
-    KCL_BITFIELD_CANNON_TRIGGER = 1 << KCL_CANNON_TRIGGER,
-    KCL_BITFIELD_FORCE_RECALCULATION = 1 << KCL_FORCE_RECALCULATION,
-    KCL_BITFIELD_HALFPIPE = 1 << KCL_HALFPIPE,
-    KCL_BITFIELD_PLAYER_ONLY_WALL = 1 << KCL_PLAYER_ONLY_WALL,
-    KCL_BITFIELD_MOVING_ROAD = 1 << KCL_MOVING_ROAD,
-    KCL_BITFIELD_STICKY_ROAD = 1 << KCL_STICKY_ROAD,
-    KCL_BITFIELD_ROAD2 = 1 << KCL_ROAD2,
-    KCL_BITFIELD_SOUND_TRIGGER = 1 << KCL_SOUND_TRIGGER,
-    KCL_BITFIELD_WEAK_WALL = 1 << KCL_WEAK_WALL,
-    KCL_BITFIELD_EFFECT_TRIGGER = 1 << KCL_EFFECT_TRIGGER,
-    KCL_BITFIELD_ITEM_STATE = 1 << KCL_ITEM_STATE,
-    KCL_BITFIELD_HALFPIPE_INVISIBLE_WALL = 1 << KCL_HALFPIPE_INVISIBLE_WALL,
-    KCL_BITFIELD_ROULETTE_MOVING_ROAD = 1 << KCL_ROULETTE_MOVING_ROAD,
-    KCL_BITFIELD_SPECIAL_WALL = 1 << KCL_SPECIAL_WALL,
-    KCL_BITFIELD_WALL5 = 1 << KCL_WALL5
+    KCL_BITFIELD_ROAD                   = 1 << KCL_ROAD,                  //0x1
+    KCL_BITFIELD_SLIPPERY_ROAD          = 1 << KCL_SLIPPERY_ROAD,         //0x2
+    KCL_BITFIELD_WEAK_OFFROAD           = 1 << KCL_WEAK_OFFROAD,          //0x4
+    KCL_BITFIELD_NORMAL_OFFROAD         = 1 << KCL_NORMAL_OFFROAD,        //0x8
+    KCL_BITFIELD_HEAVY_OFFROAD          = 1 << KCL_HEAVY_OFFROAD,         //0x10
+    KCL_BITFIELD_ICY_ROAD               = 1 << KCL_ICY_ROAD,              //0x20
+    KCL_BITFIELD_BOOST_PANEL            = 1 << KCL_BOOST_PANEL,           //0x40
+    KCL_BITFIELD_BOOST_RAMP             = 1 << KCL_BOOST_RAMP,            //0x80
+    KCL_BITFIELD_JUMP_PAD               = 1 << KCL_JUMP_PAD,              //0x100
+    KCL_BITFIELD_ITEM_ROAD              = 1 << KCL_ITEM_ROAD,             //0x200
+    KCL_BITFIELD_SOLID_FALL             = 1 << KCL_SOLID_FALL,            //0x400
+    KCL_BITFIELD_MOVING_WATER           = 1 << KCL_MOVING_WATER,          //0x800
+    KCL_BITFIELD_WALL                   = 1 << KCL_WALL,                  //0x1000
+    KCL_BITFIELD_INVISIBLE_WALL         = 1 << KCL_INVISIBLE_WALL,        //0x2000
+    KCL_BITFIELD_ITEM_WALL              = 1 << KCL_ITEM_WALL,             //0x4000
+    KCL_BITFIELD_WALL_3                 = 1 << KCL_WALL_3,                //0x8000
+    KCL_BITFIELD_FALL_BOUNDARY          = 1 << KCL_FALL_BOUNDARY,         //0x10000
+    KCL_BITFIELD_CANNON_TRIGGER         = 1 << KCL_CANNON_TRIGGER,        //0x20000
+    KCL_BITFIELD_FORCE_RECALCULATION    = 1 << KCL_FORCE_RECALCULATION,   //0x40000
+    KCL_BITFIELD_HALFPIPE               = 1 << KCL_HALFPIPE,              //0x80000
+    KCL_BITFIELD_PLAYER_ONLY_WALL       = 1 << KCL_PLAYER_ONLY_WALL,      //0x100000
+    KCL_BITFIELD_MOVING_ROAD            = 1 << KCL_MOVING_ROAD,           //0x200000
+    KCL_BITFIELD_STICKY_ROAD            = 1 << KCL_STICKY_ROAD,           //0x400000
+    KCL_BITFIELD_ROAD2                  = 1 << KCL_ROAD2,                 //0x800000
+    KCL_BITFIELD_SOUND_TRIGGER          = 1 << KCL_SOUND_TRIGGER,         //0x1000000
+    KCL_BITFIELD_WEAK_WALL              = 1 << KCL_WEAK_WALL,             //0x2000000
+    KCL_BITFIELD_EFFECT_TRIGGER         = 1 << KCL_EFFECT_TRIGGER,        //0x4000000
+    KCL_BITFIELD_ITEM_STATE             = 1 << KCL_ITEM_STATE,            //0x8000000
+    KCL_BITFIELD_HALFPIPE_INVIS_WALL    = 1 << KCL_HALFPIPE_INVIS_WALL,   //0x10000000
+    KCL_BITFIELD_ROULETTE_MOVING_ROAD   = 1 << KCL_ROULETTE_MOVING_ROAD,  //0x20000000
+    KCL_BITFIELD_SPECIAL_WALL           = 1 << KCL_SPECIAL_WALL,          //0x40000000
+    KCL_BITFIELD_WALL5                  = 1 << KCL_WALL5                  //0x80000000
 };
 #endif

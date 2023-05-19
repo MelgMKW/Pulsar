@@ -33,7 +33,7 @@ public:
     void vf_0xec() override; //0xec 807fd704
     void vf_0xf0() override; //0xf0 807fd70c
     void vf_0xf4() override; //0xf4 807fd6cc
-    bool CheckOOBCollision(float radius, const Vec3& position, const Vec3& lastPosition,
+    bool CheckTriggerCollision(float radius, const Vec3& position, const Vec3& lastPosition,
         KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime) override; //0xf8 807fd6d4
     void vf_0xfc() override; //0xfc 807fd6dc
     bool ProcessCollision(float radius, const Vec3& position, const Vec3& lastPosition,
