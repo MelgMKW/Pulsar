@@ -60,7 +60,7 @@ public:
 
 //Merging of phase
 #define StorePhase(addr, off, destReg, srcReg) \
-asm void StorePhase##addr(){ \
+asmFunc StorePhase##addr(){ \
     ASM( \
         nofralloc;\
         lbz r12, off + 2 (r##srcReg);\
@@ -71,7 +71,7 @@ asm void StorePhase##addr(){ \
 kmCall(##addr, StorePhase##addr);
 
 #define StoreEngine(addr, off, destReg, srcReg) \
-asm void StoreEngine##addr(){ \
+asmFunc StoreEngine##addr(){ \
     ASM( \
         nofralloc;\
         lbz r12, off (r##srcReg);\
@@ -82,7 +82,7 @@ asm void StoreEngine##addr(){ \
 kmCall(##addr, StoreEngine##addr);
 
 #define GetPhase(addr, off, destReg, srcReg) \
-asm void GetPhase##addr(){ \
+asmFunc GetPhase##addr(){ \
     ASM( \
         nofralloc;\
         lbz r##destReg, off + 2 (r##srcReg);\
@@ -93,7 +93,7 @@ kmBranch(##addr, GetPhase##addr);\
 kmPatchExitPoint(GetPhase##addr, ##addr+4);
 
 #define GetEngine(addr, off, destReg, srcReg) \
-asm void GetEngine##addr(){ \
+asmFunc GetEngine##addr(){ \
     ASM( \
         nofralloc;\
         lbz r##destReg, off (r##srcReg);\

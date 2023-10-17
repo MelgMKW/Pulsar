@@ -9,7 +9,7 @@ namespace nw4r {
 namespace g3d {
 
 
-class ScnObj: public G3dObj {
+class ScnObj : public G3dObj {
     enum OptID {
         OPTID_DISABLE_GATHER_DRAW_SCNOBJ = 0x00000001,
         OPTID_DISABLE_CALC_WORLD = 0x00000002,
@@ -34,7 +34,7 @@ class ScnObj: public G3dObj {
     virtual float GetValueForSortOpa() const; //0x28 8006dcd0
     virtual float GetValueForSortXlu() const; //0x2c 8006dce0
     virtual void CalcWorldMtx(const math::MTX34* parent, u32* param); //0x30 8006d6e0
-    math::MTX34 matrixArray[3]; //local, world, view
+    math::MTX34 matrixArray[3]; //0xC local, world, view
     math::AABB aabb[2]; //local, world
     u32 scnObjFlags;
     u8 priorityDrawOpa;
@@ -46,7 +46,8 @@ class ScnObj: public G3dObj {
     u16 callbackExecOpMask;
 };
 
-class ScnLeaf: public ScnObj {
+//no children
+class ScnLeaf : public ScnObj {
 public:
     bool IsDerivedFrom(TypeObj type) const override; //0x8 8006f040 vtable 80273118
     ~ScnLeaf() override; //0x10 8006f0d0
@@ -63,7 +64,8 @@ public:
     math::VEC3 scale;
 };
 
-class ScnGroup: public ScnObj {
+//An object that has children
+class ScnGroup : public ScnObj {
 public:
     static ScnGroup* Construct(G3dHeap* heap, u32* size, u32 maxChildren); //8006e390
     ScnGroup(G3dHeap* heap, ScnObj** array, u32 maxChildren);
@@ -73,13 +75,14 @@ public:
     TypeObj GetTypeObj() const override; //0x14 8006f030
     const char* GetTypeName() const override; //0x18 8006f000
     u32 ForEach(void* func, void* info, bool postOrder = false) override; //0x1c 8006e450
-    virtual bool Insert(u32 idx, ScnObj*); //0x34 8006eb60 
+    virtual bool Insert(u32 idx, ScnObj* obj); //0x34 8006eb60 
     virtual ScnObj* Remove(u32 idx); //0x38 8006ecf0
-    virtual bool Remove(ScnObj*); //0x3c 8006edb0
+    virtual bool Remove(ScnObj* obj); //0x3c 8006edb0
+
     ScnObj** scnObjs;
-    u32 scnObjArraySize;
-    u32 scnObjCount;
-};
+    u32 scnObjArraySize; //0xe0
+    u32 scnObjCount; //0xe4
+}; //0xe8
 
 
 }//namespace g3d  

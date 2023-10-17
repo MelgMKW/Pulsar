@@ -2,7 +2,7 @@
 #define _MIIHEADSMODEL_
 #include <kamek.hpp>
 #include <game/Mii/Mii.hpp>
-#include <game/Visual/Model/ModelDirector.hpp>
+#include <game/3D/Model/ModelDirector.hpp>
 
 class MiiHeadsModel;
 

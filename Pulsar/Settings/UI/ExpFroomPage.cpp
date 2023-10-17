@@ -1,5 +1,5 @@
 #include <game/UI/Page/Other/Globe.hpp>
-#include <game/Visual/GlobeMgr.hpp>
+#include <game/3D/GlobeMgr.hpp>
 #include <PulsarSystem.hpp>
 #include <Settings/UI/ExpFroomPage.hpp>
 #include <UI/TeamSelect/TeamSelect.hpp>
@@ -27,7 +27,7 @@ void ExpFroom::OnInit() {
     this->settingsButton.buttonId = 5;
     this->settingsButton.SetOnClickHandler(this->onSettingsClickHandler, 0);
     this->settingsButton.SetOnSelectHandler(this->onButtonSelectHandler);
-    this->topSettingsPage = PAGE_VS_SETTINGS;
+    this->topSettingsPage = SettingsPanel::firstId;
 
     this->AddControl(6, teamsButton, 0);
     this->teamsButton.Load(UI::buttonFolder, "FroomButton", "Teams", 1, 0, false);
@@ -60,9 +60,9 @@ void ExpFroom::ExtOnButtonSelect(PushButton& button, u32 hudSlotId) {
 void ExpFroom::OnSettingsButtonClick(PushButton& button, u32 hudSlotId) {
     this->areControlsHidden = true;
     const Section* section = SectionMgr::sInstance->curSection;
-    section->Get<SettingsPanel>(PAGE_VS_SETTINGS)->prevPageId = PAGE_FRIEND_ROOM;
-    section->Get<SettingsPanel>(PAGE_VS_TEAMS_VIEW)->prevPageId = PAGE_FRIEND_ROOM;
-    section->Get<SettingsPanel>(PAGE_BATTLE_MODE_SELECT)->prevPageId = PAGE_FRIEND_ROOM;
+    for(int i = 0; i < SettingsPanel::pageCount; ++i) {
+        section->Get<SettingsPanel>(static_cast<PageId>(SettingsPanel::firstId + i))->prevPageId = PAGE_FRIEND_ROOM;
+    }
     this->AddPageLayer(this->topSettingsPage, 0);
 }
 

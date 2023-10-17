@@ -73,31 +73,32 @@ protected:
 private:
     //System functions
     void Init(const Binary& bin);
-    void InitInstances(const Binary& bin) {
+    void InitInstances(const Binary& bin) const {
         CupsDef::sInstance = new CupsDef(bin.GetSection<CupsHolder>().cups);
         Info::sInstance = new Info(bin.GetSection<InfoHolder>().info);
         this->InitIO();
         this->InitSettings(&bin.GetSection<CupsHolder>().cups.trophyCount[0]);
     }
-    void InitIO();
+    void InitIO() const;
     void InitCups(const Binary& bin);
 
 protected:
     //Virtual
-    virtual void InitSettings(const u16* totalTrophyCount);
+    virtual void InitSettings(const u16* totalTrophyCount) const;
     virtual void AfterInit() {};
+
 public:
-    virtual void SetUserInfo(Network::ResvInfo::UserInfo& userInfo) const {};
-    virtual bool CheckUserInfo(const Network::ResvInfo::UserInfo& userInfo) const { return true; };
-    virtual u8 SetPackROOMMsg() const { return 0; }
-    virtual void ParsePackROOMMsg(u8 msg) const {}
+    virtual void SetUserInfo(Network::ResvInfo::UserInfo& userInfo) {};
+    virtual bool CheckUserInfo(const Network::ResvInfo::UserInfo& userInfo) { return true; };
+    virtual u8 SetPackROOMMsg() { return 0; } //Only called for hosts
+    virtual void ParsePackROOMMsg(u8 msg) {}  //Only called for non-hosts
 
     static System* sInstance;
     const char* GetModFolder() const { return modFolderName; }
     static void CreateSystem();
 
     //Network
-    static asm void GetRaceCount();
+    static asmFunc GetRaceCount();
 
     //BMG
     const BMGHolder& GetBMG() const { return customBmgs; }

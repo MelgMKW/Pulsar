@@ -2,7 +2,7 @@
 #define _CTRLRACEBALLOON_
 #include <kamek.hpp>
 #include <game/UI/Ctrl/UIControl.hpp>
-#include <game/System/Camera.hpp>
+#include <game/3D/Camera/Camera.hpp>
 
 class CtrlRaceNameBalloon;
 class CtrlRaceItemBalloon;

@@ -58,11 +58,14 @@ kmCall(0x8062f314, BuildChooseNextTrack); //0x77
 
 ChooseNextTrack::ChooseNextTrack() :
     isBattle(RaceData::sInstance->racesScenario.settings.gamemode == MODE_PRIVATE_BATTLE),
-    isHost(RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub].hostAid
-        == RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub].localAid),
-    isReady(false), sendPacket(isHost), hasSentInitialPacket(false),
-    curPageIdx(CupsDef::sInstance->winningCourse / 4)
+    curPageIdx(CupsDef::sInstance->winningCourse / 4)//, lastSentFrames(-1), maxTimeDiff(0), readyWait(0)
 {
+    if(RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub].hostAid
+        == RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub].localAid) {
+        status = STATUS_HOST;
+    }
+    else status = STATUS_NOTRACK;
+
     controlBMGId = BMG_CHOOSE_NEXT;
     nextPage = PAGE_WWRACEEND_WAIT;
     onRightArrowSelectHandler.subject = this;
@@ -83,12 +86,12 @@ void ChooseNextTrack::OnActivate() {
     this->countdown.SetInitial(10.0f);
     this->countdown.isActive = true;
     this->countdownControl.AnimateCurrentCountDown();
-        
+
 }
 
 void ChooseNextTrack::OnUpdate() {
     this->countdown.Update();
-    this->countdownControl.AnimateCurrentCountDown();  
+    this->countdownControl.AnimateCurrentCountDown();
     const CupsDef* cups = CupsDef::sInstance;
     if(this->duration == 600) {
         PulsarId lastTrack = cups->winningCourse;
@@ -98,7 +101,6 @@ void ChooseNextTrack::OnUpdate() {
         this->buttons[0].buttonId = lastTrack;
         this->OnButtonClick(this->buttons[0], 0);
     }
-
 }
 
 int ChooseNextTrack::GetMessageBMG() const {
@@ -193,12 +195,15 @@ kmCall(0x80858ebc, AddArrowsToChooseNext);
 
 PageId CorrectPageAfterResults(PageId id) {
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
-    const ChooseNextTrack* page = sectionMgr->curSection->Get<ChooseNextTrack>(PAGE_GHOST_RACE_ENDMENU);
-    if(page != nullptr && page->isHost && Info::IsHAW(false)) {
-        const SectionParams* params = sectionMgr->sectionParams;
-        if(page->isBattle && params->redWins < 2 && params->blueWins < 2
-            || !page->isBattle && params->currentRaceNumber != System::sInstance->racesPerGP) id = PAGE_GHOST_RACE_ENDMENU;
+    if(Info::IsHAW(false)) {
+        const ChooseNextTrack* page = sectionMgr->curSection->Get<ChooseNextTrack>(PAGE_GHOST_RACE_ENDMENU);
+        if(page != nullptr && page->IsHost()) {
+            const SectionParams* params = sectionMgr->sectionParams;
+            if(page->isBattle && params->redWins < 2 && params->blueWins < 2
+                || !page->isBattle && params->currentRaceNumber != System::sInstance->racesPerGP) id = PAGE_GHOST_RACE_ENDMENU;
+        }
     }
+
     return id;
 }
 kmBranch(0x80646754, CorrectPageAfterResults);

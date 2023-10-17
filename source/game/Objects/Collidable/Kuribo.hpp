@@ -7,7 +7,7 @@
 namespace Objects {
 
 class Kuribo: public ObjectCollidable, public ObjectCycleManager { //0x191 = 401
-    explicit Kuribo(const KMP::GOBJHolder& gobjHolder); //806db184
+    explicit Kuribo(const KMP::Holder<GOBJ>& gobjHolder); //806db184
 
     //ObjectCollidable vtable 808c5e10
     ~Kuribo() override; //806db3a0

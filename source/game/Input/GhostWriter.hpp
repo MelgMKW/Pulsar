@@ -34,6 +34,8 @@ public:
 }; //0x18
 
 class GhostActionStream : public GhostStream { //size 0x276c value = buttonAction
+public:
+    static const int inputSize = 2;
     void Write(u8 value) override; //0x8 80522dcc vtable 808b30c8
     u8 Read() override; //0xC 80522f40   
     int GetInputSize() const override; //0x10 805230a8   

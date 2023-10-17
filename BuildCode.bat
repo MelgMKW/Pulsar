@@ -12,8 +12,8 @@ echo %RIIVO%
 
 :: CPP compilation settings
 SET CC="../engine/cw/mwcceppc.exe"
-SET CFLAGS=-I- -i "../engine/engine" -i "../engine/source" -i "../engine/source/game" -i Pulsar -O2,p^
-  -opt loop,peep,schedule  -inline auto -enum int -proc gekko -fp hard -rostr -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 -rtti off 
+SET CFLAGS=-I- -i "../engine/engine" -i "../engine/source" -i "../engine/source/game" -i Pulsar ^
+  -opt all -inline auto -enum int -proc gekko -fp hard -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4
 SET DEFINE=
 
 :: CPP Sources

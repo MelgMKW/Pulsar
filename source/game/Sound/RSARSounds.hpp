@@ -18,8 +18,8 @@ so stuff like the position tracker, the lap transition sound, the roulette spinn
 
 class RSARSoundsPlayer {
 public:
-    static RSARSoundsPlayer* GetStaticInstance(u32 type); //80713e90 1 = menu
-    static RSARSoundsPlayer* DestroyStaticInstance(); //807140b4
+    static RSARSoundsPlayer* CreateInstance(u32 type); //80713e90 1 = menu
+    static RSARSoundsPlayer* DestroyInstance(); //807140b4
     static RSARSoundsPlayer* sInstance; //809c2850
     static void PlaySoundById(u32 soundId, u32 r4, Page* page); //807146a8 page unused
     virtual void Close(); //0x8 8071412c vtable 808c90e8
@@ -35,6 +35,7 @@ public:
     static bool HasFinishedLoadingGroups(); //807141ec on Stop, leads to DVDCancelAll if it returns false
     static bool IsDemo(); //80713dcc
     static SectionId curSection; //809c26ac
+    static void OutputSoundToWiimotes(AudioHandle* handle, u32 outputLineBitfield); //80713c80 bitfield must have 1 set or main (tv) is silent
     u8 unknown_0x4[4];
     u32 state; //01 before load, 02 after, 0x3 after pressing next race -> setting it to 3 midrace mutes most BRSAR sounds
     u8 unknown_0xC; //checks if it's 1 after pressing next race

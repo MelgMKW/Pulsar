@@ -66,14 +66,29 @@ public:
         int waveTrackCount;
     };
 
-    struct Sound3DParam;
+    struct Sound3DParam {
+        u32 ctrlFlag; //1 = don't control volume, 2 = don't control pan, 3 = don't control surround pan, 4 = don't control priority
+        u8 decayCurve;
+        u8 decayRatio;
+        u8 dopplerFactor;
+    };
+
     enum SoundType {
         SOUND_TYPE_INVALID = 0,
         SOUND_TYPE_SEQ,
         SOUND_TYPE_STRM,
         SOUND_TYPE_WAVE
     };
-    SoundArchive(); //8009de00 vtable 802749c0
+    SoundArchive(); //8009de00 
+    virtual ~SoundArchive(); //8009de30 vtable 802749c0
+    // File access
+    virtual const void* detail_GetFileAddress(FileId fileId) const = 0; //0xc
+    virtual const void* detail_GetWaveDataFileAddress(FileId fileId) const = 0; //0x10
+    virtual int detail_GetRequiredStreamBufferSize() const = 0; //0x14
+
+    virtual ut::FileStream* OpenStream(void* buffer, int size, u32 begin, u32 length) const = 0; //0x18
+    virtual ut::FileStream* OpenExtStream(void* buffer, int size, const char* extFilePath, u32 begin, u32 length) const = 0; //0x1c
+
     bool IsAvailable(); //8009de70
     void Shutdown(); //8009dea0
     void Setup(detail::SoundArchiveFileReader* fileReader); //8009de90
@@ -104,7 +119,10 @@ public:
     u32 ConvertLabelStringToId(const void* stringTree, const char* str) const; //8009f740
     ut::FileStream* detail_OpenFileWaveDataStream(FileId fileId, void* buffer, int size) const; //8009e240
 
-    virtual ~SoundArchive(); //8009de30
+
+
+
+
     detail::SoundArchiveFileReader* fileReader;
     char extFileRoot[256];
 

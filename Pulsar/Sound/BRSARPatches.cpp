@@ -13,7 +13,7 @@ bool LoadBRSTMVolume(snd::detail::StrmFileLoader& fileLoader, snd::detail::StrmF
     u8 volume = *reinterpret_cast<const u8*>(ut::AddU32ToPtr(fileLoader.fileReader.header, 0x3F));
     if(volume != 0) {
         register snd::detail::StrmSound* sound;
-        asm volatile(subi sound, r29, 0x100);
+        asm(subi sound, r29, 0x100);
         const u32 maxVolume = 0x7F;
         if(volume > maxVolume) volume = maxVolume;
         sound->mainOutVolume = (float)volume / (float)maxVolume;

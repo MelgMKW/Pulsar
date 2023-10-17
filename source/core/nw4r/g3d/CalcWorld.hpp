@@ -33,8 +33,12 @@ public:
     u16 nodeID;
 };
 
+//Changes position:rotation of all ScnObj (cameras, lights, fogs), calculates the world matrix
 void CalcWorld(math::MTX34* modelMtxArray, u32* modelMtxAttribArray, const u8* byteCode, const math::MTX34* baseMtx,
     ResMdl mdl, AnmObjChr* chr, FuncObjCalcWorld* callbackObj, u32 rootAttrib); //800679a0
+
+
+
 
 }//namespace g3d
 }//namespace nw4r

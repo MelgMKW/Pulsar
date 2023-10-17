@@ -12,8 +12,8 @@ public:
         STATUS_PLAYER_NORMAL
     };
     static AudioItemAlterationMgr* sInstance; //809c27f0
-    static AudioItemAlterationMgr* GetStaticInstance(); //8070fa08
-    static void DestroyStaticInstance(); //8070fabc
+    static AudioItemAlterationMgr* CreateInstance(); //8070fa08
+    static void DestroyInstance(); //8070fabc
     ~AudioItemAlterationMgr(); //8070fbc0
     void Init(); //8070fc98
     bool IsDemo() const; //8070fcf0

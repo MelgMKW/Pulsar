@@ -63,7 +63,8 @@ public:
     void EndRace(const Timer& finishTime, bool hasNoCameras, u32 r6); //805347f4
     void Vanish(); //80534c78 for example when a ghost ends its race
     void Disconnect(); //80534cbc sets state to |0x10
-    void UpdateCheckPoint(float completion, u16 cpId, bool isDrivingBackwards);
+    void UpdateCheckPoint(u16 cpId, bool isDrivingBackwards, float completion);
+    void CopyCPUInputs(const Input::State& cpuState); //80535718
 
     u8 unknown_0x4[0x8 - 0x4];
     u8 id; //0x8
@@ -105,8 +106,8 @@ size_assert(RaceInfoPlayer, 0x54);
 class RaceInfo {
 public:
     static RaceInfo* sInstance; //809bd730
-    static RaceInfo* GetStaticInstance(); //80532084
-    static void DestroyStaticInstance(); //805320d4
+    static RaceInfo* CreateInstance(); //80532084
+    static void DestroyInstance(); //805320d4
 
     RaceInfo(); //805327a0
     virtual ~RaceInfo(); //80532e3c vtable 808b3350
@@ -117,10 +118,10 @@ public:
     void SetPlayerDisconnected(u8 playerId); //80533d84 used if a player is disconnected
     bool IsAtLeastStage(RaceStage stage); //80536230
     bool CanRaceEnd(); //80536208
-    const KMP::JGPTHolder* GetRespawnPoint(u8 playerId); //8053621c just wraps around GMData's virtual func
-    const KMP::KTPTHolder* GetStartPoint(u8 playerId); //805365c8
+    const KMP::Holder<JGPT>* GetJGPTHolder(u8 playerId); //8053621c just wraps around GMData's virtual func
+    const KMP::Holder<KTPT>* GetKTPTHolder(u8 playerId); //805365c8
     void GetInitialPhysicsValues(Vec3* position, Vec3* angles, u8 playerId); //805362dc
-    void GetEnemyLink(u8 playerId); //80536828 from KTPTHolder
+    s8 GetStartENPT(u8 playerId); //80536828 from ENPH 0
     KRT** GetRawKRT(); //805368c4 from GPDataGP else returns 0
     int GetBattleDuration(); //805326ec
     void ComputeDelfinoPierTideState(); //805330c0 inlined

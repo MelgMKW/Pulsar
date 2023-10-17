@@ -1,10 +1,10 @@
 #include <kamek.hpp>
 #include <game/Input/InputManager.hpp>
-#include <game/Race/Kart/KartHolder.hpp>
-#include <game/visual/effect/EffectMgr.hpp> 
+#include <game/Kart/KartManager.hpp>
+#include <game/3D/Effect/EffectMgr.hpp> 
 #include <game/UI/SectionMgr/SectionMgr.hpp>
 #include <game/Item/Obj/ItemObj.hpp>
-#include <game/KMP/KMPController.hpp>
+#include <game/KMP/KMPManager.hpp>
 #include <game/Race/RaceData.hpp>
 #include <Race/200ccParams.hpp>
 
@@ -17,9 +17,9 @@ namespace Race {
 //kmWrite32(0x805850c4, 0x7FC3F378); //to get kartMovement
 void CannonExitSpeed() {
     const float ratio = Info::Is200cc() ? 0.6666667f : 1.0f;
-    register KartMovement* kartMovement;
-    asm volatile(mr kartMovement, r30;);
-    kartMovement->kartSpeed = kartMovement->baseSpeed * ratio;
+    register Kart::Movement* kartMovement;
+    asm(mr kartMovement, r30;);
+    kartMovement->engineSpeed = kartMovement->baseSpeed * ratio;
 }
 kmCall(0x805850c8, CannonExitSpeed);
 
@@ -55,17 +55,17 @@ static RaceFrameHook BrakeDriftingCheck(CalcBrakeDrifting);
 void FixGhostBrakeDrifting(Input::GhostWriter* writer, u16 buttonActions, u8 quantisedStickX,
     u8 quantisedStickY, u8 motionControlFlickUnmirrored) {
     register Input::ControllerHolder* controllerHolder;
-    asm volatile(mr controllerHolder, r30;);
+    asm(mr controllerHolder, r30;);
     EnableBrakeDrifting(*controllerHolder);
     writer->WriteFrame(controllerHolder->inputStates[0].buttonActions, quantisedStickX, quantisedStickY, motionControlFlickUnmirrored);
 }
 kmCall(0x80521828, FixGhostBrakeDrifting);
 
 
-bool IsBrakeDrifting(const KartStatus& status) {
+bool IsBrakeDrifting(const Kart::Status& status) {
     if(Info::Is200cc()) {
         u32 bitfield0 = status.bitfield0;
-        const Input::ControllerHolder& controllerHolder = status.base->GetControllerHolder();
+        const Input::ControllerHolder& controllerHolder = status.link->GetControllerHolder();
         if((bitfield0 & 0x40000) != 0 && (bitfield0 & 0x1F) == 0xF && (bitfield0 & 0x80100000) == 0
             && (controllerHolder.inputStates[0].buttonActions & 0x10) != 0x0) {
             return true;
@@ -74,29 +74,30 @@ bool IsBrakeDrifting(const KartStatus& status) {
     return false;
 }
 
-void BrakeDriftingAcceleration(KartMovement& movement) {
+void BrakeDriftingAcceleration(Kart::Movement& movement) {
     movement.UpdateKartSpeed();
-    if(IsBrakeDrifting(*movement.base.pointers->kartStatus)) movement.acceleration = -1.5f; //JUMP_PAD|RAMP_BOOST|BOOST
+    if(IsBrakeDrifting(*movement.link.pointers->kartStatus)) movement.acceleration = -1.5f; //JUMP_PAD|RAMP_BOOST|BOOST
 }
 kmCall(0x80579910, BrakeDriftingAcceleration);
 
-int BrakeDriftingSound(const Kart&, const KartStatus& status) {
-    if(IsBrakeDrifting(status)) return 4;
-    return status.bitfield0;
-}
-
-asm int BrakeDriftingSoundWrapper() {
+asmFunc BrakeDriftingSoundWrapper() {
     ASM(
         nofralloc;
     mflr r27;
-    mr r30, r3;
-    bl BrakeDriftingSound;
+    mr r28, r3;
+    mr r30, r4;
+    mr r3, r28;
+    bl IsBrakeDrifting;
+    lwz r0, 0x4 (r30);
+    cmpwi r3, 0;
+    beq + normal;
+    li r0, 2;
+normal:
     mtlr r27;
-    rlwinm r0, r3, 0, 31, 31;
-    rlwinm r27, r3, 31, 31, 31;
-    rlwinm r28, r3, 30, 31, 31;
-    mr r3, r30;
-    mr r30, r0;
+    mr r3, r28;
+    rlwinm r27, r0, 30, 31, 31;
+    rlwinm r28, r0, 31, 31, 31;
+    rlwinm r30, r0, 0, 31, 31;
     blr;
     )
 }
@@ -104,33 +105,33 @@ kmCall(0x806faff8, BrakeDriftingSoundWrapper);
 
 kmWrite32(0x80698f88, 0x60000000);
 int BrakeEffectBikes(PlayerEffects& effects) {
-    const Kart* kart = effects.kart;
+    const Kart::Player* kartPlayer = effects.kartPlayer;
     if(Info::Is200cc()) {
-        if(IsBrakeDrifting(*kart->base.pointers->kartStatus)) effects.DisplayEffects2(effects.bikeDriftEffects, 25, 26, true);
+        if(IsBrakeDrifting(*kartPlayer->link.pointers->kartStatus)) effects.DisplayEffects2(effects.bikeDriftEffects, 25, 26, true);
         else effects.FadeEffects2(effects.bikeDriftEffects, 25, 26, true);
     }
-    return kart->GetDriftState();
+    return kartPlayer->GetDriftState();
 }
 kmCall(0x80698f8c, BrakeEffectBikes);
 
 kmWrite32(0x80698048, 0x60000000);
 int BrakeEffectKarts(PlayerEffects& effects) {
-    Kart* kart = effects.kart;
+    Kart::Player* kartPlayer = effects.kartPlayer;
     if(Info::Is200cc()) {
-        if(IsBrakeDrifting(*kart->base.pointers->kartStatus)) effects.DisplayEffects2(effects.kartDriftEffects, 34, 36, true);
+        if(IsBrakeDrifting(*kartPlayer->link.pointers->kartStatus)) effects.DisplayEffects2(effects.kartDriftEffects, 34, 36, true);
         else effects.FadeEffects2(effects.kartDriftEffects, 34, 36, true);
     }
-    return kart->GetDriftState();
+    return kartPlayer->GetDriftState();
 }
 kmCall(0x8069804c, BrakeEffectKarts);
 
 
-void FastFallingBody(KartStatus& status, KartPhysics& physics) { //weird thing 0x96 padding byte used
+void FastFallingBody(Kart::Status& status, Kart::Physics& physics) { //weird thing 0x96 padding byte used
     if(Info::Is200cc()) {
         if((status.airtime >= 2) && (!status.bool_0x96 || (status.airtime > 19))) {
-            Input::ControllerHolder& controllerHolder = status.base->GetControllerHolder();
-            float input = controllerHolder.inputStates[0].stickY <= 0.0f ? 0.0f :
-                (controllerHolder.inputStates[0].stickY + controllerHolder.inputStates[0].stickY);
+            Input::ControllerHolder& controllerHolder = status.link->GetControllerHolder();
+            float input = controllerHolder.inputStates[0].stick.z <= 0.0f ? 0.0f :
+                (controllerHolder.inputStates[0].stick.z + controllerHolder.inputStates[0].stick.z);
             physics.gravity -= input * 0.39f;
         }
     }
@@ -140,20 +141,20 @@ kmCall(0x805967a4, FastFallingBody);
 
 
 kmWrite32(0x8059739c, 0x38A10014); //addi r5, sp, 0x14 to align with the Vec3 on the stack
-WheelPhysicsHolder& FastFallingWheels(const KartSub& sub, u8 wheelIdx, Vec3& gravityVector) { //weird thing 0x96 status
+Kart::WheelPhysicsHolder& FastFallingWheels(Kart::Sub& sub, u8 wheelIdx, Vec3& gravityVector) { //weird thing 0x96 status
     float gravity = -1.3f;
     if(Info::Is200cc()) {
-        KartStatus* status = sub.kartStatus;
+        Kart::Status* status = sub.kartStatus;
         if(status->airtime == 0) status->bool_0x96 = ((status->bitfield0 & 0x80) != 0) ? true : false;
         else if((status->airtime >= 2) && (!status->bool_0x96 || (status->airtime > 19))) {
-            Input::ControllerHolder& controllerHolder = sub.base.GetControllerHolder();
-            float input = controllerHolder.inputStates[0].stickY <= 0.0f ? 0.0f
-                : (controllerHolder.inputStates[0].stickY + controllerHolder.inputStates[0].stickY);
+            Input::ControllerHolder& controllerHolder = sub.link.GetControllerHolder();
+            float input = controllerHolder.inputStates[0].stick.z <= 0.0f ? 0.0f
+                : (controllerHolder.inputStates[0].stick.z + controllerHolder.inputStates[0].stick.z);
             gravity *= (input * 0.3f + 1.0f);
         }
     }
     gravityVector.y = gravity;
-    return sub.base.GetWheelPhysicsHolder(wheelIdx);
+    return sub.link.GetWheelPhysicsHolder(wheelIdx);
 };
 kmCall(0x805973a4, FastFallingWheels);
 }//namespace Race

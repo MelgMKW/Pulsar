@@ -11,8 +11,8 @@ class NandMgr {
 public:
     static const char* saveFileNames[7]; //0x808b3228 to 808b3240 see bottom of header
     static NandMgr* sInstance; //809bd720
-    static NandMgr* GetStaticInstance(); //8052bdf4
-    static void DestroyStaticInstance(); //8052be98
+    static NandMgr* CreateInstance(); //8052bdf4
+    static void DestroyInstance(); //8052be98
     NandMgr(); //8052becc inlined
     void Init(); //8052bff8
     EGG::TDisposer<NandMgr> disposer; //dtor 8052bd5c vtable 808b3250

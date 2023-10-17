@@ -26,7 +26,7 @@ struct BSP { //https://wiki.tockdom.com/wiki/BSP_(File_Format)
         u32 unknown;
     };
     float initialYPos;
-    Hitbox hitbox[16];
+    Hitbox hitbox[16]; //0x4
     Vec3 cuboidInertiaTensor1;
     Vec3 cuboidInertiaTensor2;
     float rotSpeedFactor;

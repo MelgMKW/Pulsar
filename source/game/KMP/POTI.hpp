@@ -1,6 +1,6 @@
 #ifndef _POTI_
 #define _POTI_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
 struct POTIPoint {
     Vec3 position;
@@ -15,6 +15,6 @@ struct POTI { //routes
     //Points points each entry has an array of points
 };
 
-typedef struct KMPSection<POTI> POTISection;
+typedef struct KMPBlock<POTI> POTIBlock;
 
 #endif

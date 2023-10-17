@@ -59,17 +59,17 @@ public:
     void Enter(); //80602144
     void UpdateControls(); //806022cc
     void Update(); //80602338
-    void Draw(u32 isOpaque); //8060235c
+    void Draw(u32 curZIdx); //8060235c
     void ResetManipulatorManager(); //80602378
     //8060238c
     void Resume(); //80602390
     void HandleSectionChange(); //80602428 calls OnSectionChange
     void SetAnimDirection(); //8060244c
     void InitControlGroup(u32 controlCount); //8060245C
-    void AddControl(u8 controlIdx, UIControl& control, u32 isOpaque); //8060246c
+    void AddControl(u8 controlIdx, UIControl& control, u32 zIdx); //8060246c
     void SetManipulatorManager(ManipulatorManager& manager); //00602474
     void EndState(); //8060247c
-    void EndStateAnimated(float animLength, u32 animDirection); //80602488
+    void EndStateAnimated(u32 animDirection, float animLength); //80602488
     void EndExitState(); //806024a4
     void AnimateControls(); //8060265c
     void StartEntrance(); //80602970 inlined

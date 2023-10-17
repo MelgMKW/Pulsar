@@ -104,7 +104,7 @@ public:
 
     //substruct from here, evidence at 8021133c
     snd::Sound3DManager sound3DManager; //0x6bc
-    snd::Sound3DListener sound3DListener[4]; //0x6e4
+    snd::Sound3DListener sound3DListener[4]; //0x6e4 one per player?
     snd::DVDSoundArchive* dvdSoundArchive; //0x844
     u32 unknown_0x848;
     //end of substruct

@@ -8,6 +8,7 @@
 #include <core/nw4r/ut/List.hpp>
 #include <core/nw4r/ut/Color.hpp>
 #include <core/nw4r/ut/Rect.hpp>
+#include <core/nw4r/math/math.hpp>
 
 namespace nw4r {
 namespace lyt {
@@ -24,7 +25,7 @@ public:
 };
 }//namespace detail
 
-class Pane: public detail::PaneBase {
+class Pane : public detail::PaneBase {
 public:
     //Pane(nw4r::lyt::res::Pane const *); // todo: this struct
     Pane(res::Pane* src); //80078980
@@ -59,7 +60,7 @@ public:
     void AppendChild(Pane* child); //80078c00
     void AddAnimationLink(AnimationLink* animationLink); //80079510
     const ut::Rect GetPaneRect(const DrawInfo& info) const; //80078c50
-    Vec2 GetVtxPos() const;
+    math::VEC2 GetVtxPos() const;
     u16 GetExtUserDataNum() const; // 802AC5A0
 
     Pane* parent; //0xC
@@ -70,8 +71,8 @@ public:
 
     math::VEC3 trans; //0x2c
     math::VEC3 rotate; //0x38
-    Vec2 scale; //0x44
-    Vec2 size; //0x4c
+    math::VEC2 scale; //0x44
+    math::VEC2 size; //0x4c
 
     Mtx calcMtx; //0x54
     Mtx effectiveMtx; //0x84

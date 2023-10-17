@@ -4,7 +4,6 @@
 #include <game/UI/SectionMgr/SectionPad.hpp>
 #include <game/System/SaveDataManager.hpp>
 #include <game/System/Timer.hpp>
-#include <IO/Folder.hpp>
 #include <PulsarSystem.hpp>
 
 

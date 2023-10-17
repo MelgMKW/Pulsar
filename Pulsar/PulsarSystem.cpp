@@ -9,8 +9,6 @@
 #include <Settings/Settings.hpp>
 #include <Debug/Debug.hpp>
 #include <IO/IO.hpp>
-#include <IO/File.hpp>
-#include <IO/Folder.hpp>
 #include <SlotExpansion/CupsDef.hpp>
 
 namespace Pulsar {
@@ -98,31 +96,32 @@ void System::Init(const Binary& bin) {
 }
 
 //IO
-void System::InitIO() {
-    IO::IOType type = IO::IOType_ISO;
-    s32 ret = IO::Open("file", IOS::MODE_NONE);
+#pragma suppress_warnings on
+void System::InitIO() const {
+    IOType type = IOType_ISO;
+    s32 ret = IO::OpenFix("file", IOS::MODE_NONE);
 
     if(ret >= 0) {
-        type = IO::IOType_RIIVO;
+        type = IOType_RIIVO;
         IOS::Close(ret);
     }
     else {
-        ret = IO::Open("/dev/dolphin", IOS::MODE_NONE);
+        ret = IO::OpenFix("/dev/dolphin", IOS::MODE_NONE);
         if(ret >= 0) {
-            type = IO::IOType_DOLPHIN;
+            type = IOType_DOLPHIN;
             IOS::Close(ret);
         }
     }
-    IO::File::CreateStaticInstance(type, this->heap, this->taskThread);
-    IO::Folder* folder = IO::Folder::CreateStaticInstance(type, this->heap, this->taskThread);
+    IO* io = IO::CreateInstance(type, this->heap, this->taskThread);
     const char* modFolder = this->GetModFolder();
-    folder->CreateFolder(modFolder); //not async because it is needed asap
+    io->CreateFolder(modFolder); //not async because it is needed asap
     char ghostPath[IOS::ipcMaxPath];
     snprintf(ghostPath, IOS::ipcMaxPath, "%s%s", modFolder, "/Ghosts");
-    folder->RequestCreateFolder(ghostPath);
+    io->RequestCreateFolder(ghostPath);
 }
+#pragma suppress_warnings reset
 
-void System::InitSettings(const u16* totalTrophyCount) {
+void System::InitSettings(const u16* totalTrophyCount) const {
     Settings* settings = new (this->heap) Settings;
     char path[IOS::ipcMaxPath];
     snprintf(path, IOS::ipcMaxPath, "%s/%s", this->GetModFolder(), "Settings.bin");
@@ -130,7 +129,7 @@ void System::InitSettings(const u16* totalTrophyCount) {
     Settings::sInstance = settings;
 }
 
-asm void System::GetRaceCount() {
+asmFunc System::GetRaceCount() {
     ASM(
         nofralloc;
     lis r5, sInstance@ha;

@@ -8,7 +8,7 @@
 #include <game/UI/Page/System/RecognizePad.hpp>
 #include <game/UI/Page/System/DpdPointer.hpp>
 #include <game/UI/FriendList.hpp>
-#include <game/Scene/BaseScene.hpp>
+#include <game/Scene/GameScene.hpp>
 
 
 class Section {
@@ -20,7 +20,7 @@ public:
     void Exit(); //806221d8
     void UpdateSystemPages(); //806223a0
     void Update(); //806224f8
-    void Draw(u32 isOpaque); //80622764
+    void Draw(u32 curZIdx); //80622764
     void Pause(); //80622ae0
     void Resume(); //80622b4c
     void OnTransition(); //80622c08
@@ -56,7 +56,7 @@ public:
 
     SectionId sectionId;
     u32 animDirection;
-    Page* pages[0xD2]; //https://wiki.tockdom.com/wiki/List_of_Identifiers#PAGE_Identifiers
+    Page* pages[0xD2]; //0x8 https://wiki.tockdom.com/wiki/List_of_Identifiers#PAGE_Identifiers
     Page* activePages[11]; //0x354 top layer is [layerCount - 1]
     u32 layerCount; //0x37C
     Pages::RecognizePad* recognizePadPage; //0x380

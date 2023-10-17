@@ -43,6 +43,7 @@ public:
 }; //total size 0xC4
 
 class TextPaneHandler {
+public:
     TextPaneHandler(); //805cda34
     ~TextPaneHandler(); //805cda50
     void Init(lyt::TextBox* pane); //805cdbe4

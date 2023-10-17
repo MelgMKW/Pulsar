@@ -5,6 +5,7 @@
 #include <core/nw4r/g3d/res/ResDic.hpp>
 #include <core/nw4r/g3d/res/ResMat.hpp>
 #include <core/nw4r/g3d/res/ResNode.hpp>
+#include <core/nw4r/g3d/res/ResShp.hpp>
 #include <core/nw4r/g3d/res/ResTexPlttInfo.hpp>
 #include <core/nw4r/math/math.hpp>
 
@@ -31,7 +32,7 @@ struct ResMdlInfoDataTypedef {
     };
 };
 
-struct ResMdlInfoData: public ResMdlInfoDataTypedef
+struct ResMdlInfoData : public ResMdlInfoDataTypedef
 {
     u32 size;
     s32 offsetToMdlData;
@@ -73,7 +74,7 @@ struct ResMdlData {
     // Data in the model (the entire set of dictionaries, nodes, and so on) and user data continues below
 };
 
-class ResMdl: public ResCommon<ResMdlData> {
+class ResMdl : public ResCommon<ResMdlData> {
 public:
     ResMat GetResMat(const char* name) const; //8004e8f0
     ResMat GetResMat(const ResName resName) const; //8004e940
@@ -81,6 +82,10 @@ public:
     ResMat GetResMat(u32 idx) const; //8004e9f0
 
     u32 GetResMatNumEntries() const; //8004ea50
+
+    ResShp GetResShp(int idx) const; //8004ea8c
+    ResShp GetResShp(u32 idx) const; //8004eaf0
+    u32 GetResShpNumEntries() const; //8004eb50
 
     ResNode GetResNode(const char* name) const; //8004e2a4 
     ResNode GetResNode(const ResName resName) const; //8004e2f0 

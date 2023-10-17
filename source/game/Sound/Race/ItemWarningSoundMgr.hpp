@@ -23,8 +23,8 @@ struct ItemWarningSound {
 class ItemWarningSoundMgr {
 public:
     static ItemWarningSoundMgr* sInstance; //809c2320
-    static ItemWarningSoundMgr* GetStaticInstance(); //806f7ee8
-    static void DestroyStaticInstance(); //806f7fcc
+    static ItemWarningSoundMgr* CreateInstance(); //806f7ee8
+    static void DestroyInstance(); //806f7fcc
     ~ItemWarningSoundMgr(); //806f80ac
     void Init(); //806f8188
     void Shutdown(); //806f8204 sets playerCount to 0

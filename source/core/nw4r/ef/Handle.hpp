@@ -5,6 +5,7 @@
 
 namespace nw4r {
 namespace ef {
+
 struct HandleBase {
     HandleBase(); //80037560
     HandleBase(const HandleBase& hnd); //80037570
@@ -14,6 +15,7 @@ struct HandleBase {
     u32 objId;
     LinkedObject* object;
 }; //total size 0x8
+
 }//namespace ef
 }//namespace nw4r
 #endif

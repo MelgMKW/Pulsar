@@ -29,7 +29,7 @@ PatchRegion(0x80659778);
 //kmWrite32(0x8065a084, 0x7C050378);
 int GetFriendsSearchType(int curType, u32 regionId) {
     register u8 friendRegionId;
-    asm volatile(mr friendRegionId, r0;);
+    asm(mr friendRegionId, r0;);
     u8 region = Info::GetWiimmfiRegion();
     if(region != friendRegionId) return curType;
     else if(curType == 7) return 6;

@@ -4,9 +4,9 @@
 #include <game/Objects/KCL/ExternalKCL/ObjectExternKCL.hpp>
 
 namespace Objects {
-class WLwallGC: public ObjectExternKCL { //0xcb
+class WLwallGC : public ObjectExternKCL { //0xcb
     static u32 count; //0x809c4760, incremented by 1 at the end of the ctor
-    explicit WLwallGC(const KMP::GOBJHolder& gobjHolder); //8086bc1c
+    explicit WLwallGC(const KMP::Holder<GOBJ>& gobjHolder); //8086bc1c
     ~WLwallGC() override; //8086bde4 vtable 808dbfe0
     void OnStart() override; //0xC 8086be34
     void Update() override; //0x14 8086c108
@@ -16,11 +16,11 @@ class WLwallGC: public ObjectExternKCL { //0xcb
     int vf_0x11c() override; //0x11c 8086c684
     const Mtx34& GetTransformationMatrix() const override; //0x12c 8086bf30
     float GetPeriod() const override; //0x134 8086c648
-    bool ProcessEntityCollisionImpl(float radius, const Vec3& position, const Vec3& lastPosition,
-        KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime) override; //0x148 8086c328
-    bool ProcessCollisionImpl(float radius, const Vec3& position, const Vec3& lastPosition,
-        KCLTypesBIT bitfield, UnkType* normals, KCLTypeHolder& result, u32 initialTime) override; //0x14c 8086c5a8
-    static Vec3 CalcNextPosition(float percent, const Vec& basePos, const Vec& finalPos); //8086c098 (final - base) * percent + base
+    bool IsCollidingNoTriangleCheckImpl(const Vec3& position, const Vec3& prevPosition,
+        KCLTypesBitfield accepted, CollisionInfo* collisionInfo, KCLTypeHolder* result, u32 initialTime, float radius) override; //0x148 8086c328
+    bool IsCollidingImpl(const Vec3& position, const Vec3& prevPosition,
+        KCLTypesBitfield accepted, CollisionInfo* collisionInfo, KCLTypeHolder* result, u32 initialTime, float radius) override; //0x14c 8086c5a8
+    static Vec3 CalcNextPosition(const Vec& basePos, const Vec& finalPos, float percent); //8086c098 (final - base) * percent + base
     u8 unknown_0x104[0x170 - 0x104];
     u32 idx; //0x104 809c4760, incremented by 1 at the end of the ctor
     u32 timeRetracted; //0x108

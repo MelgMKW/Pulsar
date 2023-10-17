@@ -7,14 +7,14 @@
 #include <game/UI/Page/Other/Approve.hpp>
 
 //_sinit_ at 805ee894
-class LicenseControl: public LayoutUIControl {
+class LicenseControl : public LayoutUIControl {
     //no ctor
     ~LicenseControl() override; //805ebf10 vtable 808b992c
     int GetRuntimeTypeInfo() const override; //0x28 805ee678
     const char* GetClassName() const override; //0x2c 805ea818
 }; //total size 0x174
 
-class LicenseButton: public PushButton {
+class LicenseButton : public PushButton {
     LicenseButton(); //805eaa6c
     ~LicenseButton() override; //805eaaa8 vtable 808b98e0
     int GetRuntimeTypeInfo() const override; //0x28 805ee66c
@@ -23,7 +23,7 @@ class LicenseButton: public PushButton {
 };
 
 namespace Pages {
-class LicenseSelect: public Page { //ID 0x65
+class LicenseSelect : public Page { //ID 0x65
     LicenseSelect(); //805ea834
     ~LicenseSelect() override; //805eab00 vtable 808b984c
     PageId GetNextPage() const override; //0x10 805ee658
@@ -58,7 +58,7 @@ class LicenseSelect: public Page { //ID 0x65
 }; //total size 0x130c
 size_assert(LicenseSelect, 0x130c);
 
-class LicenseChangeMii: public Page { //ID 0x66 comes after choose mii
+class LicenseChangeMii : public Page { //ID 0x66 comes after choose mii
     LicenseChangeMii(); //805ebdac
     ~LicenseChangeMii() override; //805ebf68 vtable 808b97b8
     PageId GetNextPage() const override; //0x10 805ee644
@@ -69,7 +69,7 @@ class LicenseChangeMii: public Page { //ID 0x66 comes after choose mii
     void OnMiiValidate(Approve& validatePage); //85ed450 validate function
     void OnMiiDisapprove(Approve& validatePage); //805ed45c disapprove function
     void OnMessageBoxClick(MessageBox& messageBox); //805ed468
-    void UpdateMiiGroup(MiiTexMap& newPotentialMii); //805ecdc8 updates MiiGroup with selected mii in case it is then chosen
+    void UpdateMiiGroup(RFL::CreateID* createId); //805ecdc8 updates MiiGroup with selected mii in case it is then chosen
     void PrepareMessageBox(); //805ecdd8 updates page 52 with the correct text
     static void SetControlMii(UnkType* unusedArg, LicenseControl* licenseControl, u8 curLicenseId, MiiGroup* miiGroup, u32 index); //805ec4e8
     PtmfHolder_1A<LicenseChangeMii, void, u32> onClick; //0x44 805ed2d4
@@ -84,7 +84,7 @@ class LicenseChangeMii: public Page { //ID 0x66 comes after choose mii
 }; //total size 0x6cc
 size_assert(LicenseChangeMii, 0x6cc);
 
-class LicenseSettings: public Page { //ID 0x67
+class LicenseSettings : public Page { //ID 0x67
     LicenseSettings(); //805ed4ec 
     ~LicenseSettings() override; //805ed70c vtable 808b973c
     PageId GetNextPage() const override; //0x10 805ee630
@@ -111,7 +111,7 @@ class LicenseSettings: public Page { //ID 0x67
 }; //total size 0x1138
 size_assert(LicenseSettings, 0x1138);
 
-class LicenseErase: public Page { //ID 0x68
+class LicenseErase : public Page { //ID 0x68
     LicenseErase(); //805eddf4
     ~LicenseErase() override; //805edf84 vtable 808b96b4
     PageId GetNextPage() const override; //0x10 805ee41c returns -1 

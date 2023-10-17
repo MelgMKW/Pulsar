@@ -1,20 +1,20 @@
 
 #include <kamek.hpp>
 #include <game/Archive/ArchiveRoot.hpp>
-#include <game/visual/effect/EffectMgr.hpp>
-#include <game/Visual/Model/ModelDirector.hpp>
+#include <game/3D/Effect/EffectMgr.hpp>
+#include <game/3D/Model/ModelDirector.hpp>
 #include <game/Race/RaceData.hpp>
 #include <game/File/Tables/ObjFlow.hpp>
-#include <game/KMP/KMPController.hpp>
+#include <game/KMP/KMPManager.hpp>
 
 //A bunch of patches to prevent common slot related crashes
 kmWrite32(0x8068dfc8, 0x60000000);
-KartType PreventRSLCrash(PlayerEffects* effects, KartBase* base) {
+KartType PreventRSLCrash(PlayerEffects* effects, Kart::Link* base) {
     bool isSherbet = true;
     if(RaceData::sInstance->racesScenario.settings.courseId != N64_SHERBET_LAND
         || ArchiveRoot::sInstance->GetFile(ARCHIVE_HOLDER_COURSE, "ice.brres", 0) == nullptr) isSherbet = false;
     effects->isSL = isSherbet;
-    return base->GetKartType();
+    return base->GetType();
 }
 kmCall(0x8068dfcc, PreventRSLCrash);
 kmWrite32(0x8068e2b0, 0x60000000);
@@ -27,7 +27,7 @@ kmCall(0x80827a34, PreventRSBCrash);
 kmWrite32(0x80827a3c, 0x41820018); //if ptr is nullptr, skip rSGB section
 
 void* PreventMHCrash(u32 carManagerSize) {
-    const ArchiveRoot *root = ArchiveRoot::sInstance;
+    const ArchiveRoot* root = ArchiveRoot::sInstance;
     if(root->GetFile(ARCHIVE_HOLDER_COURSE, "K_car_body.brres", 0) == nullptr
         || root->GetFile(ARCHIVE_HOLDER_COURSE, "K_truck.brres", 0) == nullptr) return nullptr;
     return new u8[carManagerSize];
@@ -36,7 +36,7 @@ kmCall(0x808279ac, PreventMHCrash);
 kmWrite32(0x808279b4, 0x41820018); //if ptr is nullptr, skip MH section
 
 extern const char* matNamesMH[12]; //808d1860
-bool PreventMHMatCrash(RaceData *racedata) {
+bool PreventMHMatCrash(RaceData* racedata) {
     if(racedata->racesScenario.settings.courseId != MOONVIEW_HIGHWAY) return false;
     nw4r::g3d::ResFile file;
     file.data = reinterpret_cast<nw4r::g3d::ResFileData*>(ArchiveRoot::sInstance->GetFile(ARCHIVE_HOLDER_COURSE, "course_model.brres", 0));
@@ -58,9 +58,9 @@ kmCall(0x8082c140, GetCommonBinary); //ObjFlow
 kmCall(0x807f92ac, GetCommonBinary); //GeoHitTables
 
 //Uses the 2nd KTPT entry (if it exists in the KMP) to draw the finish line on the minimap
-const KMP::KTPTHolder* SecondaryKTPT(KMP::Controller& controller, u32 idx) {
-    const KMP::KTPTHolder* holder = controller.GetKTPTHolder(1);
-    if(holder == nullptr) holder = controller.GetKTPTHolder(0);
+const KMP::Holder<KTPT>* SecondaryKTPT(KMP::Manager& manager, u32 idx) {
+    const KMP::Holder<KTPT>* holder = manager.GetHolder<KTPT>(1);
+    if(holder == nullptr) holder = manager.GetHolder<KTPT>(0);
     return holder;
 }
 kmCall(0x807ea670, SecondaryKTPT);

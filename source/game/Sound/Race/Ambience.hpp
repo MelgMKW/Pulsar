@@ -19,8 +19,8 @@ class Ambience {
 class RaceAmbienceMgr {
 public:
     static RaceAmbienceMgr* sInstance; //809c2338
-    static RaceAmbienceMgr* GetStaticInstance(); //806fb8b8
-    static void DestroyStaticInstance(); //806fb964
+    static RaceAmbienceMgr* CreateInstance(); //806fb8b8
+    static void DestroyInstance(); //806fb964
     RaceAmbienceMgr(); //806fbab0
     ~RaceAmbienceMgr(); //806fbb70
     void Init(CourseId courseId); //806fbc90 

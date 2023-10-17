@@ -1,8 +1,8 @@
 #ifndef _ITPH_
 #define _ITPH_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
-typedef PointGroup ITPH;
-typedef struct KMPSection<ITPH> ITPHSection;
+struct ITPH : PointGroup {};
+typedef struct KMPBlock<ITPH> ITPHBlock;
 
 #endif

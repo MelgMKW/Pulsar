@@ -2,10 +2,16 @@
 #define _KARTSOUND_
 #include <kamek.hpp>
 #include <game/Sound/Actors/RaceActor.hpp>
+#include <game/Sound/Other/AudioValues.hpp>
 
 using namespace nw4r;
-class Kart;
-class KartSound : public SimpleRaceAudioActor {
+namespace Kart {
+class Player;
+}
+class EngineSoundMgr;
+class Object;
+
+class KartSound : public SimpleRaceAudioActor { //LinkedRaceActor: 0xb2 is KCLVariant (when needed), 0xb3 is hudSlotId
 public:
     static Vec3 DefaultVelocity; //809c2858 0.0f x3
     KartSound(); //8070722c
@@ -31,19 +37,44 @@ public:
     bool StartSound(u32 soundId, AudioHandle* handle) override; //thunk 8070ca3c func 807092b4
     bool HoldSound(u32 soundId, AudioHandle* handle) override; //thunk 8070ca34 func 80709338
 
-    void SetLinked_0xC(u32 r4); //807074b0
-    int GetRoadSound() const; //8070b8f0 actually virtual, but missing the middle class 
-    void UpdateLapSounds(); //8070b250, can play sounds by itself based on certain conditions like lap transitions
-    void UpdateMTSounds(); //807093c4
+    virtual u32 GetRoadSoundId() const; //8070bb6c "0x12c" for stuff like mud that triggers even when driving normally
+    virtual u32 GetBrakingSoundId() const; //8070bcbc "0x130"
+    virtual u32 GetDriftAndSSMTRoadSoundId() const; //8070b8f0 "0x134" RR is the prime example of this
+    virtual u32 GetLandingSoundId() const; //8070ba40 "0x138"
+
+    void SetActorType(ActorType type); //807074b0
+    static void OutputSoundToWiimotes(AudioHandle *handle, u32 outputLineBitfield); //80708b20 inlined
     void ApplyKCLSoundTrigger(u8 soundTriggerVariant); //80708b44
+    void PlayBoostSound(); //80708bac ramps do not count
+    void PlayRampSound(); //80708d48
+    void PlayCannonSound(); //80709150
+    void PlayHornSound(const KartSound& other); //807091ac
+    void PlayMTSounds(); //807093c4
+    void PlayRoadSound(); //80709610
+    void OnObjectNormalCollision(Object* object); //80709b08
+    void OnObjectWallCollision(Object* object); //80709ca4
+    //Massive switch that has multiple roles
+    //Plays the collision sound itself
+    //Plays the object's collided sound (for most, ID 0x229 which is some kind of bam sound)
+    //Plays the characterSound
+    void PlayObjectCollisionSounds(Object* object, u32 objectId, bool isInvincible, bool isInvincible2); //80709df8 isInvincible = star, etc..
+    void PlayWallCollisionSound(); //8070afcc all but bushes
+    void PlayBushCollisionSound(); //8070b09c
+    void UpdateLapSounds(); //8070b250, can play sounds by itself based on certain conditions like lap transitions
+    void UpdateKCLValues(); //8070b490
+    void SetRoadState(u32 state); //8070b8dc
+    void SetNonLocalVolumeAndPriority(); //8070be0c alters volume (and priority) if non-local
+    void PlayOtherKartCollisionSound(); //8070c8e4
+    void PlayEngineSound(u32 engineSoundId, float pitch, float volume); //8070c564
+    void SetPitch(float pitch); //8070c758 set pitch will actually be 1-(0.4 * pitch); most notably used when the bullet starts to run out
 
     bool isChargingSSMT; //0xb4
     u8 padding[3];
-    UnkType* unkClass_0xb8; //some sort of kart engine manager
+    EngineSoundMgr* engineSoundMgr; //some sort of kart engine manager
     AudioHandle handles[4]; //0xbc c4 seems to be the one used most of the times? cur handle?
     u8 unknown_0xCc[0xDb - 0xCc]; //0xd6 weird s16 cumulative speed
     u8 currentLap; //0xdb
-    Kart* kart; //0xdc
+    Kart::Player* kartPlayer; //0xdc
     bool isLocal; //0xe0
     bool isGhost; //0xe1
     u8 wheelCount; //0xe2
@@ -55,7 +86,44 @@ public:
     float speedNorm; //0xec
     u16 kclFlag; //0xf0
     u16 variant; //0xf2
-    u8 unknown_0xF4[0xfc - 0xf4];
+    u32 outputLineFlag; //0xf4 and of 1 << (hudslotIds + 1)
+    u32 roadSate; //0xf8 0 = normal, 1 = on water, 2/3 = on silent road
 };  // Total size 0xfc
 size_assert(KartSound, 0xfc);
+
+class EngineSoundMgr {
+public:
+
+    void Init(KartSound* kartSound); //806fae60
+    void Update(); //806fafb4
+    void CalcSoundId(); //806fb2fc
+    void CalcPitch(); //806fb640
+    void CalcAccelerating(float curSpeed); //806fb444 both directions
+    void CalcBraking(float curSpeed); //806fb558
+    KartId kartId;
+    u32 engineState; //1 braking, 2 accelerating both forwards and backwards, 3 nothing
+
+    float baseAccelerationRPM; //0x8 engine RPM based on kart and CC
+    float baseDeccelerationRPM; //0xc engine RPM same
+    float baseBrakingPitch; //0x10 depends on kart
+    float baseEnginePitch; //0x14
+    float soundIncreasePerSpeedPercent; //0x18
+    float unknown_0x1c[2];
+    float curPitch; //0x24
+    float unknown_0x28[2];
+
+    PitchModuler moduler; //0x30
+
+    float baseSpeed; //0x40
+    u32 curSoundId; //0x44
+    float curVolume; //0x48
+    bool isAccelerating;
+    u8 padding[3];
+    KartSound* kartSound; //0x50
+    Kart::Player* kartPlayer; //0x54
+
+}; //0x58
+
+
+
 #endif

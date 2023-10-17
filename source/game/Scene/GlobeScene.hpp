@@ -1,6 +1,6 @@
 #ifndef _GLOBESCENE_
 #define _GLOBESCENE_
-#include <game/Scene/BaseScene.hpp>
+#include <game/Scene/GameScene.hpp>
 
 class GlobeScene: public GameScene {
 public:

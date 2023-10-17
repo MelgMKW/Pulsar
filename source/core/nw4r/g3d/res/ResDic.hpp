@@ -16,11 +16,11 @@ struct ResDicData {
         u16 idxRight; //0x6
         s32 ofsString; //0x8
         s32 ofsData; //0xC
-    }data[1]; //data count, total size 0x10
+    }data[1]; //0x8 data count, total size 0x10
 
 };
 
-class ResDic: public ResCommon<ResDicData> {
+class ResDic : public ResCommon<ResDicData> {
 public:
 
 };

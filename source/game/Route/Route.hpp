@@ -1,7 +1,7 @@
 #ifndef _ROUTE_
 #define _ROUTE_
 #include <kamek.hpp>
-#include <game/KMP/KMPController.hpp>
+#include <game/KMP/KMPManager.hpp>
 
 
 
@@ -31,7 +31,7 @@ class RouteArc {
 }; //0x38
 
 class Route {
-    Route(u32 routeId, const KMP::POTIHolder& route); //806ec9a4
+    Route(u32 routeId, const KMP::Holder<POTI>& route); //806ec9a4
     Route(u32 routeId, const Vec3& pointsArray, u32 pointCount, u32 isCurved, bool isNotCyclic); //806ec9a4 array of vectors
     virtual ~Route(); //806ecc40 vtable 808c76a8
     virtual float GetTotalDistance() const = 0; //0xC
@@ -59,8 +59,8 @@ class Route {
     u32 isCurved; //0x24
 }; //0x28
 
-class RouteStraight: public Route {
-    RouteStraight(u32 routeId, const KMP::POTIHolder& route); //806ef9b4
+class RouteStraight : public Route {
+    RouteStraight(u32 routeId, const KMP::Holder<POTI>& route); //806ef9b4
     RouteStraight(u32 routeId, const Vec3& pointsArray, u32 pointCount, u32 isCurved, bool isNotCyclic); //806efc34 unsure what r5 is
     ~RouteStraight() override; //806efd6c vtable 808c7768
     float GetTotalDistance() const override; //806f09c0
@@ -80,8 +80,8 @@ class RouteStraight: public Route {
 
 
 
-class RouteCurved: public Route {
-    RouteCurved(u32 routeId, const KMP::POTIHolder& route); //806ed57c
+class RouteCurved : public Route {
+    RouteCurved(u32 routeId, const KMP::Holder<POTI>& route); //806ed57c
     RouteCurved(u32 routeId, const Vec3& pointsArray, u32 pointCount, u32 isCurved, bool isNotCyclic); //806ed704 unsure what r5 is
     ~RouteCurved() override; //806ed828 vtable 808c7708
     float GetTotalDistance() const override; //806ef9ac

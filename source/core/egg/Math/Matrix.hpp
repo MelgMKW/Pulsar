@@ -13,8 +13,9 @@ https://cdn.discordapp.com/attachments/739985181389094975/1052953626462666782/im
 this is how it looks, with rotation, scale and translation components in game*/
 
 //_sinit_ at 8023040c
-struct Matrix34f: nw4r::math::MTX34 {
+struct Matrix34f : nw4r::math::MTX34 {
     Matrix34f() {};
+    void TryInverseTo(Matrix34f& dest) const; //8022f90c dest will be identity if det(this) == 0
     void CalcRPY(Vector3f& dest); //8022fb04
     void Set(float n00, float n01, float n02,
         float n03, float n10, float n11,
@@ -31,6 +32,7 @@ struct Matrix34f: nw4r::math::MTX34 {
     void MakeQT(const Quatf& quatf, const Vector3f& translation); //80230118
     void MakeQ(const Quatf& quatf); //802301d0
     void MakeS(const Vector3f& scale); //80230280
+    void MakeT(const Vector3f& translation); //802302c4
     void MakeQ2(const Quatf& quatf); //8023030c
     void SetAxisRotation(const Vector3f& axis, float angle); //802303bc
     Vector3f& MultVector(const Vector3f& factor) const; //802303f8

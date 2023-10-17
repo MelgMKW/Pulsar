@@ -18,7 +18,7 @@ public:
     //virtual void Draw(); //0x14 8063dd84
     //virtual void InitSelf(); 0x18 805be600
     //virtual void OnUpdate(); 0x1c 805bd2e0
-    //virtual void SetPositionAnim(float curFrame, PositionAndScale &positionAndScale); 0x20  8063d194
+    //virtual void SetPositionAnim(PositionAndScale &positionAndScale, float curFrame); 0x20  8063d194
     //virtual void func_805bd2dc(); 0x24 805bd2dc
     int GetRuntimeTypeInfo() const override; //0x28 805be610
     const char* GetClassName() const override; //0x2c 805bd39c
@@ -66,7 +66,7 @@ class PushButtonScaleFade : public PushButton {
 public:
     PushButtonScaleFade(); //805be448
     ~PushButtonScaleFade() override; //805be55c vtable 808b7720
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20 805be5c8
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 805be5c8
     int GetRuntimeTypeInfo() const override; //0x28 805be604
     const char* GetClassName() const override; //0x2c 805be438
 };

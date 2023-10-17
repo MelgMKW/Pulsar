@@ -91,14 +91,14 @@ struct Request
     };
 }; //total size 0x80
 
-s32 Open(char* path, Mode mode);
+s32 Open(const char* path, Mode mode);
 s32 Read(s32 fd, void* buffer, s32 length);
-s32 Write(s32 fd, void* buffer, s32 length);
+s32 Write(s32 fd, const void* buffer, s32 length);
 s32 Seek(s32 fd, s32 offset, SeekType whence); //returns length until the end, best to get file length
 s32 Close(s32 fd);
 s32 IOCtl(s32 fd, IOCtlType ioctl, void* buffer_in, s32 len_in, void* buffer_io, s32 len_io);
 s32 IOCtlv(s32 fd, IOCtlType ioctl, s32 countIv, s32 countIO, IOCtlvRequest* argv);
-s32 Open2ndInst(char* path, Mode mode);
+s32 Open2ndInst(const char* path, Mode mode);
 extern s32 fs_fd;
 
 

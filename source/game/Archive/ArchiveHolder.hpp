@@ -11,7 +11,7 @@
 class LayoutResources;
 
 enum ArchiveSource {
-    ARCHIVE_HOLDER_COMMON = 0x0, //common.szs
+    ARCHIVE_HOLDER_COMMON = 0x0, //common.szs and Kart/kartSzs.szs
     ARCHIVE_HOLDER_COURSE = 0x1, //beginner_course
     ARCHIVE_HOLDER_UI = 0x2, //title.szs
     ARCHIVE_HOLDER_FONT = 0x3, //font.szs
@@ -58,17 +58,17 @@ public:
 };//total size 0x1c
 size_assert(ArchivesHolder, 0x1C);
 
-class CommonArchivesLoader: public ArchivesHolder {
+class CommonArchivesLoader : public ArchivesHolder {
     ~CommonArchivesLoader() override; //8052a4e0 vtable 808b31a8
     void Reset() override; //8052a3c0
 };
 
-class CourseArchivesHolder: public ArchivesHolder {
+class CourseArchivesHolder : public ArchivesHolder {
     CourseArchivesHolder(); //8052a1c8
     ~CourseArchivesHolder() override; //8052a430 vtable 808b31c8
     void Reset() override; //8052a21c
 };
-class UIArchivesHolder: public ArchivesHolder {
+class UIArchivesHolder : public ArchivesHolder {
     ~UIArchivesHolder() override; //8052a488 vtable 808b31b8
     void Reset() override; //8052a2fc
 };

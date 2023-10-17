@@ -1,6 +1,6 @@
 #ifndef _JGPT_
 #define _JGPT_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
 struct JGPT {
     Vec3 position;
@@ -9,5 +9,5 @@ struct JGPT {
     u16 userData; //https://wiki.tockdom.com/wiki/KMP_(File_Format) sound trigger related
 }; //total size 0x1c
 
-typedef struct KMPSection<JGPT> JGPTSection;
+typedef struct KMPBlock<JGPT> JGPTBlock;
 #endif

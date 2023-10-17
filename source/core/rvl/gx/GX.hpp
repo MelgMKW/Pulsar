@@ -33,5 +33,6 @@ extern "C" {
     OS::Thread* GetCurrentGXThread(); //8016d39c
     void GXSetDrawSync(u16 token); //sets a token, which will be stored in a reg when it reaches the end of the pipeline
     u16 GXReadDrawSync(); //if matches token set with, geometry has been rendered
+    void GXSetLineWidth(u8 width, GXTexOffset offset);
 }
 #endif

@@ -31,7 +31,7 @@ class RecognizePadWindow: public LayoutUIControl {
     ~RecognizePadWindow() override; //80601820
     void InitSelf() override; //806018f4 0x18
     void OnUpdate() override; //806018f8 0x1c
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //806018fc 0x20
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //806018fc 0x20
     int GetRuntimeTypeInfo() const override; //0x28 80601934
     const char* GetClassName() const override; //0x2c 806017d4
     void Load(const char* folderName, const char* ctrName, const char* variant); //80601878

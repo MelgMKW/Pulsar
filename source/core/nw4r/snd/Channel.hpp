@@ -34,7 +34,7 @@ public:
     void NoteOff(); //800906a0
     void Stop(); //80090720
     void UpdateSweep(int count); //80090850
-    void SetSweepParam(float sweepPitch, int sweepTime, bool autoUpdate); //8009086c
+    void SetSweepParam(int sweepTime, bool autoUpdate, float sweepPitch); //8009086c
     void VoiceCallbackFunc(Voice* voice, Voice::VoiceCallbackStatus status, void* arg); //80090890
 
     static Channel* AllocChannel(int voiceChannelCount, int voiceOutCount, int priority, Channel::ChannelCallback callback, u32 callbackData); //800909e0
@@ -110,7 +110,7 @@ public:
     void UpdateAllChannel(); //8008fc80
 
     InstancePool<Channel> pool;
-    ut::LinkList< Channel, offsetof(Channel, link)> channelList;
+    ut::LinkList<Channel, offsetof(Channel, link)> channelList;
     bool initialized;
     u32 channelCount;
     void* buffer;

@@ -108,7 +108,8 @@ enum ItemObjId {
     OBJ_BLOOPER = 0xA,
     OBJ_POW_BLOCK = 0xB,
     OBJ_THUNDER_CLOUD = 0xE,
-    OBJ_BULLET_BILL = 0xD
+    OBJ_BULLET_BILL = 0xD,
+    OBJ_NONE = 0x10
 };
 
 enum ItemId {
@@ -795,13 +796,17 @@ enum SoundIDs {
     SOUND_ID_TROPHY_MAIN                    = 0xCA,
     SOUND_ID_UNLOCKED                       = 0x73,
 
+    SOUND_ID_FINAL_LAP                      = 0x74,
+    SOUND_ID_NORMAL_LAP                     = 0xda,
+    SOUND_ID_BLUE_SHELL_FLY                 = 0x103,
     SOUND_ID_STAR                           = 0x10e,
     SOUND_ID_MEGA                           = 0x112,
     SOUND_ID_GLOBAL_SHOCK                   = 0x114,
     SOUND_ID_GLOBAL_POW_1STSHAKE            = 0x11d,
     SOUND_ID_GLOBAL_POW_2NDSHAKE            = 0x11e,
     SOUND_ID_GLOBAL_POW_3RDSHAKE            = 0x11f,
-    SOUND_ID_aDP_WATER                      = 0x309,
+    SOUND_ID_KART_BOOST                     = 0x19c,
+    SOUND_ID_aDP_WATER                      = 0x309
 };
 
 enum DamageType {
@@ -861,7 +866,7 @@ enum KCLTypes {
     KCL_WALL5                   = 0x1F
 };
 
-enum KCLTypesBIT {
+enum KCLTypesBitfield {
     KCL_BITFIELD_ROAD                   = 1 << KCL_ROAD,                  //0x1
     KCL_BITFIELD_SLIPPERY_ROAD          = 1 << KCL_SLIPPERY_ROAD,         //0x2
     KCL_BITFIELD_WEAK_OFFROAD           = 1 << KCL_WEAK_OFFROAD,          //0x4

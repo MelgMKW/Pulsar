@@ -51,22 +51,6 @@ struct ConnectionUserData {
     u8 unknown_0x1[3];
 }; //Total size 0x4
 
-struct ControllerSub {
-    u64 unknown_0x0; //a time for something
-    u32 connectionCount; //0x8 number of consoles connected
-    u32 playerCount; //0xc
-    u32 availableAids; //0x10 bit flags, 1 for connected, indexed 1 << aid
-    u32 directConnectedAids; //0x14 bit flags, same as above
-    u32 groupId; //0x18 group id for the room
-    u32 friendToJoin; //0x1c index in your friend roster of who is joined
-    u8 localPlayerCount; //0x20
-    u8 localAid; //0x21
-    u8 hostAid; //0x22 aid of the host
-    ConnectionUserData connectionUserDatas[12]; //0x24 index is aid
-    bool matchingSuspended;
-    u8 unknown_0x54[4];
-}; //Total size 0x58
-
 enum ConnectionState {
     CONNECTIONSTATE_SHUTDOWN,
     CONNECTIONSTATE_LOGIN_START,
@@ -86,6 +70,7 @@ enum RoomType {
     ROOMTYPE_FROOM_HOST,
     ROOMTYPE_FROOM_NONHOST
 };
+
 class Controller;
 void MainNetworkLoop(Controller* controller); //80657500
 void* SOAlloc(u32 size); //80658418
@@ -102,12 +87,27 @@ void UpdateServerCallbackAlt(int error, int isChanged, Controller* controller); 
 void FriendStatusChangeCallback(); //80658918
 void BuddyFriendCallback(u32 unused, Controller* controller);          //8065891c
 
+struct ControllerSub {
+    u64 unknown_0x0; //a time for something
+    u32 connectionCount; //0x8 number of consoles connected
+    u32 playerCount; //0xc
+    u32 availableAids; //0x10 bit flags, 1 for connected, indexed 1 << aid
+    u32 directConnectedAids; //0x14 bit flags, same as above
+    u32 groupId; //0x18 group id for the room
+    u32 friendToJoin; //0x1c index in your friend roster of who is joined
+    u8 localPlayerCount; //0x20
+    u8 localAid; //0x21
+    u8 hostAid; //0x22 aid of the host
+    ConnectionUserData connectionUserDatas[12]; //0x24 index is aid
+    bool matchingSuspended;
+    u8 unknown_0x54[4];
+}; //Total size 0x58
 
 class Controller {
 public:
     static Controller* sInstance; //809c20d8
-    static Controller* GetStaticInstance(); //80655b24
-    static void DestroyStaticInstance(); //80655bac
+    static Controller* CreateInstance(); //80655b24
+    static void DestroyInstance(); //80655bac
     explicit Controller(EGG::ExpHeap* heap); //80657004
     virtual ~Controller(); //8065741c vtable 808c097c
 

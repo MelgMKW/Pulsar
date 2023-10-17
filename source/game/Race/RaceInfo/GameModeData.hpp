@@ -4,7 +4,7 @@
 #include <kamek.hpp>
 #include <game/File/KRT.hpp>
 #include <game/System/Timer.hpp>
-#include <game/KMP/KMPController.hpp>
+#include <game/KMP/KMPManager.hpp>
 #include <game/RKNet/RH2.hpp>
 
 class RaceInfo;
@@ -14,7 +14,7 @@ public:
     virtual void UpdateLocalPlayers(); //0xc 80535de8
     virtual void Update(); //0x10 80535e84 
     virtual void HandlePositionTracking(); //0x14 805336d8
-    virtual const KMP::JGPTHolder* GetRespawnPoint(u8 playerId); //0x18 80535ef4
+    virtual const KMP::Holder<JGPT>* GetRespawnPoint(u8 playerId); //0x18 80535ef4
     virtual void Init(); //0x1c 8053308c
     virtual void vf_0x20(); //0x20 80533be8
     virtual void vf_0x24(); //0x24 80533c34
@@ -22,24 +22,24 @@ public:
     RaceInfo* raceinfo;
 }; //Total size 0x8
 
-class GMDataGP: public GMData {
+class GMDataGP : public GMData {
     GMDataGP(RaceInfo* raceinfo); //80532124 inlined
     bool CanRaceEnd() override; //0x8 80535f28 vtable 808b344c
     void Update() override; //0x10 80535fe4
     KRT* rawKRT; //0x8 ranktimeGP.krt
 }; //0xc
 
-class GMDataVS: public GMData {
+class GMDataVS : public GMData {
     bool CanRaceEnd() override; //0x8 80536054 vtable 808b3420
 }; //0x8
 
-class GMDataTT: public GMData { //also used 
+class GMDataTT : public GMData { //also used 
     bool CanRaceEnd() override; //0x8 80536054 vtable 808b3478
 }; //0x8
 
-class GMDataBattle: public GMData {
+class GMDataBattle : public GMData {
     void HandlePositionTracking() override; //0x14 80538418
-    KMP::JGPTHolder* GetRespawnPoint(u8 playerId) override; //0x18 805391e4
+    KMP::Holder<JGPT>* GetRespawnPoint(u8 playerId) override; //0x18 805391e4
     void Init() override; //0x1c 80538fec
     virtual void OnItemCollision(u8 playerIdSubject, u8 playerIdUser) = 0; //0x2c user = who used the item who collided
     virtual void OnKartCollision(u8 playerIdCollided, u8 playerIdCollider) = 0; //0x30
@@ -56,7 +56,7 @@ class GMDataBattle: public GMData {
     u8 unknown_0x10[0x38 - 0x10];
 }; //0x38
 
-class GMDataBalloonBattle: public GMDataBattle {
+class GMDataBalloonBattle : public GMDataBattle {
     bool CanRaceEnd() override; //0x8 80539770 vtable 808b36e4
     void Update() override; //0x10 80539574  
     void OnItemCollision(u8 playerIdSubject, u8 playerIdUser) override; //0x2c 80538770 handles balloon loss
@@ -68,7 +68,7 @@ class GMDataBalloonBattle: public GMDataBattle {
     u16 GetKMGSeconds3() override; //0x48 8053d91c
 }; //0x38
 
-class GMDataCoinBattle: public GMDataBattle {
+class GMDataCoinBattle : public GMDataBattle {
     bool CanRaceEnd() override; //0x8 80539a84 vtable 808b3698
     void Update() override; //0x10 80539824 
     void OnItemCollision(u8 playerIdxSubject, u8 playerIdxUser) override; //0x2c 80539a90 handles coin loss
@@ -95,7 +95,7 @@ class RH2Packer { //808b33c0, 808b3390, 808b33a8, 808b3378, 808b3360, 808b33f0
     virtual int GetParamSize();
 }; //0x8
 
-class RH2IntPacker: public RH2Packer {
+class RH2IntPacker : public RH2Packer {
 public:
     ~RH2IntPacker() override;
     void Pack(RKNet::RACEHEADER2Packet* packet, u32 r5) override;
@@ -107,7 +107,7 @@ public:
 
 
 
-class GMDataOnlineVS: public GMData {
+class GMDataOnlineVS : public GMData {
 public:
     bool CanRaceEnd() override; //0x8 8053fa10 vtable 808b3928
     void UpdateLocalPlayers() override; //0xc 8053fb98
@@ -118,10 +118,10 @@ public:
     GMDataOnlineVSPlayer players[12];
     RKNet::RACEHEADER2Packet rh2Packet; //0xf8
     u8 unknown_0x120[0xc];
-    RH2Packer packers[9]; //one for each RH2 value? hold the RH2 values as well as a packing parameter (the size of the value?)
+    RH2Packer packers[9]; //0x12c one for each RH2 value? hold the RH2 values as well as a packing parameter (the size of the value?)
 }; //Total size 0x174
 
-class GMDataOnlineBalloonBattle: public GMDataBattle {
+class GMDataOnlineBalloonBattle : public GMDataBattle {
 public:
     GMDataOnlineBalloonBattle(RaceInfo* raceinfo); //80539f88
     bool CanRaceEnd() override; //0x8 8053d914 vtable 808b3570
@@ -141,7 +141,7 @@ public:
     u8 unknown_0x114[0x170 - 0x114];
 };//0x170
 
-class GMDataOnlineCoinBattle: public GMDataCoinBattle {
+class GMDataOnlineCoinBattle : public GMDataCoinBattle {
 public:
     void Update() override; //0x10 8053d428 vtable 808b3524
 }; //0x38

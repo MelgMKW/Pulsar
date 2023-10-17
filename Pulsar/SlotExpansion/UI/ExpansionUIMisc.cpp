@@ -81,7 +81,7 @@ kmCall(0x806441b8, CourseVoteBMG);
 //kmWrite32(0x80644340, 0x7F64DB78);
 void WinningTrackBMG(PulsarId winningCourse) {
     register Pages::Vote* vote;
-    asm volatile(mr vote, r27;);
+    asm(mr vote, r27;);
     vote->trackBmgId = GetTrackBMG(winningCourse);
 }
 kmCall(0x80644344, WinningTrackBMG);

@@ -8,11 +8,7 @@
 namespace nw4r {
 namespace g3d {
 
-struct DrawResMdlReplacement
-{
-    enum Flag {
-        IGNORE_BUFFER_ANM_SHP = 0x00000001
-    };
+struct DrawResMdlReplacement {
 
     u32  flag;
     u8* visArray;
@@ -33,7 +29,7 @@ struct DrawResMdlReplacement
     ResVtxClrData** vtxClrTable;
 };
 
-class ScnMdl: public ScnMdlSimple {
+class ScnMdl : public ScnMdlSimple {
 public:
     enum AnmObjType {
         ANMOBJTYPE_CHR = 0,
@@ -70,10 +66,18 @@ public:
     };
     class CopiedMatAccess {
     private:
+        CopiedMatAccess(ScnMdl* scnMdl, u32 id); //800730b0
+        ResTexObj GetResTexObj(bool bMarkDirty); //80072e60
+        ResMatTevColor GetResMatTevColor(bool bMarkDirty); //80072e60
+        ResTexSrt GetResTexSrtEx(); //80072f00
+        ResMatMisc GetResMatMiscEx(); //80072f60
+        ResMatTevColor GetResMatTevColorEx(); //80072fc0
+        ResTev GetResTevEx(); //8007230b0
+
         ScnMdl* scnMdl; //0x0
         u32 matID;
         u8 unknown_0x8[0x30 - 0x8];
-        CopiedMatAccess(ScnMdl* scnMdl, u32 id); //800730b0
+
     };
     static ScnMdl* Construct(G3dHeap* heap, u32* size, ResMdl mdl, u32 bufferOption, int nView = 1); //80073470
     bool IsDerivedFrom(TypeObj type) const override; //0x8 800757f0 vtable 80273248

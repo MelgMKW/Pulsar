@@ -28,7 +28,7 @@ public:
     ~NoteModelControl() override; //805f42f0
     void InitSelf() override; //805f44c0
     void OnUpdate() override; //805f45f8
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //805f4cfc
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //805f4cfc
     int GetRuntimeTypeInfo() const override; //805f4f7c
     const char* GetClassName() const override; //805f42a4
     void Load(const char* ctrName, u8 hudSlotId); //805f4348
@@ -48,7 +48,7 @@ public:
     ~VehicleModelControl() override; //805f39f8 vtable 808B9B0C
     void InitSelf() override; //0x18 805f3c8c
     void OnUpdate() override; //0x1c 805f3cf8
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20 805f40a4
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 805f40a4
     int GetRuntimeTypeInfo() const override; //805f4f88
     const char* GetClassName() const override; //805f39ac
     void Load(const char* ctrName, u8 hudSlotId); //805f3a50
@@ -66,14 +66,14 @@ size_assert(VehicleModelControl, 0x184);
 
 class DriverModelControl: public LayoutUIControl {
 public:
-    DriverModelControl(); //805f3248
-    ~DriverModelControl() override; //0x805f3284 vtable 808b9b48
+    DriverModelControl(); //805float48
+    ~DriverModelControl() override; //0x805float84 vtable 808b9b48
     void InitSelf() override; //0x18 805f3568
     void OnUpdate() override; //0x1c 805f356c
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20 805f37e4
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 805f37e4
     int GetRuntimeTypeInfo() const override; //805f4f94
-    const char* GetClassName() const override; //805f3238
-    void Load(const char* ctrName, u8 hudSlotId); //805f32dc
+    const char* GetClassName() const override; //805float38
+    void Load(const char* ctrName, u8 hudSlotId); //805floatdc
     void SetAnimationType(PageId id); //805f346c sets 0x180
     void RequestModel(CharacterId id); //805f3494
     void SetModelPositionOnAnim(); //805f3830 called by Initself

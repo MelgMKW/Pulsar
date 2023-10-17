@@ -28,7 +28,7 @@ public:
     u32 localPlayerCount; //0x124
     u32 category; //0x128, mainMenu's clicked buttonId, essentially indicated where in the game we are 
     CharacterId characters[4]; //0x12c 
-    KartId karts[4]; //0x13c
+    KartId players[4]; //0x13c
     u32 lastSelectedCourse; //0x14c
     u32 lastSelectedStage; //0x150
     u8 unknown_0x154[0x188 - 0x154];

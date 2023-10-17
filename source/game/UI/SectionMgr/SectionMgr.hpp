@@ -21,8 +21,8 @@ class Page;
 class SectionMgr {
 public:
     static SectionMgr* sInstance; //809c1e38
-    static SectionMgr* GetStaticInstance(); //80634c90
-    static void DestroyStaticInstance(); //80634cc8
+    static SectionMgr* CreateInstance(); //80634c90
+    static void DestroyInstance(); //80634cc8
 
     static Pages::System* CreateSystemPages(u8 idx, SectionId id); //80634a64
     static int GetSectionPriority(SectionId id); //80634b80

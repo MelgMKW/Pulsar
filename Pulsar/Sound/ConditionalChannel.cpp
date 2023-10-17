@@ -17,7 +17,7 @@ int CheckChannelCount(const AudioStreamsMgr&, u32 channel, const nw4r::snd::deta
     return (channelCount < need) ? -1 : sound.soundId;
 }
 
-asm int ConditionalChannelSwitch() {
+asmFunc ConditionalChannelSwitch() {
     ASM(
         nofralloc;
     mr r27, r3;

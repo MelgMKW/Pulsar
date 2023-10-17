@@ -1,5 +1,6 @@
 #include <Ghost/PULLeaderboard.hpp>
 #include <Ghost/GhostManager.hpp>
+#include <IO/IO.hpp>
 
 
 namespace Pulsar {
@@ -16,28 +17,28 @@ Leaderboard::Leaderboard() {
 Leaderboard::Leaderboard(const char* folderPath, u32 crc32) {
     char filePath[IOS::ipcMaxPath];
     snprintf(filePath, IOS::ipcMaxPath, "%s/ldb.bin", folderPath);
-    IO::File* file = IO::File::sInstance;
-    s32 ret = file->Open(filePath, IO::FILE_MODE_READ_WRITE);
-    if(ret > 0) ret = file->Read(sizeof(Leaderboard), this);
+    IO* io = IO::sInstance;;
+    s32 ret = io->OpenModFile(filePath, FILE_MODE_READ_WRITE);
+    if(ret) ret = io->Read(sizeof(Leaderboard), this);
 
-    if(ret <= 0 || this->crc32 != crc32 || magic != fileMagic) {
+    if(!ret || this->crc32 != crc32 || magic != fileMagic) {
         System::sInstance->taskThread->Request(&Leaderboard::CreateFile, crc32, 0);
         new (this) Leaderboard;
         this->crc32 = crc32;
     }
-    file->Close();
+    io->Close();
 }
 
 //This is its own function so that the file can be created async 
 void Leaderboard::CreateFile(u32 crc32) {
     char filePath[IOS::ipcMaxPath];
     snprintf(filePath, IOS::ipcMaxPath, "%s/ldb.bin", Manager::folderPath);
-    IO::File* file = IO::File::sInstance;
-    file->CreateAndOpen(filePath, IO::FILE_MODE_READ_WRITE);
+    IO* io = IO::sInstance;;
+    io->CreateAndOpen(filePath, FILE_MODE_READ_WRITE);
     alignas(0x20) Leaderboard tempCopy;
     tempCopy.crc32 = crc32;
-    file->Overwrite(sizeof(Leaderboard), &tempCopy);
-    file->Close();
+    io->Overwrite(sizeof(Leaderboard), &tempCopy);
+    io->Close();
 };
 
 //Get ldb position
@@ -72,10 +73,10 @@ void Leaderboard::Update(u32 position, const TimeEntry& entry, u32 crc32) {
 void Leaderboard::Save(const char* folderPath) {
     char filePath[IOS::ipcMaxPath];
     snprintf(filePath, IOS::ipcMaxPath, "%s/ldb.bin", folderPath);
-    IO::File* loader = IO::File::sInstance;
-    loader->Open(filePath, IO::FILE_MODE_WRITE);
-    loader->Overwrite(sizeof(Leaderboard), this);
-    loader->Close();
+    IO* file = IO::sInstance;;
+    file->OpenModFile(filePath, FILE_MODE_WRITE);
+    file->Overwrite(sizeof(Leaderboard), this);
+    file->Close();
 }
 
 void Leaderboard::EntryToTimer(Timer& dest, u8 id) const {

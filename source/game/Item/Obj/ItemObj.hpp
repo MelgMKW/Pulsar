@@ -2,13 +2,13 @@
 #define _ITEMOBJ_
 #include <kamek.hpp>
 #include <game/System/Identifiers.hpp>
-#include <game/Visual/ClipInfoMgr.hpp>
-#include <game/Collision/Entity/EntityHolder.hpp>
-#include <game/Visual/Model/ModelDirector.hpp>
-#include <game/Visual/Model/ShadowModelDirector.hpp>
-#include <game/Visual/Model/ModelWorldCalc.hpp>
+#include <game/3D/ClipInfoMgr.hpp>
+#include <game/Entity/EntityManager.hpp>
+#include <game/3D/Model/ModelDirector.hpp>
+#include <game/3D/Model/ShadowModelDirector.hpp>
+#include <game/3D/Model/ModelWorldCalc.hpp>
 #include <game/Sound/Actors/ItemSound.hpp>
-#include <game/Collision/Collision.hpp>
+#include <game/KCL/Collision.hpp>
 
 namespace Item {
 class Obj;
@@ -123,7 +123,7 @@ public:
     void Set(ItemObjId objId); //8079e5f4
     void Spawn(ItemObjId objId, u8 playerId, const Vec3& position, bool r7); //8079e550
 
-    bool CheckKartCollision(Kart* kart, u32 r5); //807a14d4
+    bool CheckKartCollision(Kart::Player* kartPlayer, u32 r5); //807a14d4
     void LoadGraphics(const char* brresName, const char* mdlName, const char* shadowSrc, u8 whichShadowListToUse, AnmParam* anmParam,
         g3d::ScnMdl::BufferOption option, void* funcPtr, u32 directorBitfield); //807a0040
     void LoadGraphicsImplicitBRRESNoFunc(const char* mdlName, const char* shadowSrc, AnmParam* anmParam,
@@ -147,7 +147,7 @@ public:
     void Init(ItemObjId id, u32* initialIdx); //80795ccc
     void Spawn(u32 quantity, ItemObj* usedObj, u8 playerId, const Vec3& playerPos, bool r8); //80795e04 usedObj is filled by the function
     ItemObjId itemObjId;
-    Obj** itemObj;
+    Obj** itemObj; //0x4
     u32 capacity; //unsure what the diff is with limit
     u32 capacity2;
     u32 bodyCount; //count on the track, including trailing/spinning

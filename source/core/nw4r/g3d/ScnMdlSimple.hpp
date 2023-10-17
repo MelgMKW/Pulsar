@@ -12,11 +12,11 @@
 namespace nw4r {
 namespace g3d {
 
-class ScnMdlSimple: public ScnLeaf {
+class ScnMdlSimple : public ScnLeaf {
 public:
     enum AnmObjType {
         ANMOBJTYPE_CHR = 0,
-        ANMOBJTYPE_UNKNOWN,
+        ANMOBJTYPE_VIS,
         ANMOBJTYPE_MATCLR,
         ANMOBJTYPE_TEXPAT,
         ANMOBJTYPE_TEXSRT,

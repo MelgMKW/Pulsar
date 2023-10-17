@@ -43,8 +43,8 @@ public:
     size_assert(RouletteItems, 0x50);
 
     static ItemSlotData* sInstance(); //809c3670
-    static ItemSlotData* GetStaticInstance(); //807ba77c
-    static void DestroyStaticInstance(); //807bda814
+    static ItemSlotData* CreateInstance(); //807ba77c
+    static void DestroyInstance(); //807bda814
     ItemSlotData(); //807ba8c8 inlined
     ~ItemSlotData(); //807ba934
     void Init(); //807ba7d8

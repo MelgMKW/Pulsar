@@ -3,11 +3,11 @@
 #include <kamek.hpp>
 #include <game/Item/Obj/ItemObj.hpp>
 #include <game/Sound/Actors/ItemSound.hpp>
-#include <game/Visual/Model/ModelDirector.hpp>
+#include <game/3D/Model/ModelDirector.hpp>
 
 //_sinit_ at 807a9a58
-namespace Item{
-class ObjGesso: public Obj {
+namespace Item {
+class ObjGesso : public Obj {
 public:
     static Obj** CreateArray(u32 count); //807a8138
     void InitSelf() override; //0x8 807a8378 vtable 808d1e48
@@ -31,9 +31,11 @@ size_assert(GessoScreen, 0xd0);
 class GessoMgr {
 public:
     static GessoMgr* sInstance; //809c3648
-    static GessoMgr* GetStaticInstance(); //807a8f04
-    static void DestroyStaticInstance(); //807a8fa0
+    static GessoMgr* CreateInstance(); //807a8f04
+    static void DestroyInstance(); //807a8fa0
     GessoMgr(); //807a90a0 inlined
+    static void Init(); //807a8fd8
+
     void DeployBlooper(u8 playerId); //807a9128 that player used a blooper which will deploy the blooper model from the character
     u32 screenCount; //0x0
     u8 unknown_0x4[0x44 - 0x4];

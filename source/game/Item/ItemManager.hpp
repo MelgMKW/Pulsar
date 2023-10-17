@@ -7,34 +7,36 @@ Stebler, CLF (main documentation), Melg
 #include <core/egg/mem/Disposer.hpp>
 #include <game/Item/Obj/ItemObj.hpp>
 #include <game/Item/ItemPlayer.hpp>
-#include <game/Race/Kart/KartPointers.hpp>
-#include <game/KMP/KMPController.hpp>
+#include <game/Kart/KartPointers.hpp>
+#include <game/KMP/KMPManager.hpp>
 #include <game/System/Identifiers.hpp>
 
 
 
 
-class KartModel;
+class DriverController;
 
 namespace Item {
 class Player;
 class Manager {
 public:
     static Manager* sInstance; //809c3618
-    static Manager* GetStaticInstance(); //80799138
-    static void DestroyStaticInstance(); //80799188
+    static Manager* CreateInstance(); //80799138
+    static void DestroyInstance(); //80799188
     Manager(); //807992d8 inlined
     ~Manager(); //80799670 inlined
+    void Init(); //80799794
     void Update(); //80799850
     void CreateItemDirect(); //80799fbc
     void GenerateItemDirect(); //8079a12c
     void SpawnCloud(u8 playerId); //8079a298
-    int CheckKartCollision(const Kart& kart); //returns number of items hit
+    int CheckKartCollision(const Kart::Player& kartPlayer); //returns number of items hit
+    void InitItemDirects(); //80799e50
     EGG::TDisposer<Manager> disposer; //80798f9c vtable 808d1960
     u8 playerCount; //0x10
     u8 unknown_0x11[3];
     Player* players; //0x14
-    Player* otherLocalOnlinePlayersplayer[12];
+    Player* otherLocalOnlinePlayersplayer[12]; //0x18
     ObjHolder itemObjHolders[0xF]; //One per objId 0x48
     Obj* curItemObj[16]; //0x264
     ObjBase dummyObj; //base one? dummy?

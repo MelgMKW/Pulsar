@@ -6,8 +6,6 @@
 #include <game/UI/Page/Other/TTSplits.hpp>
 #include <PulsarSystem.hpp>
 #include <Settings/Settings.hpp>
-#include <IO/File.hpp>
-#include <IO/Folder.hpp>
 #include <Ghost/PULLeaderboard.hpp>
 
 

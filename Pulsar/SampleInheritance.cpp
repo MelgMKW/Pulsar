@@ -4,9 +4,9 @@
 
 class MyPack : public Pulsar::System {
 public:
-    MyPack(const Binary *bin, EGG::ExpHeap *heap): System(bin, heap), myVariable(50) {}; //MAKE SURE TO CALL PULSAR's CTOR
-    static System *Create(); //My Create function, needs to return Pulsar
-    static MyPack *GetsInstance(){return (MyPack*)sInstance;} //for ease of use, optional
+    MyPack(const Binary *bin, EGG::ExpHeap *heap): System(bin, heap), myVariable(50) {}; //MAKE SURE TO CALL Pulsar::System's CTOR
+    static System *Create(); //My Create function, needs to return a ptr to a Pulsar::System
+    static MyPack *GetsInstance(){return static_cast<MyPack*>(sInstance);} //for ease of use, optional
 
 //From there, anything is possible
 private:

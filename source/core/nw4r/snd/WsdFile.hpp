@@ -11,7 +11,7 @@ namespace nw4r {
 namespace snd {
 namespace detail {
 struct WaveSoundInfo {
-    f32 pitch;
+    float pitch;
     u8 pan;
     u8 surroundPan;
     u8 fxSendA;
@@ -31,7 +31,7 @@ struct WaveSoundNoteInfo {
     u8 pan;
     u8 surroundPan;
     u8 volume;
-    f32 pitch;
+    float pitch;
 }; //0x14
 
 //Links which RWAV files inside a RWAR to use; how to functionally use the file: https://imgur.com/0FDMOoZ
@@ -48,7 +48,7 @@ struct WsdFile { //RWSD https ://wiki.tockdom.com/wiki/BRWSD_(File_Format)
         u8 volume;
         u8 pan;
         u8 surroundPan;
-        f32 pitch;
+        float pitch;
         Util::DataRef<void> lfoTableRef;
         Util::DataRef<void> graphEnvTablevRef;
         Util::DataRef<void> randomizerTableRef;
@@ -57,8 +57,8 @@ struct WsdFile { //RWSD https ://wiki.tockdom.com/wiki/BRWSD_(File_Format)
 
     struct TrackInfo {
         struct NoteEvent {
-            f32 position;
-            f32 length;
+            float position;
+            float length;
             u32 noteIndex;
             u32 reserved;
         };
@@ -68,7 +68,7 @@ struct WsdFile { //RWSD https ://wiki.tockdom.com/wiki/BRWSD_(File_Format)
     };
 
     struct WsdInfo {
-        f32 pitch;
+        float pitch;
         u8 pan;
         u8 surroundPan;
         u8 fxSendA;

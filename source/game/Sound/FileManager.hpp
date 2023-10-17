@@ -27,8 +27,8 @@ class GroupBankRequester {
         u32 bankId;
     };
     GroupBankRequester* sInstance; //809c2690
-    GroupBankRequester* GetStaticInstance(); //806ffcd8
-    void DestroyStaticInstance(); //806ffe40
+    GroupBankRequester* CreateInstance(); //806ffcd8
+    void DestroyInstance(); //806ffe40
     GroupBankRequester(); //806ffef4
     ~GroupBankRequester(); //80700030
 

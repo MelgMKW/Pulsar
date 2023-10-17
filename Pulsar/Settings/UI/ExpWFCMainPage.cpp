@@ -24,14 +24,15 @@ void ExpWFCMain::OnInit() {
     this->settingsButton.SetOnClickHandler(this->onSettingsClick, 0);
     this->settingsButton.SetOnSelectHandler(this->onButtonSelectHandler);
 
-    this->topSettingsPage = PAGE_VS_SETTINGS;
+    this->topSettingsPage = SettingsPanel::firstId;
 }
 
 void ExpWFCMain::OnSettingsButtonClick(PushButton& pushButton, u32 r5) {
     const Section* section = SectionMgr::sInstance->curSection;
-    section->Get<SettingsPanel>(PAGE_VS_SETTINGS)->prevPageId = PAGE_WFC_MAIN;
-    section->Get<SettingsPanel>(PAGE_VS_TEAMS_VIEW)->prevPageId = PAGE_WFC_MAIN;
-    section->Get<SettingsPanel>(PAGE_BATTLE_MODE_SELECT)->prevPageId = PAGE_WFC_MAIN;
+    for(int i = 0; i < SettingsPanel::pageCount; ++i) {
+        section->Get<SettingsPanel>(static_cast<PageId>(SettingsPanel::firstId + i))->prevPageId = PAGE_WFC_MAIN;
+    }
+
     this->nextPageId = this->topSettingsPage;
     this->EndStateAnimated(pushButton.GetAnimationFrameSize(), 0);
 }

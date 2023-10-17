@@ -58,24 +58,31 @@ class ExternalSoundPlayer;
 
 class BasicSound {
 public:
-    class AmbientParamUpdateCallback {
-        virtual ~AmbientParamUpdateCallback() = 0;
-        //virtual void detail_UpdateAmbientParam(const void *arg, u32 soundId, int voiceOutCount, SoundAmbientParam *param) = 0;
-    };
     class AmbientArgAllocaterCallback {
-        virtual ~AmbientArgAllocaterCallback() = 0;
+        virtual ~AmbientArgAllocaterCallback();
         virtual void* detail_AllocAmbientArg(u32 argSize) = 0;
+        virtual void detail_FreeAmbientArg(void* arg, const detail::BasicSound* sound) = 0;
     };
     class AmbientArgUpdateCallback {
     public:
-        virtual ~AmbientArgUpdateCallback() {}
+        virtual ~AmbientArgUpdateCallback();
+        //Updates the actor parameters, as arg is almost always a Sound3DParam, that arg is then passed to UpdateAmbientParam
         virtual void detail_UpdateAmbientArg(void* arg, const detail::BasicSound* sound) = 0;
     };
+    class AmbientParamUpdateCallback {
+    public:
+        virtual ~AmbientParamUpdateCallback();
+        //Fills the ambient param using arg, which is almost always a Sound3DParam (the actor) that has been filled by ArgUpdateCB
+        virtual void detail_UpdateAmbientParam(const void* arg, u32 soundId, int voiceOutCount, SoundAmbientParam* param) = 0;
+        virtual int detail_GetAmbientPriority(const void* arg, u32 soundId) = 0;
+        virtual int detail_GetRequiredVoiceOutCount(const void* arg, u32 soundId) = 0;
+    };
+
     struct AmbientInfo {
         AmbientParamUpdateCallback* paramUpdateCallback; //1c
         AmbientArgUpdateCallback* argUpdateCallback; //20
         AmbientArgAllocaterCallback* argAllocaterCallback; //24
-        void* arg; //28
+        void* arg; //28 the one passed in the callBacks
         u32 argSize; //2c
     };
     enum PauseState {
@@ -115,7 +122,7 @@ public:
     int GetVoiceOutCount() const; //8008f4b0
     void SetPlayerPriority(int priority); //8008f4c0
     void SetInitialVolume(float volume); //8008f530
-    void SetVolume(float volume, int frames); //8008f560
+    void SetVolume(int frames, float volume); //8008f560
     void SetPitch(float pitch);  //8008f610
     void SetPan(float pan); //8008f620
     void SetLpfFreq(float lpfFreq); //8008f630
@@ -140,8 +147,10 @@ public:
     SoundActor* soundActor; //14
     ExternalSoundPlayer* extSoundPlayer; //18
     AmbientInfo ambientInfo;  //1c
-    SoundParam ambientParam; //0x30
-    SoundActorParam actorParam; //0x4c
+
+    //External user params
+    SoundParam ambientParam; //0x30 externalParams, in mkwii essentially Sound3D based calculations, all values are multiplied by these
+    SoundActorParam actorParam; //0x4c actorParams, all values are multiplied by these
 
     MoveValue<float, int> fadeVolume; //0x58
     MoveValue<float, int> pauseFadeVolume; //0x68
@@ -174,7 +183,7 @@ public:
     float fxSend[3]; //c4
     float mRemoteOutVolume[4];
     ut::LinkListNode priorityLink; //e0
-    ut::LinkListNode soundPlayerPlayLink; //e8 the one used in muscispeedup
+    ut::LinkListNode soundPlayerLink; //e8 the one used in muscispeedup
     ut::LinkListNode soundPlayerPriorityLink; //f0 priority list stuff, next changes when strm starts
     ut::LinkListNode extSoundPlayerPlayLink; //f8
 }; //total size 0x100

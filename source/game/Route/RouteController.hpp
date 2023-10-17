@@ -1,7 +1,7 @@
 #ifndef _ROUTECONTROLLER_
 #define _ROUTECONTROLLER_
 #include <kamek.hpp>
-#include <game/KMP/KMPController.hpp>
+#include <game/KMP/KMPManager.hpp>
 #include <game/Route/RouteHolder.hpp>
 
 class RouteController {

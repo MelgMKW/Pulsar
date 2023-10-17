@@ -17,8 +17,8 @@ using namespace nw4r;
 
 class AudioStreamsMgr {
     static AudioStreamsMgr* sInstance; //809c2330
-    static AudioStreamsMgr* GetStaticInstance(); //806fa0ac
-    static void DestroyStaticInstance(); //806fa154
+    static AudioStreamsMgr* CreateInstance(); //806fa0ac
+    static void DestroyInstance(); //806fa154
     ~AudioStreamsMgr(); //806fa208
 
     void PrepareStreams(AudioHandle* handle, float* streamsVolume, u8 streamCount); //806fa2ac

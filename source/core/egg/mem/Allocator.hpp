@@ -5,7 +5,7 @@
 
 namespace EGG {
 class Heap;
-class Allocator: public MEM::Allocator {
+class Allocator : public MEM::Allocator {
 public:
     Allocator(Heap* heap, s32 alignment); //8020f62c
     virtual ~Allocator(); //8020f688 vtable 802a2668

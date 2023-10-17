@@ -17,9 +17,11 @@ bool Info::IsHAW(bool isRoomHost) {
 bool Info::Is200cc() {
     return Info::Has200cc() && !CupsDef::IsRegsSituation() && RaceData::sInstance->racesScenario.settings.engineClass == CC_100;
 }
+
 bool Info::IsFeather() {
     return Info::HasFeather() && !CupsDef::IsRegsSituation();
 }
+
 bool Info::IsUMTs() {
     return Info::HasUMTs() && !CupsDef::IsRegsSituation();
 }

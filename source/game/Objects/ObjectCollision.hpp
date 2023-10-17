@@ -15,13 +15,13 @@ class ObjectCollision { //very likely completely wrong names
     virtual void SetPositionAndScale(const Mtx34& transformationMtx, float objScale, const Vec3& collisionTranslation) = 0; //10 called on collision
     virtual const Vec3& GetPosition(const Vec3& unknown) const = 0; //0x14
     virtual float GetRadius() const = 0; //0x18
-    bool CheckCollision(ObjectCollision& other, Vec3& position); //80834348 position is filled
+    bool ProcessCollision(ObjectCollision& other, Vec3& position); //80834348 position is filled
     Vec3 position;
     Vec3 speed; //0x10
 }; //0x1c
 
-class ObjectCollisionSphere: public ObjectCollision { //P4 = 1, P5 is 3D Radius WanWan for example
-    ObjectCollisionSphere(float radius, const Vec3& center); //808368d0
+class ObjectCollisionSphere : public ObjectCollision { //P4 = 1, P5 is 3D Radius WanWan for example
+    ObjectCollisionSphere(const Vec3& center, float radius); //808368d0
     ~ObjectCollisionSphere() override; //80836b5c vtable 808d8d58
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale) override; //80836998
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale, const Vec3& collisionTranslation) override; //80836a50
@@ -37,9 +37,9 @@ class ObjectCollisionSphere: public ObjectCollision { //P4 = 1, P5 is 3D Radius 
     Vec3 translatedPosition; //0x4c unsure
 }; //0x58
 
-class ObjectCollisionCylinder: public ObjectCollision { //P4 = 2, P5 is 2D Radius, P6 is height Kuribo for example
+class ObjectCollisionCylinder : public ObjectCollision { //P4 = 2, P5 is 2D Radius, P6 is height Kuribo for example
 public:
-    ObjectCollisionCylinder(float radius, float height, const Vec3& center); //80836068
+    ObjectCollisionCylinder(const Vec3& center, float radius, float height); //80836068
     ~ObjectCollisionCylinder() override; //808364a0 vtable 808d8d10
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale) override; //808361f0
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale, const Vec3& collisionTranslation) override; //80836334
@@ -58,7 +58,7 @@ public:
     Vec3 bottomMostPos; //0x60
 }; //0x6c
 
-class ObjectCollisionPolyhedra: public ObjectCollision {
+class ObjectCollisionPolyhedra : public ObjectCollision {
     ObjectCollisionPolyhedra(u8 vertexCount, Vec3* baseVtxPosArray = nullptr); //808364e0, array that has as many vec3 as the solid has vtx
     ~ObjectCollisionPolyhedra() override; //808365a8 vtable 808d8d30
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale) override; //808366d0
@@ -79,9 +79,9 @@ class ObjectCollisionPolyhedra: public ObjectCollision {
     Vec3 unknown_0x38;
 };
 
-class ObjectCollisionCube: public ObjectCollisionPolyhedra { //P4 = 3, P5, P6, P7 are X, Y, Z sizes DKShip64 for example
+class ObjectCollisionCube : public ObjectCollisionPolyhedra { //P4 = 3, P5, P6, P7 are X, Y, Z sizes DKShip64 for example
 public:
-    ObjectCollisionCube(float x, float y, float z, const Vec3& center); //80833840
+    ObjectCollisionCube(const Vec3& center, float x, float y, float z); //80833840
     ~ObjectCollisionCube() override; //808342f0 vtable 808d8ce8
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale) override; //80833b00
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale, const Vec3& collisionTranslation) override; //80833eec
@@ -97,7 +97,7 @@ class ObjectCollisionManager { //collision with anything, players/items etc...
     virtual void vf_0x10();  //8082b530 just a blr
     virtual const Vec3& GetPosition() const; //0x14 8082b534
     virtual float Get_0x1c() const; //0x18 8082b524
-    static PlayerItemState GetPlayerItemState(const Kart& kart); //8082b4e0
+    static PlayerItemState GetPlayerItemState(const Kart::Player& kartPlayer); //8082b4e0
 
     Vec3 finalPosition; //unsure
     u8 unknown_0x10[0x1c - 0x10];

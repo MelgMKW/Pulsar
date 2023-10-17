@@ -68,7 +68,9 @@ public:
     SoundPlayer& GetSoundPlayer(SoundArchive::PlayerId playerId); //800a1550
     const void* detail_GetFileAddress(SoundArchive::FileId fileId) const; //800a1560
     const void* detail_GetFileWaveDataAddress(SoundArchive::FileId fileId) const; //800a16b0
-    
+
+    //AmbientInfo is almost always a Sound3DParam based one in mkwii, with Sound3DManager as the ParamUpdate and ArgAllocater callback, 
+    //and a Sound3DActor (what's trying to setup a sound) as the ArgUpdate
     StartResult SetupSoundImpl(SoundHandle* handle, u32 soundId, detail::BasicSound::AmbientInfo* info,
         SoundActor* actor, bool holdFlag, SoundArchive::SoundInfo* soundInfo); //800a1820 returns 0 if success
     SoundStartable::StartResult PrepareSeqImpl(detail::SeqSound* sound, const SoundArchive::SoundInfo* soundInfo,

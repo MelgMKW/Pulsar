@@ -16,13 +16,13 @@ bool CheckControllerStrap() {
     //"unsafe" function that relies on no stack frame being created, which is essentially guaranteed as this doesn't call any other function
     //I just prefer it to the asm version
     register u32 ret;
-    asm volatile(mr ret, r31;);
+    asm(mr ret, r31;);
     if(ret == 0) return false;
     register u8 usedChannel;
     u16 type = 0x24;
     if(ret == 1) { //GCN
         register PAD::Status* gcnStatus;
-        asm volatile(addi gcnStatus, sp, 0x10;);
+        asm(addi gcnStatus, sp, 0x10;);
         for(u8 channel = 0; channel < 4; channel++) {
             if(gcnStatus[channel].buttons != 0) {
                 usedChannel = channel + 1;
@@ -31,9 +31,9 @@ bool CheckControllerStrap() {
         }
     }
     else if(ret == 2) { //ret == 2, KPAD controller
-        asm volatile(mr usedChannel, r29;);
+        asm(mr usedChannel, r29;);
         register KPAD::Status* kpadStatus;
-        asm volatile(addi kpadStatus, sp, 0x40;);
+        asm(addi kpadStatus, sp, 0x40;);
         type = kpadStatus->extension + 0x11;
     }
     controllerOnStrap = (usedChannel << 8) + type;
@@ -74,10 +74,10 @@ void SetUpCorrectController(RealControllerHolder* realControllerHolder, const Co
     const ControllerType controllerType = pad.GetType(pad.padInfos[0].controllerID);
     u32 channel = ((pad.padInfos[0].controllerID & 0xFF00) >> 0x8) - 1; //to make it 0-indexed
     register u32 loopIndex;
-    asm volatile(mr loopIndex, r27;);
+    asm(mr loopIndex, r27;);
     if(channel == loopIndex) {
         register const Manager* input;
-        asm volatile(mr input, r30;);
+        asm(mr input, r30;);
         if(controllerType == GCN) controller = &input->gcnControllers[channel];
         else controller = &input->wiiControllers[channel];
         pad.padInfos[0].controllerHolder = realControllerHolder;

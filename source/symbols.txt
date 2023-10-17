@@ -145,19 +145,19 @@ Open__4ISFSFPcQ24ISFS4Mode = 0x8016AE5C
 GetFileStats__4ISFSFUiPQ23IOS9FileStats = 0x8016afdc
 Read__4ISFSFiPvUi = 0x8016B1FC
 Close__4ISFSFi = 0x8016B384
-Write__4ISFSFiPvUi = 0x8016b2c0
+Write__4ISFSFiPCvUi = 0x8016b2c0
 Seek__4ISFSFiii = 0x8016b16c
 GetAttr__4ISFSFPCcPUiPUsPUcPQ23IOS4ModePQ23IOS4ModePQ23IOS4Mode = 0x8016a500
 
 #IPC
-Open__3IOSFPcQ23IOS4Mode = 0x801938f8
+Open__3IOSFPCcQ23IOS4Mode = 0x801938f8
 Close__3IOSFi = 0x80193ad8
 Read__3IOSFiPvi = 0x80193c80
-Write__3IOSFiPvi = 0x80193e88
+Write__3IOSFiPCvi = 0x80193e88
 Seek__3IOSFiiQ23IOS8SeekType = 0x80194070
 IOCtl__3IOSFiQ23IOS9IOCtlTypePviPvi = 0x80194290
 IOCtlv__3IOSFiQ23IOS9IOCtlTypeiiPQ23IOS13IOCtlvRequest = 0x801945e0
-Open2ndInst__3IOSFPcQ23IOS4Mode = 0x801938fc
+Open2ndInst__3IOSFPCcQ23IOS4Mode = 0x801938fc
 fs_fd__3IOS = 0x80385920
 
 #KPAD
@@ -232,6 +232,7 @@ GetResMat__Q34nw4r3g3d6ResMdlCFPCc = 0x8004e8f0
 
 #ef
 GetPtr__Q34nw4r2ef10HandleBaseCFv = 0x800375f0
+_PSSinCosRad__Q24nw4r2efFPff = 0x80036f70
 
 #ut
 Seek__Q34nw4r2ut13DvdFileStreamFUiUi = 0x800b05e0
@@ -240,6 +241,8 @@ List_GetNth__Q24nw4r2utFPCQ34nw4r2ut4ListUs = 0x800af1c0
 List_GetNext__Q24nw4r2utFPCQ34nw4r2ut4ListPv = 0x800af180
 List_Append__Q24nw4r2utFPQ34nw4r2ut4ListPv = 0x800aef80
 List_Insert__Q24nw4r2utFPQ34nw4r2ut4ListPvPv = 0x800aeff0
+Insert__Q44nw4r2ut6detail12LinkListImplFQ54nw4r2ut6detail12LinkListImpl12IteratorImplPQ34nw4r2ut12LinkListNode = 0x800af340
+Erase__Q44nw4r2ut6detail12LinkListImplFPQ34nw4r2ut12LinkListNode = 0x800af370
 
 #lyt
 __vt__Q34nw4r3lyt6Layout = 0x802734c0
@@ -253,6 +256,10 @@ GetSoundType__Q34nw4r3snd12SoundArchiveCFUi = 0x8009df30
 ReadStrmInfo__Q44nw4r3snd6detail14StrmFileLoaderFPQ54nw4r3snd6detail14StrmFileReader8StrmInfo = 0x800a5490
 DetailUtilCalcRandom__Q24nw4r3sndFv = 0x800ad050
 
+#math
+F_PI__Q24nw4r4math = 0x803878F8
+SinCosFIdx__Q24nw4r4mathFPfPff = 0x800851e0
+
 #DWC
 DWC_AuthServer = 0x80386338
 loginRegion__3DWC = 0x80384fd0
@@ -265,6 +272,7 @@ mInstance__8RKSystem = 0x802a4080
 
 #Math
 Mult__Q23EGG5QuatfFRCQ23EGG5QuatfRCQ23EGG8Vector3fRQ23EGG5Quatf = 0x8023a540
+Normalize__Q23EGG8Vector3fFv = 0x80243b6c
 
 #DVDRipper
 LoadToMainRAM__Q23EGG9DvdRipperFPCcPvPQ23EGG4HeapQ33EGG9DvdRipper15EAllocDirectionUiPUiPUi = 0x802226d8
@@ -319,8 +327,22 @@ Mount__Q23EGG7ArchiveFPvPQ23EGG4Heapi = 0x8020f768
 GetCurrent__9GameSceneFv = 0x8051bed0
 
 #KMP
-sInstance__Q23KMP10Controller = 0x809BD6E8
-GetKTPTHolder__Q23KMP10ControllerCFUc = 0x80514b30
+sInstance__Q23KMP7Manager = 0x809BD6E8
+GetHolder<4KTPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4KTPT> = 0x80514b30
+GetHolder<4GOBJ>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4GOBJ> = 0x80514148
+GetHolder<4KTPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4KTPT> = 0x80514b30
+GetHolder<4ENPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4ENPT> = 0x80514b7c
+GetHolder<4ENPH>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4ENPH> = 0x80514bc8
+GetHolder<4ITPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4ITPT> = 0x80514d3c
+GetHolder<4ITPH>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4ITPH> = 0x80514d88
+GetHolder<4CKPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4CKPT> = 0x80515c24
+GetHolder<4CKPH>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4CKPH> = 0x80515c70
+GetHolder<4POTI>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4POTI> = 0x80515e04
+GetHolder<4AREA>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4AREA> = 0x80516768
+GetHolder<4CAME>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4CAME> = 0x80516bb0
+GetHolder<4JGPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4JGPT> = 0x80518920
+GetHolder<4CNPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4CNPT> = 0x80518ae0
+GetHolder<4MSPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4MSPT> = 0x80518b2c
 
 #Archive
 sInstance__11ArchiveRoot = 0x809bd738
@@ -331,6 +353,7 @@ Unmount__11ArchiveFileFv = 0x805192cc
 GetFile__11ArchiveRootCF13ArchiveSourcePCcPUi = 0x805411fc
 RequestLoadCourseAsync__11ArchiveRootF8CourseId = 0x805419ac
 LoadCourseArchive__11ArchiveRootF8CourseIdPQ23EGG4Heapb = 0x80540760
+MountFromRawArchive__11ArchiveFileFPvUiPQ23EGG4Heapb = 0x80518fbc
 
 #Exception
 console__Q23EGG9Exception = 0x80386E3C
@@ -360,6 +383,14 @@ EndGhostWriting__Q25Input20RealControllerHolderFv = 0x80521688
 #GhostWriter
 CopyToRKGInputBuffer__Q25Input11GhostWriterFPQ25Input9RKGInputs = 0x80524d20
 WriteFrame__Q25Input11GhostWriterFUsUcUcUc = 0x80524e74
+__vt__Q25Input17GhostActionStream = 0x808b30c8
+IsCurReadInputFinished__Q25Input17GhostActionStreamCFPCQ35Input11GhostStream5Input = 0x80524fc4   
+ReadValue__Q25Input17GhostActionStreamCFPCQ35Input11GhostStream5Input = 0x80524fbc 
+IsNewInput__Q25Input17GhostActionStreamCFPCQ35Input11GhostStream5InputUc = 0x80524f98
+IncrementDuration__Q25Input17GhostActionStreamCFPQ35Input11GhostStream5Input = 0x80524f88
+WriteNewValue__Q25Input17GhostActionStreamCFPQ35Input11GhostStream5InputUc = 0x80524f78
+GetInputSize__Q25Input17GhostActionStreamCFv = 0x805230a8
+Write__Q25Input17GhostActionStreamFUc = 0x80522dcc
 
 
 #Timer
@@ -396,6 +427,7 @@ nextFloatLimited__6RandomFf = 0x805556a8
 #Model Director
 BindBRRES__13ModelDirectorFRQ34nw4r3g3d7ResFile13ArchiveSourcePCc = 0x8055b618
 LinkAnimation__13ModelDirectorFUiRQ34nw4r3g3d7ResFilePCc7AnmTypebPCc13ArchiveSourceUc = 0x8055ddec
+UpdateDrawPriority__13ModelDirectorFUi = 0x8055f4c4
 
 #Mii
 #MiiHeadsModel
@@ -409,36 +441,54 @@ GetMii__8MiiGroupFUc = 0x805fa930
 ComputeRFLStoreData__3MiiFRQ23RFL9StoreDataPCUi = 0x8052758c
 
 
+#ScnManager
 
+#GameScreen
+mInstance__13ScreensHolder = 0x809C1868
+SetAndLoadProjection__10GameScreenFUiUi = 0x80566020
+SetProjection__10GameScreenFUiUi = 0x805661e8
 
-#Cameras
-sInstance__13CameraHandler = 0x809C1868
-SetProjection__17RaceCameraManagerFUiUi = 0x80566020
+#Camera
+SetInstance__9CameraMgrFP9CameraMgr = 0x805a1a64
 
-#KartHolder
-sInstance__10KartHolder = 0x809c18f8
+#KartManager
+sInstance__Q24Kart7Manager = 0x809c18f8
 sInstance__10KartParams = 0x809c1918
 sInstance__12DriverParams = 0x809c191c
-Update__10KartHolderFv = 0x8058ffe8
-GetKart__10KartHolderCFUi = 0x80590100
-IsLocal__4KartCFv = 0x80590650
-GetWheelPhysicsHolder__8KartBaseCFUi = 0x80590704
-GetKartStats__8KartBaseCFv = 0x80590874
-GetKartType__8KartBaseCFv = 0x80590a10
-GetPlayerIdx__8KartBaseCFv = 0x80590a5c
-GetControllerHolder__8KartBaseCFv = 0x805903f4
-GetKartPhysicsHolder__8KartBaseCFv = 0x805903ac
-GetDriftState__4KartCFv = 0x805911d8
-Compute__11StatsAndBspF6KartId11CharacterId= 0x80591fa4
-Update__18WheelPhysicsHolderFfRC4Vec3RC5Mtx34 = 0x8059a278
+Update__Q24Kart7ManagerFv = 0x8058ffe8
+GetKartPlayer__Q24Kart7ManagerCFUi = 0x80590100
+IsLocal__Q24Kart6PlayerCFv = 0x80590650
+GetKartPosition__Q24Kart4LinkCFv = 0x8059020c
+GetWheelPhysicsHolder__Q24Kart4LinkFUi = 0x80590704
+GetStats__Q24Kart4LinkCFv = 0x80590874
+GetType__Q24Kart4LinkCFv = 0x80590a10
+GetPlayerIdx__Q24Kart4LinkCFv = 0x80590a5c
+GetControllerHolder__Q24Kart4LinkCFv = 0x805903f4
+GetPhysicsHolder__Q24Kart4LinkCFv = 0x805903ac
+GetDriftState__Q24Kart6PlayerCFv = 0x805911d8
+ComputeStats__4KartF6KartId11CharacterId = 0x80591fa4
+Update__Q24Kart18WheelPhysicsHolderFRC4Vec3RC5Mtx34f = 0x8059a278
+
+
+hardSpeedCap__4Kart = 0x808b59f4
+bulletSpeed__4Kart = 0x808b59f8
+minDriftSpeedRatio__4Kart = 0x808b5b1c
+mtSpeedMultiplier__4Kart = 0x808b5c60
+starSpeed__4Kart = 0x808B5CAC
+megaTCSpeed__4Kart = 0x808B5CBC
+speedRatioCC__4Kart = 0x808b5cd4
+regularBoostAccel__4Kart = 0x808b5c78
+unknown_70__4Kart = 0x808cb550
 
 #KartMovement
-ApplyLightningEffect__12KartMovementFiii = 0x80580778
-Update__9KartBoostFPb = 0x80588e24
-ApplyTransparency = 0x80576b3c
+ApplyLightningEffect__Q24Kart8MovementFiii = 0x80580778
+Update__Q24Kart5BoostFPb = 0x80588e24
+
+#KartBRRESHandle
+__ct__Q24Kart11BRRESHandleFP5LightbUc = 0x80576b3c
 
 #KartStatus
-UpdateFromInput__10KartStatusFv = 0x8059487c
+UpdateFromInput__Q24Kart6StatusFv = 0x8059487c
 
 #ControlLoader
 Load__13ControlLoaderFPCcPCcPCcPPCc = 0x805c2c60
@@ -470,7 +520,7 @@ Update__9UIControlFv = 0x8063d044
 Draw__9UIControlFUi = 0x8063D084
 InitSelf__9UIControlFv = 0x805BE600
 OnUpdate__9UIControlFv = 0x805bd2e0
-SetPositionAnim__9UIControlFfR16PositionAndScale = 0x8063d194
+SetPositionAnim__9UIControlFR16PositionAndScalef = 0x8063d194
 OnPlayAnimSound__9UIControlFv = 0x805BD2DC
 GetRuntimeTypeInfo__9UIControlCFv = 0x80606bdc
 GetClassName__9UIControlCFv = 0x8063d3c0
@@ -821,7 +871,7 @@ InitControlGroup__4PageFUi = 0x8060245c
 GetControl__12ControlGroupCFUi = 0x805c2ac0
 AddControl__4PageFUcR9UIControlUi = 0x8060246c
 SetManipulatorManager__4PageFR18ManipulatorManager = 0x80602474
-EndStateAnimated__4PageFfUi = 0x80602488
+EndStateAnimated__4PageFUif = 0x80602488
 AddPageLayer__4PageF6PageIdUi = 0x806025b0
 SetTransitionSound__4PageFUiUi = 0x80602d20
 PlaySound__4PageFUiUi = 0x80602cf8
@@ -1129,7 +1179,7 @@ SSL_Initialised = 0x80386d4c
 #Effects
 Reset__10EffectsMgrFv = 0x8067b8f0
 Update__10EffectsMgrFv = 0x8067cb88
-__ct__13PlayerEffectsFP4Kart = 0x8068df98
+__ct__13PlayerEffectsFPQ24Kart6Player = 0x8068df98
 __dt__13PlayerEffectsFv = 0x8068e888
 LoadEffects__13PlayerEffectsFv = 0x8068f044
 DisplayPrimaryEffects__13PlayerEffectsFPPQ23EGG6EffectUiUiRC5Mtx34RC4Vec3b = 0x806975d4
@@ -1147,7 +1197,7 @@ PlayBRSARSound__16RaceSoundHandlerFUiUi = 0x80716608
 
 #RaceAudioManager
 sInstance__12RaceAudioMgr = 0x809c27f8
-ChangeMusic__12RaceAudioMgrF9RaceState = 0x80711ac4
+SetRaceState__12RaceAudioMgrF9RaceState = 0x80711ac4
 trackIdxToCourseID__12RaceAudioMgr = 0x80895238
 
 #AudioItemAlterationMgr
@@ -1162,14 +1212,15 @@ sInstance__8GlobeMgr = 0x809c2cb8
 ResetGlobeMii__8GlobeMgrFv = 0x807509d0
 DisplayMii__8GlobeMgrFv = 0x807509b4
 
-#KartModelsMgr
-sInstance__13KartModelsMgr = 0x809c23f8
-isOnlineRace__13KartModelsMgr = 0x809c38b9
+#DriverMgr
+sInstance__9DriverMgr = 0x809c23f8
+isOnlineRace__9DriverMgr = 0x809c38b9
 
 #KartModel
-#Model
-sInstance__11CourseModel = 0x809c2F44
-ProcessCollision__11CourseModelFfRC4Vec3RC4Vec311KCLTypesBITPiR13KCLTypeHolderUi = 0x807907f8
+
+#CourseMgr
+sInstance__11CourseMgr = 0x809c2F44
+IsCollidingAddEntry__9CourseMgrFRC4Vec3RC4Vec316KCLTypesBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x807907f8
 
 matNamesMH = 0x808d1860
 
@@ -1202,7 +1253,7 @@ DeployBlooper__Q24Item8GessoMgrFUc = 0x807a9128
 AddEVENTEntry__Q24Item7ObjBaseF9ItemObjIdUc = 0x8079c220
 
 #Lakitu
-Update__16LakituControllerFv = 0x8071e6c0
+Update__Q26Lakitu7ManagerFv = 0x8071e6c0
 
 #RKNet
 #Controller
@@ -1217,7 +1268,7 @@ Copy__Q25RKNet12PacketHolderFPCvUi = 0x8065a34c
 SetAllToSendPackets__Q25RKNet11ROOMHandlerFQ25RKNet10ROOMPacket = 0x8065ae70
 
 #SELECT
-DestroyStaticInstance__Q25RKNet13SELECTHandlerFv = 0x8065ff60
+DestroyInstance__Q25RKNet13SELECTHandlerFv = 0x8065ff60
 SetPlayerData__Q25RKNet13SELECTHandlerF11CharacterId6KartId8CourseIdUcUc = 0x80660750
 GetWinningCourse__Q25RKNet13SELECTHandlerCFv = 0x80660450
 DecideTrack__Q25RKNet13SELECTHandlerFv = 0x80661ce8
@@ -1232,10 +1283,11 @@ sInstance__Q25RKNet10RH1Handler = 0x809c2118
 
 #EVENT
 sInstance__Q25RKNet12EVENTHandler = 0x809c20f0
-AddEntry__Q25RKNet12EVENTHandlerF9ItemObjIdQ25RKNet11EVENTActionPvUi = 0x8065b780
+AddEntry__Q25RKNet12EVENTHandlerF9ItemObjIdQ25RKNet11EVENTActionPCvUi = 0x8065b780
+HasFreeEntries__Q25RKNet12EVENTHandlerCFv = 0x8065b8d4
 
 #Objects
-Update__12ObjectHolderFv = 0x8082a8f4
+Update__10ObjectsMgrFv = 0x8082a8f4
 
 ##Rel	
 GetTrackBMGId = 0x80833668							   
@@ -1250,15 +1302,6 @@ blueShellMinimumDiveDistance__4Item = 0x808a5c34
 
 
 
-hardSpeedCap = 0x808b59f4
-bulletSpeed = 0x808b59f8
-minDriftSpeedRatio = 0x808b5b1c
-mtSpeedMultiplier = 0x808b5c60
-starSpeed = 0x808B5CAC
-megaTCSpeed = 0x808B5CBC
-speedRatioCC = 0x808b5cd4
-regularBoostAccel = 0x808b5c78
-unknown_70 = 0x808cb550
 
 
 #Misc

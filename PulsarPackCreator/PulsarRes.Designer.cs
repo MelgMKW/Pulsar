@@ -188,13 +188,13 @@ namespace Pulsar_Pack_Creator {
         ///802402e0-80240e17: +0x3f1c
         ///80240e18-80244dd3: -0xebc
         ///80276054-8027b000: -0x4340
+        ///802a3d60-802a407f: -0x4368
         ///802a4080-80386e3f: -0x4380
         ///80386f48-80386f8f: -0x4388
         ///805103b4-80510a8f: -0x4380
         ///80510b84-8052d297: -0x4474
         ///8052d298-8052d96b: +0x22568
-        ///8052d96c-8053d97b: -0x4b48
-        ///8053d97c-8053e36f [rest of string was truncated]&quot;;.
+        ///8052d96c-8053d97b [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Port {
             get {
@@ -252,18 +252,18 @@ namespace Pulsar_Pack_Creator {
         ///					&lt;patch id=&quot;PackLoadPack&quot;/&gt;
         ///				&lt;/choice&gt;
         ///			&lt;/option&gt;
-        ///			&lt;option name=&quot;Custom Music&quot;&gt;
+        ///			&lt;option name=&quot;My Stuff&quot;&gt;
         ///				&lt;choice name=&quot;From CTGP-r&quot;&gt;
-        ///					&lt;patch id=&quot;CTGPLoadMusic&quot;/&gt;
+        ///					&lt;patch id=&quot;CTGPLoad&quot;/&gt;
         ///				&lt;/choice&gt;
         ///				&lt;choice name=&quot;From Pack&quot;&gt;
-        ///					&lt;patch id=&quot;PackLoadMusic&quot;/&gt;
+        ///					&lt;patch id=&quot;PackLoad&quot;/&gt;
         ///				&lt;/choice&gt;
         ///			&lt;/option&gt;
         ///		&lt;/section&gt;
         ///	&lt;/options&gt;	
         ///	&lt;patch id=&quot;PackLoadPack&quot;&gt;
-        ///		&lt;memory offset=&quot;0x8000A3F4&quot; value=&quot;4bff9c0c&quot; or [rest of string was truncated]&quot;;.
+        ///		&lt;memory offset=&quot;0x8000A3F4&quot; value=&quot;4bff9c0c&quot; original=&quot;4e8000 [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XML {
             get {

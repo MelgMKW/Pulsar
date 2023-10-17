@@ -6,7 +6,7 @@
 namespace Objects {
 
 class Itembox: public ObjectCollidable, public ObjectCycleManager { //0x65 = 101
-    explicit Itembox(const KMP::GOBJHolder& gobjHolder); //808285b0
+    explicit Itembox(const KMP::Holder<GOBJ>& gobjHolder); //808285b0
 
     ~Itembox() override; //806c4f74 vtable 808d7bc0
     void Update() override; //0x14 80828860

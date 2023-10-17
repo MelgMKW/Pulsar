@@ -39,7 +39,7 @@ s32 Delete(char* path);
 s32 Close(s32 fd);
 s32 Seek(s32 fd, s32 offset, s32 whence);
 s32 CreateFile(const char* filepath, u8 attributes, IOS::Mode ownerperms, IOS::Mode groupperms, IOS::Mode otherperms);
-s32 Write(s32 fd, void* buffer, u32 length);
+s32 Write(s32 fd, const void* buffer, u32 length);
 s32 ReadDir(const char* folder, void* r4, u32* num);
 s32 CreateDir(const char* filepath, u8 attributes, IOS::Mode userperms, IOS::Mode groupperms, IOS::Mode otherperms);
 s32 GetAttr(const char* filepath, u32* uid, u16* gid, u8* attributes, IOS::Mode* userperms, IOS::Mode* groupperms, IOS::Mode* otherperms);

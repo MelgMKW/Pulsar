@@ -26,7 +26,7 @@ kmWrite32(0x806266d4, 0x60000000);
 //kmWrite32(0x8084f080, 0x7F89E378); //get idx in r9
 void LoadCorrectBRCTR(PushButton& button, const char* folder, const char* ctr, const char* variant, u32 localPlayerField) {
     register int idx;
-    asm volatile(mr idx, r28;);
+    asm(mr idx, r28;);
     Pages::SinglePlayer* page = button.parentGroup->GetParentPage<Pages::SinglePlayer>();
     const System* system = System::sInstance;
     char ttVariant[0x15];

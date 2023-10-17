@@ -1,6 +1,6 @@
 #ifndef _MSPT_
 #define _MSPT_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
 struct MSPT {
     Vec3 position;
@@ -9,6 +9,6 @@ struct MSPT {
     u16 unknown_0x1A;
 };
 
-typedef KMPSection<MSPT> MSPTSection;
+typedef KMPBlock<MSPT> MSPTBlock;
 
 #endif

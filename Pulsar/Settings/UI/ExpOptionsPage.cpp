@@ -1,6 +1,6 @@
 #include <UI/UI.hpp>
 #include <Settings/UI/ExpOptionsPage.hpp>
-
+#include <Settings/UI/SettingsPanel.hpp>
 
 namespace Pulsar {
 namespace UI {
@@ -21,7 +21,7 @@ void ExpOptions::OnInit() {
     this->settingsButton.buttonId = 5;
     this->settingsButton.SetOnClickHandler(this->onButtonClickHandler, 0);
     this->settingsButton.SelectInitialButton(0);
-    this->topSettingsPage = PAGE_VS_SETTINGS;
+    this->topSettingsPage = SettingsPanel::firstId;
 }
 
 void ExpOptions::ExpandedOnButtonClick(PushButton& pushButton, u32 hudSlotId) {

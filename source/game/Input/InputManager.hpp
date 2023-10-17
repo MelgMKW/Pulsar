@@ -19,8 +19,8 @@ namespace Input {
 class Manager {
 public:
     static Manager* sInstance; //809bd70c
-    static Manager* getStaticInstance(); //8052313c
-    static void destroyStaticInstance(); //8052318c
+    static Manager* GetInstance(); //8052313c
+    static void DestroyInstance(); //8052318c
     Manager(); //805232f0
     virtual ~Manager(); //805231dc vtable 808b2fc8
 
@@ -43,7 +43,7 @@ public:
 
     void SyncSimpleCallBack(s32  result, s32 num); //805230e0
     RealControllerHolder realControllerHolders[4]; //0x4 Stores inputs from a real controller at the same console
-    VirtualControllerHolder virtualControllerHolders[12]; //0x3b4 Stores inputs for all the other players in a race (I think the ones with a matching realControllerHolder go unused)
+    AIControllerHolder virtualControllerHolders[12]; //0x3b4 Stores inputs for all the other players in a race (I think the ones with a matching realControllerHolder go unused)
     ControllerHolder controllerHolder; //0x15b4 dummy?
 
 

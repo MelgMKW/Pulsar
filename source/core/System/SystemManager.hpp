@@ -6,7 +6,7 @@
 class SystemManager {
 public:
     static SystemManager* sInstance; //80386000
-    static SystemManager* GetStaticInstance();  //8000a5d0
+    static SystemManager* CreateInstance();  //8000a5d0
     static void Shutdown(); //8000b154
     static void ReturnToMenu(); //8000b188
     static void RestartGame(); //8000b1bc

@@ -44,6 +44,7 @@ struct LightSetData {
 class LightSetting;
 class LightSet {
 public:
+    LightSet(LightSetting* setting, LightSetData* setData); //inlined
     bool SelectLightObj(u32 idxLight, int idxLightObj); //80078030
     bool SelectAmbLightObj(int idxAmbLightObj); //800780a0
     LightSetting* setting;

@@ -8,7 +8,7 @@
 class CtrlMenuObiTop: public LayoutUIControl {
     //no ctor
     ~CtrlMenuObiTop() override; //807e9b7c vtable 808d365c
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //807e9a68
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //807e9a68
     int GetRuntimeTypeInfo() const override; //0x28 807e9bd4
     const char* GetClassName() const override; //0x2c 807e9250
 }; //0x174
@@ -17,7 +17,7 @@ size_assert(CtrlMenuObiTop, 0x174);
 class CtrlMenuPageTitleText: public LayoutUIControl {
 public:
     ~CtrlMenuPageTitleText() override; //805baf10 vtable 808d36d4
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20 807e9898
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 807e9898
     int GetRuntimeTypeInfo() const override; //0x28 807e9bec
     const char* GetClassName() const override; //0x2c 807e9230
     void SetMsgId(u32 bmgId, const TextInfo* text = nullptr); //807e987c
@@ -27,7 +27,7 @@ public:
 class CtrlMenuInstructionText: public LayoutUIControl {
 public:
     ~CtrlMenuInstructionText() override; //805c00c0 vtable 808d3698
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20 807e999c
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 807e999c
     int GetRuntimeTypeInfo() const override; //0x28 807e9be0
     const char* GetClassName() const override; //0x2c 807e9240
     void Load(); //807e9904
@@ -44,7 +44,7 @@ public:
     ~CtrlMenuBackButton() override; //805be7f4 vtable 808d374c
     void InitSelf() override; //0x18 807e93b8
     void OnUpdate() override; //0x1c 807e9270
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20 807e9410
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 807e9410
     int GetRuntimeTypeInfo() const override; //0x28 807e9c04
     const char* GetClassName() const override; //0x2c 807e9214
     void SetPlayerBitfield(); //807e9610

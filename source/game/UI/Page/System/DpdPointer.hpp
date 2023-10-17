@@ -2,7 +2,7 @@
 #define _POINTERPAGE_
 #include <kamek.hpp>
 #include <game/UI/Page/System/System.hpp>
-#include <game/Visual/Effect/EffectMgr.hpp>
+#include <game/3D/Effect/EffectMgr.hpp>
 
 //_sinit_ at 805c9750
 

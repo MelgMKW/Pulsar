@@ -3,7 +3,7 @@
 void loadIntoMKW();
 
 struct loaderFunctionsEx {
-    loaderFunctions base;
+    LoaderFunctions base;
 };
 
 loaderFunctionsEx functions_p ={
@@ -48,15 +48,11 @@ loaderFunctionsEx functions_k ={
 };
 
 
-void loadIntoMKW()
-{
+void LoadIntoMKW() {
     u8 region = *(u8*)(0x80000003);
 
-    // choose functions
-    loaderFunctions* funcs = nullptr;
-    int* heap = nullptr;
-    switch(region)
-    {
+    LoaderFunctions* funcs = nullptr;
+    switch(region) {
         case 'P': funcs = &functions_p.base; break;
         case 'E': funcs = &functions_e.base; break;
         case 'J': funcs = &functions_j.base; break;
@@ -65,7 +61,5 @@ void loadIntoMKW()
 
     char path[64];
     funcs->sprintf(path, "/Binaries/%c.bin", region);
-    loadKamekBinaryFromDisc(funcs, path);
-
-    return;
-};
+    LoadKamekBinaryFromDisc(funcs, path);
+}

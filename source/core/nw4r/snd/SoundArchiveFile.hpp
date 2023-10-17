@@ -189,6 +189,12 @@ class NandSoundArchive : public SoundArchive {
 public:
     NandSoundArchive(); //80097570
     ~NandSoundArchive() override; //800975c0 vtable 80274808
+    const void* detail_GetFileAddress(FileId fileId) const override; //0xc 80097df0
+    const void* detail_GetWaveDataFileAddress(FileId fileId) const override; //0x10 80097de0
+    int detail_GetRequiredStreamBufferSize() const override; //0x14 800979e0
+    ut::FileStream* OpenStream(void* buffer, int size, u32 begin, u32 length) const override; //0x18 800977e0
+    ut::FileStream* OpenExtStream(void* buffer, int size, const char* extFilePath, u32 begin, u32 length) const override; //0x1c 800978a0
+
     detail::SoundArchiveFileReader fileReader; //0x108
     NAND::FileInfo fileInfo; //14c
     bool isOpen;
@@ -200,6 +206,12 @@ class MemorySoundArchive : public SoundArchive {
 public:
     MemorySoundArchive(); //80095d80
     ~MemorySoundArchive() override; //80095dd0 vtable 802744d8
+    const void* detail_GetFileAddress(FileId fileId) const override; //0xc 80095ec0
+    const void* detail_GetWaveDataFileAddress(FileId fileId) const override; //0x10 80095f70
+    int detail_GetRequiredStreamBufferSize() const override; //0x14 80096090
+    ut::FileStream* OpenStream(void* buffer, int size, u32 begin, u32 length) const override; //0x18 80096020
+    ut::FileStream* OpenExtStream(void* buffer, int size, const char* extFilePath, u32 begin, u32 length) const override; //0x1c 80096080
+
     bool Setup(const void* soundArchiveData); //80095e30
     const void* data;
     detail::SoundArchiveFileReader fileReader;

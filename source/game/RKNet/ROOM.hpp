@@ -34,8 +34,8 @@ union ROOMPacketReg {
 class ROOMHandler {
 public:
     static ROOMHandler* sInstance; //809c20e0
-    static ROOMHandler* GetStaticInstance(); //8065aa88
-    static void DestroyStaticInstance(); //8065ab4c
+    static ROOMHandler* CreateInstance(); //8065aa88
+    static void DestroyInstance(); //8065ab4c
     ROOMHandler(); //8065af84 just a wrapper around Reset
     ~ROOMHandler(); //8065b008
 

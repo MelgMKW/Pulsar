@@ -1,15 +1,15 @@
 #ifndef _ITPT_
 #define _ITPT_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
 struct ITPT {
     Vec3 position;
     float width;
-    u16 setting1;
+    u16 setting1; //0x10
     u16 setting2;
 }; //total size 0x14
 
-typedef struct KMPSection<ITPT> ITPTSection;
+typedef struct KMPBlock<ITPT> ITPTBlock;
 
 
 #endif

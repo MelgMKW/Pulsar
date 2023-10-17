@@ -95,16 +95,34 @@ struct TexSrtTypedef {
     };
 };
 
-class ResMat: public ResCommon<ResMatData> {
+class ResMat : public ResCommon<ResMatData> {
 public:
 
 };
 
-class ResMatTevColor: public ResCommon<ResTevColorDL> {
+class ResMatTevColor : public ResCommon<ResTevColorDL> {
 public:
 
 };
 
+class ResMatMisc : public ResCommon<ResMatMiscData> {
+public:
+
+};
+
+class ResTexObj : public ResCommon<ResTexObjData> {
+public:
+
+};
+class ResTexSrt : public ResCommon<ResTexSrtData>, public TexSrtTypedef {
+public:
+
+};
+
+class ResTev : public ResCommon<ResTevData> {
+public:
+
+};
 }//namespace g3d
 }//namespace nw4r
 

@@ -19,7 +19,7 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
     if(firstChar == 'n' || firstChar == 'S' || firstChar == 'r') {
         bool isFinalLap = false;
         register u32 strLength;
-        asm volatile(mr strLength, r28;);
+        asm(mr strLength, r28;);
         const char finalChar = extFilePath[strLength];
         if(finalChar == 'f' || finalChar == 'F') isFinalLap = true;
         snprintf(pulPath, 0x20, "%sstrm/%d%s.brstm", archive->extFileRoot,
@@ -30,7 +30,7 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
             snprintf(pulPath, 0x20, "%sstrm/%d%s.brstm", archive->extFileRoot, system->winningCourse, lapSpecifiers[1]);
             if(DVDConvertPathToEntryNum(pulPath) >= 0) {
                 extFilePath = pulPath;
-                AudioManager::sInstance->soundArchivePlayer->soundPlayerArray->soundList.GetFirst()->ambientParam.pitch = 1.1f;
+                AudioManager::sInstance->soundArchivePlayer->soundPlayerArray->soundList.GetFront().ambientParam.pitch = 1.1f;
             }
         }
     }

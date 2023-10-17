@@ -1,14 +1,14 @@
 #ifndef _OBJECT_
 #define _OBJECT_
 #include <kamek.hpp>
-#include <game/KMP/KMPController.hpp>
+#include <game/KMP/KMPManager.hpp>
 #include <game/File/Tables/GeoHitTable.hpp>
 #include <game/Sound/Actors/ObjectSound.hpp>
 #include <game/Route/RouteController.hpp>
-#include <game/Visual/Model/ModelDirector.hpp>
-#include <game/Visual/Model/ShadowModelDirector.hpp>
-#include <game/Collision/Entity/EntityHolder.hpp>
-#include <game/Visual/ClipInfoMgr.hpp>
+#include <game/3D/Model/ModelDirector.hpp>
+#include <game/3D/Model/ShadowModelDirector.hpp>
+#include <game/Entity/EntityManager.hpp>
+#include <game/3D/ClipInfoMgr.hpp>
 
 /*
 Contributors:
@@ -30,7 +30,7 @@ struct CyclePtmfs {
 
 class Object {
 public:
-    explicit Object(KMP::GOBJHolder* gobj); //8081f828
+    explicit Object(const KMP::Holder<GOBJ>& gobj); //8081f828
     Object(const char* name, const Vec3& position, const Vec3& rotation, const Vec3& scale, u32 r8); //8081fb04 used for sub objects
     virtual ~Object(); //8067e3c4 vtable 808d6ecc
     virtual void OnStart(); //0xC 8081fc68
@@ -111,7 +111,7 @@ public:
     u8 padding2[3];
     const char* lodResName; //0x94
     u8 unknown_0x98[8];
-    KMP::GOBJHolder* gobj; //0xa0
+    const KMP::Holder<GOBJ>& gobj; //0xa0
     u32 holderIdx;
     bool unknown_0xA8;
     u8 padding3[3];

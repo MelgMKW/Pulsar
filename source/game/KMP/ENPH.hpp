@@ -1,8 +1,8 @@
 #ifndef _ENPH_
 #define _ENPH_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
-typedef PointGroup ENPH;
-typedef struct KMPSection<ENPH> ENPHSection;
+struct ENPH : PointGroup {};
+typedef struct KMPBlock<ENPH> ENPHBlock;
 
 #endif

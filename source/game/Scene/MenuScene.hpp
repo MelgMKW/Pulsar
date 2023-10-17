@@ -1,6 +1,6 @@
 #ifndef _MENUSCENE_
 #define _MENUSCENE_
-#include <game/Scene/BaseScene.hpp>
+#include <game/Scene/GameScene.hpp>
 
 class MenuScene: public GameScene {
 public:

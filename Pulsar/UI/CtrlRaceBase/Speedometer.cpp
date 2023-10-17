@@ -48,8 +48,8 @@ void CtrlRaceSpeedo::Init() {
 
 void CtrlRaceSpeedo::OnUpdate() {
     this->UpdatePausePosition();
-    const KartPointers& pointers = KartHolder::sInstance->karts[this->GetPlayerId()]->pointers;
-    const KartPhysics* physics = pointers.kartBody->kartPhysicsHolder->kartPhysics;
+    const Kart::Pointers& pointers = Kart::Manager::sInstance->players[this->GetPlayerId()]->pointers;
+    const Kart::Physics* physics = pointers.kartBody->kartPhysicsHolder->physics;
 
     Vec3 sum;
     PSVECAdd(&physics->engineSpeed, &physics->speed2, &sum);

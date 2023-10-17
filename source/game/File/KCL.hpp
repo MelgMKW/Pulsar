@@ -20,14 +20,14 @@ struct KCLHeader {
 }; //total size 0x3c
 
 struct KCLTriangle {
-    float length;
-    u16 posIdx; //4
-    u16 dirIdx; //6
-    u16 normalAIdx; //8
+    float height;
+    u16 vertexIdx; //4
+    u16 dirNormalIdx; //6 
+    u16 normalAIdx; //8 as in vertexA
     u16 normalBIdx; //a
     u16 normalCIdx; //c
     u16 flag; //d
-};
+}; //0x10
 
 struct KCL {
     KCLHeader header;

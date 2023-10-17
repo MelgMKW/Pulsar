@@ -26,8 +26,9 @@ class ScnRootEx {
     explicit ScnRootEx(g3d::ScnRoot* scnRoot); //8023c694
     void SetLightMgr(LightMgr* mgr); //8023c88c
     void SetFogMgr(FogMgr* mgr); //8023c894
+    u32 GetLightObjects(u8 lightSetId, LightObject** dest, u32* ambientLightIdx); //8023cf48 returns nbr lightObjects obtained via the Id
     g3d::ScnRoot* scnRoot;
-    LightMgr* lightManager;
+    LightMgr* lightManager; //0x4
     FogMgr* fogMgr; //0x8
     ShadowTextureManager* shadowTextureManager; //0xC
     u16 unknown_0x10[3];
@@ -62,7 +63,7 @@ class IScnProc {
     void RemoveFromScnGroup(nw4r::g3d::ScnGroup* scnGroup); //8022a294
 }; //0x18
 
-class ScnRenderer: public ScnRootEx, public IScnProc {
+class ScnRenderer : public ScnRootEx, public IScnProc {
 public:
     explicit ScnRenderer(g3d::ScnRoot* scnRoot); //8023b980
     //ScnRootEx vtable 802a3e58 at 0xB4
@@ -70,6 +71,12 @@ public:
     //Parent vtable 802a3e90 at 0xC0
     int GetNumDrawPath() override; // thunk 8023c68c func 8023c280
     //~IScnProc() override; //thunk 8023c684
+
+    void SetPriorityDrawOpa(nw4r::g3d::ScnObj* scnObj, u32 priorityStructIdx, u32 addedPriority); //8023c328
+    void SetPriorityDrawXlu(nw4r::g3d::ScnObj* scnObj, u32 priorityStructIdx, u32 addedPriority); //8023c394
+
+
+
     u8 unknown_0xd0[0xf0 - 0xd0];
 }; //0xf0
 

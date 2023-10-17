@@ -38,7 +38,7 @@ class Wanwan_Chn: public ObjectCollidable {
 
 
 class Wanwan: public ObjectCollidable, public ObjectCycleManager {
-    Wanwan(const KMP::GOBJHolder& gobjHolder); //806e4224
+    Wanwan(const KMP::Holder<GOBJ>& gobjHolder); //806e4224
     ~Wanwan() override; //806e4aec vtable 808c71c4
     void OnStart() override; //0xC 806e4b9c
     void vf_0x10() override; //0x10 806e4b98

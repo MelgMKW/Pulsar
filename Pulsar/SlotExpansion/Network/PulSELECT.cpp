@@ -231,7 +231,7 @@ kmWrite32(0x80661f94, 0xB3DF003C);
 kmWrite32(0x8066200c, 0xB01F003C);
 
 //Merging
-asm void GetPhase_3D_r0_r24() {
+asmFunc GetPhase_3D_r0_r24() {
     ASM(
         nofralloc;
     lbz r0, 0x3D + 2 (r24);
@@ -242,7 +242,7 @@ asm void GetPhase_3D_r0_r24() {
 kmCall(0x80661578, GetPhase_3D_r0_r24);
 kmCall(0x806617b8, GetPhase_3D_r0_r24);
 
-asm void GetPhase_75_r0_r28() {
+asmFunc GetPhase_75_r0_r28() {
     ASM(
         nofralloc;
     lbz r0, 0x75 + 2 (r28);
@@ -253,7 +253,7 @@ asm void GetPhase_75_r0_r28() {
 //kmCall(0x806617e8, GetPhase_75_r0_r28);
 kmCall(0x80661880, GetPhase_75_r0_r28);
 
-asm void StorePhase_3D_r30_r24() {
+asmFunc StorePhase_3D_r30_r24() {
     ASM(
         nofralloc;
     lbz r12, 0x3D + 2 (r24);
@@ -265,7 +265,7 @@ asm void StorePhase_3D_r30_r24() {
 kmCall(0x8066163c, StorePhase_3D_r30_r24);
 //kmCall(0x806617f4, StorePhase_3D_r30_r24);
 
-asm void StorePhase_3D_r31_r24() {
+asmFunc StorePhase_3D_r31_r24() {
     ASM(
         nofralloc;
     lbz r12, 0x3D + 2 (r24);
@@ -293,7 +293,7 @@ kmWrite32(0x80660168, 0x60000000); //nop because it's already being init to 0 vi
 //StorePhase(0x8066093c, 0x3D, 28, 31);   //inlined funcs
 //StorePhase(0x80660b70, 0x35, 3, 24);    //inlined funcs
 
-asm void GetEngine_3D_r0_r28() {
+asmFunc GetEngine_3D_r0_r28() {
     ASM(
         nofralloc;
     lbz r0, 0x77 (r28);
@@ -314,7 +314,7 @@ GetEngine(0x806615b8, 0x3f, 3, 24);
 //StoreEngine(0x806617e4, 0x3f, 0, 24);
 StoreEngine(0x80661cb8, 0x3f, 28, 29);
 
-asm void CheckEngineClass() {
+asmFunc CheckEngineClass() {
     ASM(
         nofralloc;
     lbz r0, 0x77 (r28);

@@ -27,8 +27,8 @@ class GameSoundHeap : public GameSoundHeapImpl {
 public:
     //a 2nd vtable existing (with the same funcs) shows this template system is incorrect OR that disposers work differently than though
     static GameSoundHeap* sInstance; //809c2350 vtable 808c79f0 
-    GameSoundHeap* GetStaticInstance(); //806fdc1c
-    void DestroyStaticInstance(); //806fdcec
+    GameSoundHeap* CreateInstance(); //806fdc1c
+    void DestroyInstance(); //806fdcec
     GameSoundHeap(); //806fde08
     ~GameSoundHeap(); //806fdf18
     u32 SetType(); //806fe084 returns the size of the heap that'll contain the sound heap

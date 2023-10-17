@@ -4,7 +4,6 @@
 #include <core/rvl/kpad.hpp>
 #include <Debug/Debug.hpp>
 #include <IO/IO.hpp>
-#include <IO/File.hpp>
 #include <PulsarSystem.hpp>
 
 extern char gameID[4];
@@ -24,26 +23,27 @@ void FatalError(const char* string) {
     OS::Fatal(fg, bg, string);
 }
 
+#pragma suppress_warnings on
 void LaunchSoftware() { //If dolphin, restarts game, else launches Riivo->HBC->OHBC->WiiMenu
-    s32 result = IO::Open("/dev/dolphin", IOS::MODE_NONE);
+    s32 result = IO::OpenFix("/dev/dolphin", IOS::MODE_NONE);
     if(result >= 0) {
         IOS::Close(result);
         SystemManager::RestartGame();
         return;
     }
-    result = IO::Open("/title/00010001/52494956/content/title.tmd\0", IOS::MODE_NONE); //Riivo
+    result = IO::OpenFix("/title/00010001/52494956/content/title.tmd\0", IOS::MODE_NONE); //Riivo
     if(result >= 0) {
         ISFS::Close(result);
         OS::LaunchTitle(0x00010001, 0x52494956);
         return;
     }
-    result = IO::Open("/title/00010001/4c554c5a/content/title.tmd\0", IOS::MODE_NONE); //OHBC
+    result = IO::OpenFix("/title/00010001/4c554c5a/content/title.tmd\0", IOS::MODE_NONE); //OHBC
     if(result >= 0) {
         ISFS::Close(result);
         OS::LaunchTitle(0x00010001, 0x4c554c5a);
         return;
     }
-    result = IO::Open("/title/00010001/48424330/content/title.tmd\0", IOS::MODE_NONE); // If HBC can't be found try OHBC
+    result = IO::OpenFix("/title/00010001/48424330/content/title.tmd\0", IOS::MODE_NONE); // If HBC can't be found try OHBC
     if(result >= 0) {
         ISFS::Close(result);
         OS::LaunchTitle(0x00010001, 0x48424330);
@@ -51,6 +51,7 @@ void LaunchSoftware() { //If dolphin, restarts game, else launches Riivo->HBC->O
     }
     OS::LaunchTitle(0x1, 0x2); // Launch Wii Menu if channel isn't found
 }
+#pragma suppress_warnings reset
 
 //Credit Star and Riidefi
 
@@ -103,35 +104,28 @@ ExceptionFile::ExceptionFile(const OS::Context& context) : magic('PULD'), region
     }
 }
 
-void DumpContextToFile(u16 error, const OS::Context* context, u32 dsisr, u32 dar) {
+void WriteHeaderCrash(u16 error, const OS::Context* context, u32 dsisr, u32 dar) {
     crashError = error;
     crashThread = const_cast<OS::Thread*>(reinterpret_cast<const OS::Thread*>(context));
     db::ExceptionHead& exception = db::ExceptionHead::mInstance;
     exception.displayedInfo = 0x23;
     exception.callbackArgs = nullptr;
-    const char* outcome = "";
-    IO::File* file = IO::File::sInstance;
-    if(file != nullptr) {
-        IO::IOType type = file->type;
-        outcome = " to restart the game";
-        if(type != IO::IOType_DOLPHIN) outcome = " to go back to Riivolution";
-    }
+
     //char endMsg[512];
     //snprintf(endMsg, 512, "Press A%s and send a clip\nof the crash or the crash.bin file to the pack\ncreator to help fix the bug.\n", outcome);
 
-    db::Exception_Printf_("Press A%s and send a clip\nof the crash or the crash.bin file to the pack\ncreator to help fix the bug.\n",
-        outcome);
+    db::Exception_Printf_("Press A to exit. Send crash.bin to the creator.");
     db::PrintContext_(error, context, dsisr, dar);
 
 }
-kmCall(0x80023484, DumpContextToFile);
+kmCall(0x80023484, WriteHeaderCrash);
 
 
 void CreateCrashFile(s32 channel, KPAD::Status buff[], u32 count) {
 
-    IO::File* file = IO::File::sInstance;
+    IO* io = IO::sInstance;;
     bool exit = false;
-    if(file == nullptr) exit = true; //should always exist if the crash is after strap 
+    if(io == nullptr) exit = true; //should always exist if the crash is after strap 
     else {
         KPAD::Read(channel, buff, count);
         u8 wiimoteExtension = buff[0].extension;
@@ -155,6 +149,7 @@ void CreateCrashFile(s32 channel, KPAD::Status buff[], u32 count) {
             OS::DetachThread(thread);
             OS::CancelThread(thread);
 
+            /* failsafe, but bad for ISI
             register u32* const addressPtr = (u32*)(thread->context.srr0 + 4);
             const s32 diff = static_cast<int>(reinterpret_cast<u32>(&LaunchSoftware) - reinterpret_cast<u32>(addressPtr));
             u32 instruction = 0x48000000;
@@ -168,15 +163,16 @@ void CreateCrashFile(s32 channel, KPAD::Status buff[], u32 count) {
                 isync;               //discard prefetched instructions in case the update addressPtr was prefetched
                 )
             }
+            */
 
             alignas(0x20) ExceptionFile exception(thread->context);
             exception.error = static_cast<OS::Error>(crashError);
             char path[IOS::ipcMaxPath];
             const System* system = System::sInstance;
             snprintf(path, IOS::ipcMaxPath, "%s/Crash.bin", system->GetModFolder());
-            file->CreateAndOpen(path, IOS::MODE_READ_WRITE);
-            file->Overwrite(sizeof(ExceptionFile), &exception);
-            file->Close();
+            io->CreateAndOpen(path, IOS::MODE_READ_WRITE);
+            io->Overwrite(sizeof(ExceptionFile), &exception);
+            io->Close();
         }
     }
     if(exit) LaunchSoftware();
@@ -185,7 +181,7 @@ kmCall(0x80226610, CreateCrashFile);
 
 /*
 void OnCrashEnd() {
-    IO::File* file = IO::File::sInstance;
+    IO* io = IO::sInstance;;
     if(file != nullptr) { //should always exist if the crash is after strap
         register u32* const addressPtr = (u32*)(crashThread->context.srr0 + 4);
         const s32 diff = static_cast<int>(reinterpret_cast<u32>(&LaunchSoftware) - reinterpret_cast<u32>(addressPtr));

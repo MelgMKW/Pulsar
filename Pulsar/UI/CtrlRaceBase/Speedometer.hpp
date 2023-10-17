@@ -1,7 +1,7 @@
 #ifndef _PULSOM_
 #define _PULSOM_
 #include <kamek.hpp>
-#include <game/Race/Kart/KartHolder.hpp>
+#include <game/Kart/KartManager.hpp>
 #include <game/UI/SectionMgr/SectionMgr.hpp>
 #include <UI/CtrlRaceBase/CustomCtrlRaceBase.hpp>
 
@@ -16,9 +16,9 @@ public:
     static void Create(Page& page, u32 index, u32 count);
 private:
     struct SpeedArg {
-        SpeedArg(){}
+        SpeedArg() {}
         SpeedArg(u32 hundreds, u32 tens, u32 units, u32 dot, u32 decimals) :
-        hundreds(hundreds), tens(tens), units(units), dot(dot), decimals(decimals) {}
+            hundreds(hundreds), tens(tens), units(units), dot(dot), decimals(decimals) {}
         union {
             u32 values[5];
             struct {

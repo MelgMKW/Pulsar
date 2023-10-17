@@ -32,7 +32,7 @@ public:
     bool HasGlyph(u16 c) const override; //0x54 800b1ea0
     FontEncoding GetEncoding() const override; //0x58 800b1f66
 
-    OSFontHeader* fontHeader; //0x10
+    OS::FontHeader* fontHeader; //0x10
     CharWidths defaultWidths;  //0x14
     u16 altChar; //0x18
 }; //0x1c

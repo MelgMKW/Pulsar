@@ -1,6 +1,6 @@
 #ifndef _GOBJ_
 #define _GOBJ_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
 
 struct GOBJ {
@@ -14,6 +14,6 @@ struct GOBJ {
     u16 presenceFlags; //3a
 }; //0x3C
 
-typedef KMPSection<GOBJ> GOBJSection;
+typedef KMPBlock<GOBJ> GOBJBlock;
 
 #endif

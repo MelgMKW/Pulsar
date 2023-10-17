@@ -143,7 +143,7 @@ public:
     u8 unknown_0xea[6];
 }; //Total size 0xf0
 
-struct RacedataSettings {
+struct RacedataSettings { //0xb68 for race scenario
 public:
     CourseId courseId; //http://wiki.tockdom.com/wiki/List_of_Identifiers#Courses
     EngineClass engineClass; //0x4
@@ -212,8 +212,8 @@ public:
 class RaceData : public EmptyRaceDataParent, public RKParameterFile {
 public:
     static RaceData* sInstance; //0x809bd728 presumably private 
-    static RaceData* GetStaticInstance(); //8052fe58
-    static void DestroyStaticInstance(); //8052ffe8
+    static RaceData* CreateInstance(); //8052fe58
+    static void DestroyInstance(); //8052ffe8
     RaceData(); //8053015c inlined
     ~RaceData() override; //80530038 vtable 808b3268  for RKParemeterFile and 808b3260 for RaceData itself
     void vf_0x10() override; //80532078 just a blr

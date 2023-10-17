@@ -47,7 +47,7 @@ public:
     public:
         Container(); //80652be0
         ~Container() override; //80652c1c
-        void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20 80652d44
+        void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 80652d44
         int GetRuntimeTypeInfo() const override; //0x28 80653194
         const char* GetClassName() const override; //0x2c 80652bd0
         void Load(const char* folderName, const char* ctrName, const char* variant); //80652c74

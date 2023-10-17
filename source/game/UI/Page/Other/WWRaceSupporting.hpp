@@ -79,8 +79,8 @@ public:
     void AfterControlUpdate() override; //0x4c 8064ee04
     int GetRuntimeTypeInfo() const override; //0x60 8064fb08
 
-    void OnYesButtonClick(PushButton &button, u32 hudSlotId); //8064efa4
-    void OnNoButtonClick(PushButton &button, u32 hudSlotId); //8064f124
+    void OnYesButtonClick(PushButton& button, u32 hudSlotId); //8064efa4
+    void OnNoButtonClick(PushButton& button, u32 hudSlotId); //8064f124
 
     PtmfHolder_2A<WWRaceEndQuit, void, PushButton&, u32> onYesButtonClickHandler; //0x44 8064efa4
     PtmfHolder_2A<WWRaceEndQuit, void, PushButton&, u32> onNoButtonClickHandler; //0x58 8064f124
@@ -99,7 +99,7 @@ public:
     WWRaceEndWait(); //8064f168
     ~WWRaceEndWait() override; //8064f1b4 vtable 808c0200
     void OnInit() override; //0x28 8064f228
-    void OnActivate() override; //0x30 8064f320
+    void OnActivate() override; //0x30 8064float0
     void AfterControlUpdate() override; //0x4c 8064f374 very interesting, sets next section
     int GetRuntimeTypeInfo() const override; //0x60 8064faf4
     ManipulatorManager manipulatorManager; //0x44

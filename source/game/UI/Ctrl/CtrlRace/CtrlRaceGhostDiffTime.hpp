@@ -4,7 +4,7 @@
 #include <game/UI/Ctrl/CtrlRace/CtrlRaceBase.hpp>
 
 //_sinit_ at 807eea20
-class CtrlRaceGhostDiffTime: public CtrlRaceBase {
+class CtrlRaceGhostDiffTime : public CtrlRaceBase {
 public:
     CtrlRaceGhostDiffTime() {};
     ~CtrlRaceGhostDiffTime() override; //807ee990 vtable 808d3c78
@@ -18,6 +18,8 @@ public:
     static Timer SubtractTimers(const Timer& minuend, const Timer& subtrahend); //807ee860 2 - 1
 
     u8 unknown_0x198;
+    u8 curLap;
+    u8 padding[2];
     GhostData ghostData; //0x19c
     Timer timers[2]; //274
 }; //total size 0x28c

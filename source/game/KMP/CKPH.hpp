@@ -1,8 +1,8 @@
 #ifndef _CKPH_
 #define _CKPH_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
-typedef PointGroup CKPH;
-typedef struct KMPSection<CKPH> CKPHSection;
+struct CKPH : PointGroup {};
+typedef struct KMPBlock<CKPH> CKPHBlock;
 
 #endif

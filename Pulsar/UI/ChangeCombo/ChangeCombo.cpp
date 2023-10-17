@@ -82,7 +82,7 @@ void ExpVR::RandomizeCombo(PushButton& randomComboButton, u32 hudSlotId) {
         const KartId kart = kartsSortedByWeight[CharacterIDToWeightClass(character)][randomizedKartPos];
 
         sectionParams->characters[hudId] = character;
-        sectionParams->karts[hudId] = kart;
+        sectionParams->players[hudId] = kart;
         sectionParams->combos[hudId].selCharacter = character;
         sectionParams->combos[hudId].selKart = kart;
 
@@ -93,7 +93,7 @@ void ExpVR::RandomizeCombo(PushButton& randomComboButton, u32 hudSlotId) {
         charSelect->ctrlMenuCharSelect.selectedCharacter = character;
         charSelect->controlsManipulatorManager.inaccessible = true;
         ExpBattleKartSelect* battleKartSelect = section->Get<ExpBattleKartSelect>(PAGE_BATTLE_KART_SELECT);
-        if(battleKartSelect != nullptr){
+        if(battleKartSelect != nullptr) {
             battleKartSelect->selectedKart = random.NextLimited(2);
             battleKartSelect->controlsManipulatorManager.inaccessible = true;
         }
@@ -321,7 +321,7 @@ void AddCharSelectLayer(Pages::CountDownTimer* page, PageId id, u32 r5) {
 }
 kmCall(0x806509d0, AddCharSelectLayer);
 
-asm void LoadCorrectPageAfterDrift() { //r0 has gamemode
+asmFunc LoadCorrectPageAfterDrift() { //r0 has gamemode
     ASM(
         nofralloc;
     cmpwi r0, MODE_PUBLIC_BATTLE;

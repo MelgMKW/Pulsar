@@ -1,6 +1,6 @@
 #ifndef _CKPT_
 #define _CKPT_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
 struct CKPT {
     Vec2 leftPoint;
@@ -11,6 +11,6 @@ struct CKPT {
     u8 next;
 };
 
-typedef struct KMPSection<CKPT> CKPTSection;
+typedef struct KMPBlock<CKPT> CKPTBlock;
 
 #endif

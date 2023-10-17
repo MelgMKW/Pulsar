@@ -14,13 +14,20 @@ struct ResNameData {
     u32 len;
     char name[4]; //actually of size len
 };
+
+struct ResTagDLData {
+    u32 bufSize; // Maximum display list size
+    u32 cmdSize; // Current display list command size (this for DL calls)
+    s32 offsetToDL;    // Offset to the display list (ResTagDL is the starting point)
+};
+
 template<class T>
 class ResCommon {
 public:
     T* data;
 };
 
-class ResName: public ResCommon<const ResNameData> {
+class ResName : public ResCommon<const ResNameData> {
 public:
     bool operator==(const ResName rhs) const;
 };

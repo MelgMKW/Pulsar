@@ -60,12 +60,12 @@ size_assert(EVENTEntry, 0x20);
 class EVENTHandler {
 public:
     static EVENTHandler* sInstance; //809c20f0
-    static EVENTHandler* GetStaticInstance(); //8065b4e8
-    static void DestroyStaticInstance(); //8065b600
+    static EVENTHandler* CreateInstance(); //8065b4e8
+    static void DestroyInstance(); //8065b600
     EVENTHandler(); //8065b640
     ~EVENTHandler(); //8065ba8c
     void Update(); //8065b730
-    void AddEntry(ItemObjId itemObjId, EVENTAction action, void* data, u32 dataLength); //8065b780
+    void AddEntry(ItemObjId itemObjId, EVENTAction action, const void* data, u32 dataLength); //8065b780
     bool HasFreeEntries() const; //8065b8d4
     void Reset(); //8065b998
     void ExportSendEntries(); //8065bb94

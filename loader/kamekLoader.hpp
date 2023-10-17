@@ -4,7 +4,7 @@
 #include <core/RK/RKSystem.hpp>
 
 
-struct loaderFunctions;
+struct LoaderFunctions;
 
 typedef void (*OSReport_t) (const char* str, ...);
 typedef void (*OSFatal_t) (u32* fg, u32* bg, const char* str, ...);
@@ -15,7 +15,7 @@ typedef bool (*DVDClose_t) (DVDFileInfo* fileInfo);
 typedef int (*sprintf_t) (char* str, const char* format, ...);
 
 
-struct loaderFunctions {
+struct LoaderFunctions {
     OSReport_t OSReport;
     OSFatal_t OSFatal;
     DVDConvertPathToEntrynum_t DVDConvertPathToEntrynum;
@@ -26,5 +26,5 @@ struct loaderFunctions {
     RKSystem* rkSystem;
 };
 
-void loadKamekBinaryFromDisc(loaderFunctions* funcs, const char* path);
+void LoadKamekBinaryFromDisc(LoaderFunctions* funcs, const char* path);
 #endif

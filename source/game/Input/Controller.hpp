@@ -21,6 +21,7 @@ enum ControllerType {
     CLASSIC = 0x2, //0xCHANNEL13
     GCN = 0x3, //0xCHANNEL14
     DUMMY = 0x4,
+    CPU = 0x5,
     CONTROLLER_TYPE_NONE = -1
 };
 
@@ -157,6 +158,16 @@ class GhostController : public Controller {
     bool isReadingGhost; //0xa6 will not read if set to false
     u8 padding;
 };//total size 0xa8
+
+class AIController : public Controller {
+public:
+    ~AIController() override; //805227dc vtable 808b2fd8
+    void UpdateImpl(State& state, UIState& uiState) override; //80524a58
+    ControllerType GetType() const override; //0x10 80524aa8
+
+    State cpuInputState; //0x90
+}; //0xa8
+
 
 class MotionControllerSub {
 public:

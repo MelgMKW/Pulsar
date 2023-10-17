@@ -142,7 +142,7 @@ size_assert(RegionOptions, 0xa44);
 
 class MasterOptions: public Page { //ID 0xc6 chooses which option to load depending on the section and which button was pressed in the generic box pages
     //0xc2 = choice, 0xc3 and c4 = choice, 0xc7 = waiting, 0xc8 = choice saved
-    MasterOptions(); //805ff328
+    MasterOptions(); //805ffloat8
     ~MasterOptions() override; //805ff3a4 vtable 808ba180
     PageId GetNextPage() const override; //0x10 80601014
     void OnInit() override; //0x28 805FF40C

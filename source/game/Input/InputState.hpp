@@ -33,8 +33,7 @@ public:
     0x20 = rear-view camera
     */
     u16 buttonRaw; //0x6 bit flags, vary slightly by controller
-    float stickX; //-1.0 to 1.0 //0x8
-    float stickY; //-1.0 to 1.0 //0xC
+    Vec2 stick; //-1.0 to 1.0 //0x8
     u8 quantisedStickX; //0-14
     u8 quantisedStickY; //0-14
     u8 motionControlFlick; //1 up, 2 down, 3 left, 4 right; includes the first frame of d-pad presses

@@ -1,9 +1,9 @@
 #include <game/Item/ItemManager.hpp>
 #include <game/Input/InputManager.hpp>
 #include <game/Item/Obj/Gesso.hpp>
-#include <game/Visual/Model/CourseModel.hpp>
-#include <game/Visual/Model/ModelDirector.hpp>
-#include <game/Visual/Model/KartModelsMgr.hpp>
+#include <game/CourseMgr.hpp>
+#include <game/3D/Model/ModelDirector.hpp>
+#include <game/Driver/DriverManager.hpp>
 #include <Info.hpp>
 
 
@@ -11,10 +11,10 @@ namespace Pulsar {
 namespace Race {
 //Credit CLF78 and Stebler, this is mostly a port of their version with slightly different hooks and proper arguments naming since this is C++
 void UseFeather(Item::Player& itemPlayer) {
-    const KartPointers* pointers = itemPlayer.kartPointers;
+    const Kart::Pointers* pointers = itemPlayer.kartPointers;
     pointers->kartMovement->specialFloor |= 0x4; //JumpPad
 
-    KartStatus* status = pointers->kartStatus; //Hijacking bitfield1 14th bit to create a feather state
+    Kart::Status* status = pointers->kartStatus; //Hijacking bitfield1 14th bit to create a feather state
     u32 type = 0x7;
     if((status->bitfield1 & 0x4000) != 0) type = 0x2; //if already in a feather, lower vertical velocity (30.0f instead of 50.0 for type 7)
     status->jumpPadType = type;
@@ -22,7 +22,7 @@ void UseFeather(Item::Player& itemPlayer) {
 
     itemPlayer.inventory.RemoveItems(1);
 
-    if(KartModelsMgr::isOnlineRace && itemPlayer.isRemote) Item::Obj::AddEVENTEntry(OBJ_BLOOPER, itemPlayer.id);
+    if(DriverMgr::isOnlineRace && itemPlayer.isRemote) Item::Obj::AddEVENTEntry(OBJ_BLOOPER, itemPlayer.id);
 }
 
 void UseBlooperOrFeather(Item::Player& itemPlayer) {
@@ -47,59 +47,59 @@ kmCall(0x80796d8c, ReplaceBlooperUseOtherPlayers); //replaces the small blooper 
 
 
 //kmWrite32(0x805b68d8, 0x7DE97B78); //mr r9, r15 to get playercollision
-bool ConditionalIgnoreInvisibleWalls(float radius, CourseModel& model, const Vec3& position, const Vec3& lastPosition,
-    KCLTypesBIT acceptedFlags, UnkType* normalsInfo, KCLTypeHolder& kclFlags)
+bool ConditionalIgnoreInvisibleWalls(float radius, CourseMgr& mgr, const Vec3& position, const Vec3& prevPosition,
+    KCLTypesBitfield acceptedFlags, CollisionInfo* collisionInfo, KCLTypeHolder& kclFlags)
 {
     if(Info::IsFeather()) {
-        register KartCollision* collision;
-        asm volatile(mr collision, r15;);
-        KartStatus* status = collision->base.pointers->kartStatus;
+        register Kart::Collision* collision;
+        asm(mr collision, r15;);
+        Kart::Status* status = collision->link.pointers->kartStatus;
         if(status->bitfield0 & 0x40000000 && status->jumpPadType == 0x7) {
-            acceptedFlags = static_cast<KCLTypesBIT>(acceptedFlags & ~(1 << KCL_INVISIBLE_WALL));
+            acceptedFlags = static_cast<KCLTypesBitfield>(acceptedFlags & ~(1 << KCL_INVISIBLE_WALL));
         }
         //to remove invisible walls from the list of flags checked, these walls at flag 0xD and 2^0xD = 0x2000*
     }
-    return model.ProcessCollision(radius, position, lastPosition, acceptedFlags, normalsInfo, kclFlags, 0);
+    return mgr.IsCollidingAddEntry(position, prevPosition, acceptedFlags, collisionInfo, &kclFlags, 0, radius);
 }
 kmCall(0x805b68dc, ConditionalIgnoreInvisibleWalls);
 
-u8 ConditionalFastFallingBody(const KartSub& sub) {
+u8 ConditionalFastFallingBody(const Kart::Sub& sub) {
     if(Info::IsFeather()) {
-        const KartPhysicsHolder& physics = sub.base.GetKartPhysicsHolder();
-        const KartStatus* status = sub.base.pointers->kartStatus;
+        const Kart::PhysicsHolder& physicsHolder = sub.link.GetPhysicsHolder();
+        const Kart::Status* status = sub.link.pointers->kartStatus;
         if(status->bitfield0 & 0x40000000 && status->jumpPadType == 0x7 && status->airtime >= 2 && (!status->bool_0x97 || status->airtime > 19)) {
-            Input::ControllerHolder& controllerHolder = sub.base.GetControllerHolder();
-            float input = controllerHolder.inputStates[0].stickY <= 0.0f ? 0.0f :
-                (controllerHolder.inputStates[0].stickY + controllerHolder.inputStates[0].stickY);
-            physics.kartPhysics->gravity -= input * 0.39f;
+            Input::ControllerHolder& controllerHolder = sub.link.GetControllerHolder();
+            float input = controllerHolder.inputStates[0].stick.z <= 0.0f ? 0.0f :
+                (controllerHolder.inputStates[0].stick.z + controllerHolder.inputStates[0].stick.z);
+            physicsHolder.physics->gravity -= input * 0.39f;
         }
     }
-    return sub.base.GetPlayerIdx();
+    return sub.link.GetPlayerIdx();
 }
 kmCall(0x805967ac, ConditionalFastFallingBody);
 
 
-void ConditionalFastFallingWheels(float unk_float, WheelPhysicsHolder* wheelPhysicsHolder, Vec3& gravityVector, const Mtx34& wheelMat) {
+void ConditionalFastFallingWheels(float unk_float, Kart::WheelPhysicsHolder* wheelPhysicsHolder, Vec3& gravityVector, const Mtx34& wheelMat) {
     if(Info::IsFeather()) {
-        KartStatus* status = wheelPhysicsHolder->base.pointers->kartStatus;
+        Kart::Status* status = wheelPhysicsHolder->link.pointers->kartStatus;
         if(status->bitfield0 & 0x40000000 && status->jumpPadType == 0x7) {
             if(status->airtime == 0) status->bool_0x97 = ((status->bitfield0 & 0x80) != 0) ? true : false;
             else if(status->airtime >= 2 && (!status->bool_0x97 || status->airtime > 19)) {
-                const Input::ControllerHolder& controllerHolder = wheelPhysicsHolder->base.GetControllerHolder();
-                float input = controllerHolder.inputStates[0].stickY <= 0.0f ? 0.0f :
-                    (controllerHolder.inputStates[0].stickY + controllerHolder.inputStates[0].stickY);
+                const Input::ControllerHolder& controllerHolder = wheelPhysicsHolder->link.GetControllerHolder();
+                float input = controllerHolder.inputStates[0].stick.z <= 0.0f ? 0.0f :
+                    (controllerHolder.inputStates[0].stick.z + controllerHolder.inputStates[0].stick.z);
                 gravityVector.y -= input * 0.39f;
             }
         }
     }
-    wheelPhysicsHolder->Update(unk_float, gravityVector, wheelMat);
+    wheelPhysicsHolder->Update(gravityVector, wheelMat, unk_float);
 }
 kmCall(0x805973b4, ConditionalFastFallingWheels);
 
 
-s32 HandleGroundFeatherCollision(const KartCollision& collision) {
+s32 HandleGroundFeatherCollision(const Kart::Collision& collision) {
     if(Info::IsFeather()) {
-        Item::Player& itemPlayer = Item::Manager::sInstance->players[collision.base.GetPlayerIdx()];
+        Item::Player& itemPlayer = Item::Manager::sInstance->players[collision.link.GetPlayerIdx()];
         itemPlayer.inventory.currentItemCount += 1;
         UseFeather(itemPlayer);
     }

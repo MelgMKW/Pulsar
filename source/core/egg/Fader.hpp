@@ -17,7 +17,7 @@ enum EStatus {
 
 class ColorFader {
 public:
-    ColorFader(float xOrig, float yOrig, float xSize, float ySize, nw4r::ut::Color color, Fader::EStatus status); //80215168
+    ColorFader(nw4r::ut::Color color, Fader::EStatus status, float xOrig, float yOrig, float xSize, float ySize); //80215168
     virtual void setStatus(Fader::EStatus status); //80215248 vtable 802a2a28
     virtual Fader::EStatus getStatus() const; //0xc 80007bc0
     virtual bool fadeIn(); //0x10 80215280 if success

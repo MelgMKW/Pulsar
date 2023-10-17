@@ -1,20 +1,22 @@
 #include <Settings/UI/SettingsPanel.hpp>
+#include <Settings/Settings.hpp>
 #include <UI/UI.hpp>
 
 namespace Pulsar {
 namespace UI {
 
-u8 SettingsPanel::radioButtonCount[SettingsPanel::pageCount] ={ 1, 4, 2 };
-u8 SettingsPanel::scrollerCount[SettingsPanel::pageCount] ={ 1, 0, 1 };
+int SettingsPanel::pageCount = 3;
+u8 SettingsPanel::radioButtonCount[SettingsPanel::maxPageCount] ={ 1, 4, 2 };
+u8 SettingsPanel::scrollerCount[SettingsPanel::maxPageCount] ={ 1, 0, 1 };
 
-u8 SettingsPanel::buttonsPerPagePerRow[SettingsPanel::pageCount][8] = //first row is SettingsType, 2nd is rowIdx of radio
+u8 SettingsPanel::buttonsPerPagePerRow[SettingsPanel::maxPageCount][8] = //first row is SettingsType, 2nd is rowIdx of radio
 {
     { 2, 0, 0, 0, 0, 0, 0, 0 }, //Menu 
     { 2, 2, 2, 2, 0, 0, 0, 0 }, //Race
     { 2, 4, 0, 0, 0, 0, 0, 0 }, //Host
 };
 
-u8 SettingsPanel::optionsPerPagePerScroller[SettingsPanel::pageCount][8] =
+u8 SettingsPanel::optionsPerPagePerScroller[SettingsPanel::maxPageCount][8] =
 {
     { 5, 7, 0, 0, 0, 0, 0, 0 }, //Menu 
     { 0, 0, 0, 0, 0, 0, 0, 0 }, //Race
@@ -24,8 +26,8 @@ u8 SettingsPanel::optionsPerPagePerScroller[SettingsPanel::pageCount][8] =
 inline void SettingsPanel::CreatePanels(Section* section) {
     for(int i = 0; i < pageCount; ++i) { //menu->race->host
         Page* settings = new(SettingsPanel)(i);
-        section->Set(settings, static_cast<PageId>(PAGE_VS_SETTINGS + i));
-        settings->Init(static_cast<PageId>(PAGE_VS_SETTINGS + i));
+        section->Set(settings, static_cast<PageId>(firstId + i));
+        settings->Init(static_cast<PageId>(firstId + i));
     }
 }
 
@@ -111,7 +113,7 @@ void SettingsPanel::OnInit() {
     MenuInteractable::OnInit();
     this->SetTransitionSound(0, 0);
     this->externControls[1]->SetMsgId(BMG_SETTINGS_PAGE + this->GetNextIdx(1));
-    this->externControls[2]->SetMsgId(BMG_SETTINGS_PAGE + this->GetNextIdx(2));
+    this->externControls[2]->SetMsgId(BMG_SETTINGS_PAGE + this->GetNextIdx(-1));
 };
 
 UIControl* SettingsPanel::CreateExternalControl(u32 id) {
@@ -206,7 +208,7 @@ void SettingsPanel::OnExternalButtonSelect(PushButton& button, u32 r5) {
     u32 bmgId = BMG_SETTINGS_BOTTOM;
     const u32 id = button.buttonId;
     if(id == 1) bmgId += 1 + this->GetNextIdx(1);
-    else if(id == 2) bmgId += 1 + this->GetNextIdx(2);
+    else if(id == 2) bmgId += 1 + this->GetNextIdx(-1);
     this->bottomText->SetMsgId(bmgId);
 }
 
@@ -231,15 +233,15 @@ void SettingsPanel::LoadPrevMenuAndSaveSettings(PushButton& button) {
         section->Get<ExpFroom>(PAGE_WFC_MAIN)->topSettingsPage = this->pageId;
         this->nextPageId = PAGE_NONE; //FriendRoom's OnResume is important
     }
-    SettingsPanel::SaveSettings();
+    SettingsPanel::SaveSettings(true);
 }
 
 //On Save Click/Back Press, is called and updates PulsarSettings
-void SettingsPanel::SaveSettings() {
+void SettingsPanel::SaveSettings(bool writeFile) {
     const Section* section = SectionMgr::sInstance->curSection;
     Settings* settings = Settings::sInstance;
     for(int count = 0; count < pageCount; count++) {
-        SettingsPanel* panel = section->Get<SettingsPanel>((PageId)(PAGE_VS_SETTINGS + count));
+        SettingsPanel* panel = section->Get<SettingsPanel>(static_cast<PageId>(firstId + count));
         for(const RadioButtonControl* radio = panel->radioButtonControls; radio < &panel->radioButtonControls[panel->radioCount]; radio++) {
             settings->SetSettingValue(static_cast<SettingsType>(panel->sheetIdx), radio->id, radio->chosenButtonId);
         }
@@ -265,15 +267,16 @@ void SettingsPanel::OnRightButtonClick(PushButton& button, u32 hudSlotId) {
 }
 
 void SettingsPanel::OnLeftButtonClick(PushButton& button, u32 hudSlotId) {
-    this->OnButtonClick(button, 2);
+    this->OnButtonClick(button, -1);
 }
 
 void SettingsPanel::OnButtonClick(PushButton& button, u32 direction) {
-    const PageId id = (PageId)(PAGE_VS_SETTINGS + this->GetNextIdx(direction));
+    const PageId id = static_cast<PageId>(firstId + this->GetNextIdx(direction));
     SettingsPanel* nextPanel = SectionMgr::sInstance->curSection->Get<SettingsPanel>(id);
     this->LoadPrevPageById(id, button);
     nextPanel->externControls[0]->SelectInitialButton(0);
     nextPanel->bottomText->SetMsgId(BMG_SETTINGS_BOTTOM);
+    this->SaveSettings(false);
 }
 
 void SettingsPanel::OnRadioButtonChange(RadioButtonControl& radioButtonControl, u32 hudSlotId, u32 optionId) {
@@ -297,7 +300,7 @@ void SettingsPanel::OnUpDownSelect(UpDownControl& upDownControl, u32 hudSlotId) 
     this->bottomText->SetMsgId(bmgId);
 }
 
-int SettingsPanel::GetNextIdx(u32 direction) {
+int SettingsPanel::GetNextIdx(s32 direction) {
     return (this->sheetIdx + direction) % pageCount;
 }
 

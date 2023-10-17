@@ -5,9 +5,8 @@
 #include <game/UI/Page/Menu/CupSelect.hpp>
 #include <game/UI/Page/Menu/CourseSelect.hpp>
 #include <game/UI/Page/Other/Votes.hpp>
-#include <SlotExpansion/CupsDef.hpp>
-
 #include <game/GlobalFunctions.hpp>
+#include <SlotExpansion/CupsDef.hpp>
 
 namespace Pulsar {
 
@@ -26,7 +25,7 @@ int UpdateSlot(Pages::CourseSelect* page, CtrlMenuCourseSelectCourse* control, P
     return system->GetCorrectTrackSlot();
 }
 
-asm void UpdateSlotWrapper() {
+asmFunc UpdateSlotWrapper() {
     ASM(
         nofralloc;
     mflr r31;
@@ -45,15 +44,15 @@ kmCall(0x8084099c, SetVotedTrack);
 
 //CtrlMenuCupSelectCup::OnCupButtonClick patch that updates lastSelectCup so that the game remembers it in btw races
 void UpdateLastSelCup(Pages::CupSelect* page, CtrlMenuCupSelectCup& cups, PushButton& button, u32 hudSlotId) {
-    CupsDef* system = CupsDef::sInstance;
-    if(button.buttonId != system->lastSelectedCup) {
-        system->lastSelectedCup = static_cast<PulsarCupId>(button.buttonId);
-        system->selectedCourse = CupsDef::ConvertTrack_PulsarCupToTrack(system->lastSelectedCup);
+    CupsDef* cupsDef = CupsDef::sInstance;
+    if(button.buttonId != cupsDef->lastSelectedCup) {
+        cupsDef->lastSelectedCup = static_cast<PulsarCupId>(button.buttonId);
+        cupsDef->selectedCourse = CupsDef::ConvertTrack_PulsarCupToTrack(cupsDef->lastSelectedCup);
     }
     PushButton** buttons = reinterpret_cast<PushButton**>(cups.childrenGroup.controlArray);
-    for(int i = 0; i < 8; ++i) if(buttons[i] == &button) system->lastSelectedCupButtonIdx = i;
+    for(int i = 0; i < 8; ++i) if(buttons[i] == &button) cupsDef->lastSelectedCupButtonIdx = i;
     page->LoadNextPage(cups, button, hudSlotId);
-    RaceData::sInstance->menusScenario.settings.cupId = system->lastSelectedCup % 8;
+    RaceData::sInstance->menusScenario.settings.cupId = cupsDef->lastSelectedCup % 8;
 }
 kmCall(0x807e5da8, UpdateLastSelCup);
 
@@ -61,12 +60,12 @@ kmCall(0x807e5da8, UpdateLastSelCup);
 
 //Loads correct file
 void FormatTrackPath(char* path, u32 length, const char* format, const char* fileName) {
-    const CupsDef* system = CupsDef::sInstance;
-    const PulsarId pulsarId = system->winningCourse; //fileName already set through racedata's courseId, which has been set to realId before
+    const CupsDef* cups = CupsDef::sInstance;
+    const PulsarId pulsarId = cups->winningCourse; //fileName already set through racedata's courseId, which has been set to realId before
     if(IsBattle() || CupsDef::IsReg(pulsarId)) snprintf(path, 0x80, format, fileName);
     else {
         CourseId realId = CupsDef::ConvertTrack_PulsarIdToRealId(pulsarId);
-        if(system->hasOddCups && realId >= (system->GetCtsTrackCount() - 4)) realId = static_cast<CourseId>(realId % 4);
+        if(cups->hasOddCups && realId >= (cups->GetCtsTrackCount() - 4)) realId = static_cast<CourseId>(realId % 4);
         snprintf(path, 0x80, "Race/Course/%d", realId);
     }
 }
@@ -93,7 +92,7 @@ RacedataScenario* UseCorrectCourse(RacedataScenario* scenario) {
 kmWrite32(0x8052f220, 0x60000000);
 
 //Wrapper around function above
-asm void UseCorrectCourseWrapper() {
+asmFunc UseCorrectCourseWrapper() {
     ASM(
         nofralloc;
     mflr r0;

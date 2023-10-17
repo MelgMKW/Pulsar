@@ -6,7 +6,7 @@
 #include <game/Sound/Actors/RaceActor.hpp>
 
 using namespace nw4r;
-class KartModel;
+class DriverController;
 enum CharacterSoundType {
     CHARACTER_SOUND_USE_ITEM = 0x0,
     CHARACTER_SOUND_THROW_ITEM = 0x1,
@@ -64,7 +64,7 @@ class CharacterSound : public RaceAnimAudioActor {
     u32 delay; //0x100 if request, delay until request is executed
     u8 unknown_0x104[0x150 - 0x104];
     RandomCharacterSoundPicker randomSoundPickers[0x1D]; //0x150 use type enum
-    KartModel* model; //0x6c0
+    DriverController* model; //0x6c0
     u32 wiiRemoteChannelx2; //0x6c4 only if controller is wheel/nunchuck ofc
     CharacterSoundType prevType; //0x6c8
     u32 unknown_0x6CC[4];

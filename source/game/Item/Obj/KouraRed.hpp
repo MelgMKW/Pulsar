@@ -5,7 +5,7 @@
 
 //_sinit_ at 807ab96c
 namespace Item {
-class ObjKouraRed: public ObjTargeting { //actually inherits a second class also used by blues and bombs
+class ObjKouraRed : public ObjTargeting { //actually inherits a second class also used by blues and bombs
 public:
     static Obj** CreateArray(u32 count); //807a9ff0
     ObjKouraRed(); //807aa1b8

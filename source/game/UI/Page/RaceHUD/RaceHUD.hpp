@@ -10,7 +10,7 @@
 class Pause;
 
 namespace Pages {
-class RaceHUD: public Page {
+class RaceHUD : public Page {
 public:
     //ctor inlined
     static RaceHUD* sInstance;
@@ -33,7 +33,7 @@ public:
     int GetCtrlRaceBaseCount() const; //80857b08 returns how page elements there should be
     void InitCtrlRaceBase(u32 bitField); //80857cc0 inits all of the page elements 
     void InitActions(); //80856664, sets up the handlers and then stores the page input controller
-    void ChangeFocusedPlayer(u32 hudSlotId, u8 type); //80856b74 type = 0 -> next, type = 1 -> prev
+    void ChangeFocusedPlayer(u32 hudSlotId, u8 direction); //80856b74 direction = 0 -> next, direction = 1 -> prev
     void OnNextPlayerSwitch(u32 hudSlotId); //808569ac
     void OnPrevPlayerSwitch(u32 hudSlotId); //808569b4
     static int GetLocalPlayerCount(); //80856ccc
@@ -44,8 +44,8 @@ public:
     CtrlRaceCount* ctrlRaceCountArray;  //0x58, 2 elements per hudSlot
     LayoutUIControl* ghostMessage; //GHOST CANNOT BE SAVED //0x5C
     bool hudHasPlayer[4]; //is true if there's a player 0x60
-    u32 playerCount;
-    u8 unknown_0x68; //8085629c
+    u32 focusedPlayerIdx;
+    bool hasChangePlayerRequest; //8085629c
     u8 unknown_0x69[0x70 - 0x69];
     CtrlRaceWifiStartMessage** ctrlRaceWifiStartMessageArray; //0x70 one per hud slot only online
     CtrlRaceWifiFinishMessage** CtrlRaceWifiFinishMessageArray; //0x74 one per hud slot

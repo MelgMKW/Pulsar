@@ -37,8 +37,8 @@ size_assert(RH1Data, 0x30);
 class RH1Handler {
 public:
     static RH1Handler* sInstance; //809c2118
-    static void GetStaticInstance(); //80663aa4
-    static void DestroyStaticInstance(); //80663c38
+    static void CreateInstance(); //80663aa4
+    static void DestroyInstance(); //80663c38
 
     ~RH1Handler(); //80664d9c
     void Activate(); //80663c7c just sets isPrepared

@@ -5,7 +5,7 @@ cls
 
 :: CPP compilation settings
 SET CC="../cw/mwcceppc.exe"
-SET CFLAGS=-I- -i %cd% -i "../source" -i "../source/game" -i "../engine" -Cpp_exceptions off -enum int -O4,s -use_lmw_stmw on -fp hard -rostr -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 -rtti off
+SET CFLAGS=-I- -i %cd% -i "../source" -i "../source/game" -i "../engine"  -O2,p -opt loop,peep,schedule -inline auto -enum int -proc gekko -fp hard -rostr -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 -rtti off 
 SET DEFINE=
 
 ::: CPP Sources

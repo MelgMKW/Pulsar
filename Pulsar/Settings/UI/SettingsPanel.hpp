@@ -6,7 +6,6 @@
 #include <game/UI/Ctrl/PushButton.hpp>
 #include <game/UI/Page/Menu/Menu.hpp>
 #include <game/UI/Page/Menu/VSSettings.hpp>
-#include <Settings/Settings.hpp>
 #include <Settings/UI/ExpOptionsPage.hpp>
 #include <Settings/UI/ExpWFCMainPage.hpp>
 #include <Settings/UI/ExpFroomPage.hpp>
@@ -29,11 +28,13 @@ public:
 
 class SettingsPanel : public Pages::MenuInteractable {
 public:
-    static const int pageCount = 3;
-    static u8 radioButtonCount[3];
-    static u8 scrollerCount[3];
-    static u8 buttonsPerPagePerRow[pageCount][8];
-    static u8 optionsPerPagePerScroller[pageCount][8];
+    static int pageCount;
+    static const PageId firstId = PAGE_GHOST_SELECT_SUPPORTING;
+    static const int maxPageCount = 5;
+    static u8 radioButtonCount[maxPageCount];
+    static u8 scrollerCount[maxPageCount];
+    static u8 buttonsPerPagePerRow[maxPageCount][8];
+    static u8 optionsPerPagePerScroller[maxPageCount][8];
 
     static inline void CreatePanels(Section* section);
     SettingsPanel(u32 sheetIdx); //max 8 radios and 8 scrollers per instance
@@ -51,7 +52,7 @@ public:
     void OnBackPress(u32 hudSlotId);
 
 private:
-    static void SaveSettings();
+    static void SaveSettings(bool writeFile);
     void OnSaveButtonClick(PushButton& button, u32 hudSlotId);
     void OnRightButtonClick(PushButton& button, u32 hudSlotId);
     void OnLeftButtonClick(PushButton& button, u32 hudSlotId);
@@ -63,7 +64,7 @@ private:
 
     void OnTextChange(TextUpDownValueControl::TextControl& text, u32 optionId);
     void LoadPrevMenuAndSaveSettings(PushButton& button);
-    int GetNextIdx(u32 direction); //1 for right, 2 for left
+    int GetNextIdx(s32 direction); //1 for right, -1 for left
     u32 GetTextId(const TextUpDownValueControl::TextControl& text) const {
         TextUpDownValueControl* valueControl = static_cast<TextUpDownValueControl*>(text.parentGroup->parentControl);
         return static_cast<int>(reinterpret_cast<u32>(valueControl) - reinterpret_cast<u32>(&this->textUpDown[0])) / sizeof(TextUpDownValueControl);

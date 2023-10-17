@@ -21,10 +21,20 @@ class SoundTrack : public EGG::AudioTrack {
 
 };//total size 0x1C
 
+struct PitchModuler { //curModulingValue / 5 is added to curPitch; very suptle effect all things considered
+    PitchModuler(float initialValue, float minValue, float incrementPerFrame); //80717d70
+    float Update(); //80717d80
+    float GetNextLimit(float curLimit); //80717e00 inlined
+    float curModulingValue; //nextValue = curValue +- increment (based on whether above or under limit)
+    float curLimit; //nextLimit = (max(1, (curLimit² + curLimit) + 1, minValue), initialized at initialValue
+    float incrementPerFrame;
+    float minValue;
+}; //0x10
+
 class SoundPlayersVolumeMgr {
     static SoundPlayersVolumeMgr* sInstance; //809c27ec
-    static SoundPlayersVolumeMgr* GetStaticInstance(); //8070eff4
-    static void DestroyStaTicInstance(); //8070f0e8
+    static SoundPlayersVolumeMgr* CreateInstance(); //8070eff4
+    static void DestroyInstance(); //8070f0e8
     ~SoundPlayersVolumeMgr(); //8070f19c
     void Calc(); //8070f3e8
     EGG::TDisposer<SoundPlayersVolumeMgr> disposer; //8070eec8 vtable 808c8f90
@@ -33,8 +43,8 @@ class SoundPlayersVolumeMgr {
 
 class SingleSoundPlayerValuesMgr { //allows a finer control of volume/pitch for one handle (ie basicsounc)
     static SingleSoundPlayerValuesMgr* sInstance; //809c232c
-    static SingleSoundPlayerValuesMgr* GetStaticInstance(); //806f9abc
-    static void DestroyStaticInstance(); //806f9b64
+    static SingleSoundPlayerValuesMgr* CreateInstance(); //806f9abc
+    static void DestroyInstance(); //806f9b64
     ~SingleSoundPlayerValuesMgr();//806f9c18
     void SetValue(u32 trackIdx, u32 stepCount, float maxValue); //806f9e78
     void Calc(); //806f9ce0

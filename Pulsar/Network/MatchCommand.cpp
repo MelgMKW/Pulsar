@@ -12,7 +12,7 @@ ResvPacket::ResvPacket(const DWC::Reservation& src) {
         strncpy(pulInfo.modFolderName, system->GetModFolder(), IOS::ipcMaxFileName);
 }
 
-asm void MoveSize() { //needed to get datasize later
+asmFunc MoveSize() { //needed to get datasize later
     ASM(
         nofralloc;
         mr r25, r28;
@@ -29,7 +29,7 @@ DWC::MatchCommand Process(DWC::MatchCommand type, const void* data, u32 dataSize
 
     if(type == DWC::MATCH_COMMAND_RESV_OK && isCustom) {
         const ResvPacket* packet = reinterpret_cast<const ResvPacket*>(data);
-        const System* system = System::sInstance;
+        System* system = System::sInstance;
         if(dataSize != (sizeof(ResvPacket) / sizeof(u32)) || packet->pulInfo.roomKey != Info::GetKey()
             || strcmp(packet->pulInfo.modFolderName, system->GetModFolder()) != 0
             || !system->CheckUserInfo(packet->pulInfo.userInfo)) {
@@ -39,7 +39,7 @@ DWC::MatchCommand Process(DWC::MatchCommand type, const void* data, u32 dataSize
     return type;
 }
 
-asm void ProcessWrapper() {
+asmFunc ProcessWrapper() {
     ASM(
         nofralloc;
     mr r4, r31;

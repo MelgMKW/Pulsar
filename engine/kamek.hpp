@@ -17,8 +17,18 @@
 
 #include <game/Math/Matrix.hpp>
 #include <game/Math/Vector.hpp>
+#include <core/nw4r/ut/LinkList.hpp>
 #include <core/nw4r/ut/List.hpp>
  //just for usability in other structs
+
+
+/*
+CW implements ptmfs with this pseudo-struct:
+struct Ptmf{
+    u32 passedArgDelta; (this + subject is the arg passed into the func)
+    s32 offsetToVtable; (offset to the vtable of the subject, also serves to specify if the call is virtual (set to -1 if it isn't)
+    u32 funcData; (if the member func is not virtual, this is its address; if the func is virtual, this is its offset in the vtable)
+};*/
 
 template <class Subject, typename Ret>
 struct Ptmf_0A {
@@ -223,5 +233,6 @@ public:
         }
     }
 };
+
 
 #endif

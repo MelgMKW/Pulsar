@@ -33,7 +33,7 @@ meaning the LR needs to be preserved. The u64 return is just to prevent the regi
 #define PatchRegion(addr)\
     static inline u64 GetWiimmfiRegionStatic##addr(u64 src) {\
         register const Info *sInstance = Info::sInstance;\
-        asm volatile(lwz r7, Info.wiimmfiRegion(sInstance););\
+        asmVolatile(lwz r7, Info.wiimmfiRegion(sInstance););\
         return src;\
     };\
     kmBranch(addr, GetWiimmfiRegionStatic##addr);\

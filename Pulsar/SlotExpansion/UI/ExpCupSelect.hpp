@@ -3,12 +3,17 @@
 #include <kamek.hpp>
 #include <game/UI/Page/Menu/CupSelect.hpp>
 #include <game/UI/Ctrl/SheetSelect.hpp>
+#include <Settings/Settings.hpp>
 
 namespace Pulsar {
 namespace UI {
-class ExpCupSelect: public Pages::CupSelect {
+class ExpCupSelect : public Pages::CupSelect {
 public:
     ExpCupSelect();
+    ~ExpCupSelect() override {
+        Settings::GetInstance()->SetLastSelectedCup(CupsDef::sInstance->lastSelectedCup);
+        Settings::GetInstance()->RequestSave();
+    }
     static void UpdateCupData(PulsarCupId id, LayoutUIControl& control);
     void AfterControlUpdate() override;
     UIControl* CreateControl(u32 controlId) override;

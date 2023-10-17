@@ -22,8 +22,8 @@ size_assert(ITEMPacket, 0x8);
 class ITEMHandler {
 public:
     static ITEMHandler* sInstance; //809c20f8
-    static ITEMHandler* GetStaticInstance(); //8065c0ec
-    static void DestroyStaticInstance(); //8065c368
+    static ITEMHandler* CreateInstance(); //8065c0ec
+    static void DestroyInstance(); //8065c368
     ITEMHandler(); //8065c3a8
     ~ITEMHandler(); //8065dc2c unsure
     void Update(); //80656c5e8

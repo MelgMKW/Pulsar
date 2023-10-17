@@ -15,6 +15,7 @@ extern "C" {
 
     void PSMTXIdentity(Mtx matrix);
     void PSMTXCopy(const Mtx source, Mtx dest);
+    //Multiplication
     void PSMTXConcat(const Mtx sourceA, const Mtx sourceB, Mtx dest);
     void PSMTXConcatArray(const Mtx sourceA, const Mtx* sourcesB, Mtx* destsB, int count);
     u32 PSMTXInverse(const Mtx source, Mtx dest);

@@ -1,6 +1,6 @@
 #ifndef _RACESCENE_
 #define _RACESCENE_
-#include <game/Scene/BaseScene.hpp>
+#include <game/Scene/GameScene.hpp>
 #include <core/nw4r/ut/RomFont.hpp>
 
 class RaceScene: public GameScene {

@@ -1,7 +1,7 @@
 #include <Ghost/GhostManager.hpp>
 #include <game/UI/Page/Other/TTSplits.hpp>
 #include <UI/UI.hpp>
-
+#include <IO/IO.hpp>
 
 namespace Pulsar {
 namespace Ghosts {
@@ -31,28 +31,28 @@ reads them, fetches the leaderboard, creates GhostDatas based on the rkgs, sets 
 void Manager::Init(PulsarId id) {
     this->Reset();
     this->pulsarId = id;
-    IO::Folder* folder = IO::Folder::sInstance;
+    IO* io = IO::sInstance;
     const System* system = System::sInstance;
     const CupsDef* cups = CupsDef::sInstance;
     cups->GetTrackGhostFolder(folderPath, id);
 
-    bool exists = folder->FolderExists(folderPath); //Create CRC32 folder
-    if(!exists) folder->RequestCreateFolder(folderPath);
+    bool exists = io->FolderExists(folderPath); //Create CRC32 folder
+    if(!exists) io->RequestCreateFolder(folderPath);
     char folderModePath[IOS::ipcMaxPath];
     snprintf(folderModePath, IOS::ipcMaxPath, "%s/%s", folderPath, System::ttModeFolders[system->ttMode]);
-    exists = folder->FolderExists(folderModePath); //Create 150/150F etc..
-    if(!exists) folder->RequestCreateFolder(folderModePath);
-    else folder->ReadFolder(folderModePath); //Reads all files contained in the folder
+    exists = io->FolderExists(folderModePath); //Create 150/150F etc..
+    if(!exists) io->RequestCreateFolder(folderModePath);
+    else io->ReadFolder(folderModePath); //Reads all files contained in the folder
 
     new (&this->leaderboard) Leaderboard(folderPath, cups->GetCRC32(id));
 
-    this->files = new (system->heap) GhostData[folder->GetFileCount()];
+    this->files = new (system->heap) GhostData[io->GetFileCount()];
 
     u32 counter = 0;
-    for(int i = 0; i < folder->GetFileCount(); ++i) {
+    for(int i = 0; i < io->GetFileCount(); ++i) {
         rkg.ClearBuffer();
         GhostData& curData = this->files[counter];
-        s32 ret = folder->ReadFile(&rkg, i, IO::FILE_MODE_READ, sizeof(RKG));
+        s32 ret = io->ReadFolderFile(&rkg, i, FILE_MODE_READ, sizeof(RKG));
         if(ret > 0 && rkg.CheckValidity()) {
             curData.Init(rkg);
             curData.courseId = static_cast<CourseId>(id);
@@ -70,7 +70,7 @@ void Manager::Init(PulsarId id) {
 }
 
 void Manager::Reset() {
-    IO::Folder::sInstance->CloseFolder();
+    IO::sInstance->CloseFolder();
     this->pulsarId = PULSARID_NONE;
     this->lastUsedSlot = 0;
     mainGhostIndex = 0xFF;
@@ -120,7 +120,7 @@ void Manager::DisableGhost(const GhostListEntry& entry) {
 //Loads and checks validity of a RKG
 bool Manager::LoadGhost(RKG& rkg, u32 index) {
     rkg.ClearBuffer();
-    IO::Folder::sInstance->ReadFile(&rkg, index, IO::FILE_MODE_READ, sizeof(RKG));
+    IO::sInstance->ReadFolderFile(&rkg, index, FILE_MODE_READ, sizeof(RKG));
     return rkg.CheckValidity();
 }
 
@@ -173,10 +173,10 @@ bool Manager::SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap) {
 void Manager::CreateAndSaveFiles(Manager* manager) {
     char path[IOS::ipcMaxPath];
     const RKG& rkg = manager->rkg;
-    snprintf(path, IOS::ipcMaxPath, "%s/%01dm%02ds%03d.rkg", IO::Folder::sInstance->GetName(),
+    snprintf(path, IOS::ipcMaxPath, "%s/%01dm%02ds%03d.rkg", IO::sInstance->GetName(),
         rkg.header.minutes, rkg.header.seconds, rkg.header.milliseconds);
-    IO::File* loader = IO::File::sInstance;
-    loader->CreateAndOpen(path, IO::FILE_MODE_WRITE);
+    IO* loader = IO::sInstance;;
+    loader->CreateAndOpen(path, FILE_MODE_WRITE);
     loader->Overwrite(GetRKGLength(rkg), &rkg);
     loader->Close();
 
@@ -186,6 +186,7 @@ void Manager::CreateAndSaveFiles(Manager* manager) {
     manager->leaderboard.Save(folderPath);
     Settings::GetInstance()->Save(); //trophies
     manager->Init(cups->winningCourse);
+    manager->mainGhostIndex = 0;
     SectionMgr::sInstance->sectionParams->isNewTime = true;
 }
 
@@ -195,7 +196,7 @@ void Manager::InsertCustomGroupToList(GhostList* list, CourseId) { //check id he
     const CupsDef* cups = CupsDef::sInstance;
     manager->Init(cups->winningCourse);
     u32 index = 0;
-    for(int i = 0; i < IO::Folder::sInstance->GetFileCount(); ++i) {
+    for(int i = 0; i < IO::sInstance->GetFileCount(); ++i) {
         if(index == 38) break;
         const GhostData& data = manager->GetGhostData(i);
         if(data.isValid) {

@@ -5,6 +5,7 @@
 #include <core/rvl/gx/GX.hpp>
 #include <core/egg/mem/Heap.hpp>
 #include <game/System/Random.hpp>
+#include <game/System/Identifiers.hpp>
 
 /*
 Contributors:
@@ -18,8 +19,10 @@ public:
     virtual ~Mii(); //80529034 vtable 808b3148
     void Init(u32 r4); //80525f88 could be reset
     static bool ComputeRFLStoreData(RFL::StoreData& dest, const RFL::CreateID* createId); //8052758c
+    static bool IsMiiId(CharacterId character); //805275ec
     static bool GetMiiId(const RFL::CreateID* createId, u32* r4, u16* id); //80527604
     void Load(RFL::ID rflId, u32 r5); //80526020 rflId == 0 leads to empty mii
+
 
     u32 r4;
     u16 rflId; //0x8
@@ -50,7 +53,7 @@ class MiiManager {
         STATUS_OK
     };
     static MiiManager* sInstance; //809bd710
-    static MiiManager* GetStaticInstance(); //80526bfc
+    static MiiManager* CreateInstance(); //80526bfc
     MiiManager(); //80526c80
     void Init(EGG::Heap* heap); //80526d94
     static Status GetStatus(); //805276e0

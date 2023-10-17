@@ -45,7 +45,7 @@ class AddMKChannel: public Page { //ID 0xcb
     void OnBackButtonClick(CtrlMenuBackButton& button, u32 hudSlotId); //805bee00
     void OnBackPress(u32 hudSlotId); //805bee3c
 
-    static void TriggerButtonPtmf(PtmfHolder_2A<AddMKChannel, void, PushButton&, u32>*, u32); //805bf324
+    static void TriggerButtonPtmf(PtmfHolder_2A<AddMKChannel, void, PushButton&, u32>*, u32); //805bfloat4
     static void TriggerBackPtmf(PtmfHolder_1A<AddMKChannel, void, u32>*, u32); //805bf384
 
     PtmfHolder_2A<AddMKChannel, void, PushButton&, u32> onAddButtonHandler; //0x44 805beb4c

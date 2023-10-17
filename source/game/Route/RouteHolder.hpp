@@ -1,13 +1,13 @@
 #ifndef _ROUTEHOLDER_
 #define _ROUTEHOLDER_
 #include <kamek.hpp>
-#include <game/KMP/KMPController.hpp>
+#include <game/KMP/KMPManager.hpp>
 #include <game/Route/Route.hpp>
 
 class RouteHolder {
     static RouteHolder* sInstance; //809c22b0
-    static RouteHolder* GetStaticInstance; //806f09c8
-    static void DestroyStaticInstance(); //806f0a4c
+    static RouteHolder* CreateInstance; //806f09c8
+    static void DestroyInstance(); //806f0a4c
     RouteHolder(); //806f0a3c inlined
     virtual ~RouteHolder(); //806f0a98 vtable 808c7798
     void Init(); //806f0ad8 builds routes/also builds RouteControllers for routes not linked to an object (since the object does it already)

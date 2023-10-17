@@ -19,6 +19,8 @@ extern "C" {
     size_t wcslen(const wchar_t* wcs);
     int wcsncmp(const wchar_t* wcs1, const wchar_t* wcs2, size_t num);
     wchar_t* wcsncpy(wchar_t*, const wchar_t*, size_t);
+    wchar_t* wmemcpy(wchar_t* dest, const wchar_t* src, size_t count);
+
 
 #ifdef __cplusplus
 }

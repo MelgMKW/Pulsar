@@ -61,7 +61,7 @@ public:
     ~MessageSelectControl() override; //805db724 vtable 808b8ef0
     void InitSelf() override; //0x18 805db8ec
     void OnUpdate() override; //0x1c 805db8f0
-    void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20  805db9e8
+    void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20  805db9e8
     int GetRuntimeTypeInfo() const override; //0x28 805de86c
     const char* GetClassName() const override; //0x2c 805db6b8
     void Load(); //805db798

@@ -1,13 +1,13 @@
 #include <game/Item/ItemManager.hpp>
 #include <game/Item/Obj/Kumo.hpp>
-#include <game/Race/Kart/KartMovement.hpp>
+#include <game/Kart/KartMovement.hpp>
 #include <Info.hpp>
 
 
 namespace Pulsar {
 namespace Race {
 //Mega TC
-void MegaTC(KartMovement& movement, int frames, int unk0, int unk1) {
+void MegaTC(Kart::Movement& movement, int frames, int unk0, int unk1) {
     if(Info::IsMegaTC()) movement.ActivateMega();
     else movement.ApplyLightningEffect(frames, unk0, unk1);
 }

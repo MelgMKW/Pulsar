@@ -41,13 +41,13 @@ struct Thread { //priority between 0 and 31
     u16 detached; //0x2ca
     s32 suspend; //0x2cc counter
     u32 effectivePriority; //0x2d0
-    u32 priority2; //0x2d4
+    u32 priority; //0x2d4
     u32 unknown_0x2D8; //0x2d8
     ThreadQueue* threadQueue; //0x2dc equivalent to a list
     ThreadLink link; //0x2e0 equivalent to a list's link
     ThreadQueue joinAndDetachQueue; //0x2e8 queue of threads selected on join and detach
-    Mutex* mutex; //0x2f0
-    MutexQueue ownedMutex; //0x2f4
+    Mutex* mutexTryingForLock; //0x2f0
+    MutexQueue ownedMutexes; //0x2f4
     ThreadLink activeThreads; //0x2fc
     void* stackStart; //0x304 higher value
     void* stackEnd; //0x308 lower value

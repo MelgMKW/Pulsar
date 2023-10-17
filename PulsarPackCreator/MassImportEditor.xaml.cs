@@ -169,8 +169,8 @@ namespace PulsarPackCreator
 
         private byte FindSlotIndex(string slot)
         {
-            byte slotIdx = (byte)Array.FindIndex(idxToFullNames, x => x == slot);
-            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(idxToAbbrev, x => x == slot);
+            byte slotIdx = (byte)Array.FindIndex(idxToFullNames, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(idxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
             return slotIdx;
         }
     }

@@ -68,23 +68,30 @@ public:
     bool HasRegs() const { return hasRegs; }
 
 
+    //Validity
+    bool IsValidCup(PulsarCupId id) {
+        if(this->hasRegs && IsRegCup(id)) return true;
+        else return id >= PULSARCUPID_FIRSTCT && id < this->ctsCupCount - 8 * hasRegs;
+    }
+    bool IsValidTrack(PulsarId id) { return IsValidCup(static_cast<PulsarCupId>(id / 4)); }
+
     //Slot Expansion
     void SaveSelectedCourse(const PushButton& courseButton);
     PulsarCupId GetNextCupId(PulsarCupId cupId, s32 direction) const;
     PulsarId RandomizeTrack(Random& random) const;
-    static bool IsRegsSituation(); 
+    static bool IsRegsSituation();
 
     //Reg Check
     static inline bool IsReg(PulsarId pulsarId) { return pulsarId < 0x100 || pulsarId == 0xFFFFU; }
     static inline bool IsRegCup(PulsarCupId cupId) { return cupId < 8; }
 
     //Conversions
-    static u32 ConvertCup_PulsarIdToRealId(PulsarCupId pulsarCupId); 
-    static u32 ConvertCup_PulsarIdToIdx(PulsarCupId pulsarCupId); 
-    static PulsarCupId ConvertCup_IdxToPulsarId(u32 cupIdx); 
-    static inline PulsarCupId ConvertCup_PulsarTrackToCup(PulsarId pulsarId) { return static_cast<PulsarCupId>(pulsarId / 4); } 
+    static u32 ConvertCup_PulsarIdToRealId(PulsarCupId pulsarCupId);
+    static u32 ConvertCup_PulsarIdToIdx(PulsarCupId pulsarCupId);
+    static PulsarCupId ConvertCup_IdxToPulsarId(u32 cupIdx);
+    static inline PulsarCupId ConvertCup_PulsarTrackToCup(PulsarId pulsarId) { return static_cast<PulsarCupId>(pulsarId / 4); }
 
-    static CourseId ConvertTrack_PulsarIdToRealId(PulsarId pulsarId); 
+    static CourseId ConvertTrack_PulsarIdToRealId(PulsarId pulsarId);
     static PulsarId ConvertTrack_RealIdToPulsarId(CourseId id); //ONLY FOR REGS 
     PulsarId ConvertTrack_IdxToPulsarId(u32 idx) const; //Bad Function
     static inline PulsarId ConvertTrack_PulsarCupToTrack(PulsarCupId pulsarCupId) { return static_cast<PulsarId>(pulsarCupId * 4); }
@@ -94,6 +101,7 @@ public:
     bool hasOddCups;
     //To memorize
     bool hasRegs;
+    //2bytes of padding 
 
     //Variables
     PulsarId        winningCourse;

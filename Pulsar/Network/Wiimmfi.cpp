@@ -24,7 +24,7 @@ extern "C" {
 
 u32 expectedHash[] ={ 0x0FFF1F07, 0x00E638C9, 0x49FBEFFA, 0x79022D3A, 0x84AB134F };
 
-static asm void wiimmfiAsm1() {
+static asmFunc wiimmfiAsm1() {
     ASM(
         nofralloc;
 
@@ -74,7 +74,7 @@ end:
 
 kmCall(0x800ee3a0, wiimmfiAsm1);
 
-asm void wiimmfiAsm2() {
+asmFunc wiimmfiAsm2() {
     ASM(
         nofralloc;
 

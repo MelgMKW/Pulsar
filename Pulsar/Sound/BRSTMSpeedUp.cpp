@@ -1,5 +1,5 @@
 #include <kamek.hpp>
-#include <game/Race/Kart/KartHolder.hpp>
+#include <game/Kart/KartManager.hpp>
 #include <game/Race/RaceInfo/RaceInfo.hpp>
 #include <game/Sound/RSARSounds.hpp>
 #include <game/Sound/RaceAudioMgr.hpp>
@@ -16,30 +16,35 @@ speedup instead of transitioning to the _f file. The jingle will still play.
 namespace Pulsar {
 namespace Audio {
 
-void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u32 r5) {
-    static u8 hudSlotIdFinalLap;
-    RaceAudioMgr* audio = RaceAudioMgr::sInstance;
-    const u8 maxLap = audio->maxLap;
-    const u8 curLap = audio->lap;
-    const u8 idFirstFinalLap = hudSlotIdFinalLap;
+void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotId) {
+    //static u8 hudSlotIdFinalLap;
+
+    u8 isSpeedUp = Settings::GetSettingValue(SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SPEEDUP);
+    RaceAudioMgr* raceAudioMgr = RaceAudioMgr::sInstance;
+    const u8 maxLap = raceAudioMgr->maxLap;
+    const u8 curLap = raceAudioMgr->lap;
+    //const u8 idFirstFinalLap = hudSlotIdFinalLap;
     if(maxLap == 1) return;
     if(maxLap == RaceData::sInstance->racesScenario.settings.lapCount) {
-        if(Settings::GetSettingValue(SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SPEEDUP) == RACESETTING_SPEEDUP_ENABLED) {
+        if(isSpeedUp == RACESETTING_SPEEDUP_ENABLED) {
             const RaceInfo* raceInfo = RaceInfo::sInstance;
             const Timer& raceTimer = raceInfo->timerMgr->timers[0];
-            const Timer& playerTimer = raceInfo->players[idFirstFinalLap]->lapSplits[maxLap - 2];
+            const Timer& playerTimer = raceInfo->players[hudSlotId]->lapSplits[maxLap - 2];
             const Timer difference = CtrlRaceGhostDiffTime::SubtractTimers(raceTimer, playerTimer);
             if(difference.minutes < 1 && difference.seconds < 5) {
-                KartHolder::sInstance->GetKart(hudSlotIdFinalLap)->pointers.kartSound->soundArchivePlayer->soundPlayerArray
-                    ->soundList.GetFirst()->ambientParam.pitch += 0.0002f;
+                register KartSound* kartSound;
+                asm(mr kartSound, r29;);
+                kartSound->soundArchivePlayer->soundPlayerArray[0].soundList.GetFront().ambientParam.pitch += 0.0002f;
             }
-            if(maxLap != curLap) rsarSoundPlayer->PlaySound(0x74, r5);
+            if(maxLap != curLap) rsarSoundPlayer->PlaySound(SOUND_ID_FINAL_LAP, hudSlotId);
         }
-        else if((maxLap != curLap) && (audio->raceState == 0x4 || audio->raceState == 0x6)) audio->ChangeMusic(RACE_STATE_FAST);
+        else if((maxLap != curLap) && (raceAudioMgr->raceState == 0x4 || raceAudioMgr->raceState == 0x6)) {
+            raceAudioMgr->SetRaceState(RACE_STATE_FAST);
+        }
     }
     else if(maxLap != curLap) {
-        rsarSoundPlayer->PlaySound(jingle, r5);
-        hudSlotIdFinalLap = audio->playerIdFirstLocalPlayer;
+        rsarSoundPlayer->PlaySound(SOUND_ID_NORMAL_LAP, hudSlotId);
+        //hudSlotIdFinalLap = raceAudioMgr->playerIdFirstLocalPlayer;
     }
     return;
 }

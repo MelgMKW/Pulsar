@@ -142,7 +142,7 @@
   5011	= Enabled
   5020	= Normal
   5021	= 150 Only
-  5022	= 200 Only
+  5022	= 100 Only
   5023	= Mirror Only
   5100	= Track voting is normal.
   5101	= Host will always wins track voting.

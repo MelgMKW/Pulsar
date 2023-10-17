@@ -12,7 +12,7 @@ public:
         ~SheetSelectButton() override; //0x80636564 vtable 808be998
         void Init() override; //0xc 806367f8 
         void Update() override; //0x10 806369e4
-        void SetPositionAnim(float curFrame, PositionAndScale& positionAndScale) override; //0x20 80637344
+        void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 80637344
         int GetRuntimeTypeInfo() const override; //0x28 806374ac
         const char* GetClassName() const override; //0x2c 80636460
         void Load(u32 buttonId, const char* folderName, const char* ctrName, const char* variant,

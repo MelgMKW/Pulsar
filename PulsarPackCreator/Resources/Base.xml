@@ -7,12 +7,12 @@
 					<patch id="PackLoadPack"/>
 				</choice>
 			</option>
-			<option name="Custom Music">
+			<option name="My Stuff">
 				<choice name="From CTGP-r">
-					<patch id="CTGPLoadMusic"/>
+					<patch id="CTGPLoad"/>
 				</choice>
 				<choice name="From Pack">
-					<patch id="PackLoadMusic"/>
+					<patch id="PackLoad"/>
 				</choice>
 			</option>
 		</section>
@@ -28,12 +28,10 @@
 		<folder external="/{$pack}/Assets" disc="/" create="true"/>
 	</patch>	
 
-	<patch id="CTGPLoadMusic">
-		<folder external="/ctgpr/My Stuff" disc="/sound" />
-		<folder external="/ctgpr/My Stuff" disc="/sound/strm" />
+	<patch id="CTGPLoad">
+		<folder external="/ctgpr/My Stuff" disc="/" />
 	</patch>
-	<patch id="PackLoadMusic">
-		<folder external="/{$pack}/My Stuff" disc="/sound" />
-		<folder external="/{$pack}/My Stuff" disc="/sound/strm" />
+	<patch id="PackLoad">
+		<folder external="/{$pack}/My Stuff" disc="/" />
 	</patch>
 </wiidisc>

@@ -6,8 +6,8 @@
 
 class AudioRandomMgr: public Random { //is used to get 12 seeds 809c4740 + 4728[id] which impact character sounds etc...
     static AudioRandomMgr* sInstance; //809c4738
-    static AudioRandomMgr* GetStaticInstance(); //80866ddc
-    static void DestroyStaticInstance(); //80866e64
+    static AudioRandomMgr* CreateInstance(); //80866ddc
+    static void DestroyInstance(); //80866e64
     ~AudioRandomMgr() override; //80866e98 vtable 808dbdf0
     u32 RandInt(u32 min, u32 max); //80866f4c non-inclusive
     float RandFloat(float min, float max); //80866f80

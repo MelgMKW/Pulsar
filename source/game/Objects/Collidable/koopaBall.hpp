@@ -6,7 +6,7 @@
 namespace Objects {
 
 class KoopaBall: public ObjectCollidable { //0xcf = 207
-    explicit KoopaBall(const KMP::GOBJHolder& gobjHolder); //80770384
+    explicit KoopaBall(const KMP::Holder<GOBJ>& gobjHolder); //80770384
     ~KoopaBall() override; //80771f70 vtable 808cf410
     void OnStart() override; //0xC 807703d0
     void Update() override; //0x14 80770adc

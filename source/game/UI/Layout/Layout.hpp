@@ -22,7 +22,7 @@ class PaneAction {
     virtual void Calc(Pane* pane) = 0;
 };
 
-class PaneTypeCounter: PaneAction {
+class PaneTypeCounter : PaneAction {
     //ctor inlined, sets all counts to 0
     virtual void Calc(Pane* pane); //808b94dc 805e94d8 increments counts based on type
     u32 paneCount; //total count excluding pan and boundary panes
@@ -30,7 +30,7 @@ class PaneTypeCounter: PaneAction {
     u32 moviePicPaneCount; //not sure which ones are counted
 };
 
-class TextPaneHandler::Initializer: PaneAction {
+class TextPaneHandler::Initializer : PaneAction {
     //ctor inlined
     virtual void Calc(Pane* pane);//808b94f4 805e92d0 if pane is a text pane, increments curPaneId and calls init on the handler
     TextPaneHandler* firstHandler;
@@ -38,7 +38,7 @@ class TextPaneHandler::Initializer: PaneAction {
     u32 curPaneId;
 };
 
-class MoviePaneHandler::Initializer: PaneAction {
+class MoviePaneHandler::Initializer : PaneAction {
     //ctor inlined
     virtual void Calc(Pane* pane);//808b94e8 805e93d4 if pane is a movie pane, increments curPaneId and calls init on the handler
     MoviePaneHandler* firstHandler;
@@ -61,26 +61,26 @@ class PaneManager {
     class Initializer;
 };
 
-class PaneManager::Initializer: PaneAction {
+class PaneManager::Initializer : PaneAction {
     //ctor inlined
     virtual void Calc(Pane* pane); //805e9708 vtable 808b94d0 checks type of pane and updates group accordingly
     MainLayout* layout;
     PaneManagerHolder* holder;
 };
 
-class PicturePaneManager: PaneManager {
+class PicturePaneManager : PaneManager {
     PicturePaneManager(); //805e7d94
     virtual void Draw(DrawInfo* drawInfo); //805e7f38 vtable 808b9530 
     Pane* pane;
 }; //total size 0xC
 
-class TextPaneHolder: PaneManager {
+class TextPaneHolder : PaneManager {
     TextPaneHolder(); //805e7db0
     virtual void Draw(DrawInfo* drawInfo); //805e805c vtable 808b9524
     TextPaneHandler* handler;
 }; //total size 0xC
 
-class MoviePaneHolder: PaneManager {
+class MoviePaneHolder : PaneManager {
     MoviePaneHolder(); //805e7dcc
     virtual void Draw(DrawInfo* drawInfo); //805e8178 vtable 808b9518 
     MoviePaneHandler* handler;
@@ -105,7 +105,7 @@ class PaneManagerHolder {
     u32 activeMoviePanesCount; //0x1c <=> 0x98 not sure which ones are counted
 };//total size 0x20
 
-class LayoutResourceLink: public ArcResourceLink {
+class LayoutResourceLink : public ArcResourceLink {
     LayoutResourceLink(); //805ea770
     ~LayoutResourceLink(); //805ea490
 }; //0xa4
@@ -118,7 +118,7 @@ class LayoutResources {
     u8 padding[2];
 }; //total size 0xC
 
-class LayoutFont: FontRefLink {
+class LayoutFont : FontRefLink {
     ~LayoutFont(); //805ea358
 }; //total size 0x8c
 size_assert(LayoutFont, 0x8c);
@@ -153,7 +153,7 @@ public:
 }; //Total size 0x28
 size_assert(BaseLayout, 0x28);
 
-class MainLayout: public BaseLayout { //main brlyt in brctr
+class MainLayout : public BaseLayout { //main brlyt in brctr
 public:
     MainLayout(); //805e85a8
     ~MainLayout() override; //805e8630 vtable 808b94c4
@@ -187,7 +187,7 @@ class PictureLayoutList {
     PictureLayout* tail;
 }; //0x4
 
-class PictureLayout: public BaseLayout { //picture brlyt 
+class PictureLayout : public BaseLayout { //picture brlyt 
 public:
     PictureLayout(); //805e9b28 inlined
     ~PictureLayout() override; //805e9bc0 vtable 808b94b8

@@ -1,6 +1,6 @@
 #ifndef _KTPT_
 #define _KTPT_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
 struct KTPT {
     Vec3 position;
@@ -9,6 +9,6 @@ struct KTPT {
     u16 unknown_0x1A;
 }; //total size 0x1C
 
-typedef struct KMPSection<KTPT> KTPTSection;
+typedef struct KMPBlock<KTPT> KTPTBlock;
 
 #endif

@@ -1,10 +1,9 @@
 #ifndef _SETTINGS_
 #define _SETTINGS_
 #include <kamek.hpp>
-#include <IO/File.hpp>
 #include <SlotExpansion/CupsDef.hpp>
 #include <PulsarSystem.hpp>
-
+#include <Settings/UI/SettingsPanel.hpp>
 
 
 namespace Pulsar {
@@ -47,11 +46,12 @@ protected: //so that it can be inherited from
                 u8 settings[12];
             };
         };
-        Binary(u32 curVersion) : magic(binMagic), version(curVersion) {}
+        Binary(u32 curVersion) : magic(binMagic), version(curVersion), lastSelectedCup(PULSARCUPID_NONE) {}
         u32 magic;
         u32 version; //just in case more than 255 versions
-        Page pages[3];
+        Page pages[UI::SettingsPanel::maxPageCount];
         u32 reserved[20];
+        PulsarCupId lastSelectedCup;
         u32 trackCount;
         Trophies trophiesHolder;
         friend class Settings;
@@ -80,9 +80,13 @@ public:
     static Settings* GetInstance() { return sInstance; }
     void Update() {
         SettingsHook::exec();
+        this->RequestSave();
+    }
+    void RequestSave() {
         System::sInstance->taskThread->Request(&Settings::SaveTask, nullptr, 0);
     }
     void Save();
+    void SetLastSelectedCup(PulsarCupId id) { this->rawBin->lastSelectedCup = id; }
 
     void AddTrophy(u32 crc32, TTMode mode);
     bool HasTrophy(u32 crc32, TTMode mode) const;

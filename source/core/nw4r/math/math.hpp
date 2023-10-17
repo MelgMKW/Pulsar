@@ -6,6 +6,10 @@
 
 namespace nw4r {
 namespace math {
+
+extern const float F_PI; //803878F8
+
+
 namespace detail {
 float FExp(float);
 float FLog(float);
@@ -18,7 +22,7 @@ float FrSqrt(float);
 
 float SinFIdx(float fidx);
 float CosFIdx(float fidx);
-void SinCosFIdx(float* pSin, float* pCos, float fidx);
+void SinCosFIdx(float* sin, float* cos, float fidx);
 float Atan2FIdx(float y, float x);
 u16 Atan2Idx(float y, float x);
 
@@ -26,7 +30,9 @@ struct VEC2 {
     float x, z;
 };
 
-struct VEC3: Vec {
+struct VEC3 : Vec {
+    VEC3() {}
+    VEC3(float x, float y, float z) { this->x = x; this->y = y; this->z = z; }
     void Report(bool addNewLine, const char* prefixText = 0);
 };
 

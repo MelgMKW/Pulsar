@@ -68,9 +68,9 @@ kmWrite32(0x80665308, 0x60000000); //nop star rank store
 
 void ImportRH1ToPulRH1() {
     register CustomRH1Packet* packet;
-    asm volatile(mr packet, r28;);
+    asm(mr packet, r28;);
     register RKNet::RH1Data* data;
-    asm volatile(addi data, r26, 0x20;);
+    asm(addi data, r26, 0x20;);
     if(CupsDef::IsRegsSituation()) {
         RKNet::RACEHEADER1Packet* normal = reinterpret_cast<RKNet::RACEHEADER1Packet*>(packet);
         data->trackId = static_cast<CourseId>(normal->trackId);

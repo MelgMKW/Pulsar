@@ -30,8 +30,8 @@ class AutoStrmHandle : public snd::StrmSoundHandle { //auto detaches the sound
 class SingleSoundPlayer {
 public:
     static SingleSoundPlayer* sInstance; //809c2328
-    static SingleSoundPlayer* GetStaticInstance(); //806f8648
-    static void DestroyStaticInstance(); //806f86f0
+    static SingleSoundPlayer* CreateInstance(); //806f8648
+    static void DestroyInstance(); //806f86f0
     SingleSoundPlayer(); //806f886c
     ~SingleSoundPlayer(); //806f8934
     void Calc(); //806f8a64 decrements the delay and starts the activeHandle once it reaches 0

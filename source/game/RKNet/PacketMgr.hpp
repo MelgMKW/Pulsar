@@ -17,8 +17,8 @@ namespace RKNet {
 class PacketMgr {
 public:
     static PacketMgr* sInstance; //809c1f50
-    static PacketMgr* GetStaticInstance(); //80653208
-    static void DestroyStaticInstance(); //80653284
+    static PacketMgr* CreateInstance(); //80653208
+    static void DestroyInstance(); //80653284
     PacketMgr(); //80653df4
     ~PacketMgr(); //80653ecc
     void Reset(); //806532d8
@@ -69,7 +69,7 @@ public:
     EVENTPacket sendEVENTBuffer; //0x94
     u8 unknown_0x18c[4];
     u64 lastFriendUpdateTime;
-    u32 playerRH1Timers[12];
+    u32 playerRH1Timers[12]; //0x198
 }; //total size 0x1c8
 size_assert(PacketMgr, 0x1c8);
 }//namespace RKNet

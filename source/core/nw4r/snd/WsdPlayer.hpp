@@ -59,7 +59,7 @@ public:
     bool wavePlayFlag;
     bool releasePriorityFixFlag; //0xec
     u8 padding[3];
-    f32 panRange; //0xf0
+    float panRange; //0xf0
     int voiceOutCount; //0xf4
     u8 priority; //0xf8
     u8 padding2[3];

@@ -1,6 +1,6 @@
 #ifndef _AREA_
 #define _AREA_
-#include <game/KMP/SectionBase.hpp>
+#include <game/KMP/KMPBlockBase.hpp>
 
 struct AREA {
     u8 shape; //0 box 1 cylinder
@@ -17,6 +17,6 @@ struct AREA {
     u16 unknown_0x2e;
 }; //total size 0x30
 
-typedef struct KMPSection<AREA> AREASection;
+typedef struct KMPBlock<AREA> AREABlock;
 
 #endif

@@ -21,9 +21,9 @@ class ControllerHolder {
 public:
     ControllerHolder(); //80520f64 - inlined in RealControllerHolder()
     virtual ~ControllerHolder(); //805222b4 vtable 808b2dd8
-    virtual void Update(); //80521198
+    virtual void Update(bool writeGhostFrame); //80521198
     virtual void Init(); //80521110
-    virtual int unknown3();//805226f4
+    virtual void CopyCPUInputs(const State& cpuInputs);//805226f4
     virtual RKGInputs* GetRKGInputs() const;//8051ce84
     virtual int GetInputsCount();//8051ce8c
     virtual int unknown6();//80520ebc
@@ -42,13 +42,15 @@ class RealControllerHolder : public ControllerHolder {
 public:
     RealControllerHolder(); //805220bc 
     ~RealControllerHolder() override; //805222f4 vtable 808b2d90
-    void Update() override; //0xc 80521768
+    void Update(bool writeGhostFrame) override; //0xc 80521768
     void Init() override; //80522708
     RKGInputs* GetRKGInputs() const override; //80522700
     int GetInputsCount() override; //805226f8
     int unknown6() override; //80520ebc
     void SetController(const Controller* controller, u32* r5); //80521554 r5 is a pointer, but unsure to what as it's always nullptr
-    void RequestRumble(double intensity, Controller* controller, u32 length, u8 r6); //80521acc
+
+    void RequestRumble(u32 length, u32 r5, float intensity); //80521a34
+    void RequestRumble(Controller* controller, u32 length, u8 r6, float intensity); //80521acc
     void SetDriftType(u16 isDriftAuto); //80520f2c
 
     void StartGhostReading(); //805215d4
@@ -63,14 +65,13 @@ public:
     GhostWriter* ghostWriter; //0xE8
 }; //Total size 0xec
 
-class VirtualControllerHolder : public ControllerHolder {
+class AIControllerHolder : public ControllerHolder {
 public:
-    VirtualControllerHolder(); //805234a0
-    ~VirtualControllerHolder() override; //8052279c vtable 808b2db4
-    int unknown3() override; //805219ac
+    AIControllerHolder(); //805234a0
+    ~AIControllerHolder() override; //8052279c vtable 808b2db4
+    void CopyCPUInputs(const State& cpuInputs) override; //805219ac
 
-    //vtable 808b2db4
-    u8 unknown_0xd8[0x180 - 0xd8];
+    AIController aiController; //0xd8
 }; //Total size 0x180
 
 }//namespace Input

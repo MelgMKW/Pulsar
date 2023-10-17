@@ -18,8 +18,8 @@ class AudioManager : public EGG::ExpAudioMgr {
 public:
     static void LoadGroup(u32 groupId);
     static AudioManager* sInstance; //809c2898
-    static AudioManager* GetStaticInstance(); //80716e2c
-    static void DestroyStaticInstance(); //80716f10
+    static AudioManager* CreateInstance(); //80716e2c
+    static void DestroyInstance(); //80716f10
     static snd::DVDSoundArchive* soundArchive; //809c2698
     AudioManager(); //80716f44 inlined
 
@@ -82,7 +82,7 @@ size_assert(AudioManager, 0x8c0);
 
 class UnkAudioClass { //Completely unused looking at references to the sInstance
     static UnkAudioClass* sInstance; //809c2818
-    static UnkAudioClass* GetStaticInstance(); //807139fc
+    static UnkAudioClass* CreateInstance(); //807139fc
     ~UnkAudioClass(); //80713a64
     EGG::TDisposer<UnkAudioClass> disposer; //807138d0 vtable 808c9018
 };

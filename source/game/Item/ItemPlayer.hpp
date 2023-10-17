@@ -3,7 +3,7 @@
 
 #include <kamek.hpp>
 #include <game/System/Identifiers.hpp>
-#include <game/Race/Kart/KartPointers.hpp>
+#include <game/Kart/KartPointers.hpp>
 
 namespace Item {
 class Player;
@@ -60,7 +60,9 @@ public:
     void Update(); //80795668
     void ActivateItem(); //8079231c spawns item, plays sounds and animations
     void UseItem(bool r4); //80791914 r4 might be isRemote?
-    KartPointers* kartPointers;
+    void LoseItem(u32 playerIdx); //80795350 unsure what playerIdx does, only used in onlineRaces
+
+    Kart::Pointers* kartPointers;
     Player* itemPlayer;
     u8 unknown_0x8[4];
     Player* itemPlayer2;
@@ -71,7 +73,7 @@ public:
     u32 useType; //0x1c 0x1 if trailing behind 0x2 if trailing behind triples, 0x3 if spinning, 0x4 if no item
     u8 unknown_0x20[0x50 - 0x20]; //this whole part only changes when trailing/using bananas/shells
     u32 activeItemCount; // eg 0x2 if 2 remaining spinning shells
-    u32 unknown_0x54;
+    ItemObjId unknown_0x54;
     Vec3 playerLeft;
     Vec3 playerUp;
     Vec3 playerFront;
@@ -111,22 +113,22 @@ public:
     void DecideItem(u16 playerItemBoxType, u16 cpuItemBoxType, u32 lotteryType); //80798c38 
     bool HasTripleItems(u8 checkRouletteOrInventory); //80798dbc r4 == 1 -> checks inventory
 
-    KartPointers* kartPointers;
-    KartModel* model;
+    Kart::Pointers* kartPointers;
+    DriverController* model;
     u8 unknown_0x8[0x18 - 0x8];
     u8 id; //0x18
-    bool isHuman;
-    bool isRemote;
-    bool isBike;
-    Kart* kart; //0x1c
-    KartModel* model2;
+    bool isHuman; //0x19
+    bool isRemote; //0x1a
+    bool isBike; //0x1b
+    Kart::Player* kartPlayer; //0x1c
+    DriverController* model2;
     Vec3 unknown_0x24;
     u8 unknown_0x30[0x44 - 0x30];
     Point itemPoint;
     PlayerRoulette roulette; //0x54
     PlayerInventory inventory; //0x88
     PlayerSub itemPlayerSub; //b4
-    u32 hudSlotId;
+    u32 hudSlotId; //0x234
     u8 unknown_0x238[0x248 - 0x238];
 }; //Total Size 0x248
 size_assert(Player, 0x248);

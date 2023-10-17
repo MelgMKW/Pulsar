@@ -17,6 +17,7 @@ enum ActorType {
     ACTOR_TYPE_ITEM = 3,
     ACTOR_TYPE_CHARACTER = 3,
     ACTOR_TYPE_KART = 5,
+    ACTOR_TYPE_BIKE = 6
 };
 
 template <int handleNum>

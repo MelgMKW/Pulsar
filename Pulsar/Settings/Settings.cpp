@@ -2,6 +2,7 @@
 #include <PulsarSystem.hpp>
 #include <SlotExpansion/CupsDef.hpp>
 #include <Debug/Debug.hpp>
+#include <IO/IO.hpp>
 
 namespace Pulsar {
 
@@ -15,10 +16,10 @@ void Settings::SaveTask(void*) {
 }
 
 void Settings::Save() {
-    IO::File* file = IO::File::sInstance;
-    file->Open(this->filePath, IO::FILE_MODE_WRITE);
-    file->Overwrite(this->GetSettingsBinSize(), this->rawBin);
-    file->Close();
+    IO* io = IO::sInstance;;
+    io->OpenModFile(this->filePath, FILE_MODE_WRITE);
+    io->Overwrite(this->GetSettingsBinSize(), this->rawBin);
+    io->Close();
 };
 
 void Settings::Init(const u16* totalTrophyCount, const char* path/*, const char *curMagic, u32 curVersion*/) {
@@ -27,11 +28,10 @@ void Settings::Init(const u16* totalTrophyCount, const char* path/*, const char 
 
     u32 size = this->GetSettingsBinSize();
     System* system = System::sInstance;
-    IO::File* file = IO::File::sInstance;
-    Settings::Binary* buffer = file->Alloc<Settings::Binary>(size);
-    file->CreateAndOpen(this->filePath, IO::FILE_MODE_READ_WRITE);
-
-    file->Read(size, buffer);
+    IO* io = IO::sInstance;;
+    Settings::Binary* buffer = io->Alloc<Settings::Binary>(size);
+    io->CreateAndOpen(this->filePath, FILE_MODE_READ_WRITE);
+    io->Read(size, buffer);
     for(int i = 0; i < 4; ++i) {
         u32 curTotalCount = this->GetTotalTrophyCount(static_cast<TTMode>(i));
         if(buffer->trophiesHolder.trophyCount[i] > curTotalCount) buffer->trophiesHolder.trophyCount[i] = curTotalCount;
@@ -42,8 +42,16 @@ void Settings::Init(const u16* totalTrophyCount, const char* path/*, const char 
     }
     this->rawBin = buffer;
     this->UpdateTrackList();
-    file->Overwrite(size, buffer);
-    file->Close();
+    io->Overwrite(size, buffer);
+    io->Close();
+
+    const PulsarCupId last = this->rawBin->lastSelectedCup;
+    CupsDef* cups = CupsDef::sInstance;
+    if(last != -1 && cups->IsValidCup(last)) {
+        cups->lastSelectedCup = last;
+        cups->selectedCourse = static_cast<PulsarId>(last * 4);
+        cups->lastSelectedCupButtonIdx = 0;
+    }
 }
 
 TrackTrophy* Settings::FindTrackTrophy(u32 crc32, TTMode mode) const {

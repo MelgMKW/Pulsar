@@ -5,7 +5,7 @@
 
 using namespace nw4r;
 
-class ItemSound: public AudioActor<2>, public LinkedRaceActor {
+class ItemSound : public AudioActor<2>, public LinkedRaceActor {
 public:
     ItemSound(); //807040dc
 
@@ -43,7 +43,7 @@ size_assert(ItemSound, 0xac);
 
 
 
-class GessoSound: public AudioActor<1>, public LinkedRaceActor {
+class GessoSound : public AudioActor<1>, public LinkedRaceActor {
 public:
     GessoSound(); //80704bd4
 

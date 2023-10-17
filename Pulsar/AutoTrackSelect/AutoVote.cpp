@@ -38,7 +38,7 @@ void AutoVote::OnInit() {
 }
 
 void AutoVote::OnDispose() {
-    RKNet::SELECTHandler::DestroyStaticInstance();
+    RKNet::SELECTHandler::DestroyInstance();
 }
 
 void AutoVote::OnUpdate() {

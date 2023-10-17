@@ -11,6 +11,7 @@ class RKG;
 class BSP;
 
 class ArchiveLoadHandle { //+0x338
+public:
     ArchivesHolder* holder;
     ArchiveFile* file;
     u8 unknown_0x8[0xc - 0x8];
@@ -52,8 +53,8 @@ class ArchiveRoot {
 public:
     ArchiveRoot(); //0x8053fcec
     static ArchiveRoot* sInstance; //809bd738
-    static ArchiveRoot* GetStaticInstance(); //8053fc4c
-    static void DestroyStaticInstance(); //8053fc9c
+    static ArchiveRoot* CreateInstance(); //8053fc4c
+    static void DestroyInstance(); //8053fc9c
     virtual ~ArchiveRoot(); //8053ff1c vtable 808b3bfc
     void WaitForLoad(); //805400a0
     /*Idx:

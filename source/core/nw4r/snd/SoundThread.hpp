@@ -48,8 +48,8 @@ public:
 
     AxManager::CallbackListNode axCallbackNode; //0x36c
 
-    ut::LinkList< SoundFrameCallback, offsetof(SoundFrameCallback, link)> soundFrameCallbackList; //0x378
-    ut::LinkList< PlayerCallback, offsetof(PlayerCallback, link)> playerCallbackList; //0x384
+    ut::LinkList<SoundFrameCallback, offsetof(SoundFrameCallback, link)> soundFrameCallbackList; //0x378
+    ut::LinkList<PlayerCallback, offsetof(PlayerCallback, link)> playerCallbackList; //0x384
 
     u32 processTick; //0x390
 

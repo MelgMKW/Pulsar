@@ -122,7 +122,7 @@ class LightTextureBinary { //probably not abstract, can't find the vtable
     u8 padding2[2];
 }; //0x58
 
-class CapTexture: public MatTexture, public LightTextureBinary {
+class CapTexture : public MatTexture, public LightTextureBinary {
     CapTexture(u16 r4, const char* name, LightMapBinary* lightMapBinary); //8022d730
 
     //CPUTexture vtable 802a3148 at 0x10
@@ -161,6 +161,9 @@ class LightObject {
     virtual void vf_0x18(); //8022d0f0
     virtual void DoubleMount(); //8022ca4c
     void Load(BinaryLIGHTObject* raw); //8022b414
+    void CalcDestination(); //8022c260
+    void CalcDir(); //8022c1bc
+
     u16 ambLightIdx; //0x4
     u16 unknown_0x6;
     Vector3f dest; //0x8
@@ -178,9 +181,15 @@ class LightObject {
     u8 unknown_0x50[0x68 - 0x50];
     u32 attenuationFalloffFuncType; //0x68 probably enums now
     u32 attenuationDistanceFuncType; //0x6C
-    u8 unknown_0x70[0x76 - 0x70];
+    float shininess;
+    u8 unknown_0x74[2];
     u16 bitField; //0x76
-    u8 unknown_0x78[0xb0 - 0x78];
+    u8 unknown_0x78[4];
+    Vector3f colorDir; //0x7c
+    GXColor color2; //0x88
+    Vector3f viewLightOri; //0x8c
+    Vector3f viewLightDest; //0x98
+    Vector3f viewLightDir; //0xa4
 }; //0xB0
 
 class AmbientLight {
@@ -199,7 +208,7 @@ class LightMgr {
     virtual ~LightMgr(); //8022b66c
     void InitAmbientLights(); //8022a4a8
     void SetMaxCounts(u16 maxLightObj, u16 maxAmbLight); //8022a49c
-    u16 lightObjCount; //0x4
+    u16 lightObjCount; //0x4 same as ScnRoot's LightSetting in mkwii
     u16 ambLightCount;
     u16 maxLightObjCount; //0x8
     u16 maxAmbLightCount; //0xA
@@ -207,7 +216,7 @@ class LightMgr {
     AmbientLight* ambientLights; //0x10
     GXColor ambBlackColor; //0x14
     u8 unknown_0x18[0x20 - 0x18];
-    LightMapBinary binary; //0x20
+    LightMapBinary* binary; //0x20
     u8 unknown_0x24[0x2C - 0x24];
 };
 }//namespace EGG

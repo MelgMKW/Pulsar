@@ -173,28 +173,28 @@ namespace PulsarPackCreator
             file.Close();
         }
 
-        private void OnBuildBinClick(object sender, RoutedEventArgs e)
+        private bool BuildBinImpl()
         {
             if (dateSelector.SelectedDate == null)
             {
                 MessageBox.Show("Please select a date.");
                 TabController.SelectedItem = Options;
                 ((TabItem)TabController.SelectedItem).Focus();
-                return;
+                return false;
             }
             if (parameters.modFolderName == null || parameters.modFolderName == "")
             {
                 MessageBox.Show("Please specify a mod folder name.");
                 TabController.SelectedItem = Options;
                 ((TabItem)TabController.SelectedItem).Focus();
-                return;
+                return false;
             }
             if (parameters.wiimmfiRegion == -1)
             {
                 MessageBox.Show("Please specify a Wiimmfi region.");
                 TabController.SelectedItem = Options;
                 ((TabItem)TabController.SelectedItem).Focus();
-                return;
+                return false;
             }
 
             string modFolder = $"output/{parameters.modFolderName}";
@@ -207,7 +207,7 @@ namespace PulsarPackCreator
                 catch
                 {
                     MessageBox.Show("Mod Folder is already in use.");
-                    return;
+                    return false;
                 }
             }
             Directory.CreateDirectory("output");
@@ -232,7 +232,7 @@ namespace PulsarPackCreator
 
             //Offsets
             bin.BaseStream.Position += SECTIONCOUNT * 4; //OFFSETS
-  
+
             string gameFolderName = $"/{parameters.modFolderName}";
             bin.Write(gameFolderName.ToArray());
             bin.BaseStream.Position += 14 - gameFolderName.Length;
@@ -241,7 +241,7 @@ namespace PulsarPackCreator
             bin.BaseStream.Position = 0x8;
             bin.Write((int)infoPosition);
             bin.BaseStream.Position = infoPosition;
-            
+
 
             WriteInfo(bin);
 
@@ -259,7 +259,7 @@ namespace PulsarPackCreator
                 MessageBox.Show("Failed Creating Cups");
                 Directory.Delete($"{modFolder}", true);
                 Directory.Delete("temp", true);
-                return;
+                return false;
             }
             bmgSW.Close();
             fileSW.Close();
@@ -283,7 +283,7 @@ namespace PulsarPackCreator
             xml[6] = xml[6].Replace("{$pack}", parameters.modFolderName);
             xml[11] = xml[11].Replace("{$pack}", parameters.modFolderName);
             xml[14] = xml[14].Replace("{$pack}", parameters.modFolderName);
-            xml[19] = xml[19].Replace("{$pack}", parameters.modFolderName);              
+            xml[19] = xml[19].Replace("{$pack}", parameters.modFolderName);
             xml[24] = xml[24].Replace("{$pack}", parameters.modFolderName);
             xml[25] = xml[25].Replace("{$pack}", parameters.modFolderName);
             xml[26] = xml[26].Replace("{$pack}", parameters.modFolderName);
@@ -299,20 +299,29 @@ namespace PulsarPackCreator
             File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
             Directory.Delete("temp/", true);
             MessageBox.Show("Pack Created");
+            return true;
+        }
+
+        private void OnBuildBinClick(object sender, RoutedEventArgs e)
+        {
+            BuildBinImpl();
         }
         private void OnBuildFullPackClick(object sender, RoutedEventArgs e)
         {
-            OnBuildBinClick(sender, e);
-            string modFolder = $"output/{parameters.modFolderName}";
-            File.WriteAllBytes($"{modFolder}/Binaries/P.bin", PulsarRes.P);
-            File.WriteAllBytes($"{modFolder}/Binaries/E.bin", PulsarRes.E);
-            File.WriteAllBytes($"{modFolder}/Binaries/J.bin", PulsarRes.J);
-            File.WriteAllBytes($"{modFolder}/Binaries/K.bin", PulsarRes.K);
-            Directory.CreateDirectory($"{modFolder}/Assets");
-            File.WriteAllBytes($"{modFolder}/Binaries/Loader.bin", PulsarRes.Loader);
-            File.WriteAllBytes($"{modFolder}/Assets/PulsarUI.szs", PulsarRes.PulsarUI);
-            File.WriteAllBytes($"{modFolder}/Assets/PulsarRace.szs", PulsarRes.PulsarRace);
-            File.WriteAllBytes($"{modFolder}/Assets/PulsarCommon.szs", PulsarRes.PulsarCommon);
+            bool ret = BuildBinImpl();
+            if (ret)
+            {
+                string modFolder = $"output/{parameters.modFolderName}";
+                File.WriteAllBytes($"{modFolder}/Binaries/P.bin", PulsarRes.P);
+                File.WriteAllBytes($"{modFolder}/Binaries/E.bin", PulsarRes.E);
+                File.WriteAllBytes($"{modFolder}/Binaries/J.bin", PulsarRes.J);
+                File.WriteAllBytes($"{modFolder}/Binaries/K.bin", PulsarRes.K);
+                Directory.CreateDirectory($"{modFolder}/Assets");
+                File.WriteAllBytes($"{modFolder}/Binaries/Loader.bin", PulsarRes.Loader);
+                File.WriteAllBytes($"{modFolder}/Assets/PulsarUI.szs", PulsarRes.PulsarUI);
+                File.WriteAllBytes($"{modFolder}/Assets/PulsarRace.szs", PulsarRes.PulsarRace);
+                File.WriteAllBytes($"{modFolder}/Assets/PulsarCommon.szs", PulsarRes.PulsarCommon);
+            }
         }
 
         private void RequestBMGAction(bool isEncode) //else will decode

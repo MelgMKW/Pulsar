@@ -3,14 +3,18 @@
 #include <types.hpp>
 #include <core/rvl/mtx/mtx.hpp>
 #include <core/nw4r/ef.hpp>
+#include <core/nw4r/ut/Color.hpp>
 #include <core/egg/Math/Matrix.hpp>
 
 namespace EGG {
+
+class ExpParticleManager;
+
 class Effect {
 public:
-    Effect(const char* effectName, int r5); //0x80222ccc
-    virtual ~Effect(); //0x80222d50 vtable 802a2dc8 reset at 0x84
-    virtual void Create(); //0xc 80222d90 they're all actually virtual but oh well
+    Effect(const char* effectName, int creatorIdx); //80222ccc
+    virtual ~Effect(); //80222d50 vtable 802a2dc8 reset at 0x84
+    virtual void Create(); //0xc 80222d90
     virtual void Fade(); //0x10 80222e60
     virtual void FollowFade(); //0x14 80222eb0
     virtual void Kill(); //0x18 80222ef4
@@ -43,14 +47,17 @@ public:
     virtual void Reset(); //0x84 802242dc
 
     bool LoadEmitter(bool r4); //returns true if properly loaded 802241f8
+    static void SetParticleLightType(ExpParticleManager* particleManager, u8 type); //802238f4
+    static void SetParticleAmbientColor(ExpParticleManager* particleManager, nw4r::ut::Color& color); //802238d0
+
     char name[0x20];
-    u32 r5Arg_0x24;
-    u32 unknown_0x28;
-    Vector3f vec_0x2C; //position?
-    Vector3f vec_0x38; //rotation?
-    Mtx mtx_0x44;
+    int creatorIdx; //0x24
+    u32 bitfield;
+    Vector3f scale; //0x2c
+    Vector3f position; //0x38
+    Mtx matrix; //0x44
     nw4r::ef::HandleBase handleBase; //0x74
 }; //total size 0x7c
-size_assert(EGG::Effect, 0x7c);
+size_assert(Effect, 0x7c);
 }//namespace EGG
 #endif

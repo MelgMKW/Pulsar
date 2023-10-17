@@ -10,15 +10,20 @@ namespace nw4r {
 namespace snd {
 class Sound3DActor: public SoundActor, public detail::BasicSound::AmbientArgUpdateCallback {
 public:
-    Sound3DActor(SoundArchivePlayer* soundArchivePlayer, Sound3DManager* sound3DManager); //8009c2a0
+    Sound3DActor(SoundArchivePlayer& soundArchivePlayer, Sound3DManager& sound3DManager); //8009c2a0
+
     //SoundActor vtable 80274918
     ~Sound3DActor() override; //8009c330
     StartResult SetupSound(SoundHandle* handle, u32 soundId, const StartInfo* startInfo, void* setupArg) override; //8009c410
+
     //AmbientArgUpdateCallback vtable 80274934 at 0x54
-    //~Sound3DActor thunk 8009c650
+    //~Sound3DActor thunk 8009c650 func 8009c330
+    //Update 
     void detail_UpdateAmbientArg(void* arg, const detail::BasicSound* sound) override; //thunk 8009c640 func 8009c600 arg is Sound3DParam
+
     void SetPosition(const math::VEC3& position); //8009c590
     void SetVelocity(const math::VEC3& velocity); //8009c5e0
+
     Sound3DManager& manager; //58
     SoundArchivePlayer* soundArchivePlayer; //5c
     u32 userParam; //60

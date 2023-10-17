@@ -8,8 +8,8 @@ namespace RKNet {
 class FriendMgr {
 public:
     static FriendMgr* sInstance; //809c2110
-    static FriendMgr* GetStaticInstance(); //80663194
-    static void DestroyStaticInstance(); //806632bc
+    static FriendMgr* CreateInstance(); //80663194
+    static void DestroyInstance(); //806632bc
     virtual ~FriendMgr(); //806573dc vtable 808c0988
     bool isBuddyFriend(u8 idx); //8066375c
     OS::Mutex mutex;

@@ -35,7 +35,7 @@ void ExpFroomMessages::OnCourseButtonClick(PushButton& button, u32 hudSlotId) {
 //kmWrite32(0x805dc47c, 0x7FE3FB78); //Get Page in r3
 void OnStartButtonFroomMsgActivate() {
     register ExpFroomMessages* msg;
-    asm volatile(mr msg, r31;);
+    asm(mr msg, r31;);
 
     if(!Info::IsHAW(true)) {
         msg->onModeButtonClickHandler.ptmf = &Pages::FriendRoomMessages::OnModeButtonClick;
@@ -84,9 +84,9 @@ kmBranch(0x805dd314, OnBackButtonClick);
 //kmWrite32(0x805dcb6c, 0x7EC4B378); //Get the loop idx in r4
 u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
     register u32 rowIdx;
-    asm volatile(mr rowIdx, r22;);
+    asm(mr rowIdx, r22;);
     register const ExpFroomMessages* messages;
-    asm volatile(mr messages, r19;);
+    asm(mr messages, r19;);
     if(Info::IsHAW(true) && !messages->isOnModeSelection) {
         if(messages->clickedButtonIdx >= 2) {
             return BMG_BATTLE + messages->curPageIdx * 4 + rowIdx;

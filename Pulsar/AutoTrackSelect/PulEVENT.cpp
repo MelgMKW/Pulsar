@@ -2,59 +2,62 @@
 #include <game/RKNet/EVENT.hpp>
 #include <game/RKNet/RKNetController.hpp>
 #include <game/UI/Page/Other/WWRaceSupporting.hpp>
+#include <PulsarSystem.hpp>
 #include <AutoTrackSelect/ChooseNextTrack.hpp>
-#include <AutoTrackSelect/PulEVENT.hpp>
 
 namespace Pulsar {
 namespace Network {
 
 using namespace RKNet;
+
+inline u32 ShouldSendPacketHost(UI::ChooseNextTrack* choosePage) {
+    if(choosePage->status == UI::ChooseNextTrack::STATUS_HOST) {
+        choosePage->status = UI::ChooseNextTrack::STATUS_HOST_TRACK_SENT;
+        return EVENTACTION_NONE;
+    }
+    else {
+        const ControllerSub& sub = Controller::sInstance->subs[Controller::sInstance->currentSub];
+        for(u8 aid = 0; aid < 12; aid++) {
+            if(aid == sub.localAid || (1 << aid & sub.availableAids) == 0) continue;
+            if(!choosePage->hasReceivedHostTrack[aid]) return -1;
+        }
+        choosePage->status = UI::ChooseNextTrack::STATUS_HOST_FINALSENT;
+        return EVENTACTION_USE; //Final Confirmation
+    }
+}
+
+inline u32 ShouldSendPacketOther(UI::ChooseNextTrack* choosePage) {
+    if(choosePage->status == UI::ChooseNextTrack::STATUS_TRACKRECEIVED) {
+        choosePage->status = UI::ChooseNextTrack::STATUS_CONFIRMATIONSENT;
+        return EVENTACTION_SHOOT;
+    }
+    return -1;
+}
+
 void CustomEVENT(SectionMgr* sectionMgr, SectionId id) {
-    bool isReady = true;
+
     const Section* section = sectionMgr->curSection;
     const SectionParams* params = sectionMgr->sectionParams;
     UI::ChooseNextTrack* choosePage = section->Get<UI::ChooseNextTrack>(PAGE_GHOST_RACE_ENDMENU);
+
     if(choosePage != nullptr) {
-        if(choosePage->isBattle && params->redWins < 2 && params->blueWins < 2
+        if(choosePage->IsReady()) id = section->sectionId;
+        else if(choosePage->isBattle && params->redWins < 2 && params->blueWins < 2
             || !choosePage->isBattle && sectionMgr->sectionParams->currentRaceNumber != System::sInstance->racesPerGP) {
-            PulEVENT packet;
-            packet.nextTrack = CupsDef::sInstance->winningCourse;
-            EVENTAction action = EVENTACTION_NONE;
-            bool sendPacket = choosePage->sendPacket;
-            if(choosePage->isHost) {
-                if(!choosePage->hasSentInitialPacket) choosePage->hasSentInitialPacket = true;
-                else {
-                    bool everyoneHasTrack = true;
-                    const ControllerSub& sub = Controller::sInstance->subs[Controller::sInstance->currentSub];
-                    for(u8 aid = 0; aid < 12; aid++) {
-                        if(aid == sub.localAid || (1 << aid & sub.availableAids) == 0) continue;
-                        if(!choosePage->hasReceivedHostTrack[aid]) {
-                            everyoneHasTrack = false;
-                            sendPacket = false;
-                            break;
-                        }
-                    }
-                    if(everyoneHasTrack) {
-                        choosePage->isReady = true;
-                        action = EVENTACTION_USE; //Final Confirmation
-                    }
-                }
-            }
-            isReady = choosePage->isReady;
-            if(isReady) id = section->sectionId;
-            if(sendPacket) {
-                choosePage->sendPacket = false;
-                EVENTHandler::sInstance->AddEntry((ItemObjId)0x11, action, &packet, 4);
-            }
+
+            UI::ChooseNextTrack::Status next;
+            if(choosePage->IsHost()) next = choosePage->UpdateStatusHost();
+            else next = choosePage->UpdateStatusNonHost();
+
+            if(next != UI::ChooseNextTrack::STATUS_NONE) choosePage->SendPacket(static_cast<EVENTAction>(next));
+            return;
         }
     }
-    if(isReady) {
-        sectionMgr->SetNextSection(id, 0);
-        register Pages::WWRaceEndWait* wait;
-        asm volatile(mr wait, r31);
-        wait->EndStateAnimated(0.0f, 0);
-        sectionMgr->RequestSceneChange(0, 0xFF);
-    }
+    sectionMgr->SetNextSection(id, 0);
+    register Pages::WWRaceEndWait* wait;
+    asm(mr wait, r31);
+    wait->EndStateAnimated(0.0f, 0);
+    sectionMgr->RequestSceneChange(0, 0xFF);
 
 }
 kmCall(0x8064f5fc, CustomEVENT);
@@ -66,19 +69,22 @@ bool ProcessCustomEVENT(EVENTType* type, const void* packet, u8 aid) { //returns
         UI::ChooseNextTrack* choosePage = sectionMgr->curSection->Get<UI::ChooseNextTrack>(PAGE_GHOST_RACE_ENDMENU);
         const PulEVENT* event = reinterpret_cast<const PulEVENT*>(packet);
         const ControllerSub& sub = Controller::sInstance->subs[Controller::sInstance->currentSub];
-        if(aid == sub.hostAid) {
-            if(type->value >> 5 == 0) {
+        if(aid == sub.hostAid) { //can only trigger for non-hosts
+            if((type->value >> 5) == UI::ChooseNextTrack::STATUS_HOST_TRACK_SENT && choosePage->status == UI::ChooseNextTrack::STATUS_NOTRACK) {
                 CupsDef* cups = CupsDef::sInstance;
                 cups->winningCourse = event->nextTrack;
-                cups->selectedCourse = cups->winningCourse;
+                //cups->selectedCourse = cups->winningCourse;
                 RaceData::sInstance->menusScenario.settings.courseId = cups->GetCorrectTrackSlot();
-                choosePage->sendPacket = true; //confirmation to the host
+                choosePage->status = UI::ChooseNextTrack::STATUS_TRACKRECEIVED; //confirmation to the host
             }
-            else choosePage->isReady = true; //this is the host confirmation       
+            else if((type->value >> 5) == UI::ChooseNextTrack::STATUS_HOST_FINALSENT) {
+                choosePage->status = UI::ChooseNextTrack::STATUS_FINALHOSTRECEIVED; //this is the host confirmation  
+            }
         }
-        else {
-            choosePage->hasReceivedHostTrack[aid] = true;
-            choosePage->sendPacket = true; //confirmation packet will be sent as soon as everyone has received the host track
+        else if(choosePage->IsHost()) {
+            //s32 diff = event->frames - choosePage->lastSentFrames;
+            //choosePage->maxTimeDiff = nw4r::ut::Max(choosePage->maxTimeDiff, diff);
+            choosePage->hasReceivedHostTrack[aid] = true; //confirmation packet will be sent when everyone has track
         }
         type->value = 0x10;
         return true;
@@ -86,7 +92,7 @@ bool ProcessCustomEVENT(EVENTType* type, const void* packet, u8 aid) { //returns
     return false;
 }
 
-asm void ProcessCustomEVENTWrapper() {
+asmFunc ProcessCustomEVENTWrapper() {
     ASM(
         nofralloc;
     mflr r26;
@@ -104,6 +110,10 @@ asm void ProcessCustomEVENTWrapper() {
     )
 }
 kmCall(0x8065bda0, ProcessCustomEVENTWrapper);
+
+//80655574 timeout 600 frames since last RH1 can lead to a dc :
+//if(rh1[aid].timer - playerRH1Timers[0] > 600)
+
 
 }//namespace Network
 }//namespace Pulsar

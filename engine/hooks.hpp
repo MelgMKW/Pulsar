@@ -1,6 +1,6 @@
 #ifndef __KAMEK_BASE_HOOKS_H
 #define __KAMEK_BASE_HOOKS_H
-
+#include <types.hpp>
 // allow Kamek hooks to be defined from C++ source files
 #pragma section ".kamek"
 
@@ -16,10 +16,10 @@
 	_k##key##counter
 #ifndef __INTELLISENSE__
 #define kmHookInt(counter) \
-        __declspec (section ".kamek") static const u32 kmIdentifier(Hook, counter)
+        __declspec (section ".kamek") static const unsigned int kmIdentifier(Hook, counter)
 #else
 #define kmHookInt(counter) \
-        static const u32 kmIdentifier(Hook, counter)
+        static const unsigned int kmIdentifier(Hook, counter)
 #endif
 
 // general hook definition macros
@@ -27,13 +27,13 @@
 #define kmHook0(type) \
 	kmHookInt(__COUNTER__)[2] = { 0, (type) }
 #define kmHook1(type, arg0) \
-	kmHookInt(__COUNTER__)[3] = { 1, (type), (u32)(arg0) }
+	kmHookInt(__COUNTER__)[3] = { 1, (type), (unsigned int)(arg0) }
 #define kmHook2(type, arg0, arg1) \
-	kmHookInt(__COUNTER__)[4] = { 2, (type), (u32)(arg0), (u32)(arg1) }
+	kmHookInt(__COUNTER__)[4] = { 2, (type), (unsigned int)(arg0), (unsigned int)(arg1) }
 #define kmHook3(type, arg0, arg1, arg2) \
-	kmHookInt(__COUNTER__)[5] = { 3, (type), (u32)(arg0), (u32)(arg1), (u32)(arg2) }
+	kmHookInt(__COUNTER__)[5] = { 3, (type), (unsigned int)(arg0), (unsigned int)(arg1), (unsigned int)(arg2) }
 #define kmHook4(type, arg0, arg1, arg2, arg3) \
-	kmHookInt(__COUNTER__)[6] = { 4, (type), (u32)(arg0), (u32)(arg1), (u32)(arg2), (u32)(arg3) }
+	kmHookInt(__COUNTER__)[6] = { 4, (type), (unsigned int)(arg0), (unsigned int)(arg1), (unsigned int)(arg2), (unsigned int)(arg3) }
 
 // kmCondWrite
 //   Write value to address, conditionally
@@ -103,10 +103,10 @@
 
 //Custom Hooks
 extern char gameID[4];
-template <u32 address, u32 instruction, char region>
+template <unsigned int address, unsigned int instruction, char region>
 int PatchRegion() {
     if(gameID[3] == region) {
-        register u32* addressPtr = (u32*)address;
+        register unsigned int* addressPtr = (unsigned int*)address;
         *addressPtr = instruction;
         asm{
             ASM(

@@ -2,7 +2,7 @@
 #define _ITEMOBJPOW_
 #include <kamek.hpp>
 #include <game/Item/Obj/ItemObj.hpp>
-#include <game/Visual/Model/ModelDirector.hpp>
+#include <game/3D/Model/ModelDirector.hpp>
 
 //_sinit_ at 807b2ed0
 namespace Item {
@@ -24,9 +24,10 @@ size_assert(PowScreen, 0x10);
 class PowMgr {
 public:
     static PowMgr* sInstance; //809c3660
-    static PowMgr* GetStaticInstance(); //807b1bc0
-    static void DestroyStaticInstance(); //807b1c70
+    static PowMgr* CreateInstance(); //807b1bc0
+    static void DestroyInstance(); //807b1c70
     PowMgr(); //807b1d18 inlined
+    static void Init(); //807b1ca8
     void DeployBlooper(u8 playerId); //807a9128 that player used a blooper which will deploy the blooper model from the character
     u32 unknown_0x0;
     u32 screenCount; //0x4
