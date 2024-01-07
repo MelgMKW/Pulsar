@@ -43,6 +43,8 @@ struct FriendUpdate {
     u32 pid;
 };
 
+int Printf(int r3, const char*, ...);
+
 }//namespace DWC
 
 

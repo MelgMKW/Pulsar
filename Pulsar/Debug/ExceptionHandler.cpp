@@ -112,9 +112,9 @@ void WriteHeaderCrash(u16 error, const OS::Context* context, u32 dsisr, u32 dar)
     exception.callbackArgs = nullptr;
 
     //char endMsg[512];
-    //snprintf(endMsg, 512, "Press A%s and send a clip\nof the crash or the crash.bin file to the pack\ncreator to help fix the bug.\n", outcome);
+    //snprintf(endMsg, 512, "Press A%s and send a clip\nof the crash or the crash.pul file to the pack\ncreator to help fix the bug.\n", outcome);
 
-    db::Exception_Printf_("Press A to exit. Send crash.bin to the creator.");
+    db::Exception_Printf_("Press A to exit. Send crash.pul to the creator.");
     db::PrintContext_(error, context, dsisr, dar);
 
 }
@@ -169,7 +169,7 @@ void CreateCrashFile(s32 channel, KPAD::Status buff[], u32 count) {
             exception.error = static_cast<OS::Error>(crashError);
             char path[IOS::ipcMaxPath];
             const System* system = System::sInstance;
-            snprintf(path, IOS::ipcMaxPath, "%s/Crash.bin", system->GetModFolder());
+            snprintf(path, IOS::ipcMaxPath, "%s/Crash.pul", system->GetModFolder());
             io->CreateAndOpen(path, IOS::MODE_READ_WRITE);
             io->Overwrite(sizeof(ExceptionFile), &exception);
             io->Close();

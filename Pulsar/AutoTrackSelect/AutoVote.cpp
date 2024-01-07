@@ -1,5 +1,6 @@
+#include <game/UI/Page/Other/ActionLess.hpp>
 #include <PulsarSystem.hpp>
-
+#include <UI/UI.hpp>
 #include <Settings/Settings.hpp>
 #include <AutoTrackSelect/AutoVote.hpp>
 #include <SlotExpansion/Network/PulSELECT.hpp>
@@ -27,7 +28,12 @@ void AddCustomLayers(Section& section, SectionId id) {
 }
 kmCall(0x8062213c, AddCustomLayers);
 
-void AutoVote::OnActivate() {}
+void AutoVote::OnActivate() {
+    Pages::AutoEnding* msg = SectionMgr::sInstance->curSection->Get<Pages::AutoEnding>(PAGE_AUTO_ENDING2);
+    msg->SetMessageWindowText(BMG_READY_TO_RACE, nullptr);
+    this->AddPageLayer(PAGE_AUTO_ENDING2, 0);
+}
+
 void AutoVote::BeforeControlUpdate() {}
 void AutoVote::OnResume() {}
 
@@ -83,7 +89,7 @@ void AutoVote::OnUpdate() {
                 static_cast<CourseId>(vote), i, combo.starRank);
         }
         bool isReady = true;
-        if(sub.connectionCount == 1 || this->duration > 1800) {
+        if(sub.connectionCount == 1 || this->duration > 5000) {
             isReady = false;
             this->status = COUNTDOWN_STATUS_DISCONNECTED; //6
         }
@@ -100,7 +106,7 @@ void AutoVote::OnUpdate() {
         }
         else if(select->receivedPackets[hostAid].phase != 2) isReady = false;
         if(isReady) ++readyDuration;
-        if(readyDuration > 60) {
+        if(readyDuration > 180) {
             reinterpret_cast<RKNet::SELECTHandler*>(select)->AllocatePlayerIdsToAids();
             this->status = COUNTDOWN_STATUS_VOTES_PAGE;
             ArchiveRoot::sInstance->RequestLoadCourseAsync(static_cast<CourseId>(cups->winningCourse));

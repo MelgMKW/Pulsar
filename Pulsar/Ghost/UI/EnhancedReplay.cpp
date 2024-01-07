@@ -138,7 +138,7 @@ asmFunc PatchSoundIssues() {
         nofralloc;
     lwz r5, 0 (r4); //Default
     subi r0, r5, SECTION_WATCH_GHOST_FROM_CHANNEL;
-    cmpwi r0, 2;
+    cmplwi r0, 2;
     bgt + end;
     li r5, 0x1f;
 end:;

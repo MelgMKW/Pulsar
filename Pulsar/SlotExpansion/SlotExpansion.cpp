@@ -152,4 +152,14 @@ CourseId VSNextTrackFix(PulsarId pulsarId) {//properly sets the next track
     return system->GetCorrectTrackSlot();
 }
 kmBranch(0x808606cc, VSNextTrackFix);
+
+kmWrite32(0x8085a944, 0x48000018);
+void DemoFix(register RaceData* raceData) {
+    register CourseId id;
+    asm(mr id, r0;);
+    asm(stw r0, 0x1758 (raceData););
+    CupsDef::sInstance->winningCourse = static_cast<PulsarId>(id);
+}
+kmCall(0x8085a95c, DemoFix);
+
 }//namespace Pulsar

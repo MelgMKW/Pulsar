@@ -264,6 +264,7 @@ SinCosFIdx__Q24nw4r4mathFPfPff = 0x800851e0
 DWC_AuthServer = 0x80386338
 loginRegion__3DWC = 0x80384fd0
 SendMatchCommand__3DWCFQ23DWC12MatchCommandUiUiUsPvUi = 0x800dbd38
+Printf__3DWCFiPCce = 0x800cd068
 
 
 #EGG
@@ -624,6 +625,7 @@ OnDeactivate__10PushButtonFv = 0x805bd710
 OnSelect__10PushButtonFv = 0x805be12c
 OnDeselect__10PushButtonFv = 0x805be354
 OnClick__10PushButtonFv = 0x805be42c
+IsSelected__10PushButtonFv = 0x805bdf44
 HandleSelect__10PushButtonFUiUi = 0x805bdffc
 HandleDeselect__10PushButtonFUiUi = 0x805be130
 HandleClick__10PushButtonFUiUi = 0x805be358
@@ -1114,6 +1116,7 @@ __dt__Q25Pages14CountDownTimerFv = 0x8064fc70
 IsHomeMenuWorking__Q25Pages14CountDownTimerCFv = 0x80651ba8
 OnInit__Q25Pages14CountDownTimerFv = 0x8064fcfc
 OnDispose__Q25Pages14CountDownTimerFv = 0x8064fe30
+OnActivate__Q25Pages14CountDownTimerFv = 0x8064fe34
 OnDeactivate__Q25Pages14CountDownTimerFv = 0x80650214
 AfterControlUpdate__Q25Pages14CountDownTimerFv = 0x80650274
 GetRuntimeTypeInfo__Q25Pages14CountDownTimerCFv = 0x80651bb0
@@ -1301,9 +1304,6 @@ blueShellHomingSpeed__4Item = 0x808a5c24
 blueShellMinimumDiveDistance__4Item = 0x808a5c34
 
 
-
-
-
 #Misc
 CourseIdToGhostIndex = 0x80552d90
 GetCourseIdBySlot = 0x80552e74
@@ -1314,6 +1314,7 @@ groupTypeSaveOffset = 0x80890d28
 #Global Funcs
 GetItemIconPaneName__F6ItemIdUi = 0x80860af0
 IsBattle__Fv = 0x80860a8c
+IsOnlineSection__F9SectionId = 0x80860484
 
 #Static Instances
 itemObjProperties = 0x809c2f48

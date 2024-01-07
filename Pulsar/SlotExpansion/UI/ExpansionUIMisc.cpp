@@ -3,6 +3,7 @@
 #include <game/UI/Page/Menu/CourseSelect.hpp>
 #include <game/UI/Page/Other/GhostSelect.hpp>
 #include <game/UI/Page/Other/Votes.hpp>
+#include <game/GlobalFunctions.hpp>
 #include <SlotExpansion/CupsDef.hpp>
 #include <SlotExpansion/UI/ExpCupSelect.hpp>
 #include <UI/UI.hpp>
@@ -28,7 +29,7 @@ kmCall(0x807e5f24, LoadCorrectTrackListBox);
 int GetTrackBMG(PulsarId pulsarId) {
     u32 bmgId;
     const u32 realId = CupsDef::ConvertTrack_PulsarIdToRealId(pulsarId);
-    if(CupsDef::IsReg(pulsarId)) bmgId = BMG_REGS;
+    if(CupsDef::IsReg(pulsarId)) bmgId = realId > 32 ? BMG_BATTLE : BMG_REGS;
     else bmgId = BMG_TRACKS;
     return bmgId + realId;
 }
@@ -76,6 +77,13 @@ void CourseVoteBMG(VoteControl* vote, bool isCourseIdInvalid, PulsarId courseVot
 }
 kmCall(0x806441b8, CourseVoteBMG);
 
+bool BattleArenaBMGFix(SectionId sectionId) {
+    register PulsarId id;
+    asm(mr id, r28;);
+    CupsDef::sInstance->winningCourse = id;
+    return IsOnlineSection(sectionId);
+}
+kmCall(0x8083d02c, BattleArenaBMGFix);
 
 
 //kmWrite32(0x80644340, 0x7F64DB78);

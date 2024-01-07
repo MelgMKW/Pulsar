@@ -6,16 +6,16 @@ namespace Pulsar {
 namespace Network {
 
 ResvPacket::ResvPacket(const DWC::Reservation& src) {
-        memcpy(this, &src, sizeof(DWC::Reservation));
-        const System* system = System::sInstance;
-        pulInfo.roomKey = Info::GetKey();
-        strncpy(pulInfo.modFolderName, system->GetModFolder(), IOS::ipcMaxFileName);
+    memcpy(this, &src, sizeof(DWC::Reservation));
+    const System* system = System::sInstance;
+    pulInfo.roomKey = Info::GetKey();
+    strncpy(pulInfo.modFolderName, system->GetModFolder(), IOS::ipcMaxFileName);
 }
 
 asmFunc MoveSize() { //needed to get datasize later
     ASM(
         nofralloc;
-        mr r25, r28;
+    mr r25, r28;
     li r28, 255;
     blr;
     )
@@ -27,17 +27,42 @@ DWC::MatchCommand Process(DWC::MatchCommand type, const void* data, u32 dataSize
     const bool isCustom = roomType == RKNet::ROOMTYPE_FROOM_NONHOST || roomType == RKNet::ROOMTYPE_FROOM_HOST
         || roomType == RKNet::ROOMTYPE_VS_REGIONAL;
 
+    Pulsar::System* system = Pulsar::System::sInstance;
+    system->isCustomDeny = false;
+
     if(type == DWC::MATCH_COMMAND_RESV_OK && isCustom) {
         const ResvPacket* packet = reinterpret_cast<const ResvPacket*>(data);
         System* system = System::sInstance;
         if(dataSize != (sizeof(ResvPacket) / sizeof(u32)) || packet->pulInfo.roomKey != Info::GetKey()
             || strcmp(packet->pulInfo.modFolderName, system->GetModFolder()) != 0
             || !system->CheckUserInfo(packet->pulInfo.userInfo)) {
+            system->isCustomDeny = true;
             type = DWC::MATCH_COMMAND_RESV_DENY;
         }
     }
     return type;
 }
+
+
+int GetSuspendType(int r3, const char* string) {
+    DWC::Printf(r3, string);
+    int errorType = 0x12000000;
+    if(Pulsar::System::sInstance->isCustomDeny) errorType = 0x13000000;
+    return errorType;
+}
+kmCall(0x800dc9e8, GetSuspendType);
+kmWrite32(0x800dc9f4, 0x906100d8);
+
+void HasBeenPulsarDenied(int r3, const char* string) {
+    register u32 error;
+    asm(mr error, r0);
+    bool isCustomDeny = false;
+    if(error == 0x13) isCustomDeny = true;
+    Pulsar::System::sInstance->isCustomDeny = isCustomDeny;
+    DWC::Printf(r3, string);
+}
+kmCall(0x800dd054, HasBeenPulsarDenied);
+kmWrite32(0x800dd044, 0x60000000);
 
 asmFunc ProcessWrapper() {
     ASM(

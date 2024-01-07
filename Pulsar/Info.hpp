@@ -3,6 +3,7 @@
 #include <kamek.hpp>
 
 namespace Pulsar {
+
 class Info {
 public:
     friend class System;

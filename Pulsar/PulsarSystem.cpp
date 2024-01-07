@@ -49,7 +49,7 @@ const BMGHeader& Binary::GetSection<BMGHeader>() const {
 //Create Pulsar
 Binary* Binary::LoadBinary(u32* readBytes) {
     EGG::ExpHeap* mem2Heap = RKSystem::mInstance.sceneManager->currentScene->mem2Heap;
-    Binary* bin = static_cast<Binary*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Pulsar.bin", nullptr, mem2Heap,
+    Binary* bin = static_cast<Binary*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
         EGG::DvdRipper::ALLOC_FROM_HEAD, 0, readBytes, nullptr));
     if(bin == nullptr) Debug::FatalError(error);
     return bin;
@@ -143,10 +143,9 @@ kmWrite32(0x80549974, 0x38600001);
 //Skip ESRB page
 kmWriteRegionInstruction(0x80604094, 0x4800001c, 'E');
 
-const char Binary::error[] = "Invalid Pulsar.bin";
+const char Binary::error[] = "Invalid Pulsar Config";
 const char System::pulsarString[] = "/Pulsar";
-const char System::UIAssets[] = "/PulsarUI.szs";
-const char System::CommonAssets[] = "/PulsarCommon.szs";
+const char System::CommonAssets[] = "/CommonAssets.szs";
 const char System::breff[] = "/Effect/Pulsar.breff";
 const char System::breft[] = "/Effect/Pulsar.breft";
 const char* System::ttModeFolders[] ={ "150", "200", "150F", "200F" };

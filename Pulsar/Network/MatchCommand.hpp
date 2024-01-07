@@ -9,7 +9,7 @@ namespace Network {
 
 struct ResvInfo {
     struct UserInfo {
-        UserInfo(){
+        UserInfo() {
             info[0] = -1;
             info[1] = -1;
             info[2] = -1;

@@ -82,5 +82,7 @@ kmCall(0x807f3648, ChangeItemWindowPane);
 kmCall(0x807ef168, ChangeItemWindowPane);
 kmCall(0x807ef3e0, ChangeItemWindowPane);
 kmCall(0x807ef444, ChangeItemWindowPane);
+
+kmWrite24(0x808A9FF3, 'PUL');
 }//namespace Race
 }//namespace Pulsar

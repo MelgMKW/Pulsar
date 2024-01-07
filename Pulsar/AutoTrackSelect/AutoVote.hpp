@@ -10,9 +10,9 @@
 
 namespace Pulsar {
 namespace UI {
-class AutoVote: public Pages::CountDownTimer {
+class AutoVote : public Pages::CountDownTimer {
 public:
-    AutoVote() : readyDuration(0){}
+    AutoVote() : readyDuration(0) {}
     void OnInit() override;
     void OnDispose() override;
     void OnActivate() override;

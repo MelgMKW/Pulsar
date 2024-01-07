@@ -15,9 +15,10 @@ enum BMG {
     BMG_FINISH = 0x4b5,
     BMG_TIME_TRIALS = 0xbb9,
     BMG_CHOOSE_GHOST_DATA = 0xd4f,
+    BMG_READY_TO_RACE = 0x1105,
     BMG_REGCUPS = 0x23f0,
     BMG_REGS = 0x2454,
-    BMG_BATTLE = 0x24B8,
+    BMG_BATTLE = 0x2498,
     BMG_MII_NAME = 0x251d,
 
     //race
@@ -37,7 +38,7 @@ enum BMG {
     BMG_TT_BOTTOM_COURSE_NOTROPHY = 0x2831,
     BMG_TT_BOTTOM_COURSE = 0x2832,
 
-    
+
     BMG_NO_TROPHY = 0x2833,
     BMG_TROPHY = 0x2834,
 
@@ -53,6 +54,7 @@ enum BMG {
     BMG_NINTENDO = 0x2848,
     BMG_TEXT = 0x2849,
     BMG_TEAM_SELECT = 0x284a,
+    BMG_ROOM_DENY = 0x284b,
 
 
     BMG_TEAMS_BOTTOM = 0x2910,

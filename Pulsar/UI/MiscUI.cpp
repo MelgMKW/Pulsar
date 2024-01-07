@@ -3,6 +3,7 @@
 #include <game/UI/SectionMgr/SectionMgr.hpp>
 #include <game/UI/Ctrl/CtrlRace/CtrlRaceWifi.hpp>
 #include <game/UI/Page/Other/Title.hpp>
+#include <game/UI/Page/Other/Message.hpp>
 #include <PulsarSystem.hpp>
 #include <Debug/Debug.hpp>
 #include <UI/UI.hpp>
@@ -48,5 +49,12 @@ void DisplayDate(CtrlMenuPressStart* start) {
     start->SetMsgId(BMG_DATE);
 }
 kmCall(0x8063ac58, DisplayDate);
+
+void CustomRoomDenyText(Pages::MessageBoxTransparent* msgBox, u32 bmgId, const TextInfo* info) {
+    if(Pulsar::System::sInstance->isCustomDeny) bmgId = 0xfb3;
+    msgBox->SetMessageWindowText(bmgId, info);
+}
+kmCall(0x805dd90c, CustomRoomDenyText);
+
 }//namespace UI
 }//namespace Pulsar

@@ -28,6 +28,8 @@ namespace PulsarPackCreator
         private void OnCrashClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
+            openFile.DefaultExt = ".pul";
+            openFile.Filter = "Pulsar Crash File (*.pul)|*.pul";
             if (openFile.ShowDialog() == true)
             {
                 crashWindow.Load(openFile.FileName);
@@ -50,78 +52,24 @@ namespace PulsarPackCreator
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                BigEndianReader bin = new BigEndianReader(File.Open(files[0], FileMode.Open));
-                int magic = bin.ReadInt32();
-                bin.BaseStream.Position -= 4;
-                if (magic == 0x50554c53) ImportPulsarBin(bin);
-                else if (magic == 0x50554c44)
-                {
-                    bin.Close();
-                    crashWindow.Load(files[0]);
-                }
-                /*
-                else
-                {
-                    bin.Close();
-                    string[] lines = File.ReadAllLines(files[0]);
-                    string lastFunction = "";
-                    for (int i = 0; i < lines.Length; i++)
-                    {
-                        string curName = lines[i].Split(' ')[4];
-                        if (curName.Contains("zz_0"))
-                        {
-                            lines[i] = lines[i].Replace("zz_0", $"0x80").TrimEnd('_');
-                            curName = lines[i].Split(' ')[4];
-                        }
-                        if (curName.Contains("switchD") || curName.Contains("zz_caseD"))
-                        {
-                            lines[i] = lines[i].Replace("switchD", $"{lastFunction}_switch");
-                            lines[i] = lines[i].Replace("zz_caseD", $"{lastFunction}_caseD");
-                        }
-                        else lastFunction = curName;
-                    }
-                    }
-                    File.WriteAllLines(files[0], lines);
-                }
-
-                else
-                {
-                    bin.Close();
-                    string[] lines = File.ReadAllLines(files[0]);
-                    char[] delims = new[] { '\r', '\n' };
-                    string[] splices = PulsarRes.Port.Replace("-8", " 8").Replace(":", "").Split(delims, StringSplitOptions.RemoveEmptyEntries);
-                    char[] regions = new char[] { 'E', 'J', 'K' };
-                    foreach (char region in regions)
-                    {
-                        using StreamWriter stream = new StreamWriter($"RMC{region}01.map");
-                        for (int i = 0; i < lines.Length; i++)
-                        {
-                            string[] curLine = lines[i].Split(' ');
-                            UInt32 address = UInt32.Parse(curLine[0], NumberStyles.HexNumber);
-                            int idx = Array.IndexOf(splices, $"[{region}]");
-                            idx++;
-                            UInt32 regionAddress = 0;
-                            while (splices[idx] != "#")
-                            {
-                                string[] curSplice = splices[idx].Split(' ');
-                                int isNegative = curSplice[2].Contains('-') ? -1 : 1;
-                                regionAddress = (UInt32)((int)address + isNegative * int.Parse(curSplice[2].Replace("-0x", "").Replace("+0x", ""), NumberStyles.HexNumber));
-                                if (UInt32.Parse(curSplice[0], NumberStyles.HexNumber) <= address &&
-                                address < UInt32.Parse(curSplice[1], NumberStyles.HexNumber))
-                                {
-                                    stream.WriteLine($"{regionAddress:X8} {curLine[1]} {regionAddress:X8} 0 {curLine[4]}");
-                                    break;
-                                }
-                                idx++;
-                            }
-                        }
-
-                    }
-                }
-                */
+                OpenPulFile(((string[])e.Data.GetData(DataFormats.FileDrop))[0]);
             }
         }
+
+        private void OpenPulFile(string path)
+        {
+            BigEndianReader bin = new BigEndianReader(File.Open(path, FileMode.Open));
+            int magic = bin.ReadInt32();
+            bin.BaseStream.Position -= 4;
+            if (magic == 0x50554c53) ImportConfigFile(bin);
+            else if (magic == 0x50554c44)
+            {
+                bin.Close();
+                crashWindow.Load(path);
+            }
+        }
+
+
         private void OnSZSDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);

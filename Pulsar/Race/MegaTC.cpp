@@ -21,5 +21,6 @@ void LoadCorrectTCBRRES(Item::ObjKumo& objKumo, const char* mdlName, const char*
 }
 kmCall(0x807af568, LoadCorrectTCBRRES);
 
+
 }//namespace Race
 }//namespace Pulsar

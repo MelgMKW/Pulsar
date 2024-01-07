@@ -14,7 +14,7 @@ to prevent ugly Z-fighting
 */
 namespace Pulsar {
 namespace UI {
-class ExpFroom: public Pages::FriendRoom {
+class ExpFroom : public Pages::FriendRoom {
 public:
     ExpFroom() : areControlsHidden(false) {
         this->onSettingsClickHandler.subject = this;

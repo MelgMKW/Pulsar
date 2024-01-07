@@ -3,13 +3,15 @@
 #include <kamek.hpp>
 #include <game/UI/Page/Page.hpp>
 #include <game/UI/Ctrl/CountDown.hpp>
+#include <game/UI/Ctrl/PushButton.hpp>
+#include <game/UI/Ctrl/Menu/CtrlMenuText.hpp>
 
 /*
 Contributors:
 -Melg
 */
 namespace Pages {
-class VR: public Page { //ID 0x91
+class VR : public Page { //ID 0x91
 public:
     VR(); //8064a3f4 vtable 808bfd0c
     ~VR() override; //0x8064a4e0

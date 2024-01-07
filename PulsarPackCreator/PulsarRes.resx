@@ -121,8 +121,14 @@
   <data name="BMG100" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\BMG100.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="BMG1001" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\BMG100.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="BMG200" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\BMG200.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="CommonAssets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\CommonAssets.szs;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="E" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\E.bin;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -148,14 +154,11 @@
   <data name="Port" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Port.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="PulsarCommon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\PulsarCommon.szs;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="RaceAssets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\RaceAssets.szs;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="PulsarRace" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\PulsarRace.szs;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="PulsarUI" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\PulsarUI.szs;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="UIAssets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\UIAssets.szs;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="wbmgt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\wbmgt.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

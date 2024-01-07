@@ -14,7 +14,7 @@ void LoadUIFile(ArchiveFile* file, const char* path, EGG::Heap* decompressedHeap
         const char* fileType = "UI";
         if(GameScene::GetCurrent()->id == SCENE_ID_RACE) fileType = "Race";
         char newPath[0x20];
-        snprintf(newPath, 0x20, "%s%s.szs", System::pulsarString, fileType);
+        snprintf(newPath, 0x20, "%sAssets.szs", fileType);
         path = newPath;
     }
     else if(&ArchiveRoot::sInstance->archivesHolders[ARCHIVE_HOLDER_COMMON]->archives[2] == file) path = System::CommonAssets;

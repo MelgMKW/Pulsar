@@ -18,10 +18,14 @@
 		</section>
 	</options>	
 	<patch id="PackLoadPack">
-		<memory offset="0x8000A3F4" value="4bff9c0c" original="4e800020" /> <!--RMCP-->
-		<memory offset="0x8000A3B4" value="4BFF9C4c" original="4e800020" /> <!--RMCE-->
-		<memory offset="0x8000A350" value="4BFF9CB0" original="4e800020" /> <!--RMCJ-->
-		<memory offset="0x8000A4FC" value="4BFF9B04" original="4e800020" /> <!--RMCK-->
+		<memory offset="0x80242698" value="4BDC1968" original="4e800020" /> <!--RMCP DOL-->
+		<memory offset="0x8000A3F4" value="4bff9c0c" original="4e800020" /> <!--RMCP REL-->
+		<memory offset="0x802417dc" value="4BDC1968" original="4e800020" /> <!--RMCE DOL-->
+		<memory offset="0x8000A3B4" value="4BFF9C4c" original="4e800020" /> <!--RMCE REL-->		
+		<memory offset="0x802425b8" value="4BDC1968" original="4e800020" /> <!--RMCJ DOL-->
+		<memory offset="0x8000A350" value="4BFF9CB0" original="4e800020" /> <!--RMCJ REL-->		
+		<memory offset="0x80242a0c" value="4BDC1968" original="4e800020" /> <!--RMCK DOL-->
+		<memory offset="0x8000A4FC" value="4BFF9B04" original="4e800020" /> <!--RMCK REL-->
 	   <memory valuefile="/{$pack}/Binaries/Loader.bin" offset="0x80004000"/>
 		<folder external="/{$pack}/Binaries" disc="/Binaries" create="true"/>
 		<folder external="/{$pack}/Tracks" disc="/Race/Course" create="true"/>

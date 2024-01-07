@@ -4,7 +4,7 @@
 #include <game/UI/Ctrl/CtrlRace/CtrlRaceBase.hpp>
 
 //_sinit_CtrlRaceTime_cpp; //807f8974
-class CtrlRaceTime: public CtrlRaceBase {
+class CtrlRaceTime : public CtrlRaceBase {
 public:
     CtrlRaceTime(u8 variantId, u32 type); //807f7bd0 id is just RowCount, 0 = final time, the rest = split, r5 is 4 if final, 5 otherwise
     ~CtrlRaceTime() override; //807f890c vtable 808d4010

@@ -158,12 +158,22 @@ namespace PulsarPackCreator
             CC150.Text = $"{parameters.prob150cc}";
             CCMirror.Text = $"{parameters.probMirror}";
             CupCount.Text = $"{ctsCupCount}";
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length > 1 && args[1].Contains(".pul"))
+            {
+                Show();
+                OpenPulFile(args[1]);
+                Environment.CurrentDirectory = args[0].Substring(0, args[0].LastIndexOf('\\') + 1);
+            }
+            //MessageBox.Show(args[0].Substring(0, args[0].LastIndexOf('\\') + 1));
+            //string path = args[0].Substring(0, args[0].LastIndexOf('/'));
+            //var splitPath = args[0].Split('/').ToList();
+            //splitPath.RemoveAt(splitPath.Count - 1);
+            
             if (!Directory.Exists("input"))
             {
                 Directory.CreateDirectory("input");
             }
         }
-
-
     }
 }

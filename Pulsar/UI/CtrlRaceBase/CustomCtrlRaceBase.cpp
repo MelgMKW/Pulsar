@@ -16,7 +16,7 @@ void CustomCtrlBuilder::BuildCustomRaceCtrls(Pages::RaceHUD& racePage, u32 baseC
         if(p->ctrlCount != 0) {
             u32 initialIdx = index;
             index += p->ctrlCount;
-            p->createCtrls(racePage, initialIdx, p->ctrlCount);           
+            p->createCtrls(racePage, initialIdx, p->ctrlCount);
         }
     }
 }

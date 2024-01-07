@@ -8,7 +8,7 @@
 //_sinit_ at 805bb294
 namespace Pages {
 
-class ActionLess: public Page { //has to be ended by another Page
+class ActionLess : public Page { //has to be ended by another Page
     ActionLess(); //805bab40 inlined
     ~ActionLess() override; //805bab84 vtable 808b7480
     void OnInit() override; //0x28 805babec
@@ -36,7 +36,8 @@ public:
     BlackBackControlForMessage bg; //0x340
 };
 
-class AutoEnding: public ActionLess { //ID 0x4F but also ID 0x50 and ID 0xc7 used for msg that have a spinner "waiting for"
+class AutoEnding : public ActionLess { //ID 0x4F but also ID 0x50 and ID 0xc7 used for msg that have a spinner "waiting for"
+public:
     AutoEnding(); //805bae98
     ~AutoEnding() override; //805baf68 vtable 808b73a8
     void OnInit() override; //0x28 805bb024

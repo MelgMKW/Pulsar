@@ -81,6 +81,7 @@
   2848  = Nintendo
   2849  = \z{a02,2000000000}
   284A  = Assign players to teams
+  284b  = Unable to join due to Room Key mismatch. Check your pack version.
   2900	= Settings
   2901	= Modify your settings.
   2902	= \z{800,46}Randomize\n\z{800,46}Combo
@@ -172,7 +173,7 @@
  10004  = Blitty
  10005  = Block
  10006  = Blooper
- 10007  = Bob-Omb King
+ 10007  = Bob-omb King
  10008  = Boo
  10009  = Boom Boom
  1000A  = Brick Block
@@ -239,7 +240,7 @@
  10047  = Pointy Tucks
  10048  = Pokey
  10049  = Polterpup
- 1004A  = Pom Pomp
+ 1004A  = Pom Pom
  1004B  = Popple
  1004C  = Porcupuffer
  1004D  = Queen Bean

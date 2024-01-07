@@ -71,11 +71,42 @@ namespace Pulsar_Pack_Creator {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #BMG
+        ///
+        ///   7dd	= Wiimmfi
+        ///   7de	= Riivolution Channel
+        ///   7e8	= Play via Wiimmfi!
+        ///   7e9	= Play with a friend via Wiimmfi!
+        ///   7ea	= Return to Riivolution!
+        ///   7f1	= Wiimmfi (1P)
+        ///   7f2	= Wiimmfi (2P)
+        ///   818	= You will now disconnect\nfrom Wiimmfi and\nreturn to the main menu.
+        ///   841	= \z{602,0} and \z{802,120000}\nwill connect to Wiimmfi\ntogether. Is this OK?
+        ///   fa8	= There are no Friends registered\nin your Friend Roster.\n\nRegister Friends to play\ntogether on Wiimmfi.\040
+        ///   faa	= Connecting to [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string BMG1001 {
+            get {
+                return ResourceManager.GetString("BMG1001", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] BMG200 {
             get {
                 object obj = ResourceManager.GetObject("BMG200", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] CommonAssets {
+            get {
+                object obj = ResourceManager.GetObject("CommonAssets", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -205,9 +236,9 @@ namespace Pulsar_Pack_Creator {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] PulsarCommon {
+        public static byte[] RaceAssets {
             get {
-                object obj = ResourceManager.GetObject("PulsarCommon", resourceCulture);
+                object obj = ResourceManager.GetObject("RaceAssets", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -215,19 +246,9 @@ namespace Pulsar_Pack_Creator {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] PulsarRace {
+        public static byte[] UIAssets {
             get {
-                object obj = ResourceManager.GetObject("PulsarRace", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] PulsarUI {
-            get {
-                object obj = ResourceManager.GetObject("PulsarUI", resourceCulture);
+                object obj = ResourceManager.GetObject("UIAssets", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -263,7 +284,7 @@ namespace Pulsar_Pack_Creator {
         ///		&lt;/section&gt;
         ///	&lt;/options&gt;	
         ///	&lt;patch id=&quot;PackLoadPack&quot;&gt;
-        ///		&lt;memory offset=&quot;0x8000A3F4&quot; value=&quot;4bff9c0c&quot; original=&quot;4e8000 [rest of string was truncated]&quot;;.
+        ///		&lt;memory offset=&quot;0x80242698&quot; value=&quot;4BDC1968&quot; original=&quot;4e8000 [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XML {
             get {

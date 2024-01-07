@@ -31,7 +31,7 @@ struct PlayerInfo {
 };//total size0xC
 
 namespace Pages {
-class CountDownTimer: public Page { //ID 0x90
+class CountDownTimer : public Page { //ID 0x90
 public:
     CountDownTimer(); //8064fbdc 
     ~CountDownTimer() override; //8064fc70 vtable 808c069c

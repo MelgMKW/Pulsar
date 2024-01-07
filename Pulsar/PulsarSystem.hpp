@@ -114,6 +114,7 @@ public:
 
     //Network
     bool hasHAW;
+    bool isCustomDeny;
     u8 curArrayIdx;
     u8 racesPerGP;
     PulsarId* lastTracks;
@@ -129,7 +130,6 @@ private:
 public:
     //string pool
     static const char pulsarString[];
-    static const char UIAssets[];
     static const char CommonAssets[];
     static const char breff[];
     static const char breft[];
