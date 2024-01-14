@@ -1,18 +1,10 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Pulsar_Pack_Creator;
-using System.Buffers.Binary;
-using System.Globalization;
 using static PulsarPackCreator.MainWindow;
-using System.ComponentModel;
 
 namespace PulsarPackCreator
 {
@@ -72,7 +64,7 @@ namespace PulsarPackCreator
                 {
                     message += " are empty";
                 }
-                MessageBox.Show(message);
+                MsgWindow.Show(message);
                 return;
             }
 
@@ -104,7 +96,7 @@ namespace PulsarPackCreator
                         message += $"{labels[idx].Text} is missing {baseLength - curLength} line{plural}.\n";
                     }
                 }
-                MessageBox.Show(message);
+                MsgWindow.Show(message);
                 return;
             }
 
@@ -116,13 +108,13 @@ namespace PulsarPackCreator
                 byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
                 if (slotIdx == 0xFF)
                 {
-                    MessageBox.Show($"Track Slot {importStringArrays[2][line]} (Line {line}) is invalid.");
+                    MsgWindow.Show($"Track Slot {importStringArrays[2][line]} (Line {line}) is invalid.");
                     return;
                 }
                 byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line]);
                 if (musicSlotIdx == 0xFF)
                 {
-                    MessageBox.Show($"Music Slot {importStringArrays[3][line]} (Line {line}) is invalid.");
+                    MsgWindow.Show($"Music Slot {importStringArrays[3][line]} (Line {line}) is invalid.");
                     return;
                 }
             }
@@ -133,7 +125,7 @@ namespace PulsarPackCreator
             {
                 if (cupIdx == parent.ctsCupCount)
                 {
-                    MessageBox.Show("Tracklist exceeded existing number of cups.");
+                    MsgWindow.Show("Tracklist exceeded existing number of cups.");
                     return;
                 }
                 byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
@@ -155,8 +147,8 @@ namespace PulsarPackCreator
                     ComboBox musicSlotBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 5) as ComboBox;
                     musicSlotBox.SelectedIndex = musicSlotIdx;
                     */
-                    
-                    
+
+
                 }
                 row++;
                 if (row == 4)

@@ -1,15 +1,9 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Pulsar_Pack_Creator;
-using System.Buffers.Binary;
 
 namespace PulsarPackCreator
 {
@@ -32,7 +26,7 @@ namespace PulsarPackCreator
         */
 
         public static int SECTIONCOUNT = 3;
-        public static int BINVERSION = 1;
+        public static int CONFIGVERSION = 1;
         public static int INFOVERSION = 1;
         public static int CUPSVERSION = 1;
         public static string[] idxToAbbrev =
@@ -62,7 +56,7 @@ namespace PulsarPackCreator
             "SNES Battle Course 4", "GBA Battle Course 3", "N64 Skyscraper", "GCN Cookie Land", "DS Twilight House"
         };
 
-        private static string[] ttModeFolders = { "150", "200", "150F", "200F" };
+        private static string[,] ttModeFolders = { { "150", "150Experts" }, { "200", "200Experts" }, { "150F", "150FeaExperts" }, { "200F", "200FeaExperts" } };
         public static byte[] idxToGameId =
         {
             0x08,0x01,0x02,0x04,
@@ -94,9 +88,11 @@ namespace PulsarPackCreator
         //Tracks
         public List<Cup> cups;
 
-        //ImportWindow
+        //Windows
         public static MassImportWindow importWindow;
         public static CrashWindow crashWindow;
+        public static SettingsWindow settingsWindow;
+        public static MsgWindow msgWindow;
 
         //public List<byte> extSlotToTrackId;
         //public List<byte> extSlotToMusicSlot;
@@ -116,6 +112,12 @@ namespace PulsarPackCreator
             InitializeComponent();
             importWindow = new MassImportWindow(this);
             crashWindow = new CrashWindow();
+            settingsWindow = new SettingsWindow();
+            msgWindow = new MsgWindow();
+
+
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            Title = "Pulsar Pack Creator " + version.Substring(0, version.Length - 2);
 
             TrackBlocking.ItemsSource = blockingValues;
             TrackBlocking.SelectedValue = blockingValues[0];
@@ -158,22 +160,46 @@ namespace PulsarPackCreator
             CC150.Text = $"{parameters.prob150cc}";
             CCMirror.Text = $"{parameters.probMirror}";
             CupCount.Text = $"{ctsCupCount}";
+
+            Show();
+            msgWindow.Owner = this;
+
+            bool checkUpdates = Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate;
             string[] args = Environment.GetCommandLineArgs();
-            if (args.Length > 1 && args[1].Contains(".pul"))
+            if (args.Length > 1)
             {
-                Show();
-                OpenPulFile(args[1]);
-                Environment.CurrentDirectory = args[0].Substring(0, args[0].LastIndexOf('\\') + 1);
+
+                if (args[1].Contains(".pul"))
+                {
+                    OpenPulFile(args[1]);
+                    Environment.CurrentDirectory = args[0].Substring(0, args[0].LastIndexOf('\\') + 1);
+                }
+                else if (args[1].Contains("Updated"))
+                {
+                    checkUpdates = false;
+                    SettingsWindow.DisplayChangelog(args[1]);
+                }
+            } 
+
+            if (checkUpdates)
+            {
+                SettingsWindow.TryUpdate();
             }
-            //MessageBox.Show(args[0].Substring(0, args[0].LastIndexOf('\\') + 1));
+
+            //MsgWindow.Show(args[0].Substring(0, args[0].LastIndexOf('\\') + 1));
             //string path = args[0].Substring(0, args[0].LastIndexOf('/'));
             //var splitPath = args[0].Split('/').ToList();
             //splitPath.RemoveAt(splitPath.Count - 1);
-            
+
             if (!Directory.Exists("input"))
             {
                 Directory.CreateDirectory("input");
+                Directory.CreateDirectory($"input/{ttModeFolders[0, 1]}");
+                Directory.CreateDirectory($"input/{ttModeFolders[1, 1]}");
+                Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
+                Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
             }
+
         }
     }
 }

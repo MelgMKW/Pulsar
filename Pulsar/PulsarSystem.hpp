@@ -28,6 +28,7 @@ struct BinaryHeader {
     s32 offsetToBMG;
     char modFolderName[IOS::ipcMaxFileName + 1];
 };
+
 struct SectionHeader {
     u32 magic;
     u32 version;
@@ -45,14 +46,14 @@ struct CupsHolder {
     Cups cups;
 };
 
-class Binary {
+class Config {
 public:
     void Destroy(u32 size) {
         memset(this, 0, size);
         delete(this);
     }
     static const char error[];
-    static Binary* LoadBinary(u32* readBytes);
+    static Config* LoadConfig(u32* readBytes);
     template <typename T>
     const T& GetSection() const;
 
@@ -72,15 +73,15 @@ protected:
     System();
 private:
     //System functions
-    void Init(const Binary& bin);
-    void InitInstances(const Binary& bin) const {
+    void Init(const Config& bin);
+    void InitInstances(const Config& bin) const {
         CupsDef::sInstance = new CupsDef(bin.GetSection<CupsHolder>().cups);
         Info::sInstance = new Info(bin.GetSection<InfoHolder>().info);
         this->InitIO();
         this->InitSettings(&bin.GetSection<CupsHolder>().cups.trophyCount[0]);
     }
     void InitIO() const;
-    void InitCups(const Binary& bin);
+    void InitCups(const Config& bin);
 
 protected:
     //Virtual

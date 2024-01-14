@@ -7,10 +7,12 @@
         xmlns:local="clr-namespace:PulsarPackCreator"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Pulsar Pack Creator Alpha 0.1" Height="500" Width="900" Background="#FD353535"
+        Title="Pulsar Pack Creator VERSION" Height="500" Width="900" Background="#FD353535"
         HorizontalAlignment="Center" VerticalAlignment="Center"
         AllowDrop="True"
-        Drop="OnDropFile">
+        Drop="OnDropFile"
+        Closing="OnMainWindowClosing"
+        >
 
     <DockPanel x:Name="Dock">
         <StackPanel Orientation = "Horizontal" DockPanel.Dock="Bottom" Background="#FFDDE0DD">
@@ -21,6 +23,8 @@
             <Button x:Name = "MassImport" Content = "Mass Import Names" Width = "120" Height = "20" Click="OnMassImportClick"/>
             <Button x:Name = "OpenInput" Content = "Open Input Folder" Width = "120" Height = "20" Click="OnOpenInputClick"/>
             <Button x:Name = "Crash" Content = "Check Crash" Width = "90" Height = "20" Click="OnCrashClick"/>
+            <Button x:Name = "SettingsButton" Content = "Program Settings" Width = "100" Height = "20" Click="OnSettingsClick"/>
+
         </StackPanel>
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>

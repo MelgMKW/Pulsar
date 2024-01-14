@@ -112,7 +112,7 @@ public:
     virtual void Init(const PointInfo& info); //0xc 8073b5dc
     virtual void Update(const KartAIController& controller); //0x10 8073b690
 
-    void SetStartPositionIdxw(u8 playerId); //8073b830
+    void SetStartPositionIdx(u8 playerId); //8073b830
     bool IsOutCurENPTBounds(const Vec3& playerPosition, float distToNext); //8073bd50
     void AdvanceToNextENPT(ENPTTransitionParams& params); //8073c110
 

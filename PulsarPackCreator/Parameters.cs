@@ -1,15 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Pulsar_Pack_Creator;
-using System.Buffers.Binary;
 
 namespace PulsarPackCreator
 {
@@ -17,7 +8,7 @@ namespace PulsarPackCreator
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {    
+    {
         class Parameters
         {
             public byte regsMode = 0;
@@ -50,7 +41,7 @@ namespace PulsarPackCreator
         }
 
         private void OnWiimmfiRegionChange(object sender, TextChangedEventArgs e)
-        {            
+        {
             TextBox box = sender as TextBox;
             if (box.Text == "") return;
 
@@ -61,8 +52,9 @@ namespace PulsarPackCreator
         {
             TextBox box = sender as TextBox;
             string text = box.Text;
-            if (text.Length > 12) {
-                MessageBox.Show("Name is too long. Maximum length is 12 characters.");
+            if (text.Length > 12)
+            {
+                MsgWindow.Show("Name is too long. Maximum length is 12 characters.");
                 box.Text = "";
             }
             else parameters.modFolderName = $"{text}";
@@ -102,7 +94,7 @@ namespace PulsarPackCreator
             if ((sender as CheckBox).IsKeyboardFocused)
             {
                 parameters.hasFeather = !parameters.hasFeather;
-            }           
+            }
         }
 
         private void OnMegaTCToggle(object sender, RoutedEventArgs e)
@@ -125,14 +117,15 @@ namespace PulsarPackCreator
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
                 int Prob100 = int.Parse(CC100Box.Text);
-                if(Prob100 == 100) CC150Box.Text = "0";
+                if (Prob100 == 100) CC150Box.Text = "0";
                 int Prob150 = int.Parse(CC150Box.Text);
-                if (Prob100 + Prob150 > 100) {
-                    MessageBox.Show("The sum of all probabilities should not exceed 100");
+                if (Prob100 + Prob150 > 100)
+                {
+                    MsgWindow.Show("The sum of all probabilities should not exceed 100");
                     CC100Box.Text = $"{parameters.prob100cc}";
                     return;
                 }
-                int ProbMirror = 100 - (Prob100 + Prob150);           
+                int ProbMirror = 100 - (Prob100 + Prob150);
                 parameters.prob100cc = Prob100;
                 parameters.probMirror = ProbMirror;
                 CCMirror.Text = $"{parameters.probMirror}";
@@ -147,17 +140,17 @@ namespace PulsarPackCreator
                 CC150Box.Text = $"{parameters.prob150cc}";
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
-            {             
+            {
                 int Prob150 = int.Parse(CC150Box.Text);
                 if (Prob150 == 100) CC100Box.Text = "0";
                 int Prob100 = int.Parse(CC100Box.Text);
                 if (Prob100 + Prob150 > 100)
                 {
-                    MessageBox.Show("The sum of all info.probabilities should not exceed 100");
+                    MsgWindow.Show("The sum of all info.probabilities should not exceed 100");
                     CC150Box.Text = $"{parameters.prob150cc}";
                     return;
                 }
-                int ProbMirror = 100 - (Prob100 + Prob150);                
+                int ProbMirror = 100 - (Prob100 + Prob150);
                 parameters.prob150cc = Prob150;
                 parameters.probMirror = ProbMirror;
                 CCMirror.Text = $"{parameters.probMirror}";

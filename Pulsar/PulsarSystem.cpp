@@ -17,29 +17,29 @@ System* System::sInstance = nullptr;
 System::Inherit* System::inherit = nullptr;
 
 template<>
-inline void Binary::CheckSection<BMGHeader>(const BMGHeader& bmg) const {
+inline void Config::CheckSection<BMGHeader>(const BMGHeader& bmg) const {
     if(bmg.magic != 0x4D455347626D6731) Debug::FatalError(error);
 }
 
 template<>
-inline const Binary& Binary::GetSection() const {
+inline const Config& Config::GetSection() const {
     return *this;
 }
 
 template<>
-const InfoHolder& Binary::GetSection<InfoHolder>() const {
+const InfoHolder& Config::GetSection<InfoHolder>() const {
     const InfoHolder& infoHolder = *reinterpret_cast<const InfoHolder*>(ut::AddU32ToPtr(this, this->header.offsetToInfo));
     CheckSection(infoHolder);
     return infoHolder;
 }
 template<>
-const CupsHolder& Binary::GetSection<CupsHolder>() const {
+const CupsHolder& Config::GetSection<CupsHolder>() const {
     const CupsHolder& cupsHolder =  *reinterpret_cast<const CupsHolder*>(ut::AddU32ToPtr(this, this->header.offsetToCups));
     CheckSection(cupsHolder);
     return cupsHolder;
 }
 template<>
-const BMGHeader& Binary::GetSection<BMGHeader>() const {
+const BMGHeader& Config::GetSection<BMGHeader>() const {
     const BMGHeader& bmg = *reinterpret_cast<const BMGHeader*>(ut::AddOffsetToPtr(this, this->header.offsetToBMG));
     CheckSection(bmg);
     return bmg;
@@ -47,12 +47,12 @@ const BMGHeader& Binary::GetSection<BMGHeader>() const {
 
 
 //Create Pulsar
-Binary* Binary::LoadBinary(u32* readBytes) {
+Config* Config::LoadConfig(u32* readBytes) {
     EGG::ExpHeap* mem2Heap = RKSystem::mInstance.sceneManager->currentScene->mem2Heap;
-    Binary* bin = static_cast<Binary*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
+    Config* conf = static_cast<Config*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
         EGG::DvdRipper::ALLOC_FROM_HEAD, 0, readBytes, nullptr));
-    if(bin == nullptr) Debug::FatalError(error);
-    return bin;
+    if(conf == nullptr) Debug::FatalError(error);
+    return conf;
 }
 
 void System::CreateSystem() {
@@ -66,10 +66,10 @@ void System::CreateSystem() {
     else system = new System();
     System::sInstance = system;
     u32 readBytes;
-    Binary* bin = Binary::LoadBinary(&readBytes);
-    system->Init(*bin);
+    Config* conf = Config::LoadConfig(&readBytes);
+    system->Init(*conf);
     prev->BecomeCurrentHeap();
-    bin->Destroy(readBytes);
+    conf->Destroy(readBytes);
 }
 BootHook CreateSystem(System::CreateSystem, 0);
 
@@ -78,19 +78,19 @@ System::System() :
     //Track blocking 
     racesPerGP(3), curArrayIdx(0) {}
 
-void System::Init(const Binary& bin) {
-    strncpy(this->modFolderName, bin.header.modFolderName, IOS::ipcMaxFileName);
+void System::Init(const Config& conf) {
+    strncpy(this->modFolderName, conf.header.modFolderName, IOS::ipcMaxFileName);
 
-    this->InitInstances(bin);
+    this->InitInstances(conf);
     //Track blocking 
     Info* info = Info::sInstance;
     u32 trackBlocking = info->GetTrackBlocking();
     lastTracks = new PulsarId[trackBlocking];
     for(int i = 0; i < trackBlocking; ++i) lastTracks[i] = PULSARID_NONE;
 
-    const BMGHeader* const rawBinBmg = &bin.GetSection<BMGHeader>();
-    this->rawBmg = EGG::Heap::alloc<BMGHeader>(rawBinBmg->fileLength, 0x4, heap);
-    memcpy(this->rawBmg, rawBinBmg, rawBinBmg->fileLength);
+    const BMGHeader* const confBMG = &conf.GetSection<BMGHeader>();
+    this->rawBmg = EGG::Heap::alloc<BMGHeader>(confBMG->fileLength, 0x4, heap);
+    memcpy(this->rawBmg, confBMG, confBMG->fileLength);
     this->customBmgs.Init(*this->rawBmg);
     this->AfterInit();
 }
@@ -143,7 +143,7 @@ kmWrite32(0x80549974, 0x38600001);
 //Skip ESRB page
 kmWriteRegionInstruction(0x80604094, 0x4800001c, 'E');
 
-const char Binary::error[] = "Invalid Pulsar Config";
+const char Config::error[] = "Invalid Pulsar Config";
 const char System::pulsarString[] = "/Pulsar";
 const char System::CommonAssets[] = "/CommonAssets.szs";
 const char System::breff[] = "/Effect/Pulsar.breff";

@@ -1,17 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Pulsar_Pack_Creator;
-using System.Buffers.Binary;
-using System.IO.Hashing;
-using System.Diagnostics.Eventing.Reader;
 
 namespace PulsarPackCreator
 {
@@ -71,7 +62,7 @@ namespace PulsarPackCreator
             UInt16 newCount = UInt16.Parse(box.Text);
             if (newCount > 1000)
             {
-                MessageBox.Show("The maximum number of cups is 1000.");
+                MsgWindow.Show("The maximum number of cups is 1000.");
                 box.Text = $"{ctsCupCount}";
                 return;
             }
@@ -149,12 +140,12 @@ namespace PulsarPackCreator
                 Author3.Text = cup.authorNames[2];
                 Author4.Text = cup.authorNames[3];
 
-                for(int row = 0; row < 4; row++)
+                for (int row = 0; row < 4; row++)
                 {
                     SetGhostLabelName(row, cup.trackNames[row]);
                     for (int col = 0; col < 4; col++)
                     {
-                        SetExpertName(cup.expertFileNames[row, col], row, col);                       
+                        SetExpertName(cup.expertFileNames[row, col], row, col);
                     }
                 }
 
@@ -216,7 +207,7 @@ namespace PulsarPackCreator
             }
             cups = sortedCups;
             UpdateCurCup(0);
-            MessageBox.Show("Tracks have been sorted alphabetically.");
+            MsgWindow.Show("Tracks have been sorted alphabetically.");
         }
     }
 }

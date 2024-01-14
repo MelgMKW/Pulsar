@@ -27,6 +27,7 @@ winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup
         hasOddCups = true;
     }
     definedCTsCupCount = count;
+    ctsCupCount = count;
     for(int i = 0; i < 4; ++i) trophyCount[i] = rawCups.trophyCount[i];
     cups = new Cup[count];
     memcpy(cups, &rawCups.cups, sizeof(Cup) * count);
@@ -94,11 +95,25 @@ PulsarId CupsDef::RandomizeTrack(Random& random) const {
     return static_cast<PulsarId>(pulsarId);
 }
 
+/*
+PulsarCupId CupsDef::GetNextCupId(PulsarCupId pulsarId, s32 direction) const {
+    const u32 idx = ConvertCup_PulsarIdToIdx(pulsarId); //40 -> 8
+    const u32 count = this->GetTotalCupCount(); //0xa
+    const u32 min = count < 8 ? 8 : 0; //0
+    const u32 nextIdx = ((idx + direction + count) % count) + min; //6
+    if(this->hasRegs && nextIdx < 8) return static_cast<PulsarCupId>(nextIdx);
+    else return
+        if(IsRegCup(pulsarId) && nextIdx >= 8) return static_cast<PulsarCupId>(nextIdx + 0x38 + count);
+    return ConvertCup_IdxToPulsarId(nextIdx);
+}
+*/
+
 PulsarCupId CupsDef::GetNextCupId(PulsarCupId pulsarId, s32 direction) const {
     const u32 idx = ConvertCup_PulsarIdToIdx(pulsarId);
     const u32 count = this->GetTotalCupCount();
     const u32 min = count < 8 ? 8 : 0;
     const u32 nextIdx = ((idx + direction + count) % count) + min;
+    if(!this->hasRegs && nextIdx < 8) return static_cast<PulsarCupId>(nextIdx + count + 0x38);
     return ConvertCup_IdxToPulsarId(nextIdx);
 }
 
@@ -120,11 +135,13 @@ u32 CupsDef::ConvertCup_PulsarIdToRealId(PulsarCupId pulsarCupId) {
     }
     else return pulsarCupId - 0x40;
 }
+
 u32 CupsDef::ConvertCup_PulsarIdToIdx(PulsarCupId pulsarCupId) {
     u32 idx = pulsarCupId;
     if(!IsRegCup(pulsarCupId)) idx = pulsarCupId - 0x38;
     return idx;
 }
+
 PulsarCupId CupsDef::ConvertCup_IdxToPulsarId(u32 cupIdx) {
     if(!IsRegCup(static_cast<PulsarCupId>(cupIdx))) {
         return static_cast<PulsarCupId>(cupIdx + 0x38);

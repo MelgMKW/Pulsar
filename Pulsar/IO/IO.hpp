@@ -193,7 +193,6 @@ class RiivoIO : public IO {
 
     RiivoIO(IOType type, EGG::Heap* heap, EGG::TaskThread* taskThread) : IO(type, heap, taskThread) {}
 
-
     bool OpenModFile(const char* path, u32 mode) override;
     bool CreateAndOpen(const char* path, u32 mode) override;
     void GetCorrectPath(char* realPath, const char* path) const override;

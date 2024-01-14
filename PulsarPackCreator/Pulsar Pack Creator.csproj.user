@@ -4,6 +4,17 @@
     <_LastSelectedProfileId>C:\Modding\Coding\Kamek\Pulsar\PulsarPackCreator\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Update="PulsarRes.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MsgBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Settings.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Crash.xaml">
       <SubType>Designer</SubType>
     </Page>

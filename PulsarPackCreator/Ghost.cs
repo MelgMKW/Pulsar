@@ -1,17 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Pulsar_Pack_Creator;
-using System.Buffers.Binary;
-using System.IO.Hashing;
-using System.Diagnostics.Eventing.Reader;
 
 namespace PulsarPackCreator
 {

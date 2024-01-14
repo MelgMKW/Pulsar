@@ -6,7 +6,7 @@ del build\*.o
 
 :: Destination (change as necessary)
 SET "SOURCE=Pulsar"
-SET "RIIVO=C:\Users\admin\Documents\Dolphin Emulator\Load\Pulsar"
+SET "RIIVO=C:\Users\admin\Documents\Dolphin Emulator\Load\Riivolution\Pulsar"
 echo %RIIVO%
 
 
@@ -36,7 +36,6 @@ echo Linking... %time%
 
 if %ErrorLevel% equ 0 (
     xcopy /Y build\*.bin "%RIIVO%\Binaries" >nul
-    xcopy /Y /S "%RIIVO%\Binaries" "C:\Users\admin\Documents\Dolphin Emulator\Load\varietypack\Binaries" >nul
     echo Binaries copied
 )
 

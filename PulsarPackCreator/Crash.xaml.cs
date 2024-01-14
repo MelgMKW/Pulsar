@@ -1,22 +1,9 @@
-﻿using Microsoft.Win32;
+﻿using Pulsar_Pack_Creator;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Pulsar_Pack_Creator;
-using System.Buffers.Binary;
-using System.Globalization;
-using System.Windows.Controls.Primitives;
-using System.Windows.Shapes;
-using static System.Windows.Forms.LinkLabel;
 using System.ComponentModel;
-using System.Dynamic;
-using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Windows;
 
 namespace PulsarPackCreator
 {
@@ -34,7 +21,7 @@ namespace PulsarPackCreator
             if (bin.ReadInt32() != 0x50554c44)
             {
                 bin.Close();
-                MessageBox.Show("Invalid Crash File.");
+                MsgWindow.Show("Invalid Crash File.");
                 return;
             }
             Show();

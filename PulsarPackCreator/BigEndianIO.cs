@@ -1,8 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Buffers.Binary;
 using System.IO;
-using System.Linq;
 
 namespace PulsarPackCreator
 {

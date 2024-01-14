@@ -8710,7 +8710,7 @@
 801de6f0 NWC24GetMsgObj
 801de974 NWC24iIsMsgObjReadable
 801dea58 NWC24DeleteMsg
-801deab8 NWC24CheckMsgBoxSpace
+801deab8 NWC24CheckMsgWindowSpace
 801deba8 NWC24iOpenMBox
 801ded3c NWC24iMBoxGetCtrlFilePath
 801dee0c 0x801dee0c
@@ -8757,7 +8757,7 @@
 801e1f24 NWC24CommitMsgInternal
 801e2c24 CorrectHeadersForMBDelay
 801e2cf4 CheckMsgObject
-801e2d94 CheckMsgBoxSpace
+801e2d94 CheckMsgWindowSpace
 801e3110 SynthesizeAddrStr
 801e3220 WriteSMTP_MAILFROM
 801e3308 WriteSMTP_RCPTTO
@@ -8788,7 +8788,7 @@
 801e4f58 ReadBase64Data
 801e5094 0x801e5094
 801e51c8 0x801e51c8
-801e5240 NWC24SetSearchCondMsgBox
+801e5240 NWC24SetSearchCondMsgWindow
 801e52b0 NWC24SearchMsgs
 801e5404 NWC24iSearchMain
 801e55a0 NWC24iSearchMatching

@@ -289,11 +289,12 @@ void SettingsPanel::OnUpDownClick(UpDownControl& upDownControl, u32 hudSlotId) {
 }
 
 void SettingsPanel::OnTextChange(TextUpDownValueControl::TextControl& text, u32 optionId) {
+
+    const u32 bmgId = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12) + optionId;
+    u32 id = this->GetTextId(text);
+    text.SetMsgId(bmgId + (id + 1 << 4));
     if(!this->externControls[0]->IsSelected()) {
-        const u32 bmgId = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12) + optionId;
-        u32 id = this->GetTextId(text);
         this->bottomText->SetMsgId(bmgId + (id + 1 << 8));
-        text.SetMsgId(bmgId + (id + 1 << 4));
     }
 };
 

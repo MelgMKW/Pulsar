@@ -96,29 +96,31 @@ kmCall(0x80644344, WinningTrackBMG);
 
 //Rewrote InitSelf to start with correct TPLs
 void ExtCupSelectCupInitSelf(CtrlMenuCupSelectCup* cups) {
-    const CupsDef* system = CupsDef::sInstance;
-    cups->curCupID = system->lastSelectedCup;
+    const CupsDef* cupsDef = CupsDef::sInstance;
+    PulsarCupId selCup = cupsDef->lastSelectedCup;
+    cups->curCupID = selCup;
     PushButton** buttons = reinterpret_cast<PushButton**>(cups->childrenGroup.controlArray);
+
     for(int i = 0; i < 8; ++i) {
-        const PulsarCupId id = system->GetNextCupId(system->lastSelectedCup, i - system->lastSelectedCupButtonIdx);
+        const PulsarCupId id = cupsDef->GetNextCupId(selCup, i - cupsDef->lastSelectedCupButtonIdx);
         buttons[i]->buttonId = id;
         ExpCupSelect::UpdateCupData(id, *buttons[i]);
         buttons[i]->SetOnClickHandler(cups->onCupButtonClickHandler, 0);
         buttons[i]->SetOnSelectHandler(cups->onCupButtonSelectHandler);
         buttons[i]->SetPlayerBitfield(SectionMgr::sInstance->curSection->Get<Pages::CupSelect>(PAGE_CUP_SELECT)->GetPlayerBitfield());
     }
-    buttons[system->lastSelectedCupButtonIdx]->SelectInitialButton(0);
+    buttons[cupsDef->lastSelectedCupButtonIdx]->SelectInitialButton(0);
 };
 kmWritePointer(0x808d324c, ExtCupSelectCupInitSelf); //807e5894
 
 void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
-    const CupsDef* system = CupsDef::sInstance;
+    const CupsDef* cupsDef = CupsDef::sInstance;
     for(int i = 0; i < 8; ++i) {
         CtrlMenuCourseSelectCupSub& cur = courseCups->cupIcons[i];
-        const PulsarCupId id = system->GetNextCupId(system->lastSelectedCup, i - system->lastSelectedCupButtonIdx);
+        const PulsarCupId id = cupsDef->GetNextCupId(cupsDef->lastSelectedCup, i - cupsDef->lastSelectedCupButtonIdx);
         ExpCupSelect::UpdateCupData(id, cur);
         cur.animator.GetAnimationGroupById(0).PlayAnimationAtFrame(0, 0.0f);
-        const bool clicked = system->lastSelectedCupButtonIdx == i ? true : false;
+        const bool clicked = cupsDef->lastSelectedCupButtonIdx == i ? true : false;
         cur.animator.GetAnimationGroupById(1).PlayAnimationAtFrame(!clicked, 0.0f);
         cur.animator.GetAnimationGroupById(2).PlayAnimationAtFrame(!clicked, 0.0f);
         cur.animator.GetAnimationGroupById(3).PlayAnimationAtFrame(clicked, 0.0f);
@@ -171,7 +173,7 @@ void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
 kmWritePointer(0x808d3190, ExtCourseSelectCupInitSelf); //807e45c0
 
 void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
-    const CupsDef* system = CupsDef::sInstance;
+    const CupsDef* cupsDef = CupsDef::sInstance;
     const Section* curSection = SectionMgr::sInstance->curSection;
     const Pages::CupSelect* cupPage = curSection->Get<Pages::CupSelect>(PAGE_CUP_SELECT);
     Pages::CourseSelect* coursePage = curSection->Get<Pages::CourseSelect>(PAGE_COURSE_SELECT);
@@ -182,7 +184,7 @@ void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
         curButton.buttonId = i;
         const u32 bmgId = GetTrackBMGByRowIdx(i);
         curButton.SetMsgId(bmgId);
-        if(system->lastSelectedCup * 4 + i == system->selectedCourse) {
+        if(cupsDef->lastSelectedCup * 4 + i == cupsDef->selectedCourse) {
             coursePage->SelectButton(curButton);
         }
     };

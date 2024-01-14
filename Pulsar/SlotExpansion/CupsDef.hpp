@@ -71,7 +71,10 @@ public:
     //Validity
     bool IsValidCup(PulsarCupId id) {
         if(this->hasRegs && IsRegCup(id)) return true;
-        else return id >= PULSARCUPID_FIRSTCT && id < this->ctsCupCount - 8 * hasRegs;
+        else {
+            s32 idx = id - PULSARCUPID_FIRSTCT;
+            return idx >= 0 && idx < this->ctsCupCount - 8 * hasRegs;
+        }
     }
     bool IsValidTrack(PulsarId id) { return IsValidCup(static_cast<PulsarCupId>(id / 4)); }
 

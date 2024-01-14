@@ -318,7 +318,7 @@ public:
     Holder<CKPH>* GetCKPHHolderByCP(u16 cpIdx); //80515cbc
 
     Holder<AREA>* GetAREAHolderByPriority(u8 priority) const; //805167b4
-    u32 FindAREA(const Vec& position, u32 areaIdToTestFirst, u8 areaType); //80516808 if areaIdToTest is not -1, will test it first
+    s16 FindAREA(const Vec& position, u32 areaIdToTestFirst, u8 areaType); //80516808 if areaIdToTest is not -1, will test it first
     bool GetMiniMapAREAParams(Vec3& bottomleft, Vec& topRight); //80516a60
     Holder<CAME>* GetCAMEHolderFromAREAId(u16 areaIdx); //80516bfc
 

@@ -50,7 +50,7 @@ void Settings::Init(const u16* totalTrophyCount, const char* path/*, const char 
     if(last != -1 && cups->IsValidCup(last)) {
         cups->lastSelectedCup = last;
         cups->selectedCourse = static_cast<PulsarId>(last * 4);
-        cups->lastSelectedCupButtonIdx = 0;
+        cups->lastSelectedCupButtonIdx = last & 1;
     }
 }
 

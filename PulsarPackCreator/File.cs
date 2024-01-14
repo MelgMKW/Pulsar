@@ -1,21 +1,13 @@
 ﻿using Microsoft.Win32;
+using Pulsar_Pack_Creator;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using Pulsar_Pack_Creator;
-using System.Buffers.Binary;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Globalization;
-using System.Reflection.Metadata;
-using System.Security.Cryptography;
+using static PulsarPackCreator.MsgWindow;
 
 namespace PulsarPackCreator
 {
@@ -36,9 +28,9 @@ namespace PulsarPackCreator
             {
                 curCup = 0;
                 //Read HEADER
-                UInt32 binMagic = bin.ReadUInt32();
-                UInt32 binVersion = bin.ReadUInt32();
-                if (binMagic != 0x50554C53 || binVersion != BINVERSION) throw new Exception();
+                UInt32 configMagic = bin.ReadUInt32();
+                UInt32 configVersion = bin.ReadUInt32();
+                if (configMagic != 0x50554C53 || configVersion != CONFIGVERSION) throw new Exception();
                 int offsetToInfo = bin.ReadInt32();
                 int offsetToCups = bin.ReadInt32();
                 int offsetToBMG = bin.ReadInt32();
@@ -91,12 +83,12 @@ namespace PulsarPackCreator
                 TrackBlocking.SelectedValue = blockingValues[Array.IndexOf(blockingValues, (UInt16)parameters.trackBlocking)];
                 dateSelector.SelectedDate = DateTime.Parse(date);
                 UpdateCurCup(0);
-                MessageBox.Show("Bin successfully imported.");
+                MsgWindow.Show("Configuration successfully imported.");
             }
             catch
             {
                 bin.Close();
-                MessageBox.Show("Invalid Bin File.");
+                MsgWindow.Show("Invalid Bin File.");
             }
             finally
             {
@@ -175,25 +167,25 @@ namespace PulsarPackCreator
             file.Close();
         }
 
-        private bool BuildBinImpl()
+        public bool BuildConfigImpl()
         {
             if (dateSelector.SelectedDate == null)
             {
-                MessageBox.Show("Please select a date.");
+                MsgWindow.Show("Please select a date.");
                 TabController.SelectedItem = Options;
                 ((TabItem)TabController.SelectedItem).Focus();
                 return false;
             }
             if (parameters.modFolderName == null || parameters.modFolderName == "")
             {
-                MessageBox.Show("Please specify a mod folder name.");
+                MsgWindow.Show("Please specify a mod folder name.");
                 TabController.SelectedItem = Options;
                 ((TabItem)TabController.SelectedItem).Focus();
                 return false;
             }
             if (parameters.wiimmfiRegion == -1)
             {
-                MessageBox.Show("Please specify a Wiimmfi region.");
+                MsgWindow.Show("Please specify a Wiimmfi region.");
                 TabController.SelectedItem = Options;
                 ((TabItem)TabController.SelectedItem).Focus();
                 return false;
@@ -208,7 +200,7 @@ namespace PulsarPackCreator
                 }
                 catch
                 {
-                    MessageBox.Show("Mod Folder is already in use.");
+                    MsgWindow.Show("Mod Folder is already in use.");
                     return false;
                 }
             }
@@ -230,7 +222,7 @@ namespace PulsarPackCreator
             fileSW.WriteLine("FILE");
 
             bin.Write(0x50554C53); //"PULS"
-            bin.Write(BINVERSION);
+            bin.Write(CONFIGVERSION);
 
             //Offsets
             bin.BaseStream.Position += SECTIONCOUNT * 4; //OFFSETS
@@ -258,7 +250,7 @@ namespace PulsarPackCreator
                 bmgSW.Close();
                 fileSW.Close();
                 crcToFile.Close();
-                MessageBox.Show("Failed Creating Cups");
+                MsgWindow.Show("Failed Creating Cups");
                 Directory.Delete($"{modFolder}", true);
                 Directory.Delete("temp", true);
                 return false;
@@ -282,20 +274,19 @@ namespace PulsarPackCreator
             string[] xml = PulsarRes.XML.Split(delims, StringSplitOptions.RemoveEmptyEntries);
 
             xml[3] = xml[3].Replace("{$pack}", parameters.modFolderName);
-            xml[24] = xml[24].Replace("{$pack}", parameters.modFolderName);
-            xml[25] = xml[25].Replace("{$pack}", parameters.modFolderName);
-            xml[26] = xml[26].Replace("{$pack}", parameters.modFolderName);
-            xml[27] = xml[27].Replace("{$pack}", parameters.modFolderName);
-            xml[33] = xml[33].Replace("{$pack}", parameters.modFolderName);
+            xml[28] = xml[28].Replace("{$pack}", parameters.modFolderName);
+            xml[29] = xml[29].Replace("{$pack}", parameters.modFolderName);
+            xml[30] = xml[30].Replace("{$pack}", parameters.modFolderName);
+            xml[31] = xml[31].Replace("{$pack}", parameters.modFolderName);
+            xml[37] = xml[37].Replace("{$pack}", parameters.modFolderName);
 
             bmgReader.Close();
             fileReader.Close();
             File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
             File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
             Directory.Delete("temp/", true);
-            MessageBox.Show("Pack Created");
-            MessageBoxResult result = MessageBox.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MessageBoxButton.YesNo);
-            if(result == MessageBoxResult.Yes)
+            MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
+            if (result == MsgWindowResult.Yes)
             {
                 OpenDir($"{Directory.GetCurrentDirectory()}\\output");
             }
@@ -304,11 +295,11 @@ namespace PulsarPackCreator
 
         private void OnBuildConfigClick(object sender, RoutedEventArgs e)
         {
-            BuildBinImpl();
+            BuildConfigImpl();
         }
         private void OnBuildFullPackClick(object sender, RoutedEventArgs e)
         {
-            bool ret = BuildBinImpl();
+            bool ret = BuildConfigImpl();
             if (ret)
             {
                 string modFolder = $"output/{parameters.modFolderName}";
@@ -413,7 +404,7 @@ namespace PulsarPackCreator
         {
             string modFolder = $"output/{parameters.modFolderName}";
             UInt32 idx = cup.idx;
-            string[] fileInfo = Directory.GetFiles("input/");
+            string[] fileInfo = Directory.GetFiles("input/", "*", SearchOption.AllDirectories);
             fileInfo = fileInfo.Select(s => s.ToLowerInvariant()).ToArray();
             bin.Write(idx);
             for (int i = 0; i < 4; i++)
@@ -422,7 +413,7 @@ namespace PulsarPackCreator
                 string curFile = $"input/{name}.szs".ToLowerInvariant();
                 if (!fileInfo.Contains(curFile))
                 {
-                    MessageBox.Show($"Track {name} does not exist.");
+                    MsgWindow.Show($"Track {name} does not exist.");
                     return false;
                 }
                 bin.Write(cup.slots[i]);
@@ -441,10 +432,10 @@ namespace PulsarPackCreator
                         string expertName = cup.expertFileNames[i, expert];
                         if (expertName != "RKG File" && expertName != "")
                         {
-                            string rkgName = $"input/{expertName}.rkg".ToLowerInvariant();
+                            string rkgName = $"input/{ttModeFolders[expert, 1]}\\{expertName}.rkg".ToLowerInvariant();
                             if (!fileInfo.Contains(rkgName))
                             {
-                                MessageBox.Show($"Expert ghost {expertName}.rkg does not exist.");
+                                MsgWindow.Show($"Expert ghost {expertName}.rkg does not exist.");
                                 return false;
                             }
                             using BigEndianReader rkg = new BigEndianReader(File.Open(rkgName, FileMode.Open));
@@ -454,8 +445,8 @@ namespace PulsarPackCreator
 
                             rkg.BaseStream.Position = 0;
                             byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
-                            Directory.CreateDirectory($"{crc32Folder}/{ttModeFolders[expert]}");
-                            using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{crc32Folder}/{ttModeFolders[expert]}/expert.rkg"));
+                            Directory.CreateDirectory($"{crc32Folder}/{ttModeFolders[expert, 0]}");
+                            using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{crc32Folder}/{ttModeFolders[expert, 0]}/expert.rkg"));
                             rkgBytes[0xC] = (byte)(newC >> 8);
                             rkgBytes[0xD] = (byte)(newC & 0xFF);
                             finalRkg.Write(rkgBytes);

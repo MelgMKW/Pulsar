@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace PulsarPackCreator
@@ -13,5 +8,14 @@ namespace PulsarPackCreator
     /// </summary>
     public partial class App : Application
     {
+        private void OnExit(object sender, ExitEventArgs e)
+        {
+            Pulsar_Pack_Creator.Properties.Settings.Default.Save();
+        }
+
+        private void OnAppDeactivated(object sender, EventArgs e)
+        {
+            //PulsarPackCreator.MainWindow.msgWindow.Hide();
+        }
     }
 }
