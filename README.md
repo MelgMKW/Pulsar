@@ -9,12 +9,14 @@ Core:
 - Ghost saving on all tracks and all four modes (on the SD on console and on the NAND on dolphin)
 - Support for staff ghosts should the creator make them
 
+
 UI:
 - A speedometer that is flush with the game UI
 - In-game crediting of track authors
 - Between Races change combo, which has its own UI along with a randomize button
 - Team selection, where the host of a room can manually set the team of each player. Moreover, team VS has been edited to play exactly as normal VS while keeping the coloured minimap icons and the scoreboard after races.
 - Boot in wiimmfi directly
+
 
 Sound:
 - BRSAR entry size patch to make all brstms loop normally
@@ -23,12 +25,15 @@ Sound:
 - BRSTM expansion
 - Optional Music speedUp on final lap (the music is sped up when you cross the line instead of switching to the fast lap version)
 
+
 Gameplay:
 - Optional Music speedUp on final lap (the music is sped up when you cross the line instead of switching to the fast lap version)200cc support
 - Ultra Mini-Turbos
 - Mega TCs
 - CLF78 and stebler's feather
 - Support for custom CC distribution
+- COOB (both kHacker35000vr's and Riidefi's versions)
+
 
 Network:
 - Rooms that can only be joined by people on the same pack (including the same version)
