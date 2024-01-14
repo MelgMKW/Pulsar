@@ -3,7 +3,7 @@
 Pulsar is a Mario Kart Wii Kamek-Based engine to create CT distributions. It comes with its own software to aid in building custom distributions, and multiple quality of life features:
 
 Core:
-*Cup select expansion
+  Cup select expansion
 *Settings that are directly modifiable in-game, including in friend rooms
 *Up to four time-trial modes (150cc, 150cc feather, 200cc and 200cc feather)
 *Ghost saving on all tracks and all four modes (on the SD on console and on the NAND on dolphin)
