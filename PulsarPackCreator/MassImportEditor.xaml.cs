@@ -33,10 +33,11 @@ namespace PulsarPackCreator
 
             string[] namesImport = NamesImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
             string[] authorsImport = AuthorsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+            string[] versionsImport = AuthorsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
             string[] slotsImport = SlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
             string[] musicSlotsImport = MusicSlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
 
-            string[][] importStringArrays = { namesImport, authorsImport, slotsImport, musicSlotsImport };
+            string[][] importStringArrays = { namesImport, authorsImport, versionsImport, slotsImport, musicSlotsImport };
 
             TextBox[] imports = new TextBox[] { NamesImport, AuthorsImport, SlotsImport, MusicSlotsImport };
             TextBlock[] labels = new TextBlock[] { NamesImportLabel, AuthorsImportLabel, SlotsImportLabel, MusicSlotsImportLabel };
@@ -105,16 +106,16 @@ namespace PulsarPackCreator
             int cupIdx = parent.curCup;
             for (int line = 0; line < namesImport.Length; line++)
             {
-                byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
+                byte slotIdx = FindSlotIndex(importStringArrays[3][line]);
                 if (slotIdx == 0xFF)
                 {
-                    MsgWindow.Show($"Track Slot {importStringArrays[2][line]} (Line {line}) is invalid.");
+                    MsgWindow.Show($"Track Slot {importStringArrays[3][line]} (Line {line}) is invalid.");
                     return;
                 }
-                byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line]);
+                byte musicSlotIdx = FindSlotIndex(importStringArrays[4][line]);
                 if (musicSlotIdx == 0xFF)
                 {
-                    MsgWindow.Show($"Music Slot {importStringArrays[3][line]} (Line {line}) is invalid.");
+                    MsgWindow.Show($"Music Slot {importStringArrays[4][line]} (Line {line}) is invalid.");
                     return;
                 }
             }
@@ -128,10 +129,11 @@ namespace PulsarPackCreator
                     MsgWindow.Show("Tracklist exceeded existing number of cups.");
                     return;
                 }
-                byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
-                byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line]);
+                byte slotIdx = FindSlotIndex(importStringArrays[3][line]);
+                byte musicSlotIdx = FindSlotIndex(importStringArrays[4][line]);
                 parent.cups[cupIdx].trackNames[row] = importStringArrays[0][line];
                 parent.cups[cupIdx].authorNames[row] = importStringArrays[1][line];
+                parent.cups[cupIdx].versionNames[row] = importStringArrays[2][line];
                 parent.cups[cupIdx].slots[row] = idxToGameId[slotIdx];
                 parent.cups[cupIdx].musicSlots[row] = idxToGameId[musicSlotIdx];
                 if (cupIdx == parent.curCup)

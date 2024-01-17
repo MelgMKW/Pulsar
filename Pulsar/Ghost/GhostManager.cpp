@@ -6,6 +6,8 @@
 namespace Pulsar {
 namespace Ghosts {
 Manager* Manager::sInstance = nullptr;
+void(*Manager::RKGCallback)(const RKG&, int) = nullptr;
+
 char Manager::folderPath[IOS::ipcMaxPath] = "";
 
 Manager* Manager::CreateInstance() {
@@ -49,12 +51,18 @@ void Manager::Init(PulsarId id) {
     this->files = new (system->heap) GhostData[io->GetFileCount()];
 
     u32 counter = 0;
+    RKG* decompressed = new (system->heap) RKG;
     for(int i = 0; i < io->GetFileCount(); ++i) {
         rkg.ClearBuffer();
         GhostData& curData = this->files[counter];
         s32 ret = io->ReadFolderFile(&rkg, i, FILE_MODE_READ, sizeof(RKG));
         if(ret > 0 && rkg.CheckValidity()) {
+
             curData.Init(rkg);
+            if(this->RKGCallback != nullptr) {
+                rkg.DecompressTo(*decompressed);
+                this->RKGCallback(*decompressed, counter);
+            }
             curData.courseId = static_cast<CourseId>(id);
             if(curData.type == EXPERT_STAFF_GHOST) { //very easy to fake/manipulate, but 0 security so it doesn't matter
                 this->expertGhost.minutes = rkg.header.minutes;
@@ -67,6 +75,7 @@ void Manager::Init(PulsarId id) {
         }
     }
     this->rkgCount = counter;
+    delete decompressed;
 }
 
 void Manager::Reset() {

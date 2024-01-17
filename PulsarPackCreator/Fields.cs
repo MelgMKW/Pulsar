@@ -146,6 +146,10 @@ namespace PulsarPackCreator
             Author2.Text = initial.authorNames[0];
             Author3.Text = initial.authorNames[0];
             Author4.Text = initial.authorNames[0];
+            Version1.Text = initial.versionNames[0];
+            Version2.Text = initial.versionNames[0];
+            Version3.Text = initial.versionNames[0];
+            Version4.Text = initial.versionNames[0];
 
             Slot1.SelectedValue = idxToAbbrev[0];
             Slot2.SelectedValue = idxToAbbrev[0];

@@ -457,8 +457,13 @@ namespace PulsarPackCreator
 
                 }
 
+                string trackName = cup.trackNames[i];
+                if (cup.versionNames[i] != "" && cup.versionNames[i] != "Version")               
+                {
+                    trackName += $" \\c{{red3}}{cup.versionNames[i]}\\c{{off}}";
+                }
 
-                bmgSW.WriteLine($"  {0x20000 + idx * 4 + i:X}    = {cup.trackNames[i]}");
+                bmgSW.WriteLine($"  {0x20000 + idx * 4 + i:X}    = {trackName}");
                 bmgSW.WriteLine($"  {0x30000 + idx * 4 + i:X}    = {cup.authorNames[i]}");
                 fileSW.WriteLine($"{idx * 4 + i:X}={cup.fileNames[i]}|" +
                 $"{cup.expertFileNames[i, 0]}|{cup.expertFileNames[i, 1]}|{cup.expertFileNames[i, 2]}|{cup.expertFileNames[i, 3]}");
@@ -496,7 +501,14 @@ namespace PulsarPackCreator
                                 switch (type)
                                 {
                                     case (0x20000):
-                                        cups[cupIdx].trackNames[trackIdx] = content;
+                                        if (content.Contains("\\c{red3}"))
+                                        {
+                                            string[] split = content.Split("\\c{red3}");
+
+                                            cups[cupIdx].trackNames[trackIdx] = split[0];
+                                            cups[cupIdx].versionNames[trackIdx] = split[1].Split("\\c{off}")[0];
+                                        }
+                                        else cups[cupIdx].trackNames[trackIdx] = content;
                                         break;
                                     case (0x30000):
                                         cups[cupIdx].authorNames[trackIdx] = content;

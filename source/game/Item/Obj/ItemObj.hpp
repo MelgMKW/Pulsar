@@ -6,7 +6,7 @@
 #include <game/Entity/EntityManager.hpp>
 #include <game/3D/Model/ModelDirector.hpp>
 #include <game/3D/Model/ShadowModelDirector.hpp>
-#include <game/3D/Model/ModelWorldCalc.hpp>
+#include <game/3D/Model/ModelCalc.hpp>
 #include <game/Sound/Actors/ItemSound.hpp>
 #include <game/KCL/Collision.hpp>
 
@@ -59,7 +59,7 @@ public:
     ObjBase(); //8079d8bc
 
     class CalcWorld : public ModelWorldCalc {
-        ~CalcWorld() override; //807a3c1c vtable 808d19b0, 808D19A8 for empty
+        ~CalcWorld() override; //807a3a1c vtable 808d19b0, 808D19A8 for empty
         void ExecCallbackB(g3d::WorldMtxManip* manip, g3d::ResMdl mdl, g3d::FuncObjCalcWorld* obj) override; //807a3a14
         virtual void vf_0x18(); //807a39d4
         virtual void vf_0x1c(); //8079d84c

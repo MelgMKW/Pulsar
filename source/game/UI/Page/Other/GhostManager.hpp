@@ -13,8 +13,11 @@ Contributors:
 enum GhostManagerPageState {
     IDLE,
     SAVED_GHOST_RACE_FROM_MENU = 0x3,
+    SAVED_GHOST_RACE_FROM_RACE = 0x4,
+    SAVED_GHOST_RACE_FROM_REPLAY = 0x5,
     SAVED_GHOST_REPLAY = 0x6,
     STAFF_GHOST_RACE_FROM_MENU = 0x9,
+    STAFF_GHOST_RACE_FROM_RACE = 0xA,
     STAFF_GHOST_REPLAY = 0xc
 };
 
@@ -45,6 +48,7 @@ public:
     bool CheckIsNew(u32 entryIndex) const; //805e2528
     bool AreAllGhostsNew() const; //805e2554
     void InitSectionParamsParams(s32 entryIndex) const; //805e2588
+
     GhostListEntry entries[38];
     u32 count; //0x260
     GhostManager* ghostManagerPage; //0x264
@@ -69,6 +73,8 @@ public:
     void RequestAllGhosts(); //805e11b0 appears to be unused
     bool AreStaffGhostsLoading(); //805e15c4, delays call to setup until this returns false
     GhostData* GetGhostData(GhostType type, u32 licenseId, CourseId id); //805e163c
+    void PrepareRaceState(bool isRace, bool isStaffGhost); //805e1748
+    void PrepareReplayState(); //805e17cc
     void RequestGhost(bool checkRKGValidity); //0x805e1998
     void SetupGhostRace(bool isStaffGhost, bool replaceGhostMiiByPlayer, bool disablePlayerMii); //805e1b04
     void SetupGhostReplay(bool isStaffGhosts); //805e1d5c

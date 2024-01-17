@@ -4,12 +4,19 @@
 #include <game/Kart/KartLink.hpp>
 #include <game/3D/Model/ModelDirector.hpp>
 #include <game/3D/Model/ShadowModelDirector.hpp>
+#include <game/3D/Model/ModelCalc.hpp>
 #include <game/Kart/KartBRRESHandle.hpp>
 
 namespace Kart {
 
 class Killer { //bullet bill
 public:
+    class ModelCalc : public ModelCalcCallback {
+    public:
+        ~ModelCalc() override; //0x8 vtable 808b6890 at 0x8, 808b6888 at 0xc for empty thunk 8059df1c func 8059dedc
+        void CalcWorldImpl() override; //0x24 8059b600
+    };
+
     explicit Killer(const BRRESHandle& handle); //8059b658
     void Activate(u8 itemPoint); //8059b7b8 if itemPoint == 0xFF, gets item point from Item::Player
     void Update(); //8059bc44

@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:PulsarPackCreator"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Pulsar Pack Creator VERSION" Height="500" Width="900" Background="#FD353535"
+        Title="Pulsar Pack Creator VERSION" Height="550" Width="1000" Background="#FD353535"
         HorizontalAlignment="Center" VerticalAlignment="Center"
         AllowDrop="True"
         Drop="OnDropFile"
@@ -55,121 +55,149 @@
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.2*"/>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="0.5*" />
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock x:Name="CupsLabel1" Grid.Row="0" Grid.Column="0"
-                            Margin="20,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
+                        <TextBlock x:Name="FileLabel" Grid.Row="0" Grid.Column="1"
+                            Margin="0,22,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
+                            Text="File Names" Grid.RowSpan="2"/>
+                        <TextBlock x:Name="NameLabel" Grid.Row="0" Grid.Column="2"
+                            Margin="0,22,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
+                            Text="Track Names" Grid.RowSpan="2"/>
+                        <TextBlock x:Name="AuthorLabel" Grid.Row="0" Grid.Column="3"
+                            Margin="0,22,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
+                            Text="Author Names" Grid.RowSpan="2"/>
+                        <TextBlock x:Name="VersionLabel" Grid.Row="0" Grid.Column="4"
+                            Margin="0,22,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
+                            Text="Versions (optional)" Grid.RowSpan="2"/>
+
+                        <TextBlock x:Name="CupsLabel1" Grid.Row="1" Grid.Column="0"
+                            Margin="20,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
                             Text="Track1" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
-                        <TextBlock x:Name="CupsLabel2" Grid.Row="1" Grid.Column="0"
-                            Margin="20,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
+                        <TextBlock x:Name="CupsLabel2" Grid.Row="2" Grid.Column="0"
+                            Margin="20,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
                             Text="Track2" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
-                        <TextBlock x:Name="CupsLabel3" Grid.Row="2" Grid.Column="0"
-                            Margin="20,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
+                        <TextBlock x:Name="CupsLabel3" Grid.Row="3" Grid.Column="0"
+                            Margin="20,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
                             Text="Track3" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
-                        <TextBlock x:Name="CupsLabel4" Grid.Row="3" Grid.Column="0"
-                            Margin="20,52,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
+                        <TextBlock x:Name="CupsLabel4" Grid.Row="4" Grid.Column="0"
+                            Margin="20,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
                             Text="Track4" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
 
-                        <TextBox x:Name="File1"  Grid.Row="0" Grid.Column="1" 
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="File1"  Grid.Row="1" Grid.Column="1" 
+                                 Margin="0,23,0,28" Width="160" VerticalContentAlignment="Center"
                                  Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"
                                  PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
-                        <TextBox x:Name="File2" Grid.Row="1" Grid.Column="1" 
-                                 Margin="16,35,16,16" Width="120"  VerticalContentAlignment="Center"   
+                        <TextBox x:Name="File2" Grid.Row="2" Grid.Column="1" 
+                                 Margin="17,23,17,28" Width="160"  VerticalContentAlignment="Center"   
                                  Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
                                  PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
-                        <TextBox x:Name="File3" Grid.Row="2" Grid.Column="1" 
-                                 Margin="16,35,16,16" Width="120"  VerticalContentAlignment="Center"   
+                        <TextBox x:Name="File3" Grid.Row="3" Grid.Column="1" 
+                                 Margin="17,23,17,28" Width="160"  VerticalContentAlignment="Center"   
                                  Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
                                  PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
-                        <TextBox x:Name="File4" Grid.Row="3" Grid.Column="1" 
-                                 Margin="16,35,16,16" Width="120"  VerticalContentAlignment="Center"   
+                        <TextBox x:Name="File4" Grid.Row="4" Grid.Column="1" 
+                                 Margin="17,23,17,28" Width="160"  VerticalContentAlignment="Center"   
                                  Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
                                  PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
 
-                        <TextBox x:Name="Name1" Grid.Row="0" Grid.Column="2"
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="Name1" Grid.Row="1" Grid.Column="2"
+                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
                                  Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
-                        <TextBox x:Name="Name2" Grid.Row="1" Grid.Column="2"
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="Name2" Grid.Row="2" Grid.Column="2"
+                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
                                  Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
-                        <TextBox x:Name="Name3" Grid.Row="2" Grid.Column="2"
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="Name3" Grid.Row="3" Grid.Column="2"
+                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
                                  Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
-                        <TextBox x:Name="Name4" Grid.Row="3" Grid.Column="2"
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="Name4" Grid.Row="4" Grid.Column="2"
+                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
                                  Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
 
-                        <TextBox x:Name="Author1" Grid.Row="0" Grid.Column="3" 
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="Author1" Grid.Row="1" Grid.Column="3" 
+                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
                                  Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
-                        <TextBox x:Name="Author2" Grid.Row="1" Grid.Column="3" 
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="Author2" Grid.Row="2" Grid.Column="3" 
+                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
                                  Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
-                        <TextBox x:Name="Author3" Grid.Row="2" Grid.Column="3" 
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="Author3" Grid.Row="3" Grid.Column="3" 
+                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
                                  Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
-                        <TextBox x:Name="Author4" Grid.Row="3" Grid.Column="3" 
-                                 Margin="16,35,16,16" Width="120" VerticalContentAlignment="Center"
+                        <TextBox x:Name="Author4" Grid.Row="4" Grid.Column="3" 
+                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
                                  Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
 
-                        <ComboBox x:Name="Slot1" Grid.Row="0" Grid.Column="4"
+                        <TextBox x:Name="Version1" Grid.Row="1" Grid.Column="4" 
+                                 Margin="13,23,13,28" Width="90" VerticalContentAlignment="Center"
+                                 Text="Version" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnVersionChange"/>
+                        <TextBox x:Name="Version2" Grid.Row="2" Grid.Column="4" 
+                                 Margin="13,23,13,28" Width="90" VerticalContentAlignment="Center"
+                                 Text="Version" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnVersionChange"/>
+                        <TextBox x:Name="Version3" Grid.Row="3" Grid.Column="4" 
+                                 Margin="13,23,13,28" Width="90" VerticalContentAlignment="Center"
+                                 Text="Version" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnVersionChange"/>
+                        <TextBox x:Name="Version4" Grid.Row="4" Grid.Column="4" 
+                                 Margin="13,23,13,28" Width="90" VerticalContentAlignment="Center"
+                                 Text="Version" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnVersionChange"/>
+
+                        <ComboBox x:Name="Slot1" Grid.Row="1" Grid.Column="5"
                                   Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
                                   SelectionChanged="OnSlotChange"/>
-                        <ComboBox x:Name="Slot2" Grid.Row="1" Grid.Column="4"
+                        <ComboBox x:Name="Slot2" Grid.Row="2" Grid.Column="5"
                                   Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
                                   SelectionChanged="OnSlotChange"/>
-                        <ComboBox x:Name="Slot3" Grid.Row="2" Grid.Column="4"
+                        <ComboBox x:Name="Slot3" Grid.Row="3" Grid.Column="5"
                                   Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
                                   SelectionChanged="OnSlotChange"/>
-                        <ComboBox x:Name="Slot4" Grid.Row="3" Grid.Column="4"
+                        <ComboBox x:Name="Slot4" Grid.Row="4" Grid.Column="5"
                                   Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
                                   SelectionChanged="OnSlotChange"/>
 
-                        <TextBlock x:Name="Slot1Label" Grid.Row="0" Grid.Column="4"
+                        <TextBlock x:Name="Slot1Label" Grid.Row="1" Grid.Column="5"
                                    Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
                                    Text="Slot1"/>
-                        <TextBlock x:Name="Slot2Label" Grid.Row="1" Grid.Column="4"
+                        <TextBlock x:Name="Slot2Label" Grid.Row="2" Grid.Column="5"
                                    Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
                                    Text="Slot2"/>
-                        <TextBlock x:Name="Slot3Label" Grid.Row="2" Grid.Column="4"
+                        <TextBlock x:Name="Slot3Label" Grid.Row="3" Grid.Column="5"
                                    Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
                                    Text="Slot3"/>
-                        <TextBlock x:Name="Slot4Label" Grid.Row="3" Grid.Column="4"
+                        <TextBlock x:Name="Slot4Label" Grid.Row="4" Grid.Column="5"
                                    Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
                                    Text="Slot4"/>
 
-                        <ComboBox x:Name="Music1"  Grid.Row="0" Grid.Column="5"
+                        <ComboBox x:Name="Music1"  Grid.Row="1" Grid.Column="6"
                                   Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
                                    SelectionChanged="OnMusicChange"/>
-                        <ComboBox x:Name="Music2"  Grid.Row="1" Grid.Column="5"
+                        <ComboBox x:Name="Music2"  Grid.Row="2" Grid.Column="6"
                                   Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
                                    SelectionChanged="OnMusicChange"/>
-                        <ComboBox x:Name="Music3"  Grid.Row="2" Grid.Column="5"
+                        <ComboBox x:Name="Music3"  Grid.Row="3" Grid.Column="6"
                                   Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
                                    SelectionChanged="OnMusicChange"/>
-                        <ComboBox x:Name="Music4"  Grid.Row="3" Grid.Column="5"
+                        <ComboBox x:Name="Music4"  Grid.Row="4" Grid.Column="6"
                                   Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
                                    SelectionChanged="OnMusicChange"/>
 
-                        <TextBlock x:Name="Music1Label" Grid.Row="0" Grid.Column="5"
+                        <TextBlock x:Name="Music1Label" Grid.Row="1" Grid.Column="6"
                                    Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
                                    Text="Music1"/>
-                        <TextBlock x:Name="Music2Label" Grid.Row="1" Grid.Column="5"
+                        <TextBlock x:Name="Music2Label" Grid.Row="2" Grid.Column="6"
                                    Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
                                    Text="Music2"/>
-                        <TextBlock x:Name="Music3Label" Grid.Row="2" Grid.Column="5"
+                        <TextBlock x:Name="Music3Label" Grid.Row="3" Grid.Column="6"
                                    Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
                                    Text="Music3"/>
-                        <TextBlock x:Name="Music4Label" Grid.Row="3" Grid.Column="5"
+                        <TextBlock x:Name="Music4Label" Grid.Row="4" Grid.Column="6"
                                    Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
                                    Text="Music4"/>
 
@@ -327,8 +355,8 @@
                         <TextBlock Name="GhostTrackName4" Grid.Row="4" Grid.ColumnSpan="2"
                                    Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
                                   Text="Track 4"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
-                        
-                 
+
+
                         <TextBlock Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="150cc" TextAlignment="Center" Margin="0,29,0,0"/>
                         <TextBlock Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="200cc" TextAlignment="Center" Margin="0,29,0,0"/>
                         <TextBlock Grid.Column="3" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="150cc Feather" TextAlignment="Center" Margin="0,29,0,0"/>

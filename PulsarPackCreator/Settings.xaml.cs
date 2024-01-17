@@ -93,7 +93,16 @@ namespace PulsarPackCreator
                     MsgWindow.Show(msg, MainWindow.settingsWindow);
                 }
             }
-            else MsgWindow.Show("You are already using the latest version.", MainWindow.settingsWindow);
+            else
+            {
+                Window owner = null;
+                if(MainWindow.settingsWindow.IsActive) { 
+                    owner = MainWindow.settingsWindow;
+                }
+                MsgWindow.Show("You are already using the latest version.", owner);
+            }
+                
+                
         }
 
         public static UpdateResult Update()

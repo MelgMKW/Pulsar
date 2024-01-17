@@ -4,7 +4,7 @@
 #include <game/UI/Page/RaceMenu/RaceMenu.hpp>
 
 namespace Pages {
-class TTEnd: public RaceMenu { //ID 0x21
+class TTEnd : public RaceMenu { //ID 0x21
 public:
     TTEnd(); //80624e04
     ~TTEnd() override; //80632cd4 vtable 808bd918
@@ -15,7 +15,7 @@ public:
     bool IsPausePage() const override; //0x74 80632cac
     const char* GetButtonsBRCTRName() const override; //0x78 80632cb4
 };//0x344
-static_assert(sizeof(TTEnd) = 0x344, "TTEnd");
+size_assert(TTEnd, 0x344);
 }//namespace Pages
 
 

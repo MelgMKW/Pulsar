@@ -9,7 +9,7 @@
 #include <game/3D/Scn/ScnManager.hpp>
 #include <game/3D/Scn/Renderer.hpp>
 #include <game/3D/Model/ModelDirector.hpp>
-#include <game/3D/Model/ModelWorldCalc.hpp>
+#include <game/3D/Model/ModelCalc.hpp>
 
 
 class MiiRenderMgr {

@@ -7,7 +7,7 @@
 #include <game/UI/Page/Other/WWRaceSupporting.hpp>
 
 namespace Pages {
-class RaceMenu: public Page { //also used for end of races
+class RaceMenu : public Page { //also used for end of races
 public:
     RaceMenu(); //80858ca4
     ~RaceMenu() override; //80624b38 vtable 808da928

@@ -20,11 +20,13 @@ namespace PulsarPackCreator
                 string defaultFile = "File";
                 string defaultTrack = "Name";
                 string defaultAuthor = "Author";
+                string defaultVersion = "Version";
                 string defaultGhost = "";
                 musicSlots = new byte[4] { 0x8, 0x8, 0x8, 0x8 };
                 fileNames = new string[4] { defaultFile, defaultFile, defaultFile, defaultFile };
                 trackNames = new string[4] { defaultTrack, defaultTrack, defaultTrack, defaultTrack };
                 authorNames = new string[4] { defaultAuthor, defaultAuthor, defaultAuthor, defaultAuthor };
+                versionNames = new string[4] { defaultVersion, defaultVersion, defaultVersion, defaultVersion };
                 expertFileNames = new string[4, 4] {{defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
@@ -48,6 +50,7 @@ namespace PulsarPackCreator
             public string[] fileNames;
             public string[] trackNames;
             public string[] authorNames;
+            public string[] versionNames;
             public string[,] expertFileNames;
         }
 
@@ -77,7 +80,7 @@ namespace PulsarPackCreator
         {
             TextBox box = sender as TextBox;
             int idx = Grid.GetRow(box);
-            cups[curCup].fileNames[idx] = box.Text;
+            cups[curCup].fileNames[idx - firstTrackRow] = box.Text;
         }
 
         private void OnTracknameChange(object sender, TextChangedEventArgs e)
@@ -86,7 +89,7 @@ namespace PulsarPackCreator
             if (box.IsKeyboardFocused)
             {
                 int idx = Grid.GetRow(box);
-                cups[curCup].trackNames[idx] = box.Text;
+                cups[curCup].trackNames[idx - firstTrackRow] = box.Text;
                 SetGhostLabelName(idx, box.Text);
             }
         }
@@ -95,21 +98,28 @@ namespace PulsarPackCreator
         {
             TextBox box = sender as TextBox;
             int idx = Grid.GetRow(box);
-            cups[curCup].authorNames[idx] = box.Text;
+            cups[curCup].authorNames[idx - firstTrackRow] = box.Text;
+        }
+
+        private void OnVersionChange(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            int idx = Grid.GetRow(box);
+            cups[curCup].versionNames[idx - firstTrackRow] = box.Text;
         }
 
         private void OnSlotChange(object sender, SelectionChangedEventArgs e)
         {
             ComboBox box = sender as ComboBox;
             int idx = Grid.GetRow(box);
-            cups[curCup].slots[idx] = idxToGameId[box.SelectedIndex];
+            cups[curCup].slots[idx - firstTrackRow] = idxToGameId[box.SelectedIndex];
         }
 
         private void OnMusicChange(object sender, SelectionChangedEventArgs e)
         {
             ComboBox box = sender as ComboBox;
             int idx = Grid.GetRow(box);
-            cups[curCup].musicSlots[idx] = idxToGameId[box.SelectedIndex];
+            cups[curCup].musicSlots[idx - firstTrackRow] = idxToGameId[box.SelectedIndex];
         }
 
         private void OnLeftArrowClick(object sender, RoutedEventArgs e)
@@ -139,6 +149,10 @@ namespace PulsarPackCreator
                 Author2.Text = cup.authorNames[1];
                 Author3.Text = cup.authorNames[2];
                 Author4.Text = cup.authorNames[3];
+                Version1.Text = cup.versionNames[0];
+                Version2.Text = cup.versionNames[1];
+                Version3.Text = cup.versionNames[2];
+                Version4.Text = cup.versionNames[3];
 
                 for (int row = 0; row < 4; row++)
                 {
@@ -194,6 +208,7 @@ namespace PulsarPackCreator
                 sortedCups[cupIdx].fileNames[trackIdx] = cups[oldCupIdx].fileNames[oldTrackIdx];
                 sortedCups[cupIdx].trackNames[trackIdx] = cups[oldCupIdx].trackNames[oldTrackIdx];
                 sortedCups[cupIdx].authorNames[trackIdx] = cups[oldCupIdx].authorNames[oldTrackIdx];
+                sortedCups[cupIdx].versionNames[trackIdx] = cups[oldCupIdx].versionNames[oldTrackIdx];
                 sortedCups[cupIdx].expertFileNames[trackIdx, 0] = cups[oldCupIdx].expertFileNames[oldTrackIdx, 0];
                 sortedCups[cupIdx].expertFileNames[trackIdx, 1] = cups[oldCupIdx].expertFileNames[oldTrackIdx, 1];
                 sortedCups[cupIdx].expertFileNames[trackIdx, 2] = cups[oldCupIdx].expertFileNames[oldTrackIdx, 2];

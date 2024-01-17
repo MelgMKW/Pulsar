@@ -152,10 +152,7 @@ public:
     u8 unknown_0xB1;
     u8 unknown_0xB2;
     u8 unknown_0xB3;
-    u8 unknown_0xB4;
-    u8 unknown_0xB5;
-    u8 unknown_0xB6;
-    u8 unknown_0xB7;
+    float unknown_0xb4;
     u8 unknown_0xB8;
     bool hasHitItem; //0xB9
     u8 unknown_0xBA[0xC0 - 0XBA];

@@ -16,6 +16,10 @@ public:
     ExpGhostSelect();
     void OnInit() override;
     void OnActivate() override;
+    void ToggleSelectButton(bool isInvisible) {
+        this->selectGhostButton.manipulator.inaccessible = isInvisible;
+        this->selectGhostButton.isHidden = isInvisible;
+    }
 
 private:
     void OnChallengeGhostPress(PushButton& button, u32 hudSlotId);
@@ -26,6 +30,7 @@ private:
     void OnNewPage();
     void SetToggleBMG();
     void Reset();
+
     CtrlMenuInstructionText bottomText;
     ToggleButton selectGhostButton;
     PtmfHolder_2A<ExpGhostSelect, void, ToggleButton&, u32> onSelectGhostChangeHandler;

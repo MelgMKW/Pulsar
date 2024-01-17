@@ -1145,6 +1145,7 @@ AfterControlUpdate__Q25Pages12GhostManagerFv = 0x805e1104
 func_0x58__Q25Pages12GhostManagerFv = 0x805e1108
 RequestGhost__Q25Pages12GhostManagerFUc = 0x805e1998
 GetRuntimeTypeInfo__Q25Pages12GhostManagerCFv = 0x805e2720
+PrepareRaceState__Q25Pages12GhostManagerFbb = 0x805e1748
 SetupGhostReplay__Q25Pages12GhostManagerFb = 0x805e1d5c
 SetupGhostRace__Q25Pages12GhostManagerFbbb = 0x805e1b04
 

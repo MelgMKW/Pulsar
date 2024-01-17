@@ -34,10 +34,6 @@ void ExpFroom::OnInit() {
     this->teamsButton.buttonId = 6;
     this->teamsButton.SetOnClickHandler(this->onTeamsClickHandler, 0);
     this->teamsButton.SetOnSelectHandler(this->onButtonSelectHandler);
-
-
-
-    this->manipulatorManager.SetDistanceFunc(3);
 }
 
 void ExpFroom::OnResume() {

@@ -53,11 +53,11 @@ public:
     u16 numViewMtx;
     u32 flagScnMdlSimple;
 
-    const u8* byteCodeCalc;
-    const u8* byteCodeMix;
-    const u8* byteCodeDrawOpa;
-    const u8* byteCodeDrawXlu;
-    u32 renderingMode;
+    const u8* byteCodeCalc; //0x108
+    const u8* byteCodeMix; //0x10c
+    const u8* byteCodeDrawOpa; //0x110
+    const u8* byteCodeDrawXlu; //0x114
+    u32 renderingMode; //0x118
     ICalcWorldCallback calcWorldCb; //0x11c
     u8 callbackTiming;
     u8 callbackDeleteOption;

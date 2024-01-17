@@ -62,8 +62,8 @@ public:
     void DecompressTo(RKG& copyBuffer) const; //8051d1b4
     bool CompressTo(RKG& copyBuffer) const; //8051d0e0
     int GetLength() const; //8051d388 only if valid
-    RKGHeader header;
-    Input::RKGInputs inputs;
+    RKGHeader header; //0x0
+    Input::RKGInputs inputs; //0x88
     u32 uncompressedCRC32;
 };//total size 0x2800
 size_assert(RKG, 0x2800);

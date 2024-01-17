@@ -15,6 +15,8 @@ namespace PulsarPackCreator
     /// </summary>
     public partial class MainWindow : Window
     {
+        public int firstTrackRow = 1;
+        public int firstTrackCol = 1;
         private void OnMassImportClick(object sender, RoutedEventArgs e)
         {
             importWindow.Show();
@@ -91,11 +93,11 @@ namespace PulsarPackCreator
                         box.Text = fileName;
 
                     }
-                    cups[cupIdx].fileNames[row] = fileName;
+                    cups[cupIdx].fileNames[row - firstTrackRow] = fileName;
                     row++;
-                    if (row == 4)
+                    if (row == 4 + firstTrackRow)
                     {
-                        row = 0;
+                        row = firstTrackRow;
                         cupIdx++;
                     }
                     if (cupIdx >= ctsCupCount) break;

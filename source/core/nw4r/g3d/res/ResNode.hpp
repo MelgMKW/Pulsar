@@ -28,7 +28,7 @@ struct ResNodeData { //BONES https://wiki.tockdom.com/wiki/MDL0_(File_Format)#Se
     u32 size;
     s32 offsetToMdlData;
     s32 offsetToName;
-    u32 id;
+    u32 id; //0xC
     u32 matId; //0x10
     u32 flags;
     Billboard billboardMode;
@@ -47,7 +47,7 @@ struct ResNodeData { //BONES https://wiki.tockdom.com/wiki/MDL0_(File_Format)#Se
     math::MTX34 invModelMtx;
 }; //0xD0
 
-class ResNode: public ResCommon<ResNodeData> {
+class ResNode : public ResCommon<ResNodeData> {
 public:
     void PatchChrAnmResult(ChrAnmResult* result) const; //80052af0
     void CalcChrAnmResult(ChrAnmResult* result) const; //80052c90
