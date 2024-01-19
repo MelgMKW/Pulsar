@@ -1,6 +1,6 @@
 # Pulsar
 
-Pulsar is a Mario Kart Wii Kamek-Based engine to create CT distributions. It comes with its own [software](../PulsarPackCreator/Executable/Pulsar Pack Creator.exe) to aid in building custom distributions, and multiple quality of life features:
+Pulsar is a Mario Kart Wii Kamek-Based engine to create CT distributions. It comes with its own [software](../PulsarPackCreator/Executable) to aid in building custom distributions, and multiple quality of life features:
 
 Core:
 - Cup select expansion
@@ -44,4 +44,4 @@ Network:
 
 
 Credits:
--Treeky for [Kamek](https://github.com/Treeki/Kamek/tree/master). The engine has been ever so slightly modified to create a new output format which combines the usual 4 binaries. 
+- Treeky for [Kamek](https://github.com/Treeki/Kamek/tree/master). The engine has been ever so slightly modified to create a new output format which combines the usual 4 binaries. 
