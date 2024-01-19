@@ -1,6 +1,6 @@
 # Pulsar
 
-Pulsar is a Mario Kart Wii Kamek-Based engine to create CT distributions. It comes with its own software to aid in building custom distributions, and multiple quality of life features:
+Pulsar is a Mario Kart Wii Kamek-Based engine to create CT distributions. It comes with its own [software](../PulsarPackCreator/Executable/Pulsar Pack Creator.exe) to aid in building custom distributions, and multiple quality of life features:
 
 Core:
 - Cup select expansion
@@ -13,9 +13,10 @@ Core:
 UI:
 - A speedometer that is flush with the game UI
 - In-game crediting of track authors
-- Between Races change combo, which has its own UI along with a randomize button
+- Between Races Change Combo, which has its own UI along with a randomize button
 - Team selection, where the host of a room can manually set the team of each player. Moreover, team VS has been edited to play exactly as normal VS while keeping the coloured minimap icons and the scoreboard after races.
 - Boot in wiimmfi directly
+- Better ghost replay which allows multi ghost watching and point-of-view switching
 
 
 Sound:
@@ -40,3 +41,7 @@ Network:
 - A much faster Host Always Wins where the host selects the next track directly in the race.
 - Worldwides that work as on vanilla
 - The features that impact gameplay the most (200cc, UMTs, feather, mega TCs) can be turned off in the software when making your distribution. Pulsar can also be used as a base to add your own features. CTTP is such an example. The software only outputs the tracks and a config file, but the code binaries can be modified to fit your needs.
+
+
+Credits:
+-Treeky for [Kamek](https://github.com/Treeki/Kamek/tree/master). The engine has been ever so slightly modified to create a new output format which combines the usual 4 binaries. 
