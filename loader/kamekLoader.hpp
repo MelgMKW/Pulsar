@@ -26,5 +26,12 @@ struct LoaderFunctions {
     RKSystem* rkSystem;
 };
 
-void LoadKamekBinaryFromDisc(LoaderFunctions* funcs, const char* path);
+enum Region {
+    PAL = 0,
+    NTSC_U = 1,
+    NTSC_J = 2,
+    NTSC_K = 3
+};
+
+void LoadKamekBinaryFromDisc(LoaderFunctions* funcs, Region region);
 #endif

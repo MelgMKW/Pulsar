@@ -5,7 +5,7 @@
 
 //Chomp with a wedge (pile)
 namespace Objects {
-class Pile: public ObjectCollidable {
+class Pile : public ObjectCollidable {
     //ctor inlined
     ~Pile() override; //806e9568 vtable 808c73b8
     void OnStart() override; //0xC 806e3e20
@@ -21,7 +21,7 @@ class Pile: public ObjectCollidable {
 }; //total size 0xfc
 size_assert(Pile, 0xfc);
 
-class Wanwan_Chn: public ObjectCollidable {
+class Wanwan_Chn : public ObjectCollidable {
     //ctor inlined, takes wanwan's gobjholder as a param
     ~Wanwan_Chn() override; //806e94fc vtable 808c72cc
     void OnStart() override; //0xC 806e4a64
@@ -32,12 +32,12 @@ class Wanwan_Chn: public ObjectCollidable {
     void LoadCollision() override; //0x60 806e41a4
     void UpdateCollision() override; //0x74 806e4220
     float GetCollisionDiameter() const override; //0xa0 806e94c4
-    ObjToKartHit OnCollision(const Kart& kart, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806e4218
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806e4218
     float unknown_0xb0[4];
 }; //0xc0
 
 
-class Wanwan: public ObjectCollidable, public ObjectCycleManager {
+class Wanwan : public ObjectCollidable, public ObjectCycleManager {
     Wanwan(const KMP::Holder<GOBJ>& gobjHolder); //806e4224
     ~Wanwan() override; //806e4aec vtable 808c71c4
     void OnStart() override; //0xC 806e4b9c
@@ -46,9 +46,9 @@ class Wanwan: public ObjectCollidable, public ObjectCycleManager {
     bool HasLod() override; //0x2c 806e94bc
     void LoadAnimations() override; //0x5c 806e9468
     void UpdateModelMatrix() override; //0x6c 806e9464
-    ObjToKartHit OnCollision(const Kart& kart, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806e526c
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806e526c
     //depends on factors like speed and obviously the kartToObj as a goomba does not do anything to a player in a mega
-    ObjToItemInteraction GetItemCollisionType(const Kart& kart, ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806e546c
+    ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806e546c
 
     //CycleManager vtable 808c72b0 at 0xb0, 7 ptmfs
     //~Kuribo() override; thunk 806e95a8

@@ -29,12 +29,6 @@ enum PlayerType {
     PLAYER_NONE
 };
 
-enum Team {
-    TEAM_RED,
-    TEAM_BLUE,
-    TEAM_NONE
-};
-
 enum BattleType {
     BATTLE_BALLOON,
     BATTLE_COIN
@@ -150,9 +144,9 @@ public:
     GameMode gamemode; //0x8
     GameType gametype; //0xc
     BattleType battleType; //0x10
-    CpuMode cpuMode;
-    ItemMode itemMode;
-    u8 hudPlayerIds[4];
+    CpuMode cpuMode; //0x14
+    ItemMode itemMode; //0x18
+    u8 hudPlayerIds[4]; //0x1c
     u32 cupId; //http://wiki.tockdom.com/wiki/List_of_Identifiers#Cups
     u8 raceNumber; //resets at 100 for some reason
     u8 lapCount; //0x25
@@ -243,7 +237,9 @@ size_assert(RaceData, 0x73f0);
 
 extern "C" {
     int GetTrackBMGId(CourseId id);
-    int CharacterIDToWeightClass(CharacterId id); //0 light 1 medium 2 heavy
+    int CharacterIDToWeightClass(CharacterId id); //8081cd3c 0 light 1 medium 2 heavy
+    bool IsKartUnlocked(KartId kart, u32 r4); //8081cfb4 belongs to another file but idk
+    KartId CharacterIdToKartIdByIdx(CharacterId id, u8 idx); //8081cef4
     char* CharacterIDToChar(CharacterId id); //80860acc
 }
 #endif

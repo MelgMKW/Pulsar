@@ -1,7 +1,7 @@
 #ifndef _NW4R_LYTTYPES_
 #define _NW4R_LYTTYPES_
 #include <types.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 
 namespace nw4r {
 namespace lyt {

@@ -187,16 +187,20 @@ void ChangeGhostOpacity(u8 focusedPlayerIdx) {
     for(int i = 0; i < kartMgr->playerCount; ++i) {
         u32 scnObjDrawOptionsIdx = i == focusedPlayerIdx ? 0xA : 1;
         Kart::Pointers& pointers = kartMgr->players[i]->pointers;
-        pointers.kartBody->UpdateModelDrawPriority(scnObjDrawOptionsIdx);
         DriverController* driver = pointers.driverController;
+
+        pointers.kartBody->UpdateModelDrawPriority(scnObjDrawOptionsIdx);
         if(driver->driverModel != nullptr) driver->driverModel->UpdateDrawPriority(scnObjDrawOptionsIdx);
         if(driver->driverModel_lod != nullptr) driver->driverModel_lod->UpdateDrawPriority(scnObjDrawOptionsIdx);
         if(driver->miiHeads != nullptr) driver->miiHeads->UpdateDrawPriority(scnObjDrawOptionsIdx);
+        if(driver->ticoModel != nullptr) driver->ticoModel->tico->UpdateDrawPriority(scnObjDrawOptionsIdx);
+        if(driver->toadetteHair != nullptr && driver->toadetteHair->cb != 0) driver->toadetteHair->cb->hair->UpdateDrawPriority(scnObjDrawOptionsIdx);
         for(int j = 0; j < pointers.values->wheelCount0; ++j) {
             pointers.wheels[j]->UpdateModelDrawPriority(scnObjDrawOptionsIdx);
             pointers.suspensions[j]->UpdateModelDrawPriority(scnObjDrawOptionsIdx);
         }
     }
+    RaceData::sInstance->racesScenario.settings.hudPlayerIds[0] = focusedPlayerIdx;
 }
 kmBranch(0x805a9b60, ChangeGhostOpacity);
 

@@ -2,19 +2,15 @@
 #define _MODELRENDERERPAGE_
 #include <kamek.hpp>
 #include <game/UI/Page/Page.hpp>
+#include <game/3D/Model/Menu/BackModel.hpp>
 
-enum BackGroundModelType {
-    BACKGROUND_STOPWATCH,
-    BACKGROUND_TROPHY,
-    BACKGROUND_FLAG,
-    BACKGROUND_BALOON
-};
 
 struct ModelRendererParams {
     void Reset();
     CharacterId character;
     KartId kart;
-    u8 unknown_0x8[2];
+    bool isVisible; //0x8
+    u8 unknown_0x9;
     u8 padding[2];
 }; //total size 0xC
 
@@ -47,7 +43,7 @@ class ModelRendererValuesHolder {
 }; //total size 0x1980
 
 namespace Pages {
-class ModelRenderer: public Page { //ID 0x7f
+class ModelRenderer : public Page { //ID 0x7f
 public:
     ModelRenderer(); //805f4fd0
     ~ModelRenderer() override; //805f51c8 vtable 808b9c00
@@ -60,15 +56,17 @@ public:
     int GetRuntimeTypeInfo() const override; //0x60 805f5fdc
     void RequestCharacterModel(u8 hudSlotId, CharacterId id); //805f56e0
     void RequestKartModel(u8 hudSlotId, KartId id); //805f5958
-    void RequestBackgroundModel(BackGroundModelType type); //805f5984
+    void RequestBackgroundModel(BackModelType type); //805f5984
     void SetBackgroundModelVisibility(bool isVisible); //805f5a30
     void LoadKartModelsByCharacter(u8 hudSlotId, CharacterId id); //805f570c loads the models for a character, called when a character is selected
     static u32 GetVariantType(u8 hudSlotId); //805f5a98 depends on section Id
     static u32 GetModelCount(SectionId sectionId); //805f5d58
+    static void PrepareParams(u8 playerId); //805f5c94 transition from charSelect to kartSelect
+
     GXTexObj* GetModelTexObj(u8 hudSlotId); //805f5a4c for karts and characters
     GXTexObj* GetBackgroundModelTexObj() const; //805f5a70
     ManipulatorManager manipulatorManager; //0x44
-    ModelRendererParams params[4]; //one per local player
+    ModelRendererParams params[4]; //0x54 one per local player
     u8 modelCount; //0x84
     u8 padding[3];
     float unknown_0x88;//0x88

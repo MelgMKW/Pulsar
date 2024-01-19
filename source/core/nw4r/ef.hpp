@@ -25,8 +25,8 @@
 
 namespace nw4r {
 namespace ef {
-void _PSSinCosRad(register f32* ret, register float val); //80036f70
-void PSSinCosRad(register f32* sin, register f32* cos, register float val); //80036ff0
+void _PSSinCosRad(register float* ret, register float val); //80036f70
+void PSSinCosRad(register float* sin, register float* cos, register float val); //80036ff0
 }//namespace ef
 }//namespace nw4r
 

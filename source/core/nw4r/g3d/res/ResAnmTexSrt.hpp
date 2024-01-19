@@ -5,7 +5,7 @@
 #include <core/nw4r/g3d/res/ResDic.hpp>
 #include <core/nw4r/g3d/res/ResMat.hpp>
 #include <core/nw4r/g3d/res/ResMdl.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 
 namespace nw4r {
 namespace g3d {

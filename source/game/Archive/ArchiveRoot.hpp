@@ -37,12 +37,17 @@ class AsyncCourseArchiveLoader : public EGG::Disposer { //+0x588
 size_assert(AsyncCourseArchiveLoader, 0x24);
 
 class AllkartArchivesLoader {
+    enum State {
+        ALLKARTARCHIVES_HASREQUEST,
+        ALLKARTARCHIVES_ABOUTTOLOAD = 1,
+        ALLKARTARCHIVES_ISLOADING = 3,
+        ALLKARTARCHIVES_HASLOADED = 4
+    };
     AllkartArchivesLoader(); //8053fe68
     virtual ~AllkartArchivesLoader(); //8053fe94 vtable 808b3c08
     EGG::Heap* mountHeap; //0x4
     EGG::Heap* dumpHeap; //0x8
-    u8 unknown_0xC[0xf - 0xC];
-    bool hasRequest;
+    State state; //0xC
     CharacterId id;
     u32 mode; //0 battle 2 otherwise
 }; //total size 0x18
@@ -102,12 +107,13 @@ public:
         const char* dir, LayoutResources& resources) const; //80541878
     static void LoadCourseArchiveAsync(CourseId id); //80541998
     void RequestLoadCourseAsync(CourseId id); //805419ac
-    static const char* GetKartArchivePostfix(CharacterId character); //805419c8
-    static const char* GetKartArchivePrefix(KartId id); //805419ec
+    static const char* GetKartArchivePostfix(CharacterId character); //805419c8 fk part of labike_fk
+    static const char* GetKartArchivePrefix(KartId id); //805419ec labike part of labike_fk
     bool ExecuteTask(EGG::TaskThread::TaskFunction function, void* args); //80541c48
     bool RequestTask(EGG::TaskThread::TaskFunction function, void* args, u32 r6); //80541cbc
     void ProcessRequestsAndShutdown(); //80541ce0 Waits for all requests to finish then shuts down (bool isFree set to false)
     static void LoadKartArchiveAsync(u8 hudSlotId); //80541e44
+    void RequestLoadKartArchives(u8 hudSlotId, CharacterId character, u32 gamemode); //80542210 gamemode 0 for vs, 2 for battle
     void InitAllkartArchivesLoaders(u32 localPlayerCount, u8 sceneHeapIdx); //805422cc
     void ResetAllkartArchivesLoaders(); //805423bc
     EGG::Heap* GetKartLoaderHeap(u8 hudSlotId) const; //8054247c

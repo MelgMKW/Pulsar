@@ -7,6 +7,7 @@ del build\*.o
 :: Destination (change as necessary)
 SET "SOURCE=Pulsar"
 SET "RIIVO=C:\Users\admin\Documents\Dolphin Emulator\Load\Riivolution\Pulsar"
+SET "ENGINE=C:\Modding\Coding\Kamek\Engine\engine"
 echo %RIIVO%
 
 
@@ -21,7 +22,7 @@ SET CPPFILES=
 for /R Pulsar %%f in (*.cpp) do SET "CPPFILES=%%f !CPPFILES!"
 
 :: Compile CPP
-%CC% %CFLAGS% -c -o "build/kamek.o" "C:\Modding\Coding\Kamek\Engine\engine\kamek.cpp"
+%CC% %CFLAGS% -c -o "build/kamek.o" "%ENGINE%\kamek.cpp"
 
 SET OBJECTS=
 FOR %%H IN (%CPPFILES%) DO (
@@ -32,7 +33,7 @@ FOR %%H IN (%CPPFILES%) DO (
 
 :: Link
 echo Linking... %time%
-"../engine/Kamek" "build/kamek.o" %OBJECTS% -dynamic -externals="../engine/source/symbols.txt" -versions="../engine/source/versions.txt" -output-kamek=build\$KV$.bin >nul
+"../engine/Kamek" "build/kamek.o" %OBJECTS% -dynamic -externals="../engine/source/symbols.txt" -versions="../engine/source/versions.txt" -output-combined=build\Code.bin >nul
 
 if %ErrorLevel% equ 0 (
     xcopy /Y build\*.bin "%RIIVO%\Binaries" >nul

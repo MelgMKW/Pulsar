@@ -6,12 +6,12 @@
 #include <core/egg/ProcessMeter.hpp>
 #include <core/egg/Display.hpp>
 #include <core/RK/RKSceneManager.hpp>
+#include <core/rvl/gx/GXStruct.hpp>
 
 //using namespace EGG;
-class GXRModeObj;
 
 struct Video {
-    GXRModeObj* mode;
+    GXRenderModeObj* mode;
     u32 unknown[2];
 };//total size 0xc
 
@@ -42,7 +42,7 @@ public:
     u32 unknown_0x30; //idk
     u32 sysHeapSize;
     u32 gxFifoBufSize;
-    GXRModeObj* mode;
+    GXRenderModeObj* mode;
     EGG::ExpAudioMgr* audioManager; //0x40
     Video* video; //0x44
     void* xfbManager; //0x48
@@ -55,7 +55,7 @@ public:
     EGG::ExpHeap* heapSystem2; //the one I use 0x64
     u8 frameClock;
     u8 unknown_0x68;
-    bool drawFrame;
+    bool drawFrame; //0x69
     u8 unknown_0x6b[0x74 - 0x6b];
 }; //total size 0x74
 #endif

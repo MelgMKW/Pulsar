@@ -2,7 +2,7 @@
 #define _NW4R_EF_PARTICLE_
 #include <types.hpp>
 #include <core/rvl/gx/GXStruct.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 #include <core/nw4r/ef/res/ResTexture.hpp>
 #include <core/nw4r/ef/res/ResEmitter.hpp>
 #include <core/nw4r/ef/Common.hpp>

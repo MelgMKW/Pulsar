@@ -1,7 +1,7 @@
 #ifndef _NW4R_G3D_RESVTX_
 #define _NW4R_G3D_RESVTX_
 #include <types.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 #include <core/rvl/gx/GXEnum.hpp>
 
 //https://wiki.tockdom.com/wiki/MDL0_(File_Format)#Section_8_-_Materials

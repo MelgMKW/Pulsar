@@ -3,7 +3,7 @@
 #include <types.hpp>
 #include <core/nw4r/g3d/g3dObj.hpp>
 #include <core/nw4r/g3d/res/ResMdl.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 
 namespace nw4r {
 namespace g3d {
@@ -85,6 +85,8 @@ public:
     virtual bool Insert(u32 idx, ScnObj* obj); //0x34 8006eb60 
     virtual ScnObj* Remove(u32 idx); //0x38 8006ecf0
     virtual bool Remove(ScnObj* obj); //0x3c 8006edb0
+
+    void DefG3dProcScnGroup(u32 g3dproc, u32 param, void* info); //8006e6f0
 
     ScnObj** scnObjs;
     u32 scnObjArraySize; //0xe0

@@ -67,7 +67,7 @@ enum KartUIStats {
     UISTATS_MT
 };
 
-class ButtonMachine: public PushButton {
+class ButtonMachine : public PushButton {
 public:
     //ctor inline
     ~ButtonMachine() override; //80847ca8 vtable 808d9918
@@ -80,7 +80,7 @@ public:
 
 //_sinit_ at 80847d00
 namespace Pages {
-class KartSelect: public MenuInteractable { //ID 0x6C
+class KartSelect : public MenuInteractable { //ID 0x6C
 public:
     KartSelect(); //80627060
     ~KartSelect() override; //80847bf4 vtable 808d9880
@@ -127,13 +127,11 @@ public:
     u32 curButtonId; //matches kart IDs
     VehicleModelControl vehicleModel;
     CtrlMenuMachineGraph ctrlMenuMachineGraph; //0x87c 808d3420 inherited from LayoutUIControl,
-    Vec2 kartScale; //depends on minUnlockedKartCount
-    u32 minUnlockedKartsCount; //min unlocked karts out of all weight classes and types
+    Vec2 kartScale; //0xA00 depends on minUnlockedKartCount
+    u32 minUnlockedKartsCount; //0xA08 min unlocked karts out of all weight classes and types
 }; //Total Size 0xA0C
 size_assert(KartSelect, 0xA0C);
 }//namespace Pages
-
-bool IsKartUnlocked(KartId kart, bool isBike); //8081cfb4 belongs to another file but idk
 extern KartId kartsSortedByWeight[3][12]; //808ab770
 /* controlGroup:
 index 0 = CharaName (MachineSelectName.brctr)

@@ -48,18 +48,30 @@ loaderFunctionsEx functions_k ={
 };
 
 
+
 void LoadIntoMKW() {
-    u8 region = *(u8*)(0x80000003);
+    u8 regionMem = *(u8*)(0x80000003);
 
     LoaderFunctions* funcs = nullptr;
-    switch(region) {
-        case 'P': funcs = &functions_p.base; break;
-        case 'E': funcs = &functions_e.base; break;
-        case 'J': funcs = &functions_j.base; break;
-        case 'K': funcs = &functions_k.base; break;
+    Region region;
+    switch(regionMem) {
+        case 'P':
+            funcs = &functions_p.base;
+            region = PAL;
+            break;
+        case 'E':
+            funcs = &functions_e.base;
+            region = NTSC_U;
+            break;
+        case 'J':
+            funcs = &functions_j.base;
+            region = NTSC_J;
+            break;
+        case 'K':
+            funcs = &functions_k.base;
+            region = NTSC_K;
+            break;
     }
 
-    char path[64];
-    funcs->sprintf(path, "/Binaries/%c.bin", region);
-    LoadKamekBinaryFromDisc(funcs, path);
+    LoadKamekBinaryFromDisc(funcs, region);
 }

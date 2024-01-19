@@ -3,7 +3,7 @@
 #include <types.hpp>
 #include <core/nw4r/ef/res/Resource.hpp>
 #include <core/nw4r/ef/res/ResEmitter.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 
 namespace nw4r {
 namespace ef {

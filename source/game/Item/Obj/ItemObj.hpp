@@ -58,12 +58,12 @@ class ObjBase {
 public:
     ObjBase(); //8079d8bc
 
-    class CalcWorld : public ModelWorldCalc {
-        ~CalcWorld() override; //807a3a1c vtable 808d19b0, 808D19A8 for empty
-        void ExecCallbackB(g3d::WorldMtxManip* manip, g3d::ResMdl mdl, g3d::FuncObjCalcWorld* obj) override; //807a3a14
-        virtual void vf_0x18(); //807a39d4
-        virtual void vf_0x1c(); //8079d84c
-    }; //used to set ScnMdlSimple's cb
+    class CalcWorldCB : public ModelCalcBase, public EmptyModelCalcParent, public g3d::ICalcWorldCallback {
+        //vtable 808d19b0, 808D19A8 for empty
+        ~CalcWorldCB() override; //thunk 807a3a1c func 807a39d4
+        void ExecCallbackB(g3d::WorldMtxManip* manip, g3d::ResMdl mdl, g3d::FuncObjCalcWorld* obj) override; //thunk 807a3a14 func 8079d84c
+        Vec3* position;
+    }; //0x14 used to set ScnMdlSimple's cb
     struct AnmParam { //808d1d20 for example
         const char* name;
         AnmType type;

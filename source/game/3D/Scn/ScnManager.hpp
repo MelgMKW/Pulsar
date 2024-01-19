@@ -107,9 +107,9 @@ public:
     void UpdateModelDrawPriority(ModelDirector* mdlDirector, u32 scnObjDrawOptionsIdx); //80564074
 
     static Light* AcquireLight(); //80565630
-    EGG::Heap* heap; //0x10
+    EGG::Heap* curHeap; //0x10
     EGG::Heap* heap2; //0x14
-    EGG::Allocator* allocator; //0x18
+    EGG::Allocator* curAllocator; //0x18 set by MenuModelMgr in menus, so might be for models?
     EGG::Allocator* allocator2; //0x1c
     EGG::Allocator* mem2Allocator; //0x20
     g3d::ScnRoot* curScnRoot; //0x24

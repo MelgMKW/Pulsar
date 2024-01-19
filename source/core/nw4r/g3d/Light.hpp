@@ -3,7 +3,7 @@
 
 #include <types.hpp>
 #include <core/nw4r/g3d/res/ResCommon.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 #include <core/rvl/gx/GXEnum.hpp>
 #include <core/rvl/gx/GXStruct.hpp>
 

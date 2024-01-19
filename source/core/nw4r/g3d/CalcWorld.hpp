@@ -15,12 +15,13 @@ public:
 };
 
 class FuncObjCalcWorld;
+//the 3 callback when a G3CPROC for CALC_WORLD is executed for the ScnGroup the model is part of
 class ICalcWorldCallback {
 public:
-    virtual ~ICalcWorldCallback() {}
-    virtual void ExecCallbackA(ChrAnmResult* result, ResMdl mdl, FuncObjCalcWorld* obj) {}
-    virtual void ExecCallbackB(WorldMtxManip* manip, ResMdl mdl, FuncObjCalcWorld* obj) {}
-    virtual void ExecCallbackC(math::MTX34* mat, ResMdl mdl, FuncObjCalcWorld* obj) {}
+    virtual ~ICalcWorldCallback() {} //806c7c6c vtable 808c4828
+    virtual void ExecCallbackA(ChrAnmResult* result, ResMdl mdl, FuncObjCalcWorld* obj) {} //806cc9e8
+    virtual void ExecCallbackB(WorldMtxManip* manip, ResMdl mdl, FuncObjCalcWorld* obj) {} //806cce34
+    virtual void ExecCallbackC(math::MTX34* mat, ResMdl mdl, FuncObjCalcWorld* obj) {} //806cc9e4
 };
 
 

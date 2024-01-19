@@ -14,10 +14,12 @@
 
 class MiiRenderMgr {
 public:
-    class CalcWorld : public ModelWorldCalc {
-        ~CalcWorld() override; //thunk 807829d0 func 8078528b0 vtable 808d1610, 808d1608 for empty
+    class CalcWorldCB : public ModelCalcBase, public EmptyModelCalcParent, public g3d::ICalcWorldCallback {
+        //vtable 808d1610, 808d1608 for empty
+        ~CalcWorldCB() override; //thunk 807829d0 func 807828b0 
         void ExecCallbackB(g3d::WorldMtxManip* manip, g3d::ResMdl mdl, g3d::FuncObjCalcWorld* obj) override; //thunk 807829c8 func 80782804
-    }; //used to set ScnMdlSimple's cb
+        float rotation; //0x10 not sure whose rotation
+    }; //0x14 used to set ScnMdlSimple's cb
 
     struct MiiRequester {
         MiiRenderMgr* next;
@@ -67,7 +69,7 @@ public:
     u8 unknown_0x134[0x148 - 0x134];
     EGG::LightMgr* lightMgr; //0x148
     u8 unknown_0x14c[0x14c - 0x134];
-    CalcWorld* calcWorld; //0x15c
+    CalcWorldCB* calcWorld; //0x15c
     u8 unknown_0x160[4];
     EGG::UnknownGX eggGX; //0x164
     u8 unknown_0x1a0[0x1bc - 0x1a0];

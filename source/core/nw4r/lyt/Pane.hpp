@@ -8,7 +8,7 @@
 #include <core/nw4r/ut/List.hpp>
 #include <core/nw4r/ut/Color.hpp>
 #include <core/nw4r/ut/Rect.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 
 namespace nw4r {
 namespace lyt {

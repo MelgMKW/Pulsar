@@ -5,7 +5,7 @@
 #include <core/nw4r/snd/Sound3DListener.hpp>
 #include <core/nw4r/snd/SoundActor.hpp>
 #include <core/nw4r/snd/SoundArchivePlayer.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 #include <core/rvl/mtx/mtx.hpp>
 #include <core/nw4r/snd/InstancePool.hpp>
 

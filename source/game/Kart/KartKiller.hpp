@@ -14,7 +14,7 @@ public:
     class ModelCalc : public ModelCalcCallback {
     public:
         ~ModelCalc() override; //0x8 vtable 808b6890 at 0x8, 808b6888 at 0xc for empty thunk 8059df1c func 8059dedc
-        void CalcWorldImpl() override; //0x24 8059b600
+        void ExecWorldCBImpl(u32 args) override; //0x24 8059b600
     };
 
     explicit Killer(const BRRESHandle& handle); //8059b658

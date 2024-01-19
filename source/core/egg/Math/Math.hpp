@@ -1,7 +1,7 @@
 #ifndef _EGGMATH_
 #define _EGGMATH_
 #include <types.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 
 namespace EGG {
 namespace Math {

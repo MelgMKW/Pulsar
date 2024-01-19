@@ -5,7 +5,7 @@
 #include <game/UI/Page/Other/ModelRenderer.hpp>
 //_sinit_ at 805f4fac
 
-class BackGroundModelControl: public LayoutUIControl {
+class BackGroundModelControl : public LayoutUIControl {
     BackGroundModelControl(); //805f2d30
     ~BackGroundModelControl() override; //805f2d6c vtable 808b9b84
     void InitSelf() override; //0x18 805f2ea4
@@ -13,16 +13,16 @@ class BackGroundModelControl: public LayoutUIControl {
     int GetRuntimeTypeInfo() const override; //0x28 805f4fa0
     const char* GetClassName() const override; //0x2c 805f2d24
     void Load(const char* ctrName, u8 type); //805f2dc4
-    void RequestModel(BackGroundModelType type); //805f2e84
-    BackGroundModelType curType; //0x174
-    BackGroundModelType newType; //0x178 if new and cur do not match, request a change
+    void RequestModel(BackModelType type); //805f2e84
+    BackModelType curType; //0x174
+    BackModelType newType; //0x178 if new and cur do not match, request a change
     u16 opacity; //decreased as the old model fades, then increased back to 0x00FF
     bool hasNewType; //0x17e checked by update every frame
     u8 padding;
 }; //0x180
 size_assert(BackGroundModelControl, 0x180);
 
-class NoteModelControl: public LayoutUIControl {
+class NoteModelControl : public LayoutUIControl {
 public:
     NoteModelControl(); //805f42b4 vtable 808b9ad0
     ~NoteModelControl() override; //805f42f0
@@ -42,7 +42,7 @@ public:
 }; //total size 0x180
 size_assert(NoteModelControl, 0x180);
 
-class VehicleModelControl: public LayoutUIControl { //this c
+class VehicleModelControl : public LayoutUIControl { //this c
 public:
     VehicleModelControl(); //805f39bc 
     ~VehicleModelControl() override; //805f39f8 vtable 808B9B0C
@@ -64,16 +64,16 @@ public:
 }; //Total size 0x184
 size_assert(VehicleModelControl, 0x184);
 
-class DriverModelControl: public LayoutUIControl {
+class DriverModelControl : public LayoutUIControl {
 public:
-    DriverModelControl(); //805float48
-    ~DriverModelControl() override; //0x805float84 vtable 808b9b48
+    DriverModelControl(); //805f3248
+    ~DriverModelControl() override; //0x805f3284 vtable 808b9b48
     void InitSelf() override; //0x18 805f3568
     void OnUpdate() override; //0x1c 805f356c
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 805f37e4
     int GetRuntimeTypeInfo() const override; //805f4f94
-    const char* GetClassName() const override; //805float38
-    void Load(const char* ctrName, u8 hudSlotId); //805floatdc
+    const char* GetClassName() const override; //805f3238
+    void Load(const char* ctrName, u8 hudSlotId); //805f32dc
     void SetAnimationType(PageId id); //805f346c sets 0x180
     void RequestModel(CharacterId id); //805f3494
     void SetModelPositionOnAnim(); //805f3830 called by Initself

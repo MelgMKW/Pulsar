@@ -4,11 +4,11 @@
 #include <core/nw4r/ut/LinkList.hpp>
 #include <core/nw4r/snd/SoundActor.hpp>
 #include <core/nw4r/snd/Sound3DManager.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 
 namespace nw4r {
 namespace snd {
-class Sound3DActor: public SoundActor, public detail::BasicSound::AmbientArgUpdateCallback {
+class Sound3DActor : public SoundActor, public detail::BasicSound::AmbientArgUpdateCallback {
 public:
     Sound3DActor(SoundArchivePlayer& soundArchivePlayer, Sound3DManager& sound3DManager); //8009c2a0
 

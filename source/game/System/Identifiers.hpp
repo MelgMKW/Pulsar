@@ -1,6 +1,8 @@
 #ifndef _IDENTIFIERS_
 #define _IDENTIFIERS_
 
+
+
 enum KartId {
     STANDARD_KART_S = 0x00,
     STANDARD_KART_M = 0x01,
@@ -807,6 +809,12 @@ enum SoundIDs {
     SOUND_ID_GLOBAL_POW_3RDSHAKE            = 0x11f,
     SOUND_ID_KART_BOOST                     = 0x19c,
     SOUND_ID_aDP_WATER                      = 0x309
+};
+
+enum Team {
+    TEAM_RED,
+    TEAM_BLUE,
+    TEAM_NONE
 };
 
 enum DamageType {

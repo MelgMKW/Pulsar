@@ -79,7 +79,6 @@ class RouteStraight : public Route {
 }; //0x34
 
 
-
 class RouteCurved : public Route {
     RouteCurved(u32 routeId, const KMP::Holder<POTI>& route); //806ed57c
     RouteCurved(u32 routeId, const Vec3& pointsArray, u32 pointCount, u32 isCurved, bool isNotCyclic); //806ed704 unsure what r5 is

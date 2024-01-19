@@ -6,7 +6,7 @@
 //Goomba, just as an example
 namespace Objects {
 
-class Kuribo: public ObjectCollidable, public ObjectCycleManager { //0x191 = 401
+class Kuribo : public ObjectCollidable, public ObjectCycleManager { //0x191 = 401
     explicit Kuribo(const KMP::Holder<GOBJ>& gobjHolder); //806db184
 
     //ObjectCollidable vtable 808c5e10
@@ -16,18 +16,18 @@ class Kuribo: public ObjectCollidable, public ObjectCycleManager { //0x191 = 401
     void Update() override; //0x14 806db5b0
     void LoadAnimations() override; //0x5c 806dd278
 
-    ObjToKartHit OnCollision(const Kart& kart, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806db764
-    ObjToItemInteraction GetItemCollisionType(const Kart& kart, ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc0 806dba98
-    //RouteManager vtable 808c5efc at 0xB0
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806db764
+    ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc0 806dba98
+    //ObjectCycleManager vtable 808c5efc at 0xB0
     //~Kuribo() override; thunk 806dd2d0
     int vf_0xC() override; //806dd270 returns 2
 
-    u8 unknown_0xd0[0x14c - 0xd0];
 
     u16 respawnTime; //0xd0
     u8 padding4[2];
     float speed; //0xD4
     float animationSpeed; //0xD8
+    u8 unknown_0xdc[0x14c - 0xdc];
 
 }; //0x14c
 

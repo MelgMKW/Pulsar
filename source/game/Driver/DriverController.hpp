@@ -4,9 +4,14 @@
 #include <core/nw4r/g3d/res/ResNode.hpp>
 #include <game/Kart/KartLink.hpp>
 #include <game/3D/Model/ModelDirector.hpp>
+#include <game/Driver/Tico.hpp>
+#include <game/Driver/Toadette.hpp>
 #include <game/Mii/MiiHeadsModel.hpp>
 #include <game/Sound/Actors/CharacterSound.hpp>
+
 using namespace nw4r;
+class DriverController;
+
 class IKParams { //Inverse kinematics
 public:
     IKParams(u8 playerId); //8078b5d0 calls Load, if returns false, gets params from IKParam.ikp in the driver szs
@@ -30,7 +35,7 @@ class DriverModelBones {
     u32 unknown_0xC;
     u32 idx;
     char* name; //0x14
-    g3d::ResNode resNode; //raw bone
+    g3d::ResNode resNode; //0x18 raw bone
     u32 matId; //0x1c
     bool unknown_0x20;
     u8 unknown_0x21[3];
@@ -48,7 +53,7 @@ public:
     void LoadBones(); //807c7e7c
     void Update(); //807cb360
     void CreateModelDirectors(ModelDirector** driver, ModelDirector** driver_lod, Kart::BRRESHandle& handle, bool areTransparent); //807d21f8
-
+    u32 GetBoneMatId(u32 boneId); //807d976c
 
     Kart::Link link;
     CharacterSound* characterSound; //0xC
@@ -59,7 +64,9 @@ public:
     u32 unknown_0x1c;
     virtual ~DriverController(); //0x20 807cdd08 vtable 808d2ad8
     virtual void Init(); //807cb0c8
-    u8 unknown_0x24[0x38 - 0x24];
+    TicoModel* ticoModel; //0x24
+    ToadetteHair* toadetteHair; //0x28
+    u8 unknown_0x2c[0x38 - 0x2c];
     u32 trickType;
     u32 trickDirection;
     u8 unknown_0x40[0x68 - 0x40];
@@ -72,7 +79,7 @@ public:
     u8 unknown_0xa9[0xB8 - 0xA9];
     ClipInfo* clipInfo; //0xb8
     Vec3 unknown_0xBC;
-    bool isTT;
+    bool isTT; //0xc8
     u8 unknown_0xC9[0xCC - 0xC9];
     UnkType* unknown_0xCC[2];
     u8 unknown_0xD4[2];
@@ -81,7 +88,7 @@ public:
     ModelDirector mdlDirectors[6]; //array of all the mdlDirectors used (driver, driver_lod, miiHeads, luma etc..)
     u32 mdlDirectorsCount; //0xF0
     u8 unknown_0xE0[0xfa - 0xf4];
-    u16 currentAnimation;
+    u16 currentAnimation; //0xfa
     u16 lastAnimation;
     u8 unknown_0xFe[0x100 - 0xfe];
     MiiHeadsModel* miiHeads; //0x100 0x807c795c
@@ -101,4 +108,5 @@ public:
     ~DriverControllerBike() override; //807d3f58 vtable 808d2ab0
     void Init() override; //807cb130
 };//total size 0x6e4
+
 #endif

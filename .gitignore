@@ -9,6 +9,11 @@
 /.vs
 /PulsarPackCreator/bin
 /PulsarPackCreator/obj
+/PulsarPackCreator/.vs
+/KamekSource/bin
+/KamekSource/obj
+/KamekSource/.vs
+
 # Compiled Object files
 *.slo
 *.lo

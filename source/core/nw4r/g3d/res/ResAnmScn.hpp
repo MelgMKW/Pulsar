@@ -7,7 +7,7 @@
 #include <core/nw4r/g3d/res/ResAnmLight.hpp>
 #include <core/nw4r/g3d/res/ResAnmCamera.hpp>
 #include <core/nw4r/g3d/res/ResAnmFog.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 
 namespace nw4r {
 namespace g3d {

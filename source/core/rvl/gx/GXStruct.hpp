@@ -26,9 +26,9 @@ typedef struct _GXLightObj {
     u32 dummy[16];
 } GXLightObj;
 
-struct GXRenderModeObj{
+struct GXRenderModeObj {
     VI::TVMode viTVmode;
-    u16 fbWidth; 
+    u16 efbWidth;
     u16 efbHeight;
     u16 xfbHeight;
     u16 viXOrigin;

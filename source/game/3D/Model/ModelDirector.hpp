@@ -7,6 +7,7 @@
 #include <game/3D/Scn/ScnManager.hpp>
 #include <game/3D/Scn/Light.hpp>
 #include <game/3D/Model/ModelTransformator.hpp>
+#include <game/3D/Model/ModelCalc.hpp>
 
 /*
 Contributors:
@@ -74,6 +75,7 @@ public:
     bool IsVisibleOnScreen(u32 screenIdx); //8055cd10
 
     void Update(u32 scnMdlIdx); //8055d23c
+    ModelTransformator* CreateTransformator(); //8055d9f0 mostly inlined
     void SetSoundActor(LinkedRaceActor& actor); //8055dce4 
 
     void LinkEmptyAnm(u32 animId); //8055e274 will create an empty AnmHolder, used for conditional animations to prevent nullptr reads 
@@ -84,9 +86,11 @@ public:
     void SetLight(void* lightStruct); //8055f2b4
     ScnMgr* GetScnManager() const; //8055f2c4 often inlined
     void UpdateDrawPriority(u32 scnObjDrawOptionsIdx); //8055f4c4
-    void ChangeTransformator(ModelTransformator* newTransformator); //8055f7d8
-
+    void ChangeTransformator(ModelTransformator* newTransformator, bool disableAllAnms); //8055f7d8
     void PrepareAllAnms(); //8055f1e4
+
+    //Keeps the model insert in the ScnGroup, but toggles drawXLU/OPA
+    void ToggleTransparent(bool isTransparent); //8055f34c used to prevent this https://imgur.com/hUjHk6b
 
     u32 bitfield; //0x4
     /*

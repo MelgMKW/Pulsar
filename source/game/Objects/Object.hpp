@@ -44,7 +44,7 @@ public:
     virtual bool HasLod(); //0x2c 806bf434
     virtual ClipInfo* GetClipInfo() const; //0x30 8067da54
     virtual const char* GetBRRESName() const; //0x34 80680730
-    virtual const char* GetSubFileName() const; //0x38 806806dc completely identical to the one above, but for other objects can be KCL, BREFF etc...
+    virtual const char* GetSubFileName() const; //0x38 806806dc completely identical to the one above, but for other objects can be MDL, KCL, BREFF etc...
     virtual void* vf_0x3c(); //0x3c 806806d4
     virtual const char* GetShadowResName() const; //0x40 806806cc
     virtual void LoadModels(); //0x44 8081fcec calls loadgraphics
@@ -128,8 +128,8 @@ class ObjectCycleManager {
     u32 frames; //resets when the object reaches the end of its route//its cycle
     u16 routePtmfsCount; //unsure
     u8 padding2[2];
-    u16* idsArray; //ptmfs used
-    CyclePtmfs* ptmfs; //808c5da0
+    u16* idsArray; //0x14 ptmfs used
+    CyclePtmfs* ptmfs; //0x18 808c5da0
     Object* parent; //0x1c
 }; //0x20
 

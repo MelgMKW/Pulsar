@@ -43,7 +43,7 @@ size_assert(DVDCommandBlock, 0x30);
 
 struct DVDFileInfo {
     DVDCommandBlock commandBlock;
-    u32             startAddr;      // disk address of file
+    u32             startAddr;      //0x30 disk address of file
     u32             length;         //0x34 file size in bytes
     DVDCallback     callback;
 };

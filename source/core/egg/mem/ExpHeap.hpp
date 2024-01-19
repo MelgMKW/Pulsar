@@ -7,7 +7,7 @@
 namespace EGG {
 class GroupSizeHolder;
 
-class ExpHeap: public Heap {
+class ExpHeap : public Heap {
 public:
     class GroupSizeHolder { //non-official naming
     public:
@@ -29,6 +29,8 @@ public:
     u32 resizeForMBlock(void* buffer, u32 newSize) override; //0x20 80226c80
     u32 getAllocatableSize(s32 alignment) override; //0x24 80226c90
     u32 adjust() override; //0x28 80226d4c
+
+    void freeAll(); //80226ebc
 
     u32 getTotalFreeSize(); //80226c88
     void SetGroupId(u16 groupId); //80226c98 

@@ -12,6 +12,27 @@ Contributors:
 -Melg
 */
 
+enum MiiId { //simply charId - 6
+    MIIID_S_A_MALE   =  MII_S_A_MALE - 6,
+    MIIID_S_A_FEMALE =  MII_S_A_FEMALE - 6,
+    MIIID_S_B_MALE   =  MII_S_B_MALE - 6,
+    MIIID_S_B_FEMALE =  MII_S_B_FEMALE - 6,
+    MIIID_S_C_MALE   =  MII_S_C_MALE - 6,
+    MIIID_S_C_FEMALE =  MII_S_C_FEMALE - 6,
+    MIIID_M_A_MALE   =  MII_M_A_MALE - 6,
+    MIIID_M_A_FEMALE =  MII_M_A_FEMALE - 6,
+    MIIID_M_B_MALE   =  MII_M_B_MALE - 6,
+    MIIID_M_B_FEMALE =  MII_M_B_FEMALE - 6,
+    MIIID_M_C_MALE   =  MII_M_C_MALE - 6,
+    MIIID_M_C_FEMALE =  MII_M_C_FEMALE - 6,
+    MIIID_L_A_MALE   =  MII_L_A_MALE - 6,
+    MIIID_L_A_FEMALE =  MII_L_A_FEMALE - 6,
+    MIIID_L_B_MALE   =  MII_L_B_MALE - 6,
+    MIIID_L_B_FEMALE =  MII_L_B_FEMALE - 6,
+    MIIID_L_C_MALE   =  MII_L_C_MALE - 6,
+    MIIID_L_C_FEMALE =  MII_L_C_FEMALE - 6
+};
+
 class Mii { //has stuff like sex, type etc.. most likely
 public:
 

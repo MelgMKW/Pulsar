@@ -5,7 +5,7 @@
 #include <core/nw4r/g3d/res/ResDic.hpp>
 #include <core/nw4r/g3d/res/ResTex.hpp>
 #include <core/nw4r/g3d/res/ResAnmChr.hpp>
-#include <core/nw4r/math/math.hpp>
+#include <core/nw4r/math.hpp>
 #include <core/rvl/gx/GXStruct.hpp>
 
 //https://wiki.tockdom.com/wiki/MDL0_(File_Format)#Section_8_-_Materials
