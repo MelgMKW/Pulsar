@@ -33,9 +33,9 @@
 	</patch>	
 
 	<patch id="CTGPLoad">
-		<folder external="/ctgpr/My Stuff" disc="/" />
-	</patch>
+		<folder external="/ctgpr/My Stuff" />
+	</patch>	
 	<patch id="PackLoad">
-		<folder external="/{$pack}/My Stuff" disc="/" />
+		<folder external="/{$pack}/My Stuff" />
 	</patch>
 </wiidisc>

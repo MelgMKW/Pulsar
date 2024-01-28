@@ -28,7 +28,7 @@ Sound:
 
 
 Gameplay:
-- Optional Music speedUp on final lap (the music is sped up when you cross the line instead of switching to the fast lap version)200cc support
+- 200cc support
 - Ultra Mini-Turbos
 - Mega TCs
 - CLF78 and stebler's feather
@@ -44,4 +44,4 @@ Network:
 
 
 Credits:
-- Treeky for [Kamek](https://github.com/Treeki/Kamek/tree/master). The engine has been ever so slightly modified to create a new output format which combines the usual 4 binaries. 
+- Treeki for [Kamek](https://github.com/Treeki/Kamek/tree/master). The engine has been ever so slightly modified to create a new output format which combines the usual 4 binaries. 

@@ -123,6 +123,7 @@ void Settings::UpdateTrackList() {
         if(missingCRCIndex[i] == 0xFFFF) {
             for(int j = 0; j < oldTrackCount; ++j) {
                 if(toberemovedCRCIndex[j] == 0xFFFF) {
+                    missingCRCIndex[i] = j; //found a spot to put the missing track in, reset that spot and use it for the new track
                     toberemovedCRCIndex[j] = 0;
                     trophies[j].crc32 = cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(i));
                     for(int mode = 0; mode < 4; mode++) trophies[j].hastrophy[mode] = false;
@@ -131,7 +132,8 @@ void Settings::UpdateTrackList() {
             }
         }
     }
-    if(oldTrackCount < trackCount) {
+
+    if(oldTrackCount < trackCount) { //the surplus of tracks is simply put continuously at the end of the file
         u32 idx = oldTrackCount;
         for(int i = 0; i < trackCount; ++i) { //4032 4132
             if(missingCRCIndex[i] == 0xFFFF) {

@@ -6,7 +6,7 @@
 //Goomba, just as an example
 namespace Objects {
 
-class Kuribo : public ObjectCollidable, public ObjectCycleManager { //0x191 = 401
+class Kuribo : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 0x191 = 401
     explicit Kuribo(const KMP::Holder<GOBJ>& gobjHolder); //806db184
 
     //ObjectCollidable vtable 808c5e10

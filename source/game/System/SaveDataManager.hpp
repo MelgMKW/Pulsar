@@ -70,18 +70,25 @@ public:
     TimeEntry* GetTimeEntry(u32 index, CourseId id); //80548e30
     void StoreTimeEntry(const TimeEntry& entry, u32 index, CourseId id); //80548e90
     wchar_t miiName[10];
-    u8 unknown_0x14[2];
-    u8 miiAvatarID1;
-    u8 miiAvatarID2;
-    u8 miiAvatarID3;
-    u8 miiAvatarID4;
-    u8 miiClientID0;
+    u8 padding[2];
+
+#pragma pack(push, 1)
+    union {
+        RFL::CreateID createID; //0x16
+        u8 miiAvatarID0; //0x1a
+        u8 miiAvatarID1;
+        u8 miiAvatarID2;
+        u8 miiAvatarID3;
+    }miiID;
+
+    u8 miiClientID0; //0x1a
     u8 miiClientID1;
     u8 miiClientID2;
     u8 miiClientID3;
+#pragma pack(pop)
 
     u8 unknown_0x1e[0xE20 - 0x1e];
-    TimeEntry timentries[6][32]; //top 5 times + flap * 32 tracks
+    TimeEntry timentries[6][32]; //0xe20 top 5 times + flap * 32 tracks
     u8 unknwon_0x5920[0x93f0 - 0x5920];
 }; //total size 0x93F0
 size_assert(LicenseManager, 0x93f0);
@@ -94,10 +101,10 @@ public:
     EGG::TDisposer<SaveDataManager> disposer; //80543d18 vtable 808b3c98
     virtual ~SaveDataManager(); //8054460c vtable 808b3c80
     RKSYS* rksysRaw; //0x14
-    RKG* rkgBuffer;
-    u8 unknown_0x1C[0x36 - 0x1C];
-    u16 curLicenseId;
-    LicenseManager licenses[4];
+    RKG* rkgBuffer; //0x18
+    u8 unknown_0x1C[0x36 - 0x1C]; //0x1c
+    u16 curLicenseId; //0x36
+    LicenseManager licenses[4]; //0x38
     u8 unknown_0x24ff8[0x25004 - 0x24FF8]; //raw at 244ffc too
     u32 error; //0x25004
 }; //total size 0x25008

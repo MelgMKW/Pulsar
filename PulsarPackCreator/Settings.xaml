@@ -6,26 +6,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Program Settings" Height="200" Width="320" Background="#FD353535"
+        Title="Program Settings" Height="200" Width="320" Background="{DynamicResource AppBg}"
         HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Window.Resources>
+        <Style x:Key="ColorMode" TargetType="Control">
+            <Setter Property="Background"               Value="{DynamicResource bg}"/>
+            <Setter Property="Foreground"               Value="{DynamicResource fg}"/>
+        </Style>
+        <Style BasedOn="{StaticResource ColorMode}" x:Key="CheckBoxes" TargetType="CheckBox">
+            <Setter Property="FontSize"             Value="13"/>
+        </Style>
 
+
+    </Window.Resources>
     <Border BorderBrush="Black" BorderThickness="2">
         <Grid>
-
-            <CheckBox x:Name="AutoUpdater" Grid.Row="0" Grid.Column="0"
-                Margin="20,54,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Checked="OnAutoUpdateToggle" Unchecked="OnAutoUpdateToggle"
-                Content="Check for updates on startup" FontSize="14"/>
-            <CheckBox x:Name="OnExitRemind" Grid.Row="0" Grid.Column="0"
-                Margin="20,74,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" Checked="OnExitRemindToggle" Unchecked="OnExitRemindToggle"
-                Content="Ask before closing" FontSize="14"/>
-            <Button x:Name="Updater" Grid.Row="0"
-                Margin="229,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65"
-                Content="Update" FontSize="14"
-                Click="OnUpdateClick"/>
-            <Button x:Name="SaveSettings" Grid.Row="0"
-            Height="25" Width="60"
-            Content="Save"  
-            Click="OnSaveSettingsClick" Margin="0,100,0,0" />
+            <StackPanel Orientation = "Vertical" Margin="5,52,5,38">
+                <CheckBox x:Name="AutoUpdater"   Checked="OnAutoUpdateToggle" Unchecked="OnAutoUpdateToggle" Content="Check for updates on startup" Style="{StaticResource CheckBoxes}"/>
+                <CheckBox x:Name="ExitRemindBox" Checked="OnExitRemindToggle" Unchecked="OnExitRemindToggle" Content="Ask before closing"           Style="{StaticResource CheckBoxes}"/>
+                <CheckBox x:Name="LightModeBox"  Checked="OnLightModeToggle" Unchecked="OnLightModeToggle"   Content="Light Mode"                   Style="{StaticResource CheckBoxes}"/>
+            </StackPanel>
+            
+            <Button x:Name="Updater"      Grid.Row="0" Margin="229,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Content="Update" FontSize="14" Click="OnUpdateClick"/>
+            <Button x:Name="SaveSettings" Grid.Row="0" Height="25" Width="60" Content="Save" Click="OnSaveSettingsClick" Margin="0,100,0,0" />
 
         </Grid>
     </Border>

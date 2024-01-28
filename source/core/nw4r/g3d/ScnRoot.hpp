@@ -10,7 +10,6 @@ namespace nw4r {
 namespace g3d {
 
 //Root of scene; renders and calls it, hols every ScnObj that needs to be rendered
-
 class ScnRoot : public ScnGroup {
 public:
     static ScnRoot* Construct(G3dHeap* heap, u32* size, u32 maxChildren, u32 maxScnObj, u32 lightObjCount, u32 lightSetCount); //8006f1a0
@@ -21,7 +20,7 @@ public:
     const char* GetTypeName() const override; //0x18 80070ce0
 
     LightSet GetLightSet(int lightSetId); //8006f4a0
-    
+
     void* func;
     u32 drawMode;
     u32 scnRootFlags;
@@ -30,6 +29,27 @@ public:
     CameraData camera[32]; //0xF8
     FogData fogs[32]; //0x2278
     LightSetting lightSetting; //0x2878
+};
+
+//Collects the ScnObj to be rendered in the scene graph, and determines its rendering order.
+class ScnObjGather : public IScnObjGather {
+public:
+    ScnObj** opaArray;    //ScnObj* objects to be rendered by DrawOpa are gathered together
+    ScnObj** xluArray;    //ScnObj* objects to be rendered by DrawXlu are gathered together
+    u32      arraySize;
+    u32      opaArrayObjCount;
+    u32      xluArrayObjCount;
+
+    ScnObjGather(ScnObj** opaBuffer, ScnObj** xluBuffer, u32 objCount); //80070bf0
+    virtual ~ScnObjGather(); //80070c30
+    CullingStatus Add(ScnObj* obj, bool addToOpa, bool addToXlu) override; //8006fed0
+    void Clear() override; //80070c20
+    void ZSort() override; //8006fff0
+    void Sort() override; //800708d0
+    void Sort(CompFunc compOpa, CompFunc compXlu) override; //80070a50
+    void DrawOpa(ResMdlDrawMode* forceDrawMode) override; //80070ac0
+    void DrawXlu(ResMdlDrawMode* forceDrawMode) override; //80070b50
+    CheckStatus CheckScnObj(ScnObj* obj) override; //80070be0
 };
 
 

@@ -21,7 +21,7 @@ public:
     u32 vsRaceCount;  //0x64
     u32 redWins; //0x68
     u32 blueWins; //0x6c
-    u8 unknown_0x68[0x78 - 0x70];
+    u8 unknown_0x700[0x78 - 0x70];
     CourseId vsTracks[32]; //0x78
     u32 vsRaceLimit; //0xf8 based on unlocked cups
     u8 unknown_0xfc[0x124 - 0xfc];

@@ -15,6 +15,7 @@ public:
     static bool IsPlayerComputer(u8 playerId); //807bd5bc
     DriverMgr(); //8078ca5c
     ~DriverMgr(); //8078ce24
+    void InitAwards(); //8078d7e8
     void Update(); //8078d824
     void SetController(u8 playerIdx, DriverController* model); //8078cf4c
     static void ChangeFocusedPlayer(u8 playerIdx); //8078dde4
@@ -35,7 +36,7 @@ public:
     Vec3* targetingItemPosition[12]; //related to items 8078da90
     u32 frameCounter[12]; //0x100 related to something about the model
     u32 invertedFrameCounter[12]; //0x130  decrements
-    bool isAwardLoss; //0x160
+    bool isAwards; //0x160
     u8 racePositions[12]; //0x161
 
     u8 unknown_0x16D[0x170 - 0x16D]; //padding?

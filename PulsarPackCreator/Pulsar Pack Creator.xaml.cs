@@ -2,10 +2,12 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using static PulsarPackCreator.MsgWindow;
 
 namespace PulsarPackCreator
@@ -40,8 +42,8 @@ namespace PulsarPackCreator
         private void NumbersOnlyBox(object sender, TextCompositionEventArgs e)
         {
             string text = e.Text;
-            bool isNumber = Regex.IsMatch(text, "[^0-9]+");
-            e.Handled = isNumber;
+            bool isNotNumber = Regex.IsMatch(text, "[^0-9]+");
+            e.Handled = isNotNumber;
         }
 
         private void OnGhostsClick(object sender, RoutedEventArgs e)
@@ -212,5 +214,11 @@ namespace PulsarPackCreator
                 }
             }
         }
+ 
+        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow.ApplyColorMode();           
+        }
+
     }
 }

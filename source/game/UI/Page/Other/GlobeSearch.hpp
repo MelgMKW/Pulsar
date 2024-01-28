@@ -9,7 +9,7 @@
 //_sinit_ at 805e6b2c
 namespace Pages {
 
-class RandomMatchingPlayer: public LayoutUIControl {
+class RandomMatchingPlayer : public LayoutUIControl {
     RandomMatchingPlayer(); //80607158
     ~RandomMatchingPlayer(); //806071cc vtable 808bab7c
     void InitSelf() override; //0x18 80607368
@@ -20,11 +20,12 @@ class RandomMatchingPlayer: public LayoutUIControl {
     void SetMii(); //80607b58 inlined
     bool IsShowing(); //80607be4 checks if Fade anim group is currently on "Show"
     void CalcAngle(); //80607cdc
-    PtmfHolder_0A<RandomMatchingPlayer, void> unknown_0x174; //0x174 80607c1c
+    void OnMiiShowing();
+    PtmfHolder_0A<RandomMatchingPlayer, void> onMiiShowing; //0x174 80607c1c triggers when the animations that makes the bubble change from ? to the mii plays
     lyt::Pane* all_null; //0x188
-    u32 localPlayerCount;
+    u32 localPlayerCount; //0x18c
     u32 idx; //0x190
-    u8 unknown_0x188[0x19c - 0x194]; //0x18C
+    u8 unknown_0x194[0x19c - 0x194]; //0x194
     float angle; //0x19c 90deg - 2pi * (idx / 12)
     float unknown_0x1a0[2];
     MiiGroup* miiGroup; //0x1a8
@@ -33,7 +34,8 @@ class RandomMatchingPlayer: public LayoutUIControl {
 
 }; //0x1b8
 
-class MatchingMessageWindow: public LayoutUIControl {
+class MatchingMessageWindow : public LayoutUIControl {
+public:
     MatchingMessageWindow(); //80607d98
     ~MatchingMessageWindow(); //80607dd4 vtable 808bab40
     void InitSelf() override; //0x18 80607e90
@@ -45,7 +47,8 @@ class MatchingMessageWindow: public LayoutUIControl {
     void Hide(); //80607fb0
 }; //0x174
 
-class GlobeSearch: public Page { //ID 0x8f
+class GlobeSearch : public Page { //ID 0x8f
+public:
     GlobeSearch(); //80608060
     ~GlobeSearch(); //80608194 vtable 808baad0
     PageId GetNextPage() const override; //8060a670

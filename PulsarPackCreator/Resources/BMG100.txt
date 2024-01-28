@@ -63,7 +63,8 @@
   2848  = Nintendo
   2849  = \z{a02,2000000000}
   284A  = Assign players to teams
-  284b  = Unable to join due to Room Key mismatch. Check your pack version.
+  284b  = Unable to join due to Room Key mismatch.\nCheck your pack version.
+  284c  = Issues creating lobby.\nCheck your pack version.
   2900	= Settings
   2901	= Modify your settings.
   2902	= \z{800,46}Randomize\n\z{800,46}Combo

@@ -30,7 +30,7 @@ public:
     virtual bool Prepare() = 0;
     virtual bool PlaySound(u32 soundId, u8 hudslotid); //0x20 8071497c
     virtual bool HoldSound(u32 soundId); //80715624 for continuous sounds like the OK after clicking "solo tt"
-    virtual void func_0x28(); //80715a70
+    virtual void PrepareReverb(); //80715a70
     virtual void Reset(); //80715a74
     static bool HasFinishedLoadingGroups(); //807141ec on Stop, leads to DVDCancelAll if it returns false
     static bool IsDemo(); //80713dcc
@@ -55,7 +55,7 @@ public:
     void Stop() override; //0x10 807c5c3c
     void OnNewPageLayer(PageId pageId, PageState state) override; //0x18 80714374
     bool Prepare() override; //80715acc
-    void func_0x28() override; //80715c98
+    void PrepareReverb() override; //80715c98
 };
 
 class RaceRSARSoundsPlayer : public RSARSoundsPlayer {
@@ -67,10 +67,15 @@ public:
     bool Prepare() override; //80716028
     bool PlaySound(u32 soundId, u8 hudslotid) override; //0x20 80716608
     bool HoldSound(u32 soundId) override; //8071677c
-    void func_0x28() override; //807162b4
-
+    void PrepareReverb() override; //807162b4
+    void Pause(); //80715ecc called by w/e page causes the pause, stops the music/engine sounds etc... then plays the pause sound
+    void Resume(); //80715f60 opposite of above
     void PlayEndRaceMenuButtonClickSound(); //80715ff0 sound ID d5
+    void SetFullVolume(); //80716008
+    void HalveVolume(); //80716018
     void LoadCharacterGroups(); //80716170
+
+
     u8 unknown_0x18[4]; //probably for other types of sounds
 }; //total size 0x1C
 

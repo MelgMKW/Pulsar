@@ -15,5 +15,40 @@ public:
     u8 padding[3];
 }; //0x58
 
+class ShadowModelsMgr {
+public:
+    static ShadowModelsMgr* sInstance; //809c1b40
+    static ShadowModelsMgr* CreateInstance(); //805b8c3c
+    static void DestroyInstance(); //805b8cfc
+
+    ShadowModelsMgr(); //805b8d30
+    EGG::Disposer disposer; //805b8ba4 vtable 808b7334
+    virtual ~ShadowModelsMgr(); //805b8dc4 vtable 808b7328
+
+    void InsertModel(ShadowModelDirector* model); //805b8e60
+    void InsertModel2(ShadowModelDirector* model); //805b8e68 uses 2nd list
+
+    void Draw(); //805b8e70
+    void Draw2(); //805b8f40
+
+    ut::List shadowModelsList; //0x14
+    ut::List list2; //0x20
+    ut::List list3; //0x2c
+    ut::List list4; //0x38
+    u32 state; //0x44
+}; //0x48
+
+class ScnProcShadows : public EGG::IScnProc {
+public:
+    void Draw() override; //0x8 805b3a6c vtable 808b70a0
+    ~ScnProcShadows() override; //805b40b8
+};
+
+class ScnProcShadows2 : public EGG::IScnProc { //2nd list of ShadowModelsMgr
+public:
+    void Draw() override; //0x8 805b3a78 vtable 808b7090
+    ~ScnProcShadows2() override; //805b4060
+};
+
 //809c1f40 shadowMgr
 #endif

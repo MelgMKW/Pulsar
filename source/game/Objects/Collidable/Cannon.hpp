@@ -4,7 +4,7 @@
 #include <game/Objects/Collidable/ObjectCollidable.hpp>
 
 namespace Objects {
-class Cannon : public ObjectCollidable { //378 StarRing, 601 DonkyCannonGC, 607 DonkyCannon_wii, 609 tree_cannon
+class Cannon : public ObjectCollidable { //ObjectNum 378 StarRing, ObjectNum 601 DonkyCannonGC, ObjectNum 607 DonkyCannon_wii, ObjectNum 609 tree_cannon
 public:
     enum Type {
         DonkyCannon_wii = 0,

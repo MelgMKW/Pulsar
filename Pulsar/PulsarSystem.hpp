@@ -116,6 +116,7 @@ public:
     //Network
     bool hasHAW;
     bool isCustomDeny;
+    u8 deniesCount;
     u8 curArrayIdx;
     u8 racesPerGP;
     PulsarId* lastTracks;

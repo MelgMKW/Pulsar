@@ -263,7 +263,7 @@ void Manager::LoadCorrectMainGhost(Pages::GhostManager& ghostManager, u8 r4) {
     Manager* manager = Manager::sInstance;
     manager->LoadGhost(*ghostManager.rkgPointer, manager->GetGhostData(manager->mainGhostIndex).padding);
     if(ghostManager.state == SAVED_GHOST_RACE_FROM_MENU) ghostManager.state = STAFF_GHOST_RACE_FROM_MENU;
-    //faking that it's a staff so it copies from the buffer and not savadatemanager
+    //faking that it's a staff so it copies from the buffer and not savadatamanager
 }
 kmCall(0x805e158c, Manager::LoadCorrectMainGhost);
 

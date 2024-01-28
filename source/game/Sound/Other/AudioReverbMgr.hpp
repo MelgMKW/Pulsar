@@ -15,13 +15,17 @@ class AudioReverbMgr {
     AudioReverbMgr(); //806fe584
     static void DestroyInstance(); //806fe4d0
     ~AudioReverbMgr(); //806fe654
-    EGG::TDisposer<AudioReverbMgr> disposer; //806fe2b8 vtable 808c7a28
+    void Prepare(const snd::detail::FxReverbHiParam& params); //806fe8ac calls AudioFxMgr::CreateFxReverb and sets bool
+    void Play(); //806fe944
     void Disable(); //806fe6f8
+    void Disable2(); //806fe9bc
     void Clear(); //806fe71c
-    bool unknown_0x10;
+
+    EGG::TDisposer<AudioReverbMgr> disposer; //806fe2b8 vtable 808c7a28
+    bool unknown_0x10; //0x10
     u8 padding[3];
-    snd::detail::FxReverbHiParam params;
-    SoundTrack volumes[4];
+    snd::detail::FxReverbHiParam params; //0x14
+    SoundTrack volumes[4]; //0x3c
 }; //ac
 
 #endif

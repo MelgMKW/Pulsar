@@ -25,7 +25,7 @@ public:
 
     void AddMii(u8 idx, Mii* mii); //805fa3fc
     void LoadMii(u8 idx, RFL::CreateID* createId); //805fa6e0 replaces idx with new mii
-    void LoadMii(u8 idx, u32 id); //80fa678 id may be invalid
+    void LoadMii(u8 idx, u32 id); //805fa678 id may be invalid
     void LoadMii(u8 idx, RFL::StoreData* data); //805fa610
     void LoadMii(u8 idx, RFL::ID rflId); //805fa748
 

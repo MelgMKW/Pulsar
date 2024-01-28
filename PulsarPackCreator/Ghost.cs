@@ -11,13 +11,13 @@ namespace PulsarPackCreator
     {
         private void SetGhostLabelName(int row, string text)
         {
-            TextBlock ghostLabel = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row + 1 && Grid.GetColumn(x) == 0) as TextBlock;
+            TextBlock ghostLabel = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row + firstTrackRow && Grid.GetColumn(x) == 0) as TextBlock;
             ghostLabel.Text = text == "Name" ? $"Track {row + 1}" : text;
         }
 
         private void SetExpertName(string text, int row, int col)
         {
-            TextBox ghostBox = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row + 1 && Grid.GetColumn(x) == col + 1) as TextBox;
+            TextBox ghostBox = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row + firstTrackRow && Grid.GetColumn(x) == col + 1) as TextBox;
             if (text == "") ghostBox.Text = "RKG File";
             else ghostBox.Text = text;
         }

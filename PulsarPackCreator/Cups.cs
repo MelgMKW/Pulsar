@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PulsarPackCreator
 {
@@ -75,6 +77,26 @@ namespace PulsarPackCreator
             }
             ctsCupCount = newCount;
         }
+        private void OnGoToCupInput(object sender, TextCompositionEventArgs e)
+        {
+            NumbersOnlyBox(e.Text, e);
+            if (!e.Handled)
+            {
+                TextBox box = sender as TextBox;
+                int dest = int.Parse(box.Text + e.Text);
+                if (dest > ctsCupCount) e.Handled = true;
+            }
+        }
+        private void OnGoToCupChange(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;            
+            if (box.Text == "" )
+            {
+                return;
+            }
+            short dest = short.Parse(box.Text);
+            UpdateCurCup((short)(dest - 1 - curCup));        
+        }
 
         private void OnFilenameChange(object sender, TextChangedEventArgs e)
         {
@@ -90,7 +112,7 @@ namespace PulsarPackCreator
             {
                 int idx = Grid.GetRow(box);
                 cups[curCup].trackNames[idx - firstTrackRow] = box.Text;
-                SetGhostLabelName(idx, box.Text);
+                SetGhostLabelName(idx - firstTrackRow, box.Text);
             }
         }
 

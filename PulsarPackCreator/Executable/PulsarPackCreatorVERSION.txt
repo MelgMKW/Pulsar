@@ -1,0 +1,36 @@
+·Updated to 1.0.15
+-Fixed changelogs again again again again again again again again
+
+·Updated to 1.0.14
+-Fixed changelogs again again again again again again again 
+
+·Updated to 1.0.13
+-Fixed bad indexing
+-Added a box to go to any cup
+
+·Updated to 1.0.12
+-Added light mode option
+-Dark mode is now truly dark
+
+·Updated to 1.0.11
+-Better UMT sounds
+-Small bug fixes
+-Richer game map
+
+·Updated to 1.0.10
+-Now allows track versions to be (optionally) specified. They will appear red in-game
+
+·Updated to 1.0.8
+-Message boxes can now be resized
+
+·Updated to 1.0.7
+-Message boxes now have a scroll bar
+
+·Updated to 1.0.6
+-Now displays the changelog for all skipped versions
+
+·Updated to 1.0.5
+-Fixed a bug with changelogs
+
+·Updated to 1.0.4
+-Better (now working) message boxes

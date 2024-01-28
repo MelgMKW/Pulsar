@@ -88,7 +88,7 @@ namespace PulsarPackCreator
             catch
             {
                 bin.Close();
-                MsgWindow.Show("Invalid Bin File.");
+                MsgWindow.Show("Invalid Config File.");
             }
             finally
             {
@@ -303,10 +303,7 @@ namespace PulsarPackCreator
             if (ret)
             {
                 string modFolder = $"output/{parameters.modFolderName}";
-                File.WriteAllBytes($"{modFolder}/Binaries/P.bin", PulsarRes.P);
-                File.WriteAllBytes($"{modFolder}/Binaries/E.bin", PulsarRes.E);
-                File.WriteAllBytes($"{modFolder}/Binaries/J.bin", PulsarRes.J);
-                File.WriteAllBytes($"{modFolder}/Binaries/K.bin", PulsarRes.K);
+                File.WriteAllBytes($"{modFolder}/Binaries/Code.bin", PulsarRes.Code);
                 Directory.CreateDirectory($"{modFolder}/Assets");
                 File.WriteAllBytes($"{modFolder}/Binaries/Loader.bin", PulsarRes.Loader);
                 File.WriteAllBytes($"{modFolder}/Assets/UIAssets.szs", PulsarRes.UIAssets);

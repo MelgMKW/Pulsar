@@ -4,7 +4,7 @@
 #include <game/Objects/KCL/ExternalKCL/ObjectExternKCL.hpp>
 
 namespace Objects {
-class VolcanoPiece : public ObjectExternKCL { //0x1fc = 508
+class VolcanoPiece : public ObjectExternKCL { //ObjectNum 0x1fc = 508
     explicit VolcanoPiece(const KMP::Holder<GOBJ>& gobjHolder); //80817de8
     ~VolcanoPiece() override; //80803da8 vtable 808d670c
     void Update() override; //0x14 80819400

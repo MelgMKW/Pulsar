@@ -11,12 +11,15 @@
 
 //Unoptimized code which is mostly a port of Stebler's version which itself comes from CTGP's, speed factor is in the LapSpeedModifier code
 
+
 namespace Pulsar {
 namespace Race {
 
+
+
 //kmWrite32(0x805850c4, 0x7FC3F378); //to get kartMovement
 void CannonExitSpeed() {
-    const float ratio = Info::Is200cc() ? 0.6666667f : 1.0f;
+    const float ratio = Info::Is200cc() ? cannonExit : 1.0f;
     register Kart::Movement* kartMovement;
     asm(mr kartMovement, r30;);
     kartMovement->engineSpeed = kartMovement->baseSpeed * ratio;
@@ -28,6 +31,7 @@ void EnableBrakeDrifting(Input::ControllerHolder& controllerHolder) {
         const ControllerType controllerType = controllerHolder.curController->GetType();
         const u16 inputs = controllerHolder.inputStates[0].buttonRaw;
         u16 inputsMask = 0x700;
+
         switch(controllerType) {
             case(NUNCHUCK):
                 inputsMask = 0xC04;
@@ -76,7 +80,7 @@ bool IsBrakeDrifting(const Kart::Status& status) {
 
 void BrakeDriftingAcceleration(Kart::Movement& movement) {
     movement.UpdateKartSpeed();
-    if(IsBrakeDrifting(*movement.link.pointers->kartStatus)) movement.acceleration = -1.5f; //JUMP_PAD|RAMP_BOOST|BOOST
+    if(IsBrakeDrifting(*movement.link.pointers->kartStatus)) movement.acceleration = brakeDriftingDeceleration; //JUMP_PAD|RAMP_BOOST|BOOST
 }
 kmCall(0x80579910, BrakeDriftingAcceleration);
 
@@ -132,7 +136,7 @@ void FastFallingBody(Kart::Status& status, Kart::Physics& physics) { //weird thi
             Input::ControllerHolder& controllerHolder = status.link->GetControllerHolder();
             float input = controllerHolder.inputStates[0].stick.z <= 0.0f ? 0.0f :
                 (controllerHolder.inputStates[0].stick.z + controllerHolder.inputStates[0].stick.z);
-            physics.gravity -= input * 0.39f;
+            physics.gravity -= input * fastFallingBodyGravity;
         }
     }
     status.UpdateFromInput();
@@ -150,7 +154,7 @@ Kart::WheelPhysicsHolder& FastFallingWheels(Kart::Sub& sub, u8 wheelIdx, Vec3& g
             Input::ControllerHolder& controllerHolder = sub.link.GetControllerHolder();
             float input = controllerHolder.inputStates[0].stick.z <= 0.0f ? 0.0f
                 : (controllerHolder.inputStates[0].stick.z + controllerHolder.inputStates[0].stick.z);
-            gravity *= (input * 0.3f + 1.0f);
+            gravity *= (input * fastFallingWheelGravity + 1.0f);
         }
     }
     gravityVector.y = gravity;

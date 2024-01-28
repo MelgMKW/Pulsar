@@ -10,7 +10,7 @@ public:
     ItemSound(); //807040dc
 
     //AUDIOACTOR
-    //SoundActor vtable 808c8928
+    //SoundActor vtable 808c8984
     ~ItemSound() override; //80706f3c
 
     //AudioActor vtable 808c84a0 at 0x54

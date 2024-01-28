@@ -35,15 +35,15 @@ public:
     u8 padding[3];
 };
 
-class AudioArchivePlayer : public snd::SoundArchivePlayer { //non-official name
+class SoundArchivePlayerEGG : public snd::SoundArchivePlayer { //yes, that's the official name
     //SoundArchivePlayer
     //callback vtable 802a2920
-    ~AudioArchivePlayer() override; //8021337c
+    ~SoundArchivePlayerEGG() override; //8021337c
     //soundstartable vtable 802a2934
-    //~SoundArchivePlayerMgr() override; //thunk 8021369c func 8021337c
+    //~SoundArchivePlayerEGG() override; //thunk 8021369c func 8021337c
     StartResult detail_SetupSound(snd::SoundHandle* handle, u32 id, bool r6, snd::SoundArchive::SoundInfo* soundInfo) override; //thunk 80213694 func 8021365c
 };
-size_assert(AudioArchivePlayer, 0xe0);
+size_assert(SoundArchivePlayerEGG, 0xe0);
 
 class SimpleAudioMgr : public IAudioMgr, public SoundHeapMgr, public ArcPlayer {
 public:
@@ -71,14 +71,14 @@ public:
     void CloseArchive() override; //thunk 8021199c function 8021363c
     //void Calc() override; //thunk 802119b4 func 802135d0
     AudioSystem audioSystem; //0x5d0
-    AudioArchivePlayer archivePlayer; //0x5dc 
+    SoundArchivePlayerEGG archivePlayer; //0x5dc 
 
 }; //total size 0x6bc
 size_assert(SimpleAudioMgr, 0x6bc);
 
 class ExpAudioMgr : public SimpleAudioMgr {
 public:
-    static AudioArchivePlayer* audioArchivePlayer; //80386d98
+    static SoundArchivePlayerEGG* audioArchivePlayer; //80386d98
     static snd::Sound3DManager* sound3DManagerInstance; //80386d9c
     class ExpAudioMgrArg : public SimpleAudioMgrArg {
         ExpAudioMgrArg();  //80211460

@@ -3,7 +3,7 @@
 #include <game/Race/RaceInfo/RaceInfo.hpp>
 #include <game/Kart/KartPointers.hpp>
 
-s16 KevinCOOB(KMP::Manager* kmpMgr, const Vec& position, u32 areaIdToTestFirst, u8 areaType) {
+s16 COOB(KMP::Manager* kmpMgr, const Vec& position, u32 areaIdToTestFirst, u8 areaType) {
 
     s16 foundIdx = kmpMgr->FindAREA(position, areaIdToTestFirst, areaType);
     if(foundIdx >= 0) {
@@ -29,4 +29,4 @@ s16 KevinCOOB(KMP::Manager* kmpMgr, const Vec& position, u32 areaIdToTestFirst, 
     }
     return foundIdx;
 }
-kmCall(0x80571870, KevinCOOB);
+kmCall(0x80571870, COOB);

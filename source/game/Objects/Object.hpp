@@ -112,7 +112,7 @@ public:
     const char* lodResName; //0x94
     u8 unknown_0x98[8];
     const KMP::Holder<GOBJ>& gobj; //0xa0
-    u32 holderIdx;
+    u32 holderIdx; //0xa4
     bool unknown_0xA8;
     u8 padding3[3];
 }; //total size 0xac

@@ -24,24 +24,23 @@ public:
     Manager(); //805232f0
     virtual ~Manager(); //805231dc vtable 808b2fc8
 
-    void Init(); //80523690 called everytime a game scene is created
     void SetFSStickClamp(s8 min, s8 max); //80522358
     static void InitKPAD(); //80522690
-
+    void SyncSimpleCallBack(s32  result, s32 num); //805230e0
+    void Init(); //80523690 called everytime a game scene is created
+    void UpdateControllers(u8 isPaused); //805237e8
+    void Update(); //805238f0
+    static int ConvertType(ControllerType type); //80523a58 if wiimote based, returns 0, gcn returns 1, other returns 3
+    void ResetDummyController(); //80523eac
+    void UpdateGCNInputs(u8 id, PAD::Status* status);
+    void ResetRealController(u8 id); //80524264
+    void InitControllerHolders(); //805242d8
+    void InitGhostController(u8 id, const RKGInputs* rawInputs, bool isAuto); //8052453c
     void StartGhostReading(); //80524580
     void EndGhostWriting(u8 hudSlotId); //805245cc
-
-    void Update(); //805238f0
-    void InitControllerHolders(); //805242d8
-    void UpdateControllers(u8 isPaused); //805237e8
-    void ResetRealController(u8 id); //80524264
-    void ResetDummyController(); //80523eac
-    void InitGhostController(u8 id, const RKGInputs* rawInputs, bool isAuto); //8052453c
+    void InitRumble(); //805246c0
     bool SyncWiimotes(); //80524788 returns true if all wiimotes are connected
-    void UpdateGCNInputs(u8 id, PAD::Status* status);
-    static int ConvertType(ControllerType type); //80523a58 if wiimote based, returns 0, gcn returns 1, other returns 3
 
-    void SyncSimpleCallBack(s32  result, s32 num); //805230e0
     RealControllerHolder realControllerHolders[4]; //0x4 Stores inputs from a real controller at the same console
     AIControllerHolder virtualControllerHolders[12]; //0x3b4 Stores inputs for all the other players in a race (I think the ones with a matching realControllerHolder go unused)
     ControllerHolder controllerHolder; //0x15b4 dummy?

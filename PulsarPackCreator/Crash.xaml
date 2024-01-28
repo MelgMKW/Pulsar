@@ -6,16 +6,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Crash Summary" Height="810" Width="900" Background="#FD353535"
+        Title="Crash Summary" Height="810" Width="900" Background="{DynamicResource AppBg}"
         HorizontalAlignment="Center" VerticalAlignment="Center"
         AllowDrop="True"
         Drop="OnDropFile">
     <Border BorderBrush="Black" BorderThickness="3">
-        <Grid Background="#FD202020" x:Name="GridCrash">
-            <TextBox Name="CrashText" Text="Temp" IsReadOnly="True"
-                       Margin="10,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderThickness="0"
-                       FontFamily="Courier New" Foreground="White" FontSize="16" />
-            <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Crash Summary" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" TextDecorations="Underline"/>
+        <Grid Background="{DynamicResource AppBg}" x:Name="GridCrash">
+            <TextBox Name="CrashText" Text="Temp" IsReadOnly="True" Margin="10,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" 
+                     FontFamily="Courier New" Foreground="{DynamicResource fg}" FontSize="16" />
+            <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" Text="Crash Summary" VerticalAlignment="Top" Foreground="{DynamicResource fg}" FontWeight="Bold" TextDecorations="Underline"/>
         </Grid>
     </Border>
 </Window>

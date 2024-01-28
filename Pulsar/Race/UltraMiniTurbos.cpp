@@ -1,6 +1,7 @@
 #include <game/Kart/KartManager.hpp>
 #include <game/Race/RaceData.hpp>
 #include <Race/UltraMiniTurbos.hpp>
+#include <Sound/MiscSound.hpp>
 #include <PulsarSystem.hpp>
 
 
@@ -198,9 +199,15 @@ kmCall(0x8069c0a4, PatchFadeBoost);
 
 //Currently uses blue shell sounds for lack of a better one
 kmWrite32(0x807095b8, 0x40A00028); //changes beq to bge for UMT
-void PatchUMTSound(KartSound& sound, u32 soundId, AudioHandle* handle) {
-    if(sound.driftState == 4) soundId = SOUND_ID_BLUE_SHELL_FLY;
-    sound.KartSound::HoldSound(soundId, handle);
+void PatchUMTSound(KartSound& sound, u32 soundId, AudioHandle& handle) {
+    if(sound.driftState == 4) {
+        const char* seqName = "purpleMT.brseq";
+        const char* labelName = "b";
+        snd::SoundStartable::StartResult ret = Audio::PlayExtBRSEQ(sound, handle, seqName, labelName, true);
+        if(ret == snd::SoundStartable::START_SUCCESS) return;
+    }
+    sound.KartSound::HoldSound(soundId, &handle);
+
 };
 kmCall(0x807095f8, PatchUMTSound);
 }//namespace Race

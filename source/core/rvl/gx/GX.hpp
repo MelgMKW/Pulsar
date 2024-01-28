@@ -7,6 +7,7 @@
 #include <core/rvl/os/thread.hpp>
 
 extern "C" {
+    GXFifoObj* GXInit(void* buffer, u32 size);
     void GXSetVtxDesc(GXAttr attr, GXAttrType type);
     void GXClearVtxDesc();
     void GXSetVtxAttrFmt(GXVtxFmt vtxfmt, GXAttr attr, GXCompCnt cnt, GXCompType type, u8 frac);

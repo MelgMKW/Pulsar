@@ -1,6 +1,7 @@
 ﻿using Pulsar_Pack_Creator;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
@@ -164,7 +165,6 @@ namespace PulsarPackCreator
                 {
                     string[] curLine = lines[i].Split(' ');
                     string[] nextLine = lines[i + 1].Split(' ');
-
                     if (UInt32.Parse(curLine[0], NumberStyles.HexNumber) <= address &&
                         address < UInt32.Parse(nextLine[0], NumberStyles.HexNumber))
                     {

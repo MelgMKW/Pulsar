@@ -6,7 +6,7 @@
 //Goomba, just as an example
 namespace Objects {
 
-class TwistedWay : public ObjectKCL { //0x1fe = 510
+class TwistedWay : public ObjectKCL { //ObjectNum 0x1fe = 510
     explicit TwistedWay(KMP::Holder<GOBJ>& gobj); //80813bd4
     ~TwistedWay(); //80814918 vtable 808d62f8
     void OnStart() override; //0xC 80813c40

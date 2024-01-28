@@ -4,18 +4,101 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PulsarPackCreator"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Pulsar Pack Creator VERSION" Height="550" Width="1000" Background="#FD353535"
+        Title="Pulsar Pack Creator VERSION" Height="550" Width="1000" Background="{DynamicResource AppBg}"
         HorizontalAlignment="Center" VerticalAlignment="Center"
         AllowDrop="True"
         Drop="OnDropFile"
         Closing="OnMainWindowClosing"
-        >
+       Loaded="OnWindowLoaded" >
+
+    <Window.Resources>
+        <Style x:Key="Blocks" TargetType="TextBlock">
+            <Setter Property="Foreground"           Value="{DynamicResource fg}"/>
+            <Setter Property="Background"           Value="Transparent"/>
+            <Setter Property="HorizontalAlignment"  Value="Center" />
+            <Setter Property="VerticalAlignment"    Value="Top" />
+            <Setter Property="FontSize"             Value="13"/>
+            <Setter Property="FontWeight"           Value="Bold"/>
+            <Setter Property="TextDecorations"      Value="Underline"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource Blocks}" TargetType="TextBlock" x:Key="TopLabels">
+            <Setter Property="Margin" Value="0,22,0,0"/>
+        </Style>
+        <Style BasedOn="{StaticResource Blocks}" TargetType="TextBlock" x:Key="TrackLabels">
+            <Setter Property="Margin" Value="18,-10,0,0"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"    Value="Center" />
+        </Style>
+
+
+        <Style x:Key="ColorMode" TargetType="Control">
+            <Setter Property="Background"               Value="{DynamicResource bg}"/>
+            <Setter Property="Foreground"               Value="{DynamicResource fg}"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource ColorMode}" x:Key="Boxes" TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize"                 Value="14"/>
+            <Setter Property="Width"                    Value="160"/>
+            <Setter Property="BorderThickness"          Value="2"/>
+            <Setter Property="TextAlignment"            Value="Center"/>
+            <Setter Property="TextWrapping"             Value="Wrap"/>
+            <Setter Property="Margin"                   Value="15,23,15,28"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource Boxes}" TargetType="TextBox" x:Key="FileBoxes">
+            <Setter Property="Text" Value="File"/>
+        </Style>
+        <Style BasedOn="{StaticResource Boxes}" TargetType="TextBox" x:Key="NameBoxes">
+            <Setter Property="Text" Value="Name"/>
+        </Style>
+        <Style BasedOn="{StaticResource Boxes}" TargetType="TextBox" x:Key="AuthorBoxes">
+            <Setter Property="Text" Value="Author"/>
+        </Style>
+        <Style BasedOn="{StaticResource Boxes}" TargetType="TextBox" x:Key="VersionBoxes">
+            <Setter Property="Text"   Value="Version"/>
+            <Setter Property="Margin" Value="11,23,11,28"/>
+            <Setter Property="Width"  Value="90"/>
+        </Style>
+
+        <Style x:Key="ComboBoxes" TargetType="ComboBox">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"   Value="Top"/>
+            <Setter Property="Width"               Value="64"/>
+            <Setter Property="Margin"              Value="0,50,0,0"/>
+            <Setter Property="Foreground"          Value="{DynamicResource fg}"/>
+            <Setter Property="Template"            Value="{DynamicResource CustomComboBox}"/>
+        </Style>
+
+        <Style x:Key="SlotBoxes" TargetType="TextBlock">
+            <Setter Property="Foreground"          Value="{DynamicResource fg}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"   Value="Top"/>
+            <Setter Property="Margin"              Value="0,30,0,0"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource ColorMode}" x:Key="OptCheckBoxes" TargetType="CheckBox">
+            <Setter Property="FontSize"             Value="14"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource Boxes}" TargetType="TextBox" x:Key="GhostBoxes">
+            <Setter Property="Text"   Value="RKG File"/>
+        </Style>
+        <Style BasedOn="{StaticResource TopLabels}" TargetType="TextBlock" x:Key="GhostTopLabels">
+            <Setter Property="Margin" Value="10,33,0,0"/>
+        </Style>
+
+
+    </Window.Resources>
+
+
 
     <DockPanel x:Name="Dock">
-        <StackPanel Orientation = "Horizontal" DockPanel.Dock="Bottom" Background="#FFDDE0DD">
+        <StackPanel Orientation = "Horizontal" DockPanel.Dock="Bottom" Background="#FF202020" HorizontalAlignment="Center">
             <Button x:Name = "ImportConfig"  Content = "Import Config" Width = "90" Height = "20" Click="OnImportConfigClick"/>
             <Button x:Name = "BuildConfig" Content = "Build Config" Width = "90" Height = "20" Click="OnBuildConfigClick"/>
             <Button x:Name = "BuildPack" Content = "Build Full Pack" Width = "90" Height = "20" Click="OnBuildFullPackClick"/>
@@ -31,20 +114,16 @@
                 <ColumnDefinition Width="71*"/>
                 <ColumnDefinition Width="154*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="CupCount" 
-                     Margin="72,0,0,0" Width="117" HorizontalAlignment="Left" VerticalAlignment="Center"
-                     TextAlignment="Center" PreviewTextInput="NumbersOnlyBox" TextChanged="OnCupCountChange"  />
-            <TextBlock x:Name="CupCountLabel"
-                Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
-                Text="Cup Count" TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" />
-            <TextBlock x:Name="CupIdLabel" Grid.Column="1"
-                       Margin="79,-1,363,1" Foreground="White"
-                       Text="Cup 1" FontSize="18" TextAlignment="Center" FontWeight="Bold" TextDecorations="Underline"/>
+            <TextBox Style="{StaticResource Boxes}" x:Name="CupCount" Margin="72,0,0,0" Width="100" PreviewTextInput="NumbersOnlyBox" TextChanged="OnCupCountChange"  />
+            <TextBox Style="{StaticResource Boxes}" x:Name="GoToCup" Margin="432,0,135,0" Width="100" PreviewTextInput="OnGoToCupInput" TextChanged="OnGoToCupChange" Grid.Column="1"  />
+            <TextBlock Style="{StaticResource Blocks}" x:Name="CupCountLabel" Text="Cup Count" Margin="-150,2,0,0" />
+            <TextBlock Style="{StaticResource Blocks}" x:Name="CupIdLabel"    Text="Cup 1"     Margin="79,-1,363,1" Grid.Column="1" FontSize="18"/>
+            <TextBlock Style="{StaticResource Blocks}" x:Name="GotoLabel" Text="Go To Cup" Margin="565,2,0,0" HorizontalAlignment="Left" Grid.Column="1" />
 
         </Grid>
 
 
-        <TabControl Name="TabController" Background="#FD353535">
+        <TabControl Name="TabController" Background="{DynamicResource AppBg}">
             <TabItem Name="Cups" Header="Cups">
                 <DockPanel>
                     <Button DockPanel.Dock="Left" Content="&lt;" FontWeight="Bold" FontSize="18" Click="OnLeftArrowClick" />
@@ -67,139 +146,55 @@
                             <RowDefinition Height="2*" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock x:Name="FileLabel" Grid.Row="0" Grid.Column="1"
-                            Margin="0,22,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
-                            Text="File Names" Grid.RowSpan="2"/>
-                        <TextBlock x:Name="NameLabel" Grid.Row="0" Grid.Column="2"
-                            Margin="0,22,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
-                            Text="Track Names" Grid.RowSpan="2"/>
-                        <TextBlock x:Name="AuthorLabel" Grid.Row="0" Grid.Column="3"
-                            Margin="0,22,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
-                            Text="Author Names" Grid.RowSpan="2"/>
-                        <TextBlock x:Name="VersionLabel" Grid.Row="0" Grid.Column="4"
-                            Margin="0,22,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
-                            Text="Versions (optional)" Grid.RowSpan="2"/>
+                        <TextBlock x:Name="FileLabel"    Grid.Row="0" Grid.Column="1" Text="File Names"          Grid.RowSpan="2"  Style="{StaticResource TopLabels}"/>
+                        <TextBlock x:Name="NameLabel"    Grid.Row="0" Grid.Column="2" Text="Track Names"         Grid.RowSpan="2"  Style="{StaticResource TopLabels}"/>
+                        <TextBlock x:Name="AuthorLabel"  Grid.Row="0" Grid.Column="3" Text="Author Names"        Grid.RowSpan="2"  Style="{StaticResource TopLabels}"/>
+                        <TextBlock x:Name="VersionLabel" Grid.Row="0" Grid.Column="4" Text="Versions (optional)" Grid.RowSpan="2"  Style="{StaticResource TopLabels}"/>
 
-                        <TextBlock x:Name="CupsLabel1" Grid.Row="1" Grid.Column="0"
-                            Margin="20,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
-                            Text="Track1" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
-                        <TextBlock x:Name="CupsLabel2" Grid.Row="2" Grid.Column="0"
-                            Margin="20,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
-                            Text="Track2" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
-                        <TextBlock x:Name="CupsLabel3" Grid.Row="3" Grid.Column="0"
-                            Margin="20,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
-                            Text="Track3" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
-                        <TextBlock x:Name="CupsLabel4" Grid.Row="4" Grid.Column="0"
-                            Margin="20,40,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" 
-                            Text="Track4" FontSize="14" FontWeight="Bold" TextDecorations="Underline"/>
+                        <TextBlock x:Name="CupsLabel1" Grid.Row="1" Grid.Column="0" Text="Track1" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock x:Name="CupsLabel2" Grid.Row="2" Grid.Column="0" Text="Track2" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock x:Name="CupsLabel3" Grid.Row="3" Grid.Column="0" Text="Track3" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock x:Name="CupsLabel4" Grid.Row="4" Grid.Column="0" Text="Track4" Style="{StaticResource TrackLabels}"/>
 
-                        <TextBox x:Name="File1"  Grid.Row="1" Grid.Column="1" 
-                                 Margin="0,23,0,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
-                        <TextBox x:Name="File2" Grid.Row="2" Grid.Column="1" 
-                                 Margin="17,23,17,28" Width="160"  VerticalContentAlignment="Center"   
-                                 Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
-                        <TextBox x:Name="File3" Grid.Row="3" Grid.Column="1" 
-                                 Margin="17,23,17,28" Width="160"  VerticalContentAlignment="Center"   
-                                 Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
-                        <TextBox x:Name="File4" Grid.Row="4" Grid.Column="1" 
-                                 Margin="17,23,17,28" Width="160"  VerticalContentAlignment="Center"   
-                                 Text="File" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnFilenameChange"                                 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop" />
+                        <TextBox x:Name="File1" Grid.Row="1" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
+                        <TextBox x:Name="File2" Grid.Row="2" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
+                        <TextBox x:Name="File3" Grid.Row="3" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
+                        <TextBox x:Name="File4" Grid.Row="4" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
 
-                        <TextBox x:Name="Name1" Grid.Row="1" Grid.Column="2"
-                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
-                        <TextBox x:Name="Name2" Grid.Row="2" Grid.Column="2"
-                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
-                        <TextBox x:Name="Name3" Grid.Row="3" Grid.Column="2"
-                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
-                        <TextBox x:Name="Name4" Grid.Row="4" Grid.Column="2"
-                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="Name" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnTracknameChange"/>
+                        <TextBox x:Name="Name1" Grid.Row="1" Grid.Column="2" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name2" Grid.Row="2" Grid.Column="2" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name3" Grid.Row="3" Grid.Column="2" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name4" Grid.Row="4" Grid.Column="2" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
 
-                        <TextBox x:Name="Author1" Grid.Row="1" Grid.Column="3" 
-                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
-                        <TextBox x:Name="Author2" Grid.Row="2" Grid.Column="3" 
-                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
-                        <TextBox x:Name="Author3" Grid.Row="3" Grid.Column="3" 
-                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
-                        <TextBox x:Name="Author4" Grid.Row="4" Grid.Column="3" 
-                                 Margin="17,23,17,28" Width="160" VerticalContentAlignment="Center"
-                                 Text="Author" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnAuthorChange"/>
+                        <TextBox x:Name="Author1" Grid.Row="1" Grid.Column="3" TextChanged="OnAuthorChange" Style="{StaticResource AuthorBoxes}"/>
+                        <TextBox x:Name="Author2" Grid.Row="2" Grid.Column="3" TextChanged="OnAuthorChange" Style="{StaticResource AuthorBoxes}"/>
+                        <TextBox x:Name="Author3" Grid.Row="3" Grid.Column="3" TextChanged="OnAuthorChange" Style="{StaticResource AuthorBoxes}"/>
+                        <TextBox x:Name="Author4" Grid.Row="4" Grid.Column="3" TextChanged="OnAuthorChange" Style="{StaticResource AuthorBoxes}"/>
 
-                        <TextBox x:Name="Version1" Grid.Row="1" Grid.Column="4" 
-                                 Margin="13,23,13,28" Width="90" VerticalContentAlignment="Center"
-                                 Text="Version" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnVersionChange"/>
-                        <TextBox x:Name="Version2" Grid.Row="2" Grid.Column="4" 
-                                 Margin="13,23,13,28" Width="90" VerticalContentAlignment="Center"
-                                 Text="Version" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnVersionChange"/>
-                        <TextBox x:Name="Version3" Grid.Row="3" Grid.Column="4" 
-                                 Margin="13,23,13,28" Width="90" VerticalContentAlignment="Center"
-                                 Text="Version" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnVersionChange"/>
-                        <TextBox x:Name="Version4" Grid.Row="4" Grid.Column="4" 
-                                 Margin="13,23,13,28" Width="90" VerticalContentAlignment="Center"
-                                 Text="Version" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" TextChanged="OnVersionChange"/>
+                        <TextBox x:Name="Version1" Grid.Row="1" Grid.Column="4" TextChanged="OnVersionChange" Style="{StaticResource VersionBoxes}"/>
+                        <TextBox x:Name="Version2" Grid.Row="2" Grid.Column="4" TextChanged="OnVersionChange" Style="{StaticResource VersionBoxes}"/>
+                        <TextBox x:Name="Version3" Grid.Row="3" Grid.Column="4" TextChanged="OnVersionChange" Style="{StaticResource VersionBoxes}"/>
+                        <TextBox x:Name="Version4" Grid.Row="4" Grid.Column="4" TextChanged="OnVersionChange" Style="{StaticResource VersionBoxes}"/>
 
-                        <ComboBox x:Name="Slot1" Grid.Row="1" Grid.Column="5"
-                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                                  SelectionChanged="OnSlotChange"/>
-                        <ComboBox x:Name="Slot2" Grid.Row="2" Grid.Column="5"
-                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                                  SelectionChanged="OnSlotChange"/>
-                        <ComboBox x:Name="Slot3" Grid.Row="3" Grid.Column="5"
-                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                                  SelectionChanged="OnSlotChange"/>
-                        <ComboBox x:Name="Slot4" Grid.Row="4" Grid.Column="5"
-                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                                  SelectionChanged="OnSlotChange"/>
+                        <ComboBox x:Name="Slot1" Grid.Row="1" Grid.Column="5" SelectionChanged="OnSlotChange" Style="{StaticResource ComboBoxes}"/>
+                        <ComboBox x:Name="Slot2" Grid.Row="2" Grid.Column="5" SelectionChanged="OnSlotChange" Style="{StaticResource ComboBoxes}"/>
+                        <ComboBox x:Name="Slot3" Grid.Row="3" Grid.Column="5" SelectionChanged="OnSlotChange" Style="{StaticResource ComboBoxes}"/>
+                        <ComboBox x:Name="Slot4" Grid.Row="4" Grid.Column="5" SelectionChanged="OnSlotChange" Style="{StaticResource ComboBoxes}"/>
 
-                        <TextBlock x:Name="Slot1Label" Grid.Row="1" Grid.Column="5"
-                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
-                                   Text="Slot1"/>
-                        <TextBlock x:Name="Slot2Label" Grid.Row="2" Grid.Column="5"
-                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
-                                   Text="Slot2"/>
-                        <TextBlock x:Name="Slot3Label" Grid.Row="3" Grid.Column="5"
-                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
-                                   Text="Slot3"/>
-                        <TextBlock x:Name="Slot4Label" Grid.Row="4" Grid.Column="5"
-                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" 
-                                   Text="Slot4"/>
+                        <ComboBox x:Name="Music1" Grid.Row="1" Grid.Column="6" SelectionChanged="OnMusicChange" Style="{StaticResource ComboBoxes}"/>
+                        <ComboBox x:Name="Music2" Grid.Row="2" Grid.Column="6" SelectionChanged="OnMusicChange" Style="{StaticResource ComboBoxes}"/>
+                        <ComboBox x:Name="Music3" Grid.Row="3" Grid.Column="6" SelectionChanged="OnMusicChange" Style="{StaticResource ComboBoxes}"/>
+                        <ComboBox x:Name="Music4" Grid.Row="4" Grid.Column="6" SelectionChanged="OnMusicChange" Style="{StaticResource ComboBoxes}"/>
 
-                        <ComboBox x:Name="Music1"  Grid.Row="1" Grid.Column="6"
-                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                                   SelectionChanged="OnMusicChange"/>
-                        <ComboBox x:Name="Music2"  Grid.Row="2" Grid.Column="6"
-                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                                   SelectionChanged="OnMusicChange"/>
-                        <ComboBox x:Name="Music3"  Grid.Row="3" Grid.Column="6"
-                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                                   SelectionChanged="OnMusicChange"/>
-                        <ComboBox x:Name="Music4"  Grid.Row="4" Grid.Column="6"
-                                  Margin="0,50,0,0" Width="64" HorizontalAlignment="Center" VerticalAlignment="Top" 
-                                   SelectionChanged="OnMusicChange"/>
+                        <TextBlock x:Name="Slot1Label" Grid.Row="1" Grid.Column="5" Text="Slot1" Style="{StaticResource SlotBoxes}"/>
+                        <TextBlock x:Name="Slot2Label" Grid.Row="2" Grid.Column="5" Text="Slot2" Style="{StaticResource SlotBoxes}"/>
+                        <TextBlock x:Name="Slot3Label" Grid.Row="3" Grid.Column="5" Text="Slot3" Style="{StaticResource SlotBoxes}"/>
+                        <TextBlock x:Name="Slot4Label" Grid.Row="4" Grid.Column="5" Text="Slot4" Style="{StaticResource SlotBoxes}"/>
 
-                        <TextBlock x:Name="Music1Label" Grid.Row="1" Grid.Column="6"
-                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
-                                   Text="Music1"/>
-                        <TextBlock x:Name="Music2Label" Grid.Row="2" Grid.Column="6"
-                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
-                                   Text="Music2"/>
-                        <TextBlock x:Name="Music3Label" Grid.Row="3" Grid.Column="6"
-                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
-                                   Text="Music3"/>
-                        <TextBlock x:Name="Music4Label" Grid.Row="4" Grid.Column="6"
-                                   Margin="0,30,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"  
-                                   Text="Music4"/>
+                        <TextBlock x:Name="Music1Label" Grid.Row="1" Grid.Column="6" Text="Music1" Style="{StaticResource SlotBoxes}"/>
+                        <TextBlock x:Name="Music2Label" Grid.Row="2" Grid.Column="6" Text="Music2" Style="{StaticResource SlotBoxes}"/>
+                        <TextBlock x:Name="Music3Label" Grid.Row="3" Grid.Column="6" Text="Music3" Style="{StaticResource SlotBoxes}"/>
+                        <TextBlock x:Name="Music4Label" Grid.Row="4" Grid.Column="6" Text="Music4" Style="{StaticResource SlotBoxes}"/>
 
                     </Grid>
                 </DockPanel>
@@ -207,44 +202,48 @@
             <TabItem Name="Options" Header="Options">
 
                 <Canvas>
-                    <TextBlock HorizontalAlignment="Left" Margin="32,76,0,0" TextWrapping="Wrap" Text="Misc Settings" VerticalAlignment="Top" Foreground="White" TextDecorations="Underline" Grid.Column="1"/>
+                    <TextBlock Grid.Column="1" Margin="60,76,0,0" Text="Misc Settings" Style="{StaticResource Blocks}"/>
+                    <TextBlock Grid.Column="1" Margin="199,76,0,0" Text="CC Distribution Online" Style="{StaticResource Blocks}"/>
+
+
                     <StackPanel Margin="17,97,622,157">
-                        <ComboBox x:Name="Regs" Width="165" Height="20" SelectionChanged="OnRegsChange" HorizontalAlignment="Left"/>
-                        <CheckBox x:Name="TTTrophies" FontSize="14" Content="Time Trials Trophies" Checked="OnTrophiesToggle" Unchecked="OnTrophiesToggle" Foreground="White"/>
-                        <CheckBox x:Name="CC200" FontSize="14" Content="200cc" Checked="On200CCToggle" Unchecked="On200CCToggle" Foreground="White"/>
-                        <CheckBox x:Name="UMT" FontSize="14" Content="Ultra Mini-Turbos" Checked="OnUMTToggle" Unchecked="OnUMTToggle" Foreground="White"/>
-                        <CheckBox x:Name="Feather" FontSize="14" Content="Feather"  Checked="OnFeatherToggle" Unchecked="OnFeatherToggle" Foreground="White"/>
-                        <CheckBox x:Name="MegaTC" FontSize="14" Content="Mega Thunder Cloud" Checked="OnMegaTCToggle" Unchecked="OnMegaTCToggle" Foreground="White"/>
+                        <ComboBox x:Name="Regs" Width="165" Height="20" SelectionChanged="OnRegsChange" Margin="5"                              Style="{StaticResource ComboBoxes}"   />
+                        <CheckBox x:Name="TTTrophies" Content="Time Trials Trophies" Checked="OnTrophiesToggle"  Unchecked="OnTrophiesToggle"   Style="{StaticResource OptCheckBoxes}"/>
+                        <CheckBox x:Name="CC200"      Content="200cc"                Checked="On200CCToggle"     Unchecked="On200CCToggle"      Style="{StaticResource OptCheckBoxes}"/>
+                        <CheckBox x:Name="UMT"        Content="Ultra Mini-Turbos"    Checked="OnUMTToggle"       Unchecked="OnUMTToggle"        Style="{StaticResource OptCheckBoxes}"/>
+                        <CheckBox x:Name="Feather"    Content="Feather"              Checked="OnFeatherToggle"   Unchecked="OnFeatherToggle"    Style="{StaticResource OptCheckBoxes}"/>
+                        <CheckBox x:Name="MegaTC"     Content="Mega Thunder Cloud"   Checked="OnMegaTCToggle"    Unchecked="OnMegaTCToggle"     Style="{StaticResource OptCheckBoxes}"/>
                     </StackPanel>
-                    <TextBlock HorizontalAlignment="Left" Margin="199,76,0,0" TextWrapping="Wrap" Text="CC Distribution Online" VerticalAlignment="Top" Foreground="White" TextDecorations="Underline" Grid.Column="1"/>
-                    <StackPanel Canvas.Left="193" Canvas.Top="97" HorizontalAlignment="Left" VerticalAlignment="Center">
-                        <TextBox x:Name="CC100" FontSize="14" TextAlignment="Center" PreviewTextInput="NumbersOnlyBox" TextChanged="On100ccChange" Width="27" Height="22"/>
-                        <TextBox x:Name="CC150" FontSize="14" TextAlignment="Center" PreviewTextInput="NumbersOnlyBox" TextChanged="On150ccChange" Height="22"/>
-                        <TextBox x:Name="CCMirror" FontSize="14" TextAlignment="Center" PreviewTextInput="NumbersOnlyBox" IsReadOnly="True" Height="22"/>
+
+                    <StackPanel Canvas.Left="193" Canvas.Top="97">
+                        <TextBox x:Name="CC100"    PreviewTextInput="NumbersOnlyBox" TextChanged="On100ccChange"  Margin="30,0,0,0" Width="27" Height="22" Style="{StaticResource Boxes}"/>
+                        <TextBox x:Name="CC150"    PreviewTextInput="NumbersOnlyBox" TextChanged="On150ccChange"  Margin="30,0,0,0" Width="27" Height="22" Style="{StaticResource Boxes}"/>
+                        <TextBox x:Name="CCMirror" PreviewTextInput="NumbersOnlyBox" IsReadOnly="True"            Margin="30,0,0,0" Width="27" Height="22" Style="{StaticResource Boxes}"/>
                     </StackPanel>
                     <StackPanel Canvas.Left="224" Canvas.Top="97" HorizontalAlignment="Left" VerticalAlignment="Center">
-                        <TextBlock x:Name="CC100Label" FontSize="14" Text="% 100cc" Foreground="White" Height="23"/>
-                        <TextBlock Text="% 150cc" FontSize="14" Foreground="White" Height="22"/>
-                        <TextBlock Text="% Mirror" FontSize="14" Foreground="White"/>
+                        <TextBlock x:Name="CC100Label" Text="% 100cc"  FontSize="14" Foreground="{DynamicResource fg}" Margin="30,0,0,0" Height="23"/>
+                        <TextBlock x:Name="CC150Label" Text="% 150cc"  FontSize="14" Foreground="{DynamicResource fg}" Margin="30,0,0,0" Height="22"/>
+                        <TextBlock x:Name="CCMirLabel" Text="% Mirror" FontSize="14" Foreground="{DynamicResource fg}" Margin="30,0,0,0" Height="21"/>
                     </StackPanel>
-                    <TextBox x:Name="ModFolder" FontSize="14" TextAlignment="Center" HorizontalAlignment="Left" Margin="379,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="127" Grid.Column="1" TextChanged="OnModFolderChange"/>
-                    <TextBlock HorizontalAlignment="Left" FontSize="14" TextWrapping="Wrap" Text="Mod Folder Name" VerticalAlignment="Center" Foreground="White" Grid.Column="1" Canvas.Left="264" Canvas.Top="25"/>
-                    <ComboBox x:Name="TrackBlocking" Canvas.Left="104" Canvas.Top="319"
-                                HorizontalAlignment="Center" VerticalAlignment="Center" Width="43" Height="19"    
-                                HorizontalContentAlignment="Center"
-                                SelectionChanged="OnTrackBlockingChange"/>
-                    <TextBlock x:Name="TrackBlockingLabel" Canvas.Left="14" Canvas.Top="319"
-                                HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"
-                                Text="Track Blocking" TextWrapping="Wrap" />
-                    <DatePicker xml:lang="en-GB" x:Name="dateSelector" Language="en-GB" HorizontalAlignment="Left" Margin="429,76,0,0" VerticalAlignment="Top" SelectedDateChanged="OnDateChange" Grid.Column="1"/>
-                    <TextBox x:Name="Wiimmfi" 
-                             Canvas.Left="104" Canvas.Top="297" Width="43" HorizontalAlignment="Center" VerticalAlignment="Top"  
-                             TextWrapping="Wrap" Text=""
-                             TextChanged="OnWiimmfiRegionChange" PreviewTextInput="NumbersOnlyBox" />
-                    <TextBlock HorizontalAlignment="Center"  
-                               Canvas.Left="14" Canvas.Top="299" VerticalAlignment="Top" Foreground="White"
-                               TextWrapping="Wrap" Text="Wiimmfi Region"  />
+                    <TextBox x:Name="ModFolder" Margin="379,25,0,0" Width="127" Grid.Column="1" TextChanged="OnModFolderChange" Style="{StaticResource Boxes}"/>
+                    <TextBlock Text="Mod Folder Name" Grid.Column="1" Canvas.Left="264" Canvas.Top="27" Style="{StaticResource Blocks}"/>
 
+                    <TextBox x:Name="Wiimmfi" Canvas.Left="104" Canvas.Top="274" Width="43" Text="" TextChanged="OnWiimmfiRegionChange" PreviewTextInput="NumbersOnlyBox"  Style="{StaticResource Boxes}"/>
+                    <TextBlock Text="Wiimmfi Region" Canvas.Left="14" Canvas.Top="299" Style="{StaticResource Blocks}"/>
+
+                    <ComboBox x:Name="TrackBlocking" Canvas.Left="119" Canvas.Top="275" Width="43" Height="19" HorizontalContentAlignment="Center" SelectionChanged="OnTrackBlockingChange" Style="{StaticResource ComboBoxes}"/>
+                    <TextBlock Text="Track Blocking" Canvas.Left="14" Canvas.Top="325" Style="{StaticResource Blocks}"/>
+
+                    <DatePicker xml:lang="en-GB" x:Name="dateSelector" Language="en-GB" Foreground="{DynamicResource fg}" SelectedDateChanged="OnDateChange"
+                                Grid.Column="1"  Canvas.Left="429" Canvas.Top="76" Width="185" >
+
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="Background" Value="{DynamicResource bg}"/>
+                                <Setter Property="TextAlignment" Value="Center"/>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
 
 
 
@@ -256,7 +255,7 @@
                     <Button DockPanel.Dock="Right" Content="&gt;" FontWeight="Bold" FontSize="18" Click="OnRightArrowClick" />
                     <Grid Name="GhostGrid" >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1.5*"/>
                             <ColumnDefinition Width="3*"/>
                             <ColumnDefinition Width="3*" />
                             <ColumnDefinition Width="3*" />
@@ -269,98 +268,37 @@
                             <RowDefinition Height="2*"/>
                             <RowDefinition Height="2*" />
                         </Grid.RowDefinitions>
-                        <TextBox x:Name="Ghost11" Grid.Row="1" Grid.Column="1"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost12" Grid.Row="1" Grid.Column="2"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost13" Grid.Row="1" Grid.Column="3"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost14" Grid.Row="1" Grid.Column="4"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost11" Grid.Row="1" Grid.Column="1" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost12" Grid.Row="1" Grid.Column="2" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost13" Grid.Row="1" Grid.Column="3" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost14" Grid.Row="1" Grid.Column="4" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
 
-                        <TextBox x:Name="Ghost21" Grid.Row="2" Grid.Column="1"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost22" Grid.Row="2" Grid.Column="2"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost23" Grid.Row="2" Grid.Column="3"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost24" Grid.Row="2" Grid.Column="4"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost21" Grid.Row="2" Grid.Column="1" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost22" Grid.Row="2" Grid.Column="2" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost23" Grid.Row="2" Grid.Column="3" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost24" Grid.Row="2" Grid.Column="4" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
 
+                        <TextBox x:Name="Ghost31" Grid.Row="3" Grid.Column="1" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost32" Grid.Row="3" Grid.Column="2" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost33" Grid.Row="3" Grid.Column="3" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost34" Grid.Row="3" Grid.Column="4" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
 
-                        <TextBox x:Name="Ghost31" Grid.Row="3" Grid.Column="1"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost32" Grid.Row="3" Grid.Column="2"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost33" Grid.Row="3" Grid.Column="3"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost34" Grid.Row="3" Grid.Column="4"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBox x:Name="Ghost41" Grid.Row="4" Grid.Column="1" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop"  Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost42" Grid.Row="4" Grid.Column="2" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop"  Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost43" Grid.Row="4" Grid.Column="3" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop"  Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="Ghost44" Grid.Row="4" Grid.Column="4" TextChanged="OnGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop"  Style="{StaticResource GhostBoxes}"/>
 
-                        <TextBox x:Name="Ghost41" Grid.Row="4" Grid.Column="1"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost42" Grid.Row="4" Grid.Column="2"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost43" Grid.Row="4" Grid.Column="3"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
-                        <TextBox x:Name="Ghost44" Grid.Row="4" Grid.Column="4"
-                                 Margin="33,17,33,28"  VerticalContentAlignment="Center"
-                                 Text="RKG File" FontSize="14" TextWrapping="Wrap"  TextAlignment="Center" TextChanged="OnGhostChange" 
-                                 PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" />
+                        <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Margin="-60,5,0,0" Width="250" Text="Optional Expert Files (no .rkg extension)" Style="{StaticResource TopLabels}"/>
 
+                        <TextBlock Name="GhostTrackName1" Grid.Row="1" Grid.Column="0" Text="Track 1" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock Name="GhostTrackName2" Grid.Row="2" Grid.Column="0" Text="Track 2" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock Name="GhostTrackName3" Grid.Row="3" Grid.Column="0" Text="Track 3" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock Name="GhostTrackName4" Grid.Row="4" Grid.Column="0" Text="Track 4" Style="{StaticResource TrackLabels}"/>
 
-                        <TextBlock Grid.Column="2" Grid.ColumnSpan="2"
-                                   Margin="0,4,0,0" Width="244" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White"
-                                   TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" Text="Optional Expert Files (no .rkg extension)" TextAlignment="Center" />
-
-                        <TextBlock Name="GhostTrackName1" Grid.Row="1" Grid.ColumnSpan="2"
-                                   Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
-                                  Text="Track 1"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
-                        <TextBlock Name="GhostTrackName2" Grid.Row="2" Grid.ColumnSpan="2"
-                                   Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
-                                  Text="Track 2"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
-                        <TextBlock Name="GhostTrackName3" Grid.Row="3" Grid.ColumnSpan="2"
-                                   Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
-                                  Text="Track 3"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
-                        <TextBlock Name="GhostTrackName4" Grid.Row="4" Grid.ColumnSpan="2"
-                                   Margin="15,-14,0,0" Width="70" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White"
-                                  Text="Track 4"  TextWrapping="Wrap" FontWeight="Bold" TextDecorations="Underline" TextAlignment="Center"  />
-
-
-                        <TextBlock Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="150cc" TextAlignment="Center" Margin="0,29,0,0"/>
-                        <TextBlock Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="200cc" TextAlignment="Center" Margin="0,29,0,0"/>
-                        <TextBlock Grid.Column="3" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="150cc Feather" TextAlignment="Center" Margin="0,29,0,0"/>
-                        <TextBlock Grid.Column="4" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Width="96" Foreground="White" FontWeight="Bold" TextDecorations="Underline" Text="200cc Feather" TextAlignment="Center" Margin="0,29,0,0"/>
+                        <TextBlock Grid.Column="1" Text="150cc"          Style="{StaticResource GhostTopLabels}"/>
+                        <TextBlock Grid.Column="2" Text="200cc"          Style="{StaticResource GhostTopLabels}"/>
+                        <TextBlock Grid.Column="3" Text="150cc Feather"  Style="{StaticResource GhostTopLabels}"/>
+                        <TextBlock Grid.Column="4" Text="200cc Feather"  Style="{StaticResource GhostTopLabels}"/>
                     </Grid>
                 </DockPanel>
 
@@ -369,4 +307,5 @@
         </TabControl>
 
     </DockPanel>
+
 </Window>

@@ -3,6 +3,7 @@
 #include <types.hpp>
 #include <core/nw4r/g3d/g3dObj.hpp>
 #include <core/nw4r/g3d/res/ResMdl.hpp>
+#include <core/nw4r/g3d/Draw.hpp>
 #include <core/nw4r/math.hpp>
 
 namespace nw4r {
@@ -49,9 +50,9 @@ public:
     u8 padding[2];
     void* callback; //0xd4
     u8 callbackTiming; //0xd8
-    u8 callbackDeleteOption;
-    u16 callbackExecOpMask;
-};
+    u8 callbackDeleteOption; //0xda
+    u16 callbackExecOpMask; //0xdb
+}; //0xdc
 
 //no children
 class ScnLeaf : public ScnObj {
@@ -68,8 +69,8 @@ public:
     void SetPriorityDrawOpa(int priority); //8006dcf0
     void SetPriorityDrawXlu(int priority); //8006dd20
 
-    math::VEC3 scale;
-};
+    math::VEC3 scale; //0xdc
+}; //0xe8
 
 //An object that has children
 class ScnGroup : public ScnObj {
@@ -103,6 +104,32 @@ public:
     virtual void ExecCallback_DRAW_OPA(Timing, ScnObj* scnObj, u32 args, void* info);
     virtual void ExecCallback_DRAW_XLU(Timing, ScnObj* scnObj, u32 args, void* info);
 }; //0x4
+
+class IScnObjGather {
+public:
+    enum CullingStatus {
+        CULLINGSTATUS_INTERSECT = 0,
+        CULLINGSTATUS_INSIDE = 1,
+        CULLINGSTATUS_OUTSIDE = 2,
+        CULLINGSTATUS_NOTEST = 0
+    };
+
+    enum CheckStatus {
+        CHECKSTATUS_GATHER_SCNOBJ = 0,
+        CHECKSTATUS_IGNORE_SCNOBJ
+    };
+
+    typedef bool (*CompFunc)(const ScnObj* first, const ScnObj* second); //returns "true" if first < second, which the user decides the meaning of
+    virtual ~IScnObjGather();
+    virtual CullingStatus Add(ScnObj* obj, bool addToOpa, bool addToXlu) = 0;
+    virtual void Clear() = 0;
+    virtual void ZSort() = 0;
+    virtual void Sort() = 0;
+    virtual void Sort(CompFunc compOpa, CompFunc compXlu) = 0;
+    virtual void DrawOpa(ResMdlDrawMode* forceDrawMode) = 0;
+    virtual void DrawXlu(ResMdlDrawMode* forceDrawMode) = 0;
+    virtual CheckStatus CheckScnObj(ScnObj* obj);
+};
 
 }//namespace g3d  
 }//namespace nw4r 

@@ -1,9 +1,16 @@
-﻿using System;
+﻿using Pulsar_Pack_Creator;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.JavaScript;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
+using System.Windows.Shell;
 
 namespace PulsarPackCreator
 {
@@ -17,7 +24,7 @@ namespace PulsarPackCreator
         {
             int magic;  //MELG
             bool areRegsEnabled;
-            int trackBlocking;
+            int trackBlocking;f
             int ctsCupCount;
             int extSlotToTrackId;
             u8 extSlotToMusicSlot
@@ -102,6 +109,9 @@ namespace PulsarPackCreator
 
 
 
+
+        
+
         public MainWindow()
         {
             trophyCount = new UInt16[4];
@@ -110,6 +120,7 @@ namespace PulsarPackCreator
             Cup initial = new Cup(0);
             cups.Add(initial);
             InitializeComponent();
+ 
             importWindow = new MassImportWindow(this);
             crashWindow = new CrashWindow();
             settingsWindow = new SettingsWindow();
@@ -177,23 +188,18 @@ namespace PulsarPackCreator
                 {
                     OpenPulFile(args[1]);
                     Environment.CurrentDirectory = args[0].Substring(0, args[0].LastIndexOf('\\') + 1);
-                }
+                }               
                 else if (args[1].Contains("Updated"))
                 {
                     checkUpdates = false;
-                    SettingsWindow.DisplayChangelog(args[1]);
+                    SettingsWindow.DisplayChangelog(args[3]);
                 }
-            } 
+            }
 
             if (checkUpdates)
             {
                 SettingsWindow.TryUpdate();
             }
-
-            //MsgWindow.Show(args[0].Substring(0, args[0].LastIndexOf('\\') + 1));
-            //string path = args[0].Substring(0, args[0].LastIndexOf('/'));
-            //var splitPath = args[0].Split('/').ToList();
-            //splitPath.RemoveAt(splitPath.Count - 1);
 
             if (!Directory.Exists("input"))
             {

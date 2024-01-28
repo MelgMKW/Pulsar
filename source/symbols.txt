@@ -196,7 +196,7 @@ OSSendMessage = 0x801a735c
 OSYieldThread = 0x801a9e48
 OSResumeThread = 0x801aa58c
 SelectThread__2OSFPQ22OS6Thread = 0x801a9c08
-OSSleepThread = 0x801aa9b8
+SleepThread__2OSFPQ22OS11ThreadQueue = 0x801aa9b8
 DetachThread__2OSFPQ22OS6Thread = 0x801aa4ec
 CancelThread__2OSFPQ22OS6Thread = 0x801aa1d4
 current__Q22OS6Thread = 0x800000e4
@@ -251,6 +251,8 @@ GetTexMapAry__Q34nw4r3lyt8MaterialFv = 0x800809a0
 ReplaceImage__Q34nw4r3lyt6TexMapFP10TPLPaletteUi = 0x80082550
 
 #snd
+detail_StartSound__Q34nw4r3snd14SoundStartableFPQ34nw4r3snd11SoundHandleUiPCQ44nw4r3snd14SoundStartable9StartInfo = 0x800a3e80
+detail_HoldSound__Q34nw4r3snd14SoundStartableFPQ34nw4r3snd11SoundHandleUiPCQ44nw4r3snd14SoundStartable9StartInfo = 0x800a3f90
 OpenExtStream__Q34nw4r3snd15DVDSoundArchiveFPQ44nw4r3snd15DVDSoundArchive13DvdFileStreamUiPcUiUi = 0x800912c0
 GetSoundType__Q34nw4r3snd12SoundArchiveCFUi = 0x8009df30
 ReadStrmInfo__Q44nw4r3snd6detail14StrmFileLoaderFPQ54nw4r3snd6detail14StrmFileReader8StrmInfo = 0x800a5490
@@ -264,8 +266,16 @@ SinCosFIdx__Q24nw4r4mathFPfPff = 0x800851e0
 DWC_AuthServer = 0x80386338
 loginRegion__3DWC = 0x80384fd0
 SendMatchCommand__3DWCFQ23DWC12MatchCommandUiUiUsPvUi = 0x800dbd38
-Printf__3DWCFiPCce = 0x800cd068
+Printf__3DWCFUiPCce = 0x800cd068
+GetGHTTPDataEx__3DWCFPCcUibPFQ23DWC10GHTTPStatePCviiiPv_vPFPCviQ23DWC11GHTTPResultPv_vPv = 0x800cd864
+ProcessGHTTP__3DWCFv = 0x800cd4a8
+InitGHTTP__3DWCFPCc = 0x800cd3b0
+ShutdownGHTTP__3DWCFv = 0x800cd3f4
+GHTTPNewPost__3DWCFPPQ25GHTTP7GHIPost = 0x800cd66c
+PostGHTTPData__3DWCFPCcPPQ25GHTTP7GHIPostPFPCviQ23DWC11GHTTPResultPv_vPv = 0x800cd6d4
 
+#GHTTP
+PostAddFileFromMemoryA__5GHTTPFPPQ25GHTTP7GHIPostPCcPCviPCcPCc = 0x80113944
 
 #EGG
 #System
@@ -320,6 +330,7 @@ OnExit__Q23EGG6ThreadFv = 0x80008e7c
 #TaskThread
 Create__Q23EGG10TaskThreadFiiUiPQ23EGG4Heap = 0x802428e8
 Request__Q23EGG10TaskThreadFPFPv_vPvUi = 0x80242c18
+isTaskExist__Q23EGG10TaskThreadFv = 0x80242c98
 
 #Archive
 Mount__Q23EGG7ArchiveFPvPQ23EGG4Heapi = 0x8020f768
@@ -437,6 +448,7 @@ InitModel__13MiiHeadsModelFP3MiiP14MiiDriverModelUiQ44nw4r3g3d6ScnMdl12BufferOpt
 
 #MiiGroup
 LoadMii__8MiiGroupFUcPQ23RFL9StoreData = 0x805fa610
+LoadMii__8MiiGroupFUcUs = 0x805fa748
 GetMii__8MiiGroupFUc = 0x805fa930
 
 #Mii
@@ -784,6 +796,9 @@ __vt__18CtrlMenuBackButton = 0x808d374c
 #Title
 SetMsgId__21CtrlMenuPageTitleTextFUiPC8TextInfo = 0x807e987c
 
+#TitleImage
+ChangeImage__10TitleImageFbUi = 0x8063a8d4
+
 #Instruction
 SetMsgId__23CtrlMenuInstructionTextFUiPC8TextInfo = 0x807e9a38
 __vt__23CtrlMenuInstructionText = 0x808d3698
@@ -940,7 +955,6 @@ BeforeExitAnimations__Q25Pages8RaceMenuFv = 0x80859f34
 AfterControlUpdate__Q25Pages8RaceMenuFv = 0x80859e98
 GetRuntimeTypeInfo__Q25Pages8RaceMenuCFv = 0x8085bd58
 SetNextPage__Q25Pages8RaceMenuF6PageId = 0x8063240c
-
 OnActivate__Q25Pages8RaceMenuFv = 0x80859a2c
 
 
@@ -1102,6 +1116,9 @@ Select__Q218SheetSelectControl17SheetSelectButtonFUi = 0x806371ac
 __ct__Q25Pages10VSSettingsFv = 0x806284c8
 OnButtonDeselect__Q25Pages10VSSettingsFR10PushButtonUi = 0x808536b0
 
+#MatchingMessageWindow
+SetMsgId__Q25Pages21MatchingMessageWindowFUiPC8TextInfo = 0x80607ef8
+
 #WFCMainPage
 __ct__Q25Pages11WFCMainMenuFv = 0x8064b640
 __dt__Q25Pages11WFCMainMenuFv = 0x8064b850
@@ -1196,6 +1213,9 @@ __ct__Q23EGG14EffectResourceFPvPv = 0x80225c98
 #Sound
 sInstance__12AudioManager = 0x809c2898
 
+#LinkedRaceActor
+CannotPlaySounds__15LinkedRaceActorFv = 0x807028e4
+
 #KartSound
 HoldSound__9KartSoundFUiP11AudioHandle = 0x80709338
 PlayBRSARSound__16RaceSoundHandlerFUiUi = 0x80716608
@@ -1264,6 +1284,8 @@ Update__Q26Lakitu7ManagerFv = 0x8071e6c0
 #Controller
 sInstance__Q25RKNet10Controller = 0x809c20d8
 UpdateAidsBelongingToPlayerIds__Q25RKNet10ControllerFv = 0x80659bc0
+Init__Q25RKNet10ControllerFUc = 0x80655c10
+ScheduleShutdown__Q25RKNet10ControllerFv = 0x806561a8
 
 #PacketHolder
 sInstance__Q25RKNet13SELECTHandler = 0x809c2100
@@ -1528,3 +1550,5 @@ GXTexModeSync= 0x8016eb70
 GXTokenInterruptHandler= 0x8016eccc
 StateGX_ChangeProjectionv= 0x802417fc
 TPLGetGXTexObjFromPalette= 0x801b7544
+
+

@@ -39,11 +39,17 @@ kmBranch(0x8065a03c, GetFriendsSearchType);
 kmBranch(0x8065a088, GetFriendsSearchType);
 
 
-void PatchRKNetControllerRegion() {
-    RKNet::Controller::sInstance->localStatusData.regionId = Info::GetWiimmfiRegion();
+
+u32 PatchRKNetControllerRegion() {
+    return Info::GetWiimmfiRegion();
 }
-kmCall(0x80653690, PatchRKNetControllerRegion);
-kmCall(0x80653700, PatchRKNetControllerRegion);
+kmCall(0x80653640, PatchRKNetControllerRegion);
+kmWrite32(0x80653644, 0x7c651b78);
+kmCall(0x806536ac, PatchRKNetControllerRegion); //for battle
+kmWrite32(0x806536b0, 0x7c661b78);
+
+//kmCall(0x80653700, PatchRKNetControllerRegion); this is for battle, right now it'll store 2 (if pal)/FF
+
 
 
 //kmWrite32(0x8065A034, 0x3880008E);

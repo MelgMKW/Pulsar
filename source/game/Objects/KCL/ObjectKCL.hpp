@@ -53,7 +53,7 @@ public:
     virtual void vf_0xfc() = 0; //0xfc
     virtual bool IsCollidingAddEntry(const Vec3& position, const Vec3& prevPosition,
         KCLTypesBitfield accepted, CollisionInfo* collisionInfo,
-        KCLTypeHolder* result, u32 initialTime, float radius) = 0; //0x100
+        KCLTypeHolder* result, u32 initialTime, float radius) = 0; //0x100 the one used for players
     virtual bool AreItemsAllowed(); //0x104 8068290c if false, items will disappear on the object
     virtual float vf_0x108(); //0x108 80682900
     virtual void vf_0x10c(); //0x10c 806828f8

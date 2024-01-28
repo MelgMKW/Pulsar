@@ -6,13 +6,13 @@
 
 namespace THP {
 
-extern s32 AudioDecodeThreadCreated; //809bd758
-extern OS::Thread AudioDecodeThread; //809bd760
-extern u8 AudioDecodeThreadStack[4 * 1024]; //809bda78
-extern OS::MessageQueue FreeAudioBufferQueue; //809bea78
-extern OS::MessageQueue DecodedAudioBufferQueue; //809bea98
-extern OS::Message FreeAudioBufferMessage[6]; //809beab8
-extern OS::Message DecodedAudioBufferMessage[6]; //809bead0
+extern s32 audioDecodeThreadCreated; //809bd758
+extern OS::Thread audioDecodeThread; //809bd760
+extern u8 audioDecodeThreadStack[4 * 1024]; //809bda78
+extern OS::MessageQueue freeAudioBufferQueue; //809bea78
+extern OS::MessageQueue decodedAudioBufferQueue; //809bea98
+extern OS::Message freeAudioBufferMessage[6]; //809beab8
+extern OS::Message dDecodedAudioBufferMessage[6]; //809bead0
 
 
 //AudioDecode

@@ -4,7 +4,7 @@
 #include <game/Objects/KCL/ExternalKCL/VolcanoPiece.hpp>
 
 namespace Objects {
-class bblock: public VolcanoPiece { //0x20d = 525
+class bblock : public VolcanoPiece { //ObjectNum 0x20d = 525
     explicit bblock(const KMP::Holder<GOBJ>& gobjHolder); //80803d40
     ~bblock() override; //80805a0c vtable 808d5150
     void OnStart() override; //0xC 80803f74

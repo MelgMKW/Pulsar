@@ -54,7 +54,7 @@ public:
 }; //0x94||0x8C||0x88
 
 class LinkedRaceActor { //actors managed by RaceAudioManager //nw4r has a similar "LinkedObject" so names copied
-
+public:
     static u16 actorCount; //809c26a0
     LinkedRaceActor(); //80702678
     ~LinkedRaceActor(); //807026cc
@@ -102,6 +102,7 @@ class LinkedRaceActor { //actors managed by RaceAudioManager //nw4r has a simila
 }; //0x20
 
 class RaceAudioActor : public AudioActor<4>, public LinkedRaceActor {
+public:
     //no ctor
     //AUDIOACTOR
     //Sound3DActor vtable 808c7d60
@@ -135,6 +136,7 @@ class RaceAudioActor : public AudioActor<4>, public LinkedRaceActor {
 }; //0xb4
 
 class SimpleRaceAudioActor : public RaceAudioActor { //for actors without BRASD support
+public:
     //no ctor
     //AUDIOACTOR
     //Sound3DActor vtable 808C8A68

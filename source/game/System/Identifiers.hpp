@@ -272,7 +272,7 @@ enum PageId {
     PAGE_P4BATTLE_INTERFACE             = 0x15,
     PAGE_MISSION_TOURNAMENT_INTERFACE   = 0x16,
     PAGE_GP_PAUSE_MENU                  = 0x17,
-    PAGE_VS_RACE_PAUSE_MENU             = 0x18,
+    PAGE_VS_RACE_PAUSE_MENU             = 0x18, //DONE
     PAGE_TT_PAUSE_MENU                  = 0x19, //DONE
     PAGE_BATTLE_PAUSE_MENU              = 0x1A,
     PAGE_TOURNAMENT_PAUSE_MENU          = 0x1B,
@@ -307,7 +307,7 @@ enum PageId {
     PAGE_GP_REPLAY_PAUSE                = 0x38,
     PAGE_TT_IMMEDIATE_REPLAYPAUSE       = 0x39,
     PAGE_RESPAWN_FADE_IN_OUT            = 0x3A, //DONE
-    PAGE_PROBABLY_AWARD_INTERFACE      = 0x3B,
+    PAGE_PROBABLY_AWARD_INTERFACE       = 0x3B,
     PAGE_PROBABLY_CONGRATS              = 0x3C,
     PAGE_CREDITS_VS_INTERFACE           = 0x3D,
     PAGE_ENDING                         = 0x3E, //DONE
@@ -315,7 +315,7 @@ enum PageId {
     PAGE_WIFI_RACE_INTERFACE            = 0x40,
     PAGE_P2WIFI_RACE_INTERFACE          = 0x41,
     PAGE_WIFI_VS_INTERFACE              = 0x42, //DONE
-    PAGE_WIFI_TEAMVS_INTERFACE         = 0x43,
+    PAGE_WIFI_TEAMVS_INTERFACE          = 0x43,
     PAGE_WIFI_VS_RESULTS                = 0x44, //DONE
     PAGE_WWRACEEND_COUNTDOWN            = 0x45, //DONE
     PAGE_WWRACEEND_MENU                 = 0x46, //DONE
@@ -800,6 +800,9 @@ enum SoundIDs {
 
     SOUND_ID_FINAL_LAP                      = 0x74,
     SOUND_ID_NORMAL_LAP                     = 0xda,
+
+    SOUND_ID_PAUSE                          = 0xd3,
+    SOUND_ID_RESUME                         = 0xd4,
     SOUND_ID_BLUE_SHELL_FLY                 = 0x103,
     SOUND_ID_STAR                           = 0x10e,
     SOUND_ID_MEGA                           = 0x112,
@@ -807,6 +810,8 @@ enum SoundIDs {
     SOUND_ID_GLOBAL_POW_1STSHAKE            = 0x11d,
     SOUND_ID_GLOBAL_POW_2NDSHAKE            = 0x11e,
     SOUND_ID_GLOBAL_POW_3RDSHAKE            = 0x11f,
+    SOUND_ID_MINITURBO                      = 0x19a,
+    SOUND_ID_SUPER_MINITURBO                = 0x19b,
     SOUND_ID_KART_BOOST                     = 0x19c,
     SOUND_ID_aDP_WATER                      = 0x309
 };

@@ -68,7 +68,9 @@ enum RoomType {
     ROOMTYPE_BT_WW,
     ROOMTYPE_BT_REGIONAL,
     ROOMTYPE_FROOM_HOST,
-    ROOMTYPE_FROOM_NONHOST
+    ROOMTYPE_FROOM_NONHOST,
+    ROOMTYPE_JOINING_WW,
+    ROOMTYPE_JOINING_REGIONAL,
 };
 
 class Controller;
@@ -178,7 +180,7 @@ public:
     u64 lastRACEToSendTimes[12]; //0x1e0 time when last sent to that aid
     u64 lastRACERecivedTimes[12]; //0x240 time when last received from that aid
     u64 RACEToSendTimesTaken[12]; //0x2a0 last send time minus the time of the send before it
-    u64 RACEReceivedTiemsTaken[12]; //0x300 last receive time minus the time of the receive before it
+    u64 RACEReceivedTimesTaken[12]; //0x300 last receive time minus the time of the receive before it
     u8 lastRACESendAid; //0x360 aid a packet was last sent to
     u8 fullRecivedPackets[12][0x2e0]; //0x361 1 per aid
     u8 padding[3]; //0x25e1

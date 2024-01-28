@@ -4,7 +4,7 @@
 #include <game/Objects/KCL/ExternalKCL/ObjectExternKCL.hpp>
 
 namespace Objects {
-class WLwallGC : public ObjectExternKCL { //0xcb
+class WLwallGC : public ObjectExternKCL { //ObjectNum 0xcb
     static u32 count; //0x809c4760, incremented by 1 at the end of the ctor
     explicit WLwallGC(const KMP::Holder<GOBJ>& gobjHolder); //8086bc1c
     ~WLwallGC() override; //8086bde4 vtable 808dbfe0

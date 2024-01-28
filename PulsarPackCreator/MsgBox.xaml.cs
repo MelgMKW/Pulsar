@@ -40,9 +40,9 @@ namespace PulsarPackCreator
         public static MsgWindowResult Show(string text, string caption, MsgWindowButton button, Window owner = null) //specify owner if the "window" this box appears onto needs to stay visible
         {
             
-            if (owner == null) owner = GetWindow(App.Current.MainWindow) as MainWindow;
+            if (owner == null || !owner.IsLoaded) owner = GetWindow(App.Current.MainWindow) as MainWindow;
             MsgWindow window = MainWindow.msgWindow;
-            window.Owner = owner;
+            window.Owner = owner;       
             window.Title = caption;
             window.TextSpace.Text = text;
             window.result = false;

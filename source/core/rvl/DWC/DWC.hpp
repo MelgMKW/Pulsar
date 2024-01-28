@@ -43,7 +43,8 @@ struct FriendUpdate {
     u32 pid;
 };
 
-int Printf(int r3, const char*, ...);
+int Printf(u32 level, const char*, ...);
+s32 GetLastErrorEx(u32* errorCode, u32* errorType); //800ccb64
 
 }//namespace DWC
 

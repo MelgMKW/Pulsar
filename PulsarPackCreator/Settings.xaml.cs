@@ -1,12 +1,19 @@
-﻿using System;
+﻿using Pulsar_Pack_Creator.Properties;
+using System.Drawing;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using static PulsarPackCreator.MsgWindow;
+using System;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
+using System.Collections.Generic;
 
 namespace PulsarPackCreator
 {
@@ -20,6 +27,8 @@ namespace PulsarPackCreator
         public void Load()
         {
             AutoUpdater.IsChecked = Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate;
+            ExitRemindBox.IsChecked = Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind;
+            LightModeBox.IsChecked = Pulsar_Pack_Creator.Properties.Settings.Default.LightMode;
             Show();
         }
 
@@ -45,7 +54,8 @@ namespace PulsarPackCreator
 
         private void OnUpdateClick(object sender, RoutedEventArgs e)
         {
-            TryUpdate();
+            bool hasUpdate = TryUpdate();
+            if(!hasUpdate) MsgWindow.Show("You are already using the latest version.", this);
         }
 
         private void OnSaveSettingsClick(object sender, RoutedEventArgs e)
@@ -66,9 +76,10 @@ namespace PulsarPackCreator
             return GetChangelog().Split("\r\n")[0].Replace("·Updated to ", "");
         }
 
-        public static void TryUpdate()
+        public static bool TryUpdate()
         {
-            if (CheckUpdates())
+            bool hasUpdate = CheckUpdates();
+            if (hasUpdate)
             {
 
                 MsgWindowResult result = MsgWindow.Show("A new update is available. Updating will close the software and you will lose all current data. Proceed?",
@@ -92,17 +103,9 @@ namespace PulsarPackCreator
                     }
                     MsgWindow.Show(msg, MainWindow.settingsWindow);
                 }
+                return true;
             }
-            else
-            {
-                Window owner = null;
-                if(MainWindow.settingsWindow.IsActive) { 
-                    owner = MainWindow.settingsWindow;
-                }
-                MsgWindow.Show("You are already using the latest version.", owner);
-            }
-                
-                
+            return false;
         }
 
         public static UpdateResult Update()
@@ -115,7 +118,7 @@ namespace PulsarPackCreator
                 try
                 {
                     byte[] responseArray = client.GetByteArrayAsync("https://pulsar.brawlbox.co.uk/Pulsar%20Pack%20Creator.exe").Result;
-                    File.WriteAllBytes("new.bin", responseArray);
+                    File.WriteAllBytes("new.pul", responseArray);
                 }
                 catch (Exception)
                 {
@@ -129,7 +132,7 @@ namespace PulsarPackCreator
             using Process updater = new Process();
             {
                 updater.StartInfo.FileName = @"powershell.exe";
-                updater.StartInfo.Arguments = $"Wait-Process -name '{curExe}'; cd {curDir}; del '{curExe}.exe'; ren new.bin '{curExe}.exe'; Start-Process '{curExe}.exe' -ArgumentList '·Updated to {version}'; Wait-Process Notepad;";
+                updater.StartInfo.Arguments = $"Wait-Process -name '{curExe}'; cd {curDir}; del '{curExe}.exe'; ren new.pul '{curExe}.exe'; Start-Process '{curExe}.exe' -ArgumentList '·Updated to {version}'; Wait-Process Notepad;";
                 updater.StartInfo.Verb = "runas";
                 updater.StartInfo.CreateNoWindow = true;
                 updater.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -159,31 +162,22 @@ namespace PulsarPackCreator
 
         public static void DisplayChangelog(string oldVersion)
         {
-            string allChangelogs = GetChangelog();
-            int idxVersion = allChangelogs.IndexOf('·');
-
-            string changelog = allChangelogs.Substring(idxVersion, 17);
-            while (idxVersion >= 0)
+            string[] allChangelogs = GetChangelog().Split("\r\n");
+            string changelog = allChangelogs[0];
+            for (int i = 1; i < allChangelogs.Length; i++)
             {
-                string curVersion = allChangelogs.Substring(idxVersion, 17);
-                int prevIdxVersion = idxVersion;
-                idxVersion = allChangelogs.IndexOf('·', idxVersion + 1);
-                if (curVersion != oldVersion)
+                string curLine = allChangelogs[i];
+                if (curLine.Contains("·Updated"))
                 {
-                    if(idxVersion >= 0)
-                    {
-                        changelog += allChangelogs.Substring(17 + prevIdxVersion, idxVersion - (prevIdxVersion + 21));
-                    }
-                    else
-                    {
-                        changelog += allChangelogs.Substring(prevIdxVersion + 17, allChangelogs.Length - (prevIdxVersion + 17));
-                    }
-                    
+                    string version = curLine.Split(" ")[2];
+                    if (version == oldVersion) break;
                 }
-
+                else if(curLine != "")
+                {
+                    changelog += $"\n{curLine}";
+                }
             }
 
-            //string version = allChangelogs
             MsgWindow.Show(changelog);
         }
 
@@ -193,6 +187,68 @@ namespace PulsarPackCreator
             {
                 Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind = !Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind;
             }
+        }
+
+        private void OnLightModeToggle(object sender, RoutedEventArgs e)
+        {
+            if ((sender as CheckBox).IsKeyboardFocused)
+            {
+                Pulsar_Pack_Creator.Properties.Settings.Default.LightMode = !Pulsar_Pack_Creator.Properties.Settings.Default.LightMode;
+                ApplyColorMode();
+            }
+            
+        }
+
+
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+        private const int DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1 = 19;
+        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+
+        public static void SetWindowTitleBarColor(List<Window> windows, bool isLight)
+        {
+            if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 17763))
+            {
+                int attribute = DWMWA_USE_IMMERSIVE_DARK_MODE_BEFORE_20H1;
+                if (OperatingSystem.IsWindowsVersionAtLeast(10, 0, 18985))
+                {
+                    attribute = DWMWA_USE_IMMERSIVE_DARK_MODE;
+                }
+                int useImmersiveDarkMode = isLight ? 0 : 1;
+                foreach(Window window in windows)
+                {
+                    WindowInteropHelper helper = new WindowInteropHelper(window);
+                    HwndSource source = HwndSource.FromHwnd(helper.EnsureHandle());
+                    DwmSetWindowAttribute(source.Handle, attribute, ref useImmersiveDarkMode, sizeof(int));
+                }
+            }              
+        }
+
+
+        public static void ApplyColorMode()
+        {
+           
+            bool isLight = Pulsar_Pack_Creator.Properties.Settings.Default.LightMode;
+
+            Window main = GetWindow(App.Current.MainWindow);
+            List<Window> windows = new List<Window>
+            {
+                main,
+                MainWindow.settingsWindow,
+                MainWindow.crashWindow,
+                MainWindow.msgWindow,
+                MainWindow.importWindow
+            };
+            SetWindowTitleBarColor(windows, isLight);
+            
+
+            Color bg = isLight ? Color.FromArgb(unchecked((int)0xFDE0E0E0)) : Color.FromArgb(unchecked((int)0xFD505050)); ;
+            Color fg = isLight ? Color.Black : Color.LightGray;
+            Color appBg = isLight ? Color.White : Color.FromArgb(unchecked((int)0xFD202020));
+            Application.Current.Resources["bg"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(bg.A, bg.R, bg.G, bg.B));
+            Application.Current.Resources["fg"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(fg.A, fg.R, fg.G, fg.B));
+            Application.Current.Resources["AppBg"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(appBg.A, appBg.R, appBg.G, appBg.B));
+            //Application.Current.Resources["ComboBox.Static.Background"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(bg.A, bg.R, bg.G, bg.B));
         }
     }
 }

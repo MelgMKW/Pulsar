@@ -46,5 +46,17 @@ namespace Pulsar_Pack_Creator.Properties {
                 this["ExitRemind"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LightMode {
+            get {
+                return ((bool)(this["LightMode"]));
+            }
+            set {
+                this["LightMode"] = value;
+            }
+        }
     }
 }

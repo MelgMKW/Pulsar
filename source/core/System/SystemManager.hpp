@@ -37,7 +37,7 @@ public:
     float frameDuration;
     bool isNdev;
     u8 unknown_0x81[0x84 - 0x81];
-    u32 regionId;
+    u32 regionId; //0x84
     u8 unknown_0x88[0X98 - 0X88];
     const char* ndevArg;
     u32 dolStart;

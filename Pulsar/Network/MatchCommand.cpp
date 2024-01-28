@@ -37,6 +37,7 @@ DWC::MatchCommand Process(DWC::MatchCommand type, const void* data, u32 dataSize
             || strcmp(packet->pulInfo.modFolderName, system->GetModFolder()) != 0
             || !system->CheckUserInfo(packet->pulInfo.userInfo)) {
             system->isCustomDeny = true;
+            if(roomType == RKNet::ROOMTYPE_VS_REGIONAL) system->deniesCount++;
             type = DWC::MATCH_COMMAND_RESV_DENY;
         }
     }
@@ -57,7 +58,11 @@ void HasBeenPulsarDenied(int r3, const char* string) {
     register u32 error;
     asm(mr error, r0);
     bool isCustomDeny = false;
-    if(error == 0x13) isCustomDeny = true;
+    Pulsar::System* system = Pulsar::System::sInstance;
+    if(error == 0x13) {
+        isCustomDeny = true;
+        if(RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_VS_REGIONAL) system->deniesCount++;
+    }
     Pulsar::System::sInstance->isCustomDeny = isCustomDeny;
     DWC::Printf(r3, string);
 }
@@ -91,6 +96,15 @@ void Send(DWC::MatchCommand type, u32 pid, u32 ip, u16 port, void* data, u32 dat
     SendMatchCommand(type, pid, ip, port, data, dataSize);
 }
 kmCall(0x800df078, Send);
+
+void ResetDenyCounter(UIControl* control, u32 soundId, u32 r5) {
+    control->PlaySound(soundId, r5);
+    if(RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_VS_REGIONAL) {
+        Pulsar::System::sInstance->deniesCount = 0;
+    }
+}
+kmCall(0x80609110, ResetDenyCounter);
+
 }
 }
 

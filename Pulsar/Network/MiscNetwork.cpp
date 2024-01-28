@@ -44,12 +44,12 @@ kmCall(0x80661404, DecideCC);
 
 //Sets Team using the TeamSelectPage if it has been enabled by the host; verifies the validity of the teams
 void SetTeams(CustomSELECTHandler* handler, u32& teams) {
-    //RKNet::Controller* controller = RKNet::Controller::sInstance; //check if this only called for the host
-    //RKNet::ControllerSub* sub = &controller->subs[controller->currentSub];
+    const RKNet::Controller* controller = RKNet::Controller::sInstance; //check if this only called for the host
+    const RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
     bool isValid = false;
     Team firstTeam = UI::TeamSelect::GetPlayerTeam(0);
-    if(handler->mode == RKNet::ONLINEMODE_PRIVATE_VS /*&& sub->localAid == sub->hostAid*/ && UI::TeamSelect::isEnabled) {
-        for(int i = 0; i < 12; i++) {
+    if(handler->mode == RKNet::ONLINEMODE_PRIVATE_VS && UI::TeamSelect::isEnabled) {
+        for(int i = 0; i < sub.playerCount; i++) {
             Team curSlotTeam = UI::TeamSelect::GetPlayerTeam(i);
             if(curSlotTeam != firstTeam) isValid = true;
             teams = teams | (curSlotTeam & 1) << i;

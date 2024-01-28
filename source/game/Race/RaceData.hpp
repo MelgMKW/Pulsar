@@ -230,7 +230,7 @@ public:
 
     RacedataScenario racesScenario; //0x20
     RacedataScenario menusScenario; //0xc10
-    RacedataScenario unknown_scenario; //0x1800
+    RacedataScenario awardScenario; //0x1800
     RKG ghosts[2]; //0x23f0 is the one you're racing, not sure what 1 is
 };  //Total size 0x73f0
 size_assert(RaceData, 0x73f0);

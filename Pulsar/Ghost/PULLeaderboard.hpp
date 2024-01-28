@@ -10,7 +10,7 @@
 namespace Pulsar {
 namespace Ghosts {
 //Implements a leaderboard file; it is divided in one sub leaderboard per TT modes which holds 11 entries (top 10 + flap)
-#define LDBVersion 1
+
 
 enum EntryLaps {
     ENTRY_1ST,
@@ -71,6 +71,7 @@ private:
     u32 reserved[8];
     PULTimeEntry entries[4][11]; //0x30 to 0x44C 11th = flap
     static const u32 fileMagic = 'PULL';
+    static const u32 curVersion = 1;
 };
 static_assert(sizeof(Leaderboard) % 0x20 == 0, "Leaderboard Size Check");
 

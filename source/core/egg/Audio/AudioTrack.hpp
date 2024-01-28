@@ -21,7 +21,7 @@ struct AudioTrackCallback {
 class AudioTrack {
     AudioTrack(); //80213e1c
     AudioTrackCallback callback;
-    virtual void Reset(); //80213e48 vtable 802a2980
+    virtual void Reset(); //at 0x8 80213e48 vtable 802a2980
     virtual void Calc(); //80213edc
     void ApplyValueChange(u32 stepCount, float maxValue); //80213e5c
     bool ClampValue(float minValue, float maxValue); //80213f54

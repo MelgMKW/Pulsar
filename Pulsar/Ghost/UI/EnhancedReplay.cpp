@@ -60,19 +60,19 @@ void OnContinueButtonTTPauseClick(Pages::GhostReplayPause& page, PageId id) {
 }
 kmCall(0x8085a1e0, OnContinueButtonTTPauseClick);
 
-bool WillCharCheer(const RaceData& racedata) {
+bool WillGhostBeCompared(const RaceData& racedata) {
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
     const SectionId sectionId = sectionMgr->curSection->sectionId;
     register Timer* ghostTimer;
     asm(addi ghostTimer, r15, 0x48;);
     if(sectionId >= SECTION_WATCH_GHOST_FROM_CHANNEL && sectionId <= SECTION_WATCH_GHOST_FROM_MENU) {
-        ghostTimer->minutes = 0xFFFF;
+        ghostTimer->minutes = 0xFFFF; //guarantee a cheer
         return true;
     }
-    else if(racedata.racesScenario.settings.gamemode == MODE_GHOST_RACE || ghostTimer->isActive) return true;
+    else if(racedata.racesScenario.settings.gamemode == MODE_GHOST_RACE) return true;
     return false;
 }
-kmCall(0x808570a0, WillCharCheer);
+kmCall(0x808570a0, WillGhostBeCompared);
 kmWrite32(0x80857088, 0x40820018);
 kmWrite32(0x808570a4, 0x2C030001);
 u8 CharCheerGetCorrectArguments(int r3, u8 id) {
@@ -166,7 +166,7 @@ kmCall(0x80856d38, CreateSwitchPlayerPtmfs);
 
 void CreateAdditionalCameras(RaceCameraMgr* mgr) {
     const SectionId id = SectionMgr::sInstance->nextSectionId;
-    mgr->isOnlineSpectating = (id >= SECTION_WATCH_GHOST_FROM_CHANNEL && id <= SECTION_WATCH_GHOST_FROM_MENU);
+    if(id >= SECTION_WATCH_GHOST_FROM_CHANNEL && id <= SECTION_WATCH_GHOST_FROM_MENU) mgr->isOnlineSpectating = true;
     mgr->SetInstance(mgr);
 }
 kmCall(0x805a8520, CreateAdditionalCameras);

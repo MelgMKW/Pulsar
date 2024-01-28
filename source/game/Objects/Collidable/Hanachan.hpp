@@ -83,7 +83,7 @@ public:
     u8 unknown_0xe8[0xfc - 0xe8];
 }; //0xFC
 
-class BossHanachanHead : public HanachanPart { //242 BossHanachanHead
+class BossHanachanHead : public HanachanPart { //ObjectNum 242 BossHanachanHead
 public:
     class Handler {
     public:
@@ -124,7 +124,7 @@ public:
 
 }; //0x104
 
-class Hanachan : public ObjectCollidable, public UnkCycleParent { //226 Hanachan
+class Hanachan : public ObjectCollidable, public UnkCycleParent { //ObjectNum 226 Hanachan
 public:
     explicit Hanachan(const KMP::Holder<GOBJ>& gobjHolder); //806c8a5c
     ~Hanachan() override; //806c9598 vtable 808c43b8

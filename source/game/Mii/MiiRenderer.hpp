@@ -48,12 +48,17 @@ public:
     void ProcessTopAddRequest(); //807823e4 Using requester list
     void ProcessAllAddRequests(); //80782528
     void DeleteMii(); //80782498
+    void CreateTextures(); //8077f6e4
 
     EGG::TDisposer<MiiRenderMgr> disposer; //8077ee80 vtable 808d1630
     EGG::Heap* heap; //0x10 gets destroyed by ObjectsMgr (so after miis have been created)
     u8 unknown_0x14[0x20 - 0x14];
-    ScnMgrMii scnManager; //0x20
-    u8 unknown_0x24[0xd8 - 0x24];
+
+    EGG::MatTexture* textures[16]; //0x18
+    void* texBuffers[16]; //0x58
+    EGG::MatTexture* textures2[4]; //0x98
+    void* texBuffers2[4]; //0xa8
+    u8 unknown_0xb8[0xd8 - 0x98];
     MiiDriverModel* ma_mii_fCopy; //0xd8
     MiiDriverModel* ma_mii_f; //0xdc
     ModelDirector* icon_mii; //0xe0

@@ -17,9 +17,10 @@ enum BMG {
     BMG_CHOOSE_GHOST_DATA = 0xd4f,
     BMG_READY_TO_RACE = 0x1105,
     BMG_CHALLENGE_GHOST = 0x177b,
+    BMG_WATCH_REPLAY = 0x177c,
     BMG_REGCUPS = 0x23f0,
     BMG_REGS = 0x2454,
-    BMG_BATTLE = 0x2498,
+    BMG_BATTLE = 0x24b9,
     BMG_MII_NAME = 0x251d,
 
     //race
@@ -56,6 +57,7 @@ enum BMG {
     BMG_TEXT = 0x2849,
     BMG_TEAM_SELECT = 0x284a,
     BMG_ROOM_DENY = 0x284b,
+    BMG_TOO_MANY_DENIES = 0x244c,
 
 
     BMG_TEAMS_BOTTOM = 0x2910,

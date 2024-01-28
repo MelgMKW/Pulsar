@@ -45,11 +45,11 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Canvas Background="#FFF0F0F0" Grid.Row="1" Margin="0,0,0,0"/>
+        <Canvas Background="{DynamicResource AppBg}" Grid.Row="1" Margin="0,0,0,0"/>
         
         <TextBox Name="TextSpace" Text="Temp" IsReadOnly="True" BorderThickness="2" BorderBrush="Black"
                 FontSize="14" MinHeight="60" MinWidth="360" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
-                 Margin="8,7,9,30" Grid.RowSpan="2"    />
+                 Margin="8,7,9,30" Grid.RowSpan="2" Background="{DynamicResource bg}" Foreground="{DynamicResource fg}" />
         <Button x:Name="OK"
                 Margin="0,0,90,5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="70" Height="20"              
                 Click="OnOKClick" IsDefault="True"

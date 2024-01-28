@@ -21,5 +21,8 @@
     <Page Update="MassImportEditor.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Themes\Black.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 </Project>

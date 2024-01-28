@@ -9,7 +9,7 @@ namespace Ghosts {
 Leaderboard::Leaderboard() {
     memset(this, 0, sizeof(Leaderboard));
     this->magic = Leaderboard::fileMagic;
-    this->version = LDBVersion;
+    this->version = curVersion;
     for(int mode = 0; mode < 4; mode++) this->hasTrophy[mode] = false;
 }
 

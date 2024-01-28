@@ -62,7 +62,7 @@ public:
 };
 size_assert(Belt, 0xB0);
 
-class BeltEasy : public Belt { //0x25a = 602
+class BeltEasy : public Belt { //ObjectNum 0x25a = 602
     explicit BeltEasy(const KMP::Holder<GOBJ>& gobjHolder); //807fc578
     ~BeltEasy() override; //807fd8f0 vtable 808d4638
     u32 GetDrawType() const override; //0xb0 807fd8e8
@@ -71,7 +71,7 @@ class BeltEasy : public Belt { //0x25a = 602
     float unknown_0xB0;
 }; //0xb4
 
-class BeltCrossing : public Belt { //0x25b = 603
+class BeltCrossing : public Belt { //ObjectNum 0x25b = 603
 public:
     explicit BeltCrossing(const KMP::Holder<GOBJ>& gobjHolder); //807fc764
     ~BeltCrossing() override; //807fd8a8 vtable 808d4508
@@ -81,7 +81,7 @@ public:
     float unknown_0xB0;
 }; //0xb4
 
-class BeltCurveA : public Belt { //0x25c = 604
+class BeltCurveA : public Belt { //ObjectNum 0x25c = 604
     explicit BeltCurveA(const KMP::Holder<GOBJ>& gobjHolder); //807fc90c
     ~BeltCurveA() override; //807fd7bc vtable 808d43d8
     void OnStart() override; //0xC 807fd1ac

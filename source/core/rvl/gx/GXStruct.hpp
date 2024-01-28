@@ -3,6 +3,8 @@
 #include <types.hpp>
 #include <core/rvl/VI/VI.hpp>
 
+typedef void* GXFifoObj;
+
 typedef struct _GXColor {
     union {
         struct { u8 r, g, b, a; };

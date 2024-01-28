@@ -51,7 +51,7 @@ void DisplayDate(CtrlMenuPressStart* start) {
 kmCall(0x8063ac58, DisplayDate);
 
 void CustomRoomDenyText(Pages::MessageBoxTransparent* msgBox, u32 bmgId, const TextInfo* info) {
-    if(Pulsar::System::sInstance->isCustomDeny) bmgId = 0xfb3;
+    if(Pulsar::System::sInstance->isCustomDeny) bmgId = BMG_ROOM_DENY;
     msgBox->SetMessageWindowText(bmgId, info);
 }
 kmCall(0x805dd90c, CustomRoomDenyText);

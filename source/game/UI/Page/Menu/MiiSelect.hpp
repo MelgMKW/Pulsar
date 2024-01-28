@@ -8,7 +8,7 @@
 
 
 //_sinit_ at 80849570
-class MiiName: public LayoutUIControl {
+class MiiName : public LayoutUIControl {
 public:
     ~MiiName() override; //80626640 vtable 808d9a58
     void InitSelf() override; //0x18 80849284
@@ -17,7 +17,7 @@ public:
 }; //0x174
 
 namespace Pages {
-class MiiSelect: public MenuInteractable { //ID 0x60
+class MiiSelect : public MenuInteractable { //ID 0x60
     MiiSelect(); //8062635c
     ~MiiSelect() override; //80849450 vtable 808d99c0
     void OnInit() override; //0x28 80847e40

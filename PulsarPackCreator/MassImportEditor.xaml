@@ -6,10 +6,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Paste lists of tracks, authors and slots" Height="825" Width="1050" Background="#FD353535"
+        Title="Paste lists of tracks, authors and slots" Height="825" Width="1050" Background="{DynamicResource AppBg}"
         HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Window.Resources>
+        <Style x:Key="Blocks" TargetType="TextBlock">
+            <Setter Property="Foreground"           Value="{DynamicResource fg}"/>
+            <Setter Property="Background"           Value="Transparent"/>
+            <Setter Property="HorizontalAlignment"  Value="Center" />
+            <Setter Property="VerticalAlignment"    Value="Top" />
+            <Setter Property="FontSize"             Value="14"/>
+            <Setter Property="FontWeight"           Value="Bold"/>
+            <Setter Property="TextDecorations"      Value="Underline"/>
+        </Style>
+
+
+        <Style x:Key="ColorMode" TargetType="Control">
+            <Setter Property="Background"               Value="{DynamicResource bg}"/>
+            <Setter Property="Foreground"               Value="{DynamicResource fg}"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource ColorMode}" x:Key="Boxes" TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment"     Value="Top"/>
+            <Setter Property="FontSize"                     Value="14"/>
+            <Setter Property="BorderThickness"              Value="2"/>
+            <Setter Property="TextAlignment"                Value="Center"/>
+            <Setter Property="TextWrapping"                 Value="Wrap"/>
+            <Setter Property="Height"                       Value="700"/>
+            <Setter Property="VerticalScrollBarVisibility"  Value="Auto"/>
+            <Setter Property="AcceptsReturn"                Value="True"/>
+        </Style>
+
+    </Window.Resources>
+    
     <Border BorderBrush="Black" BorderThickness="2">
-        <Grid Background="#FD202020" x:Name="GridMassImport" >
+        <Grid Background="{DynamicResource AppBg}" x:Name="GridMassImport" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="14*"/>
                 <ColumnDefinition Width="14*"/>
@@ -22,45 +52,25 @@
                     Content="Save"  
                     Click="OnSaveImportClick" />
             <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0">
-                <TextBox x:Name="NamesImport"
-                    Width="240" Height="700" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"
-                    Text="" FontSize="14" AcceptsReturn="True"/>
+                <TextBox x:Name="NamesImport"        Width="240"  Style="{StaticResource Boxes}"/>
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1">
-                <TextBox x:Name="AuthorsImport" 
-                    Width="240" Height="700" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"
-                    Text="" FontSize="14" AcceptsReturn="True"/>
+                <TextBox x:Name="AuthorsImport"      Width="240" Style="{StaticResource Boxes}"/>
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2">
-                <TextBox x:Name="VersionsImport" 
-                    Width="170" Height="700" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"
-                    Text="" FontSize="14" AcceptsReturn="True"/>
+                <TextBox x:Name="VersionsImport"     Width="170"  Style="{StaticResource Boxes}"/>
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Grid.Column="3">
-                <TextBox x:Name="SlotsImport" 
-                    Width="170" Height="700" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"
-                    Text="" FontSize="14" AcceptsReturn="True"/>
+                <TextBox x:Name="SlotsImport"        Width="170"  Style="{StaticResource Boxes}"/>
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Grid.Column="4" Grid.ColumnSpan="2" >
-                <TextBox x:Name="MusicSlotsImport" 
-                    Width="170" Height="700" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"
-                    Text="" FontSize="14" AcceptsReturn="True"/>
+                <TextBox x:Name="MusicSlotsImport"   Width="170" Style="{StaticResource Boxes}"/>
             </Border>
-            <TextBlock x:Name="NamesImportLabel" Grid.Column="0"
-                    Margin="56,19,55,743" Width="150" Foreground="White" Height="18"
-                    Text="Track Names" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" TextDecorations="Underline" />
-            <TextBlock x:Name="AuthorsImportLabel" Grid.Column="1"
-                    Margin="56,19,55,743" Width="150" Foreground="White" Height="18"
-                    Text="Track Authors" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" TextDecorations="Underline" />
-            <TextBlock x:Name="VersionsImportLabel" Grid.Row="0" Grid.Column="2"
-                    Margin="18,19,18,743" Width="150" Foreground="White" Height="18"
-                    Text="Versions (optional)" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" TextDecorations="Underline"/>
-            <TextBlock x:Name="SlotsImportLabel" Grid.Row="0" Grid.Column="3"
-                    Margin="18,19,18,743" Width="150" Foreground="White" Height="18"
-                    Text="Slots" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" TextDecorations="Underline"/>
-            <TextBlock x:Name="MusicSlotsImportLabel" Grid.Row="0" Grid.Column="4"
-                    Margin="18,19,18,743" Width="150" Foreground="White" Height="18"
-                    Text="Music Slots" FontSize="14" TextWrapping="Wrap" TextAlignment="Center" FontWeight="Bold" TextDecorations="Underline"/>
+            <TextBlock x:Name="NamesImportLabel"        Grid.Column="0" Margin="56,19,55,743" Text="Track Names"         Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="AuthorsImportLabel"      Grid.Column="1" Margin="56,19,55,743" Text="Track Authors"       Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="VersionsImportLabel"     Grid.Column="2" Margin="18,19,18,743" Text="Versions (optional)" Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="SlotsImportLabel"        Grid.Column="3" Margin="18,19,18,743" Text="Slots"               Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="MusicSlotsImportLabel"   Grid.Column="4" Margin="18,19,18,743" Text="Music Slots"         Style="{StaticResource Blocks}"/>
         </Grid>
     </Border>
 </Window>

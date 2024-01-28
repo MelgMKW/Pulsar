@@ -1,10 +1,13 @@
-#include <kamek.hpp>
-#include <game/UI/Page/Menu/Menu.hpp>
+
 #ifndef _MAINMENU_
 #define _MAINMENU_
+#include <kamek.hpp>
+#include <game/UI/Page/Menu/Menu.hpp>
+
 //_sinit_ at 80851d38
 namespace Pages {
-class MainMenu: public MenuInteractable { //ID 0x5a
+
+class MainMenu : public MenuInteractable { //ID 0x5a
     MainMenu(); //80625da0
     ~MainMenu() override; //80851c94 vtable 808da0a0 
     void OnInit() override; //0x28 808503dc

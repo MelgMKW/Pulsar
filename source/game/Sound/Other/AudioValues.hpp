@@ -37,11 +37,23 @@ class SoundPlayersVolumeMgr {
     static void DestroyInstance(); //8070f0e8
     ~SoundPlayersVolumeMgr(); //8070f19c
     void Calc(); //8070f3e8
+    void SetVolume(bool isFull); //8070f6b8 volume of the tracks will be 50% if bool is false
+
     EGG::TDisposer<SoundPlayersVolumeMgr> disposer; //8070eec8 vtable 808c8f90
-    static SoundTrack volumes[11]; //808b28b8 1 ramper = 1 soundPlayer
+    static SoundTrack volumes[11]; //809c26b8 1 track = 1 soundPlayer
+    /*In Races:
+    -1st is track
+    -2nd is UI (pause sound, moving through buttons)
+    -3rd is objects (crowd cheering)
+    -4th is engine
+    -5th is KCL (drifting, boosters, wall hits etc...)
+    -7th is lakitu
+    -9th is characters
+
+    */
 };
 
-class SingleSoundPlayerValuesMgr { //allows a finer control of volume/pitch for one handle (ie basicsounc)
+class SingleSoundPlayerValuesMgr { //allows a finer control of volume/pitch for one handle (ie basicsound)
     static SingleSoundPlayerValuesMgr* sInstance; //809c232c
     static SingleSoundPlayerValuesMgr* CreateInstance(); //806f9abc
     static void DestroyInstance(); //806f9b64

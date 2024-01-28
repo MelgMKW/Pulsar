@@ -4,7 +4,8 @@
 #include <game/UI/Ctrl/Menu/CtrlMenuPressStart.hpp>
 
 //_sinit_ at 8063c3b8
-class TitleImage: public LayoutUIControl {
+class TitleImage : public LayoutUIControl {
+public:
     TitleImage(); //8063a598 inlined
     ~TitleImage() override; //8063a5d4 vtable 808bef0c
     void InitSelf() override; //0x18 8063a6cc
@@ -15,7 +16,7 @@ class TitleImage: public LayoutUIControl {
 }; //0x174
 size_assert(TitleImage, 0x174);
 
-class TitleMovieControl: public LayoutUIControl {
+class TitleMovieControl : public LayoutUIControl {
     TitleMovieControl(); //8063b804 inlined
     ~TitleMovieControl() override; //8063b840 vtable 808bee08
     void InitSelf() override; //0x18 8063b938
@@ -27,7 +28,8 @@ class TitleMovieControl: public LayoutUIControl {
 size_assert(TitleMovieControl, 0x174);
 
 namespace Pages {
-class Title: public Page { //ID 0x57
+class Title : public Page { //ID 0x57
+public:
     Title(); //8063aa08
     ~Title() override; //8063aae4 vtable 808beea8
     PageId GetNextPage() const override; //0x10 8063c398
@@ -54,7 +56,7 @@ class Title: public Page { //ID 0x57
 }; //0x350
 size_assert(Title, 0x350);
 
-class BlurryTitle: public Page { //ID 0x58 behind main menu
+class BlurryTitle : public Page { //ID 0x58 behind main menu
     BlurryTitle(); //8063b514
     ~BlurryTitle() override; //8063b560 vtable 808bee44
     void OnInit() override; //0x28 8062d5d4
@@ -66,7 +68,7 @@ class BlurryTitle: public Page { //ID 0x58 behind main menu
 }; //total size 0x1c8
 size_assert(BlurryTitle, 0x1c8);
 
-class TitleMovie: public Page { //ID 0x59
+class TitleMovie : public Page { //ID 0x59
     TitleMovie(); //8063bb08
     ~TitleMovie() override; //8063bb6c vtable 808beda4
     void OnInit() override; //0x28 8063bbe4
@@ -84,7 +86,7 @@ class TitleMovie: public Page { //ID 0x59
 }; //0x1d0
 size_assert(TitleMovie, 0x1d0);
 
-class BlinkingPressA: public Page { //ID the blinking "press A" on demo
+class BlinkingPressA : public Page { //ID the blinking "press A" on demo
     BlinkingPressA(); //8063c0ac
     ~BlinkingPressA() override; //8063c110 vtable 808bed40
     void OnInit() override; //0x28 8063c188
