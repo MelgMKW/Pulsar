@@ -55,10 +55,10 @@ public:
     static const char error[];
     static Config* LoadConfig(u32* readBytes);
     template <typename T>
-    const T& GetSection() const;
+    inline const T& GetSection() const;
 
     template <class T>
-    void CheckSection(const T& t) const { if(t.header.magic != T::magic) Debug::FatalError(error); }
+    inline void CheckSection(const T& t) const { if(t.header.magic != T::magic) Debug::FatalError(error); }
 
     static const u32 magic = 'PULS';
     BinaryHeader header;
@@ -66,6 +66,34 @@ public:
     CupsHolder cupsHolder;
     //BMGHeader rawBmg;
 };
+
+template<>
+inline void Config::CheckSection<BMGHeader>(const BMGHeader& bmg) const {
+    if(bmg.magic != 0x4D455347626D6731) Debug::FatalError(error);
+}
+
+template<>
+inline const Config& Config::GetSection() const {
+    return *this;
+}
+template<>
+inline const InfoHolder& Config::GetSection<InfoHolder>() const {
+    const InfoHolder& infoHolder = *reinterpret_cast<const InfoHolder*>(ut::AddU32ToPtr(this, this->header.offsetToInfo));
+    CheckSection(infoHolder);
+    return infoHolder;
+}
+template<>
+inline const CupsHolder& Config::GetSection<CupsHolder>() const {
+    const CupsHolder& cupsHolder =  *reinterpret_cast<const CupsHolder*>(ut::AddU32ToPtr(this, this->header.offsetToCups));
+    CheckSection(cupsHolder);
+    return cupsHolder;
+}
+template<>
+inline const BMGHeader& Config::GetSection<BMGHeader>() const {
+    const BMGHeader& bmg = *reinterpret_cast<const BMGHeader*>(ut::AddOffsetToPtr(this, this->header.offsetToBMG));
+    CheckSection(bmg);
+    return bmg;
+}
 
 
 class System {
@@ -78,14 +106,15 @@ private:
         CupsDef::sInstance = new CupsDef(bin.GetSection<CupsHolder>().cups);
         Info::sInstance = new Info(bin.GetSection<InfoHolder>().info);
         this->InitIO();
-        this->InitSettings(&bin.GetSection<CupsHolder>().cups.trophyCount[0]);
+        this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder>().cups.trophyCount[0]);
     }
     void InitIO() const;
     void InitCups(const Config& bin);
 
 protected:
+    static const u32 defaultSettingsPageCount = 5;
     //Virtual
-    virtual void InitSettings(const u16* totalTrophyCount) const;
+    virtual void InitSettings(u32 pageCount, const u16* totalTrophyCount) const;
     virtual void AfterInit() {};
 
 public:

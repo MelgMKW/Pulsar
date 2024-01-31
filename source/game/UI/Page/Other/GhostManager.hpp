@@ -58,6 +58,7 @@ public:
 namespace Pages {
 class GhostManager : public Page { //ID 0xA7
 public:
+    static const PageId id = PAGE_GHOST_MANAGER;
     GhostManager(); //805e0c38 vtable 808b9258
     ~GhostManager() override; //0x805e0cb8
     void OnInit() override; //805e0d84

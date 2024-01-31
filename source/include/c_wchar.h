@@ -17,8 +17,8 @@ extern "C" {
     int wcscmp(const wchar_t* wcs1, const wchar_t* wcs2);
     wchar_t* wcscpy(wchar_t*, const wchar_t*);
     size_t wcslen(const wchar_t* wcs);
-    int wcsncmp(const wchar_t* wcs1, const wchar_t* wcs2, size_t num);
-    wchar_t* wcsncpy(wchar_t*, const wchar_t*, size_t);
+    const wchar_t* wcschr(const wchar_t* ws, wchar_t wc); //80017a48
+    wchar_t* wcsncpy(wchar_t*, const wchar_t*, size_t); //800179d0
     wchar_t* wmemcpy(wchar_t* dest, const wchar_t* src, size_t count);
 
 

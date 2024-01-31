@@ -1,10 +1,7 @@
-﻿using Pulsar_Pack_Creator.Properties;
-using System.Drawing;
-using System.Collections.ObjectModel;
+﻿using System.Drawing;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Windows;
@@ -14,11 +11,19 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 
 namespace PulsarPackCreator
 {
     public partial class SettingsWindow : Window
     {
+        public enum ColorMode
+        {
+            Dark_Mode,
+            Light_Mode,
+            Space_Mode
+        }
+
         public SettingsWindow()
         {
             InitializeComponent();
@@ -28,7 +33,7 @@ namespace PulsarPackCreator
         {
             AutoUpdater.IsChecked = Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate;
             ExitRemindBox.IsChecked = Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind;
-            LightModeBox.IsChecked = Pulsar_Pack_Creator.Properties.Settings.Default.LightMode;
+            ColorModeBox.SelectedIndex = Pulsar_Pack_Creator.Properties.Settings.Default.ColorMode;
             Show();
         }
 
@@ -189,14 +194,14 @@ namespace PulsarPackCreator
             }
         }
 
-        private void OnLightModeToggle(object sender, RoutedEventArgs e)
+        private void OnColorModeChange(object sender, SelectionChangedEventArgs e)
         {
-            if ((sender as CheckBox).IsKeyboardFocused)
+            ComboBox box = sender as ComboBox;
+            if (this.IsLoaded)
             {
-                Pulsar_Pack_Creator.Properties.Settings.Default.LightMode = !Pulsar_Pack_Creator.Properties.Settings.Default.LightMode;
-                ApplyColorMode();
+                Pulsar_Pack_Creator.Properties.Settings.Default.ColorMode = box.SelectedIndex;
+                if (this.IsLoaded) ApplyColorMode();
             }
-            
         }
 
 
@@ -227,8 +232,8 @@ namespace PulsarPackCreator
 
         public static void ApplyColorMode()
         {
-           
-            bool isLight = Pulsar_Pack_Creator.Properties.Settings.Default.LightMode;
+
+            ColorMode mode = (ColorMode)Pulsar_Pack_Creator.Properties.Settings.Default.ColorMode;
 
             Window main = GetWindow(App.Current.MainWindow);
             List<Window> windows = new List<Window>
@@ -239,8 +244,12 @@ namespace PulsarPackCreator
                 MainWindow.msgWindow,
                 MainWindow.importWindow
             };
+            bool isLight = mode == ColorMode.Light_Mode;
+
             SetWindowTitleBarColor(windows, isLight);
-            
+
+
+
 
             Color bg = isLight ? Color.FromArgb(unchecked((int)0xFDE0E0E0)) : Color.FromArgb(unchecked((int)0xFD505050)); ;
             Color fg = isLight ? Color.Black : Color.LightGray;
@@ -249,6 +258,23 @@ namespace PulsarPackCreator
             Application.Current.Resources["fg"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(fg.A, fg.R, fg.G, fg.B));
             Application.Current.Resources["AppBg"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(appBg.A, appBg.R, appBg.G, appBg.B));
             //Application.Current.Resources["ComboBox.Static.Background"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(bg.A, bg.R, bg.G, bg.B));
+            
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            if (mode == ColorMode.Space_Mode)
+            {
+                image.UriSource = new Uri("pack://application:,,,/Resources/space.jpg");
+                image.EndInit();
+                Application.Current.Resources["imageBg"] = image;
+            }
+            else
+            {
+                image.UriSource = new Uri("pack://application:,,,/Resources/transparent.png");
+                image.EndInit();
+                Application.Current.Resources["imageBg"] = image;
+
+            }
+            
         }
     }
 }

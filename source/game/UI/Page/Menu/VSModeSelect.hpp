@@ -5,7 +5,8 @@
 
 //_sinit_ at 80852c6c
 namespace Pages {
-class VSModeSelect: public MenuInteractable { //ID 0x72
+class VSModeSelect : public MenuInteractable { //ID 0x72
+    static const PageId id = PAGE_VS_MODE_SELECT;
     VSModeSelect(); //80628210
     ~VSModeSelect() override; //80852be0 vtable 808da238
     void OnInit() override; //0x28 8085223c

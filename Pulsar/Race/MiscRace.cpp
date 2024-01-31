@@ -13,7 +13,7 @@ namespace Race {
 //From JoshuaMK, ported to C++ by Brawlbox and adapted as a setting
 int MiiHeads(RaceData* racedata, int r4, int r5, u8 id) {
     u32 charId = racedata->racesScenario.players[id].characterId;
-    if(Settings::GetSettingValue(SETTINGSTYPE_RACE, SETTINGRACE_RADIO_MII) == RACESETTING_MII_ENABLED) {
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_MII) == RACESETTING_MII_ENABLED) {
         if(charId < 0x2a) {
             if(id == 0) charId = 0x2a;
             else if(RKNet::Controller::sInstance->connectionState != 0) charId = 0x2a;
@@ -28,10 +28,10 @@ kmWrite32(0x807eb160, 0x88de01b4);
 //credit to XeR for finding the float address
 void BattleGlitchEnable() {
     float maxDistance = 7500.0f;
-    if(Settings::GetSettingValue(SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BATTLE) == RACESETTING_BATTLE_GLITCH_ENABLED) maxDistance = 75000.0f;
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BATTLE) == RACESETTING_BATTLE_GLITCH_ENABLED) maxDistance = 75000.0f;
     RaceBalloons::maxDistanceNames = maxDistance;
 }
-SettingsHook BattleGlitch(BattleGlitchEnable);
+Settings::Hook BattleGlitch(BattleGlitchEnable);
 
 
 kmWrite32(0x8085C914, 0x38000000); //times at the end of races in VS
@@ -45,7 +45,7 @@ kmWrite32(0x807F4DB8, 0x38000001);
 
 //Draggable blue shells
 void DraggableBlueShells(Item::PlayerSub& sub) {
-    if(Settings::GetSettingValue(SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BLUES) == RACESETTING_DRAGGABLE_BLUES_DISABLED) {
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BLUES) == RACESETTING_DRAGGABLE_BLUES_DISABLED) {
         sub.isNotDragged = true;
     }
 }

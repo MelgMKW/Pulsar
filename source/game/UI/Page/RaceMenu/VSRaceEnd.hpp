@@ -6,6 +6,7 @@
 namespace Pages {
 class VSRaceEnd : public RaceMenu { //ID 0x22
 public:
+    static const PageId id = PAGE_VS_RACEENDMENU;
     VSRaceEnd(); //80624e48
     ~VSRaceEnd() override; //80632b30 vtable 808bd820
     int GetRuntimeTypeInfo() const override; //0x60 80632b9c

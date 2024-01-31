@@ -15,7 +15,9 @@
                 <SolidColorBrush x:Key="bg" Color="DimGray"/>
                 <SolidColorBrush x:Key="fg" Color="White"/>
                 <SolidColorBrush x:Key="comboHover" Color="#FF909090"/>
-        
+                
+
+
             <SolidColorBrush x:Key="ComboBox.Static.Border" Color="#FFACACAC"/>
                 <SolidColorBrush x:Key="ComboBox.Static.Glyph" Color="#FF606060"/>
                 <SolidColorBrush x:Key="ComboBox.Static.Editable.Background" Color="#FFFFFFFF"/>

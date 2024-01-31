@@ -73,7 +73,7 @@ void OnBackPress(ExpFroomMessages& msg) {
 kmBranch(0x805dd32c, OnBackPress);
 
 void OnBackButtonClick() {
-    OnBackPress(*SectionMgr::sInstance->curSection->Get<ExpFroomMessages>(PAGE_FRIEND_ROOM_MESSAGES));
+    OnBackPress(*SectionMgr::sInstance->curSection->Get<ExpFroomMessages>());
 }
 kmBranch(0x805dd314, OnBackButtonClick);
 
@@ -91,7 +91,7 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
         if(messages->clickedButtonIdx >= 2) {
             return BMG_BATTLE + messages->curPageIdx * 4 + rowIdx;
         }
-        else return GetTrackBMG(CupsDef::ConvertTrack_PulsarCupToTrack(CupsDef::ConvertCup_IdxToPulsarId(messages->curPageIdx)) + rowIdx);
+        else return GetTrackBMGId(CupsDef::ConvertTrack_PulsarCupToTrack(CupsDef::ConvertCup_IdxToPulsarId(messages->curPageIdx)) + rowIdx);
     }
     else return Pages::FriendRoomManager::GetMessageBmg(packet, 0);
 }

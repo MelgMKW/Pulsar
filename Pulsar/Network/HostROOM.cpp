@@ -50,7 +50,7 @@ void SetAllToSendPackets(RKNet::ROOMHandler& roomHandler, u32 packetArg) {
         const u8 hostParam = Info::IsHAW(true);
         packetReg.packet.message |= hostParam << 2; //uses bit 2 of message
 
-        const u8 gpParam = Settings::GetSettingValue(SETTINGSTYPE_HOST, SETTINGHOST_SCROLL_GP_RACES);
+        const u8 gpParam = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_SCROLL_GP_RACES);
         packetReg.packet.message |= gpParam << 3; //uses bits 3-5
         ConvertROOMPacketToData(packetReg.packet.message >> 2); //4 right now (2-5) + 4 reserved (6-9)
         packetReg.packet.message |= (System::sInstance->SetPackROOMMsg() << 0xA & 0b1111110000000000); //6 bits for packs (10-15)

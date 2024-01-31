@@ -28,6 +28,7 @@ size_assert(CharaName, 0x178);
 namespace Pages {
 class CharacterSelect : public MenuInteractable { //ID 0x6B
 public:
+    static const PageId id = PAGE_CHARACTER_SELECT;
     CharacterSelect(); //80626c10
     ~CharacterSelect() override; //8083f2cc vtable 808d92c0 
     void OnInit() override; //0x28 8083d55c

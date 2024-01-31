@@ -46,7 +46,7 @@ void Manager::Init(PulsarId id) {
     if(!exists) io->RequestCreateFolder(folderModePath);
     else io->ReadFolder(folderModePath); //Reads all files contained in the folder
 
-    new (&this->leaderboard) Leaderboard(folderPath, cups->GetCRC32(id));
+    new (&this->leaderboard) Leaderboard(folderPath, id);
 
     this->files = new (system->heap) GhostData[io->GetFileCount()];
 
@@ -170,7 +170,7 @@ bool Manager::SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap) {
         const Timer& expert = this->GetExpert();
         if(expert.isActive && expert > entry.timer && Info::HasTrophies()) {
             gotTrophy = true;
-            Settings::GetInstance()->AddTrophy(CupsDef::sInstance->GetCRC32(this->GetPulsarId()), system->ttMode);
+            Settings::Mgr::GetInstance()->AddTrophy(CupsDef::sInstance->GetCRC32(this->GetPulsarId()), system->ttMode);
             this->leaderboard.AddTrophy();
 
         }
@@ -193,7 +193,7 @@ void Manager::CreateAndSaveFiles(Manager* manager) {
     char folderPath[IOS::ipcMaxPath];
     cups->GetTrackGhostFolder(folderPath, manager->pulsarId);
     manager->leaderboard.Save(folderPath);
-    Settings::GetInstance()->Save(); //trophies
+    Settings::Mgr::GetInstance()->Save(); //trophies
     manager->Init(cups->winningCourse);
     manager->mainGhostIndex = 0;
     SectionMgr::sInstance->sectionParams->isNewTime = true;

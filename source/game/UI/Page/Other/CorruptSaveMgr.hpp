@@ -11,8 +11,9 @@ namespace Pages {
 enum CorruptSaveMgrState {
 
 };
-class CorruptSaveMgr: public Page { //ID 0x3 background page that manages the section of the same name
+class CorruptSaveMgr : public Page { //ID 0x3 background page that manages the section of the same name
 public:
+    static const PageId id = PAGE_CORRUPT_SAVE_MGR;
     CorruptSaveMgr(); //8061f6e8
     ~CorruptSaveMgr() override; //8061f764
     int IsHomeMenuWorking() const override; //0x14 8061fd84

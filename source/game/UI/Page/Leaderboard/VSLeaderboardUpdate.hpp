@@ -7,8 +7,9 @@
 
 //_sinit_ at 8085e644
 namespace Pages {
-class VSLeaderboardUpdate: public Leaderboard { //ID 0x2f
+class VSLeaderboardUpdate : public Leaderboard { //ID 0x2f
 public:
+    static const PageId id = PAGE_GPVS_LEADERBOARD_UPDATE;
     VSLeaderboardUpdate(); //8062526c
     ~VSLeaderboardUpdate() override; //8085e5bc vtable 808dac18
     PageId GetNextPage() const override; //0x10 8085c974

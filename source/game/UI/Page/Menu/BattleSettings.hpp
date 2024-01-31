@@ -7,7 +7,8 @@
 
 //_sinit_ at 8083cb44
 namespace Pages {
-class BattleSettings: public MenuInteractable { //ID 0x77
+class BattleSettings : public MenuInteractable { //ID 0x77
+    static const PageId id = PAGE_BATTLE_SETTINGS;
     BattleSettings(); //80629184
     ~BattleSettings() override; //8083c9b0 808d9188
     void OnInit() override; //0x28 8083bc5c

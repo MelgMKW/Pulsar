@@ -19,7 +19,6 @@ snprintf = 0x80011938
 qsort = 0x80011b00
 rand = 0x80011c70
 srand = 0x80011c90
-
 sscanf = 0x80013040
  
 strcat = 0x80013224
@@ -28,6 +27,11 @@ strcpy = 0x80013120
 strncpy = 0x800131e0
 strtok = 0x800134cc
 strstr = 0x800135f0
+wcslen = 0x80017998
+wcsncpy = 0x800179d0
+wcschr = 0x80017a48
+
+
 strlen = 0x80021254
 swprintf = 0x80017814
 

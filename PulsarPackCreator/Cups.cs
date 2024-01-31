@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -34,14 +34,15 @@ namespace PulsarPackCreator
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost,defaultGhost} };
             }
-            public Cup(BigEndianReader bin) : this(0)
+
+            public Cup(PulsarGame.Cup raw) : this(0)
             {
-                idx = bin.ReadUInt32();
+                idx = raw.idx;
                 for (int i = 0; i < 4; i++)
                 {
-                    slots[i] = bin.ReadByte();
-                    musicSlots[i] = bin.ReadByte();
-                    bin.BaseStream.Position += 4;
+                    PulsarGame.Track track = raw.tracks[i];
+                    slots[i] = track.slot;
+                    musicSlots[i] = track.musicSlot;
                 }
             }
 
@@ -105,6 +106,21 @@ namespace PulsarPackCreator
             cups[curCup].fileNames[idx - firstTrackRow] = box.Text;
         }
 
+        public static bool CheckTrackName(string name)
+        {
+            char[] invalid = Path.GetInvalidFileNameChars();
+            return name.IndexOfAny(invalid) < 0;
+        }
+        private void OnTrackNameInput(object sender, TextCompositionEventArgs e)
+        {
+            string text = e.Text;
+            char[] invalid = Path.GetInvalidFileNameChars();
+            if (!CheckTrackName(text))
+            {
+                MsgWindow.Show("Track names cannot contain any of <>:\"/\\|?*");
+                e.Handled = true;
+            }
+        }
         private void OnTracknameChange(object sender, TextChangedEventArgs e)
         {
             TextBox box = sender as TextBox;
@@ -114,6 +130,7 @@ namespace PulsarPackCreator
                 cups[curCup].trackNames[idx - firstTrackRow] = box.Text;
                 SetGhostLabelName(idx - firstTrackRow, box.Text);
             }
+           
         }
 
         private void OnAuthorChange(object sender, TextChangedEventArgs e)
@@ -134,14 +151,14 @@ namespace PulsarPackCreator
         {
             ComboBox box = sender as ComboBox;
             int idx = Grid.GetRow(box);
-            cups[curCup].slots[idx - firstTrackRow] = idxToGameId[box.SelectedIndex];
+            cups[curCup].slots[idx - firstTrackRow] = PulsarGame.MarioKartWii.idxToCourseId[box.SelectedIndex];
         }
 
         private void OnMusicChange(object sender, SelectionChangedEventArgs e)
         {
             ComboBox box = sender as ComboBox;
             int idx = Grid.GetRow(box);
-            cups[curCup].musicSlots[idx - firstTrackRow] = idxToGameId[box.SelectedIndex];
+            cups[curCup].musicSlots[idx - firstTrackRow] = PulsarGame.MarioKartWii.idxToCourseId[box.SelectedIndex];
         }
 
         private void OnLeftArrowClick(object sender, RoutedEventArgs e)
@@ -185,14 +202,14 @@ namespace PulsarPackCreator
                     }
                 }
 
-                Slot1.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.slots[0])];
-                Slot2.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.slots[1])];
-                Slot3.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.slots[2])];
-                Slot4.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.slots[3])];
-                Music1.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.musicSlots[0])];
-                Music2.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.musicSlots[1])];
-                Music3.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.musicSlots[2])];
-                Music4.SelectedValue = idxToAbbrev[Array.IndexOf(idxToGameId, cup.musicSlots[3])];
+                Slot1.SelectedValue =  PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[0])];
+                Slot2.SelectedValue =  PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[1])];
+                Slot3.SelectedValue =  PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[2])];
+                Slot4.SelectedValue =  PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[3])];
+                Music1.SelectedValue = PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.musicSlots[0])];
+                Music2.SelectedValue = PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.musicSlots[1])];
+                Music3.SelectedValue = PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.musicSlots[2])];
+                Music4.SelectedValue = PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.musicSlots[3])];
                 CupIdLabel.Text = $"Cup {curCup + 1}";
             }
         }

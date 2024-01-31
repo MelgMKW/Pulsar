@@ -16,6 +16,7 @@ Contributors:
 namespace Pages {
 class MultiDriftSelect : public MenuInteractable { //ID 0x82
 public:
+    static const PageId id = PAGE_MULTIPLAYER_DRIFT_SELECT;
     MultiDriftSelect(); //8062b8bc
     ~MultiDriftSelect() override; //8084b984 vtable 808d9bc8
     void OnInit() override; //0x28 8084aac4

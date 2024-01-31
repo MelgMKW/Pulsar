@@ -140,6 +140,7 @@ public:
 
     bool OpenFile(const char* path, u32 mode);
     s32 Read(u32 size, void* bufferIn);
+    void Seek(u32 offset) { IOS::Seek(this->fd, offset, IOS::SEEK_START); }
     s32 Write(u32 length, const void* buffer);
     s32 Overwrite(u32 length, const void* buffer);
     void Close();

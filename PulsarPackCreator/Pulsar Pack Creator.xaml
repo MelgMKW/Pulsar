@@ -98,11 +98,14 @@
 
 
     <DockPanel x:Name="Dock">
+        <DockPanel.Background>
+            <ImageBrush ImageSource="{DynamicResource imageBg}" />
+        </DockPanel.Background>
         <StackPanel Orientation = "Horizontal" DockPanel.Dock="Bottom" Background="#FF202020" HorizontalAlignment="Center">
-            <Button x:Name = "ImportConfig"  Content = "Import Config" Width = "90" Height = "20" Click="OnImportConfigClick"/>
-            <Button x:Name = "BuildConfig" Content = "Build Config" Width = "90" Height = "20" Click="OnBuildConfigClick"/>
-            <Button x:Name = "BuildPack" Content = "Build Full Pack" Width = "90" Height = "20" Click="OnBuildFullPackClick"/>
-            <Button x:Name = "Alphabetize" Content = "Alphabetize" Width = "90" Height = "20" Click="OnAlphabetizeClick"/>
+            <Button x:Name = "ImportConfig"  Content = "Import Config" Width = "100" Height = "20" Click="OnImportConfigClick"/>
+            <Button x:Name = "BuildConfig" Content = "Build Config Only" Width = "100" Height = "20" Click="OnBuildConfigClick"/>
+            <Button x:Name = "BuildPack" Content = "Build Full Pack" Width = "100" Height = "20" Click="OnBuildFullPackClick"/>
+            <Button x:Name = "Alphabetize" Content = "Alphabetize" Width = "100" Height = "20" Click="OnAlphabetizeClick"/>
             <Button x:Name = "MassImport" Content = "Mass Import Names" Width = "120" Height = "20" Click="OnMassImportClick"/>
             <Button x:Name = "OpenInput" Content = "Open Input Folder" Width = "120" Height = "20" Click="OnOpenInputClick"/>
             <Button x:Name = "Crash" Content = "Check Crash" Width = "90" Height = "20" Click="OnCrashClick"/>
@@ -123,7 +126,10 @@
         </Grid>
 
 
-        <TabControl Name="TabController" Background="{DynamicResource AppBg}">
+        <TabControl Name="TabController">
+            <TabControl.Background>
+                <ImageBrush ImageSource="{DynamicResource imageBg}" />
+            </TabControl.Background>
             <TabItem Name="Cups" Header="Cups">
                 <DockPanel>
                     <Button DockPanel.Dock="Left" Content="&lt;" FontWeight="Bold" FontSize="18" Click="OnLeftArrowClick" />
@@ -161,10 +167,10 @@
                         <TextBox x:Name="File3" Grid.Row="3" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
                         <TextBox x:Name="File4" Grid.Row="4" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
 
-                        <TextBox x:Name="Name1" Grid.Row="1" Grid.Column="2" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
-                        <TextBox x:Name="Name2" Grid.Row="2" Grid.Column="2" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
-                        <TextBox x:Name="Name3" Grid.Row="3" Grid.Column="2" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
-                        <TextBox x:Name="Name4" Grid.Row="4" Grid.Column="2" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name1" Grid.Row="1" Grid.Column="2" PreviewTextInput="OnTrackNameInput" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name2" Grid.Row="2" Grid.Column="2" PreviewTextInput="OnTrackNameInput" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name3" Grid.Row="3" Grid.Column="2" PreviewTextInput="OnTrackNameInput" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name4" Grid.Row="4" Grid.Column="2" PreviewTextInput="OnTrackNameInput" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
 
                         <TextBox x:Name="Author1" Grid.Row="1" Grid.Column="3" TextChanged="OnAuthorChange" Style="{StaticResource AuthorBoxes}"/>
                         <TextBox x:Name="Author2" Grid.Row="2" Grid.Column="3" TextChanged="OnAuthorChange" Style="{StaticResource AuthorBoxes}"/>

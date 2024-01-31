@@ -36,6 +36,7 @@ public:
 
 class AwardFade : public Page { //ID 0x3b
 public:
+    static const PageId id = PAGE_PROBABLY_AWARD_INTERFACE;
     AwardFade(); //805bb2c4
     ~AwardFade() override; //805bb348 vtable 808b7610
 
@@ -57,6 +58,7 @@ size_assert(AwardFade, 0x314);
 
 class AwardResults : public Page {
 public:
+    static const PageId id = PAGE_PROBABLY_CONGRATS; //ID 0x3c
     AwardResults(); //805bc03c
     ~AwardResults() override; //805bc108 vtable 808b7528
 

@@ -9,7 +9,8 @@
 
 //_sinit_ at 805c23d0
 namespace Pages {
-class Approve: public Page {//ID 0x52
+class Approve : public Page {//ID 0x52
+    static const PageId id = PAGE_APPROVE;
     //generic text box to validate a choice, essentially a message box page with an OK button
     //OnClick and the 2 back functions trigger a ptmf that is set by another page
     Approve(); //805c1cc0

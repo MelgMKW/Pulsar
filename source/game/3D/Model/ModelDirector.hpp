@@ -85,11 +85,13 @@ public:
 
     void SetLight(void* lightStruct); //8055f2b4
     ScnMgr* GetScnManager() const; //8055f2c4 often inlined
+    void RemoveFromGroup(); //8055f2fc
+
     void UpdateDrawPriority(u32 scnObjDrawOptionsIdx); //8055f4c4
     void ChangeTransformator(ModelTransformator* newTransformator, bool disableAllAnms); //8055f7d8
     void PrepareAllAnms(); //8055f1e4
 
-    //Keeps the model insert in the ScnGroup, but toggles drawXLU/OPA
+    //Keeps the model inserted in the ScnGroup, but toggles drawXLU/OPA
     void ToggleTransparent(bool isTransparent); //8055f34c used to prevent this https://imgur.com/hUjHk6b
 
     u32 bitfield; //0x4
@@ -100,7 +102,7 @@ public:
     8: register in the scn manager
     */
     u32 unknown_0x8;
-    g3d::ResMdlData* rawMdl; //0xC
+    g3d::ResMdl rawMdl; //0xC
     EGG::ScnMdlEx* curScnMdlEx; //0x10 chooses which one to use based on 1st bit of bitfield
     EGG::ScnMdlEx* scnMdlEx[2]; //0x14
     g3d::ScnGroup* groups[2]; //0x1c

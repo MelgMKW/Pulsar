@@ -1,3 +1,11 @@
+·Updated to 1.0.16
+-Space mode is available as a third color mode
+-Creator now uses marshalling to import game-structs
+-Settings file has been improved to future-proof expansions to it
+-BRSTM expansion now supports direct track names as BRSTMs
+-Fixed various bugs and porting issues
+-All binary files now use the .pul format, and leaderboard files can be opened in the software
+
 ·Updated to 1.0.15
 -Fixed changelogs again again again again again again again again
 

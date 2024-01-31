@@ -171,8 +171,9 @@ PulsarId CupsDef::ConvertTrack_IdxToPulsarId(u32 idx) const {
 }
 
 bool CupsDef::IsRegsSituation() {
-    const RKNet::RoomType type = RKNet::Controller::sInstance->roomType;
-    switch(type) {
+    const RKNet::Controller* rkNet = RKNet::Controller::sInstance;
+    if(rkNet->connectionState == RKNet::CONNECTIONSTATE_SHUTDOWN) return false;
+    switch(rkNet->roomType) {
         case(RKNet::ROOMTYPE_VS_REGIONAL):
         case(RKNet::ROOMTYPE_JOINING_REGIONAL): return false;
         case(RKNet::ROOMTYPE_FROOM_HOST):

@@ -13,6 +13,7 @@ Contributors:
 namespace Pages {
 class VR : public Page { //ID 0x91
 public:
+    static const PageId id = PAGE_VR;
     VR(); //8064a3f4 vtable 808bfd0c
     ~VR() override; //0x8064a4e0
     void OnInit() override; //0x28 8064a58c

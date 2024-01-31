@@ -49,29 +49,34 @@ struct PULTimeEntry {
 
 //Should be fine having "affecting" functions public as this class can only be access through a const getter in manager (or from manager itself)
 class alignas(0x20) Leaderboard {
+    static const u32 fileMagic = 'PULL';
+    static const u32 curVersion = 1;
+    static const u32 trackNameLen = 48; //0x30
+    static const char filePathFormat[];
 public:
     Leaderboard();
-    Leaderboard(const char* folderPath, u32 crc32);
+    Leaderboard(const char* folderPath, PulsarId id);
+    void SetTrack(PulsarId id);
     //void SwapEntries(LeaderboardEntry *entry1, LeaderboardEntry *entry2);
     s32 GetPosition(const Timer& other) const;
-    void Update(u32 position, const TimeEntry& entry, u32 crc32);
+    void Update(u32 position, const TimeEntry& entry, u32 rkgCRC32);
     void Save(const char* folderPath);
     void AddTrophy() { this->hasTrophy[System::sInstance->ttMode] = true; }
     const PULTimeEntry& GetPulEntry(EntryLaps lap) const { return this->entries[System::sInstance->ttMode][lap]; }
     void EntryToTimer(Timer& dest, u8 id) const;
     void EntryToTimeEntry(TimeEntry& dest, u8 id) const;
-    static void CreateFile(u32 crc32);
+    static void CreateFile(PulsarId id);
     static const TimeEntry* GetEntry(u32 index); //pointer as the game expects as such
     static int ExpertBMGDisplay();
 private:
     u32 magic; //PULL
     u32 version;
     u32 crc32; //of the track
-    bool hasTrophy[4];
-    u32 reserved[8];
-    PULTimeEntry entries[4][11]; //0x30 to 0x44C 11th = flap
-    static const u32 fileMagic = 'PULL';
-    static const u32 curVersion = 1;
+    char name[trackNameLen]; //0xC
+    bool hasTrophy[4]; //0x3c
+    u32 reserved[4]; //0x40
+    PULTimeEntry entries[4][11]; //0x50 11th = flap
+
 };
 static_assert(sizeof(Leaderboard) % 0x20 == 0, "Leaderboard Size Check");
 

@@ -11,6 +11,7 @@ class FriendMatchingPlayer;
 namespace Pages {
 class Globe : public Page { //ID 0x95
 public:
+    static const PageId id = PAGE_GLOBE;
     class MessageWindow : public LayoutUIControl {
         //no ctor
         ~MessageWindow() override; //805e42c0 vtable 808b9414

@@ -7,7 +7,8 @@
 
 //_sinit_ at 808502b8
 namespace Pages {
-class VSTeamsView: public MenuInteractable { //ID 0x74
+class VSTeamsView : public MenuInteractable { //ID 0x74
+    static const PageId id =  PAGE_VS_TEAMS_VIEW;
     VSTeamsView(); //806287e0
     ~VSTeamsView() override; //80850214 vtable 808d9f98
     void OnInit() override; //0x28 8084fdac

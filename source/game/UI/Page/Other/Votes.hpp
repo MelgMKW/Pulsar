@@ -5,7 +5,7 @@
 #include <game/UI/Ctrl/Menu/CtrlMenuText.hpp>
 #include <game/UI/Page/Other/Message.hpp>
 
-class VoteControl: public LayoutUIControl {
+class VoteControl : public LayoutUIControl {
 public:
     VoteControl(); //80642aac
     ~VoteControl() override; //80642ae8 808bf67c
@@ -26,8 +26,9 @@ public:
 };
 
 namespace Pages {
-class Vote: public Page { //ID 0x92
+class Vote : public Page { //ID 0x92
 public:
+    static const PageId id = PAGE_VOTE;
     Vote(); //80642f90
     ~Vote() override; //806430bc vtable 808bf60c
     PageId GetNextPage() const override; //0x10 80643f18 returns -1 

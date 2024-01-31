@@ -227,7 +227,7 @@ kmWritePointer(0x808DA614, BeforeEntranceAnimations);
 void TrophyBMG(CtrlMenuInstructionText& bottomText, u32 bmgId) {
     TextInfo text;
     const System* system = System::sInstance;
-    const Settings* settings = Settings::GetInstance();
+    const Settings::Mgr* settings = Settings::Mgr::GetInstance();
     u32 trophyCount = settings->GetTrophyCount(system->ttMode);
     u32 totalCount = settings->GetTotalTrophyCount(system->ttMode);
     text.intToPass[0] = trophyCount;
@@ -255,11 +255,11 @@ kmCall(0x807e54ec, IndividualTrophyBMG);
 //Global function as it is also used by CourseSelect
 const TextInfo GetCourseBottomText(PulsarId id, u32* bmgId) {
     const System* system = System::sInstance;
-    const Settings* settings = Settings::GetInstance();
+    const Settings::Mgr* settings = Settings::Mgr::GetInstance();
     if(settings->GetTotalTrophyCount(system->ttMode) > 0) *bmgId = BMG_TT_BOTTOM_COURSE;
     else *bmgId = BMG_TT_BOTTOM_COURSE_NOTROPHY;
 
-    bool hasTrophy = Settings::GetInstance()->HasTrophy(id, system->ttMode);
+    bool hasTrophy = Settings::Mgr::GetInstance()->HasTrophy(id, system->ttMode);
     TextInfo text;
     text.bmgToPass[0] = BMG_TT_MODE_BOTTOM_CUP + system->ttMode;
     u32 passedBmgId = BMG_NO_TROPHY;

@@ -107,14 +107,14 @@ public:
     //2bytes of padding 
 
     //Variables
-    PulsarId        winningCourse;
-    PulsarId        selectedCourse;
-    PulsarCupId     lastSelectedCup;
-    u32             lastSelectedCupButtonIdx;
+    PulsarId        winningCourse; //0x4
+    PulsarId        selectedCourse; //0x8
+    PulsarCupId     lastSelectedCup; //0xc
+    u32             lastSelectedCupButtonIdx; //0x10
 private:
-    const u8 regsMode;
-    u32 definedCTsCupCount;
-    u32  ctsCupCount;
+    const u8 regsMode; //0x14
+    u32 definedCTsCupCount; //0x18
+    u32  ctsCupCount; //0x14
     u16  trophyCount[4];
     Cup* cups;
 };

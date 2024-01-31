@@ -44,7 +44,7 @@ kmCall(0x800079b0, CheckControllerStrap);
 char bootParams[17] = "-s132 -l0 -p274";
 SectionId BootIntoSection() {
     SectionId section = SECTION_NONE;
-    const u8 bootSetting = Settings::GetSettingValue(SETTINGSTYPE_MENU, SETTINGMENU_SCROLL_BOOT);
+    const u8 bootSetting = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_SCROLL_BOOT);
     u8 license = 0;
     if(bootSetting != MENUSETTING_BOOT_DISABLED) {
         const SaveDataManager* save = SaveDataManager::sInstance;

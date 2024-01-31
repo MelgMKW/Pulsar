@@ -30,19 +30,20 @@ kmWrite32(0x8057ef30, 0x2c000001); //changes check from if != 2 to if = 1, so th
 kmWrite32(0x8057ef38, 0x418200A4); //ensure mtSpeedMultiplier gets reset when driftState = 1, by sending to where CreateUMT hooks
 kmWrite32(0x8057efb4, 0x48000028); //skips the SMT charge check and sends unconditionally to CreateUMT
 void CreateUMT(Kart::Movement& movement) {
+    bool isUMTs = Info::IsUMTs();
     const s16 smtCharge = movement.smtCharge;
-    if(smtCharge >= 550 && Info::IsUMTs()) movement.driftState = 4;
+    if(smtCharge >= 550 && isUMTs) movement.driftState = 4;
     else if(smtCharge >= 300) movement.driftState = 3;
 };
 kmBranch(0x8057efdc, CreateUMT);
 
 //Buffs MTStats and updates umtState
 int BuffUMT(const Kart::Movement& movement) {
+    const u8 idx = movement.link.GetPlayerIdx();
     u32 mtStat = movement.link.GetStats().mt;
-    if(movement.driftState == 4) {
-        mtStat = (int)(1.3333333333333f * (float)mtStat);
-        umtState[movement.link.GetPlayerIdx()] = true;
-    }
+    bool* state = umtState;
+    if(movement.driftState == 4) state[idx] = true;
+    if(state[idx] == true) mtStat = 3 * mtStat / 2; //50% longer
     return mtStat;
 };
 kmCall(0x80582fdc, BuffUMT);
@@ -57,7 +58,7 @@ bool UpdateSpeedMultiplier(Kart::Boost& boost, bool* boostEnded) {
     asm(mr movement, r28;);
     const u8 id = movement->link.GetPlayerIdx();
     bool* state = umtState;
-    const float umtMultiplier = 1.27f;
+    const float umtMultiplier = 1.32f; //10% faster
     const float defaultMTMultiplier = 1.2f;
 
     if(!isBoosting) state[id] = false;

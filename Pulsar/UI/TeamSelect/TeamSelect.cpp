@@ -56,7 +56,7 @@ TeamSelect::TeamSelect() {
 }
 
 void TeamSelect::OnInit() {
-    this->miiGroup = &SectionMgr::sInstance->curSection->Get<Pages::FriendRoomManager>(PAGE_FRIEND_ROOM_MANAGER)->miiGroup;
+    this->miiGroup = &SectionMgr::sInstance->curSection->Get<Pages::FriendRoomManager>()->miiGroup;
     Menu::OnInit();
     for(int idx = 0; idx < 12; idx++) {
         if(this->teams[idx] == 1) this->RotateArrow(this->arrows[idx]);

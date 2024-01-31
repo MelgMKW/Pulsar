@@ -23,13 +23,13 @@ kmCall(0x80655458, ExportRH1ToPulRH1);
 kmCall(0x806550e4, ExportRH1ToPulRH1);
 
 CourseId ReturnCorrectId(const RKNet::RH1Handler& rh1Handler) {
-    CupsDef* system = CupsDef::sInstance;
+    CupsDef* cups = CupsDef::sInstance;
     for(int i = 0; i < 12; ++i) {
         const RKNet::RH1Data& curRH1 = rh1Handler.rh1Data[i];
         if((curRH1.trackId <= 0x42 || curRH1.trackId > 0xff) && curRH1.timer != 0) {
-            if(CupsDef::IsRegsSituation()) system->winningCourse = CupsDef::ConvertTrack_RealIdToPulsarId(curRH1.trackId);
-            else system->winningCourse = static_cast<PulsarId>(curRH1.trackId);
-            return system->GetCorrectTrackSlot();
+            if(CupsDef::IsRegsSituation()) cups->winningCourse = CupsDef::ConvertTrack_RealIdToPulsarId(curRH1.trackId);
+            else cups->winningCourse = static_cast<PulsarId>(curRH1.trackId);
+            return cups->GetCorrectTrackSlot();
         }
     }
     return COURSEID_NONE;

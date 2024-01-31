@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
         Title="Program Settings" Height="200" Width="320" Background="{DynamicResource AppBg}"
+
         HorizontalAlignment="Center" VerticalAlignment="Center">
     <Window.Resources>
         <Style x:Key="ColorMode" TargetType="Control">
@@ -16,15 +17,31 @@
         <Style BasedOn="{StaticResource ColorMode}" x:Key="CheckBoxes" TargetType="CheckBox">
             <Setter Property="FontSize"             Value="13"/>
         </Style>
+        <Style x:Key="ComboBoxes" TargetType="ComboBox">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"   Value="Top"/>
+            <Setter Property="Width"               Value="100"/>
+            <Setter Property="Margin"              Value="-85,5,0,0"/>
 
+            <Setter Property="Foreground"          Value="{DynamicResource fg}"/>
+            <Setter Property="Template"            Value="{DynamicResource CustomComboBox}"/>
+        </Style>
+        <ImageBrush x:Key="settingsBg" ImageSource="{DynamicResource imageBg}" />
 
     </Window.Resources>
+    
     <Border BorderBrush="Black" BorderThickness="2">
-        <Grid>
-            <StackPanel Orientation = "Vertical" Margin="5,52,5,38">
+        <Grid Background="{StaticResource settingsBg}">
+            <StackPanel Orientation = "Vertical" HorizontalAlignment="Left" Margin="5,52,5,38">
                 <CheckBox x:Name="AutoUpdater"   Checked="OnAutoUpdateToggle" Unchecked="OnAutoUpdateToggle" Content="Check for updates on startup" Style="{StaticResource CheckBoxes}"/>
                 <CheckBox x:Name="ExitRemindBox" Checked="OnExitRemindToggle" Unchecked="OnExitRemindToggle" Content="Ask before closing"           Style="{StaticResource CheckBoxes}"/>
-                <CheckBox x:Name="LightModeBox"  Checked="OnLightModeToggle" Unchecked="OnLightModeToggle"   Content="Light Mode"                   Style="{StaticResource CheckBoxes}"/>
+                <ComboBox x:Name="ColorModeBox" SelectionChanged="OnColorModeChange" Style="{StaticResource ComboBoxes}">
+                    <ComboBoxItem IsSelected="True" Content="Dark Mode"/>
+                    <ComboBoxItem Content="Light Mode"/>
+                    <ComboBoxItem Content="Space Mode"/>
+                </ComboBox>
+
+
             </StackPanel>
             
             <Button x:Name="Updater"      Grid.Row="0" Margin="229,50,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="65" Content="Update" FontSize="14" Click="OnUpdateClick"/>

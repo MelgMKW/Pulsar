@@ -143,7 +143,7 @@ UIControl* SettingsPanel::CreateControl(u32 id) {
         snprintf(option3Variant, 12, "%sOption%d", variant, 3);
 
         const char* optionVariants[5] ={ option0Variant, option1Variant, option2Variant, option3Variant, nullptr };
-        radioButtonControl.Load(buttonsPerPagePerRow[this->sheetIdx][id], Settings::GetSettingValue(static_cast<SettingsType>(this->sheetIdx), id),
+        radioButtonControl.Load(buttonsPerPagePerRow[this->sheetIdx][id], Settings::Mgr::GetSettingValue(static_cast<Settings::Type>(this->sheetIdx), id),
             UI::controlFolder, "RadioBase", variant, "RadioOption", optionVariants, 1, 0, 0);
         radioButtonControl.SetOnChangeHandler(this->onRadioButtonChangeHandler);
         radioButtonControl.id = id;
@@ -162,7 +162,7 @@ UIControl* SettingsPanel::CreateControl(u32 id) {
         char variant[12];
         snprintf(variant, 12, "UpDown%d", id);
 
-        upDownControl.Load(optionsPerPagePerScroller[this->sheetIdx][id], Settings::GetSettingValue(static_cast<SettingsType>(this->sheetIdx), id + 6),
+        upDownControl.Load(optionsPerPagePerScroller[this->sheetIdx][id], Settings::Mgr::GetSettingValue(static_cast<Settings::Type>(this->sheetIdx), id + 6),
             UI::controlFolder, "UpDownBase", variant, "UpDownR", "Right", "UpDownL",
             "Left", &this->textUpDown[id], 1, 0, false, true, true);
         upDownControl.SetOnClickHandler(this->onUpDownClickHandler);
@@ -190,12 +190,12 @@ void SettingsPanel::SetButtonHandlers(PushButton& button) {
 
 void SettingsPanel::OnActivate() {
     for(RadioButtonControl* radio = this->radioButtonControls; radio < &this->radioButtonControls[this->radioCount]; radio++) {
-        const u8 setting = Settings::GetSettingValue(static_cast<SettingsType>(this->sheetIdx), radio->id);
+        const u8 setting = Settings::Mgr::GetSettingValue(static_cast<Settings::Type>(this->sheetIdx), radio->id);
         radio->chosenButtonId = setting;
         radio->selectedButtonId = setting;
     }
     for(UpDownControl* scroller = this->upDownControls; scroller < &this->upDownControls[this->scrollersCount]; scroller++) {
-        scroller->curSelectedOption = Settings::GetSettingValue(static_cast<SettingsType>(this->sheetIdx), scroller->id + 6);
+        scroller->curSelectedOption = Settings::Mgr::GetSettingValue(static_cast<Settings::Type>(this->sheetIdx), scroller->id + 6);
     }
     MenuInteractable::OnActivate();
 }
@@ -227,10 +227,10 @@ ManipulatorManager& SettingsPanel::GetManipulatorManager() {
 void SettingsPanel::LoadPrevMenuAndSaveSettings(PushButton& button) {
     this->LoadPrevPage(button);
     const Section* section = SectionMgr::sInstance->curSection;
-    if(this->prevPageId == PAGE_OPTIONS) section->Get<ExpOptions>(PAGE_OPTIONS)->topSettingsPage = this->pageId;
-    else if(this->prevPageId == PAGE_WFC_MAIN) section->Get<ExpWFCMain>(PAGE_WFC_MAIN)->topSettingsPage = this->pageId;
+    if(this->prevPageId == PAGE_OPTIONS) section->Get<ExpOptions>()->topSettingsPage = this->pageId;
+    else if(this->prevPageId == PAGE_WFC_MAIN) section->Get<ExpWFCMain>()->topSettingsPage = this->pageId;
     else if(this->prevPageId == PAGE_FRIEND_ROOM) {
-        section->Get<ExpFroom>(PAGE_WFC_MAIN)->topSettingsPage = this->pageId;
+        section->Get<ExpFroom>()->topSettingsPage = this->pageId;
         this->nextPageId = PAGE_NONE; //FriendRoom's OnResume is important
     }
     SettingsPanel::SaveSettings(true);
@@ -239,14 +239,14 @@ void SettingsPanel::LoadPrevMenuAndSaveSettings(PushButton& button) {
 //On Save Click/Back Press, is called and updates PulsarSettings
 void SettingsPanel::SaveSettings(bool writeFile) {
     const Section* section = SectionMgr::sInstance->curSection;
-    Settings* settings = Settings::sInstance;
+    Settings::Mgr* settings = Settings::Mgr::sInstance;
     for(int count = 0; count < pageCount; count++) {
         SettingsPanel* panel = section->Get<SettingsPanel>(static_cast<PageId>(firstId + count));
         for(const RadioButtonControl* radio = panel->radioButtonControls; radio < &panel->radioButtonControls[panel->radioCount]; radio++) {
-            settings->SetSettingValue(static_cast<SettingsType>(panel->sheetIdx), radio->id, radio->chosenButtonId);
+            settings->SetSettingValue(static_cast<Settings::Type>(panel->sheetIdx), radio->id, radio->chosenButtonId);
         }
         for(const UpDownControl* scroller = panel->upDownControls; scroller < &panel->upDownControls[panel->scrollersCount]; scroller++) {
-            settings->SetSettingValue(static_cast<SettingsType>(panel->sheetIdx), scroller->id + 6, scroller->curSelectedOption);
+            settings->SetSettingValue(static_cast<Settings::Type>(panel->sheetIdx), scroller->id + 6, scroller->curSelectedOption);
         }
     }
     settings->Update();

@@ -5,7 +5,8 @@
 
 //_sinit_ at 8083bb38
 namespace Pages {
-class BattleModeSelect: public MenuInteractable { //ID 0x75
+class BattleModeSelect : public MenuInteractable { //ID 0x75
+    static const PageId id = PAGE_BATTLE_MODE_SELECT;
     BattleModeSelect(); //80628b84
     ~BattleModeSelect() override; //8083baac vtable 808d9008
     void OnInit() override; //0x28 8083b1f0

@@ -33,9 +33,9 @@ ExpCupSelect::ExpCupSelect() {
     randomizedId = PULSARID_NONE;
     this->controlsManipulatorManager.SetGlobalHandler(START_PRESS, onStartPressHandler, false, false);
 
-    CupsDef* system = CupsDef::sInstance;
-    system->ToggleCTs(!CupsDef::IsRegsSituation());
-    if(system->GetTotalCupCount() <= 8) {
+    CupsDef* cups = CupsDef::sInstance;
+    cups->ToggleCTs(!CupsDef::IsRegsSituation());
+    if(cups->GetTotalCupCount() <= 8) {
         this->arrows.leftArrow.manipulator.inaccessible = true;
         this->arrows.leftArrow.isHidden = true;
         this->arrows.rightArrow.manipulator.inaccessible = true;
@@ -79,13 +79,13 @@ void ExpCupSelect::OnLeftArrowSelect(SheetSelectControl& control, u32 hudSlotId)
 }
 
 void ExpCupSelect::OnArrowSelect(s32 direction) {
-    const CupsDef* system = CupsDef::sInstance;
+    const CupsDef* cupsDef = CupsDef::sInstance;
     CtrlMenuCupSelectCup& cups = this->ctrlMenuCupSelectCup;
-    cups.curCupID = system->GetNextCupId(static_cast<PulsarCupId>(cups.curCupID), direction);
+    cups.curCupID = cupsDef->GetNextCupId(static_cast<PulsarCupId>(cups.curCupID), direction);
     this->ctrlMenuCupSelectCourse.UpdateTrackList(cups.curCupID);
     PushButton** buttons = reinterpret_cast<PushButton**>(cups.childrenGroup.controlArray);
     for(int i = 0; i < 8; ++i) {
-        const PulsarCupId nextId = system->GetNextCupId(static_cast<PulsarCupId>(buttons[i]->buttonId), direction);
+        const PulsarCupId nextId = cupsDef->GetNextCupId(static_cast<PulsarCupId>(buttons[i]->buttonId), direction);
         buttons[i]->buttonId = nextId;
         this->UpdateCupData(nextId, *buttons[i]);
     }
@@ -103,7 +103,7 @@ void ExpCupSelect::OnStartPress(u32 hudSlotId) {
 
 void ExpCupSelect::AfterControlUpdate() {
     CupSelect::AfterControlUpdate();
-    CupsDef* system = CupsDef::sInstance;
+    CupsDef* cups = CupsDef::sInstance;
     const GameMode gamemode = RaceData::sInstance->menusScenario.settings.gamemode;
     const bool isValid = gamemode == MODE_TIME_TRIAL || gamemode == MODE_VS_RACE;
     if(!isValid) {
@@ -122,7 +122,7 @@ void ExpCupSelect::AfterControlUpdate() {
             const u32 randomizedCupIdx = CupsDef::ConvertCup_PulsarIdToIdx(CupsDef::ConvertCup_PulsarTrackToCup(this->randomizedId));
             const u32 button0Idx = CupsDef::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[0]->buttonId));
             const u32 button7Idx = CupsDef::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[7]->buttonId));
-            const u32 cupCount = system->GetTotalCupCount();
+            const u32 cupCount = cups->GetTotalCupCount();
 
             bool isCurOnScreen = false;
             for(int i = 0; i < 8; ++i) {
@@ -143,13 +143,13 @@ void ExpCupSelect::AfterControlUpdate() {
                 finalButtonIdx = 7 - nw4r::ut::Min(finalButtonIdx, cupCount - finalButtonIdx);
                 buttons[finalButtonIdx]->Select(0);
                 buttons[finalButtonIdx]->HandleClick(0, 0);
-                Pages::CourseSelect* coursePage = SectionMgr::sInstance->curSection->Get<Pages::CourseSelect>(PAGE_COURSE_SELECT);
+                Pages::CourseSelect* coursePage = SectionMgr::sInstance->curSection->Get<Pages::CourseSelect>();
                 CourseButton& courseButton = coursePage->CtrlMenuCourseSelectCourse.courseButtons[this->randomizedId % 4];
-                system->SaveSelectedCourse(courseButton);
+                cups->SaveSelectedCourse(courseButton);
                 courseButton.Select(0);
                 //coursePage->CtrlMenuCourseSelectCourse.courseButtons[this->randomizedId % 4].HandleClick(0, -1);
                 this->randomizedId = PULSARID_NONE;
-                isInaccessible = system->GetCtsTrackCount() == 0; //keep the arrows inaccessible if there are no cts
+                isInaccessible = cups->GetCtsTrackCount() == 0; //keep the arrows inaccessible if there are no cts
             }
             for(int i = 0; i < 8; ++i) buttons[i]->manipulator.inaccessible = isInaccessible;
             this->arrows.leftArrow.manipulator.inaccessible = isInaccessible;

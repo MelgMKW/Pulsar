@@ -37,6 +37,7 @@ size_assert(xA5, 0x368);
 
 class RegisterFriend : public Page { //ID 0xA6
 public:
+    static const PageId id = PAGE_REGISTER_FRIEND;
     RegisterFriend(); //8061dcb8
     ~RegisterFriend(); //8061def0 vtable 808bb6ac
     virtual void OnInit(); //0x28 8061dfb4

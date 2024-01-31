@@ -83,6 +83,7 @@ namespace Pages {
 
 class FriendRoomWaiting : public Page { //ID 0x9b
 public:
+    static const PageId id = PAGE_FRIEND_ROOM_WAITING;
     FriendRoomWaiting(); //805dd330
     ~FriendRoomWaiting(); //805dd38c vtable 808b8df8
     PageId GetNextPage() const override; //0x10 805de844
@@ -106,6 +107,7 @@ size_assert(FriendRoomWaiting, 0x364);
 
 class FriendRoomManager : public Page { //ID 0x9c
 public:
+    static const PageId id = PAGE_FRIEND_ROOM_MANAGER;
     FriendRoomManager(); //805d9b38
     ~FriendRoomManager() override; //805d9bcc vtable 808b8f2c
     void OnInit() override; //0x28 805d9c74
@@ -143,6 +145,7 @@ size_assert(FriendRoomManager, 0x2c68);
 
 class FriendRoom : public Page { //ID 0x9d
 public:
+    static const PageId id = PAGE_FRIEND_ROOM;
     FriendRoom(); //805d7f78
     ~FriendRoom() override; //805d8160 vtable 808b8fd8
     void OnInit() override; //0x28 805d820c
@@ -183,6 +186,7 @@ class FriendRoomMessages;
 
 class FriendRoomMessages : public Page { //ID 0x9e
 public:
+    static const PageId id = PAGE_FRIEND_ROOM_MESSAGES;
     FriendRoomMessages(); //805dbd94
     ~FriendRoomMessages() override; //805dc034 vtable 808b8e5c
     void OnInit() override; //0x28 805dc104

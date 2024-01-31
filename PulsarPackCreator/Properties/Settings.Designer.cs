@@ -49,13 +49,13 @@ namespace Pulsar_Pack_Creator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool LightMode {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ColorMode {
             get {
-                return ((bool)(this["LightMode"]));
+                return ((int)(this["ColorMode"]));
             }
             set {
-                this["LightMode"] = value;
+                this["ColorMode"] = value;
             }
         }
     }

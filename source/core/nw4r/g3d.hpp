@@ -33,6 +33,7 @@
 #include <core/nw4r/g3d/res/ResTex.hpp>
 #include <core/nw4r/g3d/res/ResTexPlttInfo.hpp>
 #include <core/nw4r/g3d/res/ResVtx.hpp>
+#include <core/nw4r/g3d/ScnGroupEx.hpp>
 #include <core/nw4r/g3d/ScnMdl.hpp>
 #include <core/nw4r/g3d/ScnMdlSimple.hpp>
 #include <core/nw4r/g3d/ScnObj.hpp>

@@ -10,7 +10,7 @@ Info* Info::sInstance = nullptr;
 //Context checking
 bool Info::IsHAW(bool isRoomHost) {
     const System* system = System::sInstance;
-    if(isRoomHost) return Settings::GetSettingValue(SETTINGSTYPE_HOST, SETTINGHOST_RADIO_HOSTWINS);
+    if(isRoomHost) return Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_HOSTWINS);
     else return system->hasHAW; //set by ROOM for non-hosts
 }
 

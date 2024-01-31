@@ -33,12 +33,20 @@ namespace PulsarPackCreator
 
             string[] namesImport = NamesImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
             string[] authorsImport = AuthorsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
-            string[] versionsImport = AuthorsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+            string[] versionsImport =  VersionsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
             string[] slotsImport = SlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
             string[] musicSlotsImport = MusicSlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
 
             string[][] importStringArrays = { namesImport, authorsImport, versionsImport, slotsImport, musicSlotsImport };
 
+            foreach(string cur in namesImport)
+            {
+                if (!CheckTrackName(cur))
+                {
+                    MsgWindow.Show($"Track {cur} has an invalid name as it contains one of <>:\"/\\|?*", this);
+                      return;
+                }
+            }
             TextBox[] imports = new TextBox[] { NamesImport, AuthorsImport, SlotsImport, MusicSlotsImport };
             TextBlock[] labels = new TextBlock[] { NamesImportLabel, AuthorsImportLabel, SlotsImportLabel, MusicSlotsImportLabel };
 
@@ -134,8 +142,8 @@ namespace PulsarPackCreator
                 parent.cups[cupIdx].trackNames[row] = importStringArrays[0][line];
                 parent.cups[cupIdx].authorNames[row] = importStringArrays[1][line];
                 parent.cups[cupIdx].versionNames[row] = importStringArrays[2][line];
-                parent.cups[cupIdx].slots[row] = idxToGameId[slotIdx];
-                parent.cups[cupIdx].musicSlots[row] = idxToGameId[musicSlotIdx];
+                parent.cups[cupIdx].slots[row] = PulsarGame.MarioKartWii.idxToCourseId[slotIdx];
+                parent.cups[cupIdx].musicSlots[row] = PulsarGame.MarioKartWii.idxToCourseId[musicSlotIdx];
                 if (cupIdx == parent.curCup)
                 {
                     parent.UpdateCurCup(0);
@@ -163,8 +171,8 @@ namespace PulsarPackCreator
 
         private byte FindSlotIndex(string slot)
         {
-            byte slotIdx = (byte)Array.FindIndex(idxToFullNames, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
-            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(idxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            byte slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.idxToFullNames, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.idxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
             return slotIdx;
         }
     }

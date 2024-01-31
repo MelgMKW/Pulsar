@@ -24,6 +24,7 @@ class LicenseButton : public PushButton {
 
 namespace Pages {
 class LicenseSelect : public Page { //ID 0x65
+    static const PageId id = PAGE_LICENSE_SELECT;
     LicenseSelect(); //805ea834
     ~LicenseSelect() override; //805eab00 vtable 808b984c
     PageId GetNextPage() const override; //0x10 805ee658
@@ -59,6 +60,7 @@ class LicenseSelect : public Page { //ID 0x65
 size_assert(LicenseSelect, 0x130c);
 
 class LicenseChangeMii : public Page { //ID 0x66 comes after choose mii
+    static const PageId id = PAGE_LICENSE_CHANGE_MII;
     LicenseChangeMii(); //805ebdac
     ~LicenseChangeMii() override; //805ebf68 vtable 808b97b8
     PageId GetNextPage() const override; //0x10 805ee644
@@ -85,6 +87,7 @@ class LicenseChangeMii : public Page { //ID 0x66 comes after choose mii
 size_assert(LicenseChangeMii, 0x6cc);
 
 class LicenseSettings : public Page { //ID 0x67
+    static const PageId id = PAGE_LICENSE_SETTINGS;
     LicenseSettings(); //805ed4ec 
     ~LicenseSettings() override; //805ed70c vtable 808b973c
     PageId GetNextPage() const override; //0x10 805ee630
@@ -112,6 +115,7 @@ class LicenseSettings : public Page { //ID 0x67
 size_assert(LicenseSettings, 0x1138);
 
 class LicenseErase : public Page { //ID 0x68
+    static const PageId id = PAGE_ERASE_LICENSE;
     LicenseErase(); //805eddf4
     ~LicenseErase() override; //805edf84 vtable 808b96b4
     PageId GetNextPage() const override; //0x10 805ee41c returns -1 

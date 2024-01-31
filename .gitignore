@@ -1,6 +1,8 @@
 # Prerequisites
 *.d
 /cw
+/PulsarPackCreator/Executable/output
+/PulsarPackCreator/Executable/input
 /testing
 /resources
 /releases

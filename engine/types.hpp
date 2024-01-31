@@ -89,6 +89,27 @@ struct RGBA16 {
 #define size_assert(type, num) static_assert(sizeof(type) ==num,#type)
 #endif
 
+namespace aux {
+typedef char yes[1];
+typedef char no[2];
+
+template <typename B, typename D>
+struct Host
+{
+    operator B* () const;
+    operator D* ();
+};
+}
+template <typename B, typename D>
+struct is_base_of
+{
+    template <typename T>
+    static aux::yes& check(D*, T);
+    static aux::no& check(B*, int);
+
+    static const bool value = sizeof(check(aux::Host<B, D>(), int())) == sizeof(aux::yes);
+};
+
 #endif
 
 

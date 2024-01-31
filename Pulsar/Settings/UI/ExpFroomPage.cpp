@@ -70,9 +70,9 @@ void ExpFroom::OnTeamsButtonClick(PushButton& button, u32 hudSlotId) {
 void ExpFroom::AfterControlUpdate() {
     FriendRoom::AfterControlUpdate();
     const Section* section = SectionMgr::sInstance->curSection;
-    Pages::Globe* globe = section->Get<Pages::Globe>(PAGE_GLOBE);
-    Pages::FriendRoomWaiting* waiting = section->Get<Pages::FriendRoomWaiting>(PAGE_FRIEND_ROOM_WAITING_TEXT);
-    Pages::FriendRoomManager* mgr = section->Get<Pages::FriendRoomManager>(PAGE_FRIEND_ROOM_MANAGER);
+    Pages::Globe* globe = section->Get<Pages::Globe>();
+    Pages::FriendRoomWaiting* waiting = section->Get<Pages::FriendRoomWaiting>();
+    Pages::FriendRoomManager* mgr = section->Get<Pages::FriendRoomManager>();
 
     const bool hidden = this->areControlsHidden;
     this->messagesButton.isHidden = hidden;

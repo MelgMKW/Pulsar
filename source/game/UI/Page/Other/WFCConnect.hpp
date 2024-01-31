@@ -8,8 +8,9 @@
 
 namespace Pages {
 //_sinit_ at 0x8064944c
-class WFCConnect: public Page { //ID 0x84
+class WFCConnect : public Page { //ID 0x84
 public:
+    static const PageId id = PAGE_WFC_CONNECT;
     enum Status {};
     WFCConnect(); //806467d4
     ~WFCConnect() override; //80646850 vtable 808bfaa4
@@ -38,8 +39,9 @@ public:
 };
 size_assert(WFCConnect, 0x70);
 
-class WFCDataStatement: public Page { //ID 0x85 https://imgur.com/Qy2s24P
+class WFCDataStatement : public Page { //ID 0x85 https://imgur.com/Qy2s24P
 public:
+    static const PageId id = PAGE_WFC_DATA_STATEMENT;
     WFCDataStatement(); //80647ecc
     ~WFCDataStatement() override; //80647fe4 vtable 808bfa28
     void OnInit() override; //0x28 80648084
@@ -61,8 +63,9 @@ public:
 };
 size_assert(WFCDataStatement, 0xa38);
 
-class WFCAllowData: public Page { // ID 0x86 https://imgur.com/o7Gyanj
+class WFCAllowData : public Page { // ID 0x86 https://imgur.com/o7Gyanj
 public:
+    static const PageId id = PAGE_WFC_DATA_ALLOW;
     WFCAllowData(); //806484a8
     ~WFCAllowData() override; //80648610 vtable 808bf994
     void OnInit() override; //0x28 806486bc
@@ -87,8 +90,9 @@ public:
 };
 size_assert(WFCAllowData, 0xc9c);
 
-class WFCDisconnect: public Page { //ID 0x87, fills YesNo PopUp with "Disconnect from Nintendo WFC"
+class WFCDisconnect : public Page { //ID 0x87, fills YesNo PopUp with "Disconnect from Nintendo WFC"
 public:
+    static const PageId id = PAGE_WFC_DISCONNECT;
     WFCDisconnect(); //80648de8
     ~WFCDisconnect() override; //80648e64 vtable 808bf924
     void OnInit() override; //80648ecc

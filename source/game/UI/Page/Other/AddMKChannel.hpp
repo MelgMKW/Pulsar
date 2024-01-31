@@ -8,7 +8,8 @@
 
 //_sinit_ at 805bf3b4
 namespace Pages {
-class MKChannelExplanation: public Page { //ID 0xca
+class MKChannelExplanation : public Page { //ID 0xca
+    static const PageId id = PAGE_MKCHANNEL_EXPLANATION;
     MKChannelExplanation(); //805bee4c
     ~MKChannelExplanation() override; //805bef64 vtable 808b7818
     PageId GetNextPage() const override; //0x10 805bf1ac
@@ -29,9 +30,9 @@ class MKChannelExplanation: public Page { //ID 0xca
 }; //total size 0xa30
 size_assert(MKChannelExplanation, 0xa30);
 
-class AddMKChannel: public Page { //ID 0xcb
+class AddMKChannel : public Page { //ID 0xcb
+    static const PageId id = PAGE_ADD_MKCHANNEL_PROMPT;
     AddMKChannel(); //805be66c
-
     ~AddMKChannel() override; //805be84c vtable 808b7894
     PageId GetNextPage() const override; //0x10 805beb34
     void OnInit() override; //0x28 805be8f8

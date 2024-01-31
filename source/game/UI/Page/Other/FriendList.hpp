@@ -8,7 +8,7 @@
 #include <game/UI/Ctrl/MessageWindowControl.hpp>
 
 //_sinit_ at 805d7f40
-class FriendButton: public PushButton {
+class FriendButton : public PushButton {
 public:
     FriendButton(); //805d380c
     ~FriendButton() override; //805d3850 vtable 808b8d04
@@ -30,7 +30,7 @@ public:
 };
 size_assert(FriendButton, 0x264);
 
-class JoinFriendButton: public PushButton {
+class JoinFriendButton : public PushButton {
 public:
     JoinFriendButton(); //805d5510 inlined
     ~JoinFriendButton() override; //805d554c vtable 808b8c0c
@@ -42,8 +42,9 @@ public:
 size_assert(JoinFriendButton, 0x254);
 
 namespace Pages {
-class FriendList: public Page { //ID 0x96
+class FriendList : public Page { //ID 0x96
 public:
+    static const PageId id = PAGE_FRIEND_LIST;
     FriendList(); //805d41c8
     ~FriendList() override; //805d43a8 vtable 808b8c58
     PageId GetNextPage() const override; //805d7dd0
@@ -87,8 +88,9 @@ public:
 };
 size_assert(FriendList, 0x1a64);
 
-class FriendInfo: public Page { //ID 0x97
+class FriendInfo : public Page { //ID 0x97
 public:
+    static const PageId id = PAGE_FRIEND_INFO;
     FriendInfo(); //805d585c
     ~FriendInfo() override; //805d5a14 vtable 808b8b90
     PageId GetNextPage() const override; //805d7db0
@@ -125,8 +127,9 @@ public:
 };
 size_assert(FriendInfo, 0x11b0);
 
-class FriendRemove: public Page { //ID 0x98
+class FriendRemove : public Page { //ID 0x98
 public:
+    static const PageId id = PAGE_FRIEND_REMOVE;
     FriendRemove(); //805d69ac
     ~FriendRemove() override; //805d6b04 vtable 808b8b14
     PageId GetNextPage() const override; //805d7d9c
@@ -152,8 +155,9 @@ public:
 };
 size_assert(FriendRemove, 0xb28);
 
-class FriendRemoving: public Page { //ID 0x99, the wait after clicking remove friend code on the previous page
+class FriendRemoving : public Page { //ID 0x99, the wait after clicking remove friend code on the previous page
 public:
+    static const PageId id = PAGE_FRIEND_REMOVING;
     enum Status {
         FRIEND_REMOVE_IDLE = 0,
         FRIEND_REMOVE_STARTING = 1,

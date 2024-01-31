@@ -9,8 +9,9 @@
 
 //_sinit_ at 80840dd8
 namespace Pages {
-class CourseSelect: public MenuInteractable { //ID 0x6F    
+class CourseSelect : public MenuInteractable { //ID 0x6F    
 public:
+    static const PageId id = PAGE_COURSE_SELECT;
     CourseSelect(); //80627bd8
     ~CourseSelect() override; //80840ce0 vtable 808d9450
     void OnInit() override; //0x28 808402f4

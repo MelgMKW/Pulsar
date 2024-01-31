@@ -6,7 +6,8 @@
 
 // Contributors: Melg
 namespace Pages {
-class VSInterface: public RaceHUD { //ID 0xE
+class VSInterface : public RaceHUD { //ID 0xE
+    static const PageId id = PAGE_P1VS_INTERFACE;
     VSInterface();//80624874
     ~VSInterface() override; //80633aa0 vtable 808be378
     int GetRuntimeTypeInfo() const override; //0x60 80633b0c

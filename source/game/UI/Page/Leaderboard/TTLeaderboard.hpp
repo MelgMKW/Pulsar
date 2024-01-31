@@ -3,10 +3,12 @@
 #include <kamek.hpp>
 #include <game/UI/Page/Page.hpp>
 #include <game/UI/Page/Leaderboard/VSLeaderboardUpdate.hpp>
+#include <game/System/Timer.hpp>
 
 namespace Pages {
-class TTLeaderboard: public VSLeaderboardUpdate { //ID 0x2E unsure why it inherits from VSLeaderboardUpdate, might be wrong and could be an intermediate class
+class TTLeaderboard : public VSLeaderboardUpdate { //unsure why it inherits from VSLeaderboardUpdate, might be wrong and could be an intermediate class
 public:
+    static const PageId id = PAGE_TT_LEADERBOARDS; //ID 0x2E
     TTLeaderboard(); //80625134
     ~TTLeaderboard() override; //8085e438 vtable 808daabc
     PageId GetNextPage() const override; //0x10 8085dc44

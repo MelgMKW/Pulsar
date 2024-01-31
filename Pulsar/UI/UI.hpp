@@ -7,6 +7,7 @@ namespace Pulsar {
 namespace UI {
 
 void ChangeImage(LayoutUIControl& control, const char* paneName, const char* tplName);
+const wchar_t* GetCustomMsg(s32 bmgId);
 
 //Simple enum of BMGs, making any change much easier as everything is centralized here
 enum BMG {

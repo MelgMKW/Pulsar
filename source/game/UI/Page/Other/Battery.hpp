@@ -9,6 +9,7 @@ namespace Pages {
 
 class BatteryMgr : public Page { //ID 0x55
 public:
+    static const PageId id = PAGE_BATTERY_MGR;
     BatteryMgr(); //805c35f8
     ~BatteryMgr() override; //805c363c vtable 808b7d5c
     PageId GetNextPage() const override; //0x10 805c3b6c
@@ -26,6 +27,7 @@ public:
 size_assert(BatteryMgr, 0x58);
 
 class LowBattery : public Page { //ID 0x56
+    static const PageId id = PAGE_LOW_BATTERY;
     LowBattery(); //805c37e0
     ~LowBattery() override; //805c3874 vtable 808b7cec
     void OnInit() override; //0x28 805c3900

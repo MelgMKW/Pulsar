@@ -16,35 +16,6 @@ namespace Pulsar {
 System* System::sInstance = nullptr;
 System::Inherit* System::inherit = nullptr;
 
-template<>
-inline void Config::CheckSection<BMGHeader>(const BMGHeader& bmg) const {
-    if(bmg.magic != 0x4D455347626D6731) Debug::FatalError(error);
-}
-
-template<>
-inline const Config& Config::GetSection() const {
-    return *this;
-}
-
-template<>
-const InfoHolder& Config::GetSection<InfoHolder>() const {
-    const InfoHolder& infoHolder = *reinterpret_cast<const InfoHolder*>(ut::AddU32ToPtr(this, this->header.offsetToInfo));
-    CheckSection(infoHolder);
-    return infoHolder;
-}
-template<>
-const CupsHolder& Config::GetSection<CupsHolder>() const {
-    const CupsHolder& cupsHolder =  *reinterpret_cast<const CupsHolder*>(ut::AddU32ToPtr(this, this->header.offsetToCups));
-    CheckSection(cupsHolder);
-    return cupsHolder;
-}
-template<>
-const BMGHeader& Config::GetSection<BMGHeader>() const {
-    const BMGHeader& bmg = *reinterpret_cast<const BMGHeader*>(ut::AddOffsetToPtr(this, this->header.offsetToBMG));
-    CheckSection(bmg);
-    return bmg;
-}
-
 
 //Create Pulsar
 Config* Config::LoadConfig(u32* readBytes) {
@@ -121,12 +92,12 @@ void System::InitIO() const {
 }
 #pragma suppress_warnings reset
 
-void System::InitSettings(const u16* totalTrophyCount) const {
-    Settings* settings = new (this->heap) Settings;
+void System::InitSettings(u32 pageCount, const u16* totalTrophyCount) const {
+    Settings::Mgr* settings = new (this->heap) Settings::Mgr;
     char path[IOS::ipcMaxPath];
-    snprintf(path, IOS::ipcMaxPath, "%s/%s", this->GetModFolder(), "Settings.bin");
-    settings->Init(totalTrophyCount, path); //params
-    Settings::sInstance = settings;
+    snprintf(path, IOS::ipcMaxPath, "%s/%s", this->GetModFolder(), "Settings.pul");
+    settings->Init(pageCount, totalTrophyCount, path); //params
+    Settings::Mgr::sInstance = settings;
 }
 
 asmFunc System::GetRaceCount() {

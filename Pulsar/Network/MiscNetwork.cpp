@@ -21,7 +21,7 @@ kmWrite32(0x8053F124, 0x38000000);
 void DecideCC(CustomSELECTHandler& handler) {
     if(CupsDef::IsRegsSituation()) reinterpret_cast<RKNet::SELECTHandler&>(handler).DecideEngineClass();
     else {
-        const u8 ccSetting = Settings::GetSettingValue(SETTINGSTYPE_HOST, SETTINGHOST_RADIO_CC);
+        const u8 ccSetting = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_CC);
         RKNet::Controller* controller = RKNet::Controller::sInstance;
         const RKNet::RoomType roomType = controller->roomType;
         u8 ccClass = 1; //1 100, 2 150, 3 mirror

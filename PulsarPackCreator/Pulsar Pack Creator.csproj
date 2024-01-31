@@ -23,6 +23,8 @@
 
   <ItemGroup>
     <None Remove="Resources\Pulsar.ico" />
+    <None Remove="Resources\space.jpg" />
+    <None Remove="Resources\transparent.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +37,11 @@
 
   <ItemGroup>
     <PackageReference Include="System.IO.Hashing" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\space.jpg" />
+    <Resource Include="Resources\transparent.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -27,6 +27,7 @@ class MultiKartBox : public LayoutUIControl { //doesn't seem to have any discern
 namespace Pages {
 class MultiKartSelect : public MenuInteractable { //ID 0x81
 public:
+    static const PageId id = PAGE_MULTIPLAYER_KART_SELECT;
     MultiKartSelect(); //8062b4f4
     ~MultiKartSelect() override; //8084a824 vtable 808d9b08
     void OnInit() override; //0x28 808496a4

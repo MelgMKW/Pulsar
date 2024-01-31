@@ -29,6 +29,7 @@ class FriendStatusButton : public PushButton {
 
 namespace Pages {
 class Approve2PWFC : public Page { //ID 0x8a, just a wrapper that activates Approve with "X and Y will connect to WFC together. Is this OK?"
+    static const PageId id = PAGE_APPROVE2P_WFC;
     Approve2PWFC(); //8064aef8
     ~Approve2PWFC(); //8064af74 vtable 808c000c
     PageId GetNextPage() const override; //8064b224
@@ -48,6 +49,7 @@ size_assert(Approve2PWFC, 0x68);
 
 class WFCMainMenu : public Page { //ID 0x8B
 public:
+    static const PageId id = PAGE_WFC_MAIN;
     WFCMainMenu(); //8064b640
     ~WFCMainMenu() override; //8064b850 vtable 808bff44 
     PageId GetNextPage() const override; //8064d688
@@ -81,6 +83,7 @@ size_assert(WFCMainMenu, 0xf34);
 
 class WFCModeSelect : public Page { //ID 0x8C
 public:
+    static const PageId id = PAGE_WFC_MODE_SELECT;
     WFCModeSelect(); //8064bfd8
     ~WFCModeSelect() override; //8064c170 vtable 808bfec8
     PageId GetNextPage() const override; //8064d674
@@ -109,6 +112,7 @@ size_assert(WFCModeSelect, 0xcb0);
 
 class WFCFriendsMenu : public Page { //ID 0x8D
 public:
+    static const PageId id = PAGE_WFC_FRIENDS_MENU;
     WFCFriendsMenu(); //8064c7c8
     ~WFCFriendsMenu() override; //8064c9d8 vtable 808bfe4c
     PageId GetNextPage() const override; //8064d660

@@ -18,6 +18,7 @@ public:
 
 namespace Pages {
 class MiiSelect : public MenuInteractable { //ID 0x60
+    static const PageId id = PAGE_MII_SELECT;
     MiiSelect(); //8062635c
     ~MiiSelect() override; //80849450 vtable 808d99c0
     void OnInit() override; //0x28 80847e40

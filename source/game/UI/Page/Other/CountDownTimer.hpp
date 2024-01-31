@@ -33,6 +33,7 @@ struct PlayerInfo {
 namespace Pages {
 class CountDownTimer : public Page { //ID 0x90
 public:
+    static const PageId id = PAGE_COUNTDOWN;
     CountDownTimer(); //8064fbdc 
     ~CountDownTimer() override; //8064fc70 vtable 808c069c
     int IsHomeMenuWorking() const override; //0x14 80651ba8 return 3, so home is disabled

@@ -49,6 +49,7 @@ public:
 
 class GlobeSearch : public Page { //ID 0x8f
 public:
+    static const PageId id = PAGE_GLOBE_SEARCH;
     GlobeSearch(); //80608060
     ~GlobeSearch(); //80608194 vtable 808baad0
     PageId GetNextPage() const override; //8060a670

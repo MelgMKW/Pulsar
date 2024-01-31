@@ -2,12 +2,11 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using static PulsarPackCreator.MsgWindow;
 
 namespace PulsarPackCreator
@@ -65,14 +64,22 @@ namespace PulsarPackCreator
 
         private void OpenPulFile(string path)
         {
-            BigEndianReader bin = new BigEndianReader(File.Open(path, FileMode.Open));
-            int magic = bin.ReadInt32();
-            bin.BaseStream.Position -= 4;
-            if (magic == 0x50554c53) ImportConfigFile(bin);
+            byte[] raw = File.ReadAllBytes(path);
+            int magic = raw[3] | (raw[2] << 8) | (raw[1] << 16) | (raw[0] << 24);
+  
+            if (magic == 0x50554c53)
+            {
+                ImportConfigFile(raw);
+            }
+                               
             else if (magic == 0x50554c44)
             {
-                bin.Close();
-                crashWindow.Load(path);
+                crashWindow.Show();
+                crashWindow.ImportCrash(raw);
+            }
+            else if(magic == 0x50554C4C)
+            {
+                ImportLeaderboard(raw);
             }
         }
 
@@ -217,6 +224,11 @@ namespace PulsarPackCreator
  
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new Uri("pack://application:,,,/Resources/transparent.png");
+            image.EndInit();
+            Application.Current.Resources["imageBg"] = image;           
             SettingsWindow.ApplyColorMode();           
         }
 

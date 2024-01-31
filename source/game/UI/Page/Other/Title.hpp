@@ -30,6 +30,7 @@ size_assert(TitleMovieControl, 0x174);
 namespace Pages {
 class Title : public Page { //ID 0x57
 public:
+    static const PageId id = PAGE_TITLE;
     Title(); //8063aa08
     ~Title() override; //8063aae4 vtable 808beea8
     PageId GetNextPage() const override; //0x10 8063c398
@@ -57,6 +58,7 @@ public:
 size_assert(Title, 0x350);
 
 class BlurryTitle : public Page { //ID 0x58 behind main menu
+    static const PageId id = PAGE_BLURRY_TITLE;
     BlurryTitle(); //8063b514
     ~BlurryTitle() override; //8063b560 vtable 808bee44
     void OnInit() override; //0x28 8062d5d4
@@ -69,6 +71,7 @@ class BlurryTitle : public Page { //ID 0x58 behind main menu
 size_assert(BlurryTitle, 0x1c8);
 
 class TitleMovie : public Page { //ID 0x59
+    static const PageId id = PAGE_TITLE_MOVIE;
     TitleMovie(); //8063bb08
     ~TitleMovie() override; //8063bb6c vtable 808beda4
     void OnInit() override; //0x28 8063bbe4
@@ -86,7 +89,8 @@ class TitleMovie : public Page { //ID 0x59
 }; //0x1d0
 size_assert(TitleMovie, 0x1d0);
 
-class BlinkingPressA : public Page { //ID the blinking "press A" on demo
+class BlinkingPressA : public Page { //ID 0x5F the blinking "press A" on demo
+    static const PageId id = PAGE_BLINKING_PRESS_A;
     BlinkingPressA(); //8063c0ac
     ~BlinkingPressA() override; //8063c110 vtable 808bed40
     void OnInit() override; //0x28 8063c188

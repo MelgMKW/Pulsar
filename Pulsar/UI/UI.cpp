@@ -67,6 +67,11 @@ const u8* GetFont(const BMGHolder& normalHolder, s32 msgId) {
 }
 kmBranch(0x805f8d2c, GetFont);
 
+const wchar_t* GetCustomMsg(s32 bmgId) {
+    const BMGHolder& bmg = System::sInstance->GetBMG();
+    return GetMsgByMsgId(bmg, GetMsgIdById(bmg, bmgId));
+}
+
 
 /*
 void End(Pages::RaceHUD* page) {

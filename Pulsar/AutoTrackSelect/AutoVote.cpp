@@ -52,7 +52,7 @@ void AutoVote::OnUpdate() {
     CupsDef* cups = CupsDef::sInstance;
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
     if(status == 6) {
-        Pages::MessageBox* messageBox = sectionMgr->curSection->Get<Pages::MessageBox>(PAGE_MESSAGEBOX);
+        Pages::MessageBox* messageBox = sectionMgr->curSection->Get<Pages::MessageBox>();
         messageBox->Reset();
         messageBox->SetMessageWindowText(0xfb2);
         const PtmfHolder_1A<Page, void, Pages::Click&>& onMessageClickPtmf = this->onDisconnectHandler;

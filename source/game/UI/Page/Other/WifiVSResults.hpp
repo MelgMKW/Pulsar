@@ -9,7 +9,7 @@
 namespace Pages {
 
 //_sinit_ at 806467ac
-class WifiAwardResultItem: public LayoutUIControl {
+class WifiAwardResultItem : public LayoutUIControl {
 public:
     WifiAwardResultItem(); //806455dc
     ~WifiAwardResultItem(); //80645618 vtable 808bf854
@@ -18,8 +18,9 @@ public:
     const char* GetClassName() const override; //0x2c 806455cc
     void Load(u8 idx, bool hasTwoColumns); //80645670 bools depends on isTeamVS and localPlayerCount
 };
-class WiFiVSResults: public Page { //ID 0x44
+class WiFiVSResults : public Page { //ID 0x44
 public:
+    static const PageId id = PAGE_WIFI_VS_RESULTS;
     WiFiVSResults(); //80645bc8
     ~WiFiVSResults() override; //80645c8c vtable 808bf7e4
     PageId GetNextPage() const override; //80646750

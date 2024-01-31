@@ -5,8 +5,9 @@
 #include <game/UI/Page/RaceMenu/RaceMenu.hpp>
 
 namespace Pages {
-class QuitConfirmation: public RaceMenu { //ID 0x2C
+class QuitConfirmation : public RaceMenu { //ID 0x2C
 public:
+    static const PageId id = PAGE_2P_QUIT_CONFIRMATION;
     QuitConfirmation(); //806250f0
     ~QuitConfirmation() override; //806324f4 vtable 808bd3c4
     int GetRuntimeTypeInfo() const override; //0x60 80632560

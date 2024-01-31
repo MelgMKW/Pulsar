@@ -34,14 +34,14 @@ public:
 //Collects the ScnObj to be rendered in the scene graph, and determines its rendering order.
 class ScnObjGather : public IScnObjGather {
 public:
-    ScnObj** opaArray;    //ScnObj* objects to be rendered by DrawOpa are gathered together
-    ScnObj** xluArray;    //ScnObj* objects to be rendered by DrawXlu are gathered together
+    ScnObj** opaArray;    //ScnObj objects to be rendered by DrawOpa are gathered together
+    ScnObj** xluArray;    //ScnObj objects to be rendered by DrawXlu are gathered together
     u32      arraySize;
     u32      opaArrayObjCount;
     u32      xluArrayObjCount;
 
     ScnObjGather(ScnObj** opaBuffer, ScnObj** xluBuffer, u32 objCount); //80070bf0
-    virtual ~ScnObjGather(); //80070c30
+    virtual ~ScnObjGather(); //80070c30 vtable 80273180
     CullingStatus Add(ScnObj* obj, bool addToOpa, bool addToXlu) override; //8006fed0
     void Clear() override; //80070c20
     void ZSort() override; //8006fff0

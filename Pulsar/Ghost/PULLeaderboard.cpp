@@ -1,10 +1,12 @@
 #include <Ghost/PULLeaderboard.hpp>
 #include <Ghost/GhostManager.hpp>
+#include <SlotExpansion/UI/ExpansionUIMisc.hpp>
 #include <IO/IO.hpp>
 
 
 namespace Pulsar {
 namespace Ghosts {
+const char Leaderboard::filePathFormat[] = "%s/ldb.pul";
 //CTOR to build a leaderboard from scratch
 Leaderboard::Leaderboard() {
     memset(this, 0, sizeof(Leaderboard));
@@ -14,32 +16,40 @@ Leaderboard::Leaderboard() {
 }
 
 //CTOR to build it from the raw file
-Leaderboard::Leaderboard(const char* folderPath, u32 crc32) {
-    char filePath[IOS::ipcMaxPath];
-    snprintf(filePath, IOS::ipcMaxPath, "%s/ldb.bin", folderPath);
+Leaderboard::Leaderboard(const char* folderPath, PulsarId id) {
+    char path[IOS::ipcMaxPath];
+    snprintf(path, IOS::ipcMaxPath, filePathFormat, folderPath);
     IO* io = IO::sInstance;;
-    s32 ret = io->OpenModFile(filePath, FILE_MODE_READ_WRITE);
+    s32 ret = io->OpenModFile(path, FILE_MODE_READ_WRITE);
     if(ret) ret = io->Read(sizeof(Leaderboard), this);
 
     if(!ret || this->crc32 != crc32 || magic != fileMagic) {
-        System::sInstance->taskThread->Request(&Leaderboard::CreateFile, crc32, 0);
+        System::sInstance->taskThread->Request(&Leaderboard::CreateFile, id, 0);
         new (this) Leaderboard;
-        this->crc32 = crc32;
+        this->SetTrack(id);
     }
     io->Close();
 }
 
 //This is its own function so that the file can be created async 
-void Leaderboard::CreateFile(u32 crc32) {
-    char filePath[IOS::ipcMaxPath];
-    snprintf(filePath, IOS::ipcMaxPath, "%s/ldb.bin", Manager::folderPath);
+void Leaderboard::CreateFile(PulsarId id) {
+    char path[IOS::ipcMaxPath];
+    snprintf(path, IOS::ipcMaxPath, filePathFormat, Manager::folderPath);
     IO* io = IO::sInstance;;
-    io->CreateAndOpen(filePath, FILE_MODE_READ_WRITE);
+    io->CreateAndOpen(path, FILE_MODE_READ_WRITE);
     alignas(0x20) Leaderboard tempCopy;
-    tempCopy.crc32 = crc32;
+    tempCopy.SetTrack(id);
     io->Overwrite(sizeof(Leaderboard), &tempCopy);
     io->Close();
 };
+
+void Leaderboard::SetTrack(PulsarId id) {
+    this->crc32 = CupsDef::sInstance->GetCRC32(id);
+    wchar_t trackName[0x100];
+    UI::GetTrackBMG(trackName, id);
+    snprintf(this->name, trackNameLen, "%ls", trackName);
+}
+
 
 //Get ldb position
 s32 Leaderboard::GetPosition(const Timer& other) const {
@@ -53,11 +63,11 @@ s32 Leaderboard::GetPosition(const Timer& other) const {
 }
 
 //updates the ldb with a new entry and a rkg crc32
-void Leaderboard::Update(u32 position, const TimeEntry& entry, u32 crc32) {
+void Leaderboard::Update(u32 position, const TimeEntry& entry, u32 rkgCRC32) {
     const TTMode mode = System::sInstance->ttMode;
     if(position != ENTRY_FLAP) { //if 10 then flap
         for(int i = ENTRY_10TH; i > position; i--) memcpy(&this->entries[mode][i], &this->entries[mode][i - 1], sizeof(PULTimeEntry));
-        this->entries[mode][position].rkgCRC32 = crc32;
+        this->entries[mode][position].rkgCRC32 = rkgCRC32;
     }
     memcpy(&this->entries[mode][position].mii, &entry.miiData, sizeof(RFL::StoreData));
     this->entries[mode][position].minutes = entry.timer.minutes;
@@ -71,10 +81,10 @@ void Leaderboard::Update(u32 position, const TimeEntry& entry, u32 crc32) {
 
 //saves and writes to the file
 void Leaderboard::Save(const char* folderPath) {
-    char filePath[IOS::ipcMaxPath];
-    snprintf(filePath, IOS::ipcMaxPath, "%s/ldb.bin", folderPath);
+    char path[IOS::ipcMaxPath];
+    snprintf(path, IOS::ipcMaxPath, filePathFormat, folderPath);
     IO* file = IO::sInstance;;
-    file->OpenModFile(filePath, FILE_MODE_WRITE);
+    file->OpenModFile(path, FILE_MODE_WRITE);
     file->Overwrite(sizeof(Leaderboard), this);
     file->Close();
 }

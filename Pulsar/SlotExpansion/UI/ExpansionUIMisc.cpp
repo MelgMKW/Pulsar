@@ -6,7 +6,7 @@
 #include <game/GlobalFunctions.hpp>
 #include <SlotExpansion/CupsDef.hpp>
 #include <SlotExpansion/UI/ExpCupSelect.hpp>
-#include <UI/UI.hpp>
+#include <SlotExpansion/UI/ExpansionUIMisc.hpp>
 
 
 namespace Pulsar {
@@ -26,7 +26,7 @@ void LoadCorrectTrackListBox(ControlLoader& loader, const char* folder, const ch
 kmCall(0x807e5f24, LoadCorrectTrackListBox);
 
 //BMG
-int GetTrackBMG(PulsarId pulsarId) {
+int GetTrackBMGId(PulsarId pulsarId) {
     u32 bmgId;
     const u32 realId = CupsDef::ConvertTrack_PulsarIdToRealId(pulsarId);
     if(CupsDef::IsReg(pulsarId)) bmgId = realId > 32 ? BMG_BATTLE : BMG_REGS;
@@ -35,11 +35,11 @@ int GetTrackBMG(PulsarId pulsarId) {
 }
 
 int GetTrackBMGByRowIdx(u32 cupTrackIdx) {
-    const Pages::CupSelect* cup = SectionMgr::sInstance->curSection->Get<Pages::CupSelect>(PAGE_CUP_SELECT);
+    const Pages::CupSelect* cup = SectionMgr::sInstance->curSection->Get<Pages::CupSelect>();
     PulsarCupId curCupId;
     if(cup == nullptr) curCupId = PULSARCUPID_FIRSTREG;
     else curCupId = static_cast<PulsarCupId>(cup->ctrlMenuCupSelectCup.curCupID);
-    return GetTrackBMG(CupsDef::ConvertTrack_PulsarCupToTrack(curCupId) + cupTrackIdx);
+    return GetTrackBMGId(CupsDef::ConvertTrack_PulsarCupToTrack(curCupId) + cupTrackIdx);
 }
 kmWrite32(0x807e6184, 0x7FA3EB78);
 kmCall(0x807e6188, &GetTrackBMGByRowIdx);
@@ -47,7 +47,7 @@ kmWrite32(0x807e6088, 0x7F63DB78);
 kmCall(0x807e608c, GetTrackBMGByRowIdx);
 
 int GetCurTrackBMG() {
-    return GetTrackBMG(CupsDef::sInstance->winningCourse);
+    return GetTrackBMGId(CupsDef::sInstance->winningCourse);
 }
 
 void SetVSIntroBmgId(LayoutUIControl* trackName) {
@@ -72,7 +72,7 @@ kmWrite32(0x80643004, 0x3be000ff);
 kmWrite32(0x80644104, 0x3b5b0000);
 void CourseVoteBMG(VoteControl* vote, bool isCourseIdInvalid, PulsarId courseVote, MiiGroup& miiGroup, u32 playerId, bool isLocalPlayer, u32 team) {
     u32 bmgId = courseVote;
-    if(bmgId != 0x1101 && bmgId < 0x2498) bmgId = GetTrackBMG(courseVote);
+    if(bmgId != 0x1101 && bmgId < 0x2498) bmgId = GetTrackBMGId(courseVote);
     vote->Fill(isCourseIdInvalid, bmgId, miiGroup, playerId, isLocalPlayer, team);
 }
 kmCall(0x806441b8, CourseVoteBMG);
@@ -90,7 +90,7 @@ kmCall(0x8083d02c, BattleArenaBMGFix);
 void WinningTrackBMG(PulsarId winningCourse) {
     register Pages::Vote* vote;
     asm(mr vote, r27;);
-    vote->trackBmgId = GetTrackBMG(winningCourse);
+    vote->trackBmgId = GetTrackBMGId(winningCourse);
 }
 kmCall(0x80644344, WinningTrackBMG);
 
@@ -107,7 +107,7 @@ void ExtCupSelectCupInitSelf(CtrlMenuCupSelectCup* cups) {
         ExpCupSelect::UpdateCupData(id, *buttons[i]);
         buttons[i]->SetOnClickHandler(cups->onCupButtonClickHandler, 0);
         buttons[i]->SetOnSelectHandler(cups->onCupButtonSelectHandler);
-        buttons[i]->SetPlayerBitfield(SectionMgr::sInstance->curSection->Get<Pages::CupSelect>(PAGE_CUP_SELECT)->GetPlayerBitfield());
+        buttons[i]->SetPlayerBitfield(SectionMgr::sInstance->curSection->Get<Pages::CupSelect>()->GetPlayerBitfield());
     }
     buttons[cupsDef->lastSelectedCupButtonIdx]->SelectInitialButton(0);
 };
@@ -128,7 +128,7 @@ void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
         cur.SetRelativePosition(courseCups->positionAndscale[1]);
     }
     const Section* curSection = SectionMgr::sInstance->curSection;
-    Pages::CupSelect* cup = curSection->Get<Pages::CupSelect>(PAGE_CUP_SELECT);
+    Pages::CupSelect* cup = curSection->Get<Pages::CupSelect>();
     NoteModelControl* positionArray = cup->modelPosition;
 
     switch(cup->extraControlNumber) {
@@ -145,7 +145,7 @@ void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
         case(1):
             positionArray[0].positionAndscale[1].position.x = -32.0f;
             positionArray[0].positionAndscale[1].position.y = -32.0f;
-            positionArray = curSection->Get<Pages::CourseSelect>(PAGE_COURSE_SELECT)->modelPosition;
+            positionArray = curSection->Get<Pages::CourseSelect>()->modelPosition;
             positionArray[0].positionAndscale[1].position.x = -32.0f;
             positionArray[0].positionAndscale[1].position.y = -32.0f;
             break;
@@ -175,8 +175,8 @@ kmWritePointer(0x808d3190, ExtCourseSelectCupInitSelf); //807e45c0
 void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
     const CupsDef* cupsDef = CupsDef::sInstance;
     const Section* curSection = SectionMgr::sInstance->curSection;
-    const Pages::CupSelect* cupPage = curSection->Get<Pages::CupSelect>(PAGE_CUP_SELECT);
-    Pages::CourseSelect* coursePage = curSection->Get<Pages::CourseSelect>(PAGE_COURSE_SELECT);
+    const Pages::CupSelect* cupPage = curSection->Get<Pages::CupSelect>();
+    Pages::CourseSelect* coursePage = curSection->Get<Pages::CourseSelect>();
     //channel ldb stuff ignored
     const u32 cupId = cupPage->clickedCupId;
     for(int i = 0; i < 4; ++i) {

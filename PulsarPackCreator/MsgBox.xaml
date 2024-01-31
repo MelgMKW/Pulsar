@@ -6,11 +6,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         ResizeMode="CanResize"
-        Title="" Height="160" Width="420" Background="White"
+        Title="" Height="160" Width="420"
         HorizontalAlignment="Center" VerticalAlignment="Center"
         Deactivated="MsgWindowDeactivated"
         WindowStartupLocation="CenterOwner"
         Closing="MsgWindowClosing"
+        Background="{DynamicResource AppBg}"
         >
     <Window.Resources>
         <Style TargetType="TextBox">
@@ -34,18 +35,20 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            
         </Style>
+        <ImageBrush x:Key="msgBg" ImageSource="{DynamicResource imageBg}" />
     </Window.Resources>
 
 
 
 
-    <Grid Background="White">
+    <Grid Background="{DynamicResource msgBg}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <Canvas Background="{DynamicResource AppBg}" Grid.Row="1" Margin="0,0,0,0"/>
+        <Canvas Grid.Row="1" Margin="0,0,0,0"/>
         
         <TextBox Name="TextSpace" Text="Temp" IsReadOnly="True" BorderThickness="2" BorderBrush="Black"
                 FontSize="14" MinHeight="60" MinWidth="360" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"

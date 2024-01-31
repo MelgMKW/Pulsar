@@ -6,8 +6,9 @@
 
 
 namespace Pages {
-class TTPause: public RaceMenu { //ID 0x19
+class TTPause : public RaceMenu { //ID 0x19
 public:
+    static const PageId id = PAGE_TT_PAUSE_MENU;
     TTPause(); //80624be4 
     ~TTPause() override; //80633498 vtable 808bde6c
     int GetRuntimeTypeInfo() const override; //0x60 80633504

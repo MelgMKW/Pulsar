@@ -8,6 +8,7 @@
 namespace Pages {
 
 class MainMenu : public MenuInteractable { //ID 0x5a
+    static const PageId id = PAGE_MAIN_MENU;
     MainMenu(); //80625da0
     ~MainMenu() override; //80851c94 vtable 808da0a0 
     void OnInit() override; //0x28 808503dc

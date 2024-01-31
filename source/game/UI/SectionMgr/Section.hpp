@@ -76,8 +76,18 @@ public:
     MoviePlayer* moviePlayer; //0x400
     FriendList* friendList; //0x404
 
+
     template<class T>
-    inline T* Get(PageId id) const { return static_cast<T*>(this->pages[id]); }
+    inline T* Get() const {
+        static_assert(is_base_of<Page, T>::value, "Not a Page");
+        return static_cast<T*>(this->pages[T::id]);
+    }
+
+    template<class T>
+    inline T* Get(PageId id) const {
+        static_assert(is_base_of<Page, T>::value, "Not a Page");
+        return static_cast<T*>(this->pages[id]);
+    }
     inline void Set(Page* t, PageId id) { this->pages[id] = t; }
 };//Total Size 0x408
 size_assert(Section, 0x408);

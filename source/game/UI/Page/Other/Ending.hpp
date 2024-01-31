@@ -4,7 +4,7 @@
 #include <game/UI/Page/Page.hpp>
 
 //_sinit_ at 805cd91c
-class StaffRollControl: public LayoutUIControl {
+class StaffRollControl : public LayoutUIControl {
     //no ctor
     ~StaffRollControl() override; //805cae24 vtable 808b8558
     void InitSelf() override; //0x18 805caf30
@@ -23,7 +23,7 @@ class StaffRollText {
     StaffRollControl developpers;
 }; //0x2e8
 
-class EndingMovieControl: public LayoutUIControl {
+class EndingMovieControl : public LayoutUIControl {
     EndingMovieControl(); //805cbb0c
     ~EndingMovieControl() override; //805cbb48 vtable 808b84a0
     void InitSelf() override; //0x18 805cbc98
@@ -36,7 +36,8 @@ class EndingMovieControl: public LayoutUIControl {
 }; //0x174
 
 namespace Pages {
-class StaffRoll: public Page { //ID 0X3d
+class StaffRoll : public Page { //ID 0X3d
+    static const PageId id = PAGE_STAFF_ROLL;
     StaffRoll(); //805cafd8
     ~StaffRoll() override; //805cb144 vtable 808b84dc
     void OnInit() override; //0x28 805cb1c4
@@ -64,7 +65,8 @@ size_assert(StaffRoll, 0xa68);
 
 
 
-class EndingMovie: public Page { //ID 0x3e
+class EndingMovie : public Page { //ID 0x3e
+    static const PageId id = PAGE_ENDING_MOVIE;
     EndingMovie(); //805cbd88
     ~EndingMovie() override; //805cbe24 vtable 808b8424
     void OnInit() override; //0x28 805cbea4 

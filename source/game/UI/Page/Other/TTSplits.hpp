@@ -7,8 +7,9 @@
 
 //_sinit_TTSplitsPAGE_cpp; //80856264
 namespace Pages {
-class TTSplits: public Page { //ID 0x2D
+class TTSplits : public Page { //ID 0x2D
 public:
+    static const PageId id = PAGE_TT_SPLITS;
     TTSplits(); //808556e4
     ~TTSplits() override; //80855864 vtable 808da5dc
     PageId GetNextPage() const override; //0x10 808561dc

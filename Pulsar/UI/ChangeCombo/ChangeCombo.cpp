@@ -40,26 +40,26 @@ void ExpVR::OnInit() {
 
     const Section* section = SectionMgr::sInstance->curSection;
 
-    Pages::CountDownTimer* countdownPage = section->Get<Pages::CountDownTimer>(PAGE_COUNTDOWN);
+    Pages::CountDownTimer* countdownPage = section->Get<Pages::CountDownTimer>();
     CountDown* timer = &countdownPage->countdown;
 
-    Pages::CharacterSelect* charPage = section->Get<Pages::CharacterSelect>(PAGE_CHARACTER_SELECT);
+    Pages::CharacterSelect* charPage = section->Get<Pages::CharacterSelect>();
     charPage->timer = timer;
     charPage->ctrlMenuCharSelect.timer = timer;
 
-    Pages::KartSelect* kartPage = section->Get<Pages::KartSelect>(PAGE_KART_SELECT);
+    Pages::KartSelect* kartPage = section->Get<Pages::KartSelect>();
     if(kartPage != nullptr) kartPage->timer = timer;
 
-    Pages::BattleKartSelect* kartBattlePage = section->Get<Pages::BattleKartSelect>(PAGE_BATTLE_KART_SELECT);
+    Pages::BattleKartSelect* kartBattlePage = section->Get<Pages::BattleKartSelect>();
     if(kartBattlePage != nullptr) kartBattlePage->timer = timer;
 
-    Pages::MultiKartSelect* multiKartPage = section->Get<Pages::MultiKartSelect>(PAGE_MULTIPLAYER_KART_SELECT);
+    Pages::MultiKartSelect* multiKartPage = section->Get<Pages::MultiKartSelect>();
     if(multiKartPage != nullptr) multiKartPage->timer = timer;
 
-    Pages::DriftSelect* driftPage = section->Get<Pages::DriftSelect>(PAGE_DRIFT_SELECT);
+    Pages::DriftSelect* driftPage = section->Get<Pages::DriftSelect>();
     if(driftPage != nullptr) driftPage->timer = timer;
 
-    Pages::MultiDriftSelect* multiDriftPage = section->Get<Pages::MultiDriftSelect>(PAGE_MULTIPLAYER_DRIFT_SELECT);
+    Pages::MultiDriftSelect* multiDriftPage = section->Get<Pages::MultiDriftSelect>();
     if(multiDriftPage != nullptr) {
         multiDriftPage->nextSectionOnButtonClick = SECTION_NONE;
         multiDriftPage->timer = timer;
@@ -86,19 +86,19 @@ void ExpVR::RandomizeCombo(PushButton& randomComboButton, u32 hudSlotId) {
         sectionParams->combos[hudId].selCharacter = character;
         sectionParams->combos[hudId].selKart = kart;
 
-        ExpCharacterSelect* charSelect = section->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT); //guaranteed to exist on this page
+        ExpCharacterSelect* charSelect = section->Get<ExpCharacterSelect>(); //guaranteed to exist on this page
         charSelect->randomizedCharIdx[hudId] = character;
         charSelect->rolledCharIdx[hudId] = character;
         charSelect->rouletteCounter = ExpVR::randomDuration;
         charSelect->ctrlMenuCharSelect.selectedCharacter = character;
         charSelect->controlsManipulatorManager.inaccessible = true;
-        ExpBattleKartSelect* battleKartSelect = section->Get<ExpBattleKartSelect>(PAGE_BATTLE_KART_SELECT);
+        ExpBattleKartSelect* battleKartSelect = section->Get<ExpBattleKartSelect>();
         if(battleKartSelect != nullptr) {
             battleKartSelect->selectedKart = random.NextLimited(2);
             battleKartSelect->controlsManipulatorManager.inaccessible = true;
         }
 
-        ExpKartSelect* kartSelect = section->Get<ExpKartSelect>(PAGE_KART_SELECT);
+        ExpKartSelect* kartSelect = section->Get<ExpKartSelect>();
         if(kartSelect != nullptr) {
             kartSelect->rouletteCounter = ExpVR::randomDuration;
             kartSelect->randomizedKartPos = randomizedKartPos;
@@ -106,7 +106,7 @@ void ExpVR::RandomizeCombo(PushButton& randomComboButton, u32 hudSlotId) {
             kartSelect->controlsManipulatorManager.inaccessible = true;
         }
 
-        ExpMultiKartSelect* multiKartSelect = section->Get<ExpMultiKartSelect>(PAGE_MULTIPLAYER_KART_SELECT);
+        ExpMultiKartSelect* multiKartSelect = section->Get<ExpMultiKartSelect>();
         if(multiKartSelect != nullptr) {
             multiKartSelect->rouletteCounter = ExpVR::randomDuration;
             multiKartSelect->rolledKartPos[0] = randomizedKartPos;
@@ -281,7 +281,7 @@ void ExpMultiKartSelect::BeforeControlUpdate() {
 }
 
 void DriftSelectBeforeControlUpdate(Pages::DriftSelect* driftSelect) {
-    ExpCharacterSelect* charSelect = SectionMgr::sInstance->curSection->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT);
+    ExpCharacterSelect* charSelect = SectionMgr::sInstance->curSection->Get<ExpCharacterSelect>();
     if(charSelect->rouletteCounter != -1 && driftSelect->currentState == 0x4) {
         driftSelect->controlsManipulatorManager.inaccessible = true;
         PushButton* autoButton = driftSelect->controlGroup.GetControl<PushButton>(1);
@@ -298,7 +298,7 @@ kmWritePointer(0x808D9DF8, DriftSelectBeforeControlUpdate);
 void MultiDriftSelectBeforeControlUpdate(Pages::MultiDriftSelect* multiDriftSelect) {
 
     SectionMgr* sectionMgr = SectionMgr::sInstance;
-    ExpCharacterSelect* charSelect = sectionMgr->curSection->Get<ExpCharacterSelect>(PAGE_CHARACTER_SELECT);
+    ExpCharacterSelect* charSelect = sectionMgr->curSection->Get<ExpCharacterSelect>();
     if(charSelect->rouletteCounter != -1 && multiDriftSelect->currentState == 0x4) {
         multiDriftSelect->controlsManipulatorManager.inaccessible = true;
         for(int i = 0; i < sectionMgr->sectionParams->localPlayerCount; ++i) {
@@ -315,7 +315,7 @@ void MultiDriftSelectBeforeControlUpdate(Pages::MultiDriftSelect* multiDriftSele
 kmWritePointer(0x808D9C10, MultiDriftSelectBeforeControlUpdate);
 
 void AddCharSelectLayer(Pages::CountDownTimer* page, PageId id, u32 r5) {
-    const ExpVR* votingPage = SectionMgr::sInstance->curSection->Get<ExpVR>(PAGE_VR); //always present when 0x90 is present
+    const ExpVR* votingPage = SectionMgr::sInstance->curSection->Get<ExpVR>(); //always present when 0x90 is present
     if(votingPage->comboButtonState != 0) id = PAGE_CHARACTER_SELECT;
     return page->AddPageLayer(id, r5);
 }
@@ -339,7 +339,7 @@ kmCall(0x8084e670, LoadCorrectPageAfterDrift);
 
 void LoadCorrectPageAfterMultiDrift(Pages::MultiDriftSelect* page, u32 animDirection, float animLength) {
     page->EndStateAnimated(animLength, animDirection);
-    if(SectionMgr::sInstance->curSection->Get<ExpVR>(PAGE_VR) != nullptr) {
+    if(SectionMgr::sInstance->curSection->Get<ExpVR>() != nullptr) {
         page->nextPageId = IsBattle() ? PAGE_BATTLE_CUP_SELECT : PAGE_CUP_SELECT;
     }
 }

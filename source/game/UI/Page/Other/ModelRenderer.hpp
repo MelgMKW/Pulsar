@@ -45,6 +45,7 @@ class ModelRendererValuesHolder {
 namespace Pages {
 class ModelRenderer : public Page { //ID 0x7f
 public:
+    static const PageId id = PAGE_MODEL_RENDERER;
     ModelRenderer(); //805f4fd0
     ~ModelRenderer() override; //805f51c8 vtable 808b9c00
     void OnInit() override; //0x28 805f5230

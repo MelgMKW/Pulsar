@@ -9,6 +9,7 @@
 namespace Pages {
 class DisconnectMgr : public Page { //ID 0x88, checks if disconnect has occured and changes section accordingly
 public:
+    static const PageId id = PAGE_DISCONNECT_MGR;
     DisconnectMgr(); //80649470
     ~DisconnectMgr() override; //806494bc vtable 808bfbb4
     void OnInit() override; //0x28 80649524
@@ -22,6 +23,7 @@ size_assert(DisconnectMgr, 0x58);
 
 class DisconnectError : public Page { //ID 0x89 error on disconnection "86420" for example
 public:
+    static const PageId id = PAGE_DISCONNECT_ERROR;
     DisconnectError(); //80649988
     ~DisconnectError() override; //80649a14 vtable 808bfb44 
     int IsHomeMenuWorking() const override; //80649d6c

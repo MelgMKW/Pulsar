@@ -7,17 +7,20 @@
 
 
 namespace Pulsar {
+namespace UI { class SettingsPanel; }
+namespace Settings {
+
 //Contains all the settings. 
-enum SettingsType {
+enum Type {
     SETTINGSTYPE_MENU,
     SETTINGSTYPE_RACE,
     SETTINGSTYPE_HOST
 };
 
-class SettingsHook : public DoFuncsHook {
+class Hook : public DoFuncsHook {
     static DoFuncsHook* settingsHooks;
 public:
-    SettingsHook(Func& f) : DoFuncsHook(f, &settingsHooks) {}
+    Hook(Func& f) : DoFuncsHook(f, &settingsHooks) {}
     static void exec() { DoFuncsHook::exec(settingsHooks); }
 };
 
@@ -25,80 +28,148 @@ struct TrackTrophy {
     u32 crc32;
     bool hastrophy[4];
 };
-struct Trophies {
-    Trophies() : magic(tropMagic) {}
-    u32 magic;
+
+
+struct Page {
+    union {
+        struct {
+            u8 radioSetting[6];
+            u8 scrollSetting[6];
+        };
+        u8 settings[12];
+    };
+};
+
+struct PagesHolder {
+    static const u32 pageMagic = 'PAGE';
+    Pulsar::SectionHeader header;
+    u32 pageCount;
+    Page pages[1];
+};
+
+struct MiscParams {
+    static const u32 miscMagic = 'MISC';
+    Pulsar::SectionHeader header;
+    u32 reserved[20];
+    PulsarCupId lastSelectedCup;
+    u32 trackCount;
+};
+
+struct TrophiesHolder {
+    static const u32 tropMagic = 'TROP';
+    Pulsar::SectionHeader header;
     u16 trophyCount[4];
     TrackTrophy trophies[1];
-    static const u32 tropMagic = 'TROP';
 };
-namespace UI { class SettingsPanel; }
 
-class Settings {
-protected: //so that it can be inherited from
-    class alignas(0x20) Binary {
-        struct Page {
-            union {
-                struct {
-                    u8 radioSetting[6];
-                    u8 scrollSetting[6];
-                };
-                u8 settings[12];
-            };
-        };
-        Binary(u32 curVersion) : magic(binMagic), version(curVersion), lastSelectedCup(PULSARCUPID_NONE) {}
-        u32 magic;
-        u32 version; //just in case more than 255 versions
-        Page pages[UI::SettingsPanel::maxPageCount];
-        u32 reserved[20];
-        PulsarCupId lastSelectedCup;
-        u32 trackCount;
-        Trophies trophiesHolder;
-        friend class Settings;
-    };
+struct BinaryHeader {
+    u32 magic;
+    u32 version;
+    u32 fileSize;
+    u32 offsetToPages;
+    u32 offsetToMiscParams;
+    u32 offsetToTrophies;
+};
+
+class alignas(0x20) Binary {
+    static const u32 binMagic = 'PULP';
+
+    Binary(u32 curVersion, u32 pageCount) {
+        u32 trackCount = CupsDef::sInstance->GetEffectiveTrackCount();
+
+        header.magic = binMagic;
+        header.version = curVersion;
+        header.offsetToPages = offsetof(Binary, pages);
+        header.offsetToMiscParams = header.offsetToPages + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1);
+        header.offsetToTrophies = header.offsetToMiscParams + sizeof(MiscParams);
+        header.fileSize = header.offsetToTrophies + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1);
+
+        PagesHolder& pages = this->GetSection<PagesHolder>();
+        pages.header.magic = PagesHolder::pageMagic;
+        pages.pageCount = pageCount;
+        MiscParams& params = this->GetSection<MiscParams>();
+        params.header.magic = MiscParams::miscMagic;
+        params.trackCount = trackCount;
+        params.lastSelectedCup = PULSARCUPID_NONE;
+        this->GetSection<TrophiesHolder>().header.magic = TrophiesHolder::tropMagic;
+
+    }
+
+    template <typename T>
+    inline T& GetSection();
+    template <class T>
+    bool CheckSection(const T& t) { if(t.header.magic != T::magic) return false; return true; }
+
+    BinaryHeader header;
+    PagesHolder pages;
+    MiscParams misc;
+    TrophiesHolder trophies;
+    friend class Mgr;
+};
+
+template<>
+inline PagesHolder& Binary::GetSection<PagesHolder>() {
+    return *reinterpret_cast<PagesHolder*>(ut::AddU32ToPtr(this, this->header.offsetToPages));
+}
+
+template<>
+inline MiscParams& Binary::GetSection<MiscParams>() {
+    return *reinterpret_cast<MiscParams*>(ut::AddU32ToPtr(this, this->header.offsetToMiscParams));
+}
+
+template<>
+inline TrophiesHolder& Binary::GetSection<TrophiesHolder>() {
+    return *reinterpret_cast<TrophiesHolder*>(ut::AddU32ToPtr(this, this->header.offsetToTrophies));
+}
+
+
+
+
+class Mgr {
+protected:
+
     friend class System;
     friend class UI::SettingsPanel;
+    static const u32 curVersion = 2;
 
-    static const u32 curVersion = 1;
-    static const u32 binMagic = 'PULP';
-    static Settings* sInstance;
+    static Mgr* sInstance;
     static void SaveTask(void*);
-    virtual void Init(const u16* totalTrophyCount, const char* path);
-    virtual int GetSettingsBinSize() const {
-        return sizeof(Binary) - sizeof(TrackTrophy) + sizeof(TrackTrophy) * CupsDef::sInstance->GetEffectiveTrackCount();
-    }
+    virtual void Init(u32 pageCount, const u16* totalTrophyCount, const char* path);
+    virtual int GetSettingsBinSize(u32 pageCount) const;
     char filePath[IOS::ipcMaxPath];
     Binary* rawBin;
 private:
     u16 totalTrophyCount[4];
     TrackTrophy* FindTrackTrophy(u32 crc32, TTMode mode) const;
     void UpdateTrackList();
-    void SetSettingValue(SettingsType type, u32 setting, u8 value);
+    void SetSettingValue(Type type, u32 setting, u8 value);
+    void AdjustTrackCount(u32 newTrackCount);
 
 public:
-    Settings() : rawBin(nullptr) {}
-    static Settings* GetInstance() { return sInstance; }
+    Mgr() : rawBin(nullptr) {}
+    static Mgr* GetInstance() { return sInstance; }
     void Update() {
-        SettingsHook::exec();
+        Hook::exec();
         this->RequestSave();
     }
     void RequestSave() {
-        System::sInstance->taskThread->Request(&Settings::SaveTask, nullptr, 0);
+        System::sInstance->taskThread->Request(&Mgr::SaveTask, nullptr, 0);
     }
     void Save();
-    void SetLastSelectedCup(PulsarCupId id) { this->rawBin->lastSelectedCup = id; }
+    void SetLastSelectedCup(PulsarCupId id) { this->rawBin->GetSection<MiscParams>().lastSelectedCup = id; }
 
     void AddTrophy(u32 crc32, TTMode mode);
     bool HasTrophy(u32 crc32, TTMode mode) const;
     bool HasTrophy(PulsarId id, TTMode mode) const;
     u16 GetTotalTrophyCount(TTMode mode) const { return totalTrophyCount[mode]; }
-    int GetTrophyCount(TTMode mode) const { return this->rawBin->trophiesHolder.trophyCount[mode]; }
+    int GetTrophyCount(TTMode mode) const { return this->rawBin->GetSection<TrophiesHolder>().trophyCount[mode]; }
 
-    static u8 GetSettingValue(SettingsType type, u32 setting);
+    static u8 GetSettingValue(Type type, u32 setting);
     static void Create();
 
 };
-}
+}//namespace Settings
+}//namespace Pulsar
 
 //SETTINGS ENUM, for the page, DO NOT FORGET THE +6 for scrollers (see menu settings for example)
 //Use these 3 for "u32 setting" in GetSettingValue, the return will be the value of the other enums

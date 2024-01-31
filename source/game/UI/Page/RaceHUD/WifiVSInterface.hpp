@@ -6,7 +6,8 @@
 
 // Contributors: Melg
 namespace Pages {
-class WiFiVSInterface: public RaceHUD { //ID 0x42
+class WiFiVSInterface : public RaceHUD { //ID 0x42
+    static const PageId id = PAGE_WIFI_VS_INTERFACE;
     WiFiVSInterface();//8062587c
     ~WiFiVSInterface() override; //806336e0 vtable 808be078
     int GetRuntimeTypeInfo() const override; //0x60 8063374c

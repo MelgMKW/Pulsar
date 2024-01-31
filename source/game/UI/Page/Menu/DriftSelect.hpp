@@ -13,8 +13,9 @@ Contributors:
 
 //_sinit_ at 8084e848
 namespace Pages {
-class DriftSelect: public MenuInteractable { //ID 0x6D
+class DriftSelect : public MenuInteractable { //ID 0x6D
 public:
+    static const PageId id = PAGE_DRIFT_SELECT;
     DriftSelect(); //806273cc
     ~DriftSelect() override; //8084E7BC vtable 808d9db0
     void OnInit() override; //0x28 8084ddfc

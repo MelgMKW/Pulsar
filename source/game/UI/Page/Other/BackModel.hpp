@@ -6,7 +6,8 @@
 
 //_sinit_ at 805fb80c
 namespace Pages {
-class BackModel: public Page { //ID 0x5c
+class BackModel : public Page { //ID 0x5c
+    static const PageId id = PAGE_BACKMODEL;
     BackModel(); //805fb5bc
     ~BackModel() override; //805fb610 vtable 808b9ffc
     void OnInit() override; //0x28 805fb690

@@ -10,8 +10,9 @@ Contributors:
 */
 
 namespace Pages {
-class GhostReplayPause: public RaceMenu { //ID 0x1f
+class GhostReplayPause : public RaceMenu { //ID 0x1f
 public:
+    static const PageId id = PAGE_GHOST_REPLAY_PAUSE_MENU;
     GhostReplayPause(); //80624d7c 808bdb08
     ~GhostReplayPause() override; //80632f74
     int GetRuntimeTypeInfo() const override; //0x60 80632fe0

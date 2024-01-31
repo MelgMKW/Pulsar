@@ -7,8 +7,9 @@
 
 //_sinit_ at 8084dcd8
 namespace Pages { //MultiPlayerMenu
-class MultiPlayer: public MenuInteractable { //ID 0x80
+class MultiPlayer : public MenuInteractable { //ID 0x80
 public:
+    static const PageId id = PAGE_MULTIPLAYER_MENU;
     MultiPlayer(); //8062b240
     ~MultiPlayer() override; //8084dc4c vtable 808d9d08
     void OnInit() override; //0x28 8084d200

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 
 namespace PulsarPackCreator
@@ -39,8 +40,12 @@ namespace PulsarPackCreator
 
         public static MsgWindowResult Show(string text, string caption, MsgWindowButton button, Window owner = null) //specify owner if the "window" this box appears onto needs to stay visible
         {
-            
-            if (owner == null || !owner.IsLoaded) owner = GetWindow(App.Current.MainWindow) as MainWindow;
+            MainWindow main = GetWindow(App.Current.MainWindow) as MainWindow;
+            if (owner == null || !owner.IsLoaded)
+            {
+                owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+                if(owner == null) owner = main;
+            }
             MsgWindow window = MainWindow.msgWindow;
             window.Owner = owner;       
             window.Title = caption;
@@ -61,9 +66,10 @@ namespace PulsarPackCreator
             }
             window.OK.Margin = margin;
 
-            window.ShowDialog();
 
+            window.ShowDialog();
             window.Close();
+
             if (window.result == true || window.DialogResult == true)
             {
                 return button == MsgWindowButton.OK ? MsgWindowResult.OK : MsgWindowResult.Yes;
@@ -90,7 +96,7 @@ namespace PulsarPackCreator
 
         public static MsgWindowResult Show(string text, string caption, Window owner = null)
         {
-            return Show(text, "", MsgWindowButton.OK, owner);
+            return Show(text, caption, MsgWindowButton.OK, owner);
         }
 
         public static MsgWindowResult Show(string text, Window owner = null)

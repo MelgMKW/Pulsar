@@ -19,7 +19,7 @@ namespace Audio {
 void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotId) {
     //static u8 hudSlotIdFinalLap;
 
-    u8 isSpeedUp = Settings::GetSettingValue(SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SPEEDUP);
+    u8 isSpeedUp = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SPEEDUP);
     RaceAudioMgr* raceAudioMgr = RaceAudioMgr::sInstance;
     const u8 maxLap = raceAudioMgr->maxLap;
     const u8 curLap = raceAudioMgr->lap;

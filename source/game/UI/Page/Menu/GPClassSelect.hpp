@@ -5,7 +5,8 @@
 
 //_sinit_ at 808401d0
 namespace Pages {
-class GPClassSelect: public MenuInteractable { //ID 0x6a
+class GPClassSelect : public MenuInteractable { //ID 0x6a
+    static const PageId id = PAGE_GP_CLASS_SELECT;
     GPClassSelect(); //80626950
     ~GPClassSelect() override; //80840138 vtable 808d9398
     void OnInit() override; //0x28 8083f4a8

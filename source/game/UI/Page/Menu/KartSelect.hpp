@@ -82,6 +82,7 @@ public:
 namespace Pages {
 class KartSelect : public MenuInteractable { //ID 0x6C
 public:
+    static const PageId id = PAGE_KART_SELECT;
     KartSelect(); //80627060
     ~KartSelect() override; //80847bf4 vtable 808d9880
     void OnInit() override; //0x28 80844d68

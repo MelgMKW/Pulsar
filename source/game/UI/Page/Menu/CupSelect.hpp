@@ -8,8 +8,9 @@
 
 //_sinit_ at 80842340
 namespace Pages {
-class CupSelect: public MenuInteractable { //ID 0x6e
+class CupSelect : public MenuInteractable { //ID 0x6e
 public:
+    static const PageId id = PAGE_CUP_SELECT;
     static CourseId idxToCourseId[32]; //808ad320
     static const char cupTPLs[0x8][0x10]; //808AF8E0
     CupSelect(); //80627684

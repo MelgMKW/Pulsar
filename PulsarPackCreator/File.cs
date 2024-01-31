@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
-using Pulsar_Pack_Creator;
+﻿using Pulsar_Pack_Creator;
 using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using static PulsarPackCreator.MsgWindow;
@@ -21,42 +21,40 @@ namespace PulsarPackCreator
             return (value + (aligment - 1)) & ~(aligment - 1);
         }
 
-        private void ImportConfigFile(BigEndianReader bin)
+        private void ImportConfigFile(byte[] raw)
         {
             Directory.CreateDirectory("temp/");
             try
             {
                 curCup = 0;
-                //Read HEADER
-                UInt32 configMagic = bin.ReadUInt32();
-                UInt32 configVersion = bin.ReadUInt32();
-                if (configMagic != 0x50554C53 || configVersion != CONFIGVERSION) throw new Exception();
-                int offsetToInfo = bin.ReadInt32();
-                int offsetToCups = bin.ReadInt32();
-                int offsetToBMG = bin.ReadInt32();
-                byte[] modFolder = new byte[14];
-                for (int i = 0; i < 14; i++)
-                {
-                    modFolder[i] = bin.ReadByte();
-                }
-                parameters.modFolderName = System.Text.Encoding.UTF8.GetString(modFolder).TrimStart('/').TrimEnd('\0');
+                PulsarGame.BinaryHeader header = PulsarGame.BytesToStruct<PulsarGame.BinaryHeader>(raw.ToArray());
+                PulsarGame.InfoHolder infoHolder = CreateSubCat<PulsarGame.InfoHolder>(raw, header.offsetToInfo);
+                PulsarGame.CupsHolder cupsHolder = CreateSubCat<PulsarGame.CupsHolder>(raw, header.offsetToCups);
 
+                //Read HEADER
+                
+                if (header.magic != 0x50554C53 || header.version != CONFIGVERSION) throw new Exception();
+                parameters.modFolderName = header.modFolderName.TrimStart('/');
+                
                 //INFO Reading
-                bin.BaseStream.Position = offsetToInfo;
-                ReadInfo(bin);
+                ReadInfo(CreateSubCat<PulsarGame.   InfoHolder>(raw, header.offsetToInfo));
 
                 //CUPS reading
-                bin.BaseStream.Position = offsetToCups;
-                ReadCups(bin);
+                ReadCups(CreateSubCat<PulsarGame.CupsHolder>(raw, header.offsetToCups));
+                nint offset = header.offsetToCups + Marshal.OffsetOf(typeof(PulsarGame.CupsHolder), "cups") + Marshal.OffsetOf(typeof(PulsarGame.Cups), "cupsArray");
+                nint size = Marshal.SizeOf(typeof(PulsarGame.Cup));
+                for (int i = 0; i < ctsCupCount; i++)
+                {
+                    PulsarGame.Cup cup = CreateSubCat<PulsarGame.Cup>(raw, (int)offset);
+                    ReadCup(cup);
+                    offset += size;
+                }               
 
                 //BMG reading
-                bin.BaseStream.Position = offsetToBMG;
-                int bmgSize = ReadBMG(bin);
+                int bmgSize = ReadBMG(raw.Skip(header.offsetToBMG).Take(raw.Length - header.offsetToBMG).ToArray());
 
                 //FILE reading
-                bin.BaseStream.Position = offsetToBMG + bmgSize;
-                ReadFile(bin);
-                bin.Close();
+                ReadFile(raw.Skip(header.offsetToBMG + bmgSize).Take(raw.Length - header.offsetToBMG).ToArray()); ;
 
                 RequestBMGAction(false);
                 using StreamReader bmgSR = new StreamReader("temp/BMG.txt");
@@ -87,7 +85,6 @@ namespace PulsarPackCreator
             }
             catch
             {
-                bin.Close();
                 MsgWindow.Show("Invalid Config File.");
             }
             finally
@@ -97,74 +94,81 @@ namespace PulsarPackCreator
         }
         private void OnImportConfigClick(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFile = new OpenFileDialog();
+            Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
             openFile.DefaultExt = ".pul";
             openFile.Filter = "Pulsar Config File(*.pul) | *.pul";
             if (openFile.ShowDialog() == true)
             {
-                using BigEndianReader bin = new BigEndianReader(File.Open(openFile.FileName, FileMode.Open));
-                ImportConfigFile(bin);
+                ImportConfigFile(File.ReadAllBytes(openFile.FileName));
             }
         }
 
-        private void ReadInfo(BigEndianReader bin)
+        private void ReadInfo(PulsarGame.InfoHolder raw)
         {
-            UInt32 infoMagic = bin.ReadUInt32();
-            UInt32 infoVersion = bin.ReadUInt32();
+            UInt32 infoMagic = raw.header.magic;
+            UInt32 infoVersion = raw.header.version;
             if (infoMagic != 0x494E464F || infoVersion != INFOVERSION) throw new Exception();
-            bin.BaseStream.Position += 8; //datasize + roomKey
-            parameters.prob100cc = bin.ReadInt32();
-            parameters.prob150cc = bin.ReadInt32();
+
+            PulsarGame.Info info = raw.info;
+            parameters.prob100cc = (int)info.prob100cc;
+            parameters.prob150cc = (int)info.prob150cc;
             parameters.probMirror = 100 - (parameters.prob100cc + parameters.prob150cc);
-            parameters.wiimmfiRegion = bin.ReadInt32();
-            parameters.trackBlocking = bin.ReadInt32();
-            parameters.hasTTTrophies = bin.ReadBoolean();
-            parameters.has200cc = bin.ReadBoolean();
-            parameters.hasUMTs = bin.ReadBoolean();
-            parameters.hasFeather = bin.ReadBoolean();
-            parameters.hasMegaTC = bin.ReadBoolean();
+            parameters.wiimmfiRegion = (int)info.wiimmfiRegion;
+            parameters.trackBlocking = (int)info.trackBlocking;
+            parameters.hasTTTrophies = info.hasTTTrophies == 1 ? true : false;
+            parameters.has200cc = info.has200cc == 1 ? true : false;
+            parameters.hasUMTs = info.hasUMTs == 1 ? true : false;
+            parameters.hasFeather = info.hasFeather == 1 ? true : false; ;
+            parameters.hasMegaTC = info.hasMegaTC == 1 ? true : false; ;
         }
 
-        private void ReadCups(BigEndianReader bin)
+        private void ReadCups(PulsarGame.CupsHolder raw)
         {
-            UInt32 cupMagic = bin.ReadUInt32();
-            UInt32 cupVersion = bin.ReadUInt32();
-            if (cupMagic != 0x43555053 || cupVersion != CUPSVERSION) throw new Exception();
-            bin.BaseStream.Position += 4;
 
+
+            UInt32 cupMagic = raw.header.magic;
+            UInt32 cupVersion = raw.header.version;
+            if (cupMagic != 0x43555053 || cupVersion != CUPSVERSION) throw new Exception();
             cups.Clear();
-            ctsCupCount = bin.ReadUInt16();
-            parameters.regsMode = bin.ReadByte();
-            bin.BaseStream.Position += 1;
+            PulsarGame.Cups rawCups = raw.cups;
+            ctsCupCount = rawCups.ctsCupCount;
+            parameters.regsMode = rawCups.regsMode;
             for (int i = 0; i < 4; i++)
             {
-                trophyCount[i] = bin.ReadUInt16();
+                trophyCount[i] = rawCups.trophyCount[i];
             }
-            for (int i = 0; i < ctsCupCount; i++)
-            {
-                cups.Add(new Cup(bin));
-            }
-        }
-        private int ReadBMG(BigEndianReader bin)
-        {
-            UInt64 bmgMagic = bin.ReadUInt64();
-            if (bmgMagic != 0x4D455347626D6731) throw new Exception();
-            int bmgSize = bin.ReadInt32();
-            bin.BaseStream.Position -= 12;
-            using BigEndianWriter bmg = new BigEndianWriter(File.Create("temp/bmg.bmg"));
-            bmg.Write(bin.ReadBytes(bmgSize));
-            bmg.Close();
-            return bmgSize;
         }
 
-        private void ReadFile(BigEndianReader bin)
+        private void ReadCup(PulsarGame.Cup raw)
         {
-            UInt32 fileMagic = bin.ReadUInt32();
-            if (fileMagic != 0x46494C45) throw new Exception();
-            bin.BaseStream.Position -= 4;
-            using BigEndianWriter file = new BigEndianWriter(File.Create("temp/files.txt"));
-            file.Write(bin.ReadBytes((int)bin.BaseStream.Length));
-            file.Close();
+            cups.Add(new Cup(raw));
+        }
+        private int ReadBMG(byte[] raw)
+        {
+            using (BigEndianReader bin = new BigEndianReader(new MemoryStream(raw)))
+            {
+                UInt64 bmgMagic = bin.ReadUInt64();
+                if (bmgMagic != 0x4D455347626D6731) throw new Exception();
+                int bmgSize = bin.ReadInt32();
+                bin.BaseStream.Position -= 12;
+                using BigEndianWriter bmg = new BigEndianWriter(File.Create("temp/bmg.bmg"));
+                bmg.Write(bin.ReadBytes(bmgSize));
+                bmg.Close();
+                return bmgSize;
+            }          
+        }
+
+        private void ReadFile(byte[] raw)
+        {
+            using (BigEndianReader bin = new BigEndianReader(new MemoryStream(raw)))
+            {
+                UInt32 fileMagic = bin.ReadUInt32();
+                if (fileMagic != 0x46494C45) throw new Exception();
+                bin.BaseStream.Position -= 4;
+                using BigEndianWriter file = new BigEndianWriter(File.Create("temp/files.txt"));
+                file.Write(bin.ReadBytes((int)bin.BaseStream.Length));
+                file.Close();
+            }
         }
 
         public bool BuildConfigImpl()
@@ -331,7 +335,6 @@ namespace PulsarPackCreator
 
         private void WriteInfo(BigEndianWriter bin)
         {
-
             bin.Write(0x494E464F); //INFO
             bin.Write(INFOVERSION);
             long sizePosition = bin.BaseStream.Position;
@@ -429,7 +432,7 @@ namespace PulsarPackCreator
                         string expertName = cup.expertFileNames[i, expert];
                         if (expertName != "RKG File" && expertName != "")
                         {
-                            string rkgName = $"input/{ttModeFolders[expert, 1]}\\{expertName}.rkg".ToLowerInvariant();
+                            string rkgName = $"input/{PulsarGame.ttModeFolders[expert, 1]}\\{expertName}.rkg".ToLowerInvariant();
                             if (!fileInfo.Contains(rkgName))
                             {
                                 MsgWindow.Show($"Expert ghost {expertName}.rkg does not exist.");
@@ -442,8 +445,8 @@ namespace PulsarPackCreator
 
                             rkg.BaseStream.Position = 0;
                             byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
-                            Directory.CreateDirectory($"{crc32Folder}/{ttModeFolders[expert, 0]}");
-                            using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{crc32Folder}/{ttModeFolders[expert, 0]}/expert.rkg"));
+                            Directory.CreateDirectory($"{crc32Folder}/{PulsarGame.ttModeFolders[expert, 0]}");
+                            using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{crc32Folder}/{PulsarGame.ttModeFolders[expert, 0]}/expert.rkg"));
                             rkgBytes[0xC] = (byte)(newC >> 8);
                             rkgBytes[0xD] = (byte)(newC & 0xFF);
                             finalRkg.Write(rkgBytes);
@@ -551,5 +554,9 @@ namespace PulsarPackCreator
         }
 
         private void OpenDir(string path) => Process.Start("explorer.exe", path);
+
+
+
+
     }
 }

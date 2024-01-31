@@ -4,7 +4,8 @@
 #include <game/UI/Page/Page.hpp>
 namespace Pages {
 //_sinit_ at 808556d0
-class VSRaceIntro: public Page { //ID 0x8
+class VSRaceIntro : public Page { //ID 0x8
+    static const PageId id = PAGE_VS_INTRO;
     VSRaceIntro(); //80624690
     ~VSRaceIntro() override; //80855644 vtable 808da568
     void OnInit() override; //80855200

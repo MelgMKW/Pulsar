@@ -38,6 +38,7 @@ size_assert(EasyPairingController, 0x17c);
 namespace Pages {
 class RegisteredPads : public Page { //ID 0x61 multiple register controllers
 public:
+    static const PageId id = PAGE_REGISTERED_PADS;
     RegisteredPads(); //80602f04
     ~RegisteredPads() override; //80602f68 vtable 808ba8a4
     PageId GetNextPage() const override; //0x10 80603308
@@ -61,6 +62,7 @@ size_assert(RegisteredPads, 0x674);
 
 class RegisterPad : public Page { //ID 0x62
 public:
+    static const PageId id = PAGE_REGISTER_PAD;
     RegisterPad(); //80603764
     ~RegisterPad() override; //806038e8 vtable 808ba7ec
     PageId GetNextPage() const override; //80603f10 
@@ -87,6 +89,7 @@ size_assert(RegisterPad, 0xd70);
 
 class PairWiimotes : public Page {
 public:
+    static const PageId id = PAGE_PAIR_WII_REMOTES; //ID 0x63
     enum Status {
         STATUS_END, //for example when all 4 wiimotes are connected
     };
@@ -117,6 +120,7 @@ size_assert(PairWiimotes, 0xbf0);
 
 class ConfirmPads : public Page {
 public:
+    static const PageId id = PAGE_CONFIRM_PAD;
     ConfirmPads(); //80604cd8
     ~ConfirmPads() override; //80604ea0 vtable 808ba6b8
     PageId GetNextPage() const override; //0x10 806055cc

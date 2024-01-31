@@ -20,9 +20,9 @@ kmWrite32(0x80841830, 0x60000000);
 
 //CourseSelect::LoadNextPage patch mentioned above
 int UpdateSlot(Pages::CourseSelect* page, CtrlMenuCourseSelectCourse* control, PushButton* button) {
-    CupsDef* system = CupsDef::sInstance;
-    system->SaveSelectedCourse(*button);
-    return system->GetCorrectTrackSlot();
+    CupsDef* cups = CupsDef::sInstance;
+    cups->SaveSelectedCourse(*button);
+    return cups->GetCorrectTrackSlot();
 }
 
 asmFunc UpdateSlotWrapper() {
@@ -84,9 +84,9 @@ kmCall(0x80841854, FixGrandPrix);
 
 //Fixes GP since it usually uses racedata's courseId which only holds the slot
 RacedataScenario* UseCorrectCourse(RacedataScenario* scenario) {
-    CupsDef* system = CupsDef::sInstance;
-    system->winningCourse = CupsDef::ConvertTrack_PulsarCupToTrack(system->lastSelectedCup) + static_cast<u32>(scenario->settings.raceNumber);
-    scenario->settings.courseId = system->GetCorrectTrackSlot();
+    CupsDef* cups = CupsDef::sInstance;
+    cups->winningCourse = CupsDef::ConvertTrack_PulsarCupToTrack(cups->lastSelectedCup) + static_cast<u32>(scenario->settings.raceNumber);
+    scenario->settings.courseId = cups->GetCorrectTrackSlot();
     return scenario;
 };
 kmWrite32(0x8052f220, 0x60000000);
@@ -109,13 +109,13 @@ kmPatchExitPoint(UseCorrectCourseWrapper, 0x8052f228);
 //Badly written, but does the job even though it can in theory hang forever, as unlikely as it is
 void VSRaceRandomFix(SectionParams* m98) { //properly randomizes tracks and sets the first one
     m98->vsRaceLimit = 32;
-    CupsDef* system = CupsDef::sInstance;
+    CupsDef* cups = CupsDef::sInstance;
     Random random;
     PulsarId id;
     bool isRepeat;
     for(int i = 0; i < 32; ++i) {
         do {
-            id = system->RandomizeTrack(random);
+            id = cups->RandomizeTrack(random);
             isRepeat = false;
             for(int j = 0; j < i; ++j) {
                 if(m98->vsTracks[j] == id) {
@@ -127,8 +127,8 @@ void VSRaceRandomFix(SectionParams* m98) { //properly randomizes tracks and sets
         m98->vsTracks[i] = static_cast<CourseId>(id);
     }
 
-    system->winningCourse = static_cast<PulsarId>(m98->vsTracks[0]);
-    RaceData::sInstance->menusScenario.settings.courseId = system->GetCorrectTrackSlot();
+    cups->winningCourse = static_cast<PulsarId>(m98->vsTracks[0]);
+    RaceData::sInstance->menusScenario.settings.courseId = cups->GetCorrectTrackSlot();
 };
 kmBranch(0x805e32ec, VSRaceRandomFix);
 kmWrite32(0x8084e5e4, 0x60000000); //nop racedata courseId store since it's done in the function
@@ -136,20 +136,20 @@ kmWrite32(0x8084e5e4, 0x60000000); //nop racedata courseId store since it's done
 //Same as GP, racedata only ever has courseId
 void VSRaceOrderedFix(SectionParams* m98) {
     m98->vsRaceLimit = 32;
-    const CupsDef* system = CupsDef::sInstance;
-    const PulsarId initial = system->winningCourse;
+    const CupsDef* cups = CupsDef::sInstance;
+    const PulsarId initial = cups->winningCourse;
     PulsarCupId cupId = CupsDef::ConvertCup_PulsarTrackToCup(initial);
     for(int i = 0; i < 8; ++i) {
         for(int j = 0; j < 4; ++j) m98->vsTracks[i * 4 + j] = static_cast<CourseId>(cupId * 4 + j);
-        cupId = system->GetNextCupId(cupId, 1);
+        cupId = cups->GetNextCupId(cupId, 1);
     }
 };
 kmCall(0x80840a24, VSRaceOrderedFix);
 
 CourseId VSNextTrackFix(PulsarId pulsarId) {//properly sets the next track
-    CupsDef* system = CupsDef::sInstance;
-    system->winningCourse = pulsarId;
-    return system->GetCorrectTrackSlot();
+    CupsDef* cups = CupsDef::sInstance;
+    cups->winningCourse = pulsarId;
+    return cups->GetCorrectTrackSlot();
 }
 kmBranch(0x808606cc, VSNextTrackFix);
 

@@ -33,10 +33,10 @@ FOR %%H IN (%CPPFILES%) DO (
 
 :: Link
 echo Linking... %time%
-"../engine/Kamek" "build/kamek.o" %OBJECTS% -dynamic -externals="../engine/source/symbols.txt" -versions="../engine/source/versions.txt" -output-combined=build\Code.bin >nul
+"../engine/Kamek" "build/kamek.o" %OBJECTS% -dynamic -externals="../engine/source/symbols.txt" -versions="../engine/source/versions.txt" -output-combined=build\Code.pul >nul
 
 if %ErrorLevel% equ 0 (
-    xcopy /Y build\*.bin "%RIIVO%\Binaries" >nul
+    xcopy /Y build\*.pul "%RIIVO%\Binaries" >nul
     echo Binaries copied
 )
 

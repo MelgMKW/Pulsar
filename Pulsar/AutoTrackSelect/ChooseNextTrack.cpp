@@ -155,7 +155,7 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
         this->curPageIdx = ret;
         for(int i = 0; i < 4; ++i) {
             this->buttons[i].buttonId = this->curPageIdx * 4 + i;
-            this->buttons[i].SetMsgId(UI::GetTrackBMG(static_cast<PulsarId>(this->buttons[i].buttonId)));
+            this->buttons[i].SetMsgId(UI::GetTrackBMGId(static_cast<PulsarId>(this->buttons[i].buttonId)));
         }
     }
 }

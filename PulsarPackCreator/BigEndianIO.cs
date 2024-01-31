@@ -86,6 +86,7 @@ namespace PulsarPackCreator
             double ret = BitConverter.ToDouble(bytes, 0);
             return ret;
         }
+
         public override short ReadInt16() => BinaryPrimitives.ReverseEndianness(base.ReadInt16());
         public override ushort ReadUInt16() => BinaryPrimitives.ReverseEndianness(base.ReadUInt16());
         public override int ReadInt32() => BinaryPrimitives.ReverseEndianness(base.ReadInt32());

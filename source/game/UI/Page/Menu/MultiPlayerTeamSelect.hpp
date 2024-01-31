@@ -8,8 +8,9 @@
 
 //_sinit_ at 8084d0dc
 namespace Pages {
-class MultiTeamSelect: public MenuInteractable { //ID 0x83
+class MultiTeamSelect : public MenuInteractable { //ID 0x83
 public:
+    static const PageId id = PAGE_MULTIPLAYER_TEAM_SELECT;
     MultiTeamSelect(); //8062bb70
     ~MultiTeamSelect() override; //8084d050 vtable 808d9c60
     void OnInit() override; //0x28 8084bb34

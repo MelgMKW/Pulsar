@@ -19,6 +19,7 @@ Contributors:
 
 namespace Pages {
 class GhostSelectSupporting : public Page { //ID 0x70
+    static const PageId id = PAGE_GHOST_SELECT_SUPPORTING;
     GhostSelectSupporting(); //80638e88
     ~GhostSelectSupporting() override; //80638ecc vtable 808becd8
     PageId GetNextPage() const override; //8063a4cc
@@ -39,6 +40,7 @@ size_assert(GhostSelectSupporting, 0x5C);
 
 class GhostSelect : public Page { //ID 0x71
 public:
+    static const PageId id = PAGE_GHOST_SELECT;
     GhostSelect(); //0x806395ec vtable 808bec2c
     ~GhostSelect() override; //0x8063982c
     PageId GetNextPage() const override; //8063a4b8

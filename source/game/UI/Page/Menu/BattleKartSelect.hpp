@@ -8,8 +8,9 @@
 
 //_sinit_ at 8083b0cc
 namespace Pages {
-class BattleKartSelect: public MenuInteractable { //ID 0x76
+class BattleKartSelect : public MenuInteractable { //ID 0x76
 public:
+    static const PageId id = PAGE_BATTLE_KART_SELECT;
     BattleKartSelect(); //80628e3c 
     ~BattleKartSelect() override; //8083b014 vtable 808D8F40
     void OnInit() override; //0x28 8083a1e4

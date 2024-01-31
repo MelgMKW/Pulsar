@@ -5,47 +5,75 @@
 #include <IO/IO.hpp>
 
 namespace Pulsar {
-
+namespace Settings {
 //SETTINGS, IMPLEMENT INIT AND SAVE BASED ON YOUR SPECIFIC SETTINGS
-DoFuncsHook* SettingsHook::settingsHooks = nullptr;
+DoFuncsHook* Hook::settingsHooks = nullptr;
 
-Settings* Settings::sInstance = nullptr;
 
-void Settings::SaveTask(void*) {
-    Settings::GetInstance()->Save();
+Mgr* Mgr::sInstance = nullptr;
+
+void Mgr::SaveTask(void*) {
+    Mgr::GetInstance()->Save();
 }
 
-void Settings::Save() {
+int Mgr::GetSettingsBinSize(u32 pageCount) const {
+    u32 trackCount = CupsDef::sInstance->GetEffectiveTrackCount();
+
+    u32 size = sizeof(BinaryHeader)
+        + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1)
+        + sizeof(MiscParams)
+        + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1);
+    return size;
+}
+
+void Mgr::Save() {
     IO* io = IO::sInstance;;
     io->OpenModFile(this->filePath, FILE_MODE_WRITE);
-    io->Overwrite(this->GetSettingsBinSize(), this->rawBin);
+    io->Overwrite(this->rawBin->header.fileSize, this->rawBin);
     io->Close();
 };
 
-void Settings::Init(const u16* totalTrophyCount, const char* path/*, const char *curMagic, u32 curVersion*/) {
+void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, const char *curMagic, u32 curVersion*/) {
     for(int i = 0; i < 4; ++i) this->totalTrophyCount[i] = totalTrophyCount[i];
     strncpy(this->filePath, path, IOS::ipcMaxPath);
 
-    u32 size = this->GetSettingsBinSize();
+    u32 size = this->GetSettingsBinSize(pageCount);
     System* system = System::sInstance;
     IO* io = IO::sInstance;;
-    Settings::Binary* buffer = io->Alloc<Settings::Binary>(size);
-    io->CreateAndOpen(this->filePath, FILE_MODE_READ_WRITE);
-    io->Read(size, buffer);
+
+    Binary* buffer;
+    bool ret = io->OpenModFile(this->filePath, FILE_MODE_READ_WRITE);
+    if(ret == false) {
+        io->CreateAndOpen(this->filePath, FILE_MODE_READ_WRITE);
+    }
+    if(ret) {
+        alignas(0x20) BinaryHeader header;
+        ret = io->Read(sizeof(BinaryHeader), &header);
+        if(header.magic != Binary::binMagic || header.version != curVersion) ret = false;
+        else {
+            buffer = io->Alloc<Binary>(header.fileSize);
+            io->Seek(0);
+            io->Read(header.fileSize, buffer);
+        }
+    }
+    else if(ret == false) {
+        buffer = io->Alloc<Binary>(size);
+        memset(buffer, 0, size);
+        new(buffer) Binary(curVersion, pageCount);
+    }
+
+    TrophiesHolder& trophies = buffer->GetSection<TrophiesHolder>();
     for(int i = 0; i < 4; ++i) {
         u32 curTotalCount = this->GetTotalTrophyCount(static_cast<TTMode>(i));
-        if(buffer->trophiesHolder.trophyCount[i] > curTotalCount) buffer->trophiesHolder.trophyCount[i] = curTotalCount;
+        if(trophies.trophyCount[i] > curTotalCount) trophies.trophyCount[i] = curTotalCount;
     }
-    if(buffer->magic != binMagic || buffer->version != curVersion) {
-        memset(buffer, 0, size);
-        new(buffer) Settings::Binary(curVersion);
-    }
+
     this->rawBin = buffer;
     this->UpdateTrackList();
-    io->Overwrite(size, buffer);
+    io->Overwrite(this->rawBin->header.fileSize, this->rawBin);
     io->Close();
 
-    const PulsarCupId last = this->rawBin->lastSelectedCup;
+    const PulsarCupId last = this->rawBin->GetSection<MiscParams>().lastSelectedCup;
     CupsDef* cups = CupsDef::sInstance;
     if(last != -1 && cups->IsValidCup(last)) {
         cups->lastSelectedCup = last;
@@ -54,44 +82,65 @@ void Settings::Init(const u16* totalTrophyCount, const char* path/*, const char 
     }
 }
 
-TrackTrophy* Settings::FindTrackTrophy(u32 crc32, TTMode mode) const {
-    Binary* settings = this->rawBin;
-    for(int i = 0; i < settings->trackCount; ++i) if(settings->trophiesHolder.trophies[i].crc32 == crc32) {
-        return &settings->trophiesHolder.trophies[i];
+TrackTrophy* Mgr::FindTrackTrophy(u32 crc32, TTMode mode) const {
+    u32 trackCount = this->rawBin->GetSection<MiscParams>().trackCount;
+    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder>();
+
+    for(int i = 0; i < trackCount; ++i) if(trophiesHolder.trophies[i].crc32 == crc32) {
+        return &trophiesHolder.trophies[i];
     }
     return nullptr;
 }
 
-void Settings::AddTrophy(u32 crc32, TTMode mode) {
+void Mgr::AddTrophy(u32 crc32, TTMode mode) {
     TrackTrophy* trophy = this->FindTrackTrophy(crc32, mode);
     if(trophy != nullptr && !trophy->hastrophy[mode]) {
-        ++(this->rawBin->trophiesHolder.trophyCount[mode]);
+        ++(this->rawBin->GetSection<TrophiesHolder>().trophyCount[mode]);
         trophy->hastrophy[mode] = true;
     }
 }
 
-bool Settings::HasTrophy(u32 crc32, TTMode mode) const {
+bool Mgr::HasTrophy(u32 crc32, TTMode mode) const {
     const TrackTrophy* trophy = this->FindTrackTrophy(crc32, mode);
     if(trophy != nullptr && trophy->hastrophy[mode]) return true;
     return false;
 }
 
-bool Settings::HasTrophy(PulsarId id, TTMode mode) const {
+bool Mgr::HasTrophy(PulsarId id, TTMode mode) const {
     return this->HasTrophy(CupsDef::sInstance->GetCRC32(id), mode);
 }
 
-u8 Settings::GetSettingValue(SettingsType type, u32 setting) {
-    return Settings::sInstance->rawBin->pages[type].settings[setting];
+u8 Mgr::GetSettingValue(Type type, u32 setting) {
+    return Mgr::sInstance->rawBin->GetSection<PagesHolder>().pages[type].settings[setting];
 }
 
-void Settings::SetSettingValue(SettingsType type, u32 setting, u8 value) {
-    this->rawBin->pages[type].settings[setting] = value;
+void Mgr::SetSettingValue(Type type, u32 setting, u8 value) {
+    Mgr::sInstance->rawBin->GetSection<PagesHolder>().pages[type].settings[setting] = value;
 }
 
-void Settings::UpdateTrackList() {
-    Binary* binary = this->rawBin;
+void Mgr::AdjustTrackCount(u32 newCount) {
+    Binary* oldBin = this->rawBin;
+
+    MiscParams& params = oldBin->GetSection<MiscParams>();
+    TrophiesHolder& trophiesHolder = oldBin->GetSection<TrophiesHolder>();
+    u32 newSize = oldBin->header.fileSize + sizeof(TrackTrophy) * (newCount - params.trackCount);
+    params.trackCount = newCount;
+    Binary* buffer = IO::sInstance->Alloc<Binary>(newSize);
+
+    memcpy(buffer, oldBin, oldBin->header.fileSize);
+    buffer->header.fileSize = newSize;
+    this->rawBin = buffer;
+    delete oldBin;
+}
+
+
+void Mgr::UpdateTrackList() {
+
+    MiscParams& params = this->rawBin->GetSection<MiscParams>();
+    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder>();
+
     const CupsDef* cups = CupsDef::sInstance;
-    const u32 oldTrackCount = binary->trackCount;
+    const u32 oldTrackCount = params.trackCount;
     const u32 trackCount = cups->GetEffectiveTrackCount();
 
     EGG::Heap* heap = System::sInstance->heap;
@@ -100,54 +149,55 @@ void Settings::UpdateTrackList() {
     u16* toberemovedCRCIndex = new (heap) u16[oldTrackCount];
     memset(toberemovedCRCIndex, 0xFFFF, sizeof(u16) * oldTrackCount);
 
-    TrackTrophy* trophies = binary->trophiesHolder.trophies;
-    for(int i = 0; i < trackCount; ++i) {
-        for(int j = 0; j < oldTrackCount; ++j) {
-            if(cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(i)) == trophies[j].crc32) {
-                missingCRCIndex[i] = j;
+    TrackTrophy* trophies = trophiesHolder.trophies;
+    for(int curNew = 0; curNew < trackCount; ++curNew) {
+        for(int curOld = 0; curOld < oldTrackCount; ++curOld) {
+            if(cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(curNew)) == trophies[curOld].crc32) {
+                missingCRCIndex[curNew] = curOld;
                 break;
             }
         }
     }
 
-    for(int j = 0; j < oldTrackCount; ++j) {
-        for(int i = 0; i < trackCount; ++i) {
-            if(trophies[j].crc32 == cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(i))) {
-                toberemovedCRCIndex[j] = i;
+    for(int curOld = 0; curOld < oldTrackCount; ++curOld) {
+        for(int curNew = 0; curNew < trackCount; ++curNew) {
+            if(trophies[curOld].crc32 == cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(curNew))) {
+                toberemovedCRCIndex[curOld] = curNew;
                 break;
             }
         }
     }
 
-    for(int i = 0; i < trackCount; ++i) {
-        if(missingCRCIndex[i] == 0xFFFF) {
-            for(int j = 0; j < oldTrackCount; ++j) {
-                if(toberemovedCRCIndex[j] == 0xFFFF) {
-                    missingCRCIndex[i] = j; //found a spot to put the missing track in, reset that spot and use it for the new track
-                    toberemovedCRCIndex[j] = 0;
-                    trophies[j].crc32 = cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(i));
-                    for(int mode = 0; mode < 4; mode++) trophies[j].hastrophy[mode] = false;
+    for(int curNew = 0; curNew < trackCount; ++curNew) {
+        if(missingCRCIndex[curNew] == 0xFFFF) {
+            for(int curOld = 0; curOld < oldTrackCount; ++curOld) {
+                if(toberemovedCRCIndex[curOld] == 0xFFFF) {
+                    missingCRCIndex[curNew] = curOld; //found a spot to put the missing track in, reset that spot and use it for the new track
+                    toberemovedCRCIndex[curOld] = 0;
+                    trophies[curOld].crc32 = cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(curNew));
+                    for(int mode = 0; mode < 4; mode++) trophies[curOld].hastrophy[mode] = false;
                     break;
                 }
             }
         }
     }
 
-    if(oldTrackCount < trackCount) { //the surplus of tracks is simply put continuously at the end of the file
+    if(oldTrackCount < trackCount) { //the surplus of tracks is simply put continuously at the end of the file, which has been resized to fit the additional tracks
+        this->AdjustTrackCount(trackCount);
         u32 idx = oldTrackCount;
-        for(int i = 0; i < trackCount; ++i) { //4032 4132
-            if(missingCRCIndex[i] == 0xFFFF) {
-                trophies[idx].crc32 = cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(i));
+        for(int curNew = 0; curNew < trackCount; ++curNew) { //4032 4132
+            if(missingCRCIndex[curNew] == 0xFFFF) {
+                trophies[idx].crc32 = cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(curNew));
                 for(int mode = 0; mode < 4; mode++) trophies[idx].hastrophy[mode] = false;
                 ++idx;
             }
         }
-        binary->trackCount = trackCount;
     }
     delete[](missingCRCIndex);
     delete[](toberemovedCRCIndex);
 
 }
+} //namespace Settings
 } //namespace Pulsar
 
 

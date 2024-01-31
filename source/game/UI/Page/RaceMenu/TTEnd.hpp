@@ -6,6 +6,7 @@
 namespace Pages {
 class TTEnd : public RaceMenu { //ID 0x21
 public:
+    static const PageId id = PAGE_TT_ENDMENU;
     TTEnd(); //80624e04
     ~TTEnd() override; //80632cd4 vtable 808bd918
     int GetRuntimeTypeInfo() const override; //0x60 80632d40

@@ -257,15 +257,15 @@ void LoadKamekBinary(LoaderFunctions* funcs, const void* binary, u32 binaryLengt
 
 void LoadKamekBinaryFromDisc(LoaderFunctions* funcs, Region region)
 {
-    static void* binBuf = nullptr;
+    static void* codePulBuf = nullptr;
     static u32 fileLength = 0;
     funcs->OSReport("{Kamek by Treeki}\nLoading Kamek binary");
 
     bool isDol = false;
     EGG::ExpHeap* heap = funcs->rkSystem->EGGSystem;
 
-    if(binBuf == nullptr) {
-        const char* path = "/Binaries/Code.bin";
+    if(codePulBuf == nullptr) {
+        const char* path = "/Binaries/Code.pul";
         int entrynum = funcs->DVDConvertPathToEntrynum(path);
         if(entrynum < 0) {
             char err[512];
@@ -286,12 +286,12 @@ void LoadKamekBinaryFromDisc(LoaderFunctions* funcs, Region region)
         u32 roundedLength = nw4r::ut::RoundUp(length, 32);
 
         isDol = true;
-        binBuf = heap->alloc(roundedLength, -0x20);
-        if(!binBuf) DisplayError(funcs, "FATAL ERROR: Out of file memory");
-        funcs->DVDReadPrio(&fileInfo, binBuf, roundedLength, length * region, 2);
+        codePulBuf = heap->alloc(roundedLength, -0x20);
+        if(!codePulBuf) DisplayError(funcs, "FATAL ERROR: Out of file memory");
+        funcs->DVDReadPrio(&fileInfo, codePulBuf, roundedLength, length * region, 2);
         funcs->DVDClose(&fileInfo);
     }
 
-    LoadKamekBinary(funcs, binBuf, fileLength, isDol);
-    if(!isDol) heap->free(binBuf);
+    LoadKamekBinary(funcs, codePulBuf, fileLength, isDol);
+    if(!isDol) heap->free(codePulBuf);
 }

@@ -9,6 +9,7 @@
 namespace Pages {
 
 class LiveViewWaiting : public Page { //ID 0x93
+    static const PageId id = PAGE_LIVE_VIEW_WAITING;
     LiveViewWaiting(); //8064a0b0
     ~LiveViewWaiting() override; //8064a10c vtable 808bfc18
     PageId GetNextPage() const override; //0x10 8064a2d8
