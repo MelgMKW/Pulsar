@@ -57,7 +57,7 @@ public:
     const char* GetButtonsBRCTRName() const override;
     void OnRightArrowSelect(SheetSelectControl& control, u32 hudSlotId);
     void OnLeftArrowSelect(SheetSelectControl& control, u32 hudSlotId);
-    void OnButtonClick(PushButton& button, u32 hudSlotId); //0x8085a0f4
+    void OnButtonClick(PushButton& button, u32 hudSlotId); //8055a0f4
 
     bool IsHost() const { return this->status <= STATUS_HOST_FINALSENT; }
     bool IsReady() {

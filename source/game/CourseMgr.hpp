@@ -36,7 +36,7 @@ public:
     CourseMgr(); //8078e33c
     ~CourseMgr(); //8078e454
     void SetSoftWallInfo(SoftWallInfo* info); //8078e4e8
-    void UpdateKCL(const Vec3& position, KCLTypesBitfield accepted, bool isBiggerThanDefaultScale, float radius); //8078e4f0
+    void UpdateKCL(const Vec3& position, KCLBitfield accepted, bool isBiggerThanDefaultScale, float radius); //8078e4f0
 
     /*
     Uses in game:
@@ -50,27 +50,20 @@ public:
 
     //checks if the player is on a KCL triangle with a flag matching those of r6 (it's a bitfield, nth bit = 2^n kcl flag)
     //Results (r8) gets filled with the flag hit if a match is found
-    bool IsColliding(const Vec3& position, const Vec3& prevPosition,
-        KCLTypesBitfield acceptedFlags, CollisionInfo* collisionInfo,
-        KCLTypeHolder* result, u32 initialTime, float radius); //8078f500
-    bool IsCollidingNoTerrainInfo(const Vec3& position, const Vec3& prevPosition,
-        KCLTypesBitfield bitfield, CollisionInfo* collisionInfo,
-        KCLTypeHolder* result, u32 initialTime, float radius); //807901f0
-    bool IsCollidingNoTerrainInfoNoTriangleCheck(const Vec3& position, const Vec3& prevPosition,
-        KCLTypesBitfield bitfield, CollisionInfo* collisionInfo,
-        KCLTypeHolder* result, u32 initialTime, float radius); //8078f140 
-    bool IsCollidingNoTriangleCheck(const Vec3& position, const Vec3& prevPosition,
-        KCLTypesBitfield bitfield, CollisionInfo* collisionInfo,
-        KCLTypeHolder* result, u32 initialTime, float radius); //8078f784
-    bool IsCollidingAddEntry(const Vec3& position, const Vec3& prevPosition,
-        KCLTypesBitfield accepted, CollisionInfo* collisionInfo,
-        KCLTypeHolder* result, u32 initialTime, float radius); //807907f8
-    bool IsCollidingAddEntryNoTerrainInfo(const Vec3& position, const Vec3& prevPosition,
-        KCLTypesBitfield bitfield, CollisionInfo* collisionInfo,
-        KCLTypeHolder* result, u32 initialTime, float radius); //807903bc   
-    bool IsCollidingAddEntryNoTerrainInfoNoTriangleCheck(const Vec3& position, const Vec3& prevPosition,
-        KCLTypesBitfield bitfield, CollisionInfo* collisionInfo,
-        KCLTypeHolder* result, u32 initialTime, float radius); //8078float0
+    bool IsColliding(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
+        KCLTypeHolder* ret, u32 initialTime, float radius); //8078f500
+    bool IsCollidingNoTerrainInfo(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
+        KCLTypeHolder* ret, u32 initialTime, float radius); //807901f0
+    bool IsCollidingNoTerrainInfoNoTriangleCheck(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
+        KCLTypeHolder* ret, u32 initialTime, float radius); //8078f140 
+    bool IsCollidingNoTriangleCheck(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
+        KCLTypeHolder* ret, u32 initialTime, float radius); //8078f784
+    bool IsCollidingAddEntry(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
+        KCLTypeHolder* ret, u32 initialTime, float radius); //807907f8
+    bool IsCollidingAddEntryNoTerrainInfo(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
+        KCLTypeHolder* ret, u32 initialTime, float radius); //807903bc   
+    bool IsCollidingAddEntryNoTerrainInfoNoTriangleCheck(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
+        KCLTypeHolder* ret, u32 initialTime, float radius); //8078float0
 
 
     ModelDirector* courseModel; //0x0 course MDL0

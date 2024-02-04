@@ -67,7 +67,7 @@ struct BinaryHeader {
     u32 version;
     u32 fileSize;
     u32 offsetToPages;
-    u32 offsetToMiscParams;
+    u32 offsetToMisc;
     u32 offsetToTrophies;
 };
 
@@ -80,23 +80,25 @@ class alignas(0x20) Binary {
         header.magic = binMagic;
         header.version = curVersion;
         header.offsetToPages = offsetof(Binary, pages);
-        header.offsetToMiscParams = header.offsetToPages + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1);
-        header.offsetToTrophies = header.offsetToMiscParams + sizeof(MiscParams);
+        header.offsetToMisc = header.offsetToPages + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1);
+        header.offsetToTrophies = header.offsetToMisc + sizeof(MiscParams);
         header.fileSize = header.offsetToTrophies + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1);
 
-        PagesHolder& pages = this->GetSection<PagesHolder>();
+        PagesHolder& pages = this->GetSection<PagesHolder, &BinaryHeader::offsetToPages>();
         pages.header.magic = PagesHolder::pageMagic;
         pages.pageCount = pageCount;
-        MiscParams& params = this->GetSection<MiscParams>();
+        MiscParams& params = this->GetSection<MiscParams, &BinaryHeader::offsetToMisc>();
         params.header.magic = MiscParams::miscMagic;
         params.trackCount = trackCount;
         params.lastSelectedCup = PULSARCUPID_NONE;
-        this->GetSection<TrophiesHolder>().header.magic = TrophiesHolder::tropMagic;
+        this->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>().header.magic = TrophiesHolder::tropMagic;
 
     }
 
-    template <typename T>
-    inline T& GetSection();
+    template<typename T, u32 BinaryHeader::* offset>
+    inline T& GetSection() {
+        return *reinterpret_cast<T*>(ut::AddU32ToPtr(this, this->header.*offset));
+    }
     template <class T>
     bool CheckSection(const T& t) { if(t.header.magic != T::magic) return false; return true; }
 
@@ -107,6 +109,7 @@ class alignas(0x20) Binary {
     friend class Mgr;
 };
 
+/*
 template<>
 inline PagesHolder& Binary::GetSection<PagesHolder>() {
     return *reinterpret_cast<PagesHolder*>(ut::AddU32ToPtr(this, this->header.offsetToPages));
@@ -114,13 +117,14 @@ inline PagesHolder& Binary::GetSection<PagesHolder>() {
 
 template<>
 inline MiscParams& Binary::GetSection<MiscParams>() {
-    return *reinterpret_cast<MiscParams*>(ut::AddU32ToPtr(this, this->header.offsetToMiscParams));
+    return *reinterpret_cast<MiscParams*>(ut::AddU32ToPtr(this, this->header.offsetToMisc));
 }
 
 template<>
 inline TrophiesHolder& Binary::GetSection<TrophiesHolder>() {
     return *reinterpret_cast<TrophiesHolder*>(ut::AddU32ToPtr(this, this->header.offsetToTrophies));
 }
+*/
 
 
 
@@ -156,13 +160,13 @@ public:
         System::sInstance->taskThread->Request(&Mgr::SaveTask, nullptr, 0);
     }
     void Save();
-    void SetLastSelectedCup(PulsarCupId id) { this->rawBin->GetSection<MiscParams>().lastSelectedCup = id; }
+    void SetLastSelectedCup(PulsarCupId id) { this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>().lastSelectedCup = id; }
 
     void AddTrophy(u32 crc32, TTMode mode);
     bool HasTrophy(u32 crc32, TTMode mode) const;
     bool HasTrophy(PulsarId id, TTMode mode) const;
     u16 GetTotalTrophyCount(TTMode mode) const { return totalTrophyCount[mode]; }
-    int GetTrophyCount(TTMode mode) const { return this->rawBin->GetSection<TrophiesHolder>().trophyCount[mode]; }
+    int GetTrophyCount(TTMode mode) const { return this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>().trophyCount[mode]; }
 
     static u8 GetSettingValue(Type type, u32 setting);
     static void Create();

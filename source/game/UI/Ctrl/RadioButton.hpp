@@ -5,11 +5,11 @@
 #include <game/UI/Ctrl/Manipulator.hpp>
 
 //_sinit_ at 80607130
-class RadioButtonControl: public LayoutUIControl {
+class RadioButtonControl : public LayoutUIControl {
 public:
-    class OptionButton: public LayoutUIControl {
+    class OptionButton : public LayoutUIControl {
     private:
-        OptionButton(); //0x80606858
+        OptionButton(); //80606858
         ~OptionButton() override; //80606894 vtable 808baa24
         void Init() override; //80606994
         void Update() override; //0x10 80606a14

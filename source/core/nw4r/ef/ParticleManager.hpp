@@ -23,8 +23,8 @@ public:
     struct ParticleModifier {
         struct SimpleLight {
             u8 type; //0x6c
-            GXColor ambient; //0x6d
-            GXColor diffuse; //0x71
+            GX::Color ambient; //0x6d
+            GX::Color diffuse; //0x71
             u8 padding[3];
             float radius; //0x78
             math::VEC3 position; //0x7c

@@ -1,5 +1,6 @@
 #ifndef _EGG_LIGHT_
 #define _EGG_LIGHT_
+
 #include <types.hpp>
 #include <core/rvl/gx/GXStruct.hpp>
 #include <core/rvl/gx/GXEnum.hpp>
@@ -21,7 +22,7 @@ struct BinaryLightHeader {
 struct BinaryLIGHTInfo {
     u16 lightObjectCount;
     u16 ambLightsCount;
-    GXColor ambBlackColor;
+    GX::Color ambBlackColor;
     u8 padding[16]; //alignment
 };
 
@@ -36,8 +37,8 @@ struct BinaryLIGHTObject {
     Vector3f origin;
     Vector3f dest;
     float width;
-    GXColor color;
-    GXColor ambBLMAPColor;
+    GX::Color color;
+    GX::Color ambBLMAPColor;
     float spotlightCutoffAngle;
     float attenuationRefDistance;
     float attenuatioNRefBrightness;
@@ -47,7 +48,7 @@ struct BinaryLIGHTObject {
 }; //0x50
 
 struct BinaryAmbLight {
-    GXColor color;
+    GX::Color color;
     u32 unknown_0x4;
 };
 
@@ -169,11 +170,11 @@ class LightObject {
     Vector3f dest; //0x8
     Vector3f origin; //0x14
     Vector3f position; //0x20
-    GXColor color; //0x2C
+    GX::Color color; //0x2C
     float width; //0x30
     u32 coordSystem; //0x34
     float distanceToOrigin; //0x38
-    GXColor ambBLMAPColor; //0x3C
+    GX::Color ambBLMAPColor; //0x3C
     u32 lightType; //0x40
     float spotlightCutoffAngle; //0x44
     float attenuationRefDistance; //0x48
@@ -186,14 +187,14 @@ class LightObject {
     u16 bitField; //0x76
     u8 unknown_0x78[4];
     Vector3f colorDir; //0x7c
-    GXColor color2; //0x88
+    GX::Color color2; //0x88
     Vector3f viewLightOri; //0x8c
     Vector3f viewLightDest; //0x98
     Vector3f viewLightDir; //0xa4
 }; //0xB0
 
 class AmbientLight {
-    GXColor color;
+    GX::Color color;
     u32 unknown_0x4;
 };
 
@@ -214,7 +215,7 @@ class LightMgr {
     u16 maxAmbLightCount; //0xA
     LightObject** lightObjs; //0xC
     AmbientLight* ambientLights; //0x10
-    GXColor ambBlackColor; //0x14
+    GX::Color ambBlackColor; //0x14
     u8 unknown_0x18[0x20 - 0x18];
     LightMapBinary* binary; //0x20
     u8 unknown_0x24[0x2C - 0x24];

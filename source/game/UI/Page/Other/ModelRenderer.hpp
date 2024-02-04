@@ -64,8 +64,8 @@ public:
     static u32 GetModelCount(SectionId sectionId); //805f5d58
     static void PrepareParams(u8 playerId); //805f5c94 transition from charSelect to kartSelect
 
-    GXTexObj* GetModelTexObj(u8 hudSlotId); //805f5a4c for karts and characters
-    GXTexObj* GetBackgroundModelTexObj() const; //805f5a70
+    GX::TexObj* GetModelTexObj(u8 hudSlotId); //805f5a4c for karts and characters
+    GX::TexObj* GetBackgroundModelTexObj() const; //805f5a70
     ManipulatorManager manipulatorManager; //0x44
     ModelRendererParams params[4]; //0x54 one per local player
     u8 modelCount; //0x84

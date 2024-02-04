@@ -4,12 +4,12 @@
 #include <game/UI/Ctrl/PushButton.hpp>
 //_sinit_ at 806374e8
 
-class SheetSelectControl: public UIControl { //arrowpair
+class SheetSelectControl : public UIControl { //arrowpair
 public:
-    class SheetSelectButton: public LayoutUIControl { //select is equivalent to clicking for these
+    class SheetSelectButton : public LayoutUIControl { //select is equivalent to clicking for these
     public:
         SheetSelectButton(); //inlined but at 80636470
-        ~SheetSelectButton() override; //0x80636564 vtable 808be998
+        ~SheetSelectButton() override; //80636564 vtable 808be998
         void Init() override; //0xc 806367f8 
         void Update() override; //0x10 806369e4
         void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 80637344
@@ -63,9 +63,9 @@ public:
 size_assert(SheetSelectControl, 0x538);
 size_assert(SheetSelectControl::SheetSelectButton, 0x248);
 
-class SheetSelectControlScaleFade: public SheetSelectControl {
+class SheetSelectControlScaleFade : public SheetSelectControl {
 public:
-    SheetSelectControlScaleFade(){}
+    SheetSelectControlScaleFade() {}
     ~SheetSelectControlScaleFade() override; //805dbfdc vtable 808BE908
     int GetRuntimeTypeInfo() const override; //0x28 80637494
     const char* GetClassName() const override; //0x2c 8063747c

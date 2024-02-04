@@ -54,7 +54,7 @@ public:
     class CpuGpMonitor : public CpuMonitor { //cpumonitor's bar is the green
     public:
         struct Next {
-            void* gxFifoWritePtr; //from GXGetFifoPtrs
+            void* gxFifoWritePtr; //from GX::GetFifoPtrs
             u16 curGXDrawSyncToken;
             u8 padding[2];
             Next* next;

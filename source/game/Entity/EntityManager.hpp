@@ -30,6 +30,7 @@ class Entity {
     0x4 = some ObjectCollidable
     0x8 = other ObjectCollidable woodbox for example
     0x10 = ObjectKCL
+    0x100 = collision enabled
     0x200 = collision disabled
     */
     void* subject; //Kart, ItemObj, Object etc...
@@ -51,7 +52,7 @@ class EntityManager : public EGG::Disposer {
 
     void InsertKartPlayer(Vec3* position, u32 params, Kart::Player* subject, float radius, float maxSpeed); //80786050
     void InsertItemEntity(Vec3* position, u32 params, ItemObj* subject, float radius, float maxSpeed); //80786064
-    void InsertObjectCollidable(Vec3* position, u32 params, ObjectCollidable* subject, float radius, float maxSpeed); //80786078
+    void InsertObjectCollidable(Vec3* position, bool hasCollision, ObjectCollidable* subject, float radius, float maxSpeed); //80786078
     void InsertObjectKCL(Vec3* position, u32 params, ObjectKCL* subject, float radius, float maxSpeed); //80786120
     void InsertEntity(Vec3* position, u32 params, void* subject, float radius, float maxSpeed); //80786134
 

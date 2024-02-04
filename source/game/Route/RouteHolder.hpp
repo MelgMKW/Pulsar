@@ -14,9 +14,8 @@ class RouteHolder {
     u32 CreateRoute(const Vec3& pointsArray, u32 pointCount, u32 isCurved, bool isCylic); //806f0e58 returns route id
     void UpdateRoutePoints(u32 id, const Vec3& pointsArray, u32 pointCountToUpdate); //806f0fc8
     float AddRoutePoint(u32 id, const Vec3& point); //806f1064 returns the new total distance
-
-
     Route* GetRouteById(u32 id) const; //806f10fc
+
     Route** routes; //0x4
     Route** nonObjectRoutes; //0x8 essentially the 0x4 array but object routes are nullptr'd
     u16 routeArraySize; //0xC

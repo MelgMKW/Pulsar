@@ -11,7 +11,7 @@ public:
     class ButtonDriver : public PushButton {
     private:
         ButtonDriver(); //807e2808
-        ~ButtonDriver() override; //0x807e2844 vtable 808d3074
+        ~ButtonDriver() override; //807e2844 vtable 808d3074
         void InitSelf() override; //0x18 807e3e10
         void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 807e3eac
         int GetRuntimeTypeInfo() const override; //0x28 807e43e0

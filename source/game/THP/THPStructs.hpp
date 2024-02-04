@@ -99,7 +99,7 @@ void PlayerPause(); //80551734
 BOOL PlayerSkip(); //80551770 skips 1 frame
 void PlayControl(u32 retraceCount); //80551940 VIPostRetraceCallback
 
-s32 PlayerDrawCurrentFrame(GXRenderModeObj* rmode, u32 x, u32 y, u32 polygonW, u32 polygonH); //80551d30 just returns -1
+s32 PlayerDrawCurrentFrame(GX::RenderModeObj* rmode, u32 x, u32 y, u32 polygonW, u32 polygonH); //80551d30 just returns -1
 BOOL PlayerGetVideoInfo(VideoInfo* dest); //80551d38
 BOOL PlayerGetAudioInfo(AudioInfo* dest); //80551d80
 float PlayerGetFrameRate(); //80551dc8

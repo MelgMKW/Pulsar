@@ -38,7 +38,7 @@ struct CameraData {
     math::VEC3 cameraRotate;
     float zRotation;
 
-    GXProjectionType    projType;
+    GX::ProjectionType    projType;
     float projFovy; //viewing angle vertical
     float projAspect; //aspect ratio
     float projNear;
@@ -63,7 +63,7 @@ struct CameraData {
     s32  scissorOffsetY;
 };
 
-class Camera: public ResCommon<CameraData> {
+class Camera : public ResCommon<CameraData> {
     enum PostureType {
         POSTURE_LOOKAT,
         POSTURE_ROTATE,

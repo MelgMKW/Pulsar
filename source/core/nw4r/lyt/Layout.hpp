@@ -8,7 +8,7 @@ namespace nw4r {
 namespace lyt {
 class Layout {
 public:
-    Layout(); //0x8007a000
+    Layout(); //8007a000
     virtual ~Layout(); //8007a040 vtable 802734c0
     virtual bool Build(const void* lytResBuffer, ResourceAccessor* resAcc); //8007a170
     virtual AnimTransform* CreateAnimTransform(); //8007a4c0

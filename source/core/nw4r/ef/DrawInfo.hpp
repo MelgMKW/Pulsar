@@ -14,19 +14,19 @@ public:
     nw4r::math::MTX34 viewMtx;
     nw4r::math::MTX34 projMtx;
     bool lightEnable;
-    GXLightID lightMask;
-    GXLightID lightAlphaMask;
+    GX::LightID lightMask;
+    GX::LightID lightAlphaMask;
     bool isSpotLight;
-    GXFogType fogType;
+    GX::FogType fogType;
     float fogStartz;
     float fogEndz;
     float fogNearz;
     float fogFarz;
-    GXColor fogColor;
+    GX::Color fogColor;
     float zOffset;
     nw4r::math::VEC3 zOffsetOrig;
-    GXColor chanMatColor;
-    GXColor chanAmbColor;
+    GX::Color chanMatColor;
+    GX::Color chanAmbColor;
 };
 
 }//namespace ef

@@ -4,13 +4,14 @@ abort = 0x80001600
 
 
 gameID = 0x80000000
-
+memcmp = 0x8000f314
 memcpy = 0x80005f34
 memset = 0x80006038
 
 #systemManager
 sInstance__13SystemManager = 0x80386000
 RestartGame__13SystemManagerFv = 0x8000b1bc
+Shutdown__13SystemManagerFv = 0x8000b154
 RipFromDiscAsync__13SystemManagerFPcPvUiUiPv = 0x8000b308
 
 wcstombs = 0x8000f138
@@ -20,7 +21,9 @@ qsort = 0x80011b00
 rand = 0x80011c70
 srand = 0x80011c90
 sscanf = 0x80013040
- 
+__mod2u = 0x80021828 
+
+strchr = 0x800133f8 
 strcat = 0x80013224
 strcmp = 0x8001329c
 strcpy = 0x80013120
@@ -182,8 +185,10 @@ Seek__4NANDFPQ24NAND8FileInfoii = 0x8019b964
 
 #OS
 Report__2OSFPCce = 0x801A25D0
-Fatal__2OSF8_GXColor8_GXColorPCc = 0x801a4ec4
+Fatal__2OSFQ22GX5ColorQ22GX5ColorPCc = 0x801a4ec4
 GetTick__2OSFv = 0x801aad74
+GetTime__2OSFv = 0x801aad5c
+TicksToCalendarTime__2OSFUxPQ22OS12CalendarTime = 0x801aafa8
 OSGetTime = 0x801aad5c
 OSGetArenaLo__Fv = 0x801a10cc
 LaunchTitle__2OSFii = 0x801ada00
@@ -233,6 +238,7 @@ mInstance__Q34nw4r2db13ExceptionHead = 0x802a70b8
 #g3d
 GetResMdl__Q34nw4r3g3d7ResFileCFPCc = 0x8004c240
 GetResMat__Q34nw4r3g3d6ResMdlCFPCc = 0x8004e8f0
+SetMtx__Q34nw4r3g3d6ScnObjFQ44nw4r3g3d6ScnObj13ScnObjMtxTypeRCQ34nw4r4math5MTX34 = 0x8006dc20
 
 #ef
 GetPtr__Q34nw4r2ef10HandleBaseCFv = 0x800375f0
@@ -288,6 +294,13 @@ mInstance__8RKSystem = 0x802a4080
 #Math
 Mult__Q23EGG5QuatfFRCQ23EGG5QuatfRCQ23EGG8Vector3fRQ23EGG5Quatf = 0x8023a540
 Normalize__Q23EGG8Vector3fFv = 0x80243b6c
+
+#Quatf
+Set__Q23EGG5QuatfFffff = 0x80239dfc
+RotateVector__Q23EGG5QuatfFRCQ23EGG8Vector3fRQ23EGG8Vector3f = 0x8023a2d0
+
+#Matrix34f
+MakeRT__Q23EGG9Matrix34fFRCQ23EGG8Vector3fRCQ23EGG8Vector3f = 0x8022fe14
 
 #DVDRipper
 LoadToMainRAM__Q23EGG9DvdRipperFPCcPvPQ23EGG4HeapQ33EGG9DvdRipper15EAllocDirectionUiPUiPUi = 0x802226d8
@@ -443,6 +456,8 @@ nextFloatLimited__6RandomFf = 0x805556a8
 
 #Model Director
 BindBRRES__13ModelDirectorFRQ34nw4r3g3d7ResFile13ArchiveSourcePCc = 0x8055b618
+__ct__13ModelDirectorFUiUi = 0x8055b50c
+LoadNoAnm__13ModelDirectorFPCcRQ34nw4r3g3d7ResFileP5Light = 0x8055c2b8
 LinkAnimation__13ModelDirectorFUiRQ34nw4r3g3d7ResFilePCc7AnmTypebPCc13ArchiveSourceUc = 0x8055ddec
 UpdateDrawPriority__13ModelDirectorFUi = 0x8055f4c4
 
@@ -482,7 +497,8 @@ GetStats__Q24Kart4LinkCFv = 0x80590874
 GetType__Q24Kart4LinkCFv = 0x80590a10
 GetPlayerIdx__Q24Kart4LinkCFv = 0x80590a5c
 GetControllerHolder__Q24Kart4LinkCFv = 0x805903f4
-GetPhysicsHolder__Q24Kart4LinkCFv = 0x805903ac
+GetPhysicsHolder__Q24Kart4LinkCFv = 0x805903bc
+GetPhysicsHolder__Q24Kart4LinkFv = 0x805903ac
 GetDriftState__Q24Kart6PlayerCFv = 0x805911d8
 ComputeStats__4KartF6KartId11CharacterId = 0x80591fa4
 Update__Q24Kart18WheelPhysicsHolderFRC4Vec3RC5Mtx34f = 0x8059a278
@@ -1190,6 +1206,9 @@ CompareEntries__9GhostListFP14GhostListEntryP14GhostListEntry = 0x805e2430
 #GhostGroup
 GetGhostData__10GhostGroupFUs = 0x8051d084
 
+#Vector
+__mi__4Vec2CFRC4Vec2 = 0x8051201c
+
 #Low Level Network
 Patch_LoginPrintHeader = 0x80276054
 Patch_WiimmfiURLs = 0x8027a404
@@ -1318,6 +1337,7 @@ AddEntry__Q25RKNet12EVENTHandlerF9ItemObjIdQ25RKNet11EVENTActionPCvUi = 0x8065b7
 HasFreeEntries__Q25RKNet12EVENTHandlerCFv = 0x8065b8d4
 
 #Objects
+sInstance__10ObjectsMgr = 0x809c4330
 Update__10ObjectsMgrFv = 0x8082a8f4
 
 ##Rel	
@@ -1382,12 +1402,12 @@ __GXUpdateBPMask= 0x80171bf4
 CharWriter_SetupGX= 0x800b2ef0
 copyFromPage__Q23EGG10CapTextureFiib8GXTexFmt= 0x80214c74
 GXAbortFrame= 0x8016e848
-GXBegin= 0x8016f0f0
+Begin__2GXFQ22GX9PrimitiveQ22GX6VtxFmtUs= 0x8016f0f0
 GXBeginDisplayList= 0x80172e00
 GXCallDisplayList= 0x80172f64
 GXClearBoundingBox= 0x8016fecc
 GXClearGPMetric= 0x80173df8
-GXClearVtxDesc= 0x8016dc34
+ClearVtxDesc__2GXFv = 0x8016dc34
 GXCopyDisp= 0x8016fc38
 GXCopyTex= 0x8016fd74
 GXCPInterruptHandler= 0x8016c668
@@ -1472,10 +1492,10 @@ GXResetWriteGatherPipe= 0x8016e6b0
 GXSetAlphaCompare= 0x80172088
 GXSetAlphaUpdate= 0x801727f8
 GXSetArray= 0x8016e32c
-GXSetBlendMode= 0x8017277c
+SetBlendMode__2GXFQ22GX9BlendModeQ22GX11BlendFactorQ22GX11BlendFactorQ22GX7LogicOp = 0x8017277c
 GXSetBreakPtCallback= 0x8016d054
 GXSetChanAmbColor= 0x8017039c
-GXSetChanCtrl= 0x80170570
+SetChanCtrl__2GXFQ22GX9ChannelIDbQ22GX8ColorSrcQ22GX8ColorSrcUiQ22GX9DiffuseFnQ22GX6AttnFn = 0x80170570
 GXSetChanMatColor= 0x80170474
 GXSetClipMode= 0x8017351c
 GXSetColorUpdate= 0x801727cc
@@ -1484,7 +1504,7 @@ GXSetCopyClamp= 0x8016f618
 GXSetCopyClear= 0x8016f9c8
 GXSetCopyFilter= 0x8016fa40
 GXSetCPUFifo= 0x8016c94c
-GXSetCullMode= 0x8016f3b8
+SetCullMode__2GXFQ22GX8CullMode = 0x8016f3b8
 GXSetCurrentMtx= 0x80173214
 GXSetDispCopyDst= 0x8016f4b8
 GXSetDispCopyFrame2Field= 0x8016f5f8
@@ -1505,7 +1525,7 @@ GXSetGPMetric= 0x801735cc
 GXSetIndTexCoordScale= 0x80171968
 GXSetIndTexMtx= 0x80171814
 GXSetIndTexOrder= 0x80171a6c
-GXSetLineWidth= 0x8016f314
+SetLineWidth__2GXFUcQ22GX9TexOffset = 0x8016f314
 GXSetMisc= 0x8016e5c8
 GXSetNumChans= 0x8017054c
 GXSetNumIndStages= 0x80171b38
@@ -1529,8 +1549,8 @@ GXSetTevIndWarp= 0x80171ba0
 GXSetTevKAlphaSel= 0x80171f80
 GXSetTevKColor= 0x80171ed4
 GXSetTevKColorSel= 0x80171f30
-GXSetTevOp= 0x80171c4c
-GXSetTevOrder= 0x8017214c
+SetTevOp__2GXFQ22GX10TevStageIDQ22GX7TevMode = 0x80171c4c
+SetTevOrder__2GXFQ22GX10TevStageIDQ22GX10TexCoordIDQ22GX8TexMapIDQ22GX9ChannelID = 0x8017214c
 GXSetTevSwapMode= 0x80171fd0
 GXSetTevSwapModeTable= 0x8017200c
 GXSetTexCoordBias= 0x801711fc
@@ -1542,12 +1562,12 @@ GXSetTexRegionCallback= 0x80171158
 GXSetTlutRegionCallback= 0x8017116c
 GXSetViewport= 0x801733b4
 GXSetViewportJitter= 0x80173378
-GXSetVtxAttrFmt= 0x8016dc68
+SetVtxAttrFmt__2GXFQ22GX6VtxFmtQ22GX4AttrQ22GX7CompCntQ22GX8CompTypeUc = 0x8016dc68
 GXSetVtxAttrFmtv= 0x8016de08
-GXSetVtxDesc= 0x8016d3a4
+SetVtxDesc__2GXFQ22GX4AttrQ22GX8AttrType = 0x8016d3a4
 GXSetVtxDescv= 0x8016d608
 GXSetZCompLoc= 0x80172858
-GXSetZMode= 0x80172824
+SetZMode__2GXFbQ22GX7Compareb = 0x80172824
 GXSetZScaleOffset= 0x80173400
 GXSetZTexture= 0x801720c0
 GXTexModeSync= 0x8016eb70

@@ -3,32 +3,35 @@
 #include <types.hpp>
 #include <core/rvl/VI/VI.hpp>
 
-typedef void* GXFifoObj;
 
-typedef struct _GXColor {
+namespace GX {
+
+typedef void* FifoObj;
+
+struct Color {
     union {
         struct { u8 r, g, b, a; };
         u32 rgba;
     };
-} GXColor;
+};
 
-typedef struct _GXColorS10 {
+struct ColorS10 {
     s16 r, g, b, a;
-} GXColorS10; //0x8
+}; //0x8
 
-typedef struct _GXTexObj {
+struct TexObj {
     u32 dummy[8];
-} GXTexObj; //0x24
+}; //0x24
 
-typedef struct _GXTlutObj {
+struct TlutObj {
     u32 dummy[3];
-} GXTlutObj;
+};
 
-typedef struct _GXLightObj {
+struct LightObj {
     u32 dummy[16];
-} GXLightObj;
+};
 
-struct GXRenderModeObj {
+struct RenderModeObj {
     VI::TVMode viTVmode;
     u16 efbWidth;
     u16 efbHeight;
@@ -43,5 +46,7 @@ struct GXRenderModeObj {
     u8 sample_pattern[12][2];
     u8 vfilter[7];
 };
+
+}//namespace GX
 
 #endif

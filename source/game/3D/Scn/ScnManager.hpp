@@ -10,6 +10,7 @@
 #include <game/Scene/GameScene.hpp>
 #include <game/3D/Scn/Fog.hpp>
 #include <game/3D/Scn/GameScreen.hpp>
+#include <game/3D/TextureHolder.hpp>
 
 
 enum ScnType {
@@ -149,7 +150,8 @@ public:
     ut::List list_0x70; //0x70
     u32 curScnRootIdx; //0x7c
     ScnGroupHolder** scnGroupHolders; //0x80 as many as groupCount
-    u8 unknown_0x84[0x98 - 0x84];
+    TextureHolder* efbCopy; //0x84 for example used for WLscreenGC which just displays a copy of the player's screen
+    u8 unknown_0x88[0x98 - 0x88]; //0x88
 }; //0x98
 size_assert(ScnMgr, 0x98);
 

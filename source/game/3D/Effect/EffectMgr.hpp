@@ -49,7 +49,7 @@ class ItemEffects {
     u32 blueShellCapacity; //+4 if online gamemode
     u32 bombCapacity; //0x28
     u32 tcCapacity; //0x2C
-    bool unknown_0x30; //related to localplayercount //0x8068cf74
+    bool unknown_0x30; //related to localplayercount //8068cf74
     bool unknown_0x31; //related to localplayercount
     bool unknown_0x32[2];
     float float_0x34[2];
@@ -91,8 +91,8 @@ public:
     bool IsEveryoneLookingForwards() const; //8067dcc0
     bool IsMTOrPlayer0xF4(u8 playerIdx) const; //8067dd1c
     //creates effects based on collisions, for example Bush->WeedWall
-    void UpdatePlayerFromWheelCollision(u8 playerIdx, u16 wheelIdx, KCLTypesBitfield kclBitfield, u32 kclFlag); //8067da5c
-    void UpdatePlayerFromKartCollision(u8 playerIdx, u16 kartHitboxIdx, KCLTypesBitfield kclBitfield, u32 kclFlag); //8067da78
+    void UpdatePlayerFromWheelCollision(u8 playerIdx, u16 wheelIdx, KCLBitfield kclBitfield, u32 kclFlag); //8067da5c
+    void UpdatePlayerFromKartCollision(u8 playerIdx, u16 kartHitboxIdx, KCLBitfield kclBitfield, u32 kclFlag); //8067da78
     void CalcEffect1(); //8067dab0 UI effects?
     void DrawEffect1(const nw4r::ef::DrawInfo& drawInfo); //8067dad0
 

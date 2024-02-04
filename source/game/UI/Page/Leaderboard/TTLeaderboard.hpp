@@ -2,11 +2,11 @@
 #define _TT_LEADERBOARD_
 #include <kamek.hpp>
 #include <game/UI/Page/Page.hpp>
-#include <game/UI/Page/Leaderboard/VSLeaderboardUpdate.hpp>
+#include <game/UI/Page/Leaderboard/GPVSLeaderboardUpdate.hpp>
 #include <game/System/Timer.hpp>
 
 namespace Pages {
-class TTLeaderboard : public VSLeaderboardUpdate { //unsure why it inherits from VSLeaderboardUpdate, might be wrong and could be an intermediate class
+class TTLeaderboard : public GPVSLeaderboardUpdate { //unsure why it inherits from VSLeaderboardUpdate, might be wrong and could be an intermediate class
 public:
     static const PageId id = PAGE_TT_LEADERBOARDS; //ID 0x2E
     TTLeaderboard(); //80625134

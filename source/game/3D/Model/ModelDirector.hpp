@@ -34,8 +34,8 @@ public:
     static bool MdlExists(const char* mdlName, const g3d::ResFile& brres); //8055ba64
     static bool HasResMdl(const g3d::ResFile& brres); //8055ba9c
 
-    ModelDirector(u32 scnObjDrawOptionsIdx, ClipInfo* clipInfo, u32 bitfield); //0x8055b298 
-    ModelDirector(u32 scnObjDrawOptionsIdx, u32 bitfield); //0x8055b50c
+    ModelDirector(u32 scnObjDrawOptionsIdx, ClipInfo* clipInfo, u32 bitfield); //8055b298 
+    ModelDirector(u32 scnObjDrawOptionsIdx, u32 bitfield); //8055b50c
     ModelDirector(u32 scnMgrIdx, u32 scnObjDrawOptionsIdx, u32 bitfield); //8055b558
     virtual ~ModelDirector(); // 8055b5bc vtable 808b47f0
     virtual void ToggleVisible(bool insert);  //0xc 8055c9f0 inserts/remove from ScnGroup, easy way to make a model invisible for everyone
@@ -93,6 +93,7 @@ public:
 
     //Keeps the model inserted in the ScnGroup, but toggles drawXLU/OPA
     void ToggleTransparent(bool isTransparent); //8055f34c used to prevent this https://imgur.com/hUjHk6b
+    void ReplaceMatGXTexObj(const char* matName, GX::TexObj* texObj); //8055f3e8
 
     u32 bitfield; //0x4
     /*

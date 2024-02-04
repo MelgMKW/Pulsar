@@ -35,7 +35,7 @@ public:
     GraphicsFifo(u32 size, EGG::Heap* heap); //80229640
     virtual ~GraphicsFifo(); //802295a8 vtable 802a30b0
 
-    GXFifoObj* fifoObj; //0x4
+    GX::FifoObj* fifoObj; //0x4
     void* rawBuffer;
     u32 bufferSize; //0xC 32-bits aligned
 }; //0x10
@@ -45,16 +45,16 @@ namespace DrawGX {
 struct ZModes {
     bool compare_enable;
     u8 padding[3];
-    GXCompare func;
+    GX::Compare func;
     bool update_enable;
     u8 padding2[3];
 }; //0xC
 
 struct BlendModes {
-    GXBlendMode type;
-    GXBlendFactor src_factor;
-    GXBlendFactor dst_factor;
-    GXLogicOp op;
+    GX::BlendMode type;
+    GX::BlendFactor src_factor;
+    GX::BlendFactor dst_factor;
+    GX::LogicOp op;
 }; //0x10
 
 extern ZModes zModes; //80257558

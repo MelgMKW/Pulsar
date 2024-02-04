@@ -15,7 +15,7 @@ struct ResAnmCameraData {
     s32 name;
     u32 id;
     u32 refNumber;
-    GXProjectionType projType;
+    GX::ProjectionType projType;
     u32 flags;
     s32 offsetToResUserData;
     s32 offsetToPosX;
@@ -37,7 +37,7 @@ struct ResAnmCameraData {
 
 struct CameraAnmResult {
     u32 flags;
-    GXProjectionType projType; //0x4
+    GX::ProjectionType projType; //0x4
     math::VEC3 pos; //0x8 pos: Camera position
     float aspect; //0x14 aspect: aspect ratio width/height
     float near; //0x18 near: Distance to the near clipping plane

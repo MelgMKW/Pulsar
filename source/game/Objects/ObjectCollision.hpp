@@ -79,10 +79,11 @@ class ObjectCollisionPolyhedra : public ObjectCollision {
     Vec3 unknown_0x38;
 };
 
-class ObjectCollisionCube : public ObjectCollisionPolyhedra { //P4 = 3, P5, P6, P7 are X, Y, Z sizes DKShip64 for example
+//rectangular cuboid, e.g. a truck on MH
+class ObjectCollisionCuboid : public ObjectCollisionPolyhedra { //P4 = 3, P5, P6, P7 are X, Y, Z sizes DKShip64 for example
 public:
-    ObjectCollisionCube(const Vec3& center, float x, float y, float z); //80833840
-    ~ObjectCollisionCube() override; //808342f0 vtable 808d8ce8
+    ObjectCollisionCuboid(const Vec3& center, float x, float y, float z); //80833840
+    ~ObjectCollisionCuboid() override; //808342f0 vtable 808d8ce8
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale) override; //80833b00
     void SetPositionAndScale(const Mtx34& transformationMtx, float objScale, const Vec3& collisionTranslation) override; //80833eec
 

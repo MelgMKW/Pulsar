@@ -22,12 +22,14 @@ class RouteSegment { //from point i to point i+1 except for last if cyclic where
     Vec3 unitVec; //0x8 direction from A to B
 }; //0x14
 
-class RouteArc {
+class RouteArc { //Uses a cubic bezier curve
     RouteArc(); //806ed6c0
     ~RouteArc(); //806ed6c4
-    Vec3 originPoint;
-    Vec3 secondPoint; //(finalPoint - originPoint)/4 + originPoint
-    Vec3 unknown_0x18[3];
+    Vec3 bezierP0; //originPoint
+    Vec3 bezierP1; //(finalPoint - originPoint)/4 + originPoint
+    Vec3 bezierP2; //0x18
+    Vec3 bezierP3; //0x24
+    float unknown_0x30[2];
 }; //0x38
 
 class Route {
@@ -46,6 +48,8 @@ class Route {
     void UpdatePoints(const Vec3& pointsArray, u32 pointCount); //806ecf88
     RoutePoint* GetPointById(u16 id); //806ed150
     void AddPoint(const Vec3& point); //806ed110
+    void FillNormals(); //806eccc0
+    void FillBLIGHTIndexes(); //806ece5c
 
     u16 routeId; //0x4
     u16 maxPointCount; //0x6
@@ -53,8 +57,12 @@ class Route {
     bool isNotCyclic; //0xA
     u8 padding; //0xB
     RoutePoint* pointsArray; //0xC
-    u8 unknown_0x10;
-    u8 unknown_0x11[0x20 - 0x11];
+    bool normalsInitialized;
+    u8 unknown_0x11[3];
+    Vec3ZeroInit* normals; //0x14 one per point, uses CourseMgr::IsColliding on a driveable surface, else (0, 1, 0)
+    u8 unknown_0x18[4];
+    s32* blightIndexes; //0x1c one per point, only for driveable surfaces, else -1
+
     float unknown_0x20;
     u32 isCurved; //0x24
 }; //0x28

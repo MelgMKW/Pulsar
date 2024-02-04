@@ -48,7 +48,8 @@ void SetTeams(CustomSELECTHandler* handler, u32& teams) {
     const RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
     bool isValid = false;
     Team firstTeam = UI::TeamSelect::GetPlayerTeam(0);
-    if(handler->mode == RKNet::ONLINEMODE_PRIVATE_VS && UI::TeamSelect::isEnabled) {
+    if((handler->mode == RKNet::ONLINEMODE_PRIVATE_VS || handler->mode == RKNet::ONLINEMODE_PRIVATE_BATTLE)
+        && UI::TeamSelect::isEnabled) {
         for(int i = 0; i < sub.playerCount; i++) {
             Team curSlotTeam = UI::TeamSelect::GetPlayerTeam(i);
             if(curSlotTeam != firstTeam) isValid = true;

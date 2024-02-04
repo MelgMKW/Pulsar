@@ -31,17 +31,24 @@ struct CyclePtmfs {
 class Object {
 public:
     explicit Object(const KMP::Holder<GOBJ>& gobj); //8081f828
+    Object(u16 objId, const Vec3& position, const Vec3& rotation, const Vec3& scale); //8081f9bc
     Object(const char* name, const Vec3& position, const Vec3& rotation, const Vec3& scale, u32 r8); //8081fb04 used for sub objects
+
+
     virtual ~Object(); //8067e3c4 vtable 808d6ecc
     virtual void OnStart(); //0xC 8081fc68
-    virtual void vf_0x10(); //0x10 0x10 806807dc just a blr
+    virtual void vf_0x10(); //0x10 806807dc just a blr
     virtual void Update(); //0x14 806bf448
     virtual void vf_0x18(); //0x18 0x18 806807d8 just a blr
     virtual void UpdateModel(); //0x1c 808217b8
     virtual void Init() = 0; //0x20
     virtual int GetID() const; //0x24 80572574
     virtual const char* GetName() const; //0x28 80680784
-    virtual bool HasLod(); //0x2c 806bf434
+    virtual u32 GetPropertiesBitfield(); //0x2c 806bf434
+    /*
+        1 : isUpdating
+
+    */
     virtual ClipInfo* GetClipInfo() const; //0x30 8067da54
     virtual const char* GetBRRESName() const; //0x34 80680730
     virtual const char* GetSubFileName() const; //0x38 806806dc completely identical to the one above, but for other objects can be MDL, KCL, BREFF etc...
@@ -62,35 +69,35 @@ public:
     virtual void UpdateCollision() = 0; //0x74
     virtual void UpdateModelScale(); //0x78 8068065c called by UpdateModel
     virtual void UpdateShadowScale(); //0x7c 80680630
-    virtual bool vf_0x80(); //0x80 0x80 80680628
-    virtual bool vf_0x84(); //0x84 0x84 80680620
-    virtual void vf_0x88(); //0x88 0x88 80821db8
-    virtual void vf_0x8c(); //0x8c 0x8c 80821dd8
+    virtual u8 GetShadowListIdx(); //0x80 80680628
+    virtual bool vf_0x84(); //0x84 80680620
+    virtual void vf_0x88(); //0x88 80821db8
+    virtual void vf_0x8c(); //0x8c 80821dd8
     virtual void DisableCollision(); //0x90 80821dec for example when you destroy a create
     virtual void EnableCollision(); //0x94 0x94 80821e00
     virtual const Entity& GetEntity() const; //0x98 80680618
     virtual const Vec3& GetPosition() const; //0x9c 80681598
     virtual float GetCollisionDiameter() const; //0xa0 8080bdc0 
     virtual bool IsLodDisbled(); //0xa4 80680610
-    virtual void vf_0xa8(); //0xa8 0xa8 80680608
-    virtual void vf_0xac(); //0xac 0xa8 80680600
+    virtual void vf_0xa8(); //0xa8 80680608
+    virtual void vf_0xac(); //0xac 80680600
     virtual u32 GetDrawType() const = 0; //0xb0
 
     void LoadAnimationByType(u32 idx, AnmType type); //80820a90
     void LinkAnimations(char** brasd, char** idk, u32 brsadCount, u32 idkCount); //80820eb8
-    AudioHandle* UpdateMatrix(); //80821640
+    void UpdateMatrix(); //80821640
     AudioHandle* StartSoundLimited(u32 soundId, float volume); //808204fc
     AudioHandle* HoldSoundLimited(u32 soundId); //8082051c
     AudioHandle* StartNewSoundLimited(u32 soundId, float volume); //no overlap, if sound already started, does nothing
-    bool StartSound(u32 soundId); //40 8082055c
-    bool HoldSound(u32 soundId); //44 8082057c
-    void StopAllSound(int fadeOutFrames); //0x8082059c 
-    void StopSound(int fadeOutFrames); //0x48 808205bc
-
+    bool StartSound(u32 soundId); //8082055c
+    bool HoldSound(u32 soundId); //8082057c
+    void StopAllSound(int fadeOutFrames); //8052059c 
+    void StopSound(int fadeOutFrames); //808205bc
+    void LinkSound(u16 objId); //808204b8 if objId == 0, uses own id
 
     ObjectType type;
     ModelDirector* mdlDirector; //0x8
-    ModelDirector* mdlLodDirection; //0xc
+    ModelDirector* mdlLodDirector; //0xc
     ShadowModelDirector* shadowDirector; //0x10
     nw4r::g3d::ResFile rawBrres; //0x14
     LinkedRaceActor* objectSound; //0x18 see object sound class
@@ -121,7 +128,7 @@ size_assert(Object, 0xaC);
 class ObjectCycleManager {
     static CyclePtmfs routePtmfs;
     virtual ~ObjectCycleManager();
-    virtual int vf_0xC() = 0; //0xC 
+    //virtual int vf_0xC() = 0; //0xC this might be wrong since kart_truck has no such function 
     u16 unknown_0x4;
     u8 padding[2];
     u32 unknown_0x8;

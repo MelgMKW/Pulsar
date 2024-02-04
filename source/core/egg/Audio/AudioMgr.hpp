@@ -16,7 +16,7 @@ using namespace nw4r;
 
 class AudioSystem {
 public:
-    AudioSystem(); //0x80213cc8
+    AudioSystem(); //80213cc8
     ~AudioSystem(); //80213ce4
     void Calc(); //80213d24
     float unknown_0x0;

@@ -66,7 +66,7 @@ size_assert(UIControl, 0x98);
 //_sinit_ at 8063e930
 class LayoutUIControl : public UIControl {
 public:
-    LayoutUIControl(); //0x8063d798
+    LayoutUIControl(); //8063d798
     ~LayoutUIControl() override; //8063d8c0 vtable 808befb4
     void Init() override; //0xc 8063dac0
     void Update() override; //0x10 8063db00

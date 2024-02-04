@@ -9,8 +9,8 @@ class CtrlRaceItemBalloon;
 
 class RaceBalloons {
 public:
-    RaceBalloons(); //0x807f1c58
-    ~RaceBalloons(); //0x80858864
+    RaceBalloons(); //807f1c58
+    ~RaceBalloons(); //80858864
     void Update(); //807f132c
     void AddNameBalloon(CtrlRaceNameBalloon* ctrlRaceNameBalloon); //807f1c34
     void AddItemBalloon(CtrlRaceItemBalloon* ctrlRaceItemBalloon); //807f1c50

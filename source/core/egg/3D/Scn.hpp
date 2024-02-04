@@ -13,14 +13,23 @@ using namespace nw4r;
 namespace EGG {
 
 class ScnMdlEx {
-
+public:
     explicit ScnMdlEx(g3d::ScnMdl* src); //80230458
     g3d::ResMdl GetResMdl(); //80230fd4
+    g3d::ResMat GetResMat(u32 matIdx); //8023101c
+    g3d::ResMatMisc GetResMatMisc(u32 matIdx); //8023112c
+    void SearchNodeMatSample(u32 funcIdx, const char* name, u16* r6, u32 max); //2 = count texture links
+    //replaces it for all mats that use that texture returns number of modified tex
+    u32 ReplaceMatsGXTexObj(const char* texName, GX::TexObj* texObj, bool setFilterAndWrapMode, void* r7, u8 countSetFilterAndWrap, bool useCopyMat);  //80230da0 
+    u16 GetViewMtxCount(); //80230718
+
     g3d::ScnMdl* scnMdl;
     u32 type; //0x4
     u32 unknown_0x8[0x8];
     virtual ~ScnMdlEx(); //0x10 s80230690 vtable 802a31c8
-    void SearchNodeMatSample(u32 funcIdx, const char* name, u16* r6, u32 max); //2 = count texture links
+
+
+
 }; //0x14
 
 class ScnRootEx {

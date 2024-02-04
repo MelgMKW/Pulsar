@@ -5,10 +5,10 @@
 
 
 struct BFGEntry {
-    GXFogType type;
+    GX::FogType type;
     float startZ; //0x4
     float endZ; //0x8
-    GXColor color; //0xC
+    GX::Color color; //0xC
     u16 hasRangeCorrection; //0x10
     u16 rangeCorrectionCenter;
     float entriesTransitionSpeed; //0x14

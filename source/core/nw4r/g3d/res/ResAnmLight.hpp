@@ -26,10 +26,10 @@ struct ResAnmLightData {
     s32 offsetToAimX; //Viewpoint position x
     s32 offsetToAimY; //Viewpoint position y
     s32 offsetToAimZ; //Viewpoint position z
-    GXDistAttnFn distFunc;
+    GX::DistAttnFn distFunc;
     s32 offsetToRefDistance;
     s32 offsetToRefBrightness;
-    GXSpotFn spotFunc;
+    GX::SpotFn spotFunc;
     s32 offsetToCutoff;
     s32 offsetToSpecColor;
     s32 offsetToShininess;

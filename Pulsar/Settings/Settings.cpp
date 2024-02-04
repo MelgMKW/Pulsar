@@ -62,7 +62,7 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
         new(buffer) Binary(curVersion, pageCount);
     }
 
-    TrophiesHolder& trophies = buffer->GetSection<TrophiesHolder>();
+    TrophiesHolder& trophies = buffer->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
     for(int i = 0; i < 4; ++i) {
         u32 curTotalCount = this->GetTotalTrophyCount(static_cast<TTMode>(i));
         if(trophies.trophyCount[i] > curTotalCount) trophies.trophyCount[i] = curTotalCount;
@@ -73,7 +73,7 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
     io->Overwrite(this->rawBin->header.fileSize, this->rawBin);
     io->Close();
 
-    const PulsarCupId last = this->rawBin->GetSection<MiscParams>().lastSelectedCup;
+    const PulsarCupId last = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>().lastSelectedCup;
     CupsDef* cups = CupsDef::sInstance;
     if(last != -1 && cups->IsValidCup(last)) {
         cups->lastSelectedCup = last;
@@ -83,8 +83,8 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
 }
 
 TrackTrophy* Mgr::FindTrackTrophy(u32 crc32, TTMode mode) const {
-    u32 trackCount = this->rawBin->GetSection<MiscParams>().trackCount;
-    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder>();
+    u32 trackCount = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>().trackCount;
+    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
 
     for(int i = 0; i < trackCount; ++i) if(trophiesHolder.trophies[i].crc32 == crc32) {
         return &trophiesHolder.trophies[i];
@@ -95,7 +95,7 @@ TrackTrophy* Mgr::FindTrackTrophy(u32 crc32, TTMode mode) const {
 void Mgr::AddTrophy(u32 crc32, TTMode mode) {
     TrackTrophy* trophy = this->FindTrackTrophy(crc32, mode);
     if(trophy != nullptr && !trophy->hastrophy[mode]) {
-        ++(this->rawBin->GetSection<TrophiesHolder>().trophyCount[mode]);
+        ++(this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>().trophyCount[mode]);
         trophy->hastrophy[mode] = true;
     }
 }
@@ -111,18 +111,18 @@ bool Mgr::HasTrophy(PulsarId id, TTMode mode) const {
 }
 
 u8 Mgr::GetSettingValue(Type type, u32 setting) {
-    return Mgr::sInstance->rawBin->GetSection<PagesHolder>().pages[type].settings[setting];
+    return Mgr::sInstance->rawBin->GetSection<PagesHolder, &BinaryHeader::offsetToPages>().pages[type].settings[setting];
 }
 
 void Mgr::SetSettingValue(Type type, u32 setting, u8 value) {
-    Mgr::sInstance->rawBin->GetSection<PagesHolder>().pages[type].settings[setting] = value;
+    Mgr::sInstance->rawBin->GetSection<PagesHolder, &BinaryHeader::offsetToPages>().pages[type].settings[setting] = value;
 }
 
 void Mgr::AdjustTrackCount(u32 newCount) {
     Binary* oldBin = this->rawBin;
 
-    MiscParams& params = oldBin->GetSection<MiscParams>();
-    TrophiesHolder& trophiesHolder = oldBin->GetSection<TrophiesHolder>();
+    MiscParams& params = oldBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>();
+    TrophiesHolder& trophiesHolder = oldBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
     u32 newSize = oldBin->header.fileSize + sizeof(TrackTrophy) * (newCount - params.trackCount);
     params.trackCount = newCount;
     Binary* buffer = IO::sInstance->Alloc<Binary>(newSize);
@@ -136,8 +136,8 @@ void Mgr::AdjustTrackCount(u32 newCount) {
 
 void Mgr::UpdateTrackList() {
 
-    MiscParams& params = this->rawBin->GetSection<MiscParams>();
-    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder>();
+    MiscParams& params = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>();
+    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
 
     const CupsDef* cups = CupsDef::sInstance;
     const u32 oldTrackCount = params.trackCount;

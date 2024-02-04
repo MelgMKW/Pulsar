@@ -10,19 +10,19 @@ namespace nw4r {
 namespace g3d {
 
 struct FogData {
-    GXFogType type;
+    GX::FogType type;
     float startz;
     float endz;
     float nearz;
     float farz;
-    GXColor color;
+    GX::Color color;
     bool adjEnable;
     u8 padding;
     u16 adjCenter;
     u16 adjTable[10];
 };
 
-class Fog: public ResCommon<FogData> {
+class Fog : public ResCommon<FogData> {
 public:
     Fog(FogData* data); //800774d0
     void Init(); //800774e0

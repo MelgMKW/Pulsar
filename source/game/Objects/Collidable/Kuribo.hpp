@@ -14,13 +14,14 @@ class Kuribo : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 
     void OnStart() override; //0xC 806db40c
     void vf_0x10() override; //0x10 806db5ac
     void Update() override; //0x14 806db5b0
+    u32 GetPropertiesBitfield(); //0x2c 806dd2c8
     void LoadAnimations() override; //0x5c 806dd278
 
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806db764
     ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc0 806dba98
     //ObjectCycleManager vtable 808c5efc at 0xB0
     //~Kuribo() override; thunk 806dd2d0
-    int vf_0xC() override; //806dd270 returns 2
+    //int vf_0xC() override; //806dd270 returns 2 this might be wrong since kart_truck has no such function
 
 
     u16 respawnTime; //0xd0

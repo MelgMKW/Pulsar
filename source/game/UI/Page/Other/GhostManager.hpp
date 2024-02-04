@@ -37,7 +37,7 @@ public:
     ~GhostList(); //805e209c
     void FillWithAllGhosts(); //805e20dc
     void FillWithAllDLdGhosts(); //805e2198
-    void Init(CourseId id); //0x805e2200
+    void Init(CourseId id); //805e2200
     void Reset(); //805e22c8 inlined sets count to 0
 
     void FillFromGroup(u32 ghostGroupId, const GhostGroup& group, CourseId course, bool* isNew); //805e22d4 isNew only passed for downloaded ghosts
@@ -60,7 +60,7 @@ class GhostManager : public Page { //ID 0xA7
 public:
     static const PageId id = PAGE_GHOST_MANAGER;
     GhostManager(); //805e0c38 vtable 808b9258
-    ~GhostManager() override; //0x805e0cb8
+    ~GhostManager() override; //805e0cb8
     void OnInit() override; //805e0d84
     void OnActivate() override; //805e0ffc
     void OnDeactivate() override; //805e1100
@@ -76,7 +76,7 @@ public:
     GhostData* GetGhostData(GhostType type, u32 licenseId, CourseId id); //805e163c
     void PrepareRaceState(bool isRace, bool isStaffGhost); //805e1748
     void PrepareReplayState(); //805e17cc
-    void RequestGhost(bool checkRKGValidity); //0x805e1998
+    void RequestGhost(bool checkRKGValidity); //805e1998
     void SetupGhostRace(bool isStaffGhost, bool replaceGhostMiiByPlayer, bool disablePlayerMii); //805e1b04
     void SetupGhostReplay(bool isStaffGhosts); //805e1d5c
     void LoadGhost(u32 r4);

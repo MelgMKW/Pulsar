@@ -4,11 +4,11 @@
 #include <game/Objects/KCL/ExternalKCL/ObjectExternKCL.hpp>
 
 namespace Objects {
-class Crane : public ObjectExternKCL { //ObjectNum 0x1fb
+class Crane : public ObjectExternKCL { //ObjectNum 0x1fb = 507
     explicit Crane(const KMP::Holder<GOBJ>& gobjHolder); //807fe658
     ~Crane() override; //807feb28 vtable 808d49e8
     void Update() override; //0x14 807fe7ec
-    bool HasLod() override; //0x2c 807feb20
+    u32 GetPropertiesBitfield() override; //0x2c 807feb20
     float GetPeriod() const override; //0x134 807feaf0
     u8 unknown_0x104[0x128 - 0x104];
     u16 timeBeforeStarting; //0x128

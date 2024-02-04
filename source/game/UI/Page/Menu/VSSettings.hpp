@@ -15,7 +15,7 @@ namespace Pages {
 class VSSettings : public MenuInteractable { //ID 0x73
 public:
     static const PageId id = PAGE_VS_SETTINGS;
-    VSSettings(); //0x806284c8
+    VSSettings(); //806284c8
     ~VSSettings() override; //80853b10 vtable 808da3c8
     void OnInit() override; //0x28 80852d90
     void OnDispose() override; //0x2C 80853a8c

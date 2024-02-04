@@ -19,10 +19,17 @@ namespace Ghosts {
 //Implements MultiGhost and handles leaderboards/expert
 class Manager {
 public:
+    enum CBTiming {
+        IS_LOADING_LEADERBOARDS,
+        IS_SETTING_RACE,
+        IS_SAVING_GHOST
+    };
+    typedef void(*RKGCallback)(const RKG&, CBTiming, int);
+
     static const Manager* GetInstance() { return sInstance; }
     static Manager* CreateInstance();
     static void DestroyInstance();
-    static void SetCb(void (*cb)(const RKG& rkg, int)) { RKGCallback = cb; }
+    static void SetCb(RKGCallback userCb) { cb = userCb; }
     const Leaderboard& GetLeaderboard() const { return this->leaderboard; }
     const GhostData& GetGhostData(u32 idx) const { return this->files[idx]; }
     const PulsarId GetPulsarId() const { return this->pulsarId; }
@@ -65,7 +72,7 @@ private:
     void CreateGhost(TimeEntry* entry, u32 position);
     static void CreateAndSaveFiles(Manager* manager);
     static char folderPath[IOS::ipcMaxPath];
-    static void (*RKGCallback)(const RKG& rkg, int); //int = ghost index
+    static RKGCallback cb; //int = ghost index
 
 public:
     GhostData* files;

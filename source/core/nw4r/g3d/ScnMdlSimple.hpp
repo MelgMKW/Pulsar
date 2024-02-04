@@ -42,16 +42,16 @@ public:
 
     void ScnMdlSmpl_CalcPosture(u32 param, const math::MTX34* pParent); //80070ec0
     void EnableScnMdlCallbackTiming(Timing t); //800728f0
-    ResMdl resMdl;
-    math::MTX34* worldMtxArray;
-    u32* worldMtxAttribArray;
-    math::MTX34* viewPosMtxArray;
-    math::MTX33* viewNrmMtxArray;
-    math::MTX34* viewTexMtxArray;
-    u8 numView;
+    ResMdl resMdl; //0xe8
+    math::MTX34* worldMtxArray; //0xec
+    u32* worldMtxAttribArray; //0xf0
+    math::MTX34* viewPosMtxArray; //0xf4
+    math::MTX33* viewNrmMtxArray; //0xf8
+    math::MTX34* viewTexMtxArray; //0xfc
+    u8 numView; //0x100
     u8 curView;
-    u16 numViewMtx;
-    u32 flagScnMdlSimple;
+    u16 viewMtxCount; //0x102
+    u32 flagScnMdlSimple; //0x104
 
     const u8* byteCodeCalc; //0x108
     const u8* byteCodeMix; //0x10c
@@ -63,10 +63,10 @@ public:
     u8 callbackDeleteOption; //0x121
     u16 callbackNodeID; //0x122
     AnmObjChr* anmObjChr; //0x124
-    void* unknown;
-    AnmObjMatClr* anmObjMatClr;
-    AnmObjTexPat* anmObjTexPat;
-    AnmObjTexSrt* anmObjTexSrt;
+    void* unknown; //0x128
+    AnmObjMatClr* anmObjMatClr; //0x12c
+    AnmObjTexPat* anmObjTexPat; //0x130
+    AnmObjTexSrt* anmObjTexSrt; //0x134
 };
 
 

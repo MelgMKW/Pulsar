@@ -6,10 +6,10 @@
 
 
 //_sinit_ at 805e2f4c
-class GhostInfoControl: public LayoutUIControl {
+class GhostInfoControl : public LayoutUIControl {
 public:
-    GhostInfoControl(); //0x805e274c
-    ~GhostInfoControl() override; //0x805e27dc vtable 808b92c0
+    GhostInfoControl(); //805e274c
+    ~GhostInfoControl() override; //805e27dc vtable 808b92c0
     void InitSelf() override; //0x18 805e2964
     void OnUpdate() override; //0x1c 805e2968
     int GetRuntimeTypeInfo() const override; //0x28 805e2f40

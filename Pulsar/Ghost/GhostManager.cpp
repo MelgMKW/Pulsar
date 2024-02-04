@@ -6,6 +6,7 @@
 namespace Pulsar {
 namespace Ghosts {
 Manager* Manager::sInstance = nullptr;
+
 void(*Manager::RKGCallback)(const RKG&, int) = nullptr;
 
 char Manager::folderPath[IOS::ipcMaxPath] = "";
@@ -59,9 +60,9 @@ void Manager::Init(PulsarId id) {
         if(ret > 0 && rkg.CheckValidity()) {
 
             curData.Init(rkg);
-            if(this->RKGCallback != nullptr) {
+            if(this->cb != nullptr) {
                 rkg.DecompressTo(*decompressed);
-                this->RKGCallback(*decompressed, counter);
+                this->cb(*decompressed, IS_LOADING_LEADERBOARDS, counter);
             }
             curData.courseId = static_cast<CourseId>(id);
             if(curData.type == EXPERT_STAFF_GHOST) { //very easy to fake/manipulate, but 0 security so it doesn't matter
@@ -143,6 +144,10 @@ void Manager::LoadAllGhosts(u32 maxGhosts, bool isGhostRace) {
                 RKG& dest = racedata->ghosts[position];
                 if(this->rkg.header.compressed) this->rkg.DecompressTo(dest); //0x2800
                 else memcpy(&dest, &this->rkg, sizeof(RKG));
+                if(this->cb != nullptr) {
+                    this->cb(dest, IS_SETTING_RACE, i);
+                }
+
                 racedata->menusScenario.players[position + isGhostRace].playerType = PLAYER_GHOST;
                 SectionMgr::sInstance->sectionParams->playerMiis.LoadMii(position + isGhostRace, &dest.header.miiData);
                 ++position;
@@ -162,6 +167,9 @@ bool Manager::SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap) {
 
     bool gotTrophy = false;
     if(data.CreateRKG(buffer) && buffer.CompressTo(this->rkg)) {
+        if(this->cb != nullptr) {
+            this->cb(buffer, IS_SAVING_GHOST, -1);
+        }
         u32 crc32 = Manager::GetRKGcrc32(this->rkg);
         if(ldbPosition >= 0) this->leaderboard.Update(ldbPosition, entry, crc32); //in this order as save opens files too
         const System* system = System::sInstance;

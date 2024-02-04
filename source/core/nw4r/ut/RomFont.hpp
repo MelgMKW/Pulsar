@@ -7,7 +7,7 @@
 namespace nw4r {
 namespace ut {
 
-class RomFont: public Font {
+class RomFont : public Font {
 public:
     RomFont(); //800b1a20
     ~RomFont() override; //800b1a80 vtable 80274dac
@@ -20,7 +20,7 @@ public:
     int GetCellWidth() const override; //0x24 800b1b90
     int GetMaxCharWidth() const override; //0x28 800b1ba0
     Type GetType() const override; //0x2c 800b1bb0
-    GXTexFmt GetTextureFormat() const override; //0x30 800b1bc0
+    GX::TexFmt GetTextureFormat() const override; //0x30 800b1bc0
     int GetLineFeed() const override; //0x34 800b1bd0
     const CharWidths GetDefaultCharWidths() const override; //0x38 800b1be0
     void SetDefaultCharWidths(const CharWidths& widths) override; //0x3c 800b11c00

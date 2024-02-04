@@ -4,7 +4,8 @@
 #include <game/Objects/Collidable/ObjectCollidable.hpp>
 
 namespace Objects {
-class Cannon : public ObjectCollidable { //ObjectNum 378 StarRing, ObjectNum 601 DonkyCannonGC, ObjectNum 607 DonkyCannon_wii, ObjectNum 609 tree_cannon
+//ObjectNum 0x17a = 378 StarRing, ObjectNum 0x259 = 601 DonkyCannonGC, ObjectNum 0x25f = 607 DonkyCannon_wii, ObjectNum 0x261 = 609 tree_cannon
+class Cannon : public ObjectCollidable {
 public:
     enum Type {
         DonkyCannon_wii = 0,
@@ -17,7 +18,7 @@ public:
     ~Cannon() override; //806bfd90 vtable 808c2fa0
     void OnStart() override; //0xC 806bfddc
     void Update() override; //0x14 806bfed0
-    bool HasLod() override; //0x2c 806c04fc
+    u32 GetPropertiesBitfield() override; //0x2c 806c04fc
     void LoadAnimations() override; //0x5c 806bfc48
     u32 GetDrawType() const override; //0xb0 806c0504
     virtual int vf_0xec(); //0xec 806c04f4

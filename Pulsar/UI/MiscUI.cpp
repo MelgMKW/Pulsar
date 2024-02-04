@@ -13,7 +13,7 @@
 namespace Pulsar {
 
 namespace UI {
-//No ghost saving
+//No ghost saving on RKSYS
 kmWrite32(0x8054913C, 0x60000000);
 kmWrite32(0x80855f48, 0x48000148);
 

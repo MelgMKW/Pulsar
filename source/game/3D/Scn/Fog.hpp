@@ -9,11 +9,11 @@ class BFGHolder {
     explicit BFGHolder(BFG* raw); //805adff0 built with the 0th entry
     virtual ~BFGHolder(); //805ae774 vtable 808b6e64
     void Update(u8 bfgEntryIdx, float f1); //805ae0f8
-    GXFogType type;
+    GX::FogType type;
     float startZ;
     float endZ;
     u8 unknown_0x10;
-    GXColor color; //0x10
+    GX::Color color; //0x10
     u16 hasRangeCorrection; //0x14
     float transitionSpeed; //0x18
     u8 unknown_0x1C[2]; //0x18/0x19 of the bfgentry

@@ -10,7 +10,7 @@ class MiiGroupSub {
 };
 
 class MiiTexObj {
-    GXTexObj texObj;
+    GX::TexObj texObj;
     u8 unknown_0x20;
     u8 padding[3];
 }; //0x24
@@ -30,7 +30,7 @@ public:
     void LoadMii(u8 idx, RFL::ID rflId); //805fa748
 
     Mii* GetMii(u8 idx); //805fa930
-    GXTexObj* GetMiiTexObj(u8 idx, u8 textureIdx); //805fa964
+    GX::TexObj* GetMiiTexObj(u8 idx, u8 textureIdx); //805fa964
     void CopyMii(u8 srcIdx, u8 destIdx); //805fabf4
     void CopyMiiToOtherGroup(MiiGroup& other, u8 srcIdx, u8 destIdx); //805faf34
 

@@ -136,7 +136,7 @@ public:
     static IO* CreateInstance(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread);
     template<typename T>
     T* Alloc(u32 size) const { return EGG::Heap::alloc<T>(nw4r::ut::RoundUp(size, 0x20), 0x20, this->heap); }
-    int GetFileSize() const { return this->fileSize; }
+    s32 GetFileSize();
 
     bool OpenFile(const char* path, u32 mode);
     s32 Read(u32 size, void* bufferIn);

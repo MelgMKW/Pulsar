@@ -77,7 +77,7 @@ public:
     void StartExit(); //80602b04
     void EndExit(); //80602c40 inlined in Exit
     void PlaySound(u32 soundId, u32 r5); //80602cf8
-    void SetTransitionSound(u32 entranceSoundId, u32 exitSoundId); //0x80602d20
+    void SetTransitionSound(u32 entranceSoundId, u32 exitSoundId); //80602d20
     //static Page* GetPageById(PageId type);
 
     PageId pageId;

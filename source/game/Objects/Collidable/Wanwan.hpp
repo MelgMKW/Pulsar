@@ -11,7 +11,7 @@ class Pile : public ObjectCollidable {
     void OnStart() override; //0xC 806e3e20
     void Update() override; //0x14 806e3edc
     const char* GetName() const override; //0x28 806e953c
-    bool HasLod() override; //0x2c 806e9560
+    u32 GetPropertiesBitfield() override; //0x2c 806e9560
     const char* GetBRRESName() const override; //0x34 806e9554
     const char* GetSubFileName() const override; //0x38 806e9548
     u32 unknown_0xb0;
@@ -27,7 +27,7 @@ class Wanwan_Chn : public ObjectCollidable {
     void OnStart() override; //0xC 806e4a64
     void Update() override; //0x14 806e4208
     const char* GetName() const override; //0x28 806e94dc
-    bool HasLod() override; //0x2c 806e94f4
+    u32 GetPropertiesBitfield() override; //0x2c 806e94f4
     const char* GetSubFileName() const override; //0x38 806e94e8
     void LoadCollision() override; //0x60 806e41a4
     void UpdateCollision() override; //0x74 806e4220
@@ -43,7 +43,7 @@ class Wanwan : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 
     void OnStart() override; //0xC 806e4b9c
     void vf_0x10() override; //0x10 806e4b98
     void Update() override; //0x14 806e4f2c
-    bool HasLod() override; //0x2c 806e94bc
+    u32 GetPropertiesBitfield() override; //0x2c 806e94bc
     void LoadAnimations() override; //0x5c 806e9468
     void UpdateModelMatrix() override; //0x6c 806e9464
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806e526c
@@ -51,8 +51,8 @@ class Wanwan : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 
     ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806e546c
 
     //CycleManager vtable 808c72b0 at 0xb0, 7 ptmfs
-    //~Kuribo() override; thunk 806e95a8
-    int vf_0xC() override; //806e94b4 returns 1
+    //~Wanwan() override; thunk 806e95a8 
+    //int vf_0xC() override; //806e94b4 returns 1 this might be wrong since kart_truck has no such function
 
     //Ptmf functions
     void BeforeWanderB(); //806e6208

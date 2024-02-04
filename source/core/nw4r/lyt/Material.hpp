@@ -45,7 +45,7 @@ public:
     TexMap* GetTexMapAry(); //80080990
     TexMap* GetTexMapAry() const; //800809a0
     ut::LinkList<AnimationLink, offsetof(AnimationLink, link)> animLinkList; //0x4
-    GXColorS10 tevColours[3]; //0x10
+    GX::ColorS10 tevColours[3]; //0x10
     ut::Color tevKColours[4]; //0x28
     detail::BitGXNums GXMemCap;
     detail::BitGXNums GXMemNum;

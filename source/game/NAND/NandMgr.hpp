@@ -9,7 +9,7 @@
 
 class NandMgr {
 public:
-    static const char* saveFileNames[7]; //0x808b3228 to 808b3240 see bottom of header
+    static const char* saveFileNames[7]; //808b3228 to 808b3240 see bottom of header
     static NandMgr* sInstance; //809bd720
     static NandMgr* CreateInstance(); //8052bdf4
     static void DestroyInstance(); //8052be98

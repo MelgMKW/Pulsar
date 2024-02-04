@@ -11,14 +11,14 @@ class ControlGroupAction {
 
 class ControlGroup {
 public:
-    ControlGroup(); //0x805C23E4
-    ~ControlGroup(); //0x805c2400
+    ControlGroup(); //805C23E4
+    ~ControlGroup(); //805c2400
 
-    void Init(UIControl& parentControl, u32 controlCount); //0x805c2460
-    void Init(Page& parentPage, u32 controlCount); //0x805c2620
-    void SetControl(u8 index, UIControl& control, u32 zIdx); //0x805c27dc
-    void InitControls(); //0x805c2868
-    void Update(); //0x805c28d8
+    void Init(UIControl& parentControl, u32 controlCount); //805c2460
+    void Init(Page& parentPage, u32 controlCount); //805c2620
+    void SetControl(u8 index, UIControl& control, u32 zIdx); //805c27dc
+    void InitControls(); //805c2868
+    void Update(); //805c28d8
     void Draw(u32 zIdx); //805c2948
     void ResetControlsPosition(); //805c2a5c
     UIControl* GetControl(u32 index) const; //805c2ac0

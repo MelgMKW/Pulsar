@@ -16,9 +16,9 @@ struct CountDown {
     u32 seconds;
 };//total size 0xC
 
-class CountDownTimerControl: public LayoutUIControl {
+class CountDownTimerControl : public LayoutUIControl {
 public:
-    CountDownTimerControl(); //0x805C3CD4
+    CountDownTimerControl(); //805C3CD4
     ~CountDownTimerControl() override; //805c3d18 808b7dc0
     void InitSelf() override; //0x18 805c3dfc
     void OnUpdate() override; //0x1c 805c407c

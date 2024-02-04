@@ -75,7 +75,7 @@ class UpDownControl : public LayoutUIControl {
 public:
     class UpDownButton : public LayoutUIControl {
     private:
-        UpDownButton(); //0x8063fdc0
+        UpDownButton(); //8063fdc0
         ~UpDownButton() override; //8063fdfc vtable 808bf4b0
         void Init() override; //0xc 8063ff18
         void Update() override; //0x10 8063ffb0
@@ -95,8 +95,8 @@ public:
         ControlBoundingBox* boudingBox; //0x184
     };//total size 0x188
 
-    UpDownControl(); //0x8063e960
-    ~UpDownControl() override; //0x8063eb5c vtable 808bf46c
+    UpDownControl(); //8063e960
+    ~UpDownControl() override; //8063eb5c vtable 808bf46c
     void Init() override; //0xc 8063f16c
     void Update() override; //0x10 8063f2a8
     int GetRuntimeTypeInfo() const override; //0x28 806429a8

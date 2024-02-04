@@ -12,17 +12,17 @@ namespace g3d {
 
 class LightObj { //just a wrapper
     u32 flag;
-    GXLightObj obj;
+    GX::LightObj obj;
     void Clear(); //80077850
     void GetLightDir(math::VEC3* dest) const; //80077910
     void GetLightPos(math::VEC3* v) const; //800778f0
     void InitLightAttnA(float a0, float a1, float a2); //80077790
     void InitLightAttnK(float k0, float k1, float k2); //80077810
-    void InitLightColor(GXColor color); //80077680
+    void InitLightColor(GX::Color color); //80077680
     void InitLightPos(float x, float y, float z); //800776d0
     void InitLightDir(float nx, float ny, float nz); //80077710
-    void InitLightSpot(float cutoff, GXSpotFn spot_func); //80077750
-    void InitLightDistAttn(float ref_distance, float ref_brightness, GXDistAttnFn dist_func); //800777d0
+    void InitLightSpot(float cutoff, GX::SpotFn spot_func); //80077750
+    void InitLightDistAttn(float ref_distance, float ref_brightness, GX::DistAttnFn dist_func); //800777d0
     void InitSpecularDir(float nx, float ny, float nz); //80077850
     void InitLightShininess(float shininess); //80077890
 };

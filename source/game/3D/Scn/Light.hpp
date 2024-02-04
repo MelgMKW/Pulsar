@@ -28,9 +28,9 @@ class Light {
     u8 unknown_0x28[4];
     Vec3 lightOrigin; //0x2c
     Vec3 lightDest; //0x38
-    GXColor lightColor; //0x44
-    GXColor ambientLightColor2; //0x48
-    GXColor ambientLightColor; //0x4c
+    GX::Color lightColor; //0x44
+    GX::Color ambientLightColor2; //0x48
+    GX::Color ambientLightColor; //0x4c
     float unknown_0x50;
     u8 unknown_0x54;
     u8 padding4[3];

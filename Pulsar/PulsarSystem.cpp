@@ -59,7 +59,7 @@ void System::Init(const Config& conf) {
     lastTracks = new PulsarId[trackBlocking];
     for(int i = 0; i < trackBlocking; ++i) lastTracks[i] = PULSARID_NONE;
 
-    const BMGHeader* const confBMG = &conf.GetSection<BMGHeader>();
+    const BMGHeader* const confBMG = &conf.GetSection<BMGHeader, &BinaryHeader::offsetToBMG>();
     this->rawBmg = EGG::Heap::alloc<BMGHeader>(confBMG->fileLength, 0x4, heap);
     memcpy(this->rawBmg, confBMG, confBMG->fileLength);
     this->customBmgs.Init(*this->rawBmg);

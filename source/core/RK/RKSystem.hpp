@@ -11,7 +11,7 @@
 //using namespace EGG;
 
 struct Video {
-    GXRenderModeObj* mode;
+    GX::RenderModeObj* mode;
     u32 unknown[2];
 };//total size 0xc
 
@@ -42,7 +42,7 @@ public:
     u32 unknown_0x30; //idk
     u32 sysHeapSize;
     u32 gxFifoBufSize;
-    GXRenderModeObj* mode;
+    GX::RenderModeObj* mode;
     EGG::ExpAudioMgr* audioManager; //0x40
     Video* video; //0x44
     void* xfbManager; //0x48

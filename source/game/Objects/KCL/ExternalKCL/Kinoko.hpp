@@ -9,7 +9,7 @@ namespace Objects {
 class Kinoko_kuki : public ObjectCollidable { //ObjectNum 0x201 = 513 stem
 public:
     ~Kinoko_kuki() override; //80807e90 vtable 808d582c
-    bool HasLod() override; //0x2c 80807e88
+    u32 GetPropertiesBitfield() override; //0x2c 80807e88
     const char* GetSubFileName() const override; //0x38 80807e64
     void UpdateModelScale() override; //0x78 80807e84
     virtual void vf_0xec(); //0xec 80807e5c just a blr
@@ -24,7 +24,7 @@ public:
     ~Kinoko() override; //80807a14 vtable 808d56d8
     void OnStart() override; //0xC 808077ec
     void Update() override; //0x14 8080782c
-    bool HasLod() override; //0x2c 80807dac
+    u32 GetPropertiesBitfield() override; //0x2c 80807dac
     const char* GetSubFileName() const override; //0x38 80807d8c
     void vf_0xb4() override; //0xb4 80807d84
     void SetYScale() override; //0x124 80807d88
@@ -81,7 +81,7 @@ class Kinoko_ud : public Kinoko { //ObjectNum 0x1f5 = 501
 class Kinoko_nm : public ObjectExternKCL { //ObjectNum 0x1fa = 506 green mushrooms
 public:
     ~Kinoko_nm() override; //80827a9c vtable 808d7248
-    bool HasLod() override; //0x2c 80827a94
+    u32 GetPropertiesBitfield() override; //0x2c 80827a94
     const char* GetSubFileName() const override; //0x38 80827a74
     float GetPeriod() const override; //0x134 80827a68
 

@@ -48,14 +48,14 @@ kmCall(0x80796d8c, ReplaceBlooperUseOtherPlayers); //replaces the small blooper 
 
 //kmWrite32(0x805b68d8, 0x7DE97B78); //mr r9, r15 to get playercollision
 bool ConditionalIgnoreInvisibleWalls(float radius, CourseMgr& mgr, const Vec3& position, const Vec3& prevPosition,
-    KCLTypesBitfield acceptedFlags, CollisionInfo* collisionInfo, KCLTypeHolder& kclFlags)
+    KCLBitfield acceptedFlags, CollisionInfo* info, KCLTypeHolder& kclFlags)
 {
     if(Info::IsFeather()) {
         register Kart::Collision* collision;
         asm(mr collision, r15;);
         Kart::Status* status = collision->link.pointers->kartStatus;
         if(status->bitfield0 & 0x40000000 && status->jumpPadType == 0x7) {
-            acceptedFlags = static_cast<KCLTypesBitfield>(acceptedFlags & ~(1 << KCL_INVISIBLE_WALL));
+            acceptedFlags = static_cast<KCLBitfield>(acceptedFlags & ~(1 << KCL_INVISIBLE_WALL));
         }
         //to remove invisible walls from the list of flags checked, these walls at flag 0xD and 2^0xD = 0x2000*
     }

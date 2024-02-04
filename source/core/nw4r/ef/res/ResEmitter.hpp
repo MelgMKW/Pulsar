@@ -54,8 +54,8 @@ struct EmitterDrawSetting {
     struct Lighting {
         u8 mode;
         u8 type;
-        GXColor ambient;
-        GXColor diffuse;
+        GX::Color ambient;
+        GX::Color diffuse;
         float radius;
         math::VEC3 position;
     };
@@ -106,7 +106,7 @@ struct EmitterDrawSetting {
 
 
 struct ParticleParameterDesc {
-    GXColor color[2][2];
+    GX::Color color[2][2];
     nw4r::math::VEC2 size;
     nw4r::math::VEC2 scale;
     nw4r::math::VEC3 rotate;

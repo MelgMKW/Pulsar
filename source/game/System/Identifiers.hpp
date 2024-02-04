@@ -255,12 +255,12 @@ enum PageId {
     PAGE_CANT_SAVE                      = 0x04,
     PAGE_SYSTEM_MEMORY_CORRUPT          = 0x05,
     PAGE_MII_DATA_CORRUPT               = 0x06,
-    PAGE_GPPAN_OVERLAY                  = 0x07,
+    PAGE_GP_INTRO                       = 0x07, //DONE
     PAGE_VS_INTRO                       = 0x08, //DONE
-    PAGE_BATTLEPAN_OVERLAY              = 0x09,
-    PAGE_MISSIONPAN_OVERLAY             = 0x0A,
-    PAGE_TOURNAMENTPAN_OVERLAY          = 0x0B,
-    PAGE_GP_INTERFACE                   = 0x0C,
+    PAGE_BATTLE_INTRO                   = 0x09, //DONE
+    PAGE_MISSION_INTRO                  = 0x0A, //DONE
+    PAGE_TOURNAMENTP_INTRO              = 0x0B, //DONE
+    PAGE_GP_INTERFACE                   = 0x0C, //DONE
     PAGE_TT_INTERFACE                   = 0x0D, //DONE
     PAGE_P1VS_INTERFACE                 = 0x0E, //DONE
     PAGE_P2VS_INTERFACE                 = 0x0F, //DONE
@@ -271,7 +271,7 @@ enum PageId {
     PAGE_P3BATTLE_INTERFACE             = 0x14,
     PAGE_P4BATTLE_INTERFACE             = 0x15,
     PAGE_MISSION_TOURNAMENT_INTERFACE   = 0x16,
-    PAGE_GP_PAUSE_MENU                  = 0x17,
+    PAGE_GP_PAUSE_MENU                  = 0x17, //DONE
     PAGE_VS_RACE_PAUSE_MENU             = 0x18, //DONE
     PAGE_TT_PAUSE_MENU                  = 0x19, //DONE
     PAGE_BATTLE_PAUSE_MENU              = 0x1A,
@@ -280,7 +280,7 @@ enum PageId {
     PAGE_ABANDON_GHOST_RACE             = 0x1D,
     PAGE_QUIT_GHOST_RACE                = 0x1E,
     PAGE_GHOST_REPLAY_PAUSE_MENU        = 0x1F, //DONE
-    PAGE_GP_ENDMENU                     = 0x20,
+    PAGE_GP_ENDMENU                     = 0x20, //DONE
     PAGE_TT_ENDMENU                     = 0x21, //DONE
     PAGE_VS_RACEENDMENU                 = 0x22, //DONE
     PAGE_BATTLEENDMENU                  = 0x23,
@@ -879,7 +879,7 @@ enum KCLTypes {
     KCL_WALL5                   = 0x1F
 };
 
-enum KCLTypesBitfield {
+enum KCLBitfield {
     KCL_BITFIELD_ROAD                   = 1 << KCL_ROAD,                  //0x1
     KCL_BITFIELD_SLIPPERY_ROAD          = 1 << KCL_SLIPPERY_ROAD,         //0x2
     KCL_BITFIELD_WEAK_OFFROAD           = 1 << KCL_WEAK_OFFROAD,          //0x4

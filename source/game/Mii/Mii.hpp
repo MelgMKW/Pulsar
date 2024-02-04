@@ -44,7 +44,6 @@ public:
     static bool GetMiiId(const RFL::CreateID* createId, u32* r4, u16* id); //80527604
     void Load(RFL::ID rflId, u32 r5); //80526020 rflId == 0 leads to empty mii
 
-
     u32 r4;
     u16 rflId; //0x8
     u8 padding[2];
@@ -54,7 +53,7 @@ public:
     wchar_t name[10]; //0x68
     u8 unknown_0x7C[0x94 - 0x7c];
     RFL::CreateID createId; //0x94
-    GXTexObj texObj; //0x98
+    GX::TexObj texObj; //0x98
 }; //total size 0xB8
 size_assert(Mii, 0xb8);
 
@@ -69,6 +68,31 @@ public:
 };
 size_assert(MiiManagerSub, 0x24);
 
+struct MiiCreationParams {
+    struct Sub {
+
+    };
+    virtual ~MiiCreationParams(); //806b8f4c vtable 808c2368
+
+    void Init(u16 r4, u8 r5, u8 r6, u8 r7, u8 r8, u32 r9, bool isGameChar); //805297e4
+    void Reset(); //80529824
+
+    u16 r4;
+    u8 r5;
+    u8 r6;
+    u8 r7;
+    u8 r8; //0x9
+    u8 padding[3];
+    u32 r9;
+    bool isGameChar; //0x10
+    u8 unknown_0x11[13];
+    u8 unknown_0x1E[13];
+    u8 unknown_0x2B[13];
+    u8 unknown_0x38[14];
+    u8 unknown_0x52[14];
+    u8 padding2; //0x5F
+}; //0x60
+
 class MiiManager {
     enum Status {
         STATUS_OK
@@ -82,6 +106,8 @@ class MiiManager {
     Mii* CreateMii(const RFL::CreateID* id, EGG::Heap* heap); //80527b0c for official miis
     Mii* CreateMii(u32 id, EGG::Heap* heap); //80527d60 checks that id is valid and will return nullptr if it isn't
     Mii* CreateMii(const RFL::StoreData* storeData, EGG::Heap* heap); //80529330
+    Mii* CreateMii(MiiCreationParams* params, Random* random, EGG::Heap* heap); //805287bc
+    Mii* CreateRandomMii(EGG::Heap* heap, MiiCreationParams* params, Random* random); //805282b0
     RFL::MiddleDB& GetMiddleDB3(); //80527514
 
     EGG::TDisposer<MiiManager> disposer; //80526b64 vtable 808b316c

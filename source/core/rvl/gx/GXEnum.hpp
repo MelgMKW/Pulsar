@@ -4,7 +4,7 @@
 #include <types.hpp>
 #include <core/rvl/mtx/mtx.hpp>
 
-typedef union _wgpipe {
+union WGPipe {
     volatile u8 U8;
     volatile s8 S8;
     volatile u16 U16;
@@ -12,7 +12,7 @@ typedef union _wgpipe {
     volatile u32 U32;
     volatile s32 S32;
     volatile float F32;
-} WGPipe;
+};
 
 #define wgPipe ((WGPipe *)0xCC008000)
 
@@ -197,15 +197,9 @@ static inline void GX_MatrixIndex1x8(u8 index) {
     wgPipe->U8 = index;
 }
 
+namespace GX {
+
 struct TexMap {};
-
-typedef struct ColorS10 {
-    s16    r, g, b, a;
-} ColorS10;
-
-typedef struct _Color {
-    u8  r, g, b, a;
-} Color;
 
 #define GXEnd()
 
@@ -215,35 +209,35 @@ typedef struct _Color {
 #define GX_ENABLE			1
 
 /*clipmode Clipping mode*/
-typedef enum _GXClipMode {
+enum ClipMode {
     GX_CLIP_ENABLE = 0,
     GX_CLIP_DISABLE = 1
-} GXClipMode;
+};
 
 
 #define GX_FIFO_MINSIZE		(64*1024)			/*Smallest usable graphics FIFO size. */
 #define GX_FIFO_HIWATERMARK	(16*1024)			/*Default hi watermark for FIFO buffer control. */
 #define GX_FIFO_OBJSIZE		128
 
-typedef enum _GXProjectionType {
+enum ProjectionType {
     GX_PERSPECTIVE,
     GX_ORTHOGRAPHIC
-} GXProjectionType;
+};
 
-typedef enum _GXMiscToken {
+enum MiscToken {
     GX_MT_XF_FLUSH = 1,
     GX_MT_DL_SAVE_CONTEXT = 2,
     GX_MT_ABORT_WAIT_COPYOUT = 3,
     GX_MT_NULL = 0
-} GXMiscToken;
+};
 
-typedef enum _GXXFFlushVal {
+enum XFFlushVal {
     GX_XF_FLUSH_NONE = 0,
     GX_XF_FLUSH_SAFE = 8
-} GXXFFlushVal;
+};
 
 /*channelid Color channel ID*/
-typedef enum _GXChannelID {
+enum ChannelID {
     GX_COLOR0,
     GX_COLOR1,
     GX_ALPHA0,
@@ -254,16 +248,16 @@ typedef enum _GXChannelID {
     GX_ALPHA_BUMP,        // bump alpha 0-248, RGB=0
     GX_ALPHA_BUMPN,       // normalized bump alpha, 0-255, RGB=0
     GX_COLOR_NULL = 0xff
-} GXChannelID;
+};
 
 /*mtxtype Matrix type*/
-typedef enum _GXTexMtxType {
+enum TexMtxType {
     GX_MTX3x4 = 0,
     GX_MTX2x4
-} GXTexMtxType;
+};
 
 /*vtxfmt Vertex format index*/
-typedef enum _GXVtxFmt {
+enum VtxFmt {
     GX_VTXFMT0 = 0,
     GX_VTXFMT1,
     GX_VTXFMT2,
@@ -273,25 +267,25 @@ typedef enum _GXVtxFmt {
     GX_VTXFMT6,
     GX_VTXFMT7,
     GX_MAX_VTXFMT
-} GXVtxFmt;
+};
 
 
 
 
 /*vtxattrin Vertex data input type*/
-typedef enum _GXAttrType {
+enum AttrType {
     GX_NONE = 0,
     GX_DIRECT,
     GX_INDEX8,
     GX_INDEX16
-} GXAttrType;
+};
 
 
 
 
 /*compsize Number of components in an attribute*/
 
-typedef enum _GXCompType {
+enum CompType {
     GX_U8 = 0,				/*Unsigned 8-bit integer */
     GX_S8 = 1,				/*Signed 8-bit integer */
     GX_U16 = 2,				/*Unsigned 16-bit integer */
@@ -303,12 +297,12 @@ typedef enum _GXCompType {
     GX_RGBA4 = 3,			/*16-bit RGBA */
     GX_RGBA6 = 4,			/*24-bit RGBA */
     GX_RGBA8 = 5			/*32-bit RGBA */
-} GXCompType;
+};
 
 
 /*comptype Attribute component type*/
 
-typedef enum _GXCompCnt {
+enum CompCnt {
     GX_POS_XY = 0,	/*X,Y position */
     GX_POS_XYZ = 1,	/*X,Y,Z position */
     GX_NRM_XYZ = 0,	/*X,Y,Z normal */
@@ -319,12 +313,12 @@ typedef enum _GXCompCnt {
     GX_TEX_S = 0,	/*One texture dimension */
     GX_TEX_ST = 1	/*Two texture dimensions */
 
-} GXCompCnt;
+};
 
 
 
 /*vtxattr Vertex attribute array type*/
-typedef enum _GXAttr {
+enum Attr {
     GX_VA_PNMTXIDX = 0,    // position/normal matrix index
     GX_VA_TEX0MTXIDX,      // texture 0 matrix index
     GX_VA_TEX1MTXIDX,      // texture 1 matrix index
@@ -355,13 +349,13 @@ typedef enum _GXAttr {
     GX_VA_MAX_ATTR,        // maximum number of vertex attributes
 
     GX_VA_NULL = 0xff  // NULL attribute (to mark end of lists)
-} GXAttr;
+};
 
 
 /*primtype Primitive type
 Collection of primitive types that can be drawn by the GP.
 Which type you use depends on your needs; however, performance can increase by using triangle strips or fans instead of discrete triangles.*/
-typedef enum _GXPrimitive {
+enum Primitive {
     GX_POINTS = 0xb8,	/*Draws a series of points. Each vertex is a single point. */
     GX_LINES = 0xa8,	/*Draws a series of unconnected line segments. Each pair of vertices makes a line. */
     GX_LINESTRIP = 0xb0,	/*Draws a series of lines. Each vertex (besides the first) makes a line between it and the previous. */
@@ -369,16 +363,16 @@ typedef enum _GXPrimitive {
     GX_TRIANGLESTRIP = 0x98,	/*Draws a series of triangles. Each triangle (besides the first) shares a side with the previous triangle.* Each vertex (besides the first two) completes a triangle. */
     GX_TRIANGLEFAN = 0xa0,	/*Draws a single triangle fan. The first vertex is the "centerpoint". The second and third vertex complete* the first triangle. Each subsequent vertex completes another triangle which shares a side with the previous* triangle (except the first triangle) and has the centerpoint vertex as one of the vertices. */
     GX_QUADS = 0x80		/*Draws a series of unconnected quads. Every four vertices completes a quad. Internally, each quad is* translated into a pair of triangles. */
-} GXPrimitive;
+};
 
 
-typedef enum _GXColorSrc {
+enum ColorSrc {
     GX_SRC_REG = 0,
     GX_SRC_VTX
-} GXColorSrc;
+};
 
 /*lightid Light ID*/
-typedef enum _GXLightID {
+enum LightID {
     GX_LIGHT0 = 0x001,
     GX_LIGHT1 = 0x002,
     GX_LIGHT2 = 0x004,
@@ -389,28 +383,28 @@ typedef enum _GXLightID {
     GX_LIGHT7 = 0x080,
     GX_MAX_LIGHT = 0x100,
     GX_LIGHT_NULL = 0x000
-} GXLightID;
+};
 
 
 /*difffn Diffuse function*/
-typedef enum _GXDiffuseFn {
+enum DiffuseFn {
     GX_DF_NONE = 0,
     GX_DF_SIGN,
     GX_DF_CLAMP
-} GXDiffuseFn;
+};
 
 
 /*attenfunc Attenuation function*/
-typedef enum _GXAttnFn {
+enum AttnFn {
     GX_AF_SPEC = 0,    // use specular attenuation
     GX_AF_SPOT = 1,    // use distance/spotlight attenuation
     GX_AF_NONE         // attenuation is off
-} GXAttnFn;
+};
 
 
 /*os,nrm,tex,dtt matrix */
 /*pnmtx Position-normal matrix index*/
-typedef enum _GXPosNrmMtx {
+enum PosNrmMtx {
     GX_PNMTX0 = 0,
     GX_PNMTX1 = 3,
     GX_PNMTX2 = 6,
@@ -421,12 +415,12 @@ typedef enum _GXPosNrmMtx {
     GX_PNMTX7 = 21,
     GX_PNMTX8 = 24,
     GX_PNMTX9 = 27
-} GXPosNrmMtx;
+};
 
 
 
 /*texmtx Texture matrix index*/
-typedef enum _GXTexMtx {
+enum TexMtx {
     GX_TEXMTX0 = 30,
     GX_TEXMTX1 = 33,
     GX_TEXMTX2 = 36,
@@ -438,10 +432,10 @@ typedef enum _GXTexMtx {
     GX_TEXMTX8 = 54,
     GX_TEXMTX9 = 57,
     GX_IDENTITY = 60
-} GXTexMtx;
+};
 
 
-typedef enum _GXPTTexMtx {
+enum PTTexMtx {
     GX_PTTEXMTX0 = 64,
     GX_PTTEXMTX1 = 67,
     GX_PTTEXMTX2 = 70,
@@ -463,13 +457,13 @@ typedef enum _GXPTTexMtx {
     GX_PTTEXMTX18 = 118,
     GX_PTTEXMTX19 = 121,
     GX_PTIDENTITY = 125
-} GXPTTexMtx;
+};
 
 /* tex coord id
    used by: XF: 0x1040,0x1050BP: 0x30
 */
 /*texcoordid texture coordinate slot*/
-typedef enum _GXTexCoordID {
+enum TexCoordID {
     GX_TEXCOORD0 = 0x0,
     GX_TEXCOORD1,
     GX_TEXCOORD2,
@@ -480,11 +474,11 @@ typedef enum _GXTexCoordID {
     GX_TEXCOORD7,
     GX_MAX_TEXCOORD = 8,
     GX_TEXCOORD_NULL = 0xff
-} GXTexCoordID;
+};
 
 
 /*texfmt Texture format*/
-typedef enum _GXTexFmt {
+enum TexFmt {
 #define _GX_TF_CTF     0x20 /* copy-texture-format only */
 #define _GX_TF_ZTF     0x10 /* Z-texture-format */
     GX_TF_I4 = 0x0,
@@ -513,23 +507,23 @@ typedef enum _GXTexFmt {
     GX_CTF_Z8L = 0xA | _GX_TF_ZTF | _GX_TF_CTF,	/*For copying the lower 8 bits of Z */
     GX_CTF_Z16L = 0xC | _GX_TF_ZTF | _GX_TF_CTF,	/*For copying the lower 16 bits of Z */
     GX_TF_A8 = GX_CTF_A8
-} GXTexFmt;
+};
 
-typedef enum _GXCITexFmt {
+enum CITexFmt {
     GX_TF_C4 = 0x8,
     GX_TF_C8 = 0x9,
     GX_TF_C14X2 = 0xa
-} GXCITexFmt;
+};
 
-typedef enum _GXTlutFmt {
+enum TlutFmt {
     GX_TL_IA8 = 0x0,
     GX_TL_RGB565 = 0x1,
     GX_TL_RGB5A3 = 0x2,
     GX_MAX_TLUTFMT
-} GXTlutFmt;
+};
 
 /* gx tlut size */
-typedef enum _GXTlutSize {
+enum TlutSize {
     GX_TLUT_16 = 1, // number of 16 entry blocks.
     GX_TLUT_32 = 2,
     GX_TLUT_64 = 4,
@@ -541,21 +535,21 @@ typedef enum _GXTlutSize {
     GX_TLUT_4K = 256,
     GX_TLUT_8K = 512,
     GX_TLUT_16K = 1024
-} GXTlutSize;
+};
 
 /*ztexop Z Texture operator*/
-typedef enum _GXZTexOp {
+enum ZTexOp {
     GX_ZT_DISABLE,
     GX_ZT_ADD,				/*Add a Z texel to reference Z */
     GX_ZT_REPLACE,			/*Replace reference Z with Z texel */
     GX_MAX_ZTEXOP
-} GXZTexOp;
+};
 
 
 
 
 /*texgentyp Texture coordinate generation type*/
-typedef enum _GXTexGenType {
+enum TexGenType {
     GX_TG_MTX3x4 = 0,	/*3x4 matrix multiply on the input attribute and generate S,T,Q coordinates; S,T are then divided * by Q to produce the actual 2D texture coordinates. */
     GX_TG_MTX2x4,		/*2x4 matrix multiply on the input attribute and generate S,T texture coordinates. */
     GX_TG_BUMP0,		/*Use light 0 in the bump map calculation. */
@@ -567,12 +561,12 @@ typedef enum _GXTexGenType {
     GX_TG_BUMP6,		/*Use light 6 in the bump map calculation. */
     GX_TG_BUMP7,		/*Use light 7 in the bump map calculation. */
     GX_TG_SRTG			/*Coordinates generated from vertex lighting results; one of the color channel results is converted* into texture coordinates. */
-} GXTexGenType;
+};
 
 
 
 /*texgensrc Texture coordinate source*/
-typedef enum _GXTexGenSrc {
+enum TexGenSrc {
     GX_TG_POS = 0,
     GX_TG_NRM,
     GX_TG_BINRM,
@@ -594,12 +588,12 @@ typedef enum _GXTexGenSrc {
     GX_TG_TEXCOORD6,
     GX_TG_COLOR0,
     GX_TG_COLOR1
-} GXTexGenSrc;
+};
 
 
 
 /*compare Compare type*/
-typedef enum _GXCompare {
+enum Compare {
     GX_NEVER,
     GX_LESS,
     GX_EQUAL,
@@ -608,30 +602,30 @@ typedef enum _GXCompare {
     GX_NEQUAL,
     GX_GEQUAL,
     GX_ALWAYS
-} GXCompare;
+};
 
 
 /* Text Wrap Mode */
-typedef enum _GXTexWrapMode {
+enum TexWrapMode {
     GX_CLAMP,
     GX_REPEAT,
     GX_MIRROR,
     GX_MAX_TEXWRAPMODE
-} GXTexWrapMode;
+};
 
 /*blendmode Blending type*/
-typedef enum _GXBlendMode {
+enum BlendMode {
     GX_BM_NONE,			/*Write input directly to EFB */
     GX_BM_BLEND,		/*Blend using blending equation */
     GX_BM_LOGIC,		/*Blend using bitwise operation */
     GX_BM_SUBTRACT,		/*Input subtracts from existing pixel */
     GX_MAX_BLENDMODE
-} GXBlendMode;
+};
 
 
 /*blendfactor Blending control
 Each pixel (source or destination) is multiplied by any of these controls.*/
-typedef enum _GXBlendFactor {
+enum BlendFactor {
     GX_BL_ZERO,				/*0.0 */
     GX_BL_ONE,				/*1.0 */
     GX_BL_SRCCLR,			/*source color */
@@ -642,12 +636,12 @@ typedef enum _GXBlendFactor {
     GX_BL_INVDSTALPHA,		/*1.0 - (FB alpha) */
     GX_BL_DSTCLR = GX_BL_SRCCLR,
     GX_BL_INVDSTCLR = GX_BL_INVSRCCLR
-} GXBlendFactor;
+};
 
 
 /*logicop Logical operation type
 Destination (dst) acquires the value of one of these operations, given in C syntax.*/
-typedef enum _GXLogicOp {
+enum LogicOp {
     GX_LO_CLEAR,     /*0 */
     GX_LO_AND,       /*src & dst */
     GX_LO_REVAND,    /*src & ~dst */
@@ -664,13 +658,13 @@ typedef enum _GXLogicOp {
     GX_LO_INVOR,     /*~src | dst */
     GX_LO_NAND,      /*~(src & dst) */
     GX_LO_SET        /*1 */
-} GXLogicOp;
+};
 
 
 /*texoff Texture offset value
 Used for texturing points or lines.*/
 
-typedef enum _GXTexOffset {
+enum TexOffset {
     GX_TO_ZERO,
     GX_TO_SIXTEENTH,
     GX_TO_EIGHTH,
@@ -678,7 +672,7 @@ typedef enum _GXTexOffset {
     GX_TO_HALF,
     GX_TO_ONE,
     GX_MAX_TEXOFFSET
-} GXTexOffset;
+};
 
 
 
@@ -686,20 +680,20 @@ typedef enum _GXTexOffset {
 /*tevdefmode TEV combiner operation
 Color/Alpha combiner modes for GX_SetTevOp().
 For these equations, <i>Cv</i> is the output color for the stage, <i>Cr</i> is the output color of previous stage, and <i>Ct</i> is the texture color. <i>Av</i> is the output alpha for a stage, <i>Ar</i> is the output alpha of previous stage, and <i>At</i> is the texture alpha. As a special case, rasterized color (<tt>GX_CC_RASC</tt>) is used as <i>Cr</i> and rasterized alpha (<tt>GX_CA_RASA</tt>) is used as <i>Ar</i> at the first TEV stage because there is no previous stage.*/
-typedef enum _GXTevMode {
+enum TevMode {
     GX_MODULATE,		/*<i>Cv</i>=<i>CrCt</i>; <i>Av</i>=<i>ArAt</i> */
     GX_DECAL,			/*<i>Cv</i>=(1-<i>At</i>)<i>Cr</i> + <i>AtCt</i>; <i>Av</i>=<i>Ar</i> */
     GX_BLEND,			/*<i>Cv=(1-<i>Ct</i>)<i>Cr</i> + <i>Ct</i>; <i>Av</i>=<i>AtAr</i> */
     GX_REPLACE,			/*<i>Cv=<i>Ct</i>; <i>Ar=<i>At</i> */
     GX_PASSCLR			/*<i>Cv=<i>Cr</i>; <i>Av=<i>Ar</i> */
-} GXTevMode;
+};
 
 
 
 
 /*tevcolorarg TEV color combiner input*/
 
-typedef enum _GXTevColorArg {
+enum TevColorArg {
     GX_CC_CPREV,	/*Use the color value from previous TEV stage */
     GX_CC_APREV,	/*Use the alpha value from previous TEV stage */
     GX_CC_C0,		/*Use the color value from the color/output register 0 */
@@ -716,14 +710,14 @@ typedef enum _GXTevColorArg {
     GX_CC_HALF,
     GX_CC_KONST,
     GX_CC_ZERO		/*Use to pass zero value */
-} GXTevColorArg;
+};
 
 
 
 
 /*tevalphaarg TEV alpha combiner input*/
 
-typedef enum _GXTevAlphaArg {
+enum TevAlphaArg {
     GX_CA_APREV,	/*Use the alpha value from previous TEV stage */
     GX_CA_A0,		/*Use the alpha value from the color/output register 0 */
     GX_CA_A1,		/*Use the alpha value from the color/output register 1 */
@@ -732,7 +726,7 @@ typedef enum _GXTevAlphaArg {
     GX_CA_RASA,		/*Use the alpha value from rasterizer */
     GX_CA_KONST,
     GX_CA_ZERO		/*Use to pass zero value */
-} GXTevAlphaArg;
+};
 
 
 
@@ -741,7 +735,7 @@ typedef enum _GXTevAlphaArg {
 The GameCube's Graphics Processor (GP) can use up to 16 stages to compute a texel for a particular surface. By default, each texture will use two stages, but it can be configured through various functions calls.
 This is different from \ref texmapid s, where textures are loaded into.*/
 
-typedef enum _GXTevStageID {
+enum TevStageID {
     GX_TEVSTAGE0,
     GX_TEVSTAGE1,
     GX_TEVSTAGE2,
@@ -759,13 +753,13 @@ typedef enum _GXTevStageID {
     GX_TEVSTAGE14,
     GX_TEVSTAGE15,
     GX_MAX_TEVSTAGE
-} GXTevStageID;
+};
 
 
 
 
 /*tevop TEV combiner operator*/
-typedef enum _GXTevOp {
+enum TevOp {
     GX_TEV_ADD = 0,
     GX_TEV_SUB = 1,
     GX_TEV_COMP_R8_GT = 8,
@@ -778,68 +772,68 @@ typedef enum _GXTevOp {
     GX_TEV_COMP_RGB8_EQ = 15,
     GX_TEV_COMP_A8_GT = GX_TEV_COMP_RGB8_GT, // for alpha channel
     GX_TEV_COMP_A8_EQ = GX_TEV_COMP_RGB8_EQ  // for alpha channel
-} GXTevOp;
+};
 
-typedef enum _GXTevBias {
+enum TevBias {
     GX_TB_ZERO,
     GX_TB_ADDHALF,
     GX_TB_SUBHALF,
     GX_MAX_TEVBIAS
-} GXTevBias;
+};
 
 
 
-typedef enum _GXTevClampMode {
+enum TevClampMode {
     GX_TC_LINEAR,
     GX_TC_GE,
     GX_TC_EQ,
     GX_TC_LE,
     GX_MAX_TEVCLAMPMODE
-} GXTevClampMode;
+};
 
 
 
 
 /*tevscale TEV scale value*/
 
-typedef enum _GXTevScale {
+enum TevScale {
     GX_CS_SCALE_1,
     GX_CS_SCALE_2,
     GX_CS_SCALE_4,
     GX_CS_DIVIDE_2,
     GX_MAX_TEVSCALE
-} GXTevScale;
+};
 
 
 
 
 /*tevcoloutreg TEV color/output register*/
 
-typedef enum _GXTevRegID {
+enum TevRegID {
     GX_TEVPREV = 0,
     GX_TEVREG0,
     GX_TEVREG1,
     GX_TEVREG2,
     GX_MAX_TEVREG
-} GXTevRegID;
+};
 
 
 
 
 /*cullmode Backface culling mode*/
-typedef enum _GXCullMode {
+enum CullMode {
     GX_CULL_NONE,		/*Do not cull any primitives. */
     GX_CULL_FRONT,		/*Cull front-facing primitives.*/
     GX_CULL_BACK,		/*Cull back-facing primitives.*/
     GX_CULL_ALL			/*Cull all primitives. */
-} GXCullMode;
+};
 
 
 /*texmapid texture map slot
 Texture map slots to hold textures in.
 The GameCube's Graphics Processor (GP) can apply up to eight textures to a single surface. Those textures are assigned one of these slots. Various operations used on or with a particular texture will also take one of these items, including operations regarding texture coordinate generation (although not necessarily on the same slot).
 This is different from \ref tevstage s, which are the actual quanta for work with textures.*/
-typedef enum _GXTexMapID {
+enum TexMapID {
     GX_TEXMAP0,				/*Texture map slot 0 */
     GX_TEXMAP1,				/*Texture map slot 1 */
     GX_TEXMAP2,				/*Texture map slot 2 */
@@ -851,31 +845,31 @@ typedef enum _GXTexMapID {
     GX_MAX_TEXMAP,
     GX_TEXMAP_NULL = 0xff,	/*No texmap */
     GX_TEX_DISABLE = 0x100 	/*Disable texmap lookup for this texmap slot (use bitwise OR with a texture map slot). */
-} GXTexMapID;
+};
 
 
 
 /*alphaop Alpha combine control*/
-typedef enum _GXAlphaOp {
+enum AlphaOp {
     GX_AOP_AND,
     GX_AOP_OR,
     GX_AOP_XOR,
     GX_AOP_XNOR,
     GX_MAX_ALPHAOP
-} GXAlphaOp;
+};
 
 
-typedef enum _GXTevKColorID {
+enum TevKColorID {
     GX_KCOLOR0,
     GX_KCOLOR1,
     GX_KCOLOR2,
     GX_KCOLOR3,
     GX_MAX_KCOLOR
-} GXTevKColorID;
+};
 
 /*tevkcolorsel TEV constant color selection*/
 
-typedef enum _GXTevKColorSel {
+enum TevKColorSel {
     GX_TEV_KCSEL_8_8 = 0x00,
     GX_TEV_KCSEL_7_8 = 0x01,
     GX_TEV_KCSEL_6_8 = 0x02,
@@ -910,9 +904,9 @@ typedef enum _GXTevKColorSel {
     GX_TEV_KCSEL_K1_A = 0x1D,
     GX_TEV_KCSEL_K2_A = 0x1E,
     GX_TEV_KCSEL_K3_A = 0x1F
-} GXTevKColorSel;
+};
 
-typedef enum _GXTevKAlphaSel {
+enum TevKAlphaSel {
     GX_TEV_KASEL_8_8 = 0x00,
     GX_TEV_KASEL_7_8 = 0x01,
     GX_TEV_KASEL_6_8 = 0x02,
@@ -941,50 +935,50 @@ typedef enum _GXTevKAlphaSel {
     GX_TEV_KASEL_K1_A = 0x1D,
     GX_TEV_KASEL_K2_A = 0x1E,
     GX_TEV_KASEL_K3_A = 0x1F
-} GXTevKAlphaSel;
+};
 
-typedef enum _GXTevSwapSel {
+enum TevSwapSel {
     GX_TEV_SWAP0 = 0,
     GX_TEV_SWAP1,
     GX_TEV_SWAP2,
     GX_TEV_SWAP3,
     GX_MAX_TEVSWAP
-} GXTevSwapSel;
+};
 
 
 
-typedef enum _GXTevColorChan {
+enum TevColorChan {
     GX_CH_RED = 0,
     GX_CH_GREEN,
     GX_CH_BLUE,
     GX_CH_ALPHA
-} GXTevColorChan;
+};
 
 /*indtexstage Indirect texture stage*/
-typedef enum _GXIndTexStageID {
+enum IndTexStageID {
     GX_INDTEXSTAGE0,
     GX_INDTEXSTAGE1,
     GX_INDTEXSTAGE2,
     GX_INDTEXSTAGE3,
     GX_MAX_INDTEXSTAGE
-} GXIndTexStageID;
+};
 
 
 /*indtexformat Indirect texture format
 Bits for the indirect offsets are extracted from the high end of each component byte. Bits for the bump alpha are extraced off the low end of the byte. For <tt>GX_ITF_8</tt>, the byte is duplicated for the offset and the bump alpha.*/
-typedef enum _GXIndTexFormat {
+enum IndTexFormat {
     GX_ITF_8,       // 8 bit texture offsets.
     GX_ITF_5,       // 5 bit texture offsets.
     GX_ITF_4,       // 4 bit texture offsets.
     GX_ITF_3,       // 3 bit texture offsets.
     GX_MAX_ITFORMAT
-} GXIndTexFormat;
+};
 
 
 /*indtexbias Indirect texture bias select
 Indicates which components of the indirect offset should receive a bias value.
 The bias is fixed at -128 for <tt>GX_ITF_8</tt> and +1 for the other formats. The bias happens prior to the indirect matrix multiply.*/
-typedef enum _GXIndTexBiasSel {
+enum IndTexBiasSel {
     GX_ITB_NONE,
     GX_ITB_S,
     GX_ITB_T,
@@ -994,11 +988,11 @@ typedef enum _GXIndTexBiasSel {
     GX_ITB_TU,
     GX_ITB_STU,
     GX_MAX_ITBIAS
-} GXIndTexBiasSel;
+};
 
 
 /*indtexmtx Indirect texture matrix*/
-typedef enum _GXIndTexMtxID {
+enum IndTexMtxID {
     GX_ITM_OFF,				/*Specifies a matrix of all zeroes. */
     GX_ITM_0,				/*Specifies indirect matrix 0, indirect scale 0. */
     GX_ITM_1,				/*Specifies indirect matrix 1, indirect scale 1. */
@@ -1009,13 +1003,13 @@ typedef enum _GXIndTexMtxID {
     GX_ITM_T0 = 9,			/*Specifies dynamic T-type matrix, indirect scale 0. */
     GX_ITM_T1,				/*Specifies dynamic T-type matrix, indirect scale 1. */
     GX_ITM_T2				/*Specifies dynamic T-type matrix, indirect scale 2. */
-} GXIndTexMtxID;
+};
 
 
 /*indtexwrap Indirect texture wrap value
 Indicates whether the regular texture coordinate should be wrapped before being added to the offset.
 <tt>GX_ITW_OFF</tt> specifies no wrapping. <tt>GX_ITW_0</tt> will zero out the regular texture coordinate.*/
-typedef enum _GXIndTexWrap {
+enum IndTexWrap {
     GX_ITW_OFF,     // no wrapping
     GX_ITW_256,     // wrap 256
     GX_ITW_128,     // wrap 128
@@ -1024,25 +1018,25 @@ typedef enum _GXIndTexWrap {
     GX_ITW_16,      // wrap 16
     GX_ITW_0,       // wrap 0
     GX_MAX_ITWRAP
-} GXIndTexWrap;
+};
 
 
 /*indtexalphasel Indirect texture bump alpha select
 Indicates which offset component should provide the "bump" alpha output for the given TEV stage.
 Bump alpha is not available for TEV stage 0.*/
-typedef enum _GXIndTexAlphaSel {
+enum IndTexAlphaSel {
     GX_ITBA_OFF,
     GX_ITBA_S,
     GX_ITBA_T,
     GX_ITBA_U,
     GX_MAX_ITBALPHA
-} GXIndTexAlphaSel;
+};
 
 
 /*indtexscale Indirect texture scale
 Specifies an additional scale value that may be applied to the texcoord used for an indirect initial lookup (not a TEV stage regular lookup).
 The scale value is a fraction; thus <tt>GX_ITS_32</tt> means to divide the texture coordinate values by 32.*/
-typedef enum _GXIndTexScale {
+enum IndTexScale {
     GX_ITS_1,       // Scale by 1.
     GX_ITS_2,       // Scale by 1/2.
     GX_ITS_4,       // Scale by 1/4.
@@ -1053,11 +1047,11 @@ typedef enum _GXIndTexScale {
     GX_ITS_128,     // Scale by 1/128.
     GX_ITS_256,     // Scale by 1/256.
     GX_MAX_ITSCALE
-} GXIndTexScale;
+};
 
 
 /*fogtype Fog equation control*/
-typedef enum _GXFogType {
+enum FogType {
     GX_FOG_NONE = 0x00,
     GX_FOG_PERSP_LIN = 0x02,
     GX_FOG_PERSP_EXP = 0x04,
@@ -1074,12 +1068,12 @@ typedef enum _GXFogType {
     GX_FOG_EXP2 = GX_FOG_PERSP_EXP2,
     GX_FOG_REVEXP = GX_FOG_PERSP_REVEXP,
     GX_FOG_REVEXP2 = GX_FOG_PERSP_REVEXP2
-} GXFogType;
+};
 
 
 
 /*pixel format */
-typedef enum _GXPixelFmt {
+enum PixelFmt {
     GX_PF_RGB8_Z24,
     GX_PF_RGBA6_Z24,
     GX_PF_RGB565_Z16,
@@ -1088,79 +1082,79 @@ typedef enum _GXPixelFmt {
     GX_PF_U8,
     GX_PF_V8,
     GX_PF_YUV420
-} GXPixelFmt;
+};
 
 /*zfmt Compressed Z format*/
-typedef enum _GXZFmt16 {
+enum ZFmt16 {
     GX_ZC_LINEAR,
     GX_ZC_NEAR,
     GX_ZC_MID,
     GX_ZC_FAR
-} GXZFmt16;
+};
 
 
 /*xfbclamp XFB clamp modes*/
 
-typedef enum _GXFBClamp {
+enum FBClamp {
     GX_CLAMP_NONE,
     GX_CLAMP_TOP,
     GX_CLAMP_BOTTOM
-} GXFBClamp;
+};
 
 
 
 
 /*gammamode Gamma values*/
 
-typedef enum _GXGamma {
+enum Gamma {
     GX_GM_1_0,
     GX_GM_1_7,
     GX_GM_2_2
-} GXGamma;
+};
 
 
 
 
 /*copymode EFB copy mode
 Controls whether all lines, only even lines, or only odd lines are copied from the EFB.*/
-typedef enum _GXCopyMode {
+enum CopyMode {
     GX_COPY_PROGRESSIVE = 0,
     GX_COPY_INTLC_EVEN = 2,
     GX_COPY_INTLC_ODD = 3
-} GXCopyMode;
+};
 
 
 /*alphareadmode Alpha read mode*/
-typedef enum _GXAlphaReadMode {
+enum AlphaReadMode {
     GX_READ_00,			/*Always read 0x00. */
     GX_READ_FF,			/*Always read 0xFF. */
     GX_READ_NONE		/*Always read the real alpha value. */
-} GXAlphaReadMode;
+};
 
 
 
 /*texcachesize Texture cache size
 Size of texture cache regions.*/
-typedef enum _GXTexCacheSize {
+enum TexCacheSize {
     GX_TEXCACHE_32K,
     GX_TEXCACHE_128K,
     GX_TEXCACHE_512K,
     GX_TEXCACHE_NONE
-} GXTexCacheSize;
+};
 
 
 /*distattnfn Brightness decreasing function
 Type of the brightness decreasing function by distance.*/
-typedef enum _GXDistAttnFn {
+enum DistAttnFn {
     GX_DA_OFF = 0,
     GX_DA_GENTLE,
     GX_DA_MEDIUM,
     GX_DA_STEEP
-} GXDistAttnFn;
+};
 
 
 /*spotfn Spot illumination distribution function*/
-typedef enum _GXSpotFn {
+enum SpotFn {
     GX_SP_OFF = 0,
     GX_SP_FLAT,
     GX_SP_COS,
@@ -1168,33 +1162,33 @@ typedef enum _GXSpotFn {
     GX_SP_SHARP,
     GX_SP_RING1,
     GX_SP_RING2
-} GXSpotFn;
+};
 
 
 /*texfilter Texture filter types*/
 
-typedef enum _GXTexFilter {
+enum TexFilter {
     GX_NEAR,					/*Point sampling, no mipmap */
     GX_LINEAR,					/*Bilinear filtering, no mipmap */
     GX_NEAR_MIP_NEAR,			/*Point sampling, discrete mipmap */
     GX_LIN_MIP_NEAR,			/*Bilinear filtering, discrete mipmap */
     GX_NEAR_MIP_LIN,			/*Point sampling, linear mipmap */
     GX_LIN_MIP_LIN				/*Trilinear filtering */
-} GXTexFilter;
+};
 
 
 
 /*anisotropy Maximum anisotropy filter control*/
-typedef enum _GXAnisotropy {
+enum Anisotropy {
     GX_ANISO_1,
     GX_ANISO_2,
     GX_ANISO_4,
     GX_MAX_ANISOTROPY
-} GXAnisotropy;
+};
 
 
 /*vcachemetrics Vertex cache performance counter*/
-typedef enum _GXVCachePerf {
+enum VCachePerf {
     GX_VC_POS,
     GX_VC_NRM,
     GX_VC_CLR0,
@@ -1208,7 +1202,7 @@ typedef enum _GXVCachePerf {
     GX_VC_TEX6,
     GX_VC_TEX7,
     GX_VC_ALL = 0xf
-} GXVCachePerf;
+};
 
 
 /*perf0metrics Performance counter 0 metric
@@ -1218,7 +1212,7 @@ The triangle metrics (<tt>GX_PERF0_TRIANGLES_*</tt>) allow counting triangles un
 <tt>GX_PERF0_TRIANGLES_*TEX</tt> count triangles based on the number of texture coordinates supplied; <tt>GX_PERF0_TRIANGLES_*CLR</tt> count triangles based on the number of colors supplied.<br><br>
 The quad metrics allow you to count the number of quads (2x2 pixels) the GP processes. The term <i>coverage</i> is used to indicate how many pixels in the quad are actually part of the triangle being rasterized. For example, a coverage of 4 means all pixels in the quad intersect the triangle. A coverage of 1 indicates that only 1 pixel in the quad intersected the triangle.*/
 
-typedef enum _GXPerf0 {
+enum Perf0 {
     GX_PERF0_VERTICES,					/*Number of vertices processed by the GP. */
     GX_PERF0_CLIP_VTX,					/*Number of vertices that were clipped by the GP. */
     GX_PERF0_CLIP_CLKS,					/*Number of GP clocks spent clipping. */
@@ -1255,14 +1249,14 @@ typedef enum _GXPerf0 {
     GX_PERF0_AVG_QUAD_CNT,				/*Average quad count; average based on what is unknown */
     GX_PERF0_CLOCKS,					/*Number of GP clocks that have elapsed since the previous call to GX_ReadGP0Metric(). */
     GX_PERF0_NONE						/*Disables performance measurement for perf0 and resets the counter. */
-} GXPerf0;
+};
 
 /*perf1metrics Performance counter 1 metric
 Performance counter 1 is used for measuring texturing and caching performance as well as FIFO performance.
 <tt>GX_PERF1_TC_*</tt> can be used to compute the texture cache (TC) miss rate. The <tt>TC_CHECK*</tt> parameters count how many texture cache lines are accessed for each pixel. In the worst case, for a mipmap, up to 8 cache lines may be accessed to produce one textured pixel. <tt>GX_PERF1_TC_MISS</tt> counts how many of those accesses missed the texture cache. To compute the miss rate, divide <tt>GX_PERF1_TC_MISS</tt> by the sum of all four <tt>GX_PERF1_TC_CHECK*</tt> values.<br><br>
 <tt>GX_PERF1_VC_*</tt> count different vertex cache stall conditions.*/
 
-typedef enum _GXPerf1 {
+enum Perf1 {
     GX_PERF1_TEXELS,				/*Number of texels processed by the GP. */
     GX_PERF1_TX_IDLE,				/*Number of clocks that the texture unit (TX) is idle. */
     GX_PERF1_TX_REGS,				/*Number of GP clocks spent writing to state registers in the TX unit. */
@@ -1287,13 +1281,13 @@ typedef enum _GXPerf1 {
     GX_PERF1_CP_ALL_REQ,			/*Counts all requests (32B/request) from the GP Command Processor (CP). It should be equal to * the sum of  the sum of counts returned by <tt>GX_PERF1_FIFO_REQ</tt>, <tt>GX_PERF1_CALL_REQ</tt>, and <tt>GX_PERF1_VC_MISS_REQ</tt>. */
     GX_PERF1_CLOCKS,				/*Number of GP clocks that have elapsed since the last call to GX_ReadGP1Metric(). */
     GX_PERF1_NONE					/*Disables performance measurement for perf1 and resets the counter. */
-} GXPerf1;
+};
 
 
 /*tlutname TLUT name
 Name of Texture Look-Up Table (TLUT) in texture memory.
 Each table <tt>GX_TLUT0</tt>-<tt>GX_TLUT15</tt> contains 256 entries,16b per entry. <tt>GX_BIGTLUT0</tt>-<tt>3</tt> contains 1024 entries, 16b per entry. Used for configuring texture memory in GX_Init().*/
-typedef enum _GXTlut {
+enum Tlut {
     GX_TLUT0 = 0,
     GX_TLUT1,
     GX_TLUT2,
@@ -1314,7 +1308,7 @@ typedef enum _GXTlut {
     GX_BIGTLUT1,
     GX_BIGTLUT2,
     GX_BIGTLUT3
-} GXTlut;
+};
 
 
 #define GX_MAX_VTXDESC					GX_VA_MAXATTR
@@ -1324,7 +1318,7 @@ typedef enum _GXTlut {
 #define GX_MAX_VTXATTRFMT_LISTSIZE		(GX_VA_MAXATTR+1)
 
 #define GX_MAX_Z24						0x00ffffff
-
+}//namespace GX
 
 
 #endif

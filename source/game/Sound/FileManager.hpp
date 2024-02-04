@@ -43,7 +43,7 @@ class GroupBankRequester {
     static Request requests[47]; //0x809c2380
     static u32 currentHeapLevel; //809c268c return value of SaveState
     static ActorIDToBankId actorToBank[58]; //808a1468
-    static bool hasLoadedGroups; //0x808c7af0
+    static bool hasLoadedGroups; //808c7af0
 };
 
 //there is an intermediate cb class  //806fea20 vtable 808c7da8

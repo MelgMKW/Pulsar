@@ -14,8 +14,8 @@ public:
         Color& operator=(Color& other); //806ae380
     };
 
-    explicit PlayerEffects(Kart::Player* kartPlayer); //0x8068df98
-    virtual ~PlayerEffects(); //0x8068e888 vtable 808c1f64
+    explicit PlayerEffects(Kart::Player* kartPlayer); //8068df98
+    virtual ~PlayerEffects(); //8068e888 vtable 808c1f64
     static RaceData* GetRaceData(); //8068e830
     static CourseId* GetCourseId(RaceData* racedata); //8068e83c
 
@@ -35,8 +35,8 @@ public:
     void FadeEffects2(EGG::Effect** effectsArray, u32 firstEffectIndex, u32 lastEffectIndex, bool r7); //806a1b68
 
 
-    void UpdateFromWheelCollision(u16 wheelIdx, KCLTypesBitfield kclBitfield, u32 kclFlag); //806a0fdc
-    void UpdateFromKartCollision(u16 kartHitboxIdx, KCLTypesBitfield kclBitfield, u32 kclFlag); //806a1660
+    void UpdateFromWheelCollision(u16 wheelIdx, KCLBitfield kclBitfield, u32 kclFlag); //806a0fdc
+    void UpdateFromKartCollision(u16 kartHitboxIdx, KCLBitfield kclBitfield, u32 kclFlag); //806a1660
 
     void OnBushCollision(); //806a66a4 creates WeedWall effect, plays bushcollisionsound
 
@@ -83,8 +83,8 @@ public:
     u8 unknown_0x31; //8068eb2c
     u8 unknown_0x32[0x34 - 0x32];
     u32 smtCharge; //0x34 80698650 
-    u8 unknown_0x38; //mess at 0x8068eec4
-    u8 unknown_0x39; //mess at 0x8068eec4
+    u8 unknown_0x38; //mess at 8068eec4
+    u8 unknown_0x39; //mess at 8068eec4
     u8 unknown_0x3A;
     u8 unknown_0x3B;
     u16 unknown_0x3C; //set to 0x3
@@ -143,7 +143,7 @@ public:
     u8 unknown_0xA8; //8068ebc4 
     u8 unknown_0xA9;
     bool isManualDrifting; //0xAA
-    bool unknown_0xAB; //0x80694ad8
+    bool unknown_0xAB; //80694ad8
     u8 unknown_0xAC;
     u8 unknown_0xAD;
     bool hasTrickBoost; //0xAE
@@ -156,14 +156,14 @@ public:
     u8 unknown_0xB8;
     bool hasHitItem; //0xB9
     u8 unknown_0xBA[0xC0 - 0XBA];
-    bool unknown_0xC0; //related to cameras, 0x80694568
+    bool unknown_0xC0; //related to cameras, 80694568
     u8 unknown_0xC1[0xc4 - 0xC1];
     Mtx34 playerMat2; //might be one frame delayed, copy of the one at 6f4 80694c6c 
     u8 unknown_0xF4; //806945bc
     bool hasVanished; //80693dc0
     u8 unknown_0xF6; //80694660 related to cameras
     u8 unknown_0xF7[0x100 - 0xF7];
-    float float_0x100; //0x8069ec94
+    float float_0x100; //8069ec94
     float float_0x104;
     float float_0x108;
     u8 unknown_0x10C; //8069eca8
@@ -181,7 +181,7 @@ public:
     bool isTTReplay; //0x12c
     bool isRealOrNotGhost; //0x12D
     u8 playerId; //0x12e
-    u8 unknown_0x12f; //0x8068ee44
+    u8 unknown_0x12f; //8068ee44
     u8 unknown_0x130[0x134 - 0x130];
     u32 playerIdPlus2; //0x134 0x8068f064
     bool isCPURace; //0x138

@@ -19,13 +19,13 @@ public:
     virtual void Animate(u32 idx, Material* material) = 0;
 
     bool IsLoopData() const; //800829e0
-    u16 GetFrameSize(); //0x800829d0
+    u16 GetFrameSize(); //800829d0
     ut::LinkListNode link; //0x4
     const res::AnimationBlock* resource;
     float curFrame; //0x10
 };
 
-class AnimTransformBasic: public AnimTransform {
+class AnimTransformBasic : public AnimTransform {
 public:
     AnimTransformBasic(); //80082a00
     virtual ~AnimTransformBasic(); //80082a40 vtable 802737c0

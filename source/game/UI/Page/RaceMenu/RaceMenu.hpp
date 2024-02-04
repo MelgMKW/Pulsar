@@ -27,7 +27,7 @@ public:
     virtual bool IsPausePage() const = 0; //0x74
     virtual const char* GetButtonsBRCTRName() const = 0; //0x78 depends on if isFinal for example
 
-    void OnButtonClick(PushButton& button, u32 hudSlotId); //0x8085a0f4
+    void OnButtonClick(PushButton& button, u32 hudSlotId); //8085a0f4
     void OnStartPress(u32 hudSlotId); //8085a098
     static bool IsFinalRace(); //8085bc10
     static char** buttonVariants; //808da7a8

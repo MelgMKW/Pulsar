@@ -13,8 +13,8 @@ struct ResVtxPosData {
     s32 offsetToVtxPosArray;
     s32 offsetToName;
     u32 idx;
-    GXCompCnt  cmpcnt;
-    GXCompType tp;
+    GX::CompCnt  cmpcnt;
+    GX::CompType tp;
     u8 frac;
     u8 stride;
     u16 count;
@@ -30,8 +30,8 @@ struct ResVtxNrmData {
     s32 offsetToVtxNrmArray;
     s32 offsetToName;
     u32 idx;
-    GXCompCnt cmpcnt;
-    GXCompType tp;
+    GX::CompCnt cmpcnt;
+    GX::CompType tp;
     u8 frac;
     u8 stride;
     u16 numNrm;
@@ -46,8 +46,8 @@ struct ResVtxClrData
     s32 offsetToVtxClrArray;
     s32 offsetToName;
     u32        id;
-    GXCompCnt  cmpcnt;
-    GXCompType tp;
+    GX::CompCnt  cmpcnt;
+    GX::CompType tp;
     u8         stride;
     u8         dummy_;
     u16        numClr;

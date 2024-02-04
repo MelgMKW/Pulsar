@@ -30,6 +30,11 @@ public:
         OPTID_ENABLE_CULLING = 0x00000009,
         OPTID_DISABLE_GATHER_SCNOBJ = OPTID_DISABLE_GATHER_DRAW_SCNOBJ
     };
+    enum ScnObjMtxType {
+        MTX_LOCAL = 0,
+        MTX_WORLD = 1,
+        MTX_VIEW = 2
+    };
 
     ScnObj(G3dHeap* heap); //8006d7b0
     bool IsDerivedFrom(TypeObj type) const override; //0x8 8006efc0 vtable 8027314c
@@ -42,6 +47,11 @@ public:
     virtual float GetValueForSortOpa() const; //0x28 8006dcd0
     virtual float GetValueForSortXlu() const; //0x2c 8006dce0
     virtual void CalcWorldMtx(const math::MTX34* parent, u32* param); //0x30 8006d6e0
+
+    bool ScnObj::SetMtx(ScnObjMtxType tp, const math::MTX34* mtx); //8006db90
+    bool ScnObj::SetMtx(ScnObjMtxType tp, const math::MTX34& mtx); //8006dc20
+
+
     math::MTX34 matrixArray[3]; //0xC local, world, view
     math::AABB aabb[2]; //0x9c local, world
     u32 scnObjFlags; //0xcc

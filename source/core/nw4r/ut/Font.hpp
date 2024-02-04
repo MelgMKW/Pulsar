@@ -23,7 +23,7 @@ struct Glyph {
     const void* texture;
     CharWidths  widths;
     u8  height;
-    GXTexFmt exFormat;
+    GX::TexFmt exFormat;
     u16 texWidth;
     u16 texHeight;
     u16 cellX;
@@ -49,7 +49,7 @@ public:
     virtual int GetCellWidth() const = 0; //0x24
     virtual int GetMaxCharWidth() const = 0; //0x28
     virtual Type GetType() const = 0; //0x2c
-    virtual GXTexFmt GetTextureFormat() const = 0; //0x30
+    virtual GX::TexFmt GetTextureFormat() const = 0; //0x30
     virtual int GetLineFeed() const = 0; //0x34
     virtual const CharWidths GetDefaultCharWidths() const = 0; //0x38
     virtual void SetDefaultCharWidths(const CharWidths& widths) = 0; //0x3c

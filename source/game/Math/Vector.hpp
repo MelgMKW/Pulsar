@@ -24,8 +24,10 @@ struct Vec3 : EGG::Vector3f {
 };
 
 struct Vec2 : EGG::Vector2f {
-    Vec2 operator+(const Vec2& rhs); //80512040
-    Vec2 operator-(const Vec2& rhs); //8051201c
+    Vec2() {}
+    Vec2(float x, float z): EGG::Vector2f(x, z) {}
+    Vec2 operator+(const Vec2& rhs) const; //80512040
+    Vec2 operator-(const Vec2& rhs) const; //8051201c
 };
 
 struct Vec3ZeroInit { //Vec3 that is init to 0, 0, 0

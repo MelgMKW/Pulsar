@@ -13,6 +13,7 @@ Contributors:
 
 class ObjectCollidable : public Object { //collision is added as there is no KCL, different shapes available cube/cylinder/sphere, depends on the obj
     explicit ObjectCollidable(const KMP::Holder<GOBJ>& gobjHolder); //8081efec
+    ObjectCollidable(u16 objId, const Vec3& position, const Vec3& rotation, const Vec3& scale); //8081f028
     ObjectCollidable(const char* name, const Vec3& position, const Vec3& rotation, const Vec3& scale, u32 r8); //8081f064
     ~ObjectCollidable() override; //8067e384 vtable 808d6dd8
     void Init() override; //0x20 8081f0a0 

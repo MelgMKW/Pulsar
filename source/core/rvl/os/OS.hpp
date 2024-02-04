@@ -15,7 +15,7 @@ void TicksToCalendarTime(u64 time, CalendarTime* result);
 void Report(const char* format, ...);
 u64 GetTime();
 u32 GetTick();
-void Fatal(GXColor foreground, GXColor background, const char* message);
+void Fatal(GX::Color foreground, GX::Color background, const char* message);
 void LaunchTitle(UnkType r3, UnkType r4);
 int CalcCRC32(void* data, u32 length);
 int DisableInterrupts(); //801a65ac

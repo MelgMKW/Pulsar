@@ -13,7 +13,7 @@ public:
     const char* GetGameId(); //8000b2d8
     void RipFromDiscAsync(const char* path, EGG::Heap* heap, u32 allocDirection, u32 r7, void* buffer); //8000b308
     static void* RipFromDisc(const char* path, EGG::Heap* heap, bool allocFromHead, u32* size); //8000b5c8, will alloc a buffer, wraps around func below
-    void* RipFromDisc(const char* path, EGG::Heap* heap, bool allocFromHead, u32* size, void* buffer); //0x8000b370
+    void* RipFromDisc(const char* path, EGG::Heap* heap, bool allocFromHead, u32* size, void* buffer); //8000b370
     void ProcessRipRequest(); //8000b53c
     void Init(); //8000ac50
     //This part is used to request a file rip, these params are passed to EGG::DvdRipper

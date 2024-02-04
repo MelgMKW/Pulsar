@@ -39,7 +39,7 @@ public:
     void AddPageLayerAnimated(PageId pageId, u32 animDirection); //80623228
     void RemoveTopLayerPage(); //80623288
     void RemovePageLayers(u32 layersToRemove); //806232e8
-    static Page* CreatePageById(PageId pageId); //0x80623390
+    static Page* CreatePageById(PageId pageId); //80623390
     void CreateSectionPages(SectionId sectionId); //8062c3a4 idk why the gap in addresses
     void AddInitialLayers(SectionId sectionId); //80630094 initial layers for this section
     static SceneId GetSceneId(SectionId id); //80631588

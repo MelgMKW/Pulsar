@@ -64,8 +64,9 @@ public:
         ANM_VTX = ANM_SHP,
         ANM_ALL = ANM_MATCLR | ANM_TEXPAT | ANM_TEXSRT | ANM_VIS | ANM_VTX
     };
+    //access a copy of a given material
     class CopiedMatAccess {
-    private:
+    public:
         CopiedMatAccess(ScnMdl* scnMdl, u32 id); //800730b0
         ResTexObj GetResTexObj(bool bMarkDirty); //80072e60
         ResMatTevColor GetResMatTevColor(bool bMarkDirty); //80072e60
@@ -75,9 +76,18 @@ public:
         ResTev GetResTevEx(); //8007230b0
 
         ScnMdl* scnMdl; //0x0
-        u32 matID;
-        u8 unknown_0x8[0x30 - 0x8];
-
+        u32 matID;      //0x4
+        ResTexObj            texObj; //0x8
+        ResTlutObj           tlutObj; //0xc
+        ResTexSrt            texSrt; //0x10
+        ResMatChan           chan; //0x14
+        ResGenMode           genMode; //0x18
+        ResMatMisc           matMisc; //0x1c
+        ResMatPix            pix; //0x20
+        ResMatTevColor       tevColor; //0x24
+        ResMatIndMtxAndScale indMtxAndScale; //0x28
+        ResMatTexCoordGen    texCoordGen; //0x2c
+        ResTev               tev; //0x30
     };
     static ScnMdl* Construct(G3dHeap* heap, u32* size, ResMdl mdl, u32 bufferOption, int nView = 1); //80073470
     bool IsDerivedFrom(TypeObj type) const override; //0x8 800757f0 vtable 80273248
@@ -95,7 +105,7 @@ public:
 
     void ScnMdl_G3DPROC_CALC_MAT(u32 param, void* info); //80074000
 
-    AnmObjShp* anmObjShp;
+    AnmObjShp* anmObjShp; //0x138
     u32 unknown; //0x13c
     u32* matBufferDirtyFlag;
     DrawResMdlReplacement replacement;

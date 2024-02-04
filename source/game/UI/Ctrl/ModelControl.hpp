@@ -67,7 +67,7 @@ size_assert(VehicleModelControl, 0x184);
 class DriverModelControl : public LayoutUIControl {
 public:
     DriverModelControl(); //805f3248
-    ~DriverModelControl() override; //0x805f3284 vtable 808b9b48
+    ~DriverModelControl() override; //805f3284 vtable 808b9b48
     void InitSelf() override; //0x18 805f3568
     void OnUpdate() override; //0x1c 805f356c
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 805f37e4

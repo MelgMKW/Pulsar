@@ -4,7 +4,7 @@
 #include <core/egg/Thread.hpp>
 #include <core/nw4r/g3d/res/ResFile.hpp>
 
-class StrapScene: public RKScene {
+class StrapScene : public RKScene {
     StrapScene(); //800072c0
     ~StrapScene(); //80007448 vtable 802585b0
     void calc() override;   //0xc  800079d0
@@ -17,7 +17,7 @@ class StrapScene: public RKScene {
     nw4r::g3d::ResFile strapBrres; //0xc74
     EGG::TaskThread* taskThread;
     u8 unknown_0xc78[0xc80 - 0xc78];
-    GXTexObj textures[2]; //0xc80 SZS has 2 tex0
+    GX::TexObj textures[2]; //0xc80 SZS has 2 tex0
     u32 frameCount;  //0xcc0
     u32 frameCount2; //0xcc4
     bool buttonWasPressed; //0xcc8

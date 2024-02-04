@@ -28,8 +28,8 @@ kmWrite32(0x80827a3c, 0x41820018); //if ptr is nullptr, skip rSGB section
 
 void* PreventMHCrash(u32 carManagerSize) {
     const ArchiveRoot* root = ArchiveRoot::sInstance;
-    if(root->GetFile(ARCHIVE_HOLDER_COURSE, "K_car_body.brres", 0) == nullptr
-        || root->GetFile(ARCHIVE_HOLDER_COURSE, "K_truck.brres", 0) == nullptr) return nullptr;
+    if(root->GetFile(ARCHIVE_HOLDER_COURSE, "K_car_body.brres") == nullptr
+        || root->GetFile(ARCHIVE_HOLDER_COURSE, "K_truck.brres") == nullptr) return nullptr;
     return new u8[carManagerSize];
 }
 kmCall(0x808279ac, PreventMHCrash);
@@ -50,8 +50,8 @@ kmWrite32(0x8078e1f0, 0x2c030001); //compare r3
 
 //Loads ObjFlow/GeoTable binaries from the track; if they do not exist, gets them from common as per usual
 const void* GetCommonBinary(ArchiveRoot* root, ArchiveSource source, const char* name) {
-    const void* binary = root->GetFile(ARCHIVE_HOLDER_COURSE, name, 0);
-    if(binary == nullptr) binary = root->GetFile(ARCHIVE_HOLDER_COMMON, name, 0);
+    const void* binary = root->GetFile(ARCHIVE_HOLDER_COURSE, name);
+    if(binary == nullptr) binary = root->GetFile(ARCHIVE_HOLDER_COMMON, name);
     return binary;
 }
 kmCall(0x8082c140, GetCommonBinary); //ObjFlow

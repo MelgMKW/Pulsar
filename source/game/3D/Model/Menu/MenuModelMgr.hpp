@@ -33,6 +33,8 @@ class MenuModelBRRESHandle {
     bool BindBackBRRES(BackModelType idx); //8081e658 binds handler to the brres
     bool LoadBackModel(ModelDirector& dest); //8081ef14
 
+    bool MdlExists(const char* mdlName); //8081efdc
+
     g3d::ResFile menuModelBRRES; //0x4
 }; //0x8
 
@@ -60,7 +62,7 @@ public:
     void RequestKartModel(u8 hudSlotId, KartId id); //8059e580
     void RequestBackModel(BackModelType type); //8059e598
     void TogglePlayerModel(u8 playerId, bool isVisible); //8059e5a4
-    GXTexObj* GetTexObj(u8 playerId); //8059e5dc
+    GX::TexObj* GetTexObj(u8 playerId); //8059e5dc
     TextureHolder* GetDriverTexture(u8 playerId); //8059e634
     TextureHolder* GetKartTexture(u8 playerId, u32 kartIdx); //8059e644
     void ToggleBackModel(bool isVisible); //8059e5d4

@@ -79,7 +79,7 @@ public:
         u16 adpcmPredScale;
     }; //0x34
 
-    StrmPlayer(); //0x800a5860
+    StrmPlayer(); //800a5860
 
     //BasicSound vtable 80274a88
     ~StrmPlayer() override; //800a5a20

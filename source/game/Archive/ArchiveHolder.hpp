@@ -31,7 +31,7 @@ enum SourceType { //conditions what "suffixes" contains
 
 class ArchivesHolder {
 public:
-    explicit ArchivesHolder(u16 archiveCount); //0x8052a538 vtable 
+    explicit ArchivesHolder(u16 archiveCount); //8052a538 vtable 
     static ArchivesHolder* CreateByType(ArchiveSource type); //8052a098
     virtual ~ArchivesHolder(); //8052a6dc vtable 808b31d8
     virtual void Reset(); //8052a648 sets extensions to .szs

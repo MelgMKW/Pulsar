@@ -47,12 +47,12 @@ class GeoHitTableKartObjHolder : public GeoHitTableHolder {
 };
 
 
-enum ObjArrayList {
-    OBJ_ARRAY_ALL,
-    OBJ_ARRAY_HAS_LOD,
-    OBJ_ARRAY_2,
-    OBJ_ARRAY_3,
-    OBJ_ARRAY_SOLID
+enum ObjArrayList { //this is filled using GetBitfieldProperties
+    OBJ_ARRAY_ALL,   //0x18
+    OBJ_UPDATING,    //0x20
+    OBJ_PROPERTY_8, //0x28
+    OBJ_PROPERTY_2,      //0x30
+    OBJ_ARRAY_SOLID  //0x38
 };
 
 struct ObjectArray {
@@ -60,6 +60,13 @@ struct ObjectArray {
     u16 padding;
     Object** array;
 }; //0x8
+
+struct ManagedObjects {
+    Object* objects[0x3c];
+    u32 managedObjCount;
+}; //0xf4
+
+
 
 class ObjectsMgr {
 public:
@@ -77,21 +84,25 @@ public:
     void HandleDroppedItem(ItemObj* itemEntity, const Vec3& position, float unknown); //8082adbc
     void AddObject(Object* object); //8082b0e8
     void ProcessCollision(const Kart::Player& kartPlayer, ObjectCollisionPolyhedra* collision); //8082ab04
+    int GetManagedObjectsCount(); //8082b3b8
+    Object* GetManagedObject(u32 idx); //8082b3a8
+
 
     ObjFlowHolder* objFlow; //0x4
     GeoHitTableItemHolder* geoHitTableItem; //0x8
     GeoHitTableObjHolder* geoHitTableItemObj; //0xC
     GeoHitTableKartHolder* geoHitTableKart; //0x10
     GeoHitTableKartObjHolder* geoHitTableKartObj; //0x14
-    ObjectArray arrays[5]; //0x18 use enum, doesn't have ObjectKCLs
-    Object* objects_0x40; //0x40
+    ObjectArray arrays[5]; //0x18, 0x20, 0x28, 0x30, 0x38 use enum, doesn't have ObjectKCLs
+    Object* object_0x40; //0x40
     Vec3ZeroInit** positions; //0x44, no idea,size 0xC8
     ObjToKartHit* kartInteractionArray; //0x48
     u8 unknown_0x4C[4];
     Object* pseaOrVenice_Nami; //0x50
-    bool isNotTT; //0x55
-    u8 padding6[3];
-    Object* managedObjects; //0x58 only for MH, DC, rSGB, rDH, galaxy colosseum ie objects with a object that is managed
+    bool isGameModeMoreThan7; //0x54
+    bool isTT; //0x55
+    u8 padding6[2];
+    Object* managedObjects; //0x58 only for MH, DC, rSGB, rDH, galaxy colosseum ie tracks with a object that is managed
     u8 unknown_0x5c[4];
     bool unknown_0x60;
     u8 padding7[3];

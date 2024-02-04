@@ -37,7 +37,7 @@ public:
     ~HanachanPart() override; //806c7e68 vtable 808c4720
     void OnStart() override; //0xC 806c6b7c
     void Update() override; //0x14 806c6c10
-    bool HasLod() override; //0x2c 806ccad0
+    u32 GetPropertiesBitfield() override; //0x2c 806ccad0
     const char* GetSubFileName() const override; //0x38 806ccb88
     void LoadModels() override; //0x44 806c6b44
     void LoadRoute() override; //0x64 806ccacc
@@ -83,7 +83,7 @@ public:
     u8 unknown_0xe8[0xfc - 0xe8];
 }; //0xFC
 
-class BossHanachanHead : public HanachanPart { //ObjectNum 242 BossHanachanHead
+class BossHanachanHead : public HanachanPart { //ObjectNum 0xf2 = 242 BossHanachanHead
 public:
     class Handler {
     public:
@@ -124,14 +124,14 @@ public:
 
 }; //0x104
 
-class Hanachan : public ObjectCollidable, public UnkCycleParent { //ObjectNum 226 Hanachan
+class Hanachan : public ObjectCollidable, public UnkCycleParent { //ObjectNum 0xe2 = 226 Hanachan
 public:
     explicit Hanachan(const KMP::Holder<GOBJ>& gobjHolder); //806c8a5c
     ~Hanachan() override; //806c9598 vtable 808c43b8
     void OnStart() override; //0xC 806c9630
     void Update() override; //0x14 806c9860
     void UpdateModel() override; //0x1c 806cc9ec
-    bool HasLod() override; //0x2c 806cc9fc
+    u32 GetPropertiesBitfield() override; //0x2c 806cc9fc
     void LoadModels() override; //0x44 806cc9f8
     void LoadRenderer() override; //0x58 806cc9f0
     void LoadCollision() override; //0x60 806cc9f4

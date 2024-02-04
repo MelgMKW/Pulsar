@@ -5,12 +5,12 @@
 
 namespace Objects {
 
-class Itembox : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 0x65 = 101
+class Itembox : public ObjectCollidable { //ObjectNum 0x65 = 101
     explicit Itembox(const KMP::Holder<GOBJ>& gobjHolder); //808285b0
 
     ~Itembox() override; //806c4f74 vtable 808d7bc0
     void Update() override; //0x14 80828860
-    bool HasLod() override; //0x2c 806c69fc
+    u32 GetPropertiesBitfield() override; //0x2c 806c69fc
     void LoadShadow() override; //0x50 806c69e8
     void UpdateModelMatrix() override; //0x6c 806c69e4
     void UpdateShadow() override; //0x70 806c6a84

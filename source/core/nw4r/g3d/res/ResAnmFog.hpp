@@ -16,7 +16,7 @@ struct ResAnmFogData {
     u32 id;
     u32 refNumber;
     u32 flags;
-    GXFogType type;
+    GX::FogType type;
     s32 offsetToStartz;
     s32 offsetToEndz;
     s32 offsetTocolor;

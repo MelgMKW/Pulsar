@@ -23,8 +23,8 @@ class KCLController {
 public:
     explicit KCLController(const KCL& raw); //807bdc5c
     ~KCLController(); //807bddbc
-    void GetTrianglesList(const Vec3& position, const Vec3& prevPosition, KCLTypesBitfield accepted, float radius); //807c1bb4
-    void GetTrianglesListReuse(const Vec3& position, const Vec3& prevPosition, KCLTypesBitfield accepted, float radius); //807c1de8
+    void GetTrianglesList(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, float radius); //807c1bb4
+    void GetTrianglesListReuse(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, float radius); //807c1de8
     u16* FindTrianglesList(const Vec3& position); //807be030
     void FindTrianglesListAndProcessNewRadius(const Vec3& position, Ptmf_0A<KCLController, bool>* isColliding, float radius); //807be12c
 
@@ -35,10 +35,10 @@ public:
     bool IsCollidingFromCurCopyPosition(float* distance, Vec3* normal, u16* flag); //807c0f00 Only checks triangles after curCopyPosition
 
     //will find a new trianglesList if needed
-    void Update(const Vec3& position, KCLTypesBitfield accepted, bool isBiggerThanDefaultScale, float radius);
+    void Update(const Vec3& position, KCLBitfield accepted, bool isBiggerThanDefaultScale, float radius);
 
     //Is radius < lastMaxRadius && dist(position, lastPosition) < (lastMaxRadius - radius)
-    static bool CanReuseLastTrianglesList(const Vec3& position, const Vec3& prevPosition, float radius, float lastMaxRadius); //8051a07c
+    static bool CanReuseLastTrianglesList(const Vec3& pos, const Vec3& prevPos, float radius, float lastMaxRadius); //8051a07c
 
     Vec3* vertices; //0
     Vec3* normals; //4
@@ -58,7 +58,7 @@ public:
     Vec3 prevPosition; //0x48
     Vec3 positionDifference; //0x54
     float radius; //0x60
-    KCLTypesBitfield flags; //0x64
+    KCLBitfield flags; //0x64
 
     //to avoid searching the octree for every process collision func/call, the game checks if it can reuse the list pointed to by 0x290
     //that ptr points to a copy of the last octree list that was obtained through a search

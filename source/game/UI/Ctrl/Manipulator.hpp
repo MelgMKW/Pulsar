@@ -86,7 +86,7 @@ public:
     virtual bool IsPointerEnabled(); //0x30 805f2ce8 returns false which then disables wii pointer?
     virtual bool CheckPlayerPointer(); //805cedc4
 
-    void UpdatePlayerBitfield2(u32 localPlayerBitfield); //0x805eec50
+    void UpdatePlayerBitfield2(u32 localPlayerBitfield); //805eec50
     void Load(); // 805eed70
 
     u32 activeLocalPlayerBitfield; //0x4 if bit i is set then local player i's inputs work    
@@ -102,7 +102,7 @@ size_assert(ManipulatorManager, 0x10);
 class PageManipulatorManager : public ManipulatorManager { //sets actions for page, equivalent to ControlsManipulatorManager but for pages 80601d04 checks actions
 public:
     PageManipulatorManager(); //805ef240
-    int GetRuntimeTypeInfo() const override; //0x805f2cf8 vtable 808b9a48
+    int GetRuntimeTypeInfo() const override; //805f2cf8 vtable 808b9a48
     ~PageManipulatorManager() override; //0xc 805ef2fc
     void Init(u32 localPlayerBitfield, bool isMultiplayer) override; //0x10 805ef364
     void CheckActions() override; //0x18 805ef43c
@@ -197,7 +197,7 @@ public:
         Directions direction) const; //805f0e24 calls calcdistance with false, false
     int CalcDistance(const ControlManipulator& other,
         Directions direction, bool hasHorizontalWrapping, bool hasVerticalWrapping) const; //mode: 0 returns 0, 1 only up, 2 both
-    int CalcDistanceLinear(const ControlManipulator& other, Directions direction) const; //0x805f2948
+    int CalcDistanceLinear(const ControlManipulator& other, Directions direction) const; //805f2948
     static void GetHudSlotIdColor(u8 hudSlotId, RGBA16* primary, RGBA16* secondary); //805f0440
 
     ControlBoundingBox boundingBox; //0xC

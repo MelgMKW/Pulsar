@@ -56,7 +56,7 @@ size_assert(AllkartArchivesLoader, 0x18);
 
 class ArchiveRoot {
 public:
-    ArchiveRoot(); //0x8053fcec
+    ArchiveRoot(); //8053fcec
     static ArchiveRoot* sInstance; //809bd738
     static ArchiveRoot* CreateInstance(); //8053fc4c
     static void DestroyInstance(); //8053fc9c

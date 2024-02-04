@@ -19,10 +19,6 @@ IO* IO::CreateInstance(IOType type, EGG::Heap* heap, EGG::TaskThread* const task
 bool IO::OpenFile(const char* path, u32 mode) {
     if(type == IOType_ISO) return -1;
     this->fd = IO::OpenFix(path, static_cast<IOS::Mode>(mode));
-    s32 size = IOS::Seek(this->fd, 0, IOS::SEEK_END);
-    if(size < 0) size = 0;
-    this->fileSize = size;
-    IOS::Seek(this->fd, 0, IOS::SEEK_START);
     return this->fd >= 0;
 }
 bool IO::OpenModFile(const char* path, u32 mode) {
@@ -50,7 +46,18 @@ s32 IO::Overwrite(u32 length, const void* buffer) {
 void IO::Close() {
     if(this->fd >= 0) IOS::Close(this->fd);
     this->fd = -1;
-    this->fileSize = 0;
+    this->fileSize = -1;
+}
+
+s32 IO::GetFileSize() {
+    if(this->fileSize < 0 && this->fd >= 0) {
+        s32 size = IOS::Seek(this->fd, 0, IOS::SEEK_END);
+        if(size >= 0) {
+            this->fileSize = size;
+            IOS::Seek(this->fd, 0, IOS::SEEK_START);
+        }
+    }
+    return this->fileSize;
 }
 
 //Virtual Funcs

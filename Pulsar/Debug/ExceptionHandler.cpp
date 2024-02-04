@@ -17,9 +17,9 @@ using namespace nw4r;
 
 
 void FatalError(const char* string) {
-    GXColor fg;
+    GX::Color fg;
     fg.rgba = 0xFFFFFFFF;
-    GXColor bg ={ 0 };
+    GX::Color bg ={ 0 };
     OS::Fatal(fg, bg, string);
 }
 
@@ -28,7 +28,7 @@ void LaunchSoftware() { //If dolphin, restarts game, else launches Riivo->HBC->O
     s32 result = IO::OpenFix("/dev/dolphin", IOS::MODE_NONE);
     if(result >= 0) {
         IOS::Close(result);
-        SystemManager::RestartGame();
+        SystemManager::Shutdown();
         return;
     }
     result = IO::OpenFix("/title/00010001/52494956/content/title.tmd\0", IOS::MODE_NONE); //Riivo

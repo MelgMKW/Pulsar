@@ -18,7 +18,7 @@ public:
 
 class AnimationGroup {
 public:
-    AnimationGroup(); //0x8063c844
+    AnimationGroup(); //8063c844
     ~AnimationGroup(); //8063c8ac
     void PlayAnimationAtFrame(u32 id, float frame); //8063c91c
     void PlayAnimationAtPercent(u32 id, float percent); //8063ca98
@@ -39,7 +39,7 @@ size_assert(AnimationGroup, 0x44);
 
 class UIAnimator {
 public:
-    UIAnimator(); //0x8063c3ec
+    UIAnimator(); //8063c3ec
     void Init(u32 animationCount); //8063c470
     void InitAnimationGroup(u32 groupId, u32 animationCount); //8063c4d4
     void AppendGroup(u32 groupId, const char* groupName); //8063c560 appends brlyt group to animationGroup

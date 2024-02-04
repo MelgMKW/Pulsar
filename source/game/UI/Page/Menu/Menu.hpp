@@ -92,7 +92,7 @@ public:
     PageId prevPageId;//0x3ec
     SectionId prevSection; //0x3f0
     SectionId nextSection; //0x3f4
-    u32 controlSources; //0x80836cc8 3f8
+    u32 controlSources; //80836cc8 3f8
     PtmfHolder_1A<Menu, void, Pages::Click*> onMessageBoxClickHandler; //0x3fc
     PtmfHolder_1A<Menu, void, u32> onMoviePrepared; //0x410
     u32 movieStartFrame; //0x424

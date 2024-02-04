@@ -33,8 +33,8 @@ public:
         float scaleT;
         float transS;
         float transT;
-        GXTexWrapMode wrapS;
-        GXTexWrapMode wrapT;
+        GX::TexWrapMode wrapS;
+        GX::TexWrapMode wrapT;
         nw4r::math::VEC2 scale;
         float rotate;
         nw4r::math::VEC2 translate;
@@ -73,8 +73,8 @@ public:
     static bool Normalize(math::VEC3* vec); //80041b00
 
     PrevTexture prevTexture[3];
-    GXColor prevColor[3];
-    GXColor prevKColor[4];
+    GX::Color prevColor[3];
+    GX::Color prevKColor[4];
 
     // InitColor
     int prevARef0;
@@ -88,7 +88,7 @@ public:
     bool useAlpha2_1;
     bool useAlpha2_2;
 
-    GXColor drawColor[2][2];
+    GX::Color drawColor[2][2];
 
     // InitTexture
     u8 numTexmap;

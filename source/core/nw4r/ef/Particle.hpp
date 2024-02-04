@@ -17,7 +17,7 @@ class ParticleManager;
 class ParticleParameter {
 
 public:
-    GXColor color[2][2];
+    GX::Color color[2][2];
     math::VEC2 size;
     math::VEC2 scale;
     math::VEC3 rotate;

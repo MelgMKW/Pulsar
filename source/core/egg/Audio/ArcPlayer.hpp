@@ -14,7 +14,7 @@ using namespace nw4r;
 
 class ArcPlayer {
 public:
-    ArcPlayer(snd::SoundArchivePlayer* soundArchivePlayer, snd::SoundHeap* heap); //0x80210590
+    ArcPlayer(snd::SoundArchivePlayer* soundArchivePlayer, snd::SoundHeap* heap); //80210590
     virtual ~ArcPlayer(); //0x8 80210624 vtable 802a2730
     virtual void* OpenArchive(const char* filePath, snd::SoundHeap* heap, u32 type, ARCHandle* handle); //0xc 802106b8 type 0 = dvd, 1 nand, 2 memory
     virtual void* OpenDVDArchive(const char* filePath, snd::SoundHeap* heap); //0x10 80210748
