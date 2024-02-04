@@ -59,7 +59,7 @@ bool ConditionalIgnoreInvisibleWalls(float radius, CourseMgr& mgr, const Vec3& p
         }
         //to remove invisible walls from the list of flags checked, these walls at flag 0xD and 2^0xD = 0x2000*
     }
-    return mgr.IsCollidingAddEntry(position, prevPosition, acceptedFlags, collisionInfo, &kclFlags, 0, radius);
+    return mgr.IsCollidingAddEntry(position, prevPosition, acceptedFlags, info, &kclFlags, 0, radius);
 }
 kmCall(0x805b68dc, ConditionalIgnoreInvisibleWalls);
 

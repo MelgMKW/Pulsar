@@ -7,7 +7,7 @@ namespace Pulsar {
 namespace Ghosts {
 Manager* Manager::sInstance = nullptr;
 
-void(*Manager::RKGCallback)(const RKG&, int) = nullptr;
+Manager::RKGCallback Manager::cb = nullptr;
 
 char Manager::folderPath[IOS::ipcMaxPath] = "";
 
