@@ -40,8 +40,17 @@ kmCall(0x8062dbbc, AddSettingsPage);
 kmCall(0x8062dd60, AddSettingsPage);
 kmCall(0x8062df04, AddSettingsPage);
 kmCall(0x8062e228, AddSettingsPage);
-kmCall(0x8062e3cc, AddSettingsPage);
 
+//1P Menu
+kmCall(0x8062d250, AddSettingsPage);
+kmCall(0x8062d394, AddSettingsPage);
+kmCall(0x8062e3cc, AddSettingsPage);
+kmCall(0x8062d4d8, AddSettingsPage);
+kmCall(0x8062d610, AddSettingsPage);
+kmCall(0x8062d694, AddSettingsPage);
+kmCall(0x8062d724, AddSettingsPage);
+kmCall(0x8062d838, AddSettingsPage);
+kmCall(0x8062d910, AddSettingsPage);
 
 //SETTINGS PANEL
 SettingsPanel::SettingsPanel(u32 sheetId) :
@@ -64,6 +73,7 @@ SettingsPanel::SettingsPanel(u32 sheetId) :
     if(id == SECTION_OPTIONS) prevPageId = PAGE_OPTIONS;
     else if((id == SECTION_P1_WIFI) || (id == SECTION_P1_WIFI_GLOBE_DISCONNECT) || (id == SECTION_P1_WIFI_FROM_FIND_FRIEND)
         || (id == SECTION_P2_WIFI) || (id == SECTION_P2_WIFI_GLOBE_DISCONNECT)) prevPageId = PAGE_WFC_MAIN;
+    else if(id >= SECTION_LICENSE_SETTINGS_MENU && id <= SECTION_SINGLE_P_LIST_RACE_GHOST) prevPageId = PAGE_SINGLE_PLAYER_MENU;
 
     onMessageBoxClickHandler.ptmf = &Menu::ChangeToPrevSection;
 
@@ -233,6 +243,7 @@ void SettingsPanel::LoadPrevMenuAndSaveSettings(PushButton& button) {
         section->Get<ExpFroom>()->topSettingsPage = this->pageId;
         this->nextPageId = PAGE_NONE; //FriendRoom's OnResume is important
     }
+    else if(this->prevPageId == PAGE_SINGLE_PLAYER_MENU) ExpSinglePlayer::topSettingsPage = this->pageId;
     SettingsPanel::SaveSettings(true);
 }
 

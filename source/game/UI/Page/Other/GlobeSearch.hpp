@@ -76,7 +76,7 @@ public:
     CountDown countdown; //0x1cbc
     PtmfHolder_0A<GlobeSearch, void> unknown_0x1cc8; //0x1cc8
     PtmfHolder_0A<GlobeSearch, void> unknown_0x1cdc; //0x1cdc
-    u8 unknown_0x1cf0[0x1d00 - 0x1cf0]; //0x1cc8
+    u8 unknown_0x1cf0[0x1d00 - 0x1cf0]; //0x1cf0
     PageId nextPageId; //0x1d00
 
 };

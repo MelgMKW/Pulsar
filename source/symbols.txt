@@ -1113,6 +1113,7 @@ CreateControl__Q25Pages11DriftSelectFUi = 0x8084e134
 SetButtonHandlers__Q25Pages11DriftSelectFR10PushButton = 0x8084e760
 
 #SinglePlayer
+CreateExternalControl__Q25Pages12SinglePlayerFUi = 0x8084efc4
 OnExternalButtonSelect__Q25Pages12SinglePlayerFR10PushButtonUi = 0x8084f688
 OnButtonClick__Q25Pages12SinglePlayerFR10PushButtonUi = 0x8084f298
 
@@ -1268,7 +1269,7 @@ isOnlineRace__9DriverMgr = 0x809c38b9
 
 #CourseMgr
 sInstance__11CourseMgr = 0x809c2F44
-IsCollidingAddEntry__9CourseMgrFRC4Vec3RC4Vec316KCLTypesBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x807907f8
+IsCollidingAddEntry__9CourseMgrFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x807907f8
 
 matNamesMH = 0x808d1860
 

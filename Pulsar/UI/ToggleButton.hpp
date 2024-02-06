@@ -10,6 +10,8 @@ public:
     ToggleButton() : state(false) {}
     void Load(u32 localPlayerBitfield, const char* folderName, const char* ctrName, const char* variant);
     void ToggleState(bool state); //changes the state without an animation
+    inline bool GetState() const { return this->state; }
+private:
     void OnClick() override {
         AnimationGroup& choiceGroup = this->animator.GetAnimationGroupById(4); //choice group, off, offtoon, on, ontooff
         const u32 curAnimation = choiceGroup.curAnimation;
@@ -22,8 +24,6 @@ public:
         else if(curState == true && curAnimation == 2) choiceGroup.PlayAnimationAtFrame(3, 0.0f);
         else if(curState == false && curAnimation == 0) choiceGroup.PlayAnimationAtFrame(1, 0.0f);
     }
-    inline bool GetState() const { return this->state; }
-private:
     bool state;
 };
 #endif

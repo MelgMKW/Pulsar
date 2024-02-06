@@ -8,9 +8,9 @@
 
 namespace Pulsar {
 
-CupsDef* CupsDef::sInstance = nullptr;
+CupsConfig* CupsConfig::sInstance = nullptr;
 
-CupsDef::CupsDef(const Cups& rawCups) : regsMode(rawCups.regsMode),
+CupsConfig::CupsConfig(const Cups& rawCups) : regsMode(rawCups.regsMode),
 //Cup actions initialization
 hasOddCups(false),
 winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup(PULSARCUPID_FIRSTREG), lastSelectedCupButtonIdx(0)
@@ -34,14 +34,14 @@ winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup
 }
 
 //Converts trackID to track slot using table
-CourseId CupsDef::GetCorrectTrackSlot() const {
+CourseId CupsConfig::GetCorrectTrackSlot() const {
     const CourseId realId = ConvertTrack_PulsarIdToRealId(this->winningCourse);
     if(IsReg(this->winningCourse)) return realId;
     else return (CourseId)cups[realId / 4].tracks[realId % 4].slot;
 }
 
 //MusicSlot
-int CupsDef::GetCorrectMusicSlot() const {
+int CupsConfig::GetCorrectMusicSlot() const {
     CourseId realId = RaceAudioMgr::sInstance->courseId;
     if(realId <= 0x1F) { //!battle
         realId = ConvertTrack_PulsarIdToRealId(this->winningCourse);
@@ -50,7 +50,7 @@ int CupsDef::GetCorrectMusicSlot() const {
     return AudioItemAlterationMgr::courseToSoundIdTable[realId];
 }
 
-int CupsDef::GetCRC32(PulsarId pulsarId) const {
+int CupsConfig::GetCRC32(PulsarId pulsarId) const {
     if(IsReg(pulsarId)) return RegsCRC32[pulsarId];
     else {
         const CourseId realId = ConvertTrack_PulsarIdToRealId(pulsarId);
@@ -58,16 +58,14 @@ int CupsDef::GetCRC32(PulsarId pulsarId) const {
     }
 }
 
-void CupsDef::GetTrackGhostFolder(char* dest, PulsarId pulsarId) const {
+void CupsConfig::GetTrackGhostFolder(char* dest, PulsarId pulsarId) const {
     const u32 crc32 = this->GetCRC32(pulsarId);
     const char* modFolder = System::sInstance->GetModFolder();
-    if(IsReg((pulsarId))) {
-        snprintf(dest, IOS::ipcMaxPath, "%s/Ghosts/%s", modFolder, &crc32);
-    }
+    if(IsReg(pulsarId)) snprintf(dest, IOS::ipcMaxPath, "%s/Ghosts/%s", modFolder, &crc32);
     else snprintf(dest, IOS::ipcMaxPath, "%s/Ghosts/%08x", modFolder, crc32);
 }
 
-void CupsDef::ToggleCTs(bool enabled) {
+void CupsConfig::ToggleCTs(bool enabled) {
     u32 count;
     if(!enabled) {
         if(lastSelectedCup > 7) {
@@ -85,7 +83,7 @@ void CupsDef::ToggleCTs(bool enabled) {
     ctsCupCount = count;
 }
 
-PulsarId CupsDef::RandomizeTrack(Random& random) const {
+PulsarId CupsConfig::RandomizeTrack(Random& random) const {
     u32 pulsarId;
     if(this->HasRegs()) {
         pulsarId = random.NextLimited(this->GetCtsTrackCount() + 32);
@@ -108,7 +106,7 @@ PulsarCupId CupsDef::GetNextCupId(PulsarCupId pulsarId, s32 direction) const {
 }
 */
 
-PulsarCupId CupsDef::GetNextCupId(PulsarCupId pulsarId, s32 direction) const {
+PulsarCupId CupsConfig::GetNextCupId(PulsarCupId pulsarId, s32 direction) const {
     const u32 idx = ConvertCup_PulsarIdToIdx(pulsarId);
     const u32 count = this->GetTotalCupCount();
     const u32 min = count < 8 ? 8 : 0;
@@ -117,18 +115,18 @@ PulsarCupId CupsDef::GetNextCupId(PulsarCupId pulsarId, s32 direction) const {
     return ConvertCup_IdxToPulsarId(nextIdx);
 }
 
-void CupsDef::SaveSelectedCourse(const PushButton& courseButton) {
+void CupsConfig::SaveSelectedCourse(const PushButton& courseButton) {
     this->selectedCourse = ConvertTrack_PulsarCupToTrack(this->lastSelectedCup) + courseButton.buttonId;
     this->winningCourse = selectedCourse;
 }
 
 int GetCorrectMusicSlotWrapper() {
-    return CupsDef::sInstance->GetCorrectMusicSlot();
+    return CupsConfig::sInstance->GetCorrectMusicSlot();
 }
 kmCall(0x80711fd8, GetCorrectMusicSlotWrapper);
 kmCall(0x8071206c, GetCorrectMusicSlotWrapper);
 
-u32 CupsDef::ConvertCup_PulsarIdToRealId(PulsarCupId pulsarCupId) {
+u32 CupsConfig::ConvertCup_PulsarIdToRealId(PulsarCupId pulsarCupId) {
     if(IsRegCup(pulsarCupId)) {
         if((pulsarCupId & 1) == 0) return pulsarCupId / 2;
         else return (pulsarCupId + 7) / 2;
@@ -136,20 +134,20 @@ u32 CupsDef::ConvertCup_PulsarIdToRealId(PulsarCupId pulsarCupId) {
     else return pulsarCupId - 0x40;
 }
 
-u32 CupsDef::ConvertCup_PulsarIdToIdx(PulsarCupId pulsarCupId) {
+u32 CupsConfig::ConvertCup_PulsarIdToIdx(PulsarCupId pulsarCupId) {
     u32 idx = pulsarCupId;
     if(!IsRegCup(pulsarCupId)) idx = pulsarCupId - 0x38;
     return idx;
 }
 
-PulsarCupId CupsDef::ConvertCup_IdxToPulsarId(u32 cupIdx) {
+PulsarCupId CupsConfig::ConvertCup_IdxToPulsarId(u32 cupIdx) {
     if(!IsRegCup(static_cast<PulsarCupId>(cupIdx))) {
         return static_cast<PulsarCupId>(cupIdx + 0x38);
     }
     else return static_cast<PulsarCupId>(cupIdx);
 }
 
-CourseId CupsDef::ConvertTrack_PulsarIdToRealId(PulsarId pulsarId) {
+CourseId CupsConfig::ConvertTrack_PulsarIdToRealId(PulsarId pulsarId) {
     if(IsReg(pulsarId)) {
         if(pulsarId < 32) return static_cast<CourseId>(idToCourseId[pulsarId]);
         else return static_cast<CourseId>(pulsarId); //battle
@@ -157,12 +155,12 @@ CourseId CupsDef::ConvertTrack_PulsarIdToRealId(PulsarId pulsarId) {
     else return static_cast<CourseId>(pulsarId - 0x100);
 }
 
-PulsarId CupsDef::ConvertTrack_RealIdToPulsarId(CourseId id) {
+PulsarId CupsConfig::ConvertTrack_RealIdToPulsarId(CourseId id) {
     if(id < 32) for(int i = 0; i < 32; ++i) if(id == idToCourseId[i]) return static_cast<PulsarId>(i);
     return static_cast<PulsarId>(id);
 }
 
-PulsarId CupsDef::ConvertTrack_IdxToPulsarId(u32 idx) const {
+PulsarId CupsConfig::ConvertTrack_IdxToPulsarId(u32 idx) const {
     if(!this->HasRegs()) {
         idx += 0x100;
     }
@@ -170,7 +168,7 @@ PulsarId CupsDef::ConvertTrack_IdxToPulsarId(u32 idx) const {
     return static_cast<PulsarId>(idx);
 }
 
-bool CupsDef::IsRegsSituation() {
+bool CupsConfig::IsRegsSituation() {
     const RKNet::Controller* rkNet = RKNet::Controller::sInstance;
     if(rkNet->connectionState == RKNet::CONNECTIONSTATE_SHUTDOWN) return false;
     switch(rkNet->roomType) {
@@ -182,7 +180,7 @@ bool CupsDef::IsRegsSituation() {
     }
 }
 
-const u8 CupsDef::idToCourseId[32] ={
+const u8 CupsConfig::idToCourseId[32] ={
     0x08, 0x01, 0x02, 0x04, //mushroom cup
     0x10, 0x14, 0x19, 0x1A, //shell cup
     0x00, 0x05, 0x06, 0x07, //flower cup   
@@ -194,7 +192,7 @@ const u8 CupsDef::idToCourseId[32] ={
 
 };
 
-const u32 CupsDef::RegsCRC32[] ={
+const u32 CupsConfig::RegsCRC32[] ={
     0x4C430000,      //LC
     0x4D4D4D00,      //MMM
     0x4D470000,      //MG

@@ -20,7 +20,7 @@ public:
     void Update() override; //0x14 806d345c
     u32 GetPropertiesBitfield() override; //0x2c 806d5c6c
     void LoadModels() override; //0x44 806d5c68
-    void LoadRenderer() override; //0x58 806d5c5c
+    void LoadClipInfo() override; //0x58 806d5c5c
     void LoadCollision() override; //0x60 806d5c60
     void LoadRoute() override; //0x64 806d5c64
 
@@ -135,7 +135,7 @@ public:
 class K_car_tire : public ObjectCollidable {
 public:
     ~K_car_tire() override; //806d5c1c vtable 808c54c8
-    int GetID() const override; //0x24 806d5c14
+    u16 GetID() const override; //0x24 806d5c14
     u32 GetPropertiesBitfield() override; //0x2c 806d5c0c
     const char* GetBRRESName() const override; //0x34 806d5c00
     const char* GetSubFileName() const override; //0x38 806d5bf4
@@ -151,7 +151,7 @@ public:
 class K_truck_tire : public ObjectCollidable {
 public:
     ~K_truck_tire() override; //806d5b58 vtable 808c53d8
-    int GetID() const override; //0x24 806d5b50
+    u16 GetID() const override; //0x24 806d5b50
     u32 GetPropertiesBitfield() override; //0x2c 806d5b48
     const char* GetBRRESName() const override; //0x34 806d5b3c
     const char* GetSubFileName() const override; //0x38 806d5b30
@@ -167,7 +167,7 @@ public:
 class K_car_light : public ObjectCollidable {
 public:
     ~K_car_light() override; //806d5a94 vtable 808c52e8
-    int GetID() const override; //0x24 806d5a8c
+    u16 GetID() const override; //0x24 806d5a8c
     u32 GetPropertiesBitfield() override; //0x2c 806d5a84
     const char* GetBRRESName() const override; //0x34 806d5a78
     const char* GetSubFileName() const override; //0x38 806d5a6c
@@ -183,7 +183,7 @@ public:
 class K_truck_light : public ObjectCollidable {
 public:
     ~K_truck_light() override; //806d598c vtable 808c51f8
-    int GetID() const override; //0x24 806d5984
+    u16 GetID() const override; //0x24 806d5984
     u32 GetPropertiesBitfield() override; //0x2c 806d597c
     const char* GetBRRESName() const override; //0x34 806d5970
     const char* GetSubFileName() const override; //0x38 806d5964

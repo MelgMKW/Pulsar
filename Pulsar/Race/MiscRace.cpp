@@ -11,12 +11,12 @@
 namespace Pulsar {
 namespace Race {
 //From JoshuaMK, ported to C++ by Brawlbox and adapted as a setting
-int MiiHeads(RaceData* racedata, int r4, int r5, u8 id) {
-    u32 charId = racedata->racesScenario.players[id].characterId;
+int MiiHeads(RaceData* racedata, u32 unused, u32 unused2, u8 id) {
+    CharacterId charId = racedata->racesScenario.players[id].characterId;
     if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_MII) == RACESETTING_MII_ENABLED) {
-        if(charId < 0x2a) {
-            if(id == 0) charId = 0x2a;
-            else if(RKNet::Controller::sInstance->connectionState != 0) charId = 0x2a;
+        if(charId < MII_M) {
+            if(id == 0) charId = MII_M;
+            else if(RKNet::Controller::sInstance->connectionState != 0) charId = MII_M;
         }
     }
     return charId;

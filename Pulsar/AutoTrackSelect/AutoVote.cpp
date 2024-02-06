@@ -37,7 +37,6 @@ void AutoVote::OnActivate() {
 void AutoVote::BeforeControlUpdate() {}
 void AutoVote::OnResume() {}
 
-
 void AutoVote::OnInit() {
     this->timerControl.isHidden = true;
     CountDownTimer::OnInit();
@@ -49,7 +48,8 @@ void AutoVote::OnDispose() {
 
 void AutoVote::OnUpdate() {
     Network::CustomSELECTHandler* select = reinterpret_cast<Network::CustomSELECTHandler*>(RKNet::SELECTHandler::sInstance);
-    CupsDef* cups = CupsDef::sInstance;
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
     if(status == 6) {
         Pages::MessageBox* messageBox = sectionMgr->curSection->Get<Pages::MessageBox>();
@@ -67,7 +67,7 @@ void AutoVote::OnUpdate() {
         const u8 localAid = sub.localAid;
         PulsarId vote;
         if(hostAid == localAid) {
-            vote = cups->winningCourse;
+            vote = cupsConfig->winningCourse;
             select->toSendPacket.pulWinningCourse = vote;
             select->toSendPacket.winningVoterAid = hostAid;
         }
@@ -75,7 +75,7 @@ void AutoVote::OnUpdate() {
             const PulsarId hostVote = static_cast<PulsarId>(select->receivedPackets[hostAid].pulSELPlayerData[0].pulCourseVote);
             if(hostVote != 0x43) {
                 vote = hostVote;
-                cups->winningCourse = hostVote;
+                cupsConfig->winningCourse = hostVote;
                 select->toSendPacket.pulWinningCourse = vote;
                 select->toSendPacket.winningVoterAid = hostAid;
                 select->toSendPacket.phase = 2;
@@ -109,7 +109,7 @@ void AutoVote::OnUpdate() {
         if(readyDuration > 180) {
             reinterpret_cast<RKNet::SELECTHandler*>(select)->AllocatePlayerIdsToAids();
             this->status = COUNTDOWN_STATUS_VOTES_PAGE;
-            ArchiveRoot::sInstance->RequestLoadCourseAsync(static_cast<CourseId>(cups->winningCourse));
+            ArchiveRoot::sInstance->RequestLoadCourseAsync(static_cast<CourseId>(cupsConfig->winningCourse));
             this->SetModeTypes();
             this->PrepareRace();
             this->UpdateFriendParams();

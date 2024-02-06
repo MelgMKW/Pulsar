@@ -53,7 +53,7 @@ public:
     void CreateStoneEffect(u32 colorType); //806b04bc
 
     void SetOffroadColors(); //806b171c
-    static void CalcEffectMtx(const Vec3& playerDir, Mtx34& dest); //806b3ca4
+
 
 
     bool unknown_0x4;

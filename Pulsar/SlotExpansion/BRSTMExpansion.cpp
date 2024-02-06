@@ -20,7 +20,7 @@ s32 CheckBRSTM(const nw4r::snd::DVDSoundArchive* archive, PulsarId id, bool isFi
     snprintf(pulPath, 0x100, "%sstrm/%ls%s.brstm", archive->extFileRoot, trackName, lapSpecifier);
     ret = DVDConvertPathToEntryNum(pulPath);
     if(ret < 0) {
-        snprintf(pulPath, 0x50, "%sstrm/%d%s.brstm", archive->extFileRoot, CupsDef::ConvertTrack_PulsarIdToRealId(id), lapSpecifier);
+        snprintf(pulPath, 0x50, "%sstrm/%d%s.brstm", archive->extFileRoot, CupsConfig::ConvertTrack_PulsarIdToRealId(id), lapSpecifier);
         ret = DVDConvertPathToEntryNum(pulPath);
     }
     return ret;
@@ -30,9 +30,9 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
     const char* extFilePath, u32 r7, u32 length) {
 
     const char firstChar = extFilePath[0xC];
-    const PulsarId track = CupsDef::sInstance->winningCourse;
-    const CupsDef* cups = CupsDef::sInstance;
-    if(!CupsDef::IsReg(track) && (firstChar == 'n' || firstChar == 'S' || firstChar == 'r')) {
+    const PulsarId track = CupsConfig::sInstance->winningCourse;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
+    if(!CupsConfig::IsReg(track) && (firstChar == 'n' || firstChar == 'S' || firstChar == 'r')) {
         bool isFinalLap = false;
         register u32 strLength;
         asm(mr strLength, r28;);

@@ -4,7 +4,7 @@
 #include <SlotExpansion/CupsDef.hpp>
 #include <PulsarSystem.hpp>
 #include <Settings/UI/SettingsPanel.hpp>
-
+#include <game/UI/Page/Menu/SinglePlayer.hpp>
 
 namespace Pulsar {
 namespace UI { class SettingsPanel; }
@@ -75,7 +75,7 @@ class alignas(0x20) Binary {
     static const u32 binMagic = 'PULP';
 
     Binary(u32 curVersion, u32 pageCount) {
-        u32 trackCount = CupsDef::sInstance->GetEffectiveTrackCount();
+        u32 trackCount = CupsConfig::sInstance->GetEffectiveTrackCount();
 
         header.magic = binMagic;
         header.version = curVersion;
@@ -104,8 +104,8 @@ class alignas(0x20) Binary {
 
     BinaryHeader header;
     PagesHolder pages;
-    MiscParams misc;
-    TrophiesHolder trophies;
+    //MiscParams misc;
+    //TrophiesHolder trophies;
     friend class Mgr;
 };
 
@@ -179,7 +179,6 @@ public:
 //Use these 3 for "u32 setting" in GetSettingValue, the return will be the value of the other enums
 enum MenuSettings {
     SETTINGMENU_RADIO_FASTMENUS = 0,
-
     SETTINGMENU_SCROLL_BOOT = 0 + 6
 };
 

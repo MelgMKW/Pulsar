@@ -22,11 +22,11 @@ void ExpFroomMessages::OnModeButtonClick(PushButton& button, u32 hudSlotId) {
 void ExpFroomMessages::OnCourseButtonClick(PushButton& button, u32 hudSlotId) {
     u32 clickedIdx = clickedButtonIdx;
     u32 id = button.buttonId;
-    CupsDef* cups = CupsDef::sInstance;
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
     PulsarId pulsarId = static_cast<PulsarId>(id);
-    if(clickedIdx < 2) pulsarId = cups->ConvertTrack_IdxToPulsarId(id); //vs or teamvs
+    if(clickedIdx < 2) pulsarId = cupsConfig->ConvertTrack_IdxToPulsarId(id); //vs or teamvs
     else pulsarId = pulsarId + 0x20U;
-    cups->winningCourse = pulsarId;
+    cupsConfig->winningCourse = pulsarId;
     PushButton& clickedButton = this->messages[0].buttons[clickedIdx];
     clickedButton.buttonId = clickedIdx;
     Pages::FriendRoomMessages::OnModeButtonClick(clickedButton, 0); //hudslot is unused
@@ -46,7 +46,7 @@ void OnStartButtonFroomMsgActivate() {
         if(msg->isOnModeSelection) {
             msg->isOnModeSelection = false;
             if(msg->clickedButtonIdx >= 2) msg->msgCount = 10;
-            else msg->msgCount = CupsDef::sInstance->GetEffectiveTrackCount();
+            else msg->msgCount = CupsConfig::sInstance->GetEffectiveTrackCount();
             msg->onModeButtonClickHandler.ptmf = &ExpFroomMessages::OnCourseButtonClick;
 
         }
@@ -91,7 +91,7 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
         if(messages->clickedButtonIdx >= 2) {
             return BMG_BATTLE + messages->curPageIdx * 4 + rowIdx;
         }
-        else return GetTrackBMGId(CupsDef::ConvertTrack_PulsarCupToTrack(CupsDef::ConvertCup_IdxToPulsarId(messages->curPageIdx)) + rowIdx);
+        else return GetTrackBMGId(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(messages->curPageIdx)) + rowIdx);
     }
     else return Pages::FriendRoomManager::GetMessageBmg(packet, 0);
 }

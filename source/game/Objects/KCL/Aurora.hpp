@@ -59,9 +59,9 @@ public:
 
     bool AreItemsAllowed() override; //0x104 807fb534
     float vf_0x108() override; //0x108 807fb528
-    void InitItemEntity(void* unkItemObjSub, Vec& itemPosition) override; //0x110 807fb33c
-    void vf_0x118() override; //0x118 807fb39c
-    int vf_0x11c() override; //0x11c 807fb520
+    void CalcOtherEntityDistance(CollisionInfo::ObjInfo* objInfo, const Vec& sourcePosition); //0x110 807fb33c
+    void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir) override; //0x118 807fb39c
+    int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 807fb520
 
 
     bool IsCollidingNoTerrainInfoImpl(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,

@@ -31,7 +31,7 @@ struct KBHeader {
 #define kBranchLink 65
 
 
-void DisplayError(const LoaderFunctions* funcs, const char* str) {
+void DisplayError(const LoaderParams* funcs, const char* str) {
     u32 fg = 0xFFFFFFFF, bg = 0;
     funcs->OSFatal(&fg, &bg, str);
 }
@@ -138,7 +138,7 @@ inline void cacheInvalidateAddress(register u32 address) {
     asm(icbi 0, address;);
 }
 
-void LoadKamekBinary(LoaderFunctions* funcs, const void* binary, u32 binaryLength, bool isDol) {
+void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryLength, bool isDol) {
 
     static u32 text = 0;
     const KBHeader* header = (const KBHeader*)binary;
@@ -255,31 +255,31 @@ void LoadKamekBinary(LoaderFunctions* funcs, const void* binary, u32 binaryLengt
 }
 
 
-void LoadKamekBinaryFromDisc(LoaderFunctions* funcs, Region region)
+void LoadKamekBinaryFromDisc(LoaderParams* params)
 {
     static void* codePulBuf = nullptr;
     static u32 fileLength = 0;
-    funcs->OSReport("{Kamek by Treeki}\nLoading Kamek binary");
+    params->OSReport("{Kamek by Treeki}\nLoading Kamek binary");
 
     bool isDol = false;
-    EGG::ExpHeap* heap = funcs->rkSystem->EGGSystem;
+    EGG::ExpHeap* heap = params->rkSystem->EGGSystem;
 
     if(codePulBuf == nullptr) {
         const char* path = "/Binaries/Code.pul";
-        int entrynum = funcs->DVDConvertPathToEntrynum(path);
+        int entrynum = params->DVDConvertPathToEntrynum(path);
         if(entrynum < 0) {
             char err[512];
-            funcs->sprintf(err, "FATAL ERROR: Failed to locate file on the disc: %s", path);
-            DisplayError(funcs, err);
+            params->sprintf(err, "FATAL ERROR: Failed to locate file on the disc: %s", path);
+            DisplayError(params, err);
         }
 
         DVDFileInfo fileInfo;
-        if(!funcs->DVDFastOpen(entrynum, &fileInfo)) DisplayError(funcs, "FATAL ERROR: Failed to open file!");
-        funcs->OSReport("DVD file located: addr=%p, size=%d\n", fileInfo.startAddr, fileInfo.length);
+        if(!params->DVDFastOpen(entrynum, &fileInfo)) DisplayError(params, "FATAL ERROR: Failed to open file!");
+        params->OSReport("DVD file located: addr=%p, size=%d\n", fileInfo.startAddr, fileInfo.length);
 
         alignas(0x20) KBHeader header;
         u32 roundedHeaderLength = nw4r::ut::RoundUp(sizeof(KBHeader), 32);
-        funcs->DVDReadPrio(&fileInfo, &header, roundedHeaderLength, 0, 2);
+        params->DVDReadPrio(&fileInfo, &header, roundedHeaderLength, 0, 2);
 
         fileLength = header.length;
         u32 length = header.length;
@@ -287,11 +287,11 @@ void LoadKamekBinaryFromDisc(LoaderFunctions* funcs, Region region)
 
         isDol = true;
         codePulBuf = heap->alloc(roundedLength, -0x20);
-        if(!codePulBuf) DisplayError(funcs, "FATAL ERROR: Out of file memory");
-        funcs->DVDReadPrio(&fileInfo, codePulBuf, roundedLength, length * region, 2);
-        funcs->DVDClose(&fileInfo);
+        if(!codePulBuf) DisplayError(params, "FATAL ERROR: Out of file memory");
+        params->DVDReadPrio(&fileInfo, codePulBuf, roundedLength, length * params->region, 2);
+        params->DVDClose(&fileInfo);
     }
 
-    LoadKamekBinary(funcs, codePulBuf, fileLength, isDol);
+    LoadKamekBinary(params, codePulBuf, fileLength, isDol);
     if(!isDol) heap->free(codePulBuf);
 }

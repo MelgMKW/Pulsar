@@ -4,7 +4,7 @@
 #include <core/RK/RKSystem.hpp>
 
 
-struct LoaderFunctions;
+struct LoaderParams;
 
 typedef void (*OSReport_t) (const char* str, ...);
 typedef void (*OSFatal_t) (u32* fg, u32* bg, const char* str, ...);
@@ -14,8 +14,14 @@ typedef int (*DVDReadPrio_t) (DVDFileInfo* fileInfo, void* buffer, int length, i
 typedef bool (*DVDClose_t) (DVDFileInfo* fileInfo);
 typedef int (*sprintf_t) (char* str, const char* format, ...);
 
+enum Region {
+    PAL = 0,
+    NTSC_U = 1,
+    NTSC_J = 2,
+    NTSC_K = 3
+};
 
-struct LoaderFunctions {
+struct LoaderParams {
     OSReport_t OSReport;
     OSFatal_t OSFatal;
     DVDConvertPathToEntrynum_t DVDConvertPathToEntrynum;
@@ -24,14 +30,10 @@ struct LoaderFunctions {
     DVDClose_t DVDClose;
     sprintf_t sprintf;
     RKSystem* rkSystem;
+    Region region;
 };
 
-enum Region {
-    PAL = 0,
-    NTSC_U = 1,
-    NTSC_J = 2,
-    NTSC_K = 3
-};
 
-void LoadKamekBinaryFromDisc(LoaderFunctions* funcs, Region region);
+
+void LoadKamekBinaryFromDisc(LoaderParams* funcs);
 #endif

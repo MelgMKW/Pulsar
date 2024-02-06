@@ -39,6 +39,8 @@ namespace PulsarPackCreator
         public void ImportCrash(byte[] raw)
         {
             PulsarGame.ExceptionFile rawFile = PulsarGame.BytesToStruct<PulsarGame.ExceptionFile>(raw);
+            region = ((char)(byte)rawFile.region);
+            
             PulsarGame.OSError error = (PulsarGame.OSError)rawFile.error;
             string errorString;
             if (error == PulsarGame.OSError.OSERROR_DSI) errorString = "DSI";

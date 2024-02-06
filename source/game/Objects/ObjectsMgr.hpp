@@ -61,7 +61,8 @@ struct ObjectArray {
     Object** array;
 }; //0x8
 
-struct ManagedObjects {
+class ManagedObjects {
+    void RegisterObject(Object* object); //806c4ed4
     Object* objects[0x3c];
     u32 managedObjCount;
 }; //0xf4
@@ -86,6 +87,7 @@ public:
     void ProcessCollision(const Kart::Player& kartPlayer, ObjectCollisionPolyhedra* collision); //8082ab04
     int GetManagedObjectsCount(); //8082b3b8
     Object* GetManagedObject(u32 idx); //8082b3a8
+    void RegisterManagedObject(Object* object); //8082b3a0
 
 
     ObjFlowHolder* objFlow; //0x4
@@ -102,7 +104,7 @@ public:
     bool isGameModeMoreThan7; //0x54
     bool isTT; //0x55
     u8 padding6[2];
-    Object* managedObjects; //0x58 only for MH, DC, rSGB, rDH, galaxy colosseum ie tracks with a object that is managed
+    ManagedObjects* managedObjects; //0x58 only for DC, MH, DC, rSGB, rDH, galaxy colosseum ie tracks with a object that is managed
     u8 unknown_0x5c[4];
     bool unknown_0x60;
     u8 padding7[3];

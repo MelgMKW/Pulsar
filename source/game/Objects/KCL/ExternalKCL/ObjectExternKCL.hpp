@@ -84,11 +84,11 @@ class ObjectExternKCL : public ObjectKCL { //for objects whose KCL is provided b
 
     bool AreItemsAllowed() override; //0x104 80687d68
     float vf_0x108() override; //0x108 80687d5c
-    void vf_0x10c() override; //0x10c 8068142c
-    void InitItemEntity(void* unkItemObjSub, Vec& itemPosition) override; //0x110 807fea60  sets initial position
-    void UpdateItemEntity(void* unkItemObjSub, Vec& itemPosition) override; //0x114 806813d8
-    void vf_0x118() override; //0x118 80687d58
-    int vf_0x11c() override; //0x11c 807fea58
+    void SetObjInfoIsFilled(CollisionInfo::ObjInfo* objInfo) const override; //0x10c 8068142c
+    void CalcOtherEntityDistance(CollisionInfo::ObjInfo* otherEntityObjInfo, const Vec3& otherEntityInitialPosition) override; //0x110 807fea60
+    void UpdateOtherEntityPos(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos) override; //0x114 806813d8
+    void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir) override; //0x118 80687d58
+    int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 807fea58
 
     virtual void UpdateCollisionPosition(u32 r4); //0x120 8081ad6c
     virtual void SetYScale(); //0x124 8081af28 //something vertical scale

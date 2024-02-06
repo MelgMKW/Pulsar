@@ -11,7 +11,7 @@ class ExpCupSelect : public Pages::CupSelect {
 public:
     ExpCupSelect();
     ~ExpCupSelect() override {
-        Settings::Mgr::GetInstance()->SetLastSelectedCup(CupsDef::sInstance->lastSelectedCup);
+        Settings::Mgr::GetInstance()->SetLastSelectedCup(CupsConfig::sInstance->lastSelectedCup);
         Settings::Mgr::GetInstance()->RequestSave();
     }
     static void UpdateCupData(PulsarCupId id, LayoutUIControl& control);
@@ -31,7 +31,6 @@ private:
     SheetSelectControl arrows;
     LayoutUIControl randomControl;
     PulsarId randomizedId;
-
 };
 
 }//namespace UI

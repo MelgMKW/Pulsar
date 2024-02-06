@@ -32,6 +32,10 @@ public:
     static void SetCb(RKGCallback userCb) { cb = userCb; }
     const Leaderboard& GetLeaderboard() const { return this->leaderboard; }
     const GhostData& GetGhostData(u32 idx) const { return this->files[idx]; }
+    u32 GetRKGCount() const { return this->rkgCount; }
+    u32 GetSelGhostIdx(u32 idx) const { return this->selGhostsIndex[idx]; }
+
+
     const PulsarId GetPulsarId() const { return this->pulsarId; }
     const Timer& GetExpert() const { return this->expertGhost; }
     void ToggleGhostSaving(bool savingIsEnabled) {
@@ -74,7 +78,6 @@ private:
     static char folderPath[IOS::ipcMaxPath];
     static RKGCallback cb; //int = ghost index
 
-public:
     GhostData* files;
     PulsarId pulsarId;
     Timer expertGhost;
@@ -86,14 +89,11 @@ public:
     u32 padding[20];
     RKG rkg; //aligned for file operations
     Leaderboard leaderboard; //aligned for file operations
-
-
     TimeEntry entry;
 
     friend class UI::ExpGhostSelect; //UI backend
     friend class Leaderboard;
     friend void UI::BeforeEntranceAnimations(Pages::TTSplits* page); //not formally part of ExpGhostSelect but calls "SaveGhost"
-
 };
 
 

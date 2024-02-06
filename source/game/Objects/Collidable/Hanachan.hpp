@@ -133,7 +133,7 @@ public:
     void UpdateModel() override; //0x1c 806cc9ec
     u32 GetPropertiesBitfield() override; //0x2c 806cc9fc
     void LoadModels() override; //0x44 806cc9f8
-    void LoadRenderer() override; //0x58 806cc9f0
+    void LoadClipInfo() override; //0x58 806cc9f0
     void LoadCollision() override; //0x60 806cc9f4
 
     //UnkCycleParent vtable 808c44a4 at 0xB0 4 ptmfs

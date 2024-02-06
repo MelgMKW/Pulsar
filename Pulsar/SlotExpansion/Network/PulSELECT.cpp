@@ -14,12 +14,12 @@ namespace Network {
 
 
 void BeforeSELECTSend(RKNet::PacketHolder* packetHolder, CustomSELECTPacket* src, u32 len) {
-    if(CupsDef::IsRegsSituation()) {
+    if(CupsConfig::IsRegsSituation()) {
         CustomSELECTPacket copy = *src;
         RKNet::SELECTPacket* normalPacket = reinterpret_cast<RKNet::SELECTPacket*>(&copy);
-        normalPacket->playersData[0].courseVote = (u8)CupsDef::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->pulSELPlayerData[0].pulCourseVote));
-        normalPacket->playersData[1].courseVote = (u8)CupsDef::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->pulSELPlayerData[1].pulCourseVote));
-        normalPacket->winningCourse = CupsDef::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->pulWinningCourse));
+        normalPacket->playersData[0].courseVote = (u8)CupsConfig::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->pulSELPlayerData[0].pulCourseVote));
+        normalPacket->playersData[1].courseVote = (u8)CupsConfig::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->pulSELPlayerData[1].pulCourseVote));
+        normalPacket->winningCourse = CupsConfig::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->pulWinningCourse));
         normalPacket->playersData[0].prevRaceRank = src->pulSELPlayerData[0].prevRaceRank;
         normalPacket->playersData[1].prevRaceRank = src->pulSELPlayerData[1].prevRaceRank;
         normalPacket->phase = src->phase;
@@ -32,11 +32,11 @@ void BeforeSELECTSend(RKNet::PacketHolder* packetHolder, CustomSELECTPacket* src
 kmCall(0x80661040, BeforeSELECTSend);
 
 void AfterSELECTReception(CustomSELECTPacket* dest, CustomSELECTPacket* src, u32 packetSize) {
-    if(CupsDef::IsRegsSituation() || (src->pulSELPlayerData[1].starRank & 0x80 == 0)) {
+    if(CupsConfig::IsRegsSituation() || (src->pulSELPlayerData[1].starRank & 0x80 == 0)) {
         RKNet::SELECTPacket* normalPacket = reinterpret_cast<RKNet::SELECTPacket*>(src);
-        const u8 courseVoteHud0 = CupsDef::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->playersData[0].courseVote));
-        const u8 courseVoteHud1 = CupsDef::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->playersData[1].courseVote));
-        const u8 winningId = CupsDef::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->winningCourse));
+        const u8 courseVoteHud0 = CupsConfig::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->playersData[0].courseVote));
+        const u8 courseVoteHud1 = CupsConfig::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->playersData[1].courseVote));
+        const u8 winningId = CupsConfig::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->winningCourse));
         const u8 prevRaceRankHud0 = normalPacket->playersData[0].prevRaceRank;
         const u8 prevRaceRankHud1 = normalPacket->playersData[1].prevRaceRank;
         const u8 phase = normalPacket->phase;
@@ -73,16 +73,16 @@ kmBranch(0x80660d40, IsTrackDecided);
 
 
 PulsarId FixRandom(Random& random) {
-    return CupsDef::sInstance->RandomizeTrack(random);
+    return CupsConfig::sInstance->RandomizeTrack(random);
 }
 kmCall(0x80661f34, FixRandom);
 
 void DecideTrack(CustomSELECTHandler* select) {
     Random random;
     System* system = System::sInstance;
-    const CupsDef* cups = CupsDef::sInstance;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
     const RKNet::Controller* controller = RKNet::Controller::sInstance;
-    if(select->mode == RKNet::ONLINEMODE_PUBLIC_VS && !CupsDef::IsRegsSituation()) {
+    if(select->mode == RKNet::ONLINEMODE_PUBLIC_VS && !CupsConfig::IsRegsSituation()) {
 
         const u32 availableAids = controller->subs[controller->currentSub].availableAids;
         u8 aids[12];
@@ -107,17 +107,17 @@ void DecideTrack(CustomSELECTHandler* select) {
         if(newVoters > 0) winner = newVotesAids[random.NextLimited(newVoters)];
         else winner = aids[random.NextLimited(playerCount)];
         u16 vote = select->receivedPackets[winner].pulSELPlayerData[0].pulCourseVote;
-        if(vote == 0xFF) vote = cups->RandomizeTrack(random);
+        if(vote == 0xFF) vote = cupsConfig->RandomizeTrack(random);
         select->toSendPacket.pulWinningCourse = vote;
         select->toSendPacket.winningVoterAid = winner;
-        system->lastTracks[system->curArrayIdx] = static_cast<PulsarId>(vote);
-        system->curArrayIdx = (system->curArrayIdx + 1) % Info::GetTrackBlocking();
+        system->lastTracks[system->curBlockingArrayIdx] = static_cast<PulsarId>(vote);
+        system->curBlockingArrayIdx = (system->curBlockingArrayIdx + 1) % Info::GetTrackBlocking();
     }
     if(select->mode == RKNet::ONLINEMODE_PRIVATE_VS && Info::IsHAW(true)) {
         const u8 hostAid = controller->subs[controller->currentSub].hostAid;
         select->toSendPacket.winningVoterAid = hostAid;
         u16 hostVote = select->toSendPacket.pulSELPlayerData[0].pulCourseVote;
-        if(hostVote == 0xFF) hostVote = cups->RandomizeTrack(random);
+        if(hostVote == 0xFF) hostVote = cupsConfig->RandomizeTrack(random);
         select->toSendPacket.pulWinningCourse = hostVote;
     }
     else reinterpret_cast<RKNet::SELECTHandler*>(select)->DecideTrack();
@@ -127,17 +127,17 @@ kmCall(0x80661490, DecideTrack);
 //Patches GetWinningCOURSE call so that non-hosts prepare the correct track
 CourseId SetCorrectSlot(CustomSELECTHandler* select) {
     CourseId id = reinterpret_cast<RKNet::SELECTHandler*>(select)->GetWinningCourse();
-    if(select->toSendPacket.engineClass != 0) id = CupsDef::sInstance->GetCorrectTrackSlot();
+    if(select->toSendPacket.engineClass != 0) id = CupsConfig::sInstance->GetCorrectTrackSlot();
     return id;
 }
 kmCall(0x80650ea8, SetCorrectSlot);
 
 void SetCorrectTrack(ArchiveRoot* root, PulsarId winningCourse) {
     System* system = System::sInstance;
-    CupsDef* cups = CupsDef::sInstance;
-    system->lastTracks[system->curArrayIdx] = winningCourse;
-    cups->winningCourse = winningCourse;
-    system->curArrayIdx = (system->curArrayIdx + 1) % Info::GetTrackBlocking();
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+    system->lastTracks[system->curBlockingArrayIdx] = winningCourse;
+    cupsConfig->winningCourse = winningCourse;
+    system->curBlockingArrayIdx = (system->curBlockingArrayIdx + 1) % Info::GetTrackBlocking();
     root->RequestLoadCourseAsync(static_cast<CourseId>(winningCourse));
 }
 kmCall(0x80644414, SetCorrectTrack);

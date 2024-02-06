@@ -18,9 +18,9 @@ System::Inherit* System::inherit = nullptr;
 
 
 //Create Pulsar
-Config* Config::LoadConfig(u32* readBytes) {
+ConfigFile* ConfigFile::LoadConfig(u32* readBytes) {
     EGG::ExpHeap* mem2Heap = RKSystem::mInstance.sceneManager->currentScene->mem2Heap;
-    Config* conf = static_cast<Config*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
+    ConfigFile* conf = static_cast<ConfigFile*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
         EGG::DvdRipper::ALLOC_FROM_HEAD, 0, readBytes, nullptr));
     if(conf == nullptr) Debug::FatalError(error);
     return conf;
@@ -32,12 +32,12 @@ void System::CreateSystem() {
     const EGG::Heap* prev = heap->BecomeCurrentHeap();
     System* system;
     if(inherit != nullptr) {
-        system = inherit->Create();
+        system = inherit->create();
     }
     else system = new System();
     System::sInstance = system;
     u32 readBytes;
-    Config* conf = Config::LoadConfig(&readBytes);
+    ConfigFile* conf = ConfigFile::LoadConfig(&readBytes);
     system->Init(*conf);
     prev->BecomeCurrentHeap();
     conf->Destroy(readBytes);
@@ -47,9 +47,9 @@ BootHook CreateSystem(System::CreateSystem, 0);
 System::System() :
     heap(RKSystem::mInstance.EGGSystem), taskThread(EGG::TaskThread::Create(8, 0, 0x4000, this->heap)),
     //Track blocking 
-    racesPerGP(3), curArrayIdx(0) {}
+    racesPerGP(3), curBlockingArrayIdx(0) {}
 
-void System::Init(const Config& conf) {
+void System::Init(const ConfigFile& conf) {
     strncpy(this->modFolderName, conf.header.modFolderName, IOS::ipcMaxFileName);
 
     this->InitInstances(conf);
@@ -114,7 +114,7 @@ kmWrite32(0x80549974, 0x38600001);
 //Skip ESRB page
 kmWriteRegionInstruction(0x80604094, 0x4800001c, 'E');
 
-const char Config::error[] = "Invalid Pulsar Config";
+const char ConfigFile::error[] = "Invalid Pulsar Config";
 const char System::pulsarString[] = "/Pulsar";
 const char System::CommonAssets[] = "/CommonAssets.szs";
 const char System::breff[] = "/Effect/Pulsar.breff";

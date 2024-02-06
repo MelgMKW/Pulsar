@@ -33,9 +33,9 @@ ExpCupSelect::ExpCupSelect() {
     randomizedId = PULSARID_NONE;
     this->controlsManipulatorManager.SetGlobalHandler(START_PRESS, onStartPressHandler, false, false);
 
-    CupsDef* cups = CupsDef::sInstance;
-    cups->ToggleCTs(!CupsDef::IsRegsSituation());
-    if(cups->GetTotalCupCount() <= 8) {
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+    cupsConfig->ToggleCTs(!CupsConfig::IsRegsSituation());
+    if(cupsConfig->GetTotalCupCount() <= 8) {
         this->arrows.leftArrow.manipulator.inaccessible = true;
         this->arrows.leftArrow.isHidden = true;
         this->arrows.rightArrow.manipulator.inaccessible = true;
@@ -45,7 +45,7 @@ ExpCupSelect::ExpCupSelect() {
 
 //Patch distance func to remove horizontal wrapping
 void CupSelectDistanceFunc(ControlsManipulatorManager* manipulator, u32 type) {
-    if(CupsDef::sInstance->GetCtsTrackCount() != 0) type = 1;
+    if(CupsConfig::sInstance->GetCtsTrackCount() != 0) type = 1;
     manipulator->SetDistanceFunc(type);
 }
 kmCall(0x80841248, CupSelectDistanceFunc);
@@ -79,13 +79,13 @@ void ExpCupSelect::OnLeftArrowSelect(SheetSelectControl& control, u32 hudSlotId)
 }
 
 void ExpCupSelect::OnArrowSelect(s32 direction) {
-    const CupsDef* cupsDef = CupsDef::sInstance;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
     CtrlMenuCupSelectCup& cups = this->ctrlMenuCupSelectCup;
-    cups.curCupID = cupsDef->GetNextCupId(static_cast<PulsarCupId>(cups.curCupID), direction);
+    cups.curCupID = cupsConfig->GetNextCupId(static_cast<PulsarCupId>(cups.curCupID), direction);
     this->ctrlMenuCupSelectCourse.UpdateTrackList(cups.curCupID);
     PushButton** buttons = reinterpret_cast<PushButton**>(cups.childrenGroup.controlArray);
     for(int i = 0; i < 8; ++i) {
-        const PulsarCupId nextId = cupsDef->GetNextCupId(static_cast<PulsarCupId>(buttons[i]->buttonId), direction);
+        const PulsarCupId nextId = cupsConfig->GetNextCupId(static_cast<PulsarCupId>(buttons[i]->buttonId), direction);
         buttons[i]->buttonId = nextId;
         this->UpdateCupData(nextId, *buttons[i]);
     }
@@ -97,13 +97,13 @@ void ExpCupSelect::OnStartPress(u32 hudSlotId) {
     const bool isValid = gamemode == MODE_TIME_TRIAL || gamemode == MODE_VS_RACE;
     if(isValid && this->randomizedId == -1) {
         Random random;
-        this->randomizedId = CupsDef::sInstance->RandomizeTrack(random);
+        this->randomizedId = CupsConfig::sInstance->RandomizeTrack(random);
     }
 }
 
 void ExpCupSelect::AfterControlUpdate() {
     CupSelect::AfterControlUpdate();
-    CupsDef* cups = CupsDef::sInstance;
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
     const GameMode gamemode = RaceData::sInstance->menusScenario.settings.gamemode;
     const bool isValid = gamemode == MODE_TIME_TRIAL || gamemode == MODE_VS_RACE;
     if(!isValid) {
@@ -119,10 +119,10 @@ void ExpCupSelect::AfterControlUpdate() {
         PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
         if(this->randomizedId != PULSARID_NONE) {
             SheetSelectControl::SheetSelectButton* arrow;
-            const u32 randomizedCupIdx = CupsDef::ConvertCup_PulsarIdToIdx(CupsDef::ConvertCup_PulsarTrackToCup(this->randomizedId));
-            const u32 button0Idx = CupsDef::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[0]->buttonId));
-            const u32 button7Idx = CupsDef::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[7]->buttonId));
-            const u32 cupCount = cups->GetTotalCupCount();
+            const u32 randomizedCupIdx = CupsConfig::ConvertCup_PulsarIdToIdx(CupsConfig::ConvertCup_PulsarTrackToCup(this->randomizedId));
+            const u32 button0Idx = CupsConfig::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[0]->buttonId));
+            const u32 button7Idx = CupsConfig::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[7]->buttonId));
+            const u32 cupCount = cupsConfig->GetTotalCupCount();
 
             bool isCurOnScreen = false;
             for(int i = 0; i < 8; ++i) {
@@ -145,11 +145,11 @@ void ExpCupSelect::AfterControlUpdate() {
                 buttons[finalButtonIdx]->HandleClick(0, 0);
                 Pages::CourseSelect* coursePage = SectionMgr::sInstance->curSection->Get<Pages::CourseSelect>();
                 CourseButton& courseButton = coursePage->CtrlMenuCourseSelectCourse.courseButtons[this->randomizedId % 4];
-                cups->SaveSelectedCourse(courseButton);
+                cupsConfig->SaveSelectedCourse(courseButton);
                 courseButton.Select(0);
                 //coursePage->CtrlMenuCourseSelectCourse.courseButtons[this->randomizedId % 4].HandleClick(0, -1);
                 this->randomizedId = PULSARID_NONE;
-                isInaccessible = cups->GetCtsTrackCount() == 0; //keep the arrows inaccessible if there are no cts
+                isInaccessible = cupsConfig->GetCtsTrackCount() == 0; //keep the arrows inaccessible if there are no cts
             }
             for(int i = 0; i < 8; ++i) buttons[i]->manipulator.inaccessible = isInaccessible;
             this->arrows.leftArrow.manipulator.inaccessible = isInaccessible;
@@ -177,8 +177,8 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
     u32 bmgId;
     char tplName[0x20];
     TextInfo info;
-    u32 realCupId = CupsDef::ConvertCup_PulsarIdToRealId(pulsarCupId);
-    if(CupsDef::IsRegCup(pulsarCupId)) {
+    u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(pulsarCupId);
+    if(CupsConfig::IsRegCup(pulsarCupId)) {
         snprintf(tplName, 0x20, "tt_cup_icon_%s_00.tpl", &cupTPLs[realCupId][8]);
         bmgId = BMG_REGCUPS;
     }

@@ -46,14 +46,13 @@ struct CupsHolder {
     Cups cups;
 };
 
-class Config {
-public:
+struct ConfigFile {
     void Destroy(u32 size) {
         memset(this, 0, size);
         delete(this);
     }
     static const char error[];
-    static Config* LoadConfig(u32* readBytes);
+    static ConfigFile* LoadConfig(u32* readBytes);
     template <typename T, s32 BinaryHeader::* offset>
     inline const T& GetSection() const {
         const T& section = *reinterpret_cast<const T*>(ut::AddU32ToPtr(this, this->header.*offset));
@@ -66,13 +65,13 @@ public:
 
     static const u32 magic = 'PULS';
     BinaryHeader header;
-    InfoHolder infoHolder;
-    CupsHolder cupsHolder;
+    //InfoHolder infoHolder;
+    //CupsHolder cupsHolder;
     //BMGHeader rawBmg;
 };
 
 template<>
-inline void Config::CheckSection<BMGHeader>(const BMGHeader& bmg) const {
+inline void ConfigFile::CheckSection<BMGHeader>(const BMGHeader& bmg) const {
     if(bmg.magic != 0x4D455347626D6731) Debug::FatalError(error);
 }
 
@@ -81,15 +80,15 @@ protected:
     System();
 private:
     //System functions
-    void Init(const Config& bin);
-    void InitInstances(const Config& bin) const {
-        CupsDef::sInstance = new CupsDef(bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups);
+    void Init(const ConfigFile& bin);
+    void InitInstances(const ConfigFile& bin) const {
+        CupsConfig::sInstance = new CupsConfig(bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups);
         Info::sInstance = new Info(bin.GetSection<InfoHolder, &BinaryHeader::offsetToInfo>().info);
         this->InitIO();
         this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups.trophyCount[0]);
     }
     void InitIO() const;
-    void InitCups(const Config& bin);
+    void InitCups(const ConfigFile& bin);
 
 protected:
     static const u32 defaultSettingsPageCount = 5;
@@ -121,16 +120,13 @@ private:
     char modFolderName[IOS::ipcMaxFileName + 1];
 
 public:
-
     //Network
     bool hasHAW;
     bool isCustomDeny;
     u8 deniesCount;
-    u8 curArrayIdx;
+    u8 curBlockingArrayIdx;
     u8 racesPerGP;
     PulsarId* lastTracks;
-
-
     TTMode ttMode;
 
 private:
@@ -147,12 +143,14 @@ public:
     static const char* ttModeFolders[];
 
     struct Inherit {
-        Inherit(System* (*ptr)()) {
+        //static_assert(is_base_of<System, Child>::value, "Pulsar::System is not a parent of your class");
+        typedef System* (*CreateFunc)();
+        Inherit(CreateFunc func) {
             //static_assert(inherit == nullptr, "Can only inherit once from Pulsar::System");
-            Create = ptr;
+            create = func;
             inherit = this;
         }
-        System* (*Create)();
+        CreateFunc create;
     };
     static Inherit* inherit;
     friend class Info;

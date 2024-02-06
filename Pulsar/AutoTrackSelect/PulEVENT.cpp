@@ -71,10 +71,10 @@ bool ProcessCustomEVENT(EVENTType* type, const void* packet, u8 aid) { //returns
         const ControllerSub& sub = Controller::sInstance->subs[Controller::sInstance->currentSub];
         if(aid == sub.hostAid) { //can only trigger for non-hosts
             if((type->value >> 5) == UI::ChooseNextTrack::STATUS_HOST_TRACK_SENT && choosePage->status == UI::ChooseNextTrack::STATUS_NOTRACK) {
-                CupsDef* cups = CupsDef::sInstance;
-                cups->winningCourse = event->nextTrack;
-                //cups->selectedCourse = cups->winningCourse;
-                RaceData::sInstance->menusScenario.settings.courseId = cups->GetCorrectTrackSlot();
+                CupsConfig* cupsConfig = CupsConfig::sInstance;
+                cupsConfig->winningCourse = event->nextTrack;
+                //cupsConfig->selectedCourse = cupsConfig->winningCourse;
+                RaceData::sInstance->menusScenario.settings.courseId = cupsConfig->GetCorrectTrackSlot();
                 choosePage->status = UI::ChooseNextTrack::STATUS_TRACKRECEIVED; //confirmation to the host
             }
             else if((type->value >> 5) == UI::ChooseNextTrack::STATUS_HOST_FINALSENT) {

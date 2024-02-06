@@ -28,8 +28,8 @@ kmCall(0x807e5f24, LoadCorrectTrackListBox);
 //BMG
 int GetTrackBMGId(PulsarId pulsarId) {
     u32 bmgId;
-    const u32 realId = CupsDef::ConvertTrack_PulsarIdToRealId(pulsarId);
-    if(CupsDef::IsReg(pulsarId)) bmgId = realId > 32 ? BMG_BATTLE : BMG_REGS;
+    const u32 realId = CupsConfig::ConvertTrack_PulsarIdToRealId(pulsarId);
+    if(CupsConfig::IsReg(pulsarId)) bmgId = realId > 32 ? BMG_BATTLE : BMG_REGS;
     else bmgId = BMG_TRACKS;
     return bmgId + realId;
 }
@@ -39,7 +39,7 @@ int GetTrackBMGByRowIdx(u32 cupTrackIdx) {
     PulsarCupId curCupId;
     if(cup == nullptr) curCupId = PULSARCUPID_FIRSTREG;
     else curCupId = static_cast<PulsarCupId>(cup->ctrlMenuCupSelectCup.curCupID);
-    return GetTrackBMGId(CupsDef::ConvertTrack_PulsarCupToTrack(curCupId) + cupTrackIdx);
+    return GetTrackBMGId(CupsConfig::ConvertTrack_PulsarCupToTrack(curCupId) + cupTrackIdx);
 }
 kmWrite32(0x807e6184, 0x7FA3EB78);
 kmCall(0x807e6188, &GetTrackBMGByRowIdx);
@@ -47,7 +47,7 @@ kmWrite32(0x807e6088, 0x7F63DB78);
 kmCall(0x807e608c, GetTrackBMGByRowIdx);
 
 int GetCurTrackBMG() {
-    return GetTrackBMGId(CupsDef::sInstance->winningCourse);
+    return GetTrackBMGId(CupsConfig::sInstance->winningCourse);
 }
 
 void SetVSIntroBmgId(LayoutUIControl* trackName) {
@@ -80,7 +80,7 @@ kmCall(0x806441b8, CourseVoteBMG);
 bool BattleArenaBMGFix(SectionId sectionId) {
     register PulsarId id;
     asm(mr id, r28;);
-    CupsDef::sInstance->winningCourse = id;
+    CupsConfig::sInstance->winningCourse = id;
     return IsOnlineSection(sectionId);
 }
 kmCall(0x8083d02c, BattleArenaBMGFix);
@@ -96,31 +96,31 @@ kmCall(0x80644344, WinningTrackBMG);
 
 //Rewrote InitSelf to start with correct TPLs
 void ExtCupSelectCupInitSelf(CtrlMenuCupSelectCup* cups) {
-    const CupsDef* cupsDef = CupsDef::sInstance;
-    PulsarCupId selCup = cupsDef->lastSelectedCup;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
+    PulsarCupId selCup = cupsConfig->lastSelectedCup;
     cups->curCupID = selCup;
     PushButton** buttons = reinterpret_cast<PushButton**>(cups->childrenGroup.controlArray);
 
     for(int i = 0; i < 8; ++i) {
-        const PulsarCupId id = cupsDef->GetNextCupId(selCup, i - cupsDef->lastSelectedCupButtonIdx);
+        const PulsarCupId id = cupsConfig->GetNextCupId(selCup, i - cupsConfig->lastSelectedCupButtonIdx);
         buttons[i]->buttonId = id;
         ExpCupSelect::UpdateCupData(id, *buttons[i]);
         buttons[i]->SetOnClickHandler(cups->onCupButtonClickHandler, 0);
         buttons[i]->SetOnSelectHandler(cups->onCupButtonSelectHandler);
         buttons[i]->SetPlayerBitfield(SectionMgr::sInstance->curSection->Get<Pages::CupSelect>()->GetPlayerBitfield());
     }
-    buttons[cupsDef->lastSelectedCupButtonIdx]->SelectInitialButton(0);
+    buttons[cupsConfig->lastSelectedCupButtonIdx]->SelectInitialButton(0);
 };
 kmWritePointer(0x808d324c, ExtCupSelectCupInitSelf); //807e5894
 
 void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
-    const CupsDef* cupsDef = CupsDef::sInstance;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
     for(int i = 0; i < 8; ++i) {
         CtrlMenuCourseSelectCupSub& cur = courseCups->cupIcons[i];
-        const PulsarCupId id = cupsDef->GetNextCupId(cupsDef->lastSelectedCup, i - cupsDef->lastSelectedCupButtonIdx);
+        const PulsarCupId id = cupsConfig->GetNextCupId(cupsConfig->lastSelectedCup, i - cupsConfig->lastSelectedCupButtonIdx);
         ExpCupSelect::UpdateCupData(id, cur);
         cur.animator.GetAnimationGroupById(0).PlayAnimationAtFrame(0, 0.0f);
-        const bool clicked = cupsDef->lastSelectedCupButtonIdx == i ? true : false;
+        const bool clicked = cupsConfig->lastSelectedCupButtonIdx == i ? true : false;
         cur.animator.GetAnimationGroupById(1).PlayAnimationAtFrame(!clicked, 0.0f);
         cur.animator.GetAnimationGroupById(2).PlayAnimationAtFrame(!clicked, 0.0f);
         cur.animator.GetAnimationGroupById(3).PlayAnimationAtFrame(clicked, 0.0f);
@@ -173,7 +173,7 @@ void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
 kmWritePointer(0x808d3190, ExtCourseSelectCupInitSelf); //807e45c0
 
 void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
-    const CupsDef* cupsDef = CupsDef::sInstance;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
     const Section* curSection = SectionMgr::sInstance->curSection;
     const Pages::CupSelect* cupPage = curSection->Get<Pages::CupSelect>();
     Pages::CourseSelect* coursePage = curSection->Get<Pages::CourseSelect>();
@@ -184,7 +184,7 @@ void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
         curButton.buttonId = i;
         const u32 bmgId = GetTrackBMGByRowIdx(i);
         curButton.SetMsgId(bmgId);
-        if(cupsDef->lastSelectedCup * 4 + i == cupsDef->selectedCourse) {
+        if(cupsConfig->lastSelectedCup * 4 + i == cupsConfig->selectedCourse) {
             coursePage->SelectButton(curButton);
         }
     };

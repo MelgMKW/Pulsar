@@ -4,8 +4,8 @@
 #include <game/Item/Obj/ItemObj.hpp>
 
 //_sinit_ at 807a62d8
-namespace Item{
-class ObjBomb: public Obj {
+namespace Item {
+class ObjBomb : public Obj {
 public:
     static Obj** CreateArray(u32 count); //807a41c4
     ObjBomb(); //807a4850 inlined
@@ -23,7 +23,9 @@ public:
     void vf_0x34() override; //0x34 807a5090
     u8 unknown_0x1a0[0x1d4 - 0x1a0];
     ModelDirector* bombCore; //0x1d4
-    u8 unknown_0x1d8[0x1f0 - 0x1d8];
+    u8 unknown_0x1d8[0x4];
+    u32 timer; //0x1dc how long a bomb lasts before exploding
+    u8 unknown_0x1e0[0x1f0 - 0x1e0];
 };
 size_assert(ObjBomb, 0x1f0);
 }//namespace Item

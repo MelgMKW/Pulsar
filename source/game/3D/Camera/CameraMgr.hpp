@@ -28,6 +28,8 @@ public:
     RaceCameraMgr(); //805a8468
     ~RaceCameraMgr() override; //805a8cdc vtable 808b6c18
     void Update() override; //805a900c
+    void ApplyShaking(ClipInfo* info, u32 r5, u32 shakeParamsIdx, u32 rumbleLength);
+
 
     static void ChangeFocusedPlayer(u8 playerIdx); //805a9b04
 

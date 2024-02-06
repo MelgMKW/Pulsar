@@ -3,11 +3,6 @@
 #include <kamek.hpp>
 #include <core/egg/mem/Disposer.hpp>
 
-/*
-Contributors:
--kHacker35000vr, Melg
-*/
-
 enum AREARenderType {
     AREA_RENDERTYPE_CAN_DISABLE = 0,
     AREA_RENDERTYPE_CAN_DISABLE_AND_RECALCULATE = 1,
@@ -38,7 +33,7 @@ class FrustumUnknown {
     u8 unknown[0x60];
 };
 
-class ClipInfoMgr: public EGG::Disposer {
+class ClipInfoMgr : public EGG::Disposer {
     static ClipInfoMgr* sInstance; //809c2ef8
     static ClipInfoMgr* CreateInstance(); //8078746c
     static void DestroyInstance(); //80787538

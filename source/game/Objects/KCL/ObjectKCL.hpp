@@ -67,11 +67,14 @@ public:
 
     virtual bool AreItemsAllowed(); //0x104 8068290c if false, items will disappear on the object
     virtual float vf_0x108(); //0x108 80682900
-    virtual void vf_0x10c(); //0x10c 806828f8
-    virtual void InitItemEntity(void* unkItemObjSub, Vec& itemPosition); //0x110 806828fc when an item entity is created on top of the object (item throw or backspam)
-    virtual void UpdateItemEntity(void* unkItemObjSub, Vec& itemPosition); //0x114 806828f4 r4 contains base position?
-    virtual void vf_0x118(); //0x118 806828f0
-    virtual int vf_0x11c(); //0x11c 806828e8
+    virtual void SetObjInfoIsFilled(CollisionInfo::ObjInfo* objInfo) const; //0x10c 806828f8
+
+    //when an item entity is created on top of the object (item throw or backspam) or when an object needs to follow this object's movement
+    //this fills the object info by computing the distance btw this object and other, and the updating the entity's objInfo pos accordingly every frame
+    virtual void CalcOtherEntityDistance(CollisionInfo::ObjInfo* otherEntityObjInfo, const Vec3& otherEntityInitialPosition); //0x110 806828fc 
+    virtual void UpdateOtherEntityPos(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos); //0x114 806828f4 updates newEntityPos with objInfo's distance + this object's position
+    virtual void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir); //0x118 806828f0
+    virtual int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo); //0x11c 806828e8
 
 }; //0xAC
 size_assert(ObjectKCL, 0xAC);

@@ -14,8 +14,9 @@ enum HeapType {
     HEAP_TYPE_UNIT
 };
 
-class Heap: public Disposer {
+class Heap : public Disposer {
 public:
+    static Heap* current; //80386ea0
     Heap(MEM::iHeapHead* rvlHeap); //802296e8
     virtual ~Heap(); //80229780 vtable 802a30c0
     virtual HeapType getHeapKind() const = 0;
@@ -69,8 +70,8 @@ void* operator new[](size_t size, int alignment);
 void* operator new[](size_t size, EGG::Heap* heap, int alignment);
 
 inline void* operator new[](size_t size, EGG::Heap* heap)
-{
-    return operator new[](size, heap, 4);
-}
+    {
+        return operator new[](size, heap, 4);
+    }
 
 #endif

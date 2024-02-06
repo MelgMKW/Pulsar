@@ -19,7 +19,7 @@ kmWrite32(0x8053F124, 0x38000000);
 
 //Overwrites CC rules -> 10% 100, 65% 150, 25% mirror and/or in frooms, overwritten by host setting
 void DecideCC(CustomSELECTHandler& handler) {
-    if(CupsDef::IsRegsSituation()) reinterpret_cast<RKNet::SELECTHandler&>(handler).DecideEngineClass();
+    if(CupsConfig::IsRegsSituation()) reinterpret_cast<RKNet::SELECTHandler&>(handler).DecideEngineClass();
     else {
         const u8 ccSetting = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_CC);
         RKNet::Controller* controller = RKNet::Controller::sInstance;
@@ -50,10 +50,14 @@ void SetTeams(CustomSELECTHandler* handler, u32& teams) {
     Team firstTeam = UI::TeamSelect::GetPlayerTeam(0);
     if((handler->mode == RKNet::ONLINEMODE_PRIVATE_VS || handler->mode == RKNet::ONLINEMODE_PRIVATE_BATTLE)
         && UI::TeamSelect::isEnabled) {
-        for(int i = 0; i < sub.playerCount; i++) {
-            Team curSlotTeam = UI::TeamSelect::GetPlayerTeam(i);
+        const u32 availableAids = sub.availableAids;
+        u32 counter = 0;
+        for(int aid = 0; aid < sub.playerCount; aid++) {
+            if((1 << aid & availableAids) == 0) continue;
+            Team curSlotTeam = UI::TeamSelect::GetPlayerTeam(counter);
+            counter++;
             if(curSlotTeam != firstTeam) isValid = true;
-            teams = teams | (curSlotTeam & 1) << i;
+            teams = teams | (curSlotTeam & 1) << aid;
         }
     }
     if(!isValid) reinterpret_cast<RKNet::SELECTHandler*>(handler)->DecidePrivateTeams(teams);

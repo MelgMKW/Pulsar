@@ -46,12 +46,13 @@ inline PulsarId operator+(PulsarId src, u32 rhs) {
 }
 
 
-class CupsDef {
+class CupsConfig {
 public:
-    static CupsDef* sInstance;
+    static CupsConfig* sInstance;
     static const u32 RegsCRC32[];
 
-    CupsDef(const Cups& rawCups);
+    CupsConfig(const Cups& rawCups);
+
     //Cup Functions
     int GetTotalCupCount() const { return ctsCupCount + HasRegs() * 8; } //good
     int GetCtsTrackCount() const { return ctsCupCount * 4; } //used by random, good, but also by settings and path
@@ -66,6 +67,7 @@ public:
     int GetCorrectMusicSlot() const;
 
     bool HasRegs() const { return hasRegs; }
+    bool HasOddCups() const { return hasOddCups; }
 
 
     //Validity
@@ -101,23 +103,21 @@ public:
     static const u8 idToCourseId[32];
 
 public:
-    bool hasOddCups;
-    //To memorize
-    bool hasRegs;
-    //2bytes of padding 
+    PulsarId        winningCourse; //0x0
+    PulsarId        selectedCourse; //0x4
+    PulsarCupId     lastSelectedCup; //0x8
+    u32             lastSelectedCupButtonIdx; //0xc
 
-    //Variables
-    PulsarId        winningCourse; //0x4
-    PulsarId        selectedCourse; //0x8
-    PulsarCupId     lastSelectedCup; //0xc
-    u32             lastSelectedCupButtonIdx; //0x10
 private:
-    const u8 regsMode; //0x14
-    u32 definedCTsCupCount; //0x18
-    u32  ctsCupCount; //0x14
-    u16  trophyCount[4];
-    Cup* cups;
-};
+    bool hasRegs;      //0x10
+    bool hasOddCups;   //0x11
+    const u8 regsMode; //0x12
+    //byte of padding 
+    u32 definedCTsCupCount; //0x14
+    u32  ctsCupCount; //0x18
+    u16  trophyCount[4]; //0x1c
+    Cup* cups; //0x24
+}; //0x28
 
 }//namespace Pulsar
 

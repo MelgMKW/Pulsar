@@ -76,7 +76,7 @@ void CreatePlayerEffects(EffectsMgr& mgr) { //adding the resource here as all ot
         const ArchiveRoot* root = ArchiveRoot::sInstance;
         void* breff = root->GetFile(ARCHIVE_HOLDER_COMMON, System::breff, 0);
         void* breft = root->GetFile(ARCHIVE_HOLDER_COMMON, System::breft, 0);
-        EGG::EffectResource* res = new(EGG::EffectResource)(breff, breft);
+        EGG::EffectResource* res = new EGG::EffectResource(breff, breft);
         if(mgr.resCount != 9) mgr.resources[mgr.resCount] = res;
         else pulEffects = res;
     }

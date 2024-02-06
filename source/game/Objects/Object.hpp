@@ -9,6 +9,7 @@
 #include <game/3D/Model/ShadowModelDirector.hpp>
 #include <game/Entity/EntityManager.hpp>
 #include <game/3D/ClipInfoMgr.hpp>
+#include <core/egg/Effect/Effect.hpp>
 
 /*
 Contributors:
@@ -34,7 +35,6 @@ public:
     Object(u16 objId, const Vec3& position, const Vec3& rotation, const Vec3& scale); //8081f9bc
     Object(const char* name, const Vec3& position, const Vec3& rotation, const Vec3& scale, u32 r8); //8081fb04 used for sub objects
 
-
     virtual ~Object(); //8067e3c4 vtable 808d6ecc
     virtual void OnStart(); //0xC 8081fc68
     virtual void vf_0x10(); //0x10 806807dc just a blr
@@ -42,13 +42,9 @@ public:
     virtual void vf_0x18(); //0x18 0x18 806807d8 just a blr
     virtual void UpdateModel(); //0x1c 808217b8
     virtual void Init() = 0; //0x20
-    virtual int GetID() const; //0x24 80572574
+    virtual u16 GetID() const; //0x24 80572574
     virtual const char* GetName() const; //0x28 80680784
-    virtual u32 GetPropertiesBitfield(); //0x2c 806bf434
-    /*
-        1 : isUpdating
-
-    */
+    virtual u32 GetPropertiesBitfield(); //0x2c 806bf434 1 : isUpdating
     virtual ClipInfo* GetClipInfo() const; //0x30 8067da54
     virtual const char* GetBRRESName() const; //0x34 80680730
     virtual const char* GetSubFileName() const; //0x38 806806dc completely identical to the one above, but for other objects can be MDL, KCL, BREFF etc...
@@ -59,11 +55,11 @@ public:
     virtual void LoadGraphics(void* r4); //0x4c 8081fd10
     virtual void LoadShadow(); //0x50 808205dc
     virtual void LoadSound(); //0x54 80820360
-    virtual void LoadRenderer(); //0x58 80821070
+    virtual void LoadClipInfo(); //0x58 80821070
     virtual void LoadAnimations(); //0x5c 8082072c
     virtual void LoadCollision() = 0; //0x60
     virtual void LoadRoute(); //0x64 80820980
-    virtual void InitModels(bool r4); //0x68 808216c0
+    virtual void ToggleVisible(bool isVisible); //0x68 808216c0
     virtual void UpdateModelMatrix(); //0x6c 80821a9c
     virtual void UpdateShadow(); //0x70 80821974
     virtual void UpdateCollision() = 0; //0x74
@@ -80,7 +76,7 @@ public:
     virtual float GetCollisionDiameter() const; //0xa0 8080bdc0 
     virtual bool IsLodDisbled(); //0xa4 80680610
     virtual void vf_0xa8(); //0xa8 80680608
-    virtual void vf_0xac(); //0xac 80680600
+    virtual bool DoCalcShadowMtx(); //0xac 80680600 if false, just copies the main model's mtx
     virtual u32 GetDrawType() const = 0; //0xb0
 
     void LoadAnimationByType(u32 idx, AnmType type); //80820a90
@@ -94,6 +90,7 @@ public:
     void StopAllSound(int fadeOutFrames); //8052059c 
     void StopSound(int fadeOutFrames); //808205bc
     void LinkSound(u16 objId); //808204b8 if objId == 0, uses own id
+    void CalcYAxisTransMtx(const Vec3& dir); //808218b0 calculates the trans mtx using the position as the translation, and a YAxisRotMtx based on dir
 
     ObjectType type;
     ModelDirector* mdlDirector; //0x8
@@ -117,7 +114,9 @@ public:
     u8 lodFlags; //0x90 1 = has lod
     u8 padding2[3];
     const char* lodResName; //0x94
-    u8 unknown_0x98[8];
+    u8 unknown_0x98[3];
+    bool isVisible; //0x9b
+    u8 unknown_0x9c[4];
     const KMP::Holder<GOBJ>& gobj; //0xa0
     u32 holderIdx; //0xa4
     bool unknown_0xA8;
@@ -139,5 +138,24 @@ class ObjectCycleManager {
     CyclePtmfs* ptmfs; //0x18 808c5da0
     Object* parent; //0x1c
 }; //0x20
+
+class ObjectEffect : public EGG::Effect { //probably a bad name seeing the dtor addr
+public:
+    ~ObjectEffect() override; //806805a8 vtable 808c1010
+};
+
+template<class T>
+class SubObjectArray { //for example w_itembox
+public:
+    static_assert(is_base_of<Object, T>::value, "Not a child of object");
+    virtual ~SubObjectArray();
+    virtual void CreateArray(u32 boxCount, u32 unused);
+    virtual void CreateArray(u32 boxCount, EGG::Heap* heap);
+    virtual void vf_0x14(u32 r4);
+    virtual void vf_0x18();
+
+    u32 arrayCount; //0x4
+    T** subObjects; //0x8
+}; //0xc
 
 #endif

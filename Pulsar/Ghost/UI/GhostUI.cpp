@@ -56,7 +56,7 @@ void ExpGhostSelect::OnActivate() {
     const System* system = System::sInstance;
     if(Info::HasTrophies()) {
         u32 bmgId;
-        const TextInfo text = GetCourseBottomText(CupsDef::sInstance->winningCourse, &bmgId);
+        const TextInfo text = GetCourseBottomText(CupsConfig::sInstance->winningCourse, &bmgId);
         this->bottomText.SetMsgId(bmgId, &text);
     }
     this->ctrlMenuPageTitleText.SetMsgId(BMG_CHOOSE_GHOST_DATA);
@@ -245,7 +245,7 @@ void IndividualTrophyBMG(Pages::CourseSelect& courseSelect, CtrlMenuCourseSelect
     }
     else {
         u32 bmgId;
-        const TextInfo text = GetCourseBottomText(CupsDef::ConvertTrack_PulsarCupToTrack(CupsDef::sInstance->lastSelectedCup)
+        const TextInfo text = GetCourseBottomText(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::sInstance->lastSelectedCup)
             + button.buttonId, &bmgId);
         courseSelect.bottomText->SetMsgId(bmgId, &text);
     }

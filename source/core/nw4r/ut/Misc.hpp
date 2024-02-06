@@ -8,8 +8,6 @@ namespace ut {
 
 namespace {
 
-
-
 template <typename T>
 static inline T Abs(T a) { return (a < 0) ? static_cast<T>(-a) : a; }
 

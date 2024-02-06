@@ -9,6 +9,7 @@
 #include <Settings/UI/ExpOptionsPage.hpp>
 #include <Settings/UI/ExpWFCMainPage.hpp>
 #include <Settings/UI/ExpFroomPage.hpp>
+#include <Settings/UI/ExpSinglePlayer.hpp>
 
 /*SettingsPanel which has (currently) 3 pages for menu, race and host settings
 Inspired by VSRaceSettings but does not extend it as I wanted a custom amount of radioControls/scrollers depending on the page
@@ -29,7 +30,7 @@ public:
 class SettingsPanel : public Pages::MenuInteractable {
 public:
     static int pageCount;
-    static const PageId firstId = PAGE_GHOST_SELECT_SUPPORTING;
+    static const PageId firstId = PAGE_GP_INTERFACE;
     static const int maxPageCount = 5;
     static u8 radioButtonCount[maxPageCount];
     static u8 scrollerCount[maxPageCount];

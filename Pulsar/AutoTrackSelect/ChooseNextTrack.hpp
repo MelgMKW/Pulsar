@@ -73,7 +73,7 @@ public:
     void SendPacket(RKNet::EVENTAction action) {
         RKNet::EVENTHandler* event = RKNet::EVENTHandler::sInstance;
         if(!event->HasFreeEntries()) event->toSendEntries[23].state = RKNet::EVENTENTRYSTATE_FREE;
-        Network::PulEVENT packet(CupsDef::sInstance->winningCourse);
+        Network::PulEVENT packet(CupsConfig::sInstance->winningCourse);
         u32 frames = RaceInfo::sInstance->raceFrames;
         packet.frames = frames;
         //this->lastSentFrames = frames;

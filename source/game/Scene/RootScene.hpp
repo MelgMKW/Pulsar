@@ -2,9 +2,9 @@
 #define _ROOTSCENE_
 #include <game/Scene/GameScene.hpp>
 
-class RootScene: public BaseScene {
+class RootScene : public BaseScene {
 public:
-    RootScene* sInstance; //0x809bd740
+    RootScene* sInstance; //809bd740
     RootScene(); //80542878
     ~RootScene() override; //805129a8 vtable 808b3c48
     void calc() override;   //0xc  80543c88

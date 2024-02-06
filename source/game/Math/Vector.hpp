@@ -6,6 +6,7 @@
 
 
 typedef EGG::Quatf Quat;
+struct Mtx34;
 
 struct Vec3 : EGG::Vector3f {
     Vec3() {}
@@ -20,6 +21,7 @@ struct Vec3 : EGG::Vector3f {
 
     static Vec3 DivideByScalar(float scalar, const Vec3& src); //806a62a4
     static Vec3 EulerFromMatrix(const EGG::Matrix34f& src); //8067eaec
+    void CalcYAxisRotMtx(Mtx34& dest) const; //806b3ca4 rotMtx with axis (x, 0, z), so xz rotation
 
 };
 

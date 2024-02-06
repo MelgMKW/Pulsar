@@ -93,21 +93,21 @@ namespace aux {
 typedef char yes[1];
 typedef char no[2];
 
-template <typename B, typename D>
+template <typename Parent, typename Child>
 struct Host
 {
-    operator B* () const;
-    operator D* ();
+    operator Parent* () const;
+    operator Child* ();
 };
 }
-template <typename B, typename D>
+template <typename Parent, typename Child>
 struct is_base_of
 {
     template <typename T>
-    static aux::yes& check(D*, T);
-    static aux::no& check(B*, int);
+    static aux::yes& check(Child*, T);
+    static aux::no& check(Parent*, int);
 
-    static const bool value = sizeof(check(aux::Host<B, D>(), int())) == sizeof(aux::yes);
+    static const bool value = sizeof(check(aux::Host<Parent, Child>(), int())) == sizeof(aux::yes);
 };
 
 #endif

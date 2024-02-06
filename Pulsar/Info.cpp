@@ -15,18 +15,18 @@ bool Info::IsHAW(bool isRoomHost) {
 }
 
 bool Info::Is200cc() {
-    return Info::Has200cc() && !CupsDef::IsRegsSituation() && RaceData::sInstance->racesScenario.settings.engineClass == CC_100;
+    return Info::Has200cc() && !CupsConfig::IsRegsSituation() && RaceData::sInstance->racesScenario.settings.engineClass == CC_100;
 }
 
 bool Info::IsFeather() {
-    return Info::HasFeather() && !CupsDef::IsRegsSituation();
+    return Info::HasFeather() && !CupsConfig::IsRegsSituation();
 }
 
 bool Info::IsUMTs() {
-    return Info::HasUMTs() && !CupsDef::IsRegsSituation();
+    return Info::HasUMTs() && !CupsConfig::IsRegsSituation();
 }
 bool Info::IsMegaTC() {
-    return Info::HasMegaTC() && !CupsDef::IsRegsSituation();
+    return Info::HasMegaTC() && !CupsConfig::IsRegsSituation();
 }
 
 }//namespace Pulsar

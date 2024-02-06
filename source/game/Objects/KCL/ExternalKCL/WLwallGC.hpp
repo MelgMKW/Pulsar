@@ -11,9 +11,9 @@ class WLwallGC : public ObjectExternKCL { //ObjectNum 0xcb = 203
     void OnStart() override; //0xC 8086be34
     void Update() override; //0x14 8086c108
     u32 GetPropertiesBitfield() override; //0x2c 8086c640
-    void InitItemEntity(void* unkItemObjSub, Vec& itemPosition) override; //0x110 8086c280  sets initial position
-    void UpdateItemEntity(void* unkItemObjSub, Vec& itemPosition) override; //0x114 8082c2a8
-    int vf_0x11c() override; //0x11c 8086c684
+    void CalcOtherEntityDistance(CollisionInfo::ObjInfo* otherEntityObjInfo, const Vec3& otherEntityInitialPosition) override; //0x110 8086c280  sets initial position
+    void UpdateOtherEntityPos(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos) override; //0x114 8082c2a8
+    int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 8086c684
     const Mtx34& GetTransformationMatrix() const override; //0x12c 8086bf30
     float GetPeriod() const override; //0x134 8086c648
     bool IsCollidingNoTriangleCheckImpl(const Vec3& pos, const Vec3& prevPos,

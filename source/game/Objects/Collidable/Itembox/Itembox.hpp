@@ -2,6 +2,7 @@
 #define _ITEMBOX_
 #include <kamek.hpp>
 #include <game/Objects/Collidable/ObjectCollidable.hpp>
+#include <game/Objects/Collidable/Press.hpp>
 
 namespace Objects {
 
@@ -18,7 +19,7 @@ class Itembox : public ObjectCollidable { //ObjectNum 0x65 = 101
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80828cb8
     void OnWallCollision(const Kart::Player& kartPlayer, Vec3ZeroInit position) override; //0xc8 806c69dc
     bool IsSolid() const override; //806c69d4
-    virtual bool IsActive() const; //806c69c0
+    virtual bool IsActive() const; //0xec 806c69c0
 
     u32 isActive; //0xb0 set to 0 when the box is destroyed, set to 1 when it respawns/is created
     u32 timer; //0xb4 resets on player hit
@@ -27,6 +28,7 @@ class Itembox : public ObjectCollidable { //ObjectNum 0x65 = 101
     u16 shadowSetting; //0xbe shadows disabled if set
     u8 unknown_0xc0[0xc8 - 0xc0];
 }; //0xc8
+
 
 }//namespace Objects
 

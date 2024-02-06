@@ -60,9 +60,9 @@ class TwistedWay : public ObjectKCL { //ObjectNum 0x1fe = 510
 
     bool AreItemsAllowed() override; //0x104 80814850
     float vf_0x108() override; //0x108 80814844
-    void InitItemEntity(void* unkItemObjSub, Vec& itemPosition) override; //0x110 80814428
-    void vf_0x118() override; //0x118 808145d8
-    int vf_0x11c() override; //0x11c 8081483c
+    void UpdateOtherEntityPos(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos) override; //0x110 80814428
+    void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir) override; //0x118 808145d8
+    int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 8081483c
 
     void IsCollidingImpl(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
         KCLTypeHolder* ret, u32 initialTime, float radius); //80815d64

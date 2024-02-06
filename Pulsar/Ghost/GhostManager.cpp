@@ -36,8 +36,8 @@ void Manager::Init(PulsarId id) {
     this->pulsarId = id;
     IO* io = IO::sInstance;
     const System* system = System::sInstance;
-    const CupsDef* cups = CupsDef::sInstance;
-    cups->GetTrackGhostFolder(folderPath, id);
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
+    cupsConfig->GetTrackGhostFolder(folderPath, id);
 
     bool exists = io->FolderExists(folderPath); //Create CRC32 folder
     if(!exists) io->RequestCreateFolder(folderPath);
@@ -178,7 +178,7 @@ bool Manager::SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap) {
         const Timer& expert = this->GetExpert();
         if(expert.isActive && expert > entry.timer && Info::HasTrophies()) {
             gotTrophy = true;
-            Settings::Mgr::GetInstance()->AddTrophy(CupsDef::sInstance->GetCRC32(this->GetPulsarId()), system->ttMode);
+            Settings::Mgr::GetInstance()->AddTrophy(CupsConfig::sInstance->GetCRC32(this->GetPulsarId()), system->ttMode);
             this->leaderboard.AddTrophy();
 
         }
@@ -192,17 +192,17 @@ void Manager::CreateAndSaveFiles(Manager* manager) {
     const RKG& rkg = manager->rkg;
     snprintf(path, IOS::ipcMaxPath, "%s/%01dm%02ds%03d.rkg", IO::sInstance->GetName(),
         rkg.header.minutes, rkg.header.seconds, rkg.header.milliseconds);
-    IO* loader = IO::sInstance;;
+    IO* loader = IO::sInstance;
     loader->CreateAndOpen(path, FILE_MODE_WRITE);
     loader->Overwrite(GetRKGLength(rkg), &rkg);
     loader->Close();
 
-    const CupsDef* cups = CupsDef::sInstance;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
     char folderPath[IOS::ipcMaxPath];
-    cups->GetTrackGhostFolder(folderPath, manager->pulsarId);
+    cupsConfig->GetTrackGhostFolder(folderPath, manager->pulsarId);
     manager->leaderboard.Save(folderPath);
     Settings::Mgr::GetInstance()->Save(); //trophies
-    manager->Init(cups->winningCourse);
+    manager->Init(cupsConfig->winningCourse);
     manager->mainGhostIndex = 0;
     SectionMgr::sInstance->sectionParams->isNewTime = true;
 }
@@ -210,8 +210,8 @@ void Manager::CreateAndSaveFiles(Manager* manager) {
 //Inits MultiGhostMgr and uses it to fill the GhostList
 void Manager::InsertCustomGroupToList(GhostList* list, CourseId) { //check id here
     Manager* manager = Manager::sInstance;
-    const CupsDef* cups = CupsDef::sInstance;
-    manager->Init(cups->winningCourse);
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
+    manager->Init(cupsConfig->winningCourse);
     u32 index = 0;
     for(int i = 0; i < IO::sInstance->GetFileCount(); ++i) {
         if(index == 38) break;
@@ -299,7 +299,7 @@ kmCall(0x805e1518, Manager::ExtendSetupGhostReplay);
 void SetCorrectGhostRaceSlot(const GhostList& list, s32 entryIdx) {
     list.InitSectionParamsParams(entryIdx);
     if(entryIdx >= 0 && entryIdx < list.count) {
-        const CourseId slot = CupsDef::sInstance->GetCorrectTrackSlot();
+        const CourseId slot = CupsConfig::sInstance->GetCorrectTrackSlot();
         SectionMgr::sInstance->sectionParams->courseId = slot;
     }
 }

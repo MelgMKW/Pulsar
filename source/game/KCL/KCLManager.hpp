@@ -7,6 +7,7 @@
 
 class KCLManager {
     static KCLManager* sInstance; //809c3c10
+    static Vec3* infinitePos; //809c3c04
     static KCLManager* CreateInstance(); //807c2824
     static void DestroyInstance(); //807c2884
     void Load(const KCL& rawCourse); //807c28d8

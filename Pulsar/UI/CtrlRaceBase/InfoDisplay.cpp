@@ -11,8 +11,8 @@ u32 CtrlRaceTrackInfoDisplay::lastCourse = -1;
 u32 CtrlRaceTrackInfoDisplay::Count() {
     const u32 gamemode = RaceData::sInstance->racesScenario.settings.gamemode;
     if((gamemode == MODE_GRAND_PRIX) || (gamemode == MODE_VS_RACE) || (gamemode == MODE_PUBLIC_VS) || (gamemode == MODE_PRIVATE_VS)) return 1;
-    if(gamemode == MODE_TIME_TRIAL && CupsDef::sInstance->winningCourse != lastCourse) {
-        lastCourse = CupsDef::sInstance->winningCourse;
+    if(gamemode == MODE_TIME_TRIAL && CupsConfig::sInstance->winningCourse != lastCourse) {
+        lastCourse = CupsConfig::sInstance->winningCourse;
         return 1;
     }
     return 0;

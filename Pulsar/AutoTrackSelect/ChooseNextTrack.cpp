@@ -58,7 +58,7 @@ kmCall(0x8062f314, BuildChooseNextTrack); //0x77
 
 ChooseNextTrack::ChooseNextTrack() :
     isBattle(RaceData::sInstance->racesScenario.settings.gamemode == MODE_PRIVATE_BATTLE),
-    curPageIdx(CupsDef::sInstance->winningCourse / 4)//, lastSentFrames(-1), maxTimeDiff(0), readyWait(0)
+    curPageIdx(CupsConfig::sInstance->winningCourse / 4)//, lastSentFrames(-1), maxTimeDiff(0), readyWait(0)
 {
     if(RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub].hostAid
         == RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub].localAid) {
@@ -75,7 +75,7 @@ ChooseNextTrack::ChooseNextTrack() :
     onButtonClickHandler.ptmf = &ChooseNextTrack::OnButtonClick;
     for(int i = 0; i < 6; ++i) new (&this->manipulatorManager.holders[0].info) RaceControlButtonInfo;
     for(int i = 0; i < 12; ++i) hasReceivedHostTrack[i] = false;
-    CupsDef::sInstance->ToggleCTs(!CupsDef::IsRegsSituation());
+    CupsConfig::sInstance->ToggleCTs(!CupsConfig::IsRegsSituation());
 }
 
 void ChooseNextTrack::OnActivate() {
@@ -92,11 +92,11 @@ void ChooseNextTrack::OnActivate() {
 void ChooseNextTrack::OnUpdate() {
     this->countdown.Update();
     this->countdownControl.AnimateCurrentCountDown();
-    const CupsDef* cups = CupsDef::sInstance;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
     if(this->duration == 600) {
-        PulsarId lastTrack = cups->winningCourse;
+        PulsarId lastTrack = cupsConfig->winningCourse;
         if(this->isBattle && lastTrack == N64_SKYSCRAPER) lastTrack = static_cast<PulsarId>(DELFINO_PIER);
-        else if(lastTrack % 4 == 3) lastTrack = static_cast<PulsarId>(cups->GetNextCupId(CupsDef::ConvertCup_PulsarTrackToCup(lastTrack), 1) * 4);
+        else if(lastTrack % 4 == 3) lastTrack = static_cast<PulsarId>(cupsConfig->GetNextCupId(CupsConfig::ConvertCup_PulsarTrackToCup(lastTrack), 1) * 4);
         else lastTrack = lastTrack + 1U;
         this->buttons[0].buttonId = lastTrack;
         this->OnButtonClick(this->buttons[0], 0);
@@ -145,10 +145,10 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
         }
     }
     else {
-        const CupsDef* cups = CupsDef::sInstance;
-        int ret = cups->GetNextCupId(static_cast<PulsarCupId>(this->curPageIdx), direction);
-        const u32 count = cups->GetCtsTrackCount() / 4;
-        if(cups->hasOddCups && ret == count - 1) {
+        const CupsConfig* cupsConfig = CupsConfig::sInstance;
+        int ret = cupsConfig->GetNextCupId(static_cast<PulsarCupId>(this->curPageIdx), direction);
+        const u32 count = cupsConfig->GetCtsTrackCount() / 4;
+        if(cupsConfig->HasOddCups() && ret == count - 1) {
             if(direction == -1) ret = count - 2;
             else ret = 0;
         }
@@ -161,11 +161,11 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
 }
 
 void ChooseNextTrack::OnButtonClick(PushButton& button, u32 hudSlotId) {
-    CupsDef* cups = CupsDef::sInstance;
-    cups->winningCourse = static_cast<PulsarId>(button.buttonId);
-    cups->selectedCourse = cups->winningCourse;
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+    cupsConfig->winningCourse = static_cast<PulsarId>(button.buttonId);
+    cupsConfig->selectedCourse = cupsConfig->winningCourse;
     this->EndStateAnimated(button.GetAnimationFrameSize(), 0);
-    RaceData::sInstance->menusScenario.settings.courseId = cups->GetCorrectTrackSlot();
+    RaceData::sInstance->menusScenario.settings.courseId = cupsConfig->GetCorrectTrackSlot();
     RaceRSARSoundsPlayer* rsarSounds = static_cast<RaceRSARSoundsPlayer*>(RSARSoundsPlayer::sInstance);
     rsarSounds->PlayEndRaceMenuButtonClickSound();
 }

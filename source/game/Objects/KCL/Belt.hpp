@@ -55,11 +55,11 @@ public:
 
     bool AreItemsAllowed() override; //0x104 807fd6c4
     float vf_0x108() override; //0x108 807fd6b8
-    void vf_0x10c() override; //0x10c 807fd7fc
-    void InitItemEntity(void* unkItemObjSub, Vec& itemPosition) override; //0x110 807fd6b4
-    void UpdateItemEntity(void* unkItemObjSub, Vec& itemPosition) override; //0x114 807fd6b0
-    void vf_0x118() override; //0x118 807fd6ac
-    int vf_0x11c() override; //0x11c 807fd6a4
+    void SetObjInfoIsFilled(CollisionInfo::ObjInfo* objInfo) const override; //0x10c 807fd7fc
+    void CalcOtherEntityDistance(CollisionInfo::ObjInfo* otherEntityObjInfo, const Vec3& otherEntityInitialPosition) override; //0x110 807fd6b4
+    void UpdateOtherEntityPos(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos) override; //0x114 807fd6b0
+    void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir) override; //0x118 807fd6ac
+    int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 807fd6a4
     virtual void vf_0x120(); //0x120 807fc294
     virtual void vf_0x124() = 0; //0x124
     virtual void vf_0x128() = 0; //0x128
@@ -96,7 +96,7 @@ class BeltCurveA : public Belt { //ObjectNum 0x25c = 604
     void LoadAnimations() override; //0x5c 807fcde8
     void UpdateModelMatrix() override; //0x6c 807fd0e8
     u32 GetDrawType() const override; //0xb0 807fd7b4
-    void vf_0x10c() override; //0x10c 807fd7a4
+    void SetObjInfoIsFilled(CollisionInfo::ObjInfo* objInfo) const override; //0x10c 807fd7a4
     void vf_0x124() override; //0x124 807fc9d4
     void vf_0x128() override; //0x128 807fcca4
     void vf_0x12C() override; //0x12C 807fd38c

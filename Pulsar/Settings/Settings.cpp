@@ -17,7 +17,7 @@ void Mgr::SaveTask(void*) {
 }
 
 int Mgr::GetSettingsBinSize(u32 pageCount) const {
-    u32 trackCount = CupsDef::sInstance->GetEffectiveTrackCount();
+    u32 trackCount = CupsConfig::sInstance->GetEffectiveTrackCount();
 
     u32 size = sizeof(BinaryHeader)
         + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1)
@@ -74,11 +74,11 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
     io->Close();
 
     const PulsarCupId last = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>().lastSelectedCup;
-    CupsDef* cups = CupsDef::sInstance;
-    if(last != -1 && cups->IsValidCup(last)) {
-        cups->lastSelectedCup = last;
-        cups->selectedCourse = static_cast<PulsarId>(last * 4);
-        cups->lastSelectedCupButtonIdx = last & 1;
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+    if(last != -1 && cupsConfig->IsValidCup(last)) {
+        cupsConfig->lastSelectedCup = last;
+        cupsConfig->selectedCourse = static_cast<PulsarId>(last * 4);
+        cupsConfig->lastSelectedCupButtonIdx = last & 1;
     }
 }
 
@@ -107,7 +107,7 @@ bool Mgr::HasTrophy(u32 crc32, TTMode mode) const {
 }
 
 bool Mgr::HasTrophy(PulsarId id, TTMode mode) const {
-    return this->HasTrophy(CupsDef::sInstance->GetCRC32(id), mode);
+    return this->HasTrophy(CupsConfig::sInstance->GetCRC32(id), mode);
 }
 
 u8 Mgr::GetSettingValue(Type type, u32 setting) {
@@ -139,9 +139,9 @@ void Mgr::UpdateTrackList() {
     MiscParams& params = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>();
     TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
 
-    const CupsDef* cups = CupsDef::sInstance;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
     const u32 oldTrackCount = params.trackCount;
-    const u32 trackCount = cups->GetEffectiveTrackCount();
+    const u32 trackCount = cupsConfig->GetEffectiveTrackCount();
 
     EGG::Heap* heap = System::sInstance->heap;
     u16* missingCRCIndex = new (heap) u16[trackCount];
@@ -152,7 +152,7 @@ void Mgr::UpdateTrackList() {
     TrackTrophy* trophies = trophiesHolder.trophies;
     for(int curNew = 0; curNew < trackCount; ++curNew) {
         for(int curOld = 0; curOld < oldTrackCount; ++curOld) {
-            if(cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(curNew)) == trophies[curOld].crc32) {
+            if(cupsConfig->GetCRC32(cupsConfig->ConvertTrack_IdxToPulsarId(curNew)) == trophies[curOld].crc32) {
                 missingCRCIndex[curNew] = curOld;
                 break;
             }
@@ -161,7 +161,7 @@ void Mgr::UpdateTrackList() {
 
     for(int curOld = 0; curOld < oldTrackCount; ++curOld) {
         for(int curNew = 0; curNew < trackCount; ++curNew) {
-            if(trophies[curOld].crc32 == cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(curNew))) {
+            if(trophies[curOld].crc32 == cupsConfig->GetCRC32(cupsConfig->ConvertTrack_IdxToPulsarId(curNew))) {
                 toberemovedCRCIndex[curOld] = curNew;
                 break;
             }
@@ -174,7 +174,7 @@ void Mgr::UpdateTrackList() {
                 if(toberemovedCRCIndex[curOld] == 0xFFFF) {
                     missingCRCIndex[curNew] = curOld; //found a spot to put the missing track in, reset that spot and use it for the new track
                     toberemovedCRCIndex[curOld] = 0;
-                    trophies[curOld].crc32 = cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(curNew));
+                    trophies[curOld].crc32 = cupsConfig->GetCRC32(cupsConfig->ConvertTrack_IdxToPulsarId(curNew));
                     for(int mode = 0; mode < 4; mode++) trophies[curOld].hastrophy[mode] = false;
                     break;
                 }
@@ -187,7 +187,7 @@ void Mgr::UpdateTrackList() {
         u32 idx = oldTrackCount;
         for(int curNew = 0; curNew < trackCount; ++curNew) { //4032 4132
             if(missingCRCIndex[curNew] == 0xFFFF) {
-                trophies[idx].crc32 = cups->GetCRC32(cups->ConvertTrack_IdxToPulsarId(curNew));
+                trophies[idx].crc32 = cupsConfig->GetCRC32(cupsConfig->ConvertTrack_IdxToPulsarId(curNew));
                 for(int mode = 0; mode < 4; mode++) trophies[idx].hastrophy[mode] = false;
                 ++idx;
             }

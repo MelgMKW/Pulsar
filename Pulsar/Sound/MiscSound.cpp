@@ -6,13 +6,13 @@ namespace Audio {
 
 using namespace nw4r;
 snd::SoundStartable::StartResult PlayExtBRSEQ(snd::SoundStartable& startable, AudioHandle& handle, const char* fileName, const char* labelName, bool hold) {
+    snd::SoundStartable::StartInfo startInfo;
+    startInfo.seqSoundInfo.startLocationLabel = labelName;
+    startInfo.enableFlag |= snd::SoundStartable::StartInfo::ENABLE_SEQ_SOUND_INFO;
 
     void* file = ArchiveRoot::sInstance->GetFile(ARCHIVE_HOLDER_COMMON, fileName);
     if(file != nullptr) {
-        snd::SoundStartable::StartInfo startInfo;
         startInfo.seqSoundInfo.seqDataAddress = file;
-        startInfo.seqSoundInfo.startLocationLabel = labelName;
-        startInfo.enableFlag |= snd::SoundStartable::StartInfo::ENABLE_SEQ_SOUND_INFO;
         if(hold) return startable.detail_HoldSound(&handle, SOUND_ID_MINITURBO, &startInfo);
         else return startable.detail_StartSound(&handle, SOUND_ID_MINITURBO, &startInfo);
     }
