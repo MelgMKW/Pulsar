@@ -1,3 +1,7 @@
+·Updated to 1.0.17
+
+-A few RH1 fixes and settings are not available in single player
+
 ·Updated to 1.0.16
 -Space mode is available as a third color mode
 -Creator now uses marshalling to import game-structs

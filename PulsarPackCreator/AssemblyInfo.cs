@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 
-[assembly: AssemblyVersion("1.0.16")] //combined version, always increments
+[assembly: AssemblyVersion("1.0.17")] //combined version, always increments
 [assembly: AssemblyFileVersion("1.0.5")] //Code.bin version
