@@ -26,7 +26,7 @@
 		<memory offset="0x8000A350" value="4BFF9CB0" original="4e800020" /> <!--RMCJ REL-->		
 		<memory offset="0x80242a0c" value="4BDC15f4" original="4e800020" /> <!--RMCK DOL-->
 		<memory offset="0x8000A4FC" value="4BFF9B04" original="4e800020" /> <!--RMCK REL-->
-	    <memory valuefile="/{$pack}/Binaries/Loader.bin" offset="0x80004000"/>
+	    <memory valuefile="/{$pack}/Binaries/Loader.pul" offset="0x80004000"/>
 		<folder external="/{$pack}/Binaries" disc="/Binaries" create="true"/>
 		<folder external="/{$pack}/Tracks" disc="/Race/Course" create="true"/>
 		<folder external="/{$pack}/Assets" disc="/" create="true"/>

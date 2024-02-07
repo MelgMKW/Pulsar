@@ -42,6 +42,7 @@ struct Page {
 
 struct PagesHolder {
     static const u32 pageMagic = 'PAGE';
+    static const u32 version = 1;
     Pulsar::SectionHeader header;
     u32 pageCount;
     Page pages[1];
@@ -49,6 +50,7 @@ struct PagesHolder {
 
 struct MiscParams {
     static const u32 miscMagic = 'MISC';
+    static const u32 version = 1;
     Pulsar::SectionHeader header;
     u32 reserved[20];
     PulsarCupId lastSelectedCup;
@@ -57,6 +59,7 @@ struct MiscParams {
 
 struct TrophiesHolder {
     static const u32 tropMagic = 'TROP';
+    static const u32 version = 1;
     Pulsar::SectionHeader header;
     u16 trophyCount[4];
     TrackTrophy trophies[1];
@@ -86,12 +89,18 @@ class alignas(0x20) Binary {
 
         PagesHolder& pages = this->GetSection<PagesHolder, &BinaryHeader::offsetToPages>();
         pages.header.magic = PagesHolder::pageMagic;
+        pages.header.version = PagesHolder::version;
         pages.pageCount = pageCount;
+
         MiscParams& params = this->GetSection<MiscParams, &BinaryHeader::offsetToMisc>();
         params.header.magic = MiscParams::miscMagic;
+        params.header.version = MiscParams::version;
         params.trackCount = trackCount;
         params.lastSelectedCup = PULSARCUPID_NONE;
-        this->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>().header.magic = TrophiesHolder::tropMagic;
+
+        TrophiesHolder& trophies = this->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
+        trophies.header.magic = TrophiesHolder::tropMagic;
+        trophies.header.version = TrophiesHolder::version;
 
     }
 

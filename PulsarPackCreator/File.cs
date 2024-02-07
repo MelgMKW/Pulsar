@@ -307,9 +307,9 @@ namespace PulsarPackCreator
             if (ret)
             {
                 string modFolder = $"output/{parameters.modFolderName}";
-                File.WriteAllBytes($"{modFolder}/Binaries/Code.bin", PulsarRes.Code);
+                File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
                 Directory.CreateDirectory($"{modFolder}/Assets");
-                File.WriteAllBytes($"{modFolder}/Binaries/Loader.bin", PulsarRes.Loader);
+                File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
                 File.WriteAllBytes($"{modFolder}/Assets/UIAssets.szs", PulsarRes.UIAssets);
                 File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
                 File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);

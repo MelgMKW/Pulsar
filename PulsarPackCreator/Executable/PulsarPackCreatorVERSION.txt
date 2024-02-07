@@ -1,5 +1,13 @@
-·Updated to 1.0.17
+·Updated to 1.0.18
+Engine Changes:
+-Fixed team select not assigning the proper teams
+-Fixed a bug where the host disconnecting from a room you were joining would cause a crash
+-Added settings button in the single player section
 
+Creator Changes:
+-Changed .bin strings to .pul
+
+·Updated to 1.0.17
 -A few RH1 fixes and settings are not available in single player
 
 ·Updated to 1.0.16
