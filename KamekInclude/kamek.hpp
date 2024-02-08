@@ -21,6 +21,26 @@
 #include <core/nw4r/ut/List.hpp>
  //just for usability in other structs
 
+namespace aux {
+typedef char yes[1];
+typedef char no[2];
+
+template <typename Parent, typename Child>
+struct Host
+{
+    operator Parent* () const;
+    operator Child* ();
+};
+}
+template <typename Parent, typename Child>
+struct is_base_of
+{
+    template <typename T>
+    static aux::yes& check(Child*, T);
+    static aux::no& check(Parent*, int);
+
+    static const bool value = sizeof(check(aux::Host<Parent, Child>(), int())) == sizeof(aux::yes);
+};
 
 /*
 CW implements ptmfs with this pseudo-struct:

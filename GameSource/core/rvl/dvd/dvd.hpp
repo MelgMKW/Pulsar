@@ -49,6 +49,13 @@ struct DVDFileInfo {
 };
 size_assert(DVDFileInfo, 0x3c);
 
+struct DVDDir {
+    u32 entryNum;
+    u32 location;
+    u32 next;
+};
+size_assert(DVDDir, 0xc);
+
 extern "C" {
     s32 DVDConvertPathToEntryNum(const char* path); //8015df4c
     BOOL DVDFastOpen(s32 entrynum, DVDFileInfo* fileInfo); //8015e254

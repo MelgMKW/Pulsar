@@ -2,6 +2,7 @@
 #define _NW4R_UT_MISC_
 #include <types.hpp>
 #include <core/rvl/OS/OS.hpp>
+#include <core/rvl/OS/Mutex.hpp>
 
 namespace nw4r {
 namespace ut {
@@ -67,6 +68,25 @@ private:
     NonCopyable(const NonCopyable&);
     const NonCopyable& operator=(const NonCopyable&);
 };
+
+inline void Lock(OS::Mutex& mutex) {
+    OS::LockMutex(&mutex);
+}
+
+inline void Unlock(OS::Mutex& mutex) {
+    OS::UnlockMutex(&mutex);
+}
+
+template<typename Type>
+class AutoLock : private NonCopyable {
+public:
+    AutoLock(Type& lockObj): lock(lockObj) { Lock(lockObj); }
+    ~AutoLock() { Unlock(lock); }
+
+private:
+    Type& lock;
+};
+typedef AutoLock<OS::Mutex>   AutoMutexLock;
 
 class AutoInterruptLock : private NonCopyable {
 public:

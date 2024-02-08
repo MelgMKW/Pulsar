@@ -3,7 +3,6 @@ Engine Changes:
 -Fixed team select not assigning the proper teams
 -Fixed a bug where the host disconnecting from a room you were joining would cause a crash
 -Added settings button in the single player section
-
 Creator Changes:
 -Changed .bin strings to .pul
 
