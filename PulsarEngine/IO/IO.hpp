@@ -1,3 +1,6 @@
+#ifndef _PULSARIO_
+#define _PULSARIO_
+
 #include <kamek.hpp>
 #include <PulsarSystem.hpp>
 
@@ -124,33 +127,33 @@ public:
         IOS::Open2ndInst(path, mode);
     }
 
-    virtual bool OpenModFile(const char* path, u32 mode);
+    virtual bool OpenModFile(const char* path, u32 mode) = 0;
     virtual bool CreateAndOpen(const char* path, u32 mode) = 0;
     virtual void GetCorrectPath(char* realPath, const char* path) const = 0;
 
+    virtual s32 Read(u32 size, void* bufferIn) = 0;
+    virtual void Seek(u32 offset) = 0;
+    virtual s32 Write(u32 length, const void* buffer) = 0;
+    virtual s32 Overwrite(u32 length, const void* buffer) = 0;
+    virtual void Close() = 0;
+
+    //Folder
     virtual bool FolderExists(const char* path) const = 0;
     virtual void CreateFolder(const char* path) = 0;
     virtual void ReadFolder(const char* path) = 0;
+    virtual void CloseFolder() = 0;
+    virtual s32 ReadFolderFile(void* buffer, u32 index, u32 mode, u32 maxLength) = 0;
 
     static IO* sInstance;
     static IO* CreateInstance(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread);
     template<typename T>
     T* Alloc(u32 size) const { return EGG::Heap::alloc<T>(nw4r::ut::RoundUp(size, 0x20), 0x20, this->heap); }
-    s32 GetFileSize();
 
-    bool OpenFile(const char* path, u32 mode);
-    s32 Read(u32 size, void* bufferIn);
-    void Seek(u32 offset) { IOS::Seek(this->fd, offset, IOS::SEEK_START); }
-    s32 Write(u32 length, const void* buffer);
-    s32 Overwrite(u32 length, const void* buffer);
-    void Close();
+
 
     const int GetFileCount() const { return this->fileCount; }
     const char* GetName() const { return this->folderName; };
     void RequestCreateFolder(const char* path); //up to 2 simultaneous
-    void CloseFolder();
-    void GetFolderFilePath(char* dest, u32 index) const;
-    s32 ReadFolderFile(void* buffer, u32 index, u32 mode, u32 maxLength);
 
     const IOType type;
 
@@ -160,39 +163,57 @@ protected:
         folderName[0] = '\0';
     }
     void Bind(const char* path) { strncpy(this->folderName, path, IOS::ipcMaxPath); }
-    void CloseFile() { this->Close(); }
+    virtual bool Init() { return false; }
 
     EGG::Heap* heap;
     EGG::TaskThread* const taskThread;
     bool isBusy;
     s32 fd;
-    s32 fileSize;
+
+    CreateRequest requests[2];
     char filePath[IOS::ipcMaxPath];
     char folderName[IOS::ipcMaxPath];
     u32 fileCount;
-    IOS::IPCPath* fileNames;
-    CreateRequest requests[2];
+
 };
 
 
 class NANDIO : public IO {
-
+protected:
     NANDIO(IOType type, EGG::Heap* heap, EGG::TaskThread* taskThread) : IO(type, heap, taskThread) {}
 
+    bool OpenModFile(const char* path, u32 mode) override;
     bool CreateAndOpen(const char* path, u32 mode) override;
     void GetCorrectPath(char* realPath, const char* path) const override;
+    s32 Read(u32 size, void* bufferIn) override;
+    void Seek(u32 offset) override { IOS::Seek(this->fd, offset, IOS::SEEK_START); }
+    s32 Write(u32 length, const void* buffer) override;
+    s32 Overwrite(u32 length, const void* buffer) override;
+    void Close() override;
 
+    //Folder
     bool FolderExists(const char* path) const override;
     void CreateFolder(const char* path) override;
     void ReadFolder(const char* path) override;
+    void CloseFolder() override;
+    s32 ReadFolderFile(void* buffer, u32 index, u32 mode, u32 maxLength) override;
+
+    bool OpenIOSFile(const char* path, u32 mode);
+    void GetFolderFilePath(char* dest, u32 index) const;
+
+    s32 fileSize;
+    IOS::IPCPath* fileNames;
+
+public:
+    s32 GetFileSize();
 
     friend IO* IO::CreateInstance(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread);
 
 };
 
-class RiivoIO : public IO {
+class RiivoIO : public NANDIO {
 
-    RiivoIO(IOType type, EGG::Heap* heap, EGG::TaskThread* taskThread) : IO(type, heap, taskThread) {}
+    RiivoIO(IOType type, EGG::Heap* heap, EGG::TaskThread* taskThread) : NANDIO(type, heap, taskThread) {}
 
     bool OpenModFile(const char* path, u32 mode) override;
     bool CreateAndOpen(const char* path, u32 mode) override;
@@ -227,6 +248,6 @@ enum RiivoStatsModes {
     S_IFREG = 0x8000
 };
 
-
-
 }//namespace Pulsar
+
+#endif

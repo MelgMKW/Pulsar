@@ -1,6 +1,7 @@
 #include <kamek.hpp>
 #include <PulsarSystem.hpp>
 #include <IO/IO.hpp>
+#include <dev/sdi.hpp>
 
 namespace Pulsar {
 
@@ -8,48 +9,51 @@ IO* IO::sInstance = nullptr;
 
 IO* IO::CreateInstance(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread) {
     IO* io;
-    if(type != IOType_RIIVO) io = new (heap) NANDIO(type, heap, taskThread);
+    if(type != IOType_RIIVO) io = new (heap) FATIO(type, heap, taskThread);
     else io = new (heap) RiivoIO(type, heap, taskThread);
     IO::sInstance = io;
+    io->Init();
     return io;
 }
 
+
+//Virtual Funcs
 //FILE
 #pragma suppress_warnings on
-bool IO::OpenFile(const char* path, u32 mode) {
+bool NANDIO::OpenIOSFile(const char* path, u32 mode) {
     if(type == IOType_ISO) return -1;
     this->fd = IO::OpenFix(path, static_cast<IOS::Mode>(mode));
     return this->fd >= 0;
 }
-bool IO::OpenModFile(const char* path, u32 mode) {
+bool NANDIO::OpenModFile(const char* path, u32 mode) {
     this->GetCorrectPath(this->filePath, path);
-    return this->OpenFile(this->filePath, mode);
+    return this->OpenIOSFile(this->filePath, mode);
 }
 #pragma suppress_warnings reset
 
-s32 IO::Read(u32 size, void* bufferIn) {
+s32 NANDIO::Read(u32 size, void* bufferIn) {
     if(this->fd < 0) return 0;
     return IOS::Read(this->fd, bufferIn, size);
 }
 
-s32 IO::Write(u32 length, const void* buffer) {
+s32 NANDIO::Write(u32 length, const void* buffer) {
     if(this->fd < 0) return -1;
     return IOS::Write(this->fd, buffer, length);
 }
 
-s32 IO::Overwrite(u32 length, const void* buffer) {
+s32 NANDIO::Overwrite(u32 length, const void* buffer) {
     if(this->fd < 0) return -1;
     IOS::Seek(this->fd, 0, IOS::SEEK_START);
     return IOS::Write(this->fd, buffer, length);
 }
 
-void IO::Close() {
+void NANDIO::Close() {
     if(this->fd >= 0) IOS::Close(this->fd);
     this->fd = -1;
     this->fileSize = -1;
 }
 
-s32 IO::GetFileSize() {
+s32 NANDIO::GetFileSize() {
     if(this->fileSize < 0 && this->fd >= 0) {
         s32 size = IOS::Seek(this->fd, 0, IOS::SEEK_END);
         if(size >= 0) {
@@ -60,7 +64,6 @@ s32 IO::GetFileSize() {
     return this->fileSize;
 }
 
-//Virtual Funcs
 bool NANDIO::CreateAndOpen(const char* path, u32 mode) {
     char realPath[IOS::ipcMaxPath];
     this->GetCorrectPath(realPath, path);
@@ -74,7 +77,7 @@ void NANDIO::GetCorrectPath(char* realPath, const char* path) const {
 
 
 bool RiivoIO::OpenModFile(const char* path, u32 mode) {
-    return IO::OpenModFile(path, this->GetRiivoMode(mode));
+    return NANDIO::OpenModFile(path, this->GetRiivoMode(mode));
 }
 
 bool RiivoIO::CreateAndOpen(const char* path, u32 mode) {
@@ -87,6 +90,7 @@ bool RiivoIO::CreateAndOpen(const char* path, u32 mode) {
 void RiivoIO::GetCorrectPath(char* realPath, const char* path) const {
     snprintf(realPath, IOS::ipcMaxPath, "%s%s", "file", path);
 }
+
 
 #pragma suppress_warnings on
 //Riivo specific funcs
@@ -120,7 +124,7 @@ void IO::CreateFolderAsync(CreateRequest* request) {
     request->isFree = true;
 }
 
-void IO::CloseFolder() {
+void NANDIO::CloseFolder() {
     isBusy = false;
     this->Close();
     if(this->fileNames != nullptr) delete[](this->fileNames);
@@ -129,7 +133,7 @@ void IO::CloseFolder() {
     this->fileCount = 0;
 }
 
-s32 IO::ReadFolderFile(void* bufferIn, u32 index, u32 mode, u32 maxLength) {
+s32 NANDIO::ReadFolderFile(void* bufferIn, u32 index, u32 mode, u32 maxLength) {
     char path[IOS::ipcMaxPath];
     this->GetFolderFilePath(path, index);
     this->OpenModFile(path, mode);
@@ -140,7 +144,7 @@ s32 IO::ReadFolderFile(void* bufferIn, u32 index, u32 mode, u32 maxLength) {
     return ret;
 }
 
-void IO::GetFolderFilePath(char* path, u32 index) const {
+void NANDIO::GetFolderFilePath(char* path, u32 index) const {
     snprintf(path, IOS::ipcMaxPath, "%s/%s", &this->folderName, &this->fileNames[index]);
 }
 

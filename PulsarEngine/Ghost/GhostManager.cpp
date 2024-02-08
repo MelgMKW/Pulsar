@@ -3,6 +3,10 @@
 #include <UI/UI.hpp>
 #include <IO/IO.hpp>
 
+
+#include <dev/sdi.hpp>
+
+
 namespace Pulsar {
 namespace Ghosts {
 Manager* Manager::sInstance = nullptr;
@@ -39,13 +43,19 @@ void Manager::Init(PulsarId id) {
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     cupsConfig->GetTrackGhostFolder(folderPath, id);
 
+
+    //bool exists = io->FolderExists(folderPath); //Create CRC32 folder
+    //if(!exists) io->RequestCreateFolder(folderPath);
+
+    char folderModePath[IOS::ipcMaxPath];
+    snprintf(folderModePath, IOS::ipcMaxPath, "%s/%s", folderPath, "test");
+
+    cupsConfig->GetTrackGhostFolder(folderPath, (PulsarId)((u32)id + 1));
     bool exists = io->FolderExists(folderPath); //Create CRC32 folder
     if(!exists) io->RequestCreateFolder(folderPath);
-    char folderModePath[IOS::ipcMaxPath];
-    snprintf(folderModePath, IOS::ipcMaxPath, "%s/%s", folderPath, System::ttModeFolders[system->ttMode]);
-    exists = io->FolderExists(folderModePath); //Create 150/150F etc..
-    if(!exists) io->RequestCreateFolder(folderModePath);
-    else io->ReadFolder(folderModePath); //Reads all files contained in the folder
+
+    return;
+    //else io->ReadFolder(folderModePath); //Reads all files contained in the folder
 
     new (&this->leaderboard) Leaderboard(folderPath, id);
 
