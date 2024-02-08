@@ -155,13 +155,13 @@ void OnButtonClick(Pages::SinglePlayer* page, PushButton& button, u32 hudSlotId)
     if(id == 1 || id > 3) {
         TTMode mode = TTMODE_150;
         switch(page->externControlCount) {
-            case(5):
+            case(6):
                 if(id > 3) {
                     if(Info::Has200cc()) mode = TTMODE_200;
                     else mode = TTMODE_150_FEATHER;
                 }
                 break;
-            case(7):
+            case(8):
                 if(id > 3) mode = (TTMode)(id - 3);
                 break;
         }

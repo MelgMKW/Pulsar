@@ -132,8 +132,9 @@ namespace PulsarPackCreator
             }
 
             string curDir = Directory.GetCurrentDirectory();
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            version = version.Substring(0, version.Length - 2);
+
+            string version = (Assembly.GetExecutingAssembly().GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute).InformationalVersion.ToString();
+
             using Process updater = new Process();
             {
                 updater.StartInfo.FileName = @"powershell.exe";
@@ -160,9 +161,9 @@ namespace PulsarPackCreator
 
         public static bool CheckUpdates()
         {
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string version = (Assembly.GetExecutingAssembly().GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute).InformationalVersion.ToString();
             string newVersion = GetVersion();
-            return newVersion != version.Substring(0, version.Length - 2);
+            return newVersion != version;
         }
 
         public static void DisplayChangelog(string oldVersion)

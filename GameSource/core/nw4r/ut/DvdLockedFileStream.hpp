@@ -21,13 +21,11 @@ public:
     s32 Peek(void* buffer, u32 length) override; //0x5c 800b0950
     bool PeekAsync(void* buffer, u32 length, IOStreamCallback callback, void* cbArg) override; //0x60 800915f0
 
-    bool cancelFlag; //0x70
-    u8 padding3[3];
-
+    bool cancelFlag; //0x6f
     static OS::Mutex mutex; //802f12e8
 
 };
-size_assert(DvdLockedFileStream, 0x74);
+size_assert(DvdLockedFileStream, 0x70);
 }//namespace ut
 }//namespace nw4r
 #endif

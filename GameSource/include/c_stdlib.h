@@ -5,8 +5,12 @@
 extern "C" {
 #endif
 
-
+#ifdef __INTELLISENSE__
+    typedef unsigned long long size_t;
+#else
     typedef unsigned long size_t;
+#endif
+
     typedef struct va_list_struct {
         char gpr, fpr, reserved[2], * input_arg_area, * reg_save_area;
     } va_list[1];

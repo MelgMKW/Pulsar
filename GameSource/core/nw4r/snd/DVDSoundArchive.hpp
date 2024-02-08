@@ -17,8 +17,8 @@ public:
         void Seek(s32 offset, u32 origin) override; //0x44 800914e0
         u32 Tell() const override; //0x58 80091630
 
-        u32 offset; //74
-        u32 size; //78
+        u32 offset; //70
+        u32 size; //74
     }; //0x78
 
     DVDSoundArchive(); //80090fc0

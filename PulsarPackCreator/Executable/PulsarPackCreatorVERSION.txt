@@ -1,3 +1,9 @@
+·Updated to 1.0.19
+Engine Changes:
+-Fixed COOB
+Creator Changes:
+-Settings now pertain between versions
+
 ·Updated to 1.0.18
 Engine Changes:
 -Fixed team select not assigning the proper teams

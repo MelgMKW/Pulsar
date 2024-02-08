@@ -1,6 +1,7 @@
 #ifndef _EGGHEAP_
 #define _EGGHEAP_
 #include <types.hpp>
+#include <include/c_stdlib.h>
 #include <core/rvl/MEM/MEMheap.hpp>
 #include <core/nw4r/ut/List.hpp>
 #include <core/egg/mem/Allocator.hpp>

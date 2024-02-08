@@ -56,13 +56,6 @@ typedef int UnkType;
 typedef int BOOL; //any non-zero = true
 
 
-
-#ifdef __INTELLISENSE__
-typedef unsigned long long size_t;
-#else
-typedef unsigned long size_t;
-#endif
-
 struct RGBA16 {
     u16 red, green, blue, alpha;
 };

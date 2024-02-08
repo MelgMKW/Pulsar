@@ -53,9 +53,8 @@ public:
     DvdFileStreamInfo fileInfo; //28
     s32 priority; //68
     bool isBusy; //6c
-    bool closeOnDestroyFlag;
-    bool closeEnableFlag;
-    u8 padding2;
+    bool closeOnDestroyFlag;  //0x6e
+    bool closeEnableFlag; //0x6e
 };
 size_assert(DvdFileStream, 0x70);
 }//namespace ut

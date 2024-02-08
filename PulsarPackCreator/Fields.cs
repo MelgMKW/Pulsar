@@ -66,8 +66,8 @@ namespace PulsarPackCreator
             msgWindow = new MsgWindow();
 
 
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            Title = "Pulsar Pack Creator " + version.Substring(0, version.Length - 2);
+            string version = (Assembly.GetExecutingAssembly().GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute).InformationalVersion.ToString();
+            Title = "Pulsar Pack Creator " + version;
 
             TrackBlocking.ItemsSource = blockingValues;
             TrackBlocking.SelectedValue = blockingValues[0];
