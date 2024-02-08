@@ -44,15 +44,14 @@ void Manager::Init(PulsarId id) {
     cupsConfig->GetTrackGhostFolder(folderPath, id);
 
 
-    //bool exists = io->FolderExists(folderPath); //Create CRC32 folder
-    //if(!exists) io->RequestCreateFolder(folderPath);
+    bool exists = io->FolderExists(folderPath); //Create CRC32 folder
+    if(!exists) io->CreateFolder(folderPath);
 
     char folderModePath[IOS::ipcMaxPath];
-    snprintf(folderModePath, IOS::ipcMaxPath, "%s/%s", folderPath, "test");
+    snprintf(folderModePath, IOS::ipcMaxPath, "%s/%s", folderPath, System::ttModeFolders[system->ttMode]);
 
-    cupsConfig->GetTrackGhostFolder(folderPath, (PulsarId)((u32)id + 1));
-    bool exists = io->FolderExists(folderPath); //Create CRC32 folder
-    if(!exists) io->RequestCreateFolder(folderPath);
+    exists = io->FolderExists(folderModePath); //Create CRC32 folder
+    if(!exists) io->CreateFolder(folderModePath);
 
     return;
     //else io->ReadFolder(folderModePath); //Reads all files contained in the folder
