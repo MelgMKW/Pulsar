@@ -81,9 +81,10 @@ namespace Kamek
         private Word _location;
 
         private void ImportSections(string prefix)
-        {
+        {            
             foreach (var elf in _modules)
             {
+                
                 foreach (var s in (from s in elf.Sections
                                    where s.name.StartsWith(prefix)
                                    select s))

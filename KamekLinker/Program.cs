@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace Kamek
 {
     class Program
     {
+
+        
         static void Main(string[] args)
         {
             Console.WriteLine("Kamek 2.0 by Ninji/Ash Wolf - https://github.com/Treeki/Kamek");
@@ -24,10 +27,23 @@ namespace Kamek
             List<byte> combined = new List<byte>();
             var externals = new Dictionary<string, uint>();
             VersionInfo versions = null;
+            Debug debug = null;
             var selectedVersions = new List<String>();
 
+            if (args.Contains("-debug"))
+            {
+
+                string mapPath = args.First(x => x.StartsWith("-map=")).Substring(5);
+                string readElfPath = args.First(x => x.StartsWith("-readelf=")).Substring(9);
+                if(mapPath != null && readElfPath != null)
+                {
+                    debug = new Debug(mapPath, readElfPath);
+                }                  
+
+            }
             foreach (var arg in args)
             {
+                
                 if (arg.StartsWith("-"))
                 {
                     if (arg == "-h" || arg == "-help" || arg == "--help")
@@ -35,8 +51,10 @@ namespace Kamek
                         ShowHelp();
                         return;
                     }
+
                     if (arg == "-dynamic")
                         baseAddress = null;
+                    else if (arg == "-debug" || arg.StartsWith("-map=") || arg.StartsWith("-readelf=")) { }
                     else if (arg.StartsWith("-static=0x"))
                         baseAddress = uint.Parse(arg.Substring(10), System.Globalization.NumberStyles.HexNumber);
                     else if (arg.StartsWith("-output-kamek="))
@@ -73,13 +91,14 @@ namespace Kamek
                 else
                 {
                     Console.WriteLine("adding {0} as object..", arg);
+                    if (debug != null) debug.AnalyzeFile(arg);                                   
                     using (var stream = new FileStream(arg, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
                         modules.Add(new Elf(stream));
                     }
                 }
             }
-
+            if (debug != null) debug.Save();
 
             // We need a default VersionList for the loop later
             if (versions == null)
@@ -184,6 +203,7 @@ namespace Kamek
                     File.WriteAllBytes(outputCombinedPath, combined.ToArray());
                 }
             }
+            
         }
 
         private static void ReadExternals(Dictionary<string, uint> dict, string path)

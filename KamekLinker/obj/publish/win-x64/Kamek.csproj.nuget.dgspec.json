@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Modding\\Coding\\Kamek\\Engine\\KamekSource\\Kamek.csproj": {}
+    "C:\\Modding\\Coding\\Kamek\\Common\\KamekLinker\\Kamek.csproj": {}
   },
   "projects": {
-    "C:\\Modding\\Coding\\Kamek\\Engine\\KamekSource\\Kamek.csproj": {
+    "C:\\Modding\\Coding\\Kamek\\Common\\KamekLinker\\Kamek.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Modding\\Coding\\Kamek\\Engine\\KamekSource\\Kamek.csproj",
+        "projectUniqueName": "C:\\Modding\\Coding\\Kamek\\Common\\KamekLinker\\Kamek.csproj",
         "projectName": "Kamek",
-        "projectPath": "C:\\Modding\\Coding\\Kamek\\Engine\\KamekSource\\Kamek.csproj",
+        "projectPath": "C:\\Modding\\Coding\\Kamek\\Common\\KamekLinker\\Kamek.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Modding\\Coding\\Kamek\\Engine\\KamekSource\\obj\\publish\\win-x64\\",
+        "outputPath": "C:\\Modding\\Coding\\Kamek\\Common\\KamekLinker\\obj\\publish\\win-x64\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

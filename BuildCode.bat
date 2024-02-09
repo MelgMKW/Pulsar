@@ -1,8 +1,17 @@
-@echo off
+
 SETLOCAL EnableDelayedExpansion
 
 cls
 del build\*.o
+
+SET "debug="
+SET "cwDWARF="
+if "%1" equ "-d" SET "debug=-debug -map=^"C:\Users\admin\Documents\Dolphin Emulator\Maps\RMCP01.map^" -readelf=^"C:\MinGW\bin\readelf.exe^""
+if "%1" equ "-d" SET "cwDWARF=-g"
+
+echo %debug%
+echo %cwDWARF%
+@echo off
 
 :: Destination (change as necessary)
 SET "SOURCE=Pulsar"
@@ -14,7 +23,7 @@ echo %RIIVO%
 :: CPP compilation settings
 SET CC="../Common/cw/mwcceppc.exe"
 SET CFLAGS=-I- -i "../Common/KamekInclude" -i "../Common/GameSource" -i "../Common/GameSource/MarioKartWii" -i PulsarEngine ^
-  -opt all -inline auto -enum int -proc gekko -fp hard -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 
+  -opt all -inline auto -enum int -proc gekko -fp hard -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 %cwDWARF%
 SET DEFINE=
 
 :: CPP Sources
@@ -33,7 +42,7 @@ FOR %%H IN (%CPPFILES%) DO (
 
 :: Link
 echo Linking... %time%
-"../Common/Kamek" "build/kamek.o" %OBJECTS% -dynamic -externals="../Common/GameSource/symbols.txt" -versions="../Common/GameSource/versions.txt" -output-combined=build\Code.pul >nul
+"../Common/Kamek" "build/kamek.o" %OBJECTS% %debug% -dynamic -externals="../Common/GameSource/symbols.txt" -versions="../Common/GameSource/versions.txt" -output-combined=build\Code.pul
 
 if %ErrorLevel% equ 0 (
     xcopy /Y build\*.pul "%RIIVO%\Binaries" >nul
