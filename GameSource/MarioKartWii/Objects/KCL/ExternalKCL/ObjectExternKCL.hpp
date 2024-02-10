@@ -7,6 +7,8 @@
 class ObjectKCLController {
 public:
     explicit ObjectKCLController(KCL* raw); //807c4ce8
+    ~ObjectKCLController(); //807c4d6c
+    void Update(const Vec3& position, KCLBitfield accepted, bool isBiggerThanDefaultScale, float radius); //807c4dc8
 
     bool CalcCollision(const Vec3& pos, const Vec3& prevPos,
         KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, float radius); //807C58D4
@@ -32,13 +34,15 @@ public:
 }; //0x74
 size_assert(ObjectKCLController, 0x74);
 
+//ObjectNum 0x219 = 537 DemoCol, 0x217 = 535 M
 class ObjectExternKCL : public ObjectKCL { //for objects whose KCL is provided by the szs and not in the game code
+public:
     explicit ObjectExternKCL(const KMP::Holder<GOBJ>& gobjHolder); //8081a980
     ~ObjectExternKCL() override; //8067eafc vtable 808d6af8
 
     void LoadCollision() override; //0x60 8081aa58
     void UpdateCollision() override; //0x74 80681490
-    const Vec3& GetPosition() const override; //0x9c 80681448
+    Vec3& GetPosition() override; //0x9c 80681448
     float GetCollisionDiameter() const override; //0xa0 80687d70
 
     void vf_0xb4() override; //0xb4 8068147c
@@ -96,7 +100,7 @@ class ObjectExternKCL : public ObjectKCL { //for objects whose KCL is provided b
     virtual const Mtx34& GetTransformationMatrix() const; //0x12c 807feac0
     virtual float GetYScale() const; //0x130 80687db0
     virtual float GetPeriod() const; //0x134 8068143c
-    virtual bool vf_0x138(); //0x138 806808ec
+    virtual bool HasCurrentCollision(); //0x138 806808ec
     virtual bool IsSolidForLakitu(); //0x13c 806808f4
     virtual bool vf_0x140(); //0x140 806809f8
     virtual bool IsDriveable(); //0x144 80680a00
@@ -105,7 +109,7 @@ class ObjectExternKCL : public ObjectKCL { //for objects whose KCL is provided b
     virtual bool IsCollidingImpl(const Vec3& pos, const Vec3& prevPos,
         KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, u32 initialTime, float radius); //0x14c 8081b16c
 
-    ObjectKCLController* kclHandler; //0xAC
+    ObjectKCLController* kclController; //0xAC
     Vec3 diffPrevCurPosition; //0xB0 Cur - Prev 
     u8 unknown_0xbc[0xFC - 0xbc];
     u32 timer; //0xFC resets when equal to raceinfo's global timer

@@ -5,20 +5,8 @@
 #include <MarioKartWii/Objects/Collidable/ObjectCollidable.hpp>
 
 namespace Objects {
-
-class MapObjProjectile : public ObjectCollidable {
-    ~MapObjProjectile() override; //806c1284 vtable 808c3668
-    virtual void vf_0xec(const Vec3& vec3) = 0;
-    virtual void RequestShoot() = 0;
-    u16 routeIdShooterFiresFrom; //0xb0 setting0
-    u8 padding4[2];
-}; //0xb4
-
-class MapObjShooter : public ObjectCollidable { //its inlined ctor just registers itself as a managed object
-    ~MapObjShooter() override; //806d1998 vtable 808c5018
-    virtual int GetShootFromRoutePointID() const = 0; //0xec
-};
-
+class MapObjShooter;
+class MapObjProjectile;
 
 class MapObjSniper : public ObjectCollidable { //used by SunDSManager and HeyHoManager
 public:
@@ -34,7 +22,24 @@ public:
 
     MapObjProjectile** projectiles; //0xb0 heyhoBallGBA, FireSnake
     MapObjShooter* shooter; //0xb4 heyhoShipGBA
-}; //0xb8
+    u32 projectileCount; //0xb8
+    u16* routePointsSized; //0xbc
+}; //0xc0
+
+class MapObjShooter : public ObjectCollidable { //its inlined ctor just registers itself as a managed object
+    ~MapObjShooter() override; //806d1998 vtable 808c5018
+    virtual int GetShootFromRoutePointID() const = 0; //0xec
+}; //0xb0
+
+class MapObjProjectile : public ObjectCollidable {
+    ~MapObjProjectile() override; //806c1284 vtable 808c3668
+    virtual void vf_0xec(const Vec3& vec3) = 0; //0xec
+    virtual void RequestShoot() = 0; //0xf0
+    u16 routeIdShooterFiresFrom; //0xb0 setting0
+    u8 padding4[2];
+}; //0xb4
+
+
 
 
 

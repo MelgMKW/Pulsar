@@ -6,6 +6,7 @@
 #include <MarioKartWii/Kart/KartManager.hpp>
 #include <MarioKartWii/Mii/MiiHeadsModel.hpp>
 #include <MarioKartWii/3D/Camera/CameraMgr.hpp>
+#include <MarioKartWii/3D/Camera/RaceCamera.hpp>
 #include <UI/UI.hpp>
 
 
@@ -110,12 +111,6 @@ Kart::BRRESHandle* PatchOpacity(Kart::BRRESHandle& handle, Light* light, bool is
 kmCall(0x8058e2b8, PatchOpacity);
 kmCall(0x807c7870, PatchOpacity);
 
-void* PatchMiiHeadsOpacity(MiiHeadsModel& model, Mii* mii, MiiDriverModel* driverModel, u32 r6, nw4r::g3d::ScnMdl::BufferOption option,
-    u32 r8, u32 id) {
-    if(id == 0) model.scnObjDrawOptionsIdx = 1;
-    return model.InitModel(mii, driverModel, r6, option, r8, id);
-}
-kmCall(0x807dc0e8, PatchMiiHeadsOpacity);
 */
 
 bool PatchIsLocalCheck(const Kart::Player& kartPlayer) {
@@ -171,6 +166,7 @@ void CreateAdditionalCameras(RaceCameraMgr* mgr) {
 }
 kmCall(0x805a8520, CreateAdditionalCameras);
 
+
 RaceData* RemoveLiveview() {
     register RaceCameraMgr* mgr;
     asm(mr mgr, r31;);
@@ -179,6 +175,22 @@ RaceData* RemoveLiveview() {
     return RaceData::sInstance;
 }
 kmCall(0x805a8c68, RemoveLiveview);
+
+void AddOpeningPanToEveryone(RaceCamera* camera, u8 playerId, GameScreen& screen, BCP* rawBCP, u8 r7) {
+    register RaceCameraMgr* mgr;
+    asm(mr mgr, r31;);
+    const SectionId id = SectionMgr::sInstance->nextSectionId;
+    if(id >= SECTION_WATCH_GHOST_FROM_CHANNEL && id <= SECTION_WATCH_GHOST_FROM_MENU) rawBCP = mgr->rawBCP;
+    new (camera) RaceCamera(playerId, screen, rawBCP, r7);
+}
+kmCall(0x805a8774, AddOpeningPanToEveryone);
+
+void* PatchMiiHeadsOpacity(MiiHeadsModel& model, Mii* mii, MiiDriverModel* driverModel, u32 r6, nw4r::g3d::ScnMdl::BufferOption option,
+    u32 r8, u32 id) {
+    if(RaceInfo::sInstance != nullptr && id == 0) model.scnObjDrawOptionsIdx = 0xA;
+    return model.InitModel(mii, driverModel, r6, option, r8, id);
+}
+kmCall(0x807dc0e8, PatchMiiHeadsOpacity);
 
 void ChangeGhostOpacity(u8 focusedPlayerIdx) {
     const SectionId id = SectionMgr::sInstance->curSection->sectionId;
@@ -203,6 +215,9 @@ void ChangeGhostOpacity(u8 focusedPlayerIdx) {
     RaceData::sInstance->racesScenario.settings.hudPlayerIds[0] = focusedPlayerIdx;
 }
 kmBranch(0x805a9b60, ChangeGhostOpacity);
+
+
+
 
 }//namespace Pulsar
 

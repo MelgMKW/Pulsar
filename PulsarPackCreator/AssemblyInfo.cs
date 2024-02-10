@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 
-[assembly: AssemblyInformationalVersion("1.0.19")] //combined version, always increments
-[assembly: AssemblyFileVersion("1.0.5")] //Code.pul version
+[assembly: AssemblyInformationalVersion("1.0.0")] //combined version, always increments
+[assembly: AssemblyFileVersion("1.0.0")] //Code.pul version

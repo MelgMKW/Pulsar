@@ -163,6 +163,26 @@ namespace Pulsar_Pack_Creator {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] RaceAssets {
+            get {
+                object obj = ResourceManager.GetObject("RaceAssets", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] UIAssets {
+            get {
+                object obj = ResourceManager.GetObject("UIAssets", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [P]
         ///#Base version: MKWii PAL
         ///80000000-*: +0x0
@@ -186,29 +206,9 @@ namespace Pulsar_Pack_Creator {
         ///8052d298-8052d96b: +0x22568
         ///8052d96c-8053d97b [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string Port {
+        public static string versions {
             get {
-                return ResourceManager.GetString("Port", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] RaceAssets {
-            get {
-                object obj = ResourceManager.GetObject("RaceAssets", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] UIAssets {
-            get {
-                object obj = ResourceManager.GetObject("UIAssets", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("versions", resourceCulture);
             }
         }
         

@@ -78,7 +78,7 @@ public:
 
     ObjectsMgr(); //8082a38c
     virtual ~ObjectsMgr(); //8082a694 vtable 808d7fec
-    void Init(); //8082a2b4
+    void Start(); //8082a2b4
     void Update(); //8082a8f4
     void CreateAllObjects(bool r4); //80826e8c
     void CreateObject(const KMP::Holder<GOBJ>& gobj); //80821e14 "ObjectGenerator"

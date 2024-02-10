@@ -4,10 +4,10 @@
 #include <MarioKartWii/Objects/KCL/ObjectKCL.hpp>
 #include <MarioKartWii/KCL/KCLController.hpp>
 
-enum ObjKCLArrayList {
+enum ObjKCLArrayList { //GetBitfieldProperties
     OBJKCL_ARRAY_ALL,
-    OBJKCL_ARRAY_HAS_LOD,
-    OBJKCL_ARRAY_2,
+    OBJKCL_OBJ_UPDATING,
+    OBJKCL__PROPERTY_2
 
 };
 

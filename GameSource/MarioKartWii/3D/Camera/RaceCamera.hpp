@@ -140,8 +140,9 @@ public:
 
 
     u8 playerId; //0x9c
-    Vec3 unknown_0xA0;
-    Vec3 unknown_0xAC;
+    u8 padding[3];
+    Vec3 unknown_0xA0; //0xa0
+    Vec3 unknown_0xAC; //0xac
     u8 unknown_0xb8[0xdc - 0xb8];
     Vec3 playerPos; //0xdc
     u8 unknown_0xe8[0xf4 - 0xe8];
@@ -168,9 +169,9 @@ public:
     0x80 = similar to 40, idk use
     0x400 = OOB
     */
-
-    CamSub338* sub338;
-    u8 unknown_0x33a[0x33e - 0x33a];
+    u8 padding2[2];
+    CamSub338* sub338; //0x338
+    u8 unknown_0x33c[0x33e - 0x33c];
     bool isFocused; //0x33e
     u16 unknown_0x340; //set to 0 except in TTReplays
     bool r7CtorArg; //0x342
@@ -200,6 +201,7 @@ public:
     static bool CheckBitfield1(const Kart::Player& kartPlayer, u32 bitfieldToCheck); //805a3050 returns true if bitfield 1 has one of args' bit set
     static bool CheckBitfield0(const Kart::Player& kartPlayer, u32 bitfieldToCheck); //805a3314 returns true if bitfield 1 has one of args' bit set
 }; //0x348
+size_assert(RaceCamera, 0x348);
 
 
 

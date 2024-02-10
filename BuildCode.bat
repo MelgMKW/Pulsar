@@ -1,6 +1,6 @@
 
 SETLOCAL EnableDelayedExpansion
-
+@echo off
 cls
 del build\*.o
 
@@ -9,9 +9,6 @@ SET "cwDWARF="
 if "%1" equ "-d" SET "debug=-debug -map=^"C:\Users\admin\Documents\Dolphin Emulator\Maps\RMCP01.map^" -readelf=^"C:\MinGW\bin\readelf.exe^""
 if "%1" equ "-d" SET "cwDWARF=-g"
 
-echo %debug%
-echo %cwDWARF%
-@echo off
 
 :: Destination (change as necessary)
 SET "SOURCE=Pulsar"

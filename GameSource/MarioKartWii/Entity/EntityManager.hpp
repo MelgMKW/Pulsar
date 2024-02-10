@@ -14,6 +14,7 @@ class ObjectCollidable;
 //class that links karts/objects/items etc.. into a single trait
 
 class Entity {
+public:
     Entity(); //80786ed0
     ~Entity(); //80786ef4
     void Init(Vec3* position, u32 params, void* subject, float radius, float maxSpeed); //80786f34
@@ -21,8 +22,8 @@ class Entity {
     void MakeDynamic(); //80786f6c
     void Resize(float radius, float maxSpeed); //80786f7c
     Vec3* position;
-    float radius;
-    float range;
+    float radius; //0x4 
+    float range; //0x8
     u32 paramsBitfield; //based on r5
     /*
     0x1 = Kart
@@ -39,6 +40,13 @@ class Entity {
 }; //0x20
 
 class EntityManager : public EGG::Disposer {
+
+    struct Sub {
+        float unknown_0x0;
+        u8 entityIdx;
+        u8 nextEntityIdx;
+        u8 _5[0x3];
+    }; //0x8
     static EntityManager* sInstance; //0x809c2ef0
     static EntityManager* CreateInstance(); //807855dc
     static void DestroyInstance(); //8078562c
@@ -69,8 +77,8 @@ class EntityManager : public EGG::Disposer {
 
     bool IsPrepared(const Vec3& position, u32 params); //80786e60 checks if cur entity is already of the type indicated by params
 
-    void* unknown_0x10;
-    void* unknown_0x14;
+    Sub* subs; //0x10
+    Sub* subs2; //0x14
     Entity* entities; //0x18 array size 100
     Entity** closeToEntities; //0x1C unsure
     u32 countArray[0x100]; //0x20 no idea

@@ -103,7 +103,7 @@ namespace PulsarPackCreator
             {
                 char[] delims = new[] { '\r', '\n' };
                 string[] lines = PulsarRes.MAP.Split(delims, StringSplitOptions.RemoveEmptyEntries);
-                string[] splices = PulsarRes.Port.Replace("-8", " 8").Replace(":", "").Split(delims, StringSplitOptions.RemoveEmptyEntries);
+                string[] splices = PulsarRes.versions.Replace("-8", " 8").Replace(":", "").Split(delims, StringSplitOptions.RemoveEmptyEntries);
 
                 int idx = Array.IndexOf(splices, $"[{region}]");
                 if (idx == -1) throw new Exception();

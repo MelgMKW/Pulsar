@@ -70,9 +70,9 @@ public:
     virtual void vf_0x88(); //0x88 80821db8
     virtual void vf_0x8c(); //0x8c 80821dd8
     virtual void DisableCollision(); //0x90 80821dec for example when you destroy a create
-    virtual void EnableCollision(); //0x94 0x94 80821e00
+    virtual void EnableCollision(); //0x94 80821e00
     virtual const Entity& GetEntity() const; //0x98 80680618
-    virtual const Vec3& GetPosition() const; //0x9c 80681598
+    virtual Vec3& GetPosition(); //0x9c 80681598
     virtual float GetCollisionDiameter() const; //0xa0 8080bdc0 
     virtual bool IsLodDisbled(); //0xa4 80680610
     virtual void vf_0xa8(); //0xa8 80680608
@@ -102,7 +102,14 @@ public:
     RouteController* routeController; //0x20
     Entity* entity; //0x24
     const char* shadowResName; //0x28
-    u16 flags; //0x2c 1: update mtx pos, 2: update mtx rt, 4: update model srt, 8: update model scale
+    u16 flags; //0x2c bitfield
+    /*
+    1: update mtx pos
+    2: update mtx rt
+    3: update matrix on model update
+    4: update model srt
+    8: update model scale
+    */
     u8 padding[2];
     Vec3 position; //0x30
     Vec3 scale; //0x3c
@@ -129,9 +136,9 @@ class ObjectCycleManager {
     static CyclePtmfs routePtmfs;
     virtual ~ObjectCycleManager();
     //virtual int vf_0xC() = 0; //0xC this might be wrong since kart_truck has no such function 
-    u16 unknown_0x4;
+    u16 curPtmfArrayIdx;
     u8 padding[2];
-    u32 resetParam; //set to -1 initially, setting it to 1 resets the route, for example a HeyHoBallGBA gets rethrown
+    u32 nextPtmfArrayIdx; //0x8 set to -1 initially, setting it to 1 resets the route, for example a HeyHoBallGBA gets rethrown
     u32 frames; //resets when the object reaches the end of its route//its cycle
     u16 routePtmfsCount; //unsure
     u8 padding2[2];
@@ -140,7 +147,7 @@ class ObjectCycleManager {
     Object* parent; //0x1c
 }; //0x20
 
-class ObjectEffect : public EGG::Effect { //probably a bad name seeing the dtor addr
+class ObjectEffect : public EGG::Effect {
 public:
     ~ObjectEffect() override; //806805a8 vtable 808c1010
 };

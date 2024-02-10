@@ -39,7 +39,7 @@ class ObjectCollidable : public Object { //collision is added as there is no KCL
     virtual const Vec3& GetCollisionTranslation() const; //0xd4 8068173c
     virtual bool IsSolid() const; //0xd8 80681734
     virtual void RegisterManagedObject(); //0xdc 8081f170
-    virtual void UpdateDrawInfo(float f1); //0xe0 806816d8 not sure
+    virtual void UpdateEntity(float f1); //0xe0 806816d8 not sure
     virtual void RegisterEntity(float radius, float maxSpeed); //0xe4 8081f180 inserts it in EntityManager
     virtual const Vec3& GetSolidityCenter() const; //0xe8 806816b8
 

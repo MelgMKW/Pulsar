@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+# Credit: https://gist.github.com/jackoalan/a4035651f6b870136da5
 import sys
 
 def demangleNode(node):

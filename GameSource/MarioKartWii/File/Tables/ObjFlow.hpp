@@ -22,7 +22,7 @@ struct ObjFlowEntry {
     s16 objectClipping; //0x64 see enum
     s16 backwardDrawDistance; //0x66
     s16 forwardDrawDistance; //0x68
-    u16 solidityType; //0x6a if not null, is solid
+    u16 solidityType; //0x6a if not null, is solid, 4 means externKCL
     s16 solidityParams[3]; //0x6c value used depends on solidity type
     u16 unknown_0x72; //0x72
 }; //total size 0x74

@@ -14,8 +14,7 @@ public:
     void OnStart() override; //0xc 806d2590
     void Update() override; //0x14 806d2868
 
-    u32 heyhoBallGBACount; //0xb8
-    u16* routePointsSized; //0xbc
+
     float* routePointsSized2; //0xc0
     Vec3ZeroInit* routePointsSized3; //0xc4
     u8 unknown_0xc8[4];

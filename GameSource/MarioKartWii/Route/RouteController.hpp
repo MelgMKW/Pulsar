@@ -5,6 +5,7 @@
 #include <MarioKartWii/Route/RouteHolder.hpp>
 
 class RouteController {
+public:
     RouteController(u16 routeId, float baseSpeed); //806ed160
     virtual ~RouteController(); //806ed53c vtable 808c7678
     virtual void SetParams() = 0; //0xC

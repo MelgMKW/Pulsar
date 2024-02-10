@@ -84,8 +84,8 @@ public:
     UnkType* unknown_0xCC[2];
     u8 unknown_0xD4[2];
     bool isNotFocusedInLiveView;
-    u8 unknown_0xD7[2];
-    ModelDirector mdlDirectors[6]; //array of all the mdlDirectors used (driver, driver_lod, miiHeads, luma etc..)
+    u8 unknown_0xD7;
+    ModelDirector* mdlDirectors[6]; //0xd8 array of all the mdlDirectors used (driver, driver_lod, miiHeads, luma etc..)
     u32 mdlDirectorsCount; //0xF0
     u8 unknown_0xE0[0xfa - 0xf4];
     u16 currentAnimation; //0xfa
@@ -101,6 +101,7 @@ public:
     IKParams* ikParams; //0x2a4;
     u8 unknown_0x2a8[0x6e4 - 0x2a8];
 };//total size 0x6e4
+size_assert(DriverController, 0x6e4);
 
 class DriverControllerBike : public DriverController {
 public:

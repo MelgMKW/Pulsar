@@ -37,6 +37,7 @@ public:
     u8 unknown_0x66[6];
     u32 unknown_0x6C;
     Vec3 unknown_0x70;
+    u8 unknown_0x7c[4];
     float unknown_0x80[5];
     u16 unknown_0x94[3];
     u8 unknown_0x9A[2]; //mostly likely padding
@@ -49,6 +50,7 @@ public:
     u8 unknown_0xc8[2];
     u8 padding[2];
 }; //0xCC
+size_assert(GameCamValues, 0xcc);
 
 class CameraLink {
 public:
@@ -84,6 +86,7 @@ public:
     void Update(bool r4) override; //thunk 805a1c24 func 805a1a18
 
 }; //0x9c
+size_assert(GameCamera, 0x9c);
 
 extern u32 screenCount; //808b4be8
 

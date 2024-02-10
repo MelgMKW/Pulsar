@@ -373,6 +373,7 @@ GetHolder<4JGPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4JGPT> = 0x80518920
 GetHolder<4CNPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4CNPT> = 0x80518ae0
 GetHolder<4MSPT>__Q23KMP7ManagerCFUs_PQ23KMP13Holder<4MSPT> = 0x80518b2c
 FindAREA__Q23KMP7ManagerFRC3VecUiUc = 0x80516808
+GetRoute__Q23KMP13Holder<4GOBJ>CFv = 0x80514194
 
 #Archive
 sInstance__11ArchiveRoot = 0x809bd738
@@ -484,6 +485,7 @@ SetProjection__10GameScreenFUiUi = 0x805661e8
 
 #Camera
 SetInstance__9CameraMgrFP9CameraMgr = 0x805a1a64
+__ct__10RaceCameraFUcR10GameScreenP3BCPUc = 0x805a1d10
 
 #KartManager
 sInstance__Q24Kart7Manager = 0x809c18f8
@@ -1210,6 +1212,7 @@ GetGhostData__10GhostGroupFUs = 0x8051d084
 
 #Vector
 __mi__4Vec2CFRC4Vec2 = 0x8051201c
+__mi__4Vec3FRC4Vec3 = 0x8051486c
 
 #Low Level Network
 Patch_LoginPrintHeader = 0x80276054
@@ -1340,9 +1343,106 @@ sInstance__Q25RKNet12EVENTHandler = 0x809c20f0
 AddEntry__Q25RKNet12EVENTHandlerF9ItemObjIdQ25RKNet11EVENTActionPCvUi = 0x8065b780
 HasFreeEntries__Q25RKNet12EVENTHandlerCFv = 0x8065b8d4
 
+#Entity
+MakeDynamic__6EntityFv = 0x80786f6c
+
 #Objects
 sInstance__10ObjectsMgr = 0x809c4330
 Update__10ObjectsMgrFv = 0x8082a8f4
+
+##Object
+OnStart__6ObjectFv = 0x8081fc68
+vf_0x10__6ObjectFv = 0x806807dc
+Update__6ObjectFv = 0x806bf448
+vf_0x18__6ObjectFv = 0x806807d8
+GetID__6ObjectCFv = 0x80572574
+GetName__6ObjectCFv = 0x80680784
+GetClipInfo__6ObjectCFv = 0x8067da54
+GetBRRESName__6ObjectCFv = 0x80680730
+GetSubFileName__6ObjectCFv = 0x806806dc
+vf_0x3c__6ObjectFv = 0x806806d4
+GetShadowResName__6ObjectCFv = 0x806806cc
+LoadModels__6ObjectFv = 0x8081fcec
+LoadModels__6ObjectFPv = 0x8081fd00
+LoadGraphics__6ObjectFPv = 0x8081fd10
+LoadShadow__6ObjectFv = 0x808205dc
+LoadSound__6ObjectFv = 0x80820360
+LoadClipInfo__6ObjectFv = 0x80821070
+LoadAnimations__6ObjectFv = 0x8082072c
+LoadRoute__6ObjectFv = 0x80820980
+ToggleVisible__6ObjectFb = 0x808216c0
+UpdateModelMatrix__6ObjectFv = 0x80821a9c
+UpdateShadow__6ObjectFv = 0x80821974
+UpdateModelScale__6ObjectFv = 0x8068065c
+UpdateShadowScale__6ObjectFv = 0x80680630
+GetShadowListIdx__6ObjectFv = 0x80680628
+vf_0x84__6ObjectFv = 0x80680620
+vf_0x88__6ObjectFv = 0x80821db8
+vf_0x8c__6ObjectFv = 0x80821dd8
+DisableCollision__6ObjectFv = 0x80821dec
+EnableCollision__6ObjectFv = 0x80821e00
+GetEntity__6ObjectCFv = 0x80680618
+IsLodDisbled__6ObjectFv = 0x80680610
+vf_0xa8__6ObjectFv = 0x80680608
+DoCalcShadowMtx__6ObjectFv = 0x80680600
+
+##ObjectKCL
+UpdateModel__9ObjectKCLFv = 0x8081a8d0
+Init__9ObjectKCLFv = 0x8081a79c
+GetDrawType__9ObjectKCLCFv = 0x806807e0
+RegisterEntity__9ObjectKCLFf = 0x8081a85c
+
+##externKCL
+__ct__15ObjectExternKCLFRCQ23KMP13Holder<4GOBJ> = 0x8081a980
+__dt__15ObjectExternKCLFv = 0x8067eafc
+LoadCollision__15ObjectExternKCLFv = 0x8081aa58
+UpdateCollision__15ObjectExternKCLFv = 0x80681490
+GetPosition__15ObjectExternKCLCFv = 0x80681448
+GetCollisionDiameter__15ObjectExternKCLCFv = 0x80687d70
+vf_0xb4__15ObjectExternKCLFv = 0x8068147c
+InitCollision__15ObjectExternKCLFv = 0x8081ab4c
+
+vf_0xc0__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x806810f8
+vf_0xc4__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x806811b0
+vf_0xc8__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x80681268
+vf_0xcc__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x80681320
+
+IsCollidingNoTerrainInfoNoTriangleCheck__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x80680df4
+IsCollidingAddEntryNoTerrainInfoNoTriangleCheck__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x80680ef0
+IsColliding__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x80680fec
+IsCollidingNoTriangleCheck__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x806810e8
+UpdateKCL__15ObjectExternKCLFRC4Vec311KCLBitfieldbf = 0x806807e8
+
+IsCollidingNoTerrainInfo__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolder = 0x80680b14
+IsCollidingAddEntryNoTerrainInfo__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolder = 0x80680bcc
+vf_0xec__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolder = 0x80680c84
+IsCollidingAddEntry__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolder = 0x80680d3c
+
+IsCollidingNoTerrainInfo__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x806807f0
+IsCollidingAddEntryNoTerrainInfo__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x806807f0
+vf_0xfc__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x80680a08
+IsCollidingAddEntry__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x80680b04
+
+AreItemsAllowed__15ObjectExternKCLFv = 0x80687d68
+vf_0x108__15ObjectExternKCLFv = 0x80687d5c
+SetObjInfoIsFilled__15ObjectExternKCLCFPQ213CollisionInfo7ObjInfo = 0x8068142c
+CalcOtherEntityDistance__15ObjectExternKCLFPQ213CollisionInfo7ObjInfoRC4Vec3 = 0x807fea60
+UpdateOtherEntityPos__15ObjectExternKCLFPQ213CollisionInfo7ObjInfoR4Vec3 = 0x806813d8
+UpdateOtherEntityPosWithRot__15ObjectExternKCLFPQ213CollisionInfo7ObjInfoR4Vec3R4Vec3 = 0x80687d58
+vf_0x11c__15ObjectExternKCLFPQ213CollisionInfo7ObjInfo = 0x807fea58
+UpdateCollisionPosition__15ObjectExternKCLFUi = 0x8081ad6c
+SetYScale__15ObjectExternKCLFv = 0x8081af28
+UpdateDiffPosVector__15ObjectExternKCLFRC4Vec3 = 0x80681450
+GetTransformationMatrix__15ObjectExternKCLCFv = 0x807feac0
+GetYScale__15ObjectExternKCLCFv = 0x80687db0
+GetPeriod__15ObjectExternKCLCFv = 0x8068143c
+HasCurrentCollision__15ObjectExternKCLFv = 0x806808ec
+IsSolidForLakitu__15ObjectExternKCLFv = 0x806808f4
+vf_0x140__15ObjectExternKCLFv = 0x806809f8
+IsDriveable__15ObjectExternKCLFv = 0x80680a00
+IsCollidingNoTriangleCheckImpl__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x8081afb4
+IsCollidingImpl__15ObjectExternKCLFRC4Vec3RC4Vec311KCLBitfieldP13CollisionInfoP13KCLTypeHolderUif = 0x8081b16c
+
 
 ##Rel	
 GetTrackBMGId = 0x80833668							   
