@@ -1,3 +1,9 @@
+·Updated to 1.0.1
+Creator Changes:
+-Pasting is no longer possible in numbers only boxes
+-RKG dropping now works properly
+-CC probabilities boxes now function better
+
 ·Updated to 1.0.0
 Engine Changes:
 -Release version

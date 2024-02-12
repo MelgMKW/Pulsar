@@ -77,6 +77,15 @@ enum Type {
     NAND_TYPE_DIR
 };
 
+enum Perm {
+    NAND_PERM_OTHER_READ   = 0x01,
+    NAND_PERM_OTHER_WRITE  = 0x02,
+    NAND_PERM_GROUP_READ   = 0x04,
+    NAND_PERM_GROUP_WRITE  = 0x08,
+    NAND_PERM_OWNER_READ   = 0x10,
+    NAND_PERM_OWNER_WRITE  = 0x20
+
+};
 enum Result {
     NAND_RESULT_OK = 0,
     NAND_RESULT_ACCESS = -1,

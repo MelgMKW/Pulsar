@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -176,6 +177,13 @@ namespace PulsarPackCreator
                     cupIdx++;
                 }
             }
+            /*
+            MsgWindow.MsgWindowResult ret = MsgWindow.Show("Successfully imported names. Do you also want to change the cups names?", "Success", MsgWindow.MsgWindowButton.YesNo);
+            if(ret == MsgWindow.MsgWindowResult.Yes)
+            {
+                MainWindow.cupsImportWindow.Show();
+            }
+            */
         }
 
         private byte FindSlotIndex(string slot)

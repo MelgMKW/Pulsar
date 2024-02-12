@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -18,6 +20,12 @@ namespace PulsarPackCreator
     {
         public int firstTrackRow = 1;
         public int firstTrackCol = 1;
+
+        protected override void OnClosing(CancelEventArgs e){
+          
+            
+        }
+
         private void OnMassImportClick(object sender, RoutedEventArgs e)
         {
             importWindow.Show();
@@ -38,6 +46,14 @@ namespace PulsarPackCreator
             settingsWindow.Load();
         }
 
+        private void DisablePaste(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == ApplicationCommands.Paste)
+            {
+                e.Handled = true;
+            }
+        }
+       
         private void NumbersOnlyBox(object sender, TextCompositionEventArgs e)
         {
             string text = e.Text;
@@ -181,11 +197,13 @@ namespace PulsarPackCreator
                         string curTrack = cups[i / 4].trackNames[curRow];
                         if (fileName.Contains(curTrack, StringComparison.InvariantCultureIgnoreCase))
                         {
+                            cups[i / 4].expertFileNames[curRow, col - 1] = fileName;
                             //int idx = cups.FindIndex(x => x.trackNames[0] == curTrack || x.trackNames[1] == curTrack || x.trackNames[2] == curTrack || x.trackNames[3] == curTrack);
                             if (i / 4 == 0)
                             {
                                 box = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == curRow + 1 && Grid.GetColumn(x) == col) as TextBox;
                                 box.Text = fileName;
+                                
                             }
                             if (cups[i / 4].expertFileNames[curRow, col - 1] != "RKG File" && cups[i / 4].expertFileNames[curRow, col - 1] != "")
                             {

@@ -19,12 +19,13 @@ Leaderboard::Leaderboard() {
 Leaderboard::Leaderboard(const char* folderPath, PulsarId id) {
     char path[IOS::ipcMaxPath];
     snprintf(path, IOS::ipcMaxPath, filePathFormat, folderPath);
-    IO* io = IO::sInstance;;
+    IO* io = IO::sInstance;
     s32 ret = io->OpenModFile(path, FILE_MODE_READ_WRITE);
     if(ret) ret = io->Read(sizeof(Leaderboard), this);
 
     if(!ret || this->crc32 != crc32 || magic != fileMagic) {
-        System::sInstance->taskThread->Request(&Leaderboard::CreateFile, id, 0);
+        this->CreateFile(id);
+        //System::sInstance->taskThread->Request(&Leaderboard::CreateFile, id, 0);
         new (this) Leaderboard;
         this->SetTrack(id);
     }
@@ -35,7 +36,7 @@ Leaderboard::Leaderboard(const char* folderPath, PulsarId id) {
 void Leaderboard::CreateFile(PulsarId id) {
     char path[IOS::ipcMaxPath];
     snprintf(path, IOS::ipcMaxPath, filePathFormat, Manager::folderPath);
-    IO* io = IO::sInstance;;
+    IO* io = IO::sInstance;
     io->CreateAndOpen(path, FILE_MODE_READ_WRITE);
     alignas(0x20) Leaderboard tempCopy;
     tempCopy.SetTrack(id);

@@ -1,42 +1,56 @@
-/*
 //.hpp
-#include <PulsarSystem.hpp>
+#include <kamek.hpp>
+#include <PulsarEngine/PulsarSystem.hpp>
+#include <PulsarEngine/Settings/Settings.hpp>
 
-class MyPack : public Pulsar::System {
+namespace MyPack {
+class System : public Pulsar::System {
 public:
-    MyPack(const Config *conf, EGG::ExpHeap *heap): System(bin, heap), myVariable(50) {}; //MAKE SURE TO CALL Pulsar::System's CTOR
-    static System *Create(); //My Create function, needs to return a ptr to a Pulsar::System
-    static MyPack *GetInstance(){return static_cast<MyPack*>(sInstance);} //for ease of use, optional
+    static Pulsar::System* Create(); //My Create function, needs to return Pulsar
+    static System* GetsInstance() { return static_cast<System*>(sInstance); } //for ease of use, optional
 
-//From there, anything is possible
+    void AfterInit() override;
+};
+
+class System : public Pulsar::System {
+public:
+    System() : Pulsar::System(), myVariable(50) {}; //MAKE SURE TO CALL Pulsar::System's CTOR
+    static System* Create(); //My Create function, needs to return a ptr to a Pulsar::System
+    static System* GetInstance() { return static_cast<System*>(sInstance); } //for ease of use, optional
+
+    //From there, anything is possible
 private:
-    int myVariable;
-    //if you want to inherit settigns for your own fields; don't forget to call the base init settings
-    void InitSettings(const u16 *totalTrophyCount) override;
+    //if you want to inherit settings file to add your own fields; don't forget to call the base init settings
+    void InitSettings(u32 pageCount, const u16* totalTrophyCount) const override {}
     //called right after initialization
-    void AfterInit() {} override;
+    void AfterInit() override {};
     //Called when trying to join a room, this is transmitted to the host
-    virtual void SetUserInfo(Network::ResvInfo::UserInfo& userInfo) {};
+    void SetUserInfo(Pulsar::Network::ResvInfo::UserInfo& userInfo) override {};
     //the host looks at the packet (the arg) of someone trying to join, the bool return value indicates whether the join is allowed
-    virtual bool CheckUserInfo(const Network::ResvInfo::UserInfo& userInfo) { return true; };
+    bool CheckUserInfo(const Pulsar::Network::ResvInfo::UserInfo& userInfo) override { return true; };
     //what data to send when the room starts
-    virtual u8 SetPackROOMMsg() { return 0; } //Only called for hosts
+    u8 SetPackROOMMsg() override { return 0; } //Only called for hosts
     //how to parse the data the host has just sent
-    virtual void ParsePackROOMMsg(u8 msg) {}  //Only called for non-hosts
+    void ParsePackROOMMsg(u8 msg) override {}  //Only called for non-hosts
 
+    int myVariable;
 };
 
 //.cpp
-Pulsar::System *MyPack::Create() {
-    return new MyPack(); //now Pulsar::sInstance is of type MyPack
+Pulsar::System* MyPack::Create() {
+    return new System(); //now Pulsar::sInstance is of type MyPack
 }
-Pulsar::System::Inherit Test(MyPack::Create); //Create a Inherit that'll get called back by Pulsar::CreatePulsar
+Pulsar::System::Inherit CreateMyPack(MyPack::Create); //Create a Inherit that'll get called back by Pulsar::CreatePulsar
 
+}//namespace MyPack
 
 //Pulsar::Ghost::Manager also has a callback which can be set using SetCb
+//That cb is triggered 3 times based on specific timings (check the enum)
 //That callback will be called as each ghost is loaded 
 
 
 
-*/
+
+
+
 

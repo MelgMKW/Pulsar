@@ -31,10 +31,10 @@ struct RKGHeader {
     u32 day : 5;
     u32 controllerType : 4;
     u32 unknown_2 : 4; //0xC
-    bool compressed : 1;
-    u32 unknown_3 : 2;
-    GhostType ghostType : 7;
-    bool driftType : 1;
+    bool compressed : 1; //0xC.4
+    u32 unknown_3 : 2; //0xC.5
+    GhostType ghostType : 7; //0xC.7
+    bool driftType : 1; //0xD.6
     u32 unknown_4 : 1;
     u16 inputSectionLength; //uncompressed length 0xE
     u32 lapCount : 1;
@@ -52,6 +52,7 @@ struct CompressedRKG {
     RKGHeader header;
     u32 dataLength;
     char magic[4]; //Yaz1
+    //data
 };
 
 class RKG {

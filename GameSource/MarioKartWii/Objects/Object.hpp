@@ -26,7 +26,7 @@ struct CyclePtmfs {
     u16 id;
     u8 padding[2];
     Ptmf_0A<Object, void> ptmfs[2];
-};
+}; //0x1c
 
 
 class Object {
@@ -133,14 +133,16 @@ public:
 size_assert(Object, 0xaC);
 
 class ObjectCycleManager {
-    static CyclePtmfs routePtmfs;
+    static CyclePtmfs cyclePtmfs;
     virtual ~ObjectCycleManager();
     //virtual int vf_0xC() = 0; //0xC this might be wrong since kart_truck has no such function 
     u16 curPtmfArrayIdx;
     u8 padding[2];
-    u32 nextPtmfArrayIdx; //0x8 set to -1 initially, setting it to 1 resets the route, for example a HeyHoBallGBA gets rethrown
+    u32 nextPtmfArrayIdx; //0x8 
+    //set to -1 initially, setting it to 1 resets the route, for example a HeyHoBallGBA gets rethrown
+    //works similar to a state, where the specific object decides when to set the state
     u32 frames; //resets when the object reaches the end of its route//its cycle
-    u16 routePtmfsCount; //unsure
+    u16 cyclePtmfsCount; //unsure
     u8 padding2[2];
     u16* idsArray; //0x14 ptmfs used
     CyclePtmfs* ptmfs; //0x18 808c5da0

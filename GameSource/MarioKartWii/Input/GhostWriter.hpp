@@ -73,7 +73,7 @@ struct RKGInputs {
     u16 actionInputsCount;
     u16 directionInputsCount;
     u16 trickInputsCount;
-    u16 unused; //presumably for a 4th section.
+    u16 unused; //presumably for a 4th section
     GhostStream::Input actionInputs[1]; //0x14 real size  actionInputscount
     //GhostStream::Input directionInputs
     //GhostStream::Input trickInputsCount

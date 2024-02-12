@@ -126,8 +126,8 @@ void ExpCupSelect::AfterControlUpdate() {
 
             bool isCurOnScreen = false;
             for(int i = 0; i < 8; ++i) {
-                u32 cupI = (button0Idx + i) % cupCount;
-                if(cupI == randomizedCupIdx) isCurOnScreen = true;
+                u32 cupId = (button0Idx + i) % cupCount;
+                if(cupId == randomizedCupIdx) isCurOnScreen = true;
             }
             u32 low = nw4r::ut::Abs<s32>(randomizedCupIdx - button0Idx);
             low = nw4r::ut::Min(low, cupCount - low);
@@ -160,6 +160,10 @@ void ExpCupSelect::AfterControlUpdate() {
 
 void ExpCupSelect::OnBackPress(u32 hudSlotId) {
     this->randomizedId = PULSARID_NONE;
+    PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
+    for(int i = 0; i < 8; ++i) buttons[i]->manipulator.inaccessible = true;
+    this->arrows.leftArrow.manipulator.inaccessible = true;
+    this->arrows.rightArrow.manipulator.inaccessible = true;
     CupSelect::OnBackPress(hudSlotId);
 }
 

@@ -55,6 +55,7 @@ namespace PulsarPackCreator
             public string[] authorNames;
             public string[] versionNames;
             public string[,] expertFileNames;
+            public string imgPath = "";
         }
 
         private void OnCupCountChange(object sender, TextChangedEventArgs e)
@@ -78,6 +79,7 @@ namespace PulsarPackCreator
             }
             ctsCupCount = newCount;
         }
+
         private void OnGoToCupInput(object sender, TextCompositionEventArgs e)
         {
             NumbersOnlyBox(e.Text, e);

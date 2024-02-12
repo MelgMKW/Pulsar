@@ -9,6 +9,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="MassImportCups.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MsgBox.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -14,6 +14,7 @@ if "%1" equ "-d" SET "cwDWARF=-g"
 SET "SOURCE=Pulsar"
 SET "RIIVO=C:\Users\admin\Documents\Dolphin Emulator\Load\Riivolution\Pulsar"
 SET "ENGINE=C:\Modding\Coding\Kamek\Common\KamekInclude"
+SET "CREATOR=C:\Modding\Coding\Kamek\Pulsar\PulsarPackCreator\Resources"
 echo %RIIVO%
 
 
@@ -43,6 +44,7 @@ echo Linking... %time%
 
 if %ErrorLevel% equ 0 (
     xcopy /Y build\*.pul "%RIIVO%\Binaries" >nul
+    xcopy /Y build\*.pul "%CREATOR%" >nul
     echo Binaries copied
 )
 

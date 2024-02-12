@@ -65,7 +65,7 @@ bool NANDIO::CreateAndOpen(const char* path, u32 mode) {
     char realPath[IOS::ipcMaxPath];
     this->GetCorrectPath(realPath, path);
     ISFS::CreateFile(realPath, 0, IOS::MODE_READ_WRITE, IOS::MODE_READ_WRITE, IOS::MODE_READ_WRITE);
-    return NANDIO::OpenModFile(path, mode);
+    return IO::OpenModFile(path, mode);
 }
 
 void NANDIO::GetCorrectPath(char* realPath, const char* path) const {
@@ -102,6 +102,7 @@ RiivoMode RiivoIO::GetRiivoMode(u32 mode) const {
 
 
 //FOLDER
+/*
 void IO::RequestCreateFolder(const char* path) {
     if(!this->FolderExists(path)) {
         CreateRequest* request = &this->requests[0];
@@ -113,6 +114,7 @@ void IO::RequestCreateFolder(const char* path) {
         }
     }
 }
+*/
 
 void IO::CreateFolderAsync(CreateRequest* request) {
     IO* io = IO::sInstance;
@@ -157,7 +159,7 @@ void NANDIO::CreateFolder(const char* path) {
         this->Bind(path);
         char realPath[IOS::ipcMaxPath];
         this->GetCorrectPath(realPath, path);
-        ISFS::CreateDir(realPath, 0, IOS::MODE_READ_WRITE, IOS::MODE_READ_WRITE, IOS::MODE_READ_WRITE);
+        ISFS::CreateDir(realPath, 0, IOS::MODE_NONE, IOS::MODE_NONE, IOS::MODE_NONE);
     }
 }
 

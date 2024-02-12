@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Pulsar_Pack_Creator;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using static PulsarGame;
 
 namespace PulsarPackCreator
@@ -11,15 +14,13 @@ namespace PulsarPackCreator
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {       
+    {
 
         public static int SECTIONCOUNT = 3;
         public static int CONFIGVERSION = 1;
         public static int INFOVERSION = 1;
         public static int CUPSVERSION = 1;
-        
 
-        
         public static UInt16[] blockingValues = { 0, 2, 4, 8, 16, 32 };
         public static string[] regsValues = { "No regular tracks", "8 first cups = regular cups", "8 last cups = regular cups" };
 
@@ -40,9 +41,11 @@ namespace PulsarPackCreator
 
         //Windows
         public static MassImportWindow importWindow;
+        public static MassCupsImportWindow cupsImportWindow;
         public static CrashWindow crashWindow;
         public static SettingsWindow settingsWindow;
         public static MsgWindow msgWindow;
+
 
         //public List<byte> extSlotToTrackId;
         //public List<byte> extSlotToMusicSlot;
@@ -50,7 +53,7 @@ namespace PulsarPackCreator
         //public List<string> trackNames;
         //public List<string> authorNames;
 
-     
+
         public MainWindow()
         {
             trophyCount = new UInt16[4];
@@ -58,9 +61,11 @@ namespace PulsarPackCreator
             cups = new List<Cup>();
             Cup initial = new Cup(0);
             cups.Add(initial);
+            
             InitializeComponent();
- 
+
             importWindow = new MassImportWindow(this);
+            cupsImportWindow = new MassCupsImportWindow(this);
             crashWindow = new CrashWindow();
             settingsWindow = new SettingsWindow();
             msgWindow = new MsgWindow();
@@ -75,10 +80,10 @@ namespace PulsarPackCreator
             Regs.ItemsSource = regsValues;
             Regs.SelectedValue = regsValues[0];
 
-            Slot1.ItemsSource =  MarioKartWii.idxToAbbrev;
-            Slot2.ItemsSource =  MarioKartWii.idxToAbbrev;
-            Slot3.ItemsSource =  MarioKartWii.idxToAbbrev;
-            Slot4.ItemsSource =  MarioKartWii.idxToAbbrev;
+            Slot1.ItemsSource = MarioKartWii.idxToAbbrev;
+            Slot2.ItemsSource = MarioKartWii.idxToAbbrev;
+            Slot3.ItemsSource = MarioKartWii.idxToAbbrev;
+            Slot4.ItemsSource = MarioKartWii.idxToAbbrev;
             Music1.ItemsSource = MarioKartWii.idxToAbbrev;
             Music2.ItemsSource = MarioKartWii.idxToAbbrev;
             Music3.ItemsSource = MarioKartWii.idxToAbbrev;
@@ -127,7 +132,7 @@ namespace PulsarPackCreator
                 {
                     OpenPulFile(args[1]);
                     Environment.CurrentDirectory = args[0].Substring(0, args[0].LastIndexOf('\\') + 1);
-                }               
+                }
                 else if (args[1].Contains("Updated"))
                 {
                     checkUpdates = false;
@@ -139,15 +144,14 @@ namespace PulsarPackCreator
             {
                 SettingsWindow.TryUpdate();
             }
+            Directory.CreateDirectory("input");
+            Directory.CreateDirectory("input/CupIcons");
+            Directory.CreateDirectory($"input/{ttModeFolders[0, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[1, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
 
-            if (!Directory.Exists("input"))
-            {
-                Directory.CreateDirectory("input");
-                Directory.CreateDirectory($"input/{ttModeFolders[0, 1]}");
-                Directory.CreateDirectory($"input/{ttModeFolders[1, 1]}");
-                Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
-                Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
-            }
+
 
         }
     }

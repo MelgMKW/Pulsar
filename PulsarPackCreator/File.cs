@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Media3D;
 using static PulsarPackCreator.MsgWindow;
 
 namespace PulsarPackCreator
@@ -32,12 +33,12 @@ namespace PulsarPackCreator
                 PulsarGame.CupsHolder cupsHolder = CreateSubCat<PulsarGame.CupsHolder>(raw, header.offsetToCups);
 
                 //Read HEADER
-                
+
                 if (header.magic != 0x50554C53 || header.version != CONFIGVERSION) throw new Exception();
                 parameters.modFolderName = header.modFolderName.TrimStart('/');
-                
+
                 //INFO Reading
-                ReadInfo(CreateSubCat<PulsarGame.   InfoHolder>(raw, header.offsetToInfo));
+                ReadInfo(CreateSubCat<PulsarGame.InfoHolder>(raw, header.offsetToInfo));
 
                 //CUPS reading
                 ReadCups(CreateSubCat<PulsarGame.CupsHolder>(raw, header.offsetToCups));
@@ -48,7 +49,7 @@ namespace PulsarPackCreator
                     PulsarGame.Cup cup = CreateSubCat<PulsarGame.Cup>(raw, (int)offset);
                     ReadCup(cup);
                     offset += size;
-                }               
+                }
 
                 //BMG reading
                 int bmgSize = ReadBMG(raw.Skip(header.offsetToBMG).Take(raw.Length - header.offsetToBMG).ToArray());
@@ -155,7 +156,7 @@ namespace PulsarPackCreator
                 bmg.Write(bin.ReadBytes(bmgSize));
                 bmg.Close();
                 return bmgSize;
-            }          
+            }
         }
 
         private void ReadFile(byte[] raw)
@@ -208,93 +209,104 @@ namespace PulsarPackCreator
                     return false;
                 }
             }
+            Directory.CreateDirectory("temp");
             Directory.CreateDirectory("output");
             Directory.CreateDirectory(modFolder);
             Directory.CreateDirectory($"{modFolder}/Binaries");
             Directory.CreateDirectory($"{modFolder}/Tracks");
             Directory.CreateDirectory($"{modFolder}/Ghosts");
             Directory.CreateDirectory("output/Riivolution");
-            Directory.CreateDirectory("temp/");
 
-            File.WriteAllBytes("temp/BMG.txt", parameters.has200cc ? PulsarRes.BMG200 : PulsarRes.BMG100);
-            using StreamWriter bmgSW = new StreamWriter("temp/BMG.txt", true);
-            using StreamWriter fileSW = new StreamWriter("temp/files.txt");
-            using StreamWriter crcToFile = new StreamWriter($"{modFolder}/Ghosts/FolderToTrackName.txt");
-            using BigEndianWriter bin = new BigEndianWriter(File.Create("temp/Config.pul"));
-            bmgSW.WriteLine(bmgSW.NewLine);
-            bmgSW.WriteLine($"  {0x2847:X}    = Version created {date}");
-            fileSW.WriteLine("FILE");
-
-            bin.Write(0x50554C53); //"PULS"
-            bin.Write(CONFIGVERSION);
-
-            //Offsets
-            bin.BaseStream.Position += SECTIONCOUNT * 4; //OFFSETS
-
-            string gameFolderName = $"/{parameters.modFolderName}";
-            bin.Write(gameFolderName.ToArray());
-            bin.BaseStream.Position += 14 - gameFolderName.Length;
-
-            long infoPosition = RoundUp(bin.BaseStream.Position, 4); //INFO Offset
-            bin.BaseStream.Position = 0x8;
-            bin.Write((int)infoPosition);
-            bin.BaseStream.Position = infoPosition;
-
-
-            WriteInfo(bin);
-
-            long cupPosition = RoundUp(bin.BaseStream.Position, 4); //Cup Offset
-            bin.BaseStream.Position = 0xC;
-            bin.Write((int)cupPosition);
-            bin.BaseStream.Position = cupPosition;
-            bool ret = WriteCups(bin, bmgSW, fileSW, crcToFile);
-            if (!ret)
+            try
             {
-                bin.Close();
+
+
+                File.WriteAllBytes("temp/BMG.txt", parameters.has200cc ? PulsarRes.BMG200 : PulsarRes.BMG100);
+                using StreamWriter bmgSW = new StreamWriter("temp/BMG.txt", true);
+                using StreamWriter fileSW = new StreamWriter("temp/files.txt");
+                using StreamWriter crcToFile = new StreamWriter($"{modFolder}/Ghosts/FolderToTrackName.txt");
+                using BigEndianWriter bin = new BigEndianWriter(File.Create("temp/Config.pul"));
+                bmgSW.WriteLine(bmgSW.NewLine);
+                bmgSW.WriteLine($"  {0x2847:X}    = Version created {date}");
+                fileSW.WriteLine("FILE");
+
+                bin.Write(0x50554C53); //"PULS"
+                bin.Write(CONFIGVERSION);
+
+                //Offsets
+                bin.BaseStream.Position += SECTIONCOUNT * 4; //OFFSETS
+
+                string gameFolderName = $"/{parameters.modFolderName}";
+                bin.Write(gameFolderName.ToArray());
+                bin.BaseStream.Position += 14 - gameFolderName.Length;
+
+                long infoPosition = RoundUp(bin.BaseStream.Position, 4); //INFO Offset
+                bin.BaseStream.Position = 0x8;
+                bin.Write((int)infoPosition);
+                bin.BaseStream.Position = infoPosition;
+
+
+                WriteInfo(bin);
+
+                long cupPosition = RoundUp(bin.BaseStream.Position, 4); //Cup Offset
+                bin.BaseStream.Position = 0xC;
+                bin.Write((int)cupPosition);
+                bin.BaseStream.Position = cupPosition;
+                bool ret = WriteCups(bin, bmgSW, fileSW, crcToFile);
+                if (!ret)
+                {
+                    bin.Close();
+                    bmgSW.Close();
+                    fileSW.Close();
+                    crcToFile.Close();
+                    MsgWindow.Show("Failed Creating Cups");
+                    Directory.Delete($"{modFolder}", true);
+                    Directory.Delete("temp", true);
+                    return false;
+                }
                 bmgSW.Close();
                 fileSW.Close();
                 crcToFile.Close();
-                MsgWindow.Show("Failed Creating Cups");
-                Directory.Delete($"{modFolder}", true);
+                RequestBMGAction(true);
+
+                using BigEndianReader bmgReader = new BigEndianReader(File.Open("temp/bmg.bmg", FileMode.Open));
+                long bmgPosition = RoundUp(bin.BaseStream.Position, 4); ; //BMG Offset
+                bin.BaseStream.Position = 0x10;
+                bin.Write((int)bmgPosition);
+                bin.BaseStream.Position = bmgPosition;
+                bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));
+                using BigEndianReader fileReader = new BigEndianReader(File.Open("temp/files.txt", FileMode.Open));
+                bin.Write(fileReader.ReadBytes((int)fileReader.BaseStream.Length));
+                bin.Close();
+
+                char[] delims = new[] { '\r', '\n' };
+                string[] xml = PulsarRes.XML.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+
+                xml[3] = xml[3].Replace("{$pack}", parameters.modFolderName);
+                xml[28] = xml[28].Replace("{$pack}", parameters.modFolderName);
+                xml[29] = xml[29].Replace("{$pack}", parameters.modFolderName);
+                xml[30] = xml[30].Replace("{$pack}", parameters.modFolderName);
+                xml[31] = xml[31].Replace("{$pack}", parameters.modFolderName);
+                xml[37] = xml[37].Replace("{$pack}", parameters.modFolderName);
+
+                bmgReader.Close();
+                fileReader.Close();
+                File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
+                File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
+                MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
+                if (result == MsgWindowResult.Yes)
+                {
+                    OpenDir($"{Directory.GetCurrentDirectory()}\\output");
+                }
                 Directory.Delete("temp", true);
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                MsgWindow.Show(ex.ToString());
                 return false;
             }
-            bmgSW.Close();
-            fileSW.Close();
-            crcToFile.Close();
-            RequestBMGAction(true);
-
-            using BigEndianReader bmgReader = new BigEndianReader(File.Open("temp/bmg.bmg", FileMode.Open));
-            long bmgPosition = RoundUp(bin.BaseStream.Position, 4); ; //BMG Offset
-            bin.BaseStream.Position = 0x10;
-            bin.Write((int)bmgPosition);
-            bin.BaseStream.Position = bmgPosition;
-            bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));
-            using BigEndianReader fileReader = new BigEndianReader(File.Open("temp/files.txt", FileMode.Open));
-            bin.Write(fileReader.ReadBytes((int)fileReader.BaseStream.Length));
-            bin.Close();
-
-            char[] delims = new[] { '\r', '\n' };
-            string[] xml = PulsarRes.XML.Split(delims, StringSplitOptions.RemoveEmptyEntries);
-
-            xml[3] = xml[3].Replace("{$pack}", parameters.modFolderName);
-            xml[28] = xml[28].Replace("{$pack}", parameters.modFolderName);
-            xml[29] = xml[29].Replace("{$pack}", parameters.modFolderName);
-            xml[30] = xml[30].Replace("{$pack}", parameters.modFolderName);
-            xml[31] = xml[31].Replace("{$pack}", parameters.modFolderName);
-            xml[37] = xml[37].Replace("{$pack}", parameters.modFolderName);
-
-            bmgReader.Close();
-            fileReader.Close();
-            File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
-            File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
-            Directory.Delete("temp/", true);
-            MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
-            if (result == MsgWindowResult.Yes)
-            {
-                OpenDir($"{Directory.GetCurrentDirectory()}\\output");
-            }
-            return true;
         }
 
         private void OnBuildConfigClick(object sender, RoutedEventArgs e)
@@ -304,16 +316,16 @@ namespace PulsarPackCreator
         private void OnBuildFullPackClick(object sender, RoutedEventArgs e)
         {
             bool ret = BuildConfigImpl();
-            if (ret)
-            {
-                string modFolder = $"output/{parameters.modFolderName}";
-                File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
-                Directory.CreateDirectory($"{modFolder}/Assets");
-                File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
-                File.WriteAllBytes($"{modFolder}/Assets/UIAssets.szs", PulsarRes.UIAssets);
-                File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
-                File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
+            if (ret) { 
+            string modFolder = $"output/{parameters.modFolderName}";
+            File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
+            Directory.CreateDirectory($"{modFolder}/Assets");
+            File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
+            File.WriteAllBytes($"{modFolder}/Assets/UIAssets.szs", PulsarRes.UIAssets);
+            File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
+            File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
             }
+            
         }
 
         private void RequestBMGAction(bool isEncode) //else will decode
@@ -458,7 +470,7 @@ namespace PulsarPackCreator
                 }
 
                 string trackName = cup.trackNames[i];
-                if (cup.versionNames[i] != "" && cup.versionNames[i] != "Version")               
+                if (cup.versionNames[i] != "" && cup.versionNames[i] != "Version")
                 {
                     trackName += $" \\c{{red3}}{cup.versionNames[i]}\\c{{off}}";
                 }

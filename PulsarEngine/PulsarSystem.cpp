@@ -85,10 +85,10 @@ void System::InitIO() const {
     }
     IO* io = IO::CreateInstance(type, this->heap, this->taskThread);
     const char* modFolder = this->GetModFolder();
-    io->CreateFolder(modFolder); //not async because it is needed asap
+    io->CreateFolder(modFolder);
     char ghostPath[IOS::ipcMaxPath];
     snprintf(ghostPath, IOS::ipcMaxPath, "%s%s", modFolder, "/Ghosts");
-    io->RequestCreateFolder(ghostPath);
+    io->CreateFolder(ghostPath);
 }
 #pragma suppress_warnings reset
 
@@ -106,6 +106,7 @@ asmFunc System::GetRaceCount() {
     lis r5, sInstance@ha;
     lwz r5, sInstance@l(r5);
     lbz r0, System.racesPerGP(r5);
+    blr;
     )
 }
 //Unlock Everything Without Save (_tZ)

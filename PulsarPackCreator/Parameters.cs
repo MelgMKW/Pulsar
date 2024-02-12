@@ -112,7 +112,7 @@ namespace PulsarPackCreator
             TextBox CC150Box = CC150;
             if (CC100Box.Text == "")
             {
-                CC100Box.Text = $"{parameters.prob100cc}";
+                CC100Box.Text = $"0";
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
@@ -137,7 +137,7 @@ namespace PulsarPackCreator
             TextBox CC100Box = CC100;
             if (CC150Box.Text == "")
             {
-                CC150Box.Text = $"{parameters.prob150cc}";
+                CC150Box.Text = $"0";
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
