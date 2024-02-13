@@ -50,9 +50,23 @@ System::System() :
     racesPerGP(3), curBlockingArrayIdx(0) {}
 
 void System::Init(const ConfigFile& conf) {
+    IOType type = IOType_ISO;
+    s32 ret = IO::OpenFix("file", IOS::MODE_NONE);
+
+    if(ret >= 0) {
+        type = IOType_RIIVO;
+        IOS::Close(ret);
+    }
+    else {
+        ret = IO::OpenFix("/dev/dolphin", IOS::MODE_NONE);
+        if(ret >= 0) {
+            type = IOType_DOLPHIN;
+            IOS::Close(ret);
+        }
+    }
     strncpy(this->modFolderName, conf.header.modFolderName, IOS::ipcMaxFileName);
 
-    this->InitInstances(conf);
+    this->InitInstances(conf, type);
     //Track blocking 
     Info* info = Info::sInstance;
     u32 trackBlocking = info->GetTrackBlocking();
@@ -68,24 +82,16 @@ void System::Init(const ConfigFile& conf) {
 
 //IO
 #pragma suppress_warnings on
-void System::InitIO() const {
-    IOType type = IOType_ISO;
-    s32 ret = IO::OpenFix("file", IOS::MODE_NONE);
+void System::InitIO(IOType type) const {
 
-    if(ret >= 0) {
-        type = IOType_RIIVO;
-        IOS::Close(ret);
-    }
-    else {
-        ret = IO::OpenFix("/dev/dolphin", IOS::MODE_NONE);
-        if(ret >= 0) {
-            type = IOType_DOLPHIN;
-            IOS::Close(ret);
-        }
-    }
     IO* io = IO::CreateInstance(type, this->heap, this->taskThread);
     const char* modFolder = this->GetModFolder();
-    io->CreateFolder(modFolder);
+    bool ret = io->CreateFolder(modFolder);
+    if(!ret && io->type == IOType_DOLPHIN) {
+        char path[0x100];
+        snprintf(path, 0x100, "Unable to automatically create a folder for this CT distribution\nPlease create a %s folder in Dolphin Emulator/Wii/title/00010004", modFolder);
+        Debug::FatalError(path);
+    }
     char ghostPath[IOS::ipcMaxPath];
     snprintf(ghostPath, IOS::ipcMaxPath, "%s%s", modFolder, "/Ghosts");
     io->CreateFolder(ghostPath);

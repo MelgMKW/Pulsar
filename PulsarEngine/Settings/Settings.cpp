@@ -28,7 +28,7 @@ int Mgr::GetSettingsBinSize(u32 pageCount) const {
 
 void Mgr::Save() {
     IO* io = IO::sInstance;;
-    io->OpenModFile(this->filePath, FILE_MODE_WRITE);
+    io->OpenFile(this->filePath, FILE_MODE_WRITE);
     io->Overwrite(this->rawBin->header.fileSize, this->rawBin);
     io->Close();
 };
@@ -42,7 +42,7 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
     IO* io = IO::sInstance;;
 
     Binary* buffer;
-    bool ret = io->OpenModFile(this->filePath, FILE_MODE_READ_WRITE);
+    bool ret = io->OpenFile(this->filePath, FILE_MODE_READ_WRITE);
     if(ret == false) {
         io->CreateAndOpen(this->filePath, FILE_MODE_READ_WRITE);
     }

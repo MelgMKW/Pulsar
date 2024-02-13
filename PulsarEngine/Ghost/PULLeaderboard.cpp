@@ -20,7 +20,7 @@ Leaderboard::Leaderboard(const char* folderPath, PulsarId id) {
     char path[IOS::ipcMaxPath];
     snprintf(path, IOS::ipcMaxPath, filePathFormat, folderPath);
     IO* io = IO::sInstance;
-    s32 ret = io->OpenModFile(path, FILE_MODE_READ_WRITE);
+    s32 ret = io->OpenFile(path, FILE_MODE_READ_WRITE);
     if(ret) ret = io->Read(sizeof(Leaderboard), this);
 
     if(!ret || this->crc32 != crc32 || magic != fileMagic) {
@@ -86,7 +86,7 @@ void Leaderboard::Save(const char* folderPath) {
     char path[IOS::ipcMaxPath];
     snprintf(path, IOS::ipcMaxPath, filePathFormat, folderPath);
     IO* file = IO::sInstance;;
-    file->OpenModFile(path, FILE_MODE_WRITE);
+    file->OpenFile(path, FILE_MODE_WRITE);
     file->Overwrite(sizeof(Leaderboard), this);
     file->Close();
 }

@@ -191,7 +191,6 @@ static int stringPatch()
 
     return 0;
 }
-
 kmOnLoad(stringPatch);
 
 // Force DWC_AUTHSERVER_DEBUG

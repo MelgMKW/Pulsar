@@ -192,9 +192,11 @@ void BeforeEntranceAnimations(Pages::TTSplits* page) {
     else {
         Ghosts::Manager* manager = Ghosts::Manager::sInstance;
         bool hasFlap = false;
+        manager->entry = entry;
         manager->GetLeaderboard().EntryToTimer(manager->entry.timer, Ghosts::ENTRY_FLAP);
+        //TimeEntry bestLap = entry;
         if(manager->entry.timer > *bestLap) {
-            entry.timer = *bestLap;
+            manager->entry.timer = *bestLap;
             hasFlap = true;
             m98->fastestLapId = bestLapId;
             page->ctrlRaceTimeArray[bestLapId]->EnableFlashingAnimation();

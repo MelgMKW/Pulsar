@@ -162,7 +162,7 @@ void Manager::LoadAllGhosts(u32 maxGhosts, bool isGhostRace) {
 bool Manager::SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap) {
     //Compare against leaderboard and save
     if(!areGhostsSaving) return false;
-    if(isFlap) this->leaderboard.Update(ENTRY_FLAP, entry, -1);
+    if(isFlap) this->leaderboard.Update(ENTRY_FLAP, this->entry, -1);
     GhostData data;
     data.Fill(0);
     RKG buffer;

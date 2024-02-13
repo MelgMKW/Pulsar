@@ -7,6 +7,7 @@
 #include <MarioKartWii/UI/Text.hpp>
 #include <MarioKartWii/System/Identifiers.hpp>
 #include <Debug/Debug.hpp>
+#include <IO/IO.hpp>
 #include <Info.hpp>
 #include <SlotExpansion/CupsDef.hpp>
 #include <Network/MatchCommand.hpp>
@@ -81,13 +82,13 @@ protected:
 private:
     //System functions
     void Init(const ConfigFile& bin);
-    void InitInstances(const ConfigFile& bin) const {
+    void InitInstances(const ConfigFile& bin, IOType type) const {
         CupsConfig::sInstance = new CupsConfig(bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups);
         Info::sInstance = new Info(bin.GetSection<InfoHolder, &BinaryHeader::offsetToInfo>().info);
-        this->InitIO();
+        this->InitIO(type);
         this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups.trophyCount[0]);
     }
-    void InitIO() const;
+    void InitIO(IOType type) const;
     void InitCups(const ConfigFile& bin);
 
 protected:
