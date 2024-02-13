@@ -44,7 +44,7 @@ DSTATUS disk_initialize(
 DRESULT disk_read(
     BYTE /* pdrv */,    /* Physical drive nmuber to identify the drive */
     BYTE* buff,         /* Data buffer to store read data */
-    LBA_t sector,       /* Start sector in LBA */
+    DWORD sector,       /* Start sector in LBA */
     UINT count          /* Number of sectors to read */
 )
 {
@@ -59,15 +59,18 @@ DRESULT disk_read(
 
 #if FF_FS_READONLY == 0
 
+
+
 DRESULT disk_write(
     BYTE /* pdrv */,    /* Physical drive nmuber to identify the drive */
     const BYTE* buff,   /* Data to be written */
-    LBA_t sector,       /* Start sector in LBA */
+    DWORD sector,       /* Start sector in LBA */
     UINT count          /* Number of sectors to write */
 )
 {
     return ((Pulsar::FATIO*)Pulsar::IO::sInstance)->Sdi_write(sector, count, buff) ? RES_OK : RES_ERROR;
 }
+
 
 #endif
 
@@ -91,9 +94,9 @@ DRESULT disk_ioctl(
         case CTRL_TRIM:
             {
                 /*
-                const LBA_t* args = (const LBA_t*)buff;
-                LBA_t firstSector = args[0];
-                LBA_t sectorCount = args[1] - args[0] + 1;
+                const DWORD* args = (const DWORD*)buff;
+                DWORD firstSector = args[0];
+                DWORD sectorCount = args[1] - args[0] + 1;
                 */
                 return RES_OK;
             }

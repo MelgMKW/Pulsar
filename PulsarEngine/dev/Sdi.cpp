@@ -360,7 +360,7 @@ bool FATIO::Init() {
 
     Sdi_deselect();
 
-    if(f_mount(&this->m_fs, L"", 1) != FR_OK)  return false;
+    if(f_mount(&this->m_fs, "", 1) != FR_OK)  return false;
 
     OS::Report("%s", "Successfully completed initialization");
     return true;

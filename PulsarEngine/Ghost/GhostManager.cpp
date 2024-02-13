@@ -52,9 +52,7 @@ void Manager::Init(PulsarId id) {
 
     exists = io->FolderExists(folderModePath); //Create CRC32 folder
     if(!exists) io->CreateFolder(folderModePath);
-
-    return;
-    //else io->ReadFolder(folderModePath); //Reads all files contained in the folder
+    else io->ReadFolder(folderModePath); //Reads all files contained in the folder
 
     new (&this->leaderboard) Leaderboard(folderPath, id);
 
@@ -185,7 +183,7 @@ bool Manager::SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap) {
         u32 crc32 = Manager::GetRKGcrc32(this->rkg);
         if(ldbPosition >= 0) this->leaderboard.Update(ldbPosition, entry, crc32); //in this order as save opens files too
         const System* system = System::sInstance;
-        system->taskThread->Request(&Manager::CreateAndSaveFiles, this, 0);
+        this->CreateAndSaveFiles(this);
 
         const Timer& expert = this->GetExpert();
         if(expert.isActive && expert > entry.timer && Info::HasTrophies()) {

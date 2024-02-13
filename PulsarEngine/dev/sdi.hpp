@@ -9,6 +9,7 @@ namespace Pulsar {
 
 class FATIO : public IO {
 public:
+    typedef TCHAR FatFileName[13];
     static const u32 SECTOR_SIZE = 512;
     static const u32 TMP_SECTOR_COUNT = 8;
 
@@ -68,7 +69,7 @@ public:
     FATFS m_fs;
     DIR dir;
     FIL file;
-    u64 dir_ofs[maxFileCount];
+    FatFileName names[100];
 
     friend IO* IO::CreateInstance(IOType type, EGG::Heap* heap, EGG::TaskThread* const taskThread);
 };

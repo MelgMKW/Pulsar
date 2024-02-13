@@ -12,25 +12,25 @@ void FATIO::Convert(wchar_t* dest, const char* src) const {
 }
 
 void FATIO::CreateFolder(const char* path) {
-    wchar_t convPath[IOS::ipcMaxPath];
-    Convert(convPath, path);
-    FRESULT ret = f_mkdir(convPath);
+    //wchar_t convPath[IOS::ipcMaxPath];
+    //Convert(convPath, path);
+    FRESULT ret = f_mkdir(path);
     //return ret == FR_OK;
 }
 
 void FATIO::ReadFolder(const char* path) {
     this->Bind(path);
-    wchar_t convPath[IOS::ipcMaxPath];
-    Convert(convPath, path);
+    //wchar_t convPath[IOS::ipcMaxPath];
+    //Convert(convPath, path);
 
-    FRESULT ret = f_opendir(&dir, convPath);
+    FRESULT ret = f_opendir(&dir, path);
     if(ret == FR_OK) {
         FILINFO info;
         int idx = 0;
         do {
             ret = f_readdir(&dir, &info);
             if(ret != FR_OK) break;
-            this->dir_ofs[idx] = info.dir_ofs;
+            strncpy(this->names[idx], &info.fname[0], 13);
             idx++;
         } while(info.fname[0] != 0);
         this->fileCount = idx - 1;
@@ -40,7 +40,17 @@ void FATIO::ReadFolder(const char* path) {
 }
 
 s32 FATIO::ReadFolderFile(void* buffer, u32 index, u32 mode, u32 maxLength) {
-    FRESULT ret = f_fastopen(&file, &m_fs, this->dir_ofs[index]);
+    u32 f_mode = FA_CREATE_NEW;
+
+    switch(mode) {
+        case FILE_MODE_READ:
+            f_mode |= FA_READ;
+        case FILE_MODE_WRITE:
+            f_mode |= FA_WRITE;
+        case FILE_MODE_READ_WRITE:
+            f_mode |= FA_READ | FA_WRITE;
+    };
+    FRESULT ret = f_open(&file, this->names[index], f_mode);
 
     if(ret == FR_OK) {
         u32 br;
@@ -52,11 +62,11 @@ s32 FATIO::ReadFolderFile(void* buffer, u32 index, u32 mode, u32 maxLength) {
 }
 
 bool FATIO::FolderExists(const char* path) const {
-    wchar_t convPath[IOS::ipcMaxPath];
-    Convert(convPath, path);
+    //wchar_t convPath[IOS::ipcMaxPath];
+    //Convert(convPath, path);
 
     DIR tmpDir;
-    FRESULT ret = f_opendir(&tmpDir, convPath);
+    FRESULT ret = f_opendir(&tmpDir, path);
     if(ret == FR_OK) f_closedir(&tmpDir);
     return ret == FR_OK;
 }
@@ -76,9 +86,9 @@ bool FATIO::OpenModFile(const char* path, u32 mode) {
         case FILE_MODE_READ_WRITE:
             f_mode |= FA_READ | FA_WRITE;
     }
-    wchar_t convPath[IOS::ipcMaxPath];
-    Convert(convPath, path);
-    return f_open(&file, convPath, f_mode) == FR_OK;
+    //wchar_t convPath[IOS::ipcMaxPath];
+    //Convert(convPath, path);
+    return f_open(&file, path, f_mode) == FR_OK;
 }
 
 bool FATIO::CreateAndOpen(const char* path, u32 mode) {
@@ -92,9 +102,9 @@ bool FATIO::CreateAndOpen(const char* path, u32 mode) {
         case FILE_MODE_READ_WRITE:
             f_mode |= FA_READ | FA_WRITE;
     }
-    wchar_t convPath[IOS::ipcMaxPath];
-    Convert(convPath, path);
-    return f_open(&file, convPath, f_mode) == FR_OK;
+    //wchar_t convPath[IOS::ipcMaxPath];
+    //Convert(convPath, path);
+    return f_open(&file, path, f_mode) == FR_OK;
 
 }
 
