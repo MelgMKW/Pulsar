@@ -17,7 +17,7 @@ bool NANDIO::OpenFile(const char* path, u32 mode) {
 }
 
 void NANDIO::GetCorrectPath(char* realPath, const char* path) const {
-    snprintf(realPath, IOS::ipcMaxPath, "%s%s", "/title/00010004", path);
+    snprintf(realPath, IOS::ipcMaxPath, "%s%s", "/shared2/Pulsar", path);
     //nand::GenerateAbsPath(realPath, path);
 }
 

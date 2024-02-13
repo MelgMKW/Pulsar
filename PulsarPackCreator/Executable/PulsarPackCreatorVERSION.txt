@@ -1,3 +1,17 @@
+·Updated to 1.0.2
+Creator Changes:
+-Attempt at making the mass import window work for everyone (the save buttons is somehow sometimes outside of the window and inaccessible), although this likely still does not address the issue
+Engine Changes:
+-We are aware that for some users are unable to save any files (most notably, ghosts) on dolphin. From our investigations, this is due to these users' NAND having specific permissions that prevent the writing (ie, the creation) of files. No fix appears possible beyond  
+-Cup Select buttons are no longer mistakenly unaccessible
+-If no controller input is made on the strap screen, boot to wiimmfi will be skipped (as it stands, no way to determine which controller the player is attempting to use)
+-Flaps now work properly
+-RKG ghosts no longer get unproperly overwritten on load (currently, this causes slightly slower ghost loading times which is especially noticeable on console)
+-Improved sample inheritance file for those wanting to write their own codes
+-Settings can now be accessed on packs that have neither feathers nor 200cc.
+-Fixed BMG issue on GPs
+
+
 ·Updated to 1.0.1
 Creator Changes:
 -Pasting is no longer possible in numbers only boxes

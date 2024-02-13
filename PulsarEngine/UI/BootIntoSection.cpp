@@ -44,27 +44,29 @@ kmCall(0x800079b0, CheckControllerStrap);
 char bootParams[17] = "-s132 -l0 -p274";
 SectionId BootIntoSection() {
     SectionId section = SECTION_NONE;
-    const u8 bootSetting = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_SCROLL_BOOT);
-    u8 license = 0;
-    if(bootSetting != MENUSETTING_BOOT_DISABLED) {
-        const SaveDataManager* save = SaveDataManager::sInstance;
-        if(save->CheckLicenseMagic(bootSetting - 1)) {
-            const LicenseManager* licenseManager = &save->licenses[bootSetting - 1];
-            if(licenseManager->miiID.createID != 0) {
-                section = SECTION_P1_WIFI;
-                //section = SECTION_SINGLE_PLAYER_FROM_MENU;
-                license = bootSetting - 1;
+    if(controllerOnStrap != 0x0) {
+
+        const u8 bootSetting = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_SCROLL_BOOT);
+        u8 license = 0;
+        if(bootSetting != MENUSETTING_BOOT_DISABLED) {
+            const SaveDataManager* save = SaveDataManager::sInstance;
+            if(save->CheckLicenseMagic(bootSetting - 1)) {
+                const LicenseManager* licenseManager = &save->licenses[bootSetting - 1];
+                if(licenseManager->miiID.createID != 0) {
+                    section = SECTION_P1_WIFI;
+                    //section = SECTION_SINGLE_PLAYER_FROM_MENU;
+                    license = bootSetting - 1;
+                }
             }
         }
+        snprintf(bootParams, 17, "-s132 -l%d -p%d", license, controllerOnStrap);
+        SystemManager::sInstance->ndevArg = bootParams;
     }
-    snprintf(bootParams, 17, "-s132 -l%d -p%d", license, controllerOnStrap);
-    SystemManager::sInstance->ndevArg = bootParams;
     SetupSectionLoad();
     return section;
 }
 kmCall(0x80634f20, BootIntoSection);
 
-//kmWrite32(0x805243e4, 0x7F65DB78); //mr r5, r27 to get slot
 using namespace Input;
 //r4 usually uses Input::Manager dummy which is slot and controller independant
 void SetUpCorrectController(RealControllerHolder* realControllerHolder, const Controller* controller) {

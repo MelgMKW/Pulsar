@@ -85,11 +85,13 @@ void System::Init(const ConfigFile& conf) {
 void System::InitIO(IOType type) const {
 
     IO* io = IO::CreateInstance(type, this->heap, this->taskThread);
+    bool ret;
+    if(io->type == IOType_DOLPHIN) ret = ISFS::CreateDir("/shared2/Pulsar", 0, IOS::MODE_READ_WRITE, IOS::MODE_READ_WRITE, IOS::MODE_READ_WRITE);
     const char* modFolder = this->GetModFolder();
-    bool ret = io->CreateFolder(modFolder);
+    ret = io->CreateFolder(modFolder);
     if(!ret && io->type == IOType_DOLPHIN) {
         char path[0x100];
-        snprintf(path, 0x100, "Unable to automatically create a folder for this CT distribution\nPlease create a %s folder in Dolphin Emulator/Wii/title/00010004", modFolder);
+        snprintf(path, 0x100, "Unable to automatically create a folder for this CT distribution\nPlease create a Pulsar folder in Dolphin Emulator/Wii/shared2", modFolder);
         Debug::FatalError(path);
     }
     char ghostPath[IOS::ipcMaxPath];

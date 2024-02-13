@@ -50,17 +50,41 @@ int GetCurTrackBMG() {
     return GetTrackBMGId(CupsConfig::sInstance->winningCourse);
 }
 
-void SetVSIntroBmgId(LayoutUIControl* trackName) {
-    u32 bmgId = GetCurTrackBMG();
+void SetVSIntroBmgId(LayoutUIControl& trackName, u32 bmgId) {
+    u32 bmg = GetCurTrackBMG();
     TextInfo info;
-    info.bmgToPass[0] = bmgId;
+    info.bmgToPass[0] = bmg;
     u32 authorId;
-    if(bmgId < BMG_TRACKS) authorId = BMG_NINTENDO;
+    if(bmg < BMG_TRACKS) authorId = BMG_NINTENDO;
     else authorId = bmgId + BMG_AUTHORS - BMG_TRACKS;
     info.bmgToPass[1] = authorId;
-    trackName->SetMsgId(BMG_INFO_DISPLAY, &info);
+    trackName.SetMsgId(BMG_INFO_DISPLAY, &info);
+
 }
 kmCall(0x808552cc, SetVSIntroBmgId);
+
+void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
+
+    PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
+    if(!CupsConfig::IsRegCup(id)) {
+        titleText.layout.GetPaneByName("cup_icon")->flag &= ~1;
+        u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        u32 cupBmgId;
+        if(realCupId > 99) {
+            wchar_t cupName[0x20];
+            swprintf(cupName, 0x20, L"Cup %d", realCupId);
+            info.strings[0] = cupName;
+            cupBmgId = BMG_TEXT;
+        }
+        else cupBmgId = BMG_CUPS + realCupId;
+        info.bmgToPass[1] = cupBmgId;
+
+    }
+    titleText.SetMsgId(bmgId, &info);
+}
+kmCall(0x808553b4, SetGPIntroInfo);
+
+
 
 void SetGhostInfoTrackBMG(GhostInfoControl* control, const char* textBoxName) {
     control->SetTextBoxMsg(textBoxName, GetCurTrackBMG());

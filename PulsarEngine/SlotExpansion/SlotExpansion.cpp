@@ -74,14 +74,6 @@ kmCall(0x80540870, FormatTrackPath);
 kmCall(0x80541bc4, FormatTrackPath);
 kmWrite32(0x80531fbc, 0x38800000); //fix incorrect courseId array read
 
-
-void FixGrandPrix(Pages::CupSelect* page, SectionId nextSection, PushButton& button) {
-    CupsConfig::sInstance->winningCourse = CupsConfig::ConvertTrack_PulsarCupToTrack(static_cast<PulsarCupId>(button.buttonId));
-    page->ChangeSectionById(SECTION_VS_RACE_PANORAMA, button);
-};
-kmCall(0x80841854, FixGrandPrix);
-
-
 //Fixes GP since it usually uses racedata's courseId which only holds the slot
 RacedataScenario* UseCorrectCourse(RacedataScenario* scenario) {
     CupsConfig* cupsConfig = CupsConfig::sInstance;

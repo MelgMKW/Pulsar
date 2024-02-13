@@ -137,7 +137,7 @@ kmWritePointer(0x808D9F64, &OnButtonSelect);
 //Sets the ttMode based on which button was clicked
 void OnButtonClick(Pages::SinglePlayer* page, PushButton& button, u32 hudSlotId) {
     const u32 id = button.buttonId;
-    if(page->externControlCount > 5 && id == page->externControlCount - 1) {
+    if(page->externControlCount > 4 && id == page->externControlCount - 1) {
         const Section* section = SectionMgr::sInstance->curSection;
         for(int i = 0; i < SettingsPanel::pageCount; ++i) {
             section->Get<SettingsPanel>(static_cast<PageId>(SettingsPanel::firstId + i))->prevPageId = PAGE_SINGLE_PLAYER_MENU;
