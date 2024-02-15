@@ -6,7 +6,49 @@ public class PulsarGame
 {
     public class MarioKartWii
     {
-        public static string[] idxToAbbrev =
+        public static readonly string[] idxToAbbrev =
+        {
+            "LC", "MMM", "MG", "TF",
+            "MC","CM","DKS","WGM",
+            "DC","KC","MT","GV",
+            "DDR","MH","BC","RR",
+            "rPB","rYF","rGV2","rMR",
+            "rSL","rSGB","rDS","rWS",
+            "rDH","rBC3","rDKJP","rMC",
+            "rMC3","rPG","rDKM","rBC",
+            //"aBP","aDP","aFS","aCCW","aTD",
+            //"arBC4","arBC3","arS","arCL","arTH"
+        };
+
+        public static readonly string[] idxToFullNames =
+        {
+            "Luigi Circuit", "Moo Moo Meadows", "Mushroom Gorge", "Toad's Factory",
+            "Mario Circuit", "Coconut Mall", "DK Summit", "Wario's Gold Mine",
+            "Daisy Circuit", "Koopa Cape", "Maple Treeway", "Grumble Volcano",
+            "Dry Dry Ruins", "Moonview Highway", "Bowser's Castle", "Rainbow Road",
+            "GCN Peach Beach", "DS Yoshi Falls", "SNES Ghost Valley 2", "N64 Mario Raceway",
+            "N64 Sherbet Land", "GBA Shy Guy Beach", "DS Delfino Square", "GCN Waluigi Stadium",
+            "DS Desert Hills", "GBA Bowser Castle 3", "N64 DK's Jungle Parkway", "GCN Mario Circuit",
+            "SNES Mario Circuit 3", "DS Peach Gardens", "GCN DK Mountain", "N64 Bowser's Castle",
+            //"Block Plaza", "Delfino Pier", "Funky Stadium", "Chain Chomp Wheel", "Thwomp Desert",
+            //"SNES Battle Course 4", "GBA Battle Course 3", "N64 Skyscraper", "GCN Cookie Land", "DS Twilight House"
+        };
+
+        public static readonly byte[] idxToCourseId =
+        {
+            0x08,0x01,0x02,0x04,
+            0x00,0x05,0x06,0x07,
+            0x09,0x0f,0x0b,0x03,
+            0x0e,0x0a,0x0c,0x0d,
+            0x10,0x14,0x19,0x1a,
+            0x1b,0x1f,0x17,0x12,
+            0x15,0x1e,0x1d,0x11,
+            0x18,0x16,0x13,0x1c,
+            //0x21,0x20,0x23,0x22,0x24,
+            //0x27,0x28,0x29,0x25,0x26
+        };
+
+        public static readonly string[] musicIdxToAbbrev =
         {
             "LC", "MMM", "MG", "TF",
             "MC","CM","DKS","WGM",
@@ -17,10 +59,11 @@ public class PulsarGame
             "rDH","rBC3","rDKJP","rMC",
             "rMC3","rPG","rDKM","rBC",
             "aBP","aDP","aFS","aCCW","aTD",
-            "arBC4","arBC3","arS","arCL","arTH"
+            "arBC4","arBC3","arS","arCL","arTH",
+            "GC"
         };
 
-        public static string[] idxToFullNames =
+        public static readonly string[] musicIdxToFullNames =
         {
             "Luigi Circuit", "Moo Moo Meadows", "Mushroom Gorge", "Toad's Factory",
             "Mario Circuit", "Coconut Mall", "DK Summit", "Wario's Gold Mine",
@@ -31,10 +74,12 @@ public class PulsarGame
             "DS Desert Hills", "GBA Bowser Castle 3", "N64 DK's Jungle Parkway", "GCN Mario Circuit",
             "SNES Mario Circuit 3", "DS Peach Gardens", "GCN DK Mountain", "N64 Bowser's Castle",
             "Block Plaza", "Delfino Pier", "Funky Stadium", "Chain Chomp Wheel", "Thwomp Desert",
-            "SNES Battle Course 4", "GBA Battle Course 3", "N64 Skyscraper", "GCN Cookie Land", "DS Twilight House"
+            "SNES Battle Course 4", "GBA Battle Course 3", "N64 Skyscraper", "GCN Cookie Land", "DS Twilight House",
+            "Galaxy Colosseum"
         };
 
-        public static byte[] idxToCourseId =
+
+        public static readonly byte[] musicIdxToCourseId =
         {
             0x08,0x01,0x02,0x04,
             0x00,0x05,0x06,0x07,
@@ -45,8 +90,11 @@ public class PulsarGame
             0x15,0x1e,0x1d,0x11,
             0x18,0x16,0x13,0x1c,
             0x21,0x20,0x23,0x22,0x24,
-            0x27,0x28,0x29,0x25,0x26
+            0x27,0x28,0x29,0x25,0x26,
+            0x36
         };
+
+
 
         public enum CourseId : UInt32
         {

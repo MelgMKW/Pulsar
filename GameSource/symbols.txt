@@ -147,7 +147,7 @@ ReadDir__4ISFSFPCcPvPUi = 0x8016a05c
 CreateDir__4ISFSFPCcUcQ23IOS4ModeQ23IOS4ModeQ23IOS4Mode = 0x80169e74
 Delete__4ISFSFPc = 0x8016a78c
 CreateFile__4ISFSFPCcUcQ23IOS4ModeQ23IOS4ModeQ23IOS4Mode = 0x8016ac74
-Rename__4ISFSFPcPc = 0x8016a934
+Rename__4ISFSFPcPCc = 0x8016a934
 Open__4ISFSFPcQ24ISFS4Mode = 0x8016AE5C
 GetFileStats__4ISFSFUiPQ23IOS9FileStats = 0x8016afdc
 Read__4ISFSFiPvUi = 0x8016B1FC
@@ -170,6 +170,7 @@ fs_fd__3IOS = 0x80385920
 #NAND
 CreateDir__4NANDFPCcUcUc = 0x8019bbe0
 CreateDir__Q24NAND7PrivateFPCcUcUc = 0x8019bc54
+GenerateAbsPath__4nandFPcPCc = 0x8019e020
 
 #KPAD
 Read__4KPADFiPQ24KPAD6StatusUi = 0x80197380
@@ -608,7 +609,7 @@ PlayAnimationAtPercent__14AnimationGroupFUif = 0x8063ca98
 
 #SectionMgr
 sInstance__10SectionMgr = 0x809c1e38
-SetupSectionLoad = 0x805b9344
+SetupSectionLoad__Fv = 0x805b9344
 LoadSection__10SectionMgrFv = 0x80634fbc
 RequestSceneChange__10SectionMgrFUiUi = 0x80635ac8
 SetNextSection__10SectionMgrF9SectionIdUi = 0x80635a3c

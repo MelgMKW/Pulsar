@@ -124,13 +124,13 @@ namespace PulsarPackCreator
             int cupIdx = parent.curCup;
             for (int line = 0; line < namesImport.Length; line++)
             {
-                byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
+                byte slotIdx = FindSlotIndex(importStringArrays[2][line], false);
                 if (slotIdx == 0xFF)
                 {
                     MsgWindow.Show($"Track Slot {importStringArrays[2][line]} (Line {line}) is invalid.");
                     return;
                 }
-                byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line]);
+                byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line], true);
                 if (musicSlotIdx == 0xFF)
                 {
                     MsgWindow.Show($"Music Slot {importStringArrays[3][line]} (Line {line}) is invalid.");
@@ -138,22 +138,22 @@ namespace PulsarPackCreator
                 }
             }
 
-            Hide();
+            
 
             for (int line = 0; line < namesImport.Length; line++)
             {
-                if (cupIdx == parent.ctsCupCount)
+                if (cupIdx >= parent.ctsCupCount)
                 {
                     MsgWindow.Show("Tracklist exceeded existing number of cups.");
                     return;
                 }
-                byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
-                byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line]);
+                byte slotIdx = FindSlotIndex(importStringArrays[2][line], false);
+                byte musicSlotIdx = FindSlotIndex(importStringArrays[3][line], true);
                 parent.cups[cupIdx].trackNames[row] = importStringArrays[0][line];
                 parent.cups[cupIdx].authorNames[row] = importStringArrays[1][line];
                 if(hasVersions) parent.cups[cupIdx].versionNames[row] = importStringArrays[4][line];
                 parent.cups[cupIdx].slots[row] = PulsarGame.MarioKartWii.idxToCourseId[slotIdx];
-                parent.cups[cupIdx].musicSlots[row] = PulsarGame.MarioKartWii.idxToCourseId[musicSlotIdx];
+                parent.cups[cupIdx].musicSlots[row] = PulsarGame.MarioKartWii.musicIdxToCourseId[musicSlotIdx];
                 if (cupIdx == parent.curCup)
                 {
                     parent.UpdateCurCup(0);
@@ -177,19 +177,21 @@ namespace PulsarPackCreator
                     cupIdx++;
                 }
             }
-            /*
+            Hide();
             MsgWindow.MsgWindowResult ret = MsgWindow.Show("Successfully imported names. Do you also want to change the cups names?", "Success", MsgWindow.MsgWindowButton.YesNo);
             if(ret == MsgWindow.MsgWindowResult.Yes)
             {
                 MainWindow.cupsImportWindow.Show();
             }
-            */
+            
         }
 
-        private byte FindSlotIndex(string slot)
+        private byte FindSlotIndex(string slot, bool isMusic)
         {
-            byte slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.idxToFullNames, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
-            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.idxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            string[] idxToFull = isMusic ? PulsarGame.MarioKartWii.musicIdxToFullNames : PulsarGame.MarioKartWii.idxToFullNames;
+            string[] idxToAbbrev = isMusic ? PulsarGame.MarioKartWii.musicIdxToAbbrev : PulsarGame.MarioKartWii.idxToAbbrev;
+            byte slotIdx = (byte)Array.FindIndex(idxToFull, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(idxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
             return slotIdx;
         }
     }

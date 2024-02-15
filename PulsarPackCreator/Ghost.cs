@@ -31,11 +31,6 @@ namespace PulsarPackCreator
                 string oldText = cups[curCup].expertFileNames[row, col];
                 string text = box.Text;
                 cups[curCup].expertFileNames[row, col] = text;
-                if (text != "RKG File" && text != "" && (oldText == "RKG File" || oldText == ""))
-                {
-                    trophyCount[col]++;
-                }
-                else if (trophyCount[col] > 0 && (text == "RKG File" || text == "")) trophyCount[col]--;
             }
         }
     }

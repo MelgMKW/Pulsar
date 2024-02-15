@@ -9,7 +9,7 @@
 #include <MarioKartWii/RKNet/EVENT.hpp>
 #include <MarioKartWii/UI/Ctrl/CountDown.hpp>
 #include <MarioKartWii/Race/RaceInfo/RaceInfo.hpp>
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 
 namespace Pulsar {
 

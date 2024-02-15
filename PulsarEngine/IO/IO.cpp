@@ -90,10 +90,10 @@ void IO::CloseFolder() {
     this->fileCount = 0;
 }
 
-s32 IO::ReadFolderFile(void* bufferIn, u32 index, u32 mode, u32 maxLength) {
+s32 IO::ReadFolderFile(void* bufferIn, u32 index, u32 maxLength) {
     char path[IOS::ipcMaxPath];
     this->GetFolderFilePath(path, index);
-    this->OpenFile(path, mode);
+    this->OpenFile(path, FILE_MODE_READ);
     const u32 size = this->GetFileSize();
     const u32 length = size <= maxLength ? size : maxLength;
     s32 ret = this->Read(length, bufferIn);

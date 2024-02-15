@@ -36,9 +36,9 @@ public:
     Mii* miis[9]; //48
     u8 licenseId[9]; //6c
     u8 unknown_0x75[3];
-    u32 playerId[9];
-    wchar_t* strings[9];
-    bool useColoredBorder;
+    u32 playerId[9]; //0x78
+    wchar_t* strings[9]; //0x9c
+    bool useColoredBorder; //0xc0
     char unknown_0xC1[3];
 }; //total size 0xC4
 

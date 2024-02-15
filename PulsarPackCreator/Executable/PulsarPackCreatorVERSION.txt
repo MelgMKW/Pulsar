@@ -1,15 +1,26 @@
-·Updated to 1.0.2
+·Updated to 1.1.0
+MAJOR CHANGE:
+-Pulsar data on dolphin now lives in Dolphin Emulator/Wii/shared2. It was previously in Dolphin Emulator/Wii/title/00010004 but some users' NAND had specific permissions prevent the use of that location. MAKE SURE TO MOVE YOUR PACK DATA TO THE NEW LOCATION.
+Misc:
+-A discord server has been created at https://discord.gg/Wd8uGCrDVg
 Creator Changes:
--Attempt at making the mass import window work for everyone (the save buttons is somehow sometimes outside of the window and inaccessible), although this likely still does not address the issue
+-Now allows custom cup icons and names. They can both be mass imported. PNG is the recommended format for the images.
+-Galaxy colosseum is now selectable as a music slots. Battle arenas are no longer selectable as track slots..
+-The input/output folders no longer get created at the wrong location when the software is started through a .pul file.
+-Attempt at making the mass import window work for everyone (the save buttons is somehow sometimes outside of the window and inaccessible), although this likely still does not address the issue.
+-Fixed massive trophy counts getting written to config files.
 Engine Changes:
--We are aware that for some users are unable to save any files (most notably, ghosts) on dolphin. From our investigations, this is due to these users' NAND having specific permissions that prevent the writing (ie, the creation) of files. No fix appears possible beyond  
--Cup Select buttons are no longer mistakenly unaccessible
--If no controller input is made on the strap screen, boot to wiimmfi will be skipped (as it stands, no way to determine which controller the player is attempting to use)
--Flaps now work properly
--RKG ghosts no longer get unproperly overwritten on load (currently, this causes slightly slower ghost loading times which is especially noticeable on console)
--Improved sample inheritance file for those wanting to write their own codes
+-Cup Select buttons are no longer mistakenly unaccessible.
+-If no controller input is made on the strap screen, boot to wiimmfi will be skipped (as it stands, no way to determine which controller the player is attempting to use).
+-Flaps now work properly.
+-RKG ghosts no longer get unproperly overwritten on load (currently, this causes slightly slower ghost loading times which is especially noticeable on console).
+-Improved sample inheritance file for those wanting to write their own codes.
 -Settings can now be accessed on packs that have neither feathers nor 200cc.
--Fixed BMG issue on GPs
+-Fixed a crash that would occur on packs where cups got added.
+-Fixed BMG issue in GP mode.
+-Fixed race count related crash in friend rooms.
+-Fixed bad cup ordering on packs with 8 or fewer total cups.
+-Fixed track names being stored incorrectly in leaderboard files.
 
 
 ·Updated to 1.0.1

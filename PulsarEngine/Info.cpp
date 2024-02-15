@@ -2,7 +2,7 @@
 #include <MarioKartWii/Race/RaceData.hpp>
 #include <Settings/Settings.hpp>
 #include <Info.hpp>
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 
 namespace Pulsar {
 Info* Info::sInstance = nullptr;

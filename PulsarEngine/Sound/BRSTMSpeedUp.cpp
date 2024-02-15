@@ -16,6 +16,7 @@ speedup instead of transitioning to the _f file. The jingle will still play.
 namespace Pulsar {
 namespace Audio {
 
+using namespace nw4r;
 void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotId) {
     //static u8 hudSlotIdFinalLap;
 
@@ -26,15 +27,17 @@ void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotI
     //const u8 idFirstFinalLap = hudSlotIdFinalLap;
     if(maxLap == 1) return;
     if(maxLap == RaceData::sInstance->racesScenario.settings.lapCount) {
-        if(isSpeedUp == RACESETTING_SPEEDUP_ENABLED) {
+
+        register KartSound* kartSound;
+        asm(mr kartSound, r29;);
+        snd::detail::BasicSound& sound =  kartSound->soundArchivePlayer->soundPlayerArray[0].soundList.GetFront();
+        if(isSpeedUp == RACESETTING_SPEEDUP_ENABLED || sound.soundId == SOUND_ID_GALAXY_COLOSSEUM) {
             const RaceInfo* raceInfo = RaceInfo::sInstance;
             const Timer& raceTimer = raceInfo->timerMgr->timers[0];
             const Timer& playerTimer = raceInfo->players[hudSlotId]->lapSplits[maxLap - 2];
             const Timer difference = CtrlRaceGhostDiffTime::SubtractTimers(raceTimer, playerTimer);
             if(difference.minutes < 1 && difference.seconds < 5) {
-                register KartSound* kartSound;
-                asm(mr kartSound, r29;);
-                kartSound->soundArchivePlayer->soundPlayerArray[0].soundList.GetFront().ambientParam.pitch += 0.0002f;
+                sound.ambientParam.pitch += 0.0002f;
             }
             if(maxLap != curLap) rsarSoundPlayer->PlaySound(SOUND_ID_FINAL_LAP, hudSlotId);
         }

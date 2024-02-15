@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Media.Imaging;
 using static PulsarGame;
 
@@ -31,7 +34,6 @@ namespace PulsarPackCreator
         //Options
         public UInt16 ctsCupCount = 1;
         public string date = "01/01/2000";
-        public UInt16[] trophyCount;
 
         //Info
         Parameters parameters;
@@ -44,9 +46,10 @@ namespace PulsarPackCreator
         public static MassCupsImportWindow cupsImportWindow;
         public static CrashWindow crashWindow;
         public static SettingsWindow settingsWindow;
-        public static MsgWindow msgWindow;
+        public static MsgWindow messageWindow;
 
-
+        public Task extractTPL;
+        public CancellationTokenSource cancelToken;
         //public List<byte> extSlotToTrackId;
         //public List<byte> extSlotToMusicSlot;
         //public List<string> fileNames;
@@ -56,7 +59,6 @@ namespace PulsarPackCreator
 
         public MainWindow()
         {
-            trophyCount = new UInt16[4];
             parameters = new Parameters();
             cups = new List<Cup>();
             Cup initial = new Cup(0);
@@ -68,7 +70,8 @@ namespace PulsarPackCreator
             cupsImportWindow = new MassCupsImportWindow(this);
             crashWindow = new CrashWindow();
             settingsWindow = new SettingsWindow();
-            msgWindow = new MsgWindow();
+            messageWindow = new MsgWindow();
+            cancelToken = new CancellationTokenSource();
 
 
             string version = (Assembly.GetExecutingAssembly().GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute).InformationalVersion.ToString();
@@ -84,10 +87,10 @@ namespace PulsarPackCreator
             Slot2.ItemsSource = MarioKartWii.idxToAbbrev;
             Slot3.ItemsSource = MarioKartWii.idxToAbbrev;
             Slot4.ItemsSource = MarioKartWii.idxToAbbrev;
-            Music1.ItemsSource = MarioKartWii.idxToAbbrev;
-            Music2.ItemsSource = MarioKartWii.idxToAbbrev;
-            Music3.ItemsSource = MarioKartWii.idxToAbbrev;
-            Music4.ItemsSource = MarioKartWii.idxToAbbrev;
+            Music1.ItemsSource = MarioKartWii.musicIdxToAbbrev;
+            Music2.ItemsSource = MarioKartWii.musicIdxToAbbrev;
+            Music3.ItemsSource = MarioKartWii.musicIdxToAbbrev;
+            Music4.ItemsSource = MarioKartWii.musicIdxToAbbrev;
 
             File1.Text = initial.fileNames[0];
             File2.Text = initial.fileNames[0];
@@ -110,33 +113,53 @@ namespace PulsarPackCreator
             Slot2.SelectedValue = MarioKartWii.idxToAbbrev[0];
             Slot3.SelectedValue = MarioKartWii.idxToAbbrev[0];
             Slot4.SelectedValue = MarioKartWii.idxToAbbrev[0];
-            Music1.SelectedValue = MarioKartWii.idxToAbbrev[0];
-            Music2.SelectedValue = MarioKartWii.idxToAbbrev[0];
-            Music3.SelectedValue = MarioKartWii.idxToAbbrev[0];
-            Music4.SelectedValue = MarioKartWii.idxToAbbrev[0];
+            Music1.SelectedValue = MarioKartWii.musicIdxToAbbrev[0];
+            Music2.SelectedValue = MarioKartWii.musicIdxToAbbrev[0];
+            Music3.SelectedValue = MarioKartWii.musicIdxToAbbrev[0];
+            Music4.SelectedValue = MarioKartWii.musicIdxToAbbrev[0];
 
+            CupName.Text = Cup.defaultNames[0];
+            CupIcon.Text = $"{Cup.defaultNames[0]}.png";
+            
             CC100.Text = $"{parameters.prob100cc}";
             CC150.Text = $"{parameters.prob150cc}";
             CCMirror.Text = $"{parameters.probMirror}";
             CupCount.Text = $"{ctsCupCount}";
 
             Show();
-            msgWindow.Owner = this;
+            messageWindow.Owner = this;
 
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            Directory.CreateDirectory("temp/");
+            Directory.CreateDirectory("input");
+            Directory.CreateDirectory("input/CupIcons");
+            Directory.CreateDirectory($"input/{ttModeFolders[0, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[1, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
+            extractTPL = ExtractDefaultTPLs();
             bool checkUpdates = Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate;
+            
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
+                try
+                {
 
-                if (args[1].Contains(".pul"))
-                {
-                    OpenPulFile(args[1]);
-                    Environment.CurrentDirectory = args[0].Substring(0, args[0].LastIndexOf('\\') + 1);
+                    if (args[1].Contains(".pul"))
+                    {
+                        OpenPulFile(args[1]);
+                        Environment.CurrentDirectory = args[0].Substring(0, args[0].LastIndexOf('\\') + 1);
+                    }
+                    else if (args[1].Contains("Updated"))
+                    {
+                        checkUpdates = false;
+                        SettingsWindow.DisplayChangelog(args[3]);
+                    }
                 }
-                else if (args[1].Contains("Updated"))
+                catch(Exception ex)
                 {
-                    checkUpdates = false;
-                    SettingsWindow.DisplayChangelog(args[3]);
+                    MsgWindow.Show(ex.Message);
                 }
             }
 
@@ -144,15 +167,7 @@ namespace PulsarPackCreator
             {
                 SettingsWindow.TryUpdate();
             }
-            Directory.CreateDirectory("input");
-            Directory.CreateDirectory("input/CupIcons");
-            Directory.CreateDirectory($"input/{ttModeFolders[0, 1]}");
-            Directory.CreateDirectory($"input/{ttModeFolders[1, 1]}");
-            Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
-            Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
-
-
-
+           
         }
     }
 }

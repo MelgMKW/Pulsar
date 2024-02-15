@@ -6,7 +6,7 @@
 #include <MarioKartWii/UI/Page/Menu/CourseSelect.hpp>
 #include <MarioKartWii/UI/Page/Other/Votes.hpp>
 #include <MarioKartWii/GlobalFunctions.hpp>
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 
 namespace Pulsar {
 

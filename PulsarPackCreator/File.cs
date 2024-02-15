@@ -1,14 +1,21 @@
 ﻿using Pulsar_Pack_Creator;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
+using System.Windows.Shapes;
 using static PulsarPackCreator.MsgWindow;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PulsarPackCreator
 {
@@ -24,7 +31,7 @@ namespace PulsarPackCreator
 
         private void ImportConfigFile(byte[] raw)
         {
-            Directory.CreateDirectory("temp/");
+
             try
             {
                 curCup = 0;
@@ -34,7 +41,7 @@ namespace PulsarPackCreator
 
                 //Read HEADER
 
-                if (header.magic != 0x50554C53 || header.version != CONFIGVERSION) throw new Exception();
+                if (header.magic != 0x50554C53 || header.version != CONFIGVERSION) throw new OperationCanceledException();
                 parameters.modFolderName = header.modFolderName.TrimStart('/');
 
                 //INFO Reading
@@ -55,15 +62,13 @@ namespace PulsarPackCreator
                 int bmgSize = ReadBMG(raw.Skip(header.offsetToBMG).Take(raw.Length - header.offsetToBMG).ToArray());
 
                 //FILE reading
-                ReadFile(raw.Skip(header.offsetToBMG + bmgSize).Take(raw.Length - header.offsetToBMG).ToArray()); ;
+                ReadFile(raw.Skip(header.offsetToBMG + bmgSize).Take(raw.Length - header.offsetToBMG).ToArray());
 
                 RequestBMGAction(false);
                 using StreamReader bmgSR = new StreamReader("temp/BMG.txt");
                 using StreamReader fileSR = new StreamReader("temp/files.txt");
 
                 ParseBMGAndFILE(bmgSR, fileSR);
-                bmgSR.Close();
-                fileSR.Close();
 
                 CupCount.Text = $"{ctsCupCount}";
                 Regs.SelectedIndex = parameters.regsMode;
@@ -84,13 +89,20 @@ namespace PulsarPackCreator
                 UpdateCurCup(0);
                 MsgWindow.Show("Configuration successfully imported.");
             }
-            catch
+            catch (OperationCanceledException)
             {
                 MsgWindow.Show("Invalid Config File.");
             }
+            catch (Exception ex)
+            {
+                MsgWindow.Show(ex.ToString());
+            }
             finally
             {
-                Directory.Delete("temp/", true);
+                File.Delete("temp/bmg.bmg");
+                File.Delete("temp/bmg.txt");
+                File.Delete("temp/Config.pul");
+                File.Delete("temp/files.txt");
             }
         }
         private void OnImportConfigClick(object sender, RoutedEventArgs e)
@@ -134,10 +146,6 @@ namespace PulsarPackCreator
             PulsarGame.Cups rawCups = raw.cups;
             ctsCupCount = rawCups.ctsCupCount;
             parameters.regsMode = rawCups.regsMode;
-            for (int i = 0; i < 4; i++)
-            {
-                trophyCount[i] = rawCups.trophyCount[i];
-            }
         }
 
         private void ReadCup(PulsarGame.Cup raw)
@@ -152,9 +160,11 @@ namespace PulsarPackCreator
                 if (bmgMagic != 0x4D455347626D6731) throw new Exception();
                 int bmgSize = bin.ReadInt32();
                 bin.BaseStream.Position -= 12;
-                using BigEndianWriter bmg = new BigEndianWriter(File.Create("temp/bmg.bmg"));
-                bmg.Write(bin.ReadBytes(bmgSize));
-                bmg.Close();
+                using (BigEndianWriter bmg = new BigEndianWriter(File.Create("temp/bmg.bmg")))
+                {
+                    bmg.Write(bin.ReadBytes(bmgSize));
+                }
+                
                 return bmgSize;
             }
         }
@@ -166,9 +176,10 @@ namespace PulsarPackCreator
                 UInt32 fileMagic = bin.ReadUInt32();
                 if (fileMagic != 0x46494C45) throw new Exception();
                 bin.BaseStream.Position -= 4;
-                using BigEndianWriter file = new BigEndianWriter(File.Create("temp/files.txt"));
-                file.Write(bin.ReadBytes((int)bin.BaseStream.Length));
-                file.Close();
+                using (BigEndianWriter file = new BigEndianWriter(File.Create("temp/files.txt")))
+                { 
+                    file.Write(bin.ReadBytes((int)bin.BaseStream.Length));                   
+                }
             }
         }
 
@@ -209,7 +220,6 @@ namespace PulsarPackCreator
                     return false;
                 }
             }
-            Directory.CreateDirectory("temp");
             Directory.CreateDirectory("output");
             Directory.CreateDirectory(modFolder);
             Directory.CreateDirectory($"{modFolder}/Binaries");
@@ -219,66 +229,56 @@ namespace PulsarPackCreator
 
             try
             {
-
-
                 File.WriteAllBytes("temp/BMG.txt", parameters.has200cc ? PulsarRes.BMG200 : PulsarRes.BMG100);
-                using StreamWriter bmgSW = new StreamWriter("temp/BMG.txt", true);
-                using StreamWriter fileSW = new StreamWriter("temp/files.txt");
-                using StreamWriter crcToFile = new StreamWriter($"{modFolder}/Ghosts/FolderToTrackName.txt");
-                using BigEndianWriter bin = new BigEndianWriter(File.Create("temp/Config.pul"));
-                bmgSW.WriteLine(bmgSW.NewLine);
-                bmgSW.WriteLine($"  {0x2847:X}    = Version created {date}");
-                fileSW.WriteLine("FILE");
+                using (BigEndianWriter bin = new BigEndianWriter(File.Create("temp/Config.pul"))) 
+                { 
+                    using (StreamWriter bmgSW = new StreamWriter("temp/BMG.txt", true))
+                    using (StreamWriter fileSW = new StreamWriter("temp/files.txt"))
+                    using (StreamWriter crcToFile = new StreamWriter($"{modFolder}/Ghosts/FolderToTrackName.txt"))
+                    {
+                        bmgSW.WriteLine(bmgSW.NewLine);
+                        bmgSW.WriteLine($"  {0x2847:X}    = Version created {date}");
+                        fileSW.WriteLine("FILE");
 
-                bin.Write(0x50554C53); //"PULS"
-                bin.Write(CONFIGVERSION);
+                        bin.Write(0x50554C53); //"PULS"
+                        bin.Write(CONFIGVERSION);
 
-                //Offsets
-                bin.BaseStream.Position += SECTIONCOUNT * 4; //OFFSETS
+                        //Offsets
+                        bin.BaseStream.Position += SECTIONCOUNT * 4; //OFFSETS
 
-                string gameFolderName = $"/{parameters.modFolderName}";
-                bin.Write(gameFolderName.ToArray());
-                bin.BaseStream.Position += 14 - gameFolderName.Length;
+                        string gameFolderName = $"/{parameters.modFolderName}";
+                        bin.Write(gameFolderName.ToArray());
+                        bin.BaseStream.Position += 14 - gameFolderName.Length;
 
-                long infoPosition = RoundUp(bin.BaseStream.Position, 4); //INFO Offset
-                bin.BaseStream.Position = 0x8;
-                bin.Write((int)infoPosition);
-                bin.BaseStream.Position = infoPosition;
+                        long infoPosition = RoundUp(bin.BaseStream.Position, 4); //INFO Offset
+                        bin.BaseStream.Position = 0x8;
+                        bin.Write((int)infoPosition);
+                        bin.BaseStream.Position = infoPosition;
+                        WriteInfo(bin);
 
+                        long cupPosition = RoundUp(bin.BaseStream.Position, 4); //Cup Offset
+                        bin.BaseStream.Position = 0xC;
+                        bin.Write((int)cupPosition);
+                        bin.BaseStream.Position = cupPosition;
+                        WriteCups(bin, bmgSW, fileSW, crcToFile);
+                    }
 
-                WriteInfo(bin);
+                    RequestBMGAction(true);
 
-                long cupPosition = RoundUp(bin.BaseStream.Position, 4); //Cup Offset
-                bin.BaseStream.Position = 0xC;
-                bin.Write((int)cupPosition);
-                bin.BaseStream.Position = cupPosition;
-                bool ret = WriteCups(bin, bmgSW, fileSW, crcToFile);
-                if (!ret)
-                {
-                    bin.Close();
-                    bmgSW.Close();
-                    fileSW.Close();
-                    crcToFile.Close();
-                    MsgWindow.Show("Failed Creating Cups");
-                    Directory.Delete($"{modFolder}", true);
-                    Directory.Delete("temp", true);
-                    return false;
+                    using (BigEndianReader bmgReader = new BigEndianReader(File.Open("temp/bmg.bmg", FileMode.Open)))
+                    {
+                        long bmgPosition = RoundUp(bin.BaseStream.Position, 4); ; //BMG Offset
+                        bin.BaseStream.Position = 0x10;
+                        bin.Write((int)bmgPosition);
+                        bin.BaseStream.Position = bmgPosition;
+                        bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));
+                    }
+
+                    using (BigEndianReader fileReader = new BigEndianReader(File.Open("temp/files.txt", FileMode.Open)))
+                    {
+                        bin.Write(fileReader.ReadBytes((int)fileReader.BaseStream.Length));
+                    }
                 }
-                bmgSW.Close();
-                fileSW.Close();
-                crcToFile.Close();
-                RequestBMGAction(true);
-
-                using BigEndianReader bmgReader = new BigEndianReader(File.Open("temp/bmg.bmg", FileMode.Open));
-                long bmgPosition = RoundUp(bin.BaseStream.Position, 4); ; //BMG Offset
-                bin.BaseStream.Position = 0x10;
-                bin.Write((int)bmgPosition);
-                bin.BaseStream.Position = bmgPosition;
-                bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));
-                using BigEndianReader fileReader = new BigEndianReader(File.Open("temp/files.txt", FileMode.Open));
-                bin.Write(fileReader.ReadBytes((int)fileReader.BaseStream.Length));
-                bin.Close();
-
                 char[] delims = new[] { '\r', '\n' };
                 string[] xml = PulsarRes.XML.Split(delims, StringSplitOptions.RemoveEmptyEntries);
 
@@ -288,44 +288,116 @@ namespace PulsarPackCreator
                 xml[30] = xml[30].Replace("{$pack}", parameters.modFolderName);
                 xml[31] = xml[31].Replace("{$pack}", parameters.modFolderName);
                 xml[37] = xml[37].Replace("{$pack}", parameters.modFolderName);
-
-                bmgReader.Close();
-                fileReader.Close();
+            
                 File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
                 File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
+                return true;
+            }
+            catch(FileNotFoundException ex)
+            {
+                Directory.Delete($"{modFolder}", true);
+                MsgWindow.Show(ex.Message);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                MsgWindow.Show(ex.ToString()) ;
+                return false;
+            }
+            finally
+            {
+                File.Delete("temp/bmg.bmg");
+                File.Delete("temp/bmg.txt");
+                File.Delete("temp/Config.pul");
+                File.Delete("temp/files.txt");
+            }
+
+        }
+
+        private void OnBuildConfigClick(object sender, RoutedEventArgs e)
+        {
+            bool ret = BuildConfigImpl();
+            if(ret){
                 MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
                 if (result == MsgWindowResult.Yes)
                 {
                     OpenDir($"{Directory.GetCurrentDirectory()}\\output");
                 }
-                Directory.Delete("temp", true);
-
-                return true;
-            }
-            catch(Exception ex)
-            {
-                MsgWindow.Show(ex.ToString());
-                return false;
             }
         }
 
-        private void OnBuildConfigClick(object sender, RoutedEventArgs e)
-        {
-            BuildConfigImpl();
-        }
+        [SupportedOSPlatform("windows")]
         private void OnBuildFullPackClick(object sender, RoutedEventArgs e)
         {
             bool ret = BuildConfigImpl();
-            if (ret) { 
-            string modFolder = $"output/{parameters.modFolderName}";
-            File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
-            Directory.CreateDirectory($"{modFolder}/Assets");
-            File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
-            File.WriteAllBytes($"{modFolder}/Assets/UIAssets.szs", PulsarRes.UIAssets);
-            File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
-            File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
+            try
+            {
+                if (ret)
+                {
+                    string modFolder = $"output/{parameters.modFolderName}";
+                    File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
+                    Directory.CreateDirectory($"{modFolder}/Assets");
+                    File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
+                    File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
+                    File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
+
+                    bool hasCustomIcons = false;
+                    Process wimgtProcess = new Process();
+                    ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
+                    wimgtProcessInfo.FileName = @"temp/wimgt.exe";
+                    //wimgtProcessInfo.WorkingDirectory = @"temp/";
+                    wimgtProcessInfo.CreateNoWindow = true;
+                    wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    wimgtProcessInfo.UseShellExecute = false;
+                    wimgtProcess.StartInfo = wimgtProcessInfo;
+
+                    for (int i = 0; i < ctsCupCount; i++)
+                    {
+                        Cup cup = cups[i];
+                        if (cup.iconName != $"{Cup.defaultNames[i]}.png")
+                        {
+                            hasCustomIcons = true;
+                            bool isDefault = Cup.defaultNames.Contains(cup.iconName.Remove(cup.iconName.Length - 4));
+                            string realIconName = isDefault ? $"temp/{cup.iconName}" : $"input/CupIcons/{cup.iconName}";
+                            if(!File.Exists(realIconName))
+                            {
+                                throw new Exception($"{realIconName} does not exist.");
+                            }
+                            using (System.Drawing.Image image = System.Drawing.Image.FromFile(realIconName))
+                            {
+                                new Bitmap(image, 128, 128).Save($"temp/{i}.png");
+                            }
+                            wimgtProcessInfo.Arguments = $"encode temp/{i}.png --dest temp/UIAssets.d/button/timg/icon_{i:D2}.tpl --transform CMPR -o";
+                            wimgtProcess.Start();
+                            wimgtProcess.WaitForExit();
+                        }
+                    }
+                    if (hasCustomIcons)
+                    {
+                        ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
+                        wszstProcessInfo.FileName = @"wszst.exe";
+                        wszstProcessInfo.Arguments = $"create temp/UIAssets.d --dest \"{modFolder}/Assets/UIAssets.szs\" -o";
+                        wszstProcessInfo.CreateNoWindow = true;
+                        wszstProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        wszstProcessInfo.UseShellExecute = false;
+                        Process wszstProcess = new Process();
+                        wszstProcess.StartInfo = wszstProcessInfo;
+                        wszstProcess.Start();
+                        wszstProcess.WaitForExit();
+                    }
+                    else File.Copy("temp/UIAssets.szs", $"{modFolder}/Assets/UIAssets.szs");
+                    MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
+                    if (result == MsgWindowResult.Yes)
+                    {
+                        OpenDir($"{Directory.GetCurrentDirectory()}\\output");
+                    }
+                }
             }
-            
+            catch (Exception ex)
+            {
+                MsgWindow.Show(ex.ToString());
+            }
+
         }
 
         private void RequestBMGAction(bool isEncode) //else will decode
@@ -377,7 +449,7 @@ namespace PulsarPackCreator
             bin.BaseStream.Position = curPosition;
         }
 
-        private bool WriteCups(BigEndianWriter bin, StreamWriter bmgSW, StreamWriter fileSW, StreamWriter crcToFile)
+        private void WriteCups(BigEndianWriter bin, StreamWriter bmgSW, StreamWriter fileSW, StreamWriter crcToFile)
         {
             bin.Write(0x43555053); //CUPS
             bin.Write(CUPSVERSION);
@@ -386,47 +458,55 @@ namespace PulsarPackCreator
             bin.Write(ctsCupCount);
             bin.Write(parameters.regsMode);
             bin.BaseStream.Position += 1; //padding
-            for (int i = 0; i < 4; i++)
-            {
-                UInt16 count = parameters.hasTTTrophies ? trophyCount[i] : (UInt16)0;
-                bin.Write(count);
-            }
+            long trophyPos = bin.BaseStream.Position;
+            bin.BaseStream.Position += 8;
 
-            bool ret = true;
+            UInt16[] trophyCount = new UInt16[4] { 0, 0, 0, 0 };
             for (int id = 0; id < ctsCupCount; id++)
             {
                 Cup cup = cups[id];
-                ret = WriteCup(cup, bin, bmgSW, fileSW, crcToFile, false);
-                if (!ret) return false;
+                WriteCup(cup, bin, bmgSW, fileSW, crcToFile, false, ref trophyCount);
             }
             if (ctsCupCount % 2 == 1)
             {
                 UInt32 idx = cups[0].idx;
                 cups[0].idx = ctsCupCount;
-                ret = WriteCup(cups[0], bin, bmgSW, fileSW, crcToFile, true);
+                WriteCup(cups[0], bin, bmgSW, fileSW, crcToFile, true, ref trophyCount);
                 cups[0].idx = idx;
             }
             long curPosition = bin.BaseStream.Position;
+            bin.BaseStream.Position = trophyPos;
+            for (int i = 0; i < 4; i++)
+            {
+                UInt16 count = parameters.hasTTTrophies ? trophyCount[i] : (UInt16)0;
+                bin.Write(count);
+            }
             bin.BaseStream.Position = sizePosition;
             bin.Write((int)(curPosition - sizePosition - 4));
             bin.BaseStream.Position = curPosition;
-            return ret;
         }
-        private bool WriteCup(Cup cup, BigEndianWriter bin, StreamWriter bmgSW, StreamWriter fileSW, StreamWriter crcToFile, bool isFake)
+        private void WriteCup(Cup cup, BigEndianWriter bin, StreamWriter bmgSW, StreamWriter fileSW, StreamWriter crcToFile, bool isFake, ref UInt16[] trophyCount)
         {
             string modFolder = $"output/{parameters.modFolderName}";
             UInt32 idx = cup.idx;
             string[] fileInfo = Directory.GetFiles("input/", "*", SearchOption.AllDirectories);
             fileInfo = fileInfo.Select(s => s.ToLowerInvariant()).ToArray();
             bin.Write(idx);
+            if (!isFake)
+            {
+                string iconName = cup.iconName;
+                string finalIconName = iconName.Remove(iconName.Length - 4) != Cup.defaultNames[cup.idx] ? "" : iconName;
+                bmgSW.WriteLine($"  {0x10000 + idx:X}    = {cup.name}");
+                fileSW.WriteLine($"{idx:X}?{iconName}");
+            }
+                
             for (int i = 0; i < 4; i++)
             {
                 string name = cup.fileNames[i];
                 string curFile = $"input/{name}.szs".ToLowerInvariant();
                 if (!fileInfo.Contains(curFile))
                 {
-                    MsgWindow.Show($"Track {name} does not exist.");
-                    return false;
+                    throw new FileNotFoundException($"Track {name} does not exist. Failed creating cups.");
                 }
                 bin.Write(cup.slots[i]);
                 bin.Write(cup.musicSlots[i]);
@@ -447,8 +527,7 @@ namespace PulsarPackCreator
                             string rkgName = $"input/{PulsarGame.ttModeFolders[expert, 1]}\\{expertName}.rkg".ToLowerInvariant();
                             if (!fileInfo.Contains(rkgName))
                             {
-                                MsgWindow.Show($"Expert ghost {expertName}.rkg does not exist.");
-                                return false;
+                                throw new FileNotFoundException($"Expert ghost {expertName}.rkg does not exist. Failed creating cups.");
                             }
                             using BigEndianReader rkg = new BigEndianReader(File.Open(rkgName, FileMode.Open));
                             rkg.BaseStream.Position = 0xC;
@@ -464,6 +543,8 @@ namespace PulsarPackCreator
                             finalRkg.Write(rkgBytes);
                             int rkgCrc32 = BitConverter.ToInt32(System.IO.Hashing.Crc32.Hash(rkgBytes), 0);
                             finalRkg.Write(rkgCrc32);
+
+                            trophyCount[expert]++;
                         }
                     }
 
@@ -480,7 +561,6 @@ namespace PulsarPackCreator
                 fileSW.WriteLine($"{idx * 4 + i:X}={cup.fileNames[i]}|" +
                 $"{cup.expertFileNames[i, 0]}|{cup.expertFileNames[i, 1]}|{cup.expertFileNames[i, 2]}|{cup.expertFileNames[i, 3]}");
             }
-            return true;
         }
 
         private void ParseBMGAndFILE(StreamReader bmgSR, StreamReader fileSR)
@@ -501,7 +581,7 @@ namespace PulsarPackCreator
                     if (ret)
                     {
                         if (bmgId == 0x2847) date = curLine.Split(' ')[curLine.Split(' ').Length - 1];
-                        else if (bmgId >= 0x20000 && bmgId < 0x60000)
+                        else if (bmgId >= 0x10000 && bmgId < 0x60000)
                         {
                             string content = curLine.Split('=')[1].TrimStart(' ');
                             UInt32 type = bmgId & 0xFFFF0000;
@@ -512,6 +592,9 @@ namespace PulsarPackCreator
                                 int trackIdx = (int)rest % 4;
                                 switch (type)
                                 {
+                                    case (0x10000):
+                                        if((int)rest < ctsCupCount) cups[(int)rest].name = content;
+                                        break;
                                     case (0x20000):
                                         if (content.Contains("\\c{red3}"))
                                         {
@@ -539,20 +622,29 @@ namespace PulsarPackCreator
             {
                 if (curLine != "")
                 {
-                    string[] split = curLine.Split("=");
-                    UInt32 id = UInt32.Parse(split[0], NumberStyles.HexNumber);
-
-                    int cupIdx = (int)id / 4;
-                    if (cupIdx < ctsCupCount)
+                    if (curLine.Contains("?"))
                     {
-                        int trackIdx = (int)id % 4;
-                        string[] names = split[1].Split("|");
-                        if (names.Length > 0)
+                        string[] split = curLine.Split("?");
+                        UInt32 idx = UInt32.Parse(split[0], NumberStyles.HexNumber);
+                        if (split.Length > 1 && split[1] != "") cups[(int)idx].iconName = split[1];
+                    }
+                    else
+                    {
+                        string[] split = curLine.Split("=");
+                        UInt32 id = UInt32.Parse(split[0], NumberStyles.HexNumber);
+
+                        int cupIdx = (int)id / 4;
+                        if (cupIdx < ctsCupCount)
                         {
-                            cups[cupIdx].fileNames[trackIdx] = names[0];
-                            for (int i = 1; i < names.Length; i++)
+                            int trackIdx = (int)id % 4;
+                            string[] names = split[1].Split("|");
+                            if (names.Length > 0)
                             {
-                                cups[cupIdx].expertFileNames[trackIdx, i - 1] = names[i];
+                                cups[cupIdx].fileNames[trackIdx] = names[0];
+                                for (int i = 1; i < names.Length; i++)
+                                {
+                                    cups[cupIdx].expertFileNames[trackIdx, i - 1] = names[i];
+                                }
                             }
                         }
                     }
@@ -566,6 +658,82 @@ namespace PulsarPackCreator
         }
 
         private void OpenDir(string path) => Process.Start("explorer.exe", path);
+
+        private async Task ExtractDefaultTPLs()
+        {
+            await File.WriteAllBytesAsync("temp/wszst.exe", PulsarRes.wszst);
+            await File.WriteAllBytesAsync("temp/wimgt.exe", PulsarRes.wimgt);
+            await File.WriteAllBytesAsync("temp/UIAssets.szs", PulsarRes.UIAssets);
+
+            ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
+            wszstProcessInfo.FileName = @"wszst.exe";
+            wszstProcessInfo.Arguments = "extract UIAssets.szs";
+            wszstProcessInfo.WorkingDirectory = @"temp/";
+            wszstProcessInfo.CreateNoWindow = true;
+            wszstProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            wszstProcessInfo.UseShellExecute = false;
+
+            Process wszstProcess = new Process();
+            wszstProcess.StartInfo = wszstProcessInfo;
+            wszstProcess.Start();
+            await wszstProcess.WaitForExitAsync();
+
+            ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
+            wimgtProcessInfo.FileName = @"temp/wimgt.exe";
+            wimgtProcessInfo.CreateNoWindow = true;
+            wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            wimgtProcessInfo.UseShellExecute = false;
+
+            Process wimgtProcess = new Process();
+            wimgtProcess.StartInfo = wimgtProcessInfo;
+
+            for (int i = 0; i < Cup.maxCupIcons; i++)
+            {
+                if (cancelToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                wimgtProcessInfo.Arguments = $"decode temp/UIAssets.d/button/timg/icon_{i:D2}.tpl --dest \"temp/{Cup.defaultNames[i]}.png\" -o";
+                wimgtProcess.Start();
+                if (i == 0)
+                {
+                    wimgtProcess.WaitForExit();
+                    DisplayImage(CupIcon.Text);
+                }
+                else await wimgtProcess.WaitForExitAsync(cancelToken.Token);
+                                     
+            }
+
+        }
+
+        private bool DisplayImage(string path)
+        {
+
+            bool isDefault = Cup.defaultNames.Contains(path.Remove(path.Length - 4));
+            string filePath = isDefault ? $"temp/{path}" : $"input/CupIcons/{path}";
+
+            if (!File.Exists(filePath))
+            {
+                if (isDefault) //has not finished extracting all default tpls
+                {
+                    return false;
+                }
+                else
+                {
+                    MsgWindow.Show($"{path} does not exist.");
+                    return false;
+                }
+            }
+            BitmapImage src = new BitmapImage();
+            src.BeginInit();
+            src.UriSource = new Uri(filePath, UriKind.Relative);
+            src.CacheOption = BitmapCacheOption.OnLoad;
+            src.EndInit();
+            IconDisplay.Source = src;
+            IconDisplay.Stretch = Stretch.Uniform;
+            return true;
+
+        }
 
 
 

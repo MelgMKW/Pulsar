@@ -8,6 +8,7 @@ using System.Windows;
 using System.Drawing;
 using static PulsarPackCreator.MainWindow;
 using System.Windows.Shapes;
+using System.Runtime.Versioning;
 
 
 namespace PulsarPackCreator
@@ -35,7 +36,7 @@ namespace PulsarPackCreator
 
             //Need to add checks here i.e. slot validity, number of lines in each text box
 
-            string[] tplsImport = CupsTPLImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+            string[] iconImport = CupsIconImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
             string[] namesImport = CupsNameImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
 
             foreach (string cur in namesImport)
@@ -46,48 +47,38 @@ namespace PulsarPackCreator
                     return;
                 }
             }
-            if (namesImport.Length != tplsImport.Length)
+            if (namesImport.Length != iconImport.Length)
             {
                 MsgWindow.Show("Not an equal amount of entries in both columns");
             }
 
-            if (namesImport.Length > parent.ctsCupCount || tplsImport.Length > parent.ctsCupCount)
+            if (namesImport.Length > parent.ctsCupCount || iconImport.Length > parent.ctsCupCount)
             {
                 MsgWindow.Show("Entries exceeded existing number of cups.");
                 return;
             }
 
-            if (namesImport.Length > 100 || tplsImport.Length > 100)
+            if (namesImport.Length > 100 || iconImport.Length > 100)
             {
                 MsgWindow.Show("You can only customize the names and images of up to 100 cups.");
                 return;
             }
 
-            for (int i = 0; i < tplsImport.Length; i++)
+            for (int i = 0; i < iconImport.Length; i++)
             {
-                string curIMGPath = $"input/CupIcons/{tplsImport[i]}";
+                string curIMGPath = $"input/CupIcons/{iconImport[i]}";
                 if (!File.Exists(curIMGPath))
                 {
-                    MsgWindow.Show($"{curIMGPath} could not be found in the input folder. Make sure to specify .tpl at the end of your tpl names.");
+                    MsgWindow.Show($"{iconImport[i]} could not be found in input/CupIcons. Make sure to specify the extension at the end of the filename.");
                     return;
                 }
-                //parent.cups[i].imgPath = curIMGPath;
-                //parent.cupNames[i] = namesImport[i];
+                parent.cups[i].iconName = iconImport[i];
+                parent.cups[i].name = namesImport[i];
             }
             Hide();
         }
 
-        public bool IsCorrectCupIcon(string path)
-        {
-            Image image = Image.FromFile(path);
-            if (image.Width != image.Height)
-            {
-                MsgWindow.Show($"The image resolution for {path} is not a square.");
-                return false;
-            }
-            return true;
-        }
-
+        [SupportedOSPlatform("windows")]
         public static System.Drawing.Image ResizeImage(string path)
         {
             try

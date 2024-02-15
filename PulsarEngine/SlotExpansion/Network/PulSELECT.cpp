@@ -4,7 +4,7 @@
 #include <MarioKartWii/System/random.hpp>
 #include <MarioKartWii/Archive/ArchiveRoot.hpp>
 #include <SlotExpansion/Network/PulSELECT.hpp>
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 #include <PulsarSystem.hpp>
 #include <Info.hpp>
 

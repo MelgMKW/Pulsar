@@ -9,7 +9,7 @@
 #include <Debug/Debug.hpp>
 #include <IO/IO.hpp>
 #include <Info.hpp>
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 #include <Network/MatchCommand.hpp>
 
 namespace Pulsar {

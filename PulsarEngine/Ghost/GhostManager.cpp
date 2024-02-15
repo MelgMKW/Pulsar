@@ -56,7 +56,7 @@ void Manager::Init(PulsarId id) {
     for(int i = 0; i < io->GetFileCount(); ++i) {
         this->rkg.ClearBuffer();
         GhostData& curData = this->files[counter];
-        s32 ret = io->ReadFolderFile(&this->rkg, i, FILE_MODE_READ, sizeof(RKG));
+        s32 ret = io->ReadFolderFile(&this->rkg, i, sizeof(RKG));
         if(ret > 0 && rkg.CheckValidity()) {
 
             curData.Init(rkg);
@@ -130,7 +130,7 @@ void Manager::DisableGhost(const GhostListEntry& entry) {
 //Loads and checks validity of a RKG
 bool Manager::LoadGhost(RKG& rkg, u32 index) {
     rkg.ClearBuffer();
-    IO::sInstance->ReadFolderFile(&rkg, index, FILE_MODE_READ, sizeof(RKG));
+    IO::sInstance->ReadFolderFile(&rkg, index, sizeof(RKG));
     return rkg.CheckValidity();
 }
 

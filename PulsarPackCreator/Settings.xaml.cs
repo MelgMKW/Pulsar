@@ -242,7 +242,7 @@ namespace PulsarPackCreator
                 main,
                 MainWindow.settingsWindow,
                 MainWindow.crashWindow,
-                MainWindow.msgWindow,
+                MainWindow.messageWindow,
                 MainWindow.importWindow
             };
             bool isLight = mode == ColorMode.Light_Mode;

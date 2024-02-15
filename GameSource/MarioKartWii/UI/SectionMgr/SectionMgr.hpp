@@ -72,7 +72,6 @@ public:
 }; //Total Size 0x9C
 size_assert(SectionMgr, 0x9c);
 
-extern "C" {
-    void SetupSectionLoad();
-}
+extern SectionId SetupSectionLoad();
+
 #endif

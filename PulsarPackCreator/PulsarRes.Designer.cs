@@ -223,6 +223,26 @@ namespace Pulsar_Pack_Creator {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] wimgt {
+            get {
+                object obj = ResourceManager.GetObject("wimgt", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] wszst {
+            get {
+                object obj = ResourceManager.GetObject("wszst", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;wiidisc version=&quot;1&quot;&gt;
         ///	&lt;id game=&quot;RMC&quot;/&gt;
         ///	&lt;options&gt;

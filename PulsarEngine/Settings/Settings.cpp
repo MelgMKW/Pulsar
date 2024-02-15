@@ -1,6 +1,6 @@
 #include <Settings/Settings.hpp>
 #include <PulsarSystem.hpp>
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 #include <Debug/Debug.hpp>
 #include <IO/IO.hpp>
 
@@ -75,7 +75,7 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
 
     const PulsarCupId last = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>().lastSelectedCup;
     CupsConfig* cupsConfig = CupsConfig::sInstance;
-    if(last != -1 && cupsConfig->IsValidCup(last)) {
+    if(last != -1 && cupsConfig->IsValidCup(last) && cupsConfig->GetTotalCupCount() > 8) {
         cupsConfig->lastSelectedCup = last;
         cupsConfig->selectedCourse = static_cast<PulsarId>(last * 4);
         cupsConfig->lastSelectedCupButtonIdx = last & 1;
@@ -184,6 +184,7 @@ void Mgr::UpdateTrackList() {
 
     if(oldTrackCount < trackCount) { //the surplus of tracks is simply put continuously at the end of the file, which has been resized to fit the additional tracks
         this->AdjustTrackCount(trackCount);
+        trophies = this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>().trophies;
         u32 idx = oldTrackCount;
         for(int curNew = 0; curNew < trackCount; ++curNew) { //4032 4132
             if(missingCRCIndex[curNew] == 0xFFFF) {
@@ -192,6 +193,7 @@ void Mgr::UpdateTrackList() {
                 ++idx;
             }
         }
+        this->Save();
     }
     delete[](missingCRCIndex);
     delete[](toberemovedCRCIndex);

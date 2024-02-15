@@ -3,7 +3,7 @@
 #include <MarioKartWii/RKNet/RH1.hpp>
 #include <SlotExpansion/Network/PulRH1.hpp>
 
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 
 namespace Pulsar {
 namespace Network {

@@ -177,6 +177,10 @@ Result GetTypeAsync(const char* path, u8* type, Callback callback, CommandBlock*
 
 }//namespace NAND
 
+namespace nand {
+void GenerateAbsPath(char* dest, const char* src); //8019e020
+}//namespace nand
+
 
 
 

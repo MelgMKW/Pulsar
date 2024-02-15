@@ -46,7 +46,7 @@ namespace PulsarPackCreator
                 owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
                 if(owner == null) owner = main;
             }
-            MsgWindow window = MainWindow.msgWindow;
+            MsgWindow window = MainWindow.messageWindow;
             window.Owner = owner;       
             window.Title = caption;
             window.TextSpace.Text = text;

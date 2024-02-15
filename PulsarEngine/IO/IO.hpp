@@ -38,6 +38,7 @@ public:
     virtual bool OpenFile(const char* path, u32 mode) = 0;
     virtual bool CreateAndOpen(const char* path, u32 mode) = 0;
     virtual void GetCorrectPath(char* realPath, const char* path) const = 0;
+    virtual bool RenameFile(const char* oldPath, const char* newPath) const = 0;
 
     virtual bool FolderExists(const char* path) const = 0;
     virtual bool CreateFolder(const char* path) = 0;
@@ -61,7 +62,7 @@ public:
     //void RequestCreateFolder(const char* path); //up to 2 simultaneous
     void CloseFolder();
     void GetFolderFilePath(char* dest, u32 index) const;
-    s32 ReadFolderFile(void* buffer, u32 index, u32 mode, u32 maxLength);
+    s32 ReadFolderFile(void* buffer, u32 index, u32 maxLength);
 
     const IOType type;
 

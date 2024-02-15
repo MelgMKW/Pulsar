@@ -4,7 +4,7 @@
 #include <MarioKartWii/UI/Page/Other/GhostSelect.hpp>
 #include <MarioKartWii/UI/Page/Other/Votes.hpp>
 #include <MarioKartWii/GlobalFunctions.hpp>
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 #include <SlotExpansion/UI/ExpCupSelect.hpp>
 #include <SlotExpansion/UI/ExpansionUIMisc.hpp>
 
@@ -133,6 +133,7 @@ void ExtCupSelectCupInitSelf(CtrlMenuCupSelectCup* cups) {
         buttons[i]->SetOnSelectHandler(cups->onCupButtonSelectHandler);
         buttons[i]->SetPlayerBitfield(SectionMgr::sInstance->curSection->Get<Pages::CupSelect>()->GetPlayerBitfield());
     }
+
     buttons[cupsConfig->lastSelectedCupButtonIdx]->SelectInitialButton(0);
 };
 kmWritePointer(0x808d324c, ExtCupSelectCupInitSelf); //807e5894

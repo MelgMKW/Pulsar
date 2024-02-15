@@ -1,7 +1,7 @@
 #ifndef _SETTINGS_
 #define _SETTINGS_
 #include <kamek.hpp>
-#include <SlotExpansion/CupsDef.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
 #include <PulsarSystem.hpp>
 #include <Settings/UI/SettingsPanel.hpp>
 #include <MarioKartWii/UI/Page/Menu/SinglePlayer.hpp>
@@ -152,7 +152,7 @@ protected:
     char filePath[IOS::ipcMaxPath];
     Binary* rawBin;
 private:
-    u16 totalTrophyCount[4];
+
     TrackTrophy* FindTrackTrophy(u32 crc32, TTMode mode) const;
     void UpdateTrackList();
     void SetSettingValue(Type type, u32 setting, u8 value);
@@ -179,6 +179,9 @@ public:
 
     static u8 GetSettingValue(Type type, u32 setting);
     static void Create();
+
+private:
+    u16 totalTrophyCount[4];
 
 };
 }//namespace Settings

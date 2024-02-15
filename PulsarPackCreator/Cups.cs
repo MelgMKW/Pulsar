@@ -8,13 +8,122 @@ using System.Windows.Input;
 
 namespace PulsarPackCreator
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
+
+    
+        
+
+
+
     public partial class MainWindow : Window
     {
         public class Cup
         {
+            public static readonly string[] defaultNames =
+            {
+                "Amp",
+                "Baron Brr",
+                "Barribad",
+                "Beanie",
+                "Blitty",
+                "Block",
+                "Blooper",
+                "Bob-omb King",
+                "Boo",
+                "Boom Boom",
+                "Brick Block",
+                "Broggy",
+                "Broozer",
+                "Broque Madame",
+                "Bullet Bill",
+                "Chargin' Chuck",
+                "Cheep Cheep",
+                "Chomp",
+                "Chuboomba",
+                "Clock",
+                "Coin",
+                "Cortex",
+                "Dimentio",
+                "Dixie Kong",
+                "Dolphin",
+                "Dreambert",
+                "Fantasma",
+                "Fawful",
+                "Feather",
+                "Flipbug",
+                "Flutter",
+                "Fuzzy",
+                "Galoomba",
+                "Gearmo",
+                "Geno",
+                "Glamdozer",
+                "Glydon",
+                "Goob",
+                "Goomba",
+                "Goombette",
+                "Goonie",
+                "Grambi",
+                "Grubba",
+                "Hammer Bro",
+                "Hariet",
+                "Honeybee",
+                "Hootz",
+                "Kalimba",
+                "Kamella",
+                "Krool",
+                "Lady Lima",
+                "Lakitu",
+                "Launch Star",
+                "Lord Fredrik",
+                "Lubba",
+                "Luma",
+                "Major Burrows",
+                "Mallow",
+                "Marilyn",
+                "Midbus",
+                "Morton",
+                "Mouser",
+                "Nabbit",
+                "Ninji",
+                "O'Chunks",
+                "Oho Jee",
+                "P-Wing",
+                "Pa-Patch",
+                "Peasley",
+                "Penguin",
+                "Pianta",
+                "Pointy Tucks",
+                "Pokey",
+                "Polterpup",
+                "Pom Pom",
+                "Popple",
+                "Porcupuffer",
+                "Queen Bean",
+                "Retrocloud",
+                "Retroflower",
+                "Rollodillo",
+                "Shroob",
+                "Shy Guy",
+                "Sir Grodus",
+                "Spike Blop",
+                "Spiky Cheep Cheep",
+                "Sprixie",
+                "Starlow",
+                "Stuffwell",
+                "Sumo Bro",
+                "Tiki Buzz",
+                "Toothberry",
+                "Tornado",
+                "Tostarenan",
+                "Urchin",
+                "Wart",
+                "Whacka",
+                "Whomp",
+                "X-Naut",
+                "Yoshi Egg"
+            };
+
+            public const int maxCupIcons = 100;
             public Cup(UInt32 idx)
             {
                 this.idx = idx;
@@ -33,6 +142,17 @@ namespace PulsarPackCreator
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost,defaultGhost} };
+                if(idx < 100)
+                {
+                    name = defaultNames[idx];
+                    iconName = $"{name}.png";
+                }
+                else
+                {
+                    name = "";
+                    iconName = "";
+                }
+                
             }
 
             public Cup(PulsarGame.Cup raw) : this(0)
@@ -41,9 +161,12 @@ namespace PulsarPackCreator
                 for (int i = 0; i < 4; i++)
                 {
                     PulsarGame.Track track = raw.tracks[i];
-                    slots[i] = track.slot;
+                    if (track.slot >= 0x20) slots[i] = 0x08; //remove battle slots from old config.pul
+                    else slots[i] = track.slot;
                     musicSlots[i] = track.musicSlot;
                 }
+                name = defaultNames[idx];
+                iconName = $"{name}.png";
             }
 
             public UInt32 idx;
@@ -55,7 +178,8 @@ namespace PulsarPackCreator
             public string[] authorNames;
             public string[] versionNames;
             public string[,] expertFileNames;
-            public string imgPath = "";
+            public string iconName = "";
+            public string name = "";
         }
 
         private void OnCupCountChange(object sender, TextChangedEventArgs e)
@@ -101,6 +225,38 @@ namespace PulsarPackCreator
             UpdateCurCup((short)(dest - 1 - curCup));        
         }
 
+        private void OnCupNameChange(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            if(curCup > 100)
+            {
+                MsgWindow.Show("Only the first 100 cups have names and icons.");
+                box.Text = "";
+                return;
+            }
+            if (box.Text == "") box.Text = Cup.defaultNames[curCup];
+            cups[curCup].name = box.Text;
+        }
+
+        private void OnCupIconChange(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            if (curCup > 100)
+            {
+                MsgWindow.Show("Only the first 100 cups have names and icons.");
+                box.Text = "";
+                return;
+            }
+            if (box.Text == "") box.Text = $"{Cup.defaultNames[curCup]}.png";          
+        }
+        private void OnCupIconLostKBFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            if(box.Text != cups[curCup].iconName && box.Text != "") {
+                bool ret = DisplayImage(box.Text);
+                if(ret) cups[curCup].iconName = box.Text;
+            }
+        }
         private void OnFilenameChange(object sender, TextChangedEventArgs e)
         {
             TextBox box = sender as TextBox;
@@ -160,7 +316,7 @@ namespace PulsarPackCreator
         {
             ComboBox box = sender as ComboBox;
             int idx = Grid.GetRow(box);
-            cups[curCup].musicSlots[idx - firstTrackRow] = PulsarGame.MarioKartWii.idxToCourseId[box.SelectedIndex];
+            cups[curCup].musicSlots[idx - firstTrackRow] = PulsarGame.MarioKartWii.musicIdxToCourseId[box.SelectedIndex];
         }
 
         private void OnLeftArrowClick(object sender, RoutedEventArgs e)
@@ -208,12 +364,16 @@ namespace PulsarPackCreator
                 Slot2.SelectedValue =  PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[1])];
                 Slot3.SelectedValue =  PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[2])];
                 Slot4.SelectedValue =  PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[3])];
-                Music1.SelectedValue = PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.musicSlots[0])];
-                Music2.SelectedValue = PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.musicSlots[1])];
-                Music3.SelectedValue = PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.musicSlots[2])];
-                Music4.SelectedValue = PulsarGame.MarioKartWii.idxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.musicSlots[3])];
+                Music1.SelectedValue = PulsarGame.MarioKartWii.musicIdxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cup.musicSlots[0])];
+                Music2.SelectedValue = PulsarGame.MarioKartWii.musicIdxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cup.musicSlots[1])];
+                Music3.SelectedValue = PulsarGame.MarioKartWii.musicIdxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cup.musicSlots[2])];
+                Music4.SelectedValue = PulsarGame.MarioKartWii.musicIdxToAbbrev[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cup.musicSlots[3])];
                 CupIdLabel.Text = $"Cup {curCup + 1}";
+                CupName.Text = cup.name;
+                CupIcon.Text = cup.iconName;
+                DisplayImage(cup.iconName);
             }
+            
         }
 
         private void OnAlphabetizeClick(object sender, RoutedEventArgs e)
@@ -222,6 +382,8 @@ namespace PulsarPackCreator
             for (UInt16 i = 0; i < cups.Count(); i++)
             {
                 sortedCups[i] = new Cup(i);
+                sortedCups[i].name = cups[i].name;
+                sortedCups[i].iconName = cups[i].iconName;
             }
 
             string[] indexedArray = new string[ctsCupCount * 4];

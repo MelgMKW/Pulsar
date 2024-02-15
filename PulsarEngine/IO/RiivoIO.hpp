@@ -107,6 +107,7 @@ class RiivoIO : public IO {
     bool OpenFile(const char* path, u32 mode) override;
     bool CreateAndOpen(const char* path, u32 mode) override;
     void GetCorrectPath(char* realPath, const char* path) const override;
+    bool RenameFile(const char* oldPath, const char* newPath) const override { return false; }
 
     bool FolderExists(const char* path) const override;
     bool CreateFolder(const char* path) override;

@@ -77,4 +77,12 @@ void NANDIO::ReadFolder(const char* path) {
     EGG::Heap::free(originalPtr, this->heap);
 }
 
+bool NANDIO::RenameFile(const char* oldPath, const char* newPath) const {
+    char realOldPath[IOS::ipcMaxPath];
+    char realNewPath[IOS::ipcMaxPath];
+    this->GetCorrectPath(realOldPath, oldPath);
+    this->GetCorrectPath(realNewPath, newPath);
+    return ISFS::Rename(realOldPath, realNewPath) >= 0;
+}
+
 }//namespace Pulsar

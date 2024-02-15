@@ -56,7 +56,7 @@ public:
     virtual void OnCycleEnd2(); //0x104 806c19e4
     virtual void OnCycleStart(); //0x108 806c19e8
     virtual void OnCycleStart2(); //0x10c 806c1a88
-    virtual void OnInitialCollision(); //0x110 806c1dcc
+    virtual void OnInitialGroundCollision(); //0x110 806c1dcc
     virtual void vf_0x114(); //0x114 806c1e90
     virtual void vf_0x118(); //0x118 806c2000
     virtual void vf_0x11c(); //0x11c 806c2138
@@ -91,7 +91,7 @@ public:
     void OnCycleEnd2() override; //0x104 806c30f4
     void OnCycleStart() override; //0x108 806c30f8
     void OnCycleStart2() override; //0x10c 806c31f0
-    void OnInitialCollision() override; //0x110 806c33b4
+    void OnInitialGroundCollision() override; //0x110 806c33b4
     void vf_0x114() override; //0x114 806c33c4
 
     void UpdateImpl(); //806c2da4

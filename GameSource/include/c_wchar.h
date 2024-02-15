@@ -22,6 +22,10 @@ extern "C" {
     wchar_t* wmemcpy(wchar_t* dest, const wchar_t* src, size_t count);
 
 
+    int mbtowc(wchar_t* pwc, const char* pmb, size_t max);
+    size_t mbstowcs(wchar_t* dest, const char* src, size_t max);
+    int wcstombs(char* dest, const wchar_t* src, size_t);
+
 #ifdef __cplusplus
 }
 #endif

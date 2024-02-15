@@ -19,7 +19,13 @@ inline void GetTrackBMG(wchar_t* dest, PulsarId id) {
         const wchar_t* ptrSpace = wcschr(name, L'\\') - sizeof(L' ');
         realLength = (ptrSpace - name) / sizeof(wchar_t);
     }
-    wcsncpy(dest, name, realLength);
+    if(realLength < 0x100) {
+        dest[realLength] = L'\0';
+        wcsncpy(dest, name, realLength);
+    }
+    else dest[0] = L'\0';
+
+
 }
 int GetTrackBMGByRowIdx(u32 cupTrackIdx);
 int GetCurTrackBMG();

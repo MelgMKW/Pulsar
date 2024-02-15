@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -21,9 +22,10 @@ namespace PulsarPackCreator
         public int firstTrackRow = 1;
         public int firstTrackCol = 1;
 
-        protected override void OnClosing(CancelEventArgs e){
-          
-            
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            cancelToken.Cancel();
+            Directory.Delete("temp/", true);
         }
 
         private void OnMassImportClick(object sender, RoutedEventArgs e)
@@ -68,13 +70,20 @@ namespace PulsarPackCreator
 
         private void OnDropFile(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            try
             {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                if (Path.GetExtension(files[0]).ToLowerInvariant() == ".pul")
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
                 {
-                    OpenPulFile(files[0]);
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    if (Path.GetExtension(files[0]).ToLowerInvariant() == ".pul")
+                    {
+                        OpenPulFile(files[0]);
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                MsgWindow.Show(ex.Message);
             }
         }
 
@@ -174,11 +183,6 @@ namespace PulsarPackCreator
 
                     }
 
-                    if (cups[cupIdx].expertFileNames[row, col - 1] != "RKG File" && cups[cupIdx].expertFileNames[row, col - 1] != "")
-                    {
-                        trophyCount[col - 1]++;
-                    }
-
                     cups[cupIdx].expertFileNames[row, col - 1] = fileName;
                     row++;
                     if (row == 4)
@@ -202,12 +206,7 @@ namespace PulsarPackCreator
                             if (i / 4 == 0)
                             {
                                 box = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == curRow + 1 && Grid.GetColumn(x) == col) as TextBox;
-                                box.Text = fileName;
-                                
-                            }
-                            if (cups[i / 4].expertFileNames[curRow, col - 1] != "RKG File" && cups[i / 4].expertFileNames[curRow, col - 1] != "")
-                            {
-                                trophyCount[col - 1]++;
+                                box.Text = fileName;                              
                             }
                         }
                     }
