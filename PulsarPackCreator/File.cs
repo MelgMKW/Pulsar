@@ -70,6 +70,10 @@ namespace PulsarPackCreator
 
                 ParseBMGAndFILE(bmgSR, fileSR);
 
+                //Clear
+                CC100.Text = "0";
+                CC150.Text = "0";
+
                 CupCount.Text = $"{ctsCupCount}";
                 Regs.SelectedIndex = parameters.regsMode;
                 TTTrophies.IsChecked = parameters.hasTTTrophies;
@@ -337,6 +341,7 @@ namespace PulsarPackCreator
                     string modFolder = $"output/{parameters.modFolderName}";
                     File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
                     Directory.CreateDirectory($"{modFolder}/Assets");
+                    Directory.CreateDirectory($"{modFolder}/Assets/BRSTM");
                     File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
                     File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
                     File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
@@ -351,7 +356,7 @@ namespace PulsarPackCreator
                     wimgtProcessInfo.UseShellExecute = false;
                     wimgtProcess.StartInfo = wimgtProcessInfo;
 
-                    for (int i = 0; i < ctsCupCount; i++)
+                    for (int i = 0; i < Math.Min(ctsCupCount, (ushort)100); i++)
                     {
                         Cup cup = cups[i];
                         if (cup.iconName != $"{Cup.defaultNames[i]}.png")
@@ -495,7 +500,11 @@ namespace PulsarPackCreator
             if (!isFake)
             {
                 string iconName = cup.iconName;
-                string finalIconName = iconName.Remove(iconName.Length - 4) != Cup.defaultNames[cup.idx] ? "" : iconName;
+                string finalIconName = "";
+                if (idx < 100 && iconName.Length > 4 && iconName.Remove(iconName.Length - 4) != Cup.defaultNames[cup.idx])
+                {
+                    finalIconName = iconName;
+                }
                 bmgSW.WriteLine($"  {0x10000 + idx:X}    = {cup.name}");
                 fileSW.WriteLine($"{idx:X}?{iconName}");
             }
