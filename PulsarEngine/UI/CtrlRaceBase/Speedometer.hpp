@@ -17,22 +17,23 @@ public:
 private:
     struct SpeedArg {
         SpeedArg() {}
-        SpeedArg(u32 hundreds, u32 tens, u32 units, u32 dot, u32 decimals) :
-            hundreds(hundreds), tens(tens), units(units), dot(dot), decimals(decimals) {}
+        SpeedArg(u32 hundreds, u32 tens, u32 units, u32 dot, u32 tenths, u32 hundredths, u32 thousandths) :
+            hundreds(hundreds), tens(tens), units(units), dot(dot), tenths(tenths), hundredths(hundredths), thousandths(thousandths) {}
         union {
-            u32 values[5];
+            u32 values[7];
             struct {
                 u32 hundreds;
                 u32 tens;
                 u32 units;
                 u32 dot;
-                u32 decimals;
+                u32 tenths;
+                u32 hundredths;
+                u32 thousandths;
             };
         };
     };
     void Load(const char* variant, u8 id);
     void Animate(const SpeedArg* args = nullptr);
-
 };
 }//namespace UI
 }//namespace Pulsar

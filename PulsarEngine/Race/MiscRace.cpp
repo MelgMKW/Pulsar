@@ -13,7 +13,12 @@ namespace Race {
 //From JoshuaMK, ported to C++ by Brawlbox and adapted as a setting
 int MiiHeads(RaceData* racedata, u32 unused, u32 unused2, u8 id) {
     CharacterId charId = racedata->racesScenario.players[id].characterId;
-    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_MII) == RACESETTING_MII_ENABLED) {
+    const RKNet::RoomType roomType =  RKNet::Controller::sInstance->roomType;
+    bool isDisabled = false;
+    if(roomType == RKNet::ROOMTYPE_FROOM_HOST || roomType == RKNet::ROOMTYPE_FROOM_NONHOST) {
+        isDisabled = System::sInstance->disableMiiHeads;
+    }
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_MII) == RACESETTING_MII_ENABLED && !isDisabled) {
         if(charId < MII_M) {
             if(id == 0) charId = MII_M;
             else if(RKNet::Controller::sInstance->connectionState != 0) charId = MII_M;

@@ -157,7 +157,12 @@ namespace PulsarPackCreator
 
             public Cup(PulsarGame.Cup raw) : this(0)
             {
-                idx = raw.idx;
+                List<Cup> cups = (GetWindow(App.Current.MainWindow) as MainWindow).cups;
+                uint rawIdx = raw.idx;
+                bool alreadyUsed = cups.Find(c => c.idx == rawIdx) != null;
+
+                this.idx = alreadyUsed ? (uint)cups.Count : rawIdx;
+                
                 for (int i = 0; i < 4; i++)
                 {
                     PulsarGame.Track track = raw.tracks[i];
@@ -165,8 +170,17 @@ namespace PulsarPackCreator
                     else slots[i] = track.slot;
                     musicSlots[i] = track.musicSlot;
                 }
-                name = defaultNames[idx];
-                iconName = $"{name}.png";
+
+                if (idx < 100)
+                {
+                    name = defaultNames[idx];
+                    iconName = $"{name}.png";
+                }
+                else
+                {
+                    name = "";
+                    iconName = "";
+                }
             }
 
             public UInt32 idx;
@@ -197,7 +211,7 @@ namespace PulsarPackCreator
                 box.Text = $"{ctsCupCount}";
                 return;
             }
-            for (UInt16 ite = ctsCupCount; ite < newCount; ite++)
+            for (UInt16 ite = (UInt16)cups.Count; ite < newCount; ite++)
             {
                 cups.Add(new Cup(ite));
             }
@@ -228,26 +242,33 @@ namespace PulsarPackCreator
         private void OnCupNameChange(object sender, TextChangedEventArgs e)
         {
             TextBox box = sender as TextBox;
-            if(curCup > 100)
+            if (box.IsKeyboardFocused)
             {
-                MsgWindow.Show("Only the first 100 cups have names and icons.");
-                box.Text = "";
-                return;
+                if (curCup > 100)
+                {
+                    MsgWindow.Show("Only the first 100 cups have names and icons.");
+                    box.Text = "";
+                    return;
+                }
+                if (box.Text == "") box.Text = Cup.defaultNames[curCup];
+                cups[curCup].name = box.Text;
             }
-            if (box.Text == "") box.Text = Cup.defaultNames[curCup];
-            cups[curCup].name = box.Text;
         }
 
         private void OnCupIconChange(object sender, TextChangedEventArgs e)
         {
             TextBox box = sender as TextBox;
-            if (curCup > 100)
+            if (box.IsKeyboardFocused)
             {
-                MsgWindow.Show("Only the first 100 cups have names and icons.");
-                box.Text = "";
-                return;
+                if (curCup > 100)
+                {
+                    MsgWindow.Show("Only the first 100 cups have names and icons.");
+                    box.Text = "";
+                    return;
+                }
+                if (box.Text == "") box.Text = $"{Cup.defaultNames[curCup]}.png";
             }
-            if (box.Text == "") box.Text = $"{Cup.defaultNames[curCup]}.png";          
+                      
         }
         private void OnCupIconLostKBFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
@@ -267,15 +288,15 @@ namespace PulsarPackCreator
         public static bool CheckTrackName(string name)
         {
             char[] invalid = Path.GetInvalidFileNameChars();
+            invalid = invalid.Where(x => x != '\\').ToArray();
             return name.IndexOfAny(invalid) < 0;
         }
         private void OnTrackNameInput(object sender, TextCompositionEventArgs e)
         {
             string text = e.Text;
-            char[] invalid = Path.GetInvalidFileNameChars();
             if (!CheckTrackName(text))
             {
-                MsgWindow.Show("Track names cannot contain any of <>:\"/\\|?*");
+                MsgWindow.Show("Track names cannot contain any of <>:\"/|?*");
                 e.Handled = true;
             }
         }
@@ -371,7 +392,8 @@ namespace PulsarPackCreator
                 CupIdLabel.Text = $"Cup {curCup + 1}";
                 CupName.Text = cup.name;
                 CupIcon.Text = cup.iconName;
-                DisplayImage(cup.iconName);
+                if (cup.idx < 100) DisplayImage(cup.iconName);
+                else IconDisplay.Source = null;
             }
             
         }

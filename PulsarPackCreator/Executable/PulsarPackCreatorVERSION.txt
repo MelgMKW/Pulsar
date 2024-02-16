@@ -1,3 +1,12 @@
+·Updated to 1.1.1
+Creator Changes:
+-Import no longer fails for configs of over 100 cups.
+-No longer warns an infinite amount of times about names and icons for cup indexes over 100.
+-Backslashes are now allowed in track names, but should only be used for BMG formatting (e.g. for coloured text)
+Engine Changes:
+-New race settings to choose the speedometer location and to change its number of fractional part digits
+-New host setting to allow/forbid the use of mii heads in a friend room
+
 ·Updated to 1.1.0
 MAJOR CHANGE:
 -Pulsar data on dolphin now lives in Dolphin Emulator/Wii/shared2. It was previously in Dolphin Emulator/Wii/title/00010004 but some users' NAND had specific permissions prevent the use of that location. MAKE SURE TO MOVE YOUR PACK DATA TO THE NEW LOCATION.

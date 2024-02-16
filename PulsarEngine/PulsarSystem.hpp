@@ -123,6 +123,7 @@ private:
 public:
     //Network
     bool hasHAW;
+    bool disableMiiHeads;
     bool isCustomDeny;
     u8 deniesCount;
     u8 curBlockingArrayIdx;

@@ -708,7 +708,7 @@ namespace PulsarPackCreator
 
         private bool DisplayImage(string path)
         {
-
+            if (path == "") return false;
             bool isDefault = Cup.defaultNames.Contains(path.Remove(path.Length - 4));
             string filePath = isDefault ? $"temp/{path}" : $"input/CupIcons/{path}";
 
