@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -204,7 +204,8 @@ namespace PulsarPackCreator
                 box.Text = "1";
                 return;
             }
-            UInt16 newCount = UInt16.Parse(box.Text);
+            if (!UInt16.TryParse(box.Text, out UInt16 newCount))
+                return;
             if (newCount > 1000)
             {
                 MsgWindow.Show("The maximum number of cups is 1000.");
@@ -224,7 +225,8 @@ namespace PulsarPackCreator
             if (!e.Handled)
             {
                 TextBox box = sender as TextBox;
-                int dest = int.Parse(box.Text + e.Text);
+                if (!int.TryParse(box.Text + e.Text, out int dest))
+                    return;
                 if (dest > ctsCupCount) e.Handled = true;
             }
         }
@@ -235,7 +237,8 @@ namespace PulsarPackCreator
             {
                 return;
             }
-            short dest = short.Parse(box.Text);
+            if (!short.TryParse(box.Text, out short dest))
+                return;
             UpdateCurCup((short)(dest - 1 - curCup));        
         }
 
