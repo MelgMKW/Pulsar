@@ -21,6 +21,7 @@ namespace PulsarPackCreator
         {
             parent = parentWindow;
             InitializeComponent();
+            this.Height = SystemParameters.PrimaryScreenHeight * 0.7;
         }
         protected override void OnClosing(CancelEventArgs e)
         {
@@ -157,18 +158,6 @@ namespace PulsarPackCreator
                 if (cupIdx == parent.curCup)
                 {
                     parent.UpdateCurCup(0);
-                    /*
-                    TextBox nameBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 2) as TextBox;
-                    nameBox.Text = importStringArrays[0][line];
-                    TextBox authorBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 3) as TextBox;
-                    authorBox.Text = importStringArrays[1][line];
-                    ComboBox slotBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 4) as ComboBox;
-                    slotBox.SelectedIndex = slotIdx;
-                    ComboBox musicSlotBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 5) as ComboBox;
-                    musicSlotBox.SelectedIndex = musicSlotIdx;
-                    */
-
-
                 }
                 row++;
                 if (row == 4)

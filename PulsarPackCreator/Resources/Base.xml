@@ -30,7 +30,7 @@
 		<folder external="/{$pack}/Binaries" disc="/Binaries" create="true"/>
 		<folder external="/{$pack}/Tracks" disc="/Race/Course" create="true"/>
 		<folder external="/{$pack}/Assets" disc="/" create="true"/>
-		<folder external="/{$pack}/Assets/BRSTM" disc="/Sound/strm" create="true"/>
+		<folder external="/{$pack}/CTBRSTM" disc="/Sound/strm" create="true"/>
 	</patch>	
 
 	<patch id="CTGPLoad">

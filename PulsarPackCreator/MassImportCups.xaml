@@ -5,15 +5,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        ResizeMode="CanMinimize"
-        Title="Paste a list of cup TPLs paths and cup names" Height="825" Width="500" Background="{DynamicResource AppBg}"
+        ResizeMode="CanResizeWithGrip"
+        Title="Paste a list of cup icons (with the extension) and names" Height="825" Width="550" Background="{DynamicResource AppBg}"
         HorizontalAlignment="Center" VerticalAlignment="Center">
     <Window.Resources>
         <Style x:Key="Blocks" TargetType="TextBlock">
             <Setter Property="Foreground"           Value="{DynamicResource fg}"/>
             <Setter Property="Background"           Value="Transparent"/>
             <Setter Property="HorizontalAlignment"  Value="Center" />
-            <Setter Property="VerticalAlignment"    Value="Top" />
+            <Setter Property="VerticalAlignment"    Value="Center" />
             <Setter Property="FontSize"             Value="14"/>
             <Setter Property="FontWeight"           Value="Bold"/>
             <Setter Property="TextDecorations"      Value="Underline"/>
@@ -31,7 +31,6 @@
             <Setter Property="BorderThickness"              Value="2"/>
             <Setter Property="TextAlignment"                Value="Center"/>
             <Setter Property="TextWrapping"                 Value="Wrap"/>
-            <Setter Property="Height"                       Value="700"/>
             <Setter Property="VerticalScrollBarVisibility"  Value="Auto"/>
             <Setter Property="AcceptsReturn"                Value="True"/>
         </Style>
@@ -41,24 +40,32 @@
     <Border BorderBrush="Black" BorderThickness="2">
         <Grid Background="{StaticResource importBg}" x:Name="GridMassImport" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="14*"/>
-                <ColumnDefinition Width="14*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
 
-            <Button x:Name="SaveImport" Grid.Column="1"
-                    Margin="80,753,0,0" Height="25" Width="60"
-                    Content="Save"  
-                    Click="OnSaveCupsImportClick" />
-            
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0">
+
+            <Rectangle Grid.RowSpan="3" Grid.Column="0" Stroke="Black" StrokeThickness="2" Fill="Transparent"/>
+            <Rectangle Grid.RowSpan="3" Grid.Column="1" Stroke="Black" StrokeThickness="2" Fill="Transparent"/>
+            <Border Grid.Row="1" Grid.Column="0" BorderThickness="7">
                 <TextBox x:Name="CupsNameImport" Text="MyCupName" Width="240"  Style="{StaticResource Boxes}"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1">
+            <Border  Grid.Row="1" Grid.Column="1" BorderThickness="7">
                 <TextBox x:Name="CupsIconImport"  Text="MyCupIcon.png" Width="240"  Style="{StaticResource Boxes}"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0" Grid.ColumnSpan="2" />
-            <TextBlock x:Name="CupsNameImportLabel"        Grid.Column="0" Margin="18,19,18,743" Text="Cup Names"  Style="{StaticResource Blocks}"/>
-            <TextBlock x:Name="CupsIconImportLabel"     Grid.Column="1" Margin="18,19,18,743" Text="Cup Icons Path (include extension)"  Style="{StaticResource Blocks}"/>
+
+            <TextBlock x:Name="CupsNameImportLabel"    Grid.Row="0"  Grid.Column="0" Text="Cup Names"  Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="CupsIconImportLabel"    Grid.Row="0"  Grid.Column="1" Text="Cup Icons Path (include extension)"  Style="{StaticResource Blocks}"/>
+
+            <Button x:Name="SaveImport" Grid.Row="2" Grid.Column="1"
+                Height="25" Width="60"
+                Content="Save"  
+                Click="OnSaveCupsImportClick" />
         </Grid>
     </Border>
 </Window>

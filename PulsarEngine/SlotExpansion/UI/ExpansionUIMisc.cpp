@@ -56,7 +56,7 @@ void SetVSIntroBmgId(LayoutUIControl& trackName, u32 bmgId) {
     info.bmgToPass[0] = bmg;
     u32 authorId;
     if(bmg < BMG_TRACKS) authorId = BMG_NINTENDO;
-    else authorId = bmgId + BMG_AUTHORS - BMG_TRACKS;
+    else authorId = bmg + BMG_AUTHORS - BMG_TRACKS;
     info.bmgToPass[1] = authorId;
     trackName.SetMsgId(BMG_INFO_DISPLAY, &info);
 

@@ -1,3 +1,12 @@
+·Updated to 1.1.2
+Creator Changes:
+-Trying to build a pack of over 100 cups no longer throws an exception.
+-Fixed mass import window scaling issue.
+-Now creates a CTBRSTM folder inside the pack folder. This is where BRSTM expansion files need to be put.
+-Now creates a My Stuff folder.
+Engine Changes:
+-Fixed author display BMG issue in VS intro.
+
 ·Updated to 1.1.1
 Creator Changes:
 -Import no longer fails for configs of over 100 cups.
