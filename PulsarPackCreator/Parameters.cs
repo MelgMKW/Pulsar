@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,10 +24,6 @@ namespace PulsarPackCreator
             public int trackBlocking = 0;
             public string modFolderName;
         };
-        private void OnOptionsClick(object sender, RoutedEventArgs e)
-        {
-
-        }
         private void OnDateChange(object sender, SelectionChangedEventArgs e)
         {
             DatePicker datePicker = sender as DatePicker;
@@ -45,7 +41,7 @@ namespace PulsarPackCreator
             TextBox box = sender as TextBox;
             if (box.Text == "") return;
 
-            parameters.wiimmfiRegion = int.Parse(box.Text);
+            int.TryParse(box.Text, out parameters.wiimmfiRegion);
         }
 
         private void OnModFolderChange(object sender, TextChangedEventArgs e)
@@ -116,9 +112,9 @@ namespace PulsarPackCreator
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
-                int Prob100 = int.Parse(CC100Box.Text);
+                if(!int.TryParse(CC100Box.Text, out int Prob100)) return;
                 if (Prob100 == 100) CC150Box.Text = "0";
-                int Prob150 = int.Parse(CC150Box.Text);
+                if (!int.TryParse(CC150Box.Text, out int Prob150)) return;
                 if (Prob100 + Prob150 > 100)
                 {
                     MsgWindow.Show("The sum of all probabilities should not exceed 100");
@@ -141,9 +137,9 @@ namespace PulsarPackCreator
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
-                int Prob150 = int.Parse(CC150Box.Text);
+                if (!int.TryParse(CC150Box.Text, out int Prob150)) return;
                 if (Prob150 == 100) CC100Box.Text = "0";
-                int Prob100 = int.Parse(CC100Box.Text);
+                if (!int.TryParse(CC100Box.Text, out int Prob100)) return;
                 if (Prob100 + Prob150 > 100)
                 {
                     MsgWindow.Show("The sum of all info.probabilities should not exceed 100");
