@@ -1,4 +1,4 @@
-﻿using Pulsar_Pack_Creator;
+using Pulsar_Pack_Creator;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -636,25 +636,28 @@ namespace PulsarPackCreator
                     if (curLine.Contains("?"))
                     {
                         string[] split = curLine.Split("?");
-                        UInt32 idx = UInt32.Parse(split[0], NumberStyles.HexNumber);
-                        if (split.Length > 1 && split[1] != "") cups[(int)idx].iconName = split[1];
+                        if (UInt32.TryParse(split[0], NumberStyles.HexNumber, null, out UInt32 idx))
+                        {
+                            if (split.Length > 1 && split[1] != "") cups[(int)idx].iconName = split[1];
+                        }
                     }
                     else
                     {
                         string[] split = curLine.Split("=");
-                        UInt32 id = UInt32.Parse(split[0], NumberStyles.HexNumber);
-
-                        int cupIdx = (int)id / 4;
-                        if (cupIdx < ctsCupCount)
+                        if (UInt32.TryParse(split[0], NumberStyles.HexNumber, null, out UInt32 id))
                         {
-                            int trackIdx = (int)id % 4;
-                            string[] names = split[1].Split("|");
-                            if (names.Length > 0)
+                            int cupIdx = (int)id / 4;
+                            if (cupIdx < ctsCupCount)
                             {
-                                cups[cupIdx].fileNames[trackIdx] = names[0];
-                                for (int i = 1; i < names.Length; i++)
+                                int trackIdx = (int)id % 4;
+                                string[] names = split[1].Split("|");
+                                if (names.Length > 0)
                                 {
-                                    cups[cupIdx].expertFileNames[trackIdx, i - 1] = names[i];
+                                    cups[cupIdx].fileNames[trackIdx] = names[0];
+                                    for (int i = 1; i < names.Length; i++)
+                                    {
+                                        cups[cupIdx].expertFileNames[trackIdx, i - 1] = names[i];
+                                    }
                                 }
                             }
                         }
