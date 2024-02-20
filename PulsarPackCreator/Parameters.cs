@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -7,9 +8,9 @@ namespace PulsarPackCreator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    partial class MainWindow : Window
     {
-        class Parameters
+        public class Parameters
         {
             public byte regsMode = 0;
             public bool hasTTTrophies = false;
@@ -63,6 +64,7 @@ namespace PulsarPackCreator
         {
             ComboBox box = sender as ComboBox;
             parameters.regsMode = (byte)box.SelectedIndex;
+            RegsGhosts.Visibility = box.SelectedIndex > 0 ? Visibility.Visible : Visibility.Collapsed;            
         }
         private void OnTrophiesToggle(object sender, RoutedEventArgs e)
         {
@@ -112,7 +114,7 @@ namespace PulsarPackCreator
             TextBox CC150Box = CC150;
             if (CC100Box.Text == "")
             {
-                CC100Box.Text = $"0";
+                CC100Box.Text = $"{parameters.prob100cc}";
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
@@ -137,7 +139,7 @@ namespace PulsarPackCreator
             TextBox CC100Box = CC100;
             if (CC150Box.Text == "")
             {
-                CC150Box.Text = $"0";
+                CC150Box.Text = $"{parameters.prob150cc}";
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
@@ -157,6 +159,21 @@ namespace PulsarPackCreator
             }
 
 
+        }
+
+        private void OnEditPulsarBMGsClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.FileName = Path.GetFullPath("temp/PulsarBMG.txt");
+                startInfo.UseShellExecute = true;
+                System.Diagnostics.Process.Start(startInfo);
+            }
+            catch(Exception ex)
+            {
+                MsgWindow.Show(ex.ToString());
+            }
         }
     }
 }

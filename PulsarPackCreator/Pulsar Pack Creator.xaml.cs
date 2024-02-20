@@ -1,14 +1,13 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using static PulsarPackCreator.MsgWindow;
 
@@ -17,14 +16,14 @@ namespace PulsarPackCreator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    partial class MainWindow : Window
     {
         public int firstTrackRow = 1;
         public int firstTrackCol = 1;
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            cancelToken.Cancel();
+            IO.IOBase.cancelToken.Cancel();
             Directory.Delete("temp/", true);
         }
 
@@ -48,19 +47,29 @@ namespace PulsarPackCreator
             settingsWindow.Load();
         }
 
-        private void DisablePaste(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (e.Command == ApplicationCommands.Paste)
-            {
-                e.Handled = true;
-            }
-        }
+        
        
         private void NumbersOnlyBox(object sender, TextCompositionEventArgs e)
         {
             string text = e.Text;
             bool isNotNumber = Regex.IsMatch(text, "[^0-9]+");
             e.Handled = isNotNumber;
+        }
+
+        private void NumbersOnlyPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(String)))
+            {
+                String text = (String)e.DataObject.GetData(typeof(String));
+                if (Regex.IsMatch(text, "[^0-9]+"))
+                {
+                    e.CancelCommand();
+                }
+            }
+            else
+            {
+                e.CancelCommand();
+            }
         }
 
         private void OnGhostsClick(object sender, RoutedEventArgs e)
@@ -81,9 +90,9 @@ namespace PulsarPackCreator
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MsgWindow.Show(ex.Message);
+                MsgWindow.Show(ex.ToString());
             }
         }
 
@@ -94,7 +103,7 @@ namespace PulsarPackCreator
   
             if (magic == 0x50554c53)
             {
-                ImportConfigFile(raw);
+                Import(raw);
             }
                                
             else if (magic == 0x50554c44)
@@ -104,7 +113,7 @@ namespace PulsarPackCreator
             }
             else if(magic == 0x50554C4C)
             {
-                ImportLeaderboard(raw);
+                IO.IOBase.ImportLeaderboard(raw);
             }
         }
 
@@ -183,6 +192,11 @@ namespace PulsarPackCreator
 
                     }
 
+                    if (cups[cupIdx].expertFileNames[row, col - 1] != "RKG File" && cups[cupIdx].expertFileNames[row, col - 1] != "")
+                    {
+                        trophyCount[col - 1]++;
+                    }
+
                     cups[cupIdx].expertFileNames[row, col - 1] = fileName;
                     row++;
                     if (row == 4)
@@ -201,12 +215,15 @@ namespace PulsarPackCreator
                         string curTrack = cups[i / 4].trackNames[curRow];
                         if (fileName.Contains(curTrack, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            cups[i / 4].expertFileNames[curRow, col - 1] = fileName;
                             //int idx = cups.FindIndex(x => x.trackNames[0] == curTrack || x.trackNames[1] == curTrack || x.trackNames[2] == curTrack || x.trackNames[3] == curTrack);
                             if (i / 4 == 0)
                             {
                                 box = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == curRow + 1 && Grid.GetColumn(x) == col) as TextBox;
-                                box.Text = fileName;                              
+                                box.Text = fileName;
+                            }
+                            if (cups[i / 4].expertFileNames[curRow, col - 1] != "RKG File" && cups[i / 4].expertFileNames[curRow, col - 1] != "")
+                            {
+                                trophyCount[col - 1]++;
                             }
                         }
                     }
@@ -229,7 +246,7 @@ namespace PulsarPackCreator
 
         private void OnMainWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind == true)
+            if (PulsarPackCreator.Properties.Settings.Default.ExitRemind == true)
             {
                 MsgWindowResult ret = MsgWindow.Show("Are you sure you want to close the creator?", MsgWindowButton.YesNo);
                 if (ret == MsgWindowResult.No)
@@ -247,6 +264,163 @@ namespace PulsarPackCreator
             image.EndInit();
             Application.Current.Resources["imageBg"] = image;           
             SettingsWindow.ApplyColorMode();           
+        }
+
+        private void OnImportConfigClick(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog openFile = new Microsoft.Win32.OpenFileDialog();
+            openFile.DefaultExt = ".pul";
+            openFile.Filter = "Pulsar Config File(*.pul) | *.pul";
+            if (openFile.ShowDialog() == true)
+            {
+                Import(File.ReadAllBytes(openFile.FileName));
+            }
+        }
+        private void OnOpenInputClick(object sender, RoutedEventArgs e)
+        {
+            IO.IOBase.OpenDir($"{Directory.GetCurrentDirectory()}\\input");
+        }
+
+        private void Import(byte[] raw)
+        {
+            curCup = 0;
+
+            IO.Importer importer = new IO.Importer(this, raw);
+            IO.Result ret = importer.Import();
+            if (ret == IO.Result.Success)
+            {
+                ctsCupCount = importer.ctsCupCount;
+                date = importer.date;
+
+                //Clear
+                CC100.TextChanged -= On100ccChange;
+                CC150.TextChanged -= On150ccChange;
+                CC100.Text = "0";
+                CC150.Text = "0";
+
+                CupCount.Text = $"{ctsCupCount}";
+                Regs.SelectedIndex = parameters.regsMode;
+                TTTrophies.IsChecked = parameters.hasTTTrophies;
+                CC200.IsChecked = parameters.has200cc;
+                UMT.IsChecked = parameters.hasUMTs;
+                Feather.IsChecked = parameters.hasFeather;
+                MegaTC.IsChecked = parameters.hasMegaTC;
+                CC100.Text = $"{parameters.prob100cc}";
+                if (parameters.has200cc) CC100Label.Text = "% 200cc";
+                else CC100Label.Text = "% 100cc";
+                CC150.Text = $"{parameters.prob150cc}";
+                CCMirror.Text = $"{parameters.probMirror}";
+                ModFolder.Text = $"{parameters.modFolderName}";
+                Wiimmfi.Text = $"{parameters.wiimmfiRegion}";
+                TrackBlocking.SelectedValue = blockingValues[Array.IndexOf(blockingValues, (UInt16)parameters.trackBlocking)];
+                dateSelector.SelectedDate = DateTime.Parse(date);
+                CC100.TextChanged += On100ccChange;
+                CC150.TextChanged += On150ccChange;
+                UpdateCurCup(0);
+                UpdateCurRegsPage(0);
+            }
+            string msg = "";
+            switch (ret)
+            {
+                case IO.Result.Success:
+                    msg = "Configuration successfully imported.";
+                    break;
+                case IO.Result.InvalidConfigFile:
+                    msg = "Invalid config file.";
+                    break;
+                case IO.Result.UnknownError:
+                    msg = importer.error;
+                    break;
+            }
+            MsgWindow.Show(msg);                 
+        }
+
+        private void OnBuildConfigClick(object sender, RoutedEventArgs e)
+        {           
+            MsgWindowResult result = MsgWindow.Show("Do you also want to create the XML?", MsgWindowButton.YesNo);
+            IO.Builder builder = new IO.Builder(this, result == MsgWindowResult.Yes ? IO.Builder.BuildParams.ConfigAndXML : IO.Builder.BuildParams.ConfigOnly);
+            IO.Result ret = builder.Build();
+            HandleBuildRet(ret, builder.error);
+        }
+
+        private void OnBuildFullPackClick(object sender, RoutedEventArgs e)
+        {
+            IO.Builder builder = new IO.Builder(this, IO.Builder.BuildParams.Full);
+            IO.Result ret = builder.Build();
+            HandleBuildRet(ret, builder.error);
+        }
+
+        private void HandleBuildRet(IO.Result ret, string error)
+        {
+            if(ret == IO.Result.Success)
+            {
+                MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
+                if (result == MsgWindowResult.Yes)
+                {
+                    IO.IOBase.OpenDir($"{Directory.GetCurrentDirectory()}\\output");
+                }
+            }
+            else
+            {
+                string message = "Unknown build error";
+                bool isOptionsError = false;
+                switch (ret)
+                {
+                    case IO.Result.UnknownError:
+                        message = error;
+                        break;
+                    case IO.Result.AlreadyInUse:
+                        message = "Output folder is in use.";
+                        break;
+                    case IO.Result.FileNotFound:
+                        message = $"{error} was not found.";
+                        break;
+                    case IO.Result.NoDate:
+                        message = "Please select a date.";
+                        break;
+                    case IO.Result.NoWiimmfi:
+                        message = "Please select a Wiimfi region";
+                        break;
+                    case IO.Result.NoModName:
+                        message = "Please specify a mod folder name.";
+                        break;                        
+                }
+                if (isOptionsError)
+                {
+                    TabController.SelectedItem = Options;
+                    ((TabItem)TabController.SelectedItem).Focus();
+                }
+                MsgWindow.Show(message, "Build failure");
+            }
+        }
+
+        public bool DisplayImage(string path)
+        {
+            if (path == "") return false;
+            bool isDefault = Cup.defaultNames.Contains(path.Remove(path.Length - 4));
+            string filePath = isDefault ? $"temp/{path}" : $"input/CupIcons/{path}";
+
+            if (!File.Exists(filePath))
+            {
+                if (isDefault) //has not finished extracting all default tpls
+                {
+                    return false;
+                }
+                else
+                {
+                    MsgWindow.Show($"{path} does not exist.");
+                    return false;
+                }
+            }
+            BitmapImage src = new BitmapImage();
+            src.BeginInit();
+            src.UriSource = new Uri(filePath, UriKind.Relative);
+            src.CacheOption = BitmapCacheOption.OnLoad;
+            src.EndInit();
+            IconDisplay.Source = src;
+            IconDisplay.Stretch = Stretch.Uniform;
+            return true;
+
         }
 
     }

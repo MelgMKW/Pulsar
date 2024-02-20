@@ -29,7 +29,7 @@ enum BMG {
     BMG_TROPHY_EARNED = 0x2701,
     BMG_GP_RACE = 0x2702,
     BMG_CHOOSE_NEXT = 0x2703, //TO ADD to race
-    BMG_DEBUG = 0x2704,
+    BMG_RANDOM_TRACK = 0x2704,
 
     //Menu
     BMG_TT_MODE_BUTTONS = 0x2800,

@@ -19,7 +19,7 @@ public:
     static inline u32 GetProb100() { return sInstance->prob100cc; }
     static inline u32 GetProb150() { return sInstance->prob150cc; }
     static inline u32 GetTrackBlocking() { return  sInstance->trackBlocking; }
-
+    static inline u16 GetCupIconCount() { return sInstance->cupIconCount; }
     //Context checking
     static bool IsHAW(bool isHost);
     static bool Is200cc();
@@ -53,7 +53,8 @@ private:
     bool hasUMTs;
     bool hasFeather;
     bool hasMegaTC;
-    u8 reservedSpace[43];
+    u16 cupIconCount;
+    u8 reservedSpace[41];
 };
 
 }//namespace Pulsar

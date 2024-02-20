@@ -43,14 +43,6 @@ ExpCupSelect::ExpCupSelect() {
     }
 }
 
-void ExpCupSelect::OnActivate() {
-    this->randomizedId = PULSARID_NONE;
-    PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
-    for(int i = 0; i < 8; ++i) buttons[i]->manipulator.inaccessible = false;
-    this->arrows.leftArrow.manipulator.inaccessible = false;
-    this->arrows.rightArrow.manipulator.inaccessible = false;
-    Pages::CupSelect::OnActivate();
-}
 //Patch distance func to remove horizontal wrapping
 void CupSelectDistanceFunc(ControlsManipulatorManager* manipulator, u32 type) {
     if(CupsConfig::sInstance->GetCtsTrackCount() != 0) type = 1;
@@ -104,8 +96,7 @@ void ExpCupSelect::OnStartPress(u32 hudSlotId) {
     const GameMode gamemode = RaceData::sInstance->menusScenario.settings.gamemode;
     const bool isValid = gamemode == MODE_TIME_TRIAL || gamemode == MODE_VS_RACE;
     if(isValid && this->randomizedId == -1) {
-        Random random;
-        this->randomizedId = CupsConfig::sInstance->RandomizeTrack(random);
+        this->randomizedId = CupsConfig::sInstance->RandomizeTrack();
     }
 }
 
@@ -121,7 +112,7 @@ void ExpCupSelect::AfterControlUpdate() {
         this->randomControl.isHidden = false;
         const SectionPad& pad = SectionMgr::sInstance->pad;
         const ControllerType controllerType = pad.GetType(pad.GetCurrentID(0));
-        this->randomControl.SetMsgId(BMG_RANDOM_CUP);
+        this->randomControl.SetMessage(BMG_RANDOM_CUP);
 
         bool isInaccessible = true;
         PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
@@ -134,8 +125,8 @@ void ExpCupSelect::AfterControlUpdate() {
 
             bool isCurOnScreen = false;
             for(int i = 0; i < 8; ++i) {
-                u32 cupId = (button0Idx + i) % cupCount;
-                if(cupId == randomizedCupIdx) isCurOnScreen = true;
+                u32 cupI = (button0Idx + i) % cupCount;
+                if(cupI == randomizedCupIdx) isCurOnScreen = true;
             }
             u32 low = nw4r::ut::Abs<s32>(randomizedCupIdx - button0Idx);
             low = nw4r::ut::Min(low, cupCount - low);
@@ -168,10 +159,6 @@ void ExpCupSelect::AfterControlUpdate() {
 
 void ExpCupSelect::OnBackPress(u32 hudSlotId) {
     this->randomizedId = PULSARID_NONE;
-    PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
-    for(int i = 0; i < 8; ++i) buttons[i]->manipulator.inaccessible = true;
-    this->arrows.leftArrow.manipulator.inaccessible = true;
-    this->arrows.rightArrow.manipulator.inaccessible = true;
     CupSelect::OnBackPress(hudSlotId);
 }
 
@@ -196,7 +183,7 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
     }
     else {
         u32 tplId = realCupId;
-        if(realCupId > 99) {
+        if(realCupId > Info::GetCupIconCount()) {
             wchar_t cupName[0x20];
             swprintf(cupName, 0x20, L"Cup %d", realCupId);
             info.strings[0] = cupName;
@@ -204,10 +191,10 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
             realCupId = 0;
             bmgId = BMG_TEXT;
         }
-        else  bmgId = BMG_CUPS;
+        else bmgId = BMG_CUPS;
         snprintf(tplName, 0x20, "icon_%02d.tpl", tplId);
     }
-    control.SetMsgId(bmgId + realCupId, &info);
+    control.SetMessage(bmgId + realCupId, &info);
     ChangeImage(control, "icon", tplName);
     ChangeImage(control, "icon_light_01", tplName);
     ChangeImage(control, "icon_light_02", tplName);

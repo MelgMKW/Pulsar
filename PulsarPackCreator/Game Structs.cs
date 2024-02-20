@@ -35,7 +35,7 @@ public class PulsarGame
         };
 
         public static readonly byte[] idxToCourseId =
-        {
+         {
             0x08,0x01,0x02,0x04,
             0x00,0x05,0x06,0x07,
             0x09,0x0f,0x0b,0x03,
@@ -94,6 +94,17 @@ public class PulsarGame
             0x36
         };
 
+        public static readonly string[] regsGhostFolders =
+        {
+            "LC","MMM","MG","TF",
+            "MC","CM","DKS","WGM",
+            "DC","KC","MT","GV",
+            "DDR","MH","BC","RR",
+            "rPB","rYF","rGV","rMR",
+            "rSL","SGB","rDS","rWS",
+            "rDH","BC3","rDK","rMC",
+            "MC3","rPG","DKM","rBC",
+        };
 
 
         public enum CourseId : UInt32

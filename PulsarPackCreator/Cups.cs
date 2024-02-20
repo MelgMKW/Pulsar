@@ -9,13 +9,7 @@ using System.Windows.Input;
 namespace PulsarPackCreator
 {
 
-
-    
-        
-
-
-
-    public partial class MainWindow : Window
+    partial class MainWindow : Window
     {
         public class Cup
         {
@@ -142,17 +136,6 @@ namespace PulsarPackCreator
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost,defaultGhost} };
-                if(idx < 100)
-                {
-                    name = defaultNames[idx];
-                    iconName = $"{name}.png";
-                }
-                else
-                {
-                    name = "";
-                    iconName = "";
-                }
-                
             }
 
             public Cup(PulsarGame.Cup raw) : this(0)
@@ -216,6 +199,17 @@ namespace PulsarPackCreator
                 cups.Add(new Cup(ite));
             }
             ctsCupCount = newCount;
+        }
+        private void OnGoToCupPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            NumbersOnlyPasting(sender, e);
+            if (!e.CommandCancelled)
+            {
+                String text = (String)e.DataObject.GetData(typeof(String));
+                TextBox box = sender as TextBox;
+                int dest = int.Parse(box.Text + text);
+                if (dest > ctsCupCount) e.CancelCommand();
+            }
         }
 
         private void OnGoToCupInput(object sender, TextCompositionEventArgs e)

@@ -50,15 +50,15 @@ int GetCurTrackBMG() {
     return GetTrackBMGId(CupsConfig::sInstance->winningCourse);
 }
 
-void SetVSIntroBmgId(LayoutUIControl& trackName, u32 bmgId) {
-    u32 bmg = GetCurTrackBMG();
+void SetVSIntroBmgId(LayoutUIControl* trackName) {
+    u32 bmgId = GetCurTrackBMG();
     TextInfo info;
-    info.bmgToPass[0] = bmg;
+    info.bmgToPass[0] = bmgId;
     u32 authorId;
-    if(bmg < BMG_TRACKS) authorId = BMG_NINTENDO;
-    else authorId = bmg + BMG_AUTHORS - BMG_TRACKS;
+    if(bmgId < BMG_TRACKS) authorId = BMG_NINTENDO;
+    else authorId = bmgId + BMG_AUTHORS - BMG_TRACKS;
     info.bmgToPass[1] = authorId;
-    trackName.SetMsgId(BMG_INFO_DISPLAY, &info);
+    trackName->SetMessage(BMG_INFO_DISPLAY, &info);
 
 }
 kmCall(0x808552cc, SetVSIntroBmgId);
@@ -80,7 +80,7 @@ void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
         info.bmgToPass[1] = cupBmgId;
 
     }
-    titleText.SetMsgId(bmgId, &info);
+    titleText.SetMessage(bmgId, &info);
 }
 kmCall(0x808553b4, SetGPIntroInfo);
 
@@ -133,7 +133,6 @@ void ExtCupSelectCupInitSelf(CtrlMenuCupSelectCup* cups) {
         buttons[i]->SetOnSelectHandler(cups->onCupButtonSelectHandler);
         buttons[i]->SetPlayerBitfield(SectionMgr::sInstance->curSection->Get<Pages::CupSelect>()->GetPlayerBitfield());
     }
-
     buttons[cupsConfig->lastSelectedCupButtonIdx]->SelectInitialButton(0);
 };
 kmWritePointer(0x808d324c, ExtCupSelectCupInitSelf); //807e5894
@@ -208,7 +207,7 @@ void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
         PushButton& curButton = course->courseButtons[i];
         curButton.buttonId = i;
         const u32 bmgId = GetTrackBMGByRowIdx(i);
-        curButton.SetMsgId(bmgId);
+        curButton.SetMessage(bmgId);
         if(cupsConfig->lastSelectedCup * 4 + i == cupsConfig->selectedCourse) {
             coursePage->SelectButton(curButton);
         }

@@ -73,7 +73,7 @@ kmBranch(0x80660d40, IsTrackDecided);
 
 
 PulsarId FixRandom(Random& random) {
-    return CupsConfig::sInstance->RandomizeTrack(random);
+    return CupsConfig::sInstance->RandomizeTrack(&random);
 }
 kmCall(0x80661f34, FixRandom);
 
@@ -107,7 +107,7 @@ void DecideTrack(CustomSELECTHandler* select) {
         if(newVoters > 0) winner = newVotesAids[random.NextLimited(newVoters)];
         else winner = aids[random.NextLimited(playerCount)];
         u16 vote = select->receivedPackets[winner].pulSELPlayerData[0].pulCourseVote;
-        if(vote == 0xFF) vote = cupsConfig->RandomizeTrack(random);
+        if(vote == 0xFF) vote = cupsConfig->RandomizeTrack(&random);
         select->toSendPacket.pulWinningCourse = vote;
         select->toSendPacket.winningVoterAid = winner;
         system->lastTracks[system->curBlockingArrayIdx] = static_cast<PulsarId>(vote);
@@ -117,7 +117,7 @@ void DecideTrack(CustomSELECTHandler* select) {
         const u8 hostAid = controller->subs[controller->currentSub].hostAid;
         select->toSendPacket.winningVoterAid = hostAid;
         u16 hostVote = select->toSendPacket.pulSELPlayerData[0].pulCourseVote;
-        if(hostVote == 0xFF) hostVote = cupsConfig->RandomizeTrack(random);
+        if(hostVote == 0xFF) hostVote = cupsConfig->RandomizeTrack(&random);
         select->toSendPacket.pulWinningCourse = hostVote;
     }
     else reinterpret_cast<RKNet::SELECTHandler*>(select)->DecideTrack();

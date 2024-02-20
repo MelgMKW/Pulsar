@@ -1,4 +1,4 @@
-﻿using Pulsar_Pack_Creator;
+﻿using PulsarPackCreator;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -86,7 +86,7 @@ namespace PulsarPackCreator
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                BigEndianReader bin = new BigEndianReader(File.Open(files[0], FileMode.Open));
+                IO.BigEndianReader bin = new IO.BigEndianReader(File.Open(files[0], FileMode.Open));
                 int magic = bin.ReadInt32();
                 bin.BaseStream.Position -= 4;
                 if (magic == 0x50554c44)

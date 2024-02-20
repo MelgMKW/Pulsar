@@ -12,12 +12,12 @@ namespace PulsarPackCreator
     {
         private void OnExit(object sender, ExitEventArgs e)
         {
-            Pulsar_Pack_Creator.Properties.Settings.Default.Save();
+            PulsarPackCreator.Properties.Settings.Default.Save();
         }
 
         private void OnAppDeactivated(object sender, EventArgs e)
         {
-            //PulsarPackCreator.MainWindow.msgWindow.Hide();
+            //PulsarPackCreator.MainWindow.messageWindow.Hide();
         }
     }
 }
