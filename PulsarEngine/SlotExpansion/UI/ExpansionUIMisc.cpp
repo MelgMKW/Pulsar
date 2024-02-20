@@ -58,10 +58,41 @@ void SetVSIntroBmgId(LayoutUIControl* trackName) {
     if(bmgId < BMG_TRACKS) authorId = BMG_NINTENDO;
     else authorId = bmgId + BMG_AUTHORS - BMG_TRACKS;
     info.bmgToPass[1] = authorId;
+<<<<<<< Updated upstream
     trackName->SetMsgId(BMG_INFO_DISPLAY, &info);
 }
 kmCall(0x808552cc, SetVSIntroBmgId);
 
+=======
+    trackName.SetMessage(BMG_INFO_DISPLAY, &info);
+
+}
+kmCall(0x808552cc, SetVSIntroBmgId);
+
+void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
+
+    PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
+    if(!CupsConfig::IsRegCup(id)) {
+        titleText.layout.GetPaneByName("cup_icon")->flag &= ~1;
+        u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        u32 cupBmgId;
+        if(realCupId > 99) {
+            wchar_t cupName[0x20];
+            swprintf(cupName, 0x20, L"Cup %d", realCupId);
+            info.strings[0] = cupName;
+            cupBmgId = BMG_TEXT;
+        }
+        else cupBmgId = BMG_CUPS + realCupId;
+        info.bmgToPass[1] = cupBmgId;
+
+    }
+    titleText.SetMessage(bmgId, &info);
+}
+kmCall(0x808553b4, SetGPIntroInfo);
+
+
+
+>>>>>>> Stashed changes
 void SetGhostInfoTrackBMG(GhostInfoControl* control, const char* textBoxName) {
     control->SetTextBoxMsg(textBoxName, GetCurTrackBMG());
 }
@@ -183,7 +214,7 @@ void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
         PushButton& curButton = course->courseButtons[i];
         curButton.buttonId = i;
         const u32 bmgId = GetTrackBMGByRowIdx(i);
-        curButton.SetMsgId(bmgId);
+        curButton.SetMessage(bmgId);
         if(cupsConfig->lastSelectedCup * 4 + i == cupsConfig->selectedCourse) {
             coursePage->SelectButton(curButton);
         }

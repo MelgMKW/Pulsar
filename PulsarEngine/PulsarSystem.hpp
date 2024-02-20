@@ -22,11 +22,14 @@ enum TTMode {
 
 struct BinaryHeader {
     u32 magic;
-    u32 version;
-    s32 offsetToInfo; //from start of the header
-    s32 offsetToCups;
-    s32 offsetToBMG;
-    char modFolderName[IOS::ipcMaxFileName + 1];
+    u32 version; //0x4
+    char modFolderName[IOS::ipcMaxFileName + 1]; //0x8
+    u8 padding[2];
+    s32 offsetToInfo; //0x18 from start of the header
+    s32 offsetToCups; //0x1c
+    s32 offsetToTEXT; //0x20
+    s32 offsetToBMG; //0x24
+    u32 reserved[6]; //0x28 to 0x40
 };
 
 struct SectionHeader {
@@ -46,12 +49,19 @@ struct CupsHolder {
     Cups cups;
 };
 
+struct CupTextHolder { //string pool
+    static const u32 magic = 'CEXT';
+    SectionHeader header;
+    wchar_t text[1];
+};
+
 struct ConfigFile {
     void Destroy(u32 size) {
         memset(this, 0, size);
         delete(this);
     }
     static const char error[];
+    static const char tooBig[];
     static ConfigFile* LoadConfig(u32* readBytes);
     template <typename T, s32 BinaryHeader::* offset>
     inline const T& GetSection() const {
@@ -64,6 +74,7 @@ struct ConfigFile {
     inline void CheckSection(const T& t) const { if(t.header.magic != T::magic) Debug::FatalError(error); }
 
     static const u32 magic = 'PULS';
+    static const u32 curVersion = 2;
     BinaryHeader header;
     //InfoHolder infoHolder;
     //CupsHolder cupsHolder;
@@ -82,7 +93,14 @@ private:
     //System functions
     void Init(const ConfigFile& bin);
     void InitInstances(const ConfigFile& bin) const {
+<<<<<<< Updated upstream
         CupsConfig::sInstance = new CupsConfig(bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups);
+=======
+
+        const CupsHolder& cupsHolder = bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>();
+        const CupTextHolder& textHolder = bin.GetSection<CupTextHolder, &BinaryHeader::offsetToTEXT>();
+        CupsConfig::sInstance = new CupsConfig(cupsHolder, textHolder);
+>>>>>>> Stashed changes
         Info::sInstance = new Info(bin.GetSection<InfoHolder, &BinaryHeader::offsetToInfo>().info);
         this->InitIO();
         this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups.trophyCount[0]);

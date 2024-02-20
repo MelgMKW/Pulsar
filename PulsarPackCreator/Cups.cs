@@ -8,10 +8,21 @@ using System.Windows.Input;
 
 namespace PulsarPackCreator
 {
+<<<<<<< Updated upstream
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
+=======
+
+
+    
+        
+
+
+
+    partial class MainWindow : Window
+>>>>>>> Stashed changes
     {
         public class Cup
         {
@@ -35,13 +46,47 @@ namespace PulsarPackCreator
                                                     {defaultGhost, defaultGhost, defaultGhost,defaultGhost} };
             }
 
-            public Cup(PulsarGame.Cup raw) : this(0)
+            public Cup(PulsarGame.CupV1 raw) : this(0)
             {
                 idx = raw.idx;
                 for (int i = 0; i < 4; i++)
                 {
+<<<<<<< Updated upstream
                     PulsarGame.Track track = raw.tracks[i];
                     slots[i] = track.slot;
+=======
+                    PulsarGame.TrackV1 track = raw.tracks[i];
+                    if (track.slot >= 0x20) slots[i] = 0x08; //remove battle slots from old config.pul
+                    else slots[i] = track.slot;
+                    musicSlots[i] = track.musicSlot;
+                }
+
+                if (idx < 100)
+                {
+                    name = defaultNames[idx];
+                    iconName = $"{name}.png";
+                }
+                else
+                {
+                    name = "";
+                    iconName = "";
+                }
+            }
+
+            public Cup(PulsarGame.CupV2 raw) : this(0)
+            {
+                List<Cup> cups = (GetWindow(App.Current.MainWindow) as MainWindow).cups;
+                uint rawIdx = raw.idx;
+                bool alreadyUsed = cups.Find(c => c.idx == rawIdx) != null;
+
+                this.idx = alreadyUsed ? (uint)cups.Count : rawIdx;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    PulsarGame.TrackV2 track = raw.tracks[i];
+                    if (track.slot >= 0x20) slots[i] = 0x08; //remove battle slots from old config.pul
+                    else slots[i] = track.slot;
+>>>>>>> Stashed changes
                     musicSlots[i] = track.musicSlot;
                 }
             }
@@ -66,18 +111,40 @@ namespace PulsarPackCreator
                 return;
             }
             UInt16 newCount = UInt16.Parse(box.Text);
+            /*
             if (newCount > 1000)
             {
                 MsgWindow.Show("The maximum number of cups is 1000.");
                 box.Text = $"{ctsCupCount}";
                 return;
             }
+<<<<<<< Updated upstream
             for (UInt16 ite = ctsCupCount; ite < newCount; ite++)
+=======
+            */
+            for (UInt16 ite = (UInt16)cups.Count; ite < newCount; ite++)
+>>>>>>> Stashed changes
             {
                 cups.Add(new Cup(ite));
             }
             ctsCupCount = newCount;
         }
+<<<<<<< Updated upstream
+=======
+
+        private void OnGoToCupPasting(object sender, DataObjectPastingEventArgs e)
+        {
+            NumbersOnlyPasting(sender, e);
+            if (!e.CommandCancelled)
+            {
+                String text = (String)e.DataObject.GetData(typeof(String));
+                TextBox box = sender as TextBox;
+                int dest = int.Parse(box.Text + text);
+                if (dest > ctsCupCount) e.CancelCommand();
+            }
+        }
+
+>>>>>>> Stashed changes
         private void OnGoToCupInput(object sender, TextCompositionEventArgs e)
         {
             NumbersOnlyBox(e.Text, e);
@@ -99,6 +166,52 @@ namespace PulsarPackCreator
             UpdateCurCup((short)(dest - 1 - curCup));        
         }
 
+<<<<<<< Updated upstream
+=======
+        private void OnCupNameChange(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            if (box.IsKeyboardFocused)
+            {
+                if (curCup >= 100)
+                {
+                    MsgWindow.Show("Only the first 100 cups have names and icons.");
+                    box.TextChanged -= OnCupNameChange;                   
+                    box.Text = "";
+                    box.TextChanged += OnCupNameChange;
+                    return;
+                }
+                if (box.Text == "") box.Text = Cup.defaultNames[curCup];
+                cups[curCup].name = box.Text;
+            }
+        }
+
+        private void OnCupIconChange(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            if (box.IsKeyboardFocused)
+            {
+                if (curCup >= 100)
+                {
+                    MsgWindow.Show("Only the first 100 cups have names and icons.");
+                    box.TextChanged -= OnCupIconChange;
+                    box.Text = "";
+                    box.TextChanged += OnCupIconChange;
+                    return;
+                }
+                if (box.Text == "") box.Text = $"{Cup.defaultNames[curCup]}.png";
+            }
+                      
+        }
+        private void OnCupIconLostKBFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            if(box.Text != cups[curCup].iconName && box.Text != "") {
+                bool ret = DisplayImage(box.Text);
+                if(ret) cups[curCup].iconName = box.Text;
+            }
+        }
+>>>>>>> Stashed changes
         private void OnFilenameChange(object sender, TextChangedEventArgs e)
         {
             TextBox box = sender as TextBox;

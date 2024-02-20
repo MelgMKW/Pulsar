@@ -4,7 +4,7 @@
 		<section name="{$pack}">
 			<option name="Pack">
 				<choice name="Enabled">
-					<patch id="PackLoadPack"/>
+					<patch id="{$pack}LoadPack"/>
 				</choice>
 			</option>
 			<option name="My Stuff">
@@ -12,12 +12,12 @@
 					<patch id="CTGPLoad"/>
 				</choice>
 				<choice name="From Pack">
-					<patch id="PackLoad"/>
+					<patch id="{$pack}Load"/>
 				</choice>
 			</option>
 		</section>
 	</options>	
-	<patch id="PackLoadPack">
+	<patch id="{$pack}LoadPack">
 		<memory offset="0x80242698" value="4BDC1968" original="4e800020" /> <!--RMCP DOL-->
 		<memory offset="0x8000A3F4" value="4bff9c0c" original="4e800020" /> <!--RMCP REL-->
 		<memory offset="0x802417dc" value="4BDC2824" original="4e800020" /> <!--RMCE DOL-->
@@ -30,12 +30,15 @@
 		<folder external="/{$pack}/Binaries" disc="/Binaries" create="true"/>
 		<folder external="/{$pack}/Tracks" disc="/Race/Course" create="true"/>
 		<folder external="/{$pack}/Assets" disc="/" create="true"/>
+<<<<<<< Updated upstream
+=======
+		<folder external="/{$pack}/Assets/BRSTM" disc="/Sound/strm" create="true"/>
+>>>>>>> Stashed changes
 	</patch>	
-
 	<patch id="CTGPLoad">
 		<folder external="/ctgpr/My Stuff" />
 	</patch>	
-	<patch id="PackLoad">
+	<patch id="{$pack}Load">
 		<folder external="/{$pack}/My Stuff" />
 	</patch>
 </wiidisc>

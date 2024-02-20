@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Pulsar_Pack_Creator {
+namespace PulsarPackCreator {
     using System;
     
     
@@ -61,22 +61,26 @@ namespace Pulsar_Pack_Creator {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to #BMG
+        ///
+        ///   58a  = {CC}cc
+        ///   7dd	= Wiimmfi
+        ///   7de	= Riivolution Channel
+        ///   7e8	= Play via Wiimmfi!
+        ///   7e9	= Play with a friend via Wiimmfi!
+        ///   7ea	= Return to Riivolution!
+        ///   7f1	= Wiimmfi (1P)
+        ///   7f2	= Wiimmfi (2P)
+        ///   818	= You will now disconnect\nfrom Wiimmfi and\nreturn to the main menu.
+        ///   841	= \z{602,0} and \z{802,120000}\nwill connect to Wiimmfi\ntogether. Is this OK?
+        ///   bbf  = {CC}cc\n\z{800,32}Bikes Only
+        ///   bc3  = {CC}cc\n\z{800,32}Karts and Bikes
+        ///   d54  = {CC}cc
+        ///   d58  = {CC}cc clas [rest of string was truncated]&quot;;.
         /// </summary>
-        public static byte[] BMG100 {
+        public static string BMG {
             get {
-                object obj = ResourceManager.GetObject("BMG100", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] BMG200 {
-            get {
-                object obj = ResourceManager.GetObject("BMG200", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("BMG", resourceCulture);
             }
         }
         

@@ -34,7 +34,23 @@ public class PulsarGame
             "SNES Battle Course 4", "GBA Battle Course 3", "N64 Skyscraper", "GCN Cookie Land", "DS Twilight House"
         };
 
+<<<<<<< Updated upstream
         public static byte[] idxToCourseId =
+=======
+        public static readonly string[] regsGhostFolders =
+        {
+            "LC","MMM","MG","TF",
+            "MC","CM","DKS","WGM",
+            "DC","KC","MT","GV",
+            "DDR","MH","BC","RR",
+            "rPB","rYF","rGV","rMR",
+            "rSL","SGB","rDS","rWS",
+            "rDH","BC3","rDK","rMC",
+            "MC3","rPG","DKM","rBC",
+        };
+
+        public static readonly byte[] musicIdxToCourseId =
+>>>>>>> Stashed changes
         {
             0x08,0x01,0x02,0x04,
             0x00,0x05,0x06,0x07,
@@ -310,6 +326,69 @@ public class PulsarGame
         }
     */
 
+    public enum OSError : UInt32
+    {
+        OSERROR_DSI = 2,
+        OSERROR_ISI = 3,
+        OSERROR_FLOATING_POINT = 7,
+        OSERROR_FPE = 8
+    }
+    public struct GPR
+    {
+        [Endian(Endianness.BigEndian)]
+        public UInt32 name;
+        [Endian(Endianness.BigEndian)]
+        public UInt32 gpr;
+    }
+    public struct FPR
+    {
+        [Endian(Endianness.BigEndian)]
+        public UInt32 name;
+        [Endian(Endianness.BigEndian)]
+        public double fpr;
+    }
+    public struct StackFrame
+    {
+        [Endian(Endianness.BigEndian)]
+        public UInt32 spName;
+        [Endian(Endianness.BigEndian)]
+        public UInt32 sp;
+        [Endian(Endianness.BigEndian)]
+        public UInt32 lrName;
+        [Endian(Endianness.BigEndian)]
+        public UInt32 lr;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct ExceptionFile
+    {
+        [Endian(Endianness.BigEndian)]
+        public UInt32 magic;
+        [Endian(Endianness.BigEndian)]
+        public UInt32 region;
+        [Endian(Endianness.BigEndian)]
+        public UInt32 reserved;
+        [Endian(Endianness.BigEndian)]
+        public UInt32 error;
+        [Endian(Endianness.BigEndian)]
+        public GPR srr0;
+        [Endian(Endianness.BigEndian)]
+        public GPR srr1;
+        [Endian(Endianness.BigEndian)]
+        public GPR msr;
+        [Endian(Endianness.BigEndian)]
+        public GPR cr;
+        [Endian(Endianness.BigEndian)]
+        public GPR lr;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32), Endian(Endianness.BigEndian)]
+        public GPR[] gprs;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32), Endian(Endianness.BigEndian)]
+        public FPR[] fprs;
+        [Endian(Endianness.BigEndian)]
+        public FPR fpscr;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10), Endian(Endianness.BigEndian)]
+        public StackFrame[] frames;
+    }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct TimeEntry
@@ -364,8 +443,10 @@ public class PulsarGame
         public UInt32 dataSize; //size without the header
     }
 
+
+    //V1
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct BinaryHeader
+    public struct BinaryHeaderV1
     {
         [Endian(Endianness.BigEndian)]
         public UInt32 magic;
@@ -412,7 +493,7 @@ public class PulsarGame
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct Track
+    public struct TrackV1
     {
         public byte slot;
         public byte musicSlot;
@@ -421,16 +502,16 @@ public class PulsarGame
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct Cup
+    public struct CupV1
     {
         [Endian(Endianness.BigEndian)]
         public UInt32 idx;
         [Endian(Endianness.BigEndian), MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public Track[] tracks;
+        public TrackV1[] tracks;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct Cups
+    public struct CupsV1
     {
         [Endian(Endianness.BigEndian)]
         public UInt16 ctsCupCount;
@@ -439,7 +520,7 @@ public class PulsarGame
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4), Endian(Endianness.BigEndian)]
         public UInt16[] trophyCount;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1), Endian(Endianness.BigEndian)]
-        public Cup[] cupsArray; //CUPS
+        public CupV1[] cupsArray; //CUPS
     };
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -448,85 +529,91 @@ public class PulsarGame
         [Endian(Endianness.BigEndian)]
         public SectionHeader header;
         [Endian(Endianness.BigEndian)]
-        public Cups cups;
+        public CupsV1 cups;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct Config
     {
         [Endian(Endianness.BigEndian)]
-        public BinaryHeader header;
+        public BinaryHeaderV1 header;
         [Endian(Endianness.BigEndian)]
         public InfoHolder infoHolder;
         [Endian(Endianness.BigEndian)]
         public CupsHolder cupsHolder;
         //BMG rawBmg;
     }
-    public enum OSError : UInt32
-    {
-        OSERROR_DSI = 2,
-        OSERROR_ISI = 3,
-        OSERROR_FLOATING_POINT = 7,
-        OSERROR_FPE = 8
-    }
 
-    public struct GPR
-    {
-        [Endian(Endianness.BigEndian)]
-        public UInt32 name;
-        [Endian(Endianness.BigEndian)]
-        public UInt32 gpr;
-    }
 
-    public struct FPR
-    {
-        [Endian(Endianness.BigEndian)]
-        public UInt32 name;
-        [Endian(Endianness.BigEndian)]
-        public double fpr;
-    }
-
-    public struct StackFrame
-    {
-        [Endian(Endianness.BigEndian)]
-        public UInt32 spName;
-        [Endian(Endianness.BigEndian)]
-        public UInt32 sp;
-        [Endian(Endianness.BigEndian)]
-        public UInt32 lrName;
-        [Endian(Endianness.BigEndian)]
-        public UInt32 lr;
-    }
-
+    //V2
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct ExceptionFile
+    public struct BinaryHeaderV2
     {
         [Endian(Endianness.BigEndian)]
         public UInt32 magic;
         [Endian(Endianness.BigEndian)]
-        public UInt32 region;
+        public UInt32 version;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 14)]
+        public string modFolderName;
+        byte padding;
+        byte padding2;
         [Endian(Endianness.BigEndian)]
-        public UInt32 reserved;
+        public Int32 offsetToInfo; //0x18 from start of the header
         [Endian(Endianness.BigEndian)]
-        public UInt32 error;
+        public Int32 offsetToCups;
         [Endian(Endianness.BigEndian)]
-        public GPR srr0;
+        public Int32 offsetToTEXT;
         [Endian(Endianness.BigEndian)]
-        public GPR srr1;
+        public Int32 offsetToBMG;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 18)]
+        byte[] reservedSpace;
+
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct TrackV2
+    {
+        public byte slot;
+        public byte musicSlot;
         [Endian(Endianness.BigEndian)]
-        public GPR msr;
+        public UInt32 crc32;
         [Endian(Endianness.BigEndian)]
-        public GPR cr;
+        public int cextNameOffset;
         [Endian(Endianness.BigEndian)]
-        public GPR lr;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32), Endian(Endianness.BigEndian)]
-        public GPR[] gprs;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32), Endian(Endianness.BigEndian)]
-        public FPR[] fprs;
+        public int cextAuthorOffset;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct CupV2
+    {
         [Endian(Endianness.BigEndian)]
-        public FPR fpscr;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10), Endian(Endianness.BigEndian)]
-        public StackFrame[] frames;
+        public UInt32 idx;
+        [Endian(Endianness.BigEndian)]
+        public int cextNameOffset;
+        [Endian(Endianness.BigEndian), MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public TrackV2[] tracks;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct CupsV2
+    {
+        [Endian(Endianness.BigEndian)]
+        public UInt16 ctsCupCount;
+        public byte regsMode;
+        public byte padding;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4), Endian(Endianness.BigEndian)]
+        public UInt16[] trophyCount;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1), Endian(Endianness.BigEndian)]
+        public CupV2[] cupsArray; //CUPS
+    };
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct TextHolder
+    {
+        [Endian(Endianness.BigEndian)]
+        public SectionHeader header;
+        //text
     }
 
 }
+

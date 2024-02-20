@@ -15,12 +15,12 @@ s32 CheckBRSTM(const nw4r::snd::DVDSoundArchive* archive, PulsarId id, bool isFi
     const char* root = archive->extFileRoot;
     const char* lapSpecifier = isFinalLap ? "_f" : "_n";
     s32 ret = -1;
-    wchar_t trackName[0x100];
+    char trackName[0x100];
     UI::GetTrackBMG(trackName, id);
-    snprintf(pulPath, 0x100, "%sstrm/%ls%s.brstm", archive->extFileRoot, trackName, lapSpecifier);
+    snprintf(pulPath, 0x100, "%sstrm/%s%s.brstm", root, trackName, lapSpecifier);
     ret = DVDConvertPathToEntryNum(pulPath);
     if(ret < 0) {
-        snprintf(pulPath, 0x50, "%sstrm/%d%s.brstm", archive->extFileRoot, CupsConfig::ConvertTrack_PulsarIdToRealId(id), lapSpecifier);
+        snprintf(pulPath, 0x50, "%sstrm/%d%s.brstm", root, CupsConfig::ConvertTrack_PulsarIdToRealId(id), lapSpecifier);
         ret = DVDConvertPathToEntryNum(pulPath);
     }
     return ret;
@@ -32,7 +32,7 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
     const char firstChar = extFilePath[0xC];
     const PulsarId track = CupsConfig::sInstance->winningCourse;
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
-    if(!CupsConfig::IsReg(track) && (firstChar == 'n' || firstChar == 'S' || firstChar == 'r')) {
+    if((firstChar == 'n' || firstChar == 'S' || firstChar == 'r') && !CupsConfig::IsReg(track)) {
         bool isFinalLap = false;
         register u32 strLength;
         asm(mr strLength, r28;);

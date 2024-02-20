@@ -22,7 +22,7 @@ ConfigFile* ConfigFile::LoadConfig(u32* readBytes) {
     EGG::ExpHeap* mem2Heap = RKSystem::mInstance.sceneManager->currentScene->mem2Heap;
     ConfigFile* conf = static_cast<ConfigFile*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
         EGG::DvdRipper::ALLOC_FROM_HEAD, 0, readBytes, nullptr));
-    if(conf == nullptr) Debug::FatalError(error);
+    if(conf == nullptr || conf->header.version != curVersion) Debug::FatalError(error);
     return conf;
 }
 
@@ -50,6 +50,10 @@ System::System() :
     racesPerGP(3), curBlockingArrayIdx(0) {}
 
 void System::Init(const ConfigFile& conf) {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     strncpy(this->modFolderName, conf.header.modFolderName, IOS::ipcMaxFileName);
 
     this->InitInstances(conf);
@@ -61,6 +65,9 @@ void System::Init(const ConfigFile& conf) {
 
     const BMGHeader* const confBMG = &conf.GetSection<BMGHeader, &BinaryHeader::offsetToBMG>();
     this->rawBmg = EGG::Heap::alloc<BMGHeader>(confBMG->fileLength, 0x4, heap);
+    if(this->rawBmg == nullptr) {
+        Debug::FatalError(ConfigFile::tooBig);
+    }
     memcpy(this->rawBmg, confBMG, confBMG->fileLength);
     this->customBmgs.Init(*this->rawBmg);
     this->AfterInit();
@@ -70,11 +77,36 @@ void System::Init(const ConfigFile& conf) {
 #pragma suppress_warnings on
 void System::InitIO() const {
     IOType type = IOType_ISO;
+<<<<<<< Updated upstream
     s32 ret = IO::OpenFix("file", IOS::MODE_NONE);
 
     if(ret >= 0) {
         type = IOType_RIIVO;
         IOS::Close(ret);
+=======
+    s32 device_fd = IO::OpenFix("file", IOS::MODE_NONE);
+
+    if(device_fd >= 0) {
+        type = IOType_RIIVO;
+        IOS::Close(device_fd);
+    }
+    else {
+        device_fd = IO::OpenFix("/dev/dolphin", IOS::MODE_NONE);
+        if(device_fd >= 0) {
+            type = IOType_DOLPHIN;
+            IOS::Close(device_fd);
+        }
+    }
+    IO* io = IO::CreateInstance(type, this->heap, this->taskThread);
+    bool ret;
+    if(io->type == IOType_DOLPHIN) ret = ISFS::CreateDir("/shared2/Pulsar", 0, IOS::MODE_READ_WRITE, IOS::MODE_READ_WRITE, IOS::MODE_READ_WRITE);
+    const char* modFolder = this->GetModFolder();
+    ret = io->CreateFolder(modFolder);
+    if(!ret && io->type == IOType_DOLPHIN) {
+        char path[0x100];
+        snprintf(path, 0x100, "Unable to automatically create a folder for this CT distribution\nPlease create a Pulsar folder in Dolphin Emulator/Wii/shared2", modFolder);
+        Debug::FatalError(path);
+>>>>>>> Stashed changes
     }
     else {
         ret = IO::OpenFix("/dev/dolphin", IOS::MODE_NONE);
@@ -115,6 +147,7 @@ kmWrite32(0x80549974, 0x38600001);
 kmWriteRegionInstruction(0x80604094, 0x4800001c, 'E');
 
 const char ConfigFile::error[] = "Invalid Pulsar Config";
+const char ConfigFile::tooBig[] = "Out of memory, config file is too big";
 const char System::pulsarString[] = "/Pulsar";
 const char System::CommonAssets[] = "/CommonAssets.szs";
 const char System::breff[] = "/Effect/Pulsar.breff";

@@ -31,9 +31,9 @@ namespace PulsarPackCreator
 
         public void Load()
         {
-            AutoUpdater.IsChecked = Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate;
-            ExitRemindBox.IsChecked = Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind;
-            ColorModeBox.SelectedIndex = Pulsar_Pack_Creator.Properties.Settings.Default.ColorMode;
+            AutoUpdater.IsChecked = Properties.Settings.Default.AutoUpdate;
+            ExitRemindBox.IsChecked = Properties.Settings.Default.ExitRemind;
+            ColorModeBox.SelectedIndex = Properties.Settings.Default.ColorMode;
             Show();
         }
 
@@ -46,7 +46,7 @@ namespace PulsarPackCreator
         {
             if ((sender as CheckBox).IsKeyboardFocused)
             {
-                Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate = !Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate;
+                Properties.Settings.Default.AutoUpdate = !Properties.Settings.Default.AutoUpdate;
             }
         }
 
@@ -190,7 +190,7 @@ namespace PulsarPackCreator
         {
             if ((sender as CheckBox).IsKeyboardFocused)
             {
-                Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind = !Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind;
+                Properties.Settings.Default.ExitRemind = !Properties.Settings.Default.ExitRemind;
             }
         }
 
@@ -199,7 +199,7 @@ namespace PulsarPackCreator
             ComboBox box = sender as ComboBox;
             if (this.IsLoaded)
             {
-                Pulsar_Pack_Creator.Properties.Settings.Default.ColorMode = box.SelectedIndex;
+                Properties.Settings.Default.ColorMode = box.SelectedIndex;
                 if (this.IsLoaded) ApplyColorMode();
             }
         }
@@ -233,7 +233,7 @@ namespace PulsarPackCreator
         public static void ApplyColorMode()
         {
 
-            ColorMode mode = (ColorMode)Pulsar_Pack_Creator.Properties.Settings.Default.ColorMode;
+            ColorMode mode = (ColorMode)Properties.Settings.Default.ColorMode;
 
             Window main = GetWindow(App.Current.MainWindow);
             List<Window> windows = new List<Window>

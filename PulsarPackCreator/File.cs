@@ -1,4 +1,4 @@
-﻿using Pulsar_Pack_Creator;
+﻿using PulsarPackCreator.IO;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using static PulsarPackCreator.MsgWindow;
 
+/*
 namespace PulsarPackCreator
 {
     /// <summary>
@@ -151,9 +152,17 @@ namespace PulsarPackCreator
                 if (bmgMagic != 0x4D455347626D6731) throw new Exception();
                 int bmgSize = bin.ReadInt32();
                 bin.BaseStream.Position -= 12;
+<<<<<<< Updated upstream
                 using BigEndianWriter bmg = new BigEndianWriter(File.Create("temp/bmg.bmg"));
                 bmg.Write(bin.ReadBytes(bmgSize));
                 bmg.Close();
+=======
+                using (BigEndianWriter bmg = new BigEndianWriter(File.Create("temp/bmg.bmg")))
+                {
+                    bmg.Write(bin.ReadBytes(bmgSize));
+                }
+
+>>>>>>> Stashed changes
                 return bmgSize;
             }          
         }
@@ -165,9 +174,16 @@ namespace PulsarPackCreator
                 UInt32 fileMagic = bin.ReadUInt32();
                 if (fileMagic != 0x46494C45) throw new Exception();
                 bin.BaseStream.Position -= 4;
+<<<<<<< Updated upstream
                 using BigEndianWriter file = new BigEndianWriter(File.Create("temp/files.txt"));
                 file.Write(bin.ReadBytes((int)bin.BaseStream.Length));
                 file.Close();
+=======
+                using (BigEndianWriter file = new BigEndianWriter(File.Create("temp/files.txt")))
+                {
+                    file.Write(bin.ReadBytes((int)bin.BaseStream.Length));
+                }
+>>>>>>> Stashed changes
             }
         }
 
@@ -250,6 +266,7 @@ namespace PulsarPackCreator
             bool ret = WriteCups(bin, bmgSW, fileSW, crcToFile);
             if (!ret)
             {
+<<<<<<< Updated upstream
                 bin.Close();
                 bmgSW.Close();
                 fileSW.Close();
@@ -263,6 +280,91 @@ namespace PulsarPackCreator
             fileSW.Close();
             crcToFile.Close();
             RequestBMGAction(true);
+=======
+                File.WriteAllBytes("temp/BMG.txt", parameters.has200cc ? PulsarRes.BMG200 : PulsarRes.BMG100);
+                using (BigEndianWriter bin = new BigEndianWriter(File.Create("temp/Config.pul")))
+                {
+                    using (StreamWriter bmgSW = new StreamWriter("temp/BMG.txt", true))
+                    using (StreamWriter fileSW = new StreamWriter("temp/files.txt"))
+                    using (StreamWriter crcToFile = new StreamWriter($"{modFolder}/Ghosts/FolderToTrackName.txt"))
+                    {
+                        bmgSW.WriteLine(bmgSW.NewLine);
+                        bmgSW.WriteLine($"  {0x2847:X}    = Version created {date}");
+                        fileSW.WriteLine("FILE");
+
+                        bin.Write(0x50554C53); //"PULS"
+                        bin.Write(CONFIGVERSION);
+
+                        //Offsets
+                        bin.BaseStream.Position += SECTIONCOUNT * 4; //OFFSETS
+
+                        string gameFolderName = $"/{parameters.modFolderName}";
+                        bin.Write(gameFolderName.ToArray());
+                        bin.BaseStream.Position += 14 - gameFolderName.Length;
+
+                        long infoPosition = RoundUp(bin.BaseStream.Position, 4); //INFO Offset
+                        bin.BaseStream.Position = 0x8;
+                        bin.Write((int)infoPosition);
+                        bin.BaseStream.Position = infoPosition;
+                        WriteInfo(bin);
+
+                        long cupPosition = RoundUp(bin.BaseStream.Position, 4); //Cup Offset
+                        bin.BaseStream.Position = 0xC;
+                        bin.Write((int)cupPosition);
+                        bin.BaseStream.Position = cupPosition;
+                        WriteCups(bin, bmgSW, fileSW, crcToFile);
+                    }
+
+                    RequestBMGAction(true);
+
+                    using (BigEndianReader bmgReader = new BigEndianReader(File.Open("temp/bmg.bmg", FileMode.Open)))
+                    {
+                        long bmgPosition = RoundUp(bin.BaseStream.Position, 4); ; //BMG Offset
+                        bin.BaseStream.Position = 0x10;
+                        bin.Write((int)bmgPosition);
+                        bin.BaseStream.Position = bmgPosition;
+                        bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));
+                    }
+
+                    using (BigEndianReader fileReader = new BigEndianReader(File.Open("temp/files.txt", FileMode.Open)))
+                    {
+                        bin.Write(fileReader.ReadBytes((int)fileReader.BaseStream.Length));
+                    }
+                }
+                char[] delims = new[] { '\r', '\n' };
+                string[] xml = PulsarRes.XML.Split(delims, StringSplitOptions.RemoveEmptyEntries);
+
+                xml[3] = xml[3].Replace("{$pack}", parameters.modFolderName);
+                xml[28] = xml[28].Replace("{$pack}", parameters.modFolderName);
+                xml[29] = xml[29].Replace("{$pack}", parameters.modFolderName);
+                xml[30] = xml[30].Replace("{$pack}", parameters.modFolderName);
+                xml[31] = xml[31].Replace("{$pack}", parameters.modFolderName);
+                xml[32] = xml[32].Replace("{$pack}", parameters.modFolderName);
+                xml[37] = xml[39].Replace("{$pack}", parameters.modFolderName);
+
+                File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
+                File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
+                return true;
+            }
+            catch (FileNotFoundException ex)
+            {
+                //Directory.Delete(modFolder, true);
+                MsgWindow.Show(ex.Message);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                MsgWindow.Show(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                File.Delete("temp/bmg.bmg");
+                File.Delete("temp/bmg.txt");
+                File.Delete("temp/Config.pul");
+                File.Delete("temp/files.txt");
+            }
+>>>>>>> Stashed changes
 
             using BigEndianReader bmgReader = new BigEndianReader(File.Open("temp/bmg.bmg", FileMode.Open));
             long bmgPosition = RoundUp(bin.BaseStream.Position, 4); ; //BMG Offset
@@ -299,13 +401,26 @@ namespace PulsarPackCreator
 
         private void OnBuildConfigClick(object sender, RoutedEventArgs e)
         {
+<<<<<<< Updated upstream
             BuildConfigImpl();
+=======
+            bool ret = BuildConfigImpl();
+            if (ret)
+            {
+                MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
+                if (result == MsgWindowResult.Yes)
+                {
+                    OpenDir($"{Directory.GetCurrentDirectory()}\\output");
+                }
+            }
+>>>>>>> Stashed changes
         }
         private void OnBuildFullPackClick(object sender, RoutedEventArgs e)
         {
             bool ret = BuildConfigImpl();
             if (ret)
             {
+<<<<<<< Updated upstream
                 string modFolder = $"output/{parameters.modFolderName}";
                 File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
                 Directory.CreateDirectory($"{modFolder}/Assets");
@@ -313,6 +428,70 @@ namespace PulsarPackCreator
                 File.WriteAllBytes($"{modFolder}/Assets/UIAssets.szs", PulsarRes.UIAssets);
                 File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
                 File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
+=======
+                if (ret)
+                {
+                    string modFolder = $"output/{parameters.modFolderName}";
+                    File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
+                    Directory.CreateDirectory($"{modFolder}/Assets");
+                    Directory.CreateDirectory($"{modFolder}/CTsBRSTMs");
+                    Directory.CreateDirectory($"{modFolder}/My Stuff");
+                    File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
+                    File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
+                    File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
+
+                    bool hasCustomIcons = false;
+                    Process wimgtProcess = new Process();
+                    ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
+                    wimgtProcessInfo.FileName = @"temp/wimgt.exe";
+                    //wimgtProcessInfo.WorkingDirectory = @"temp/";
+                    wimgtProcessInfo.CreateNoWindow = true;
+                    wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    wimgtProcessInfo.UseShellExecute = false;
+                    wimgtProcess.StartInfo = wimgtProcessInfo;
+
+                    for (int i = 0; i < Math.Min(ctsCupCount, (ushort)100); i++)
+                    {
+                        Cup cup = cups[i];
+                        if (cup.iconName != $"{Cup.defaultNames[i]}.png")
+                        {
+                            hasCustomIcons = true;
+                            bool isDefault = Cup.defaultNames.Contains(cup.iconName.Remove(cup.iconName.Length - 4));
+                            string realIconName = isDefault ? $"temp/{cup.iconName}" : $"input/CupIcons/{cup.iconName}";
+                            if (!File.Exists(realIconName))
+                            {
+                                throw new Exception($"{realIconName} does not exist.");
+                            }
+                            using (System.Drawing.Image image = System.Drawing.Image.FromFile(realIconName))
+                            {
+                                new Bitmap(image, 128, 128).Save($"temp/{i}.png");
+                            }
+                            wimgtProcessInfo.Arguments = $"encode temp/{i}.png --dest temp/UIAssets.d/button/timg/icon_{i:D2}.tpl --transform CMPR -o";
+                            wimgtProcess.Start();
+                            wimgtProcess.WaitForExit();
+                        }
+                    }
+                    if (hasCustomIcons)
+                    {
+                        ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
+                        wszstProcessInfo.FileName = @"wszst.exe";
+                        wszstProcessInfo.Arguments = $"create temp/UIAssets.d --dest \"{modFolder}/Assets/UIAssets.szs\" -o";
+                        wszstProcessInfo.CreateNoWindow = true;
+                        wszstProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        wszstProcessInfo.UseShellExecute = false;
+                        Process wszstProcess = new Process();
+                        wszstProcess.StartInfo = wszstProcessInfo;
+                        wszstProcess.Start();
+                        wszstProcess.WaitForExit();
+                    }
+                    else File.Copy("temp/UIAssets.szs", $"{modFolder}/Assets/UIAssets.szs");
+                    MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
+                    if (result == MsgWindowResult.Yes)
+                    {
+                        OpenDir($"{Directory.GetCurrentDirectory()}\\output");
+                    }
+                }
+>>>>>>> Stashed changes
             }
         }
 
@@ -407,6 +586,21 @@ namespace PulsarPackCreator
             string[] fileInfo = Directory.GetFiles("input/", "*", SearchOption.AllDirectories);
             fileInfo = fileInfo.Select(s => s.ToLowerInvariant()).ToArray();
             bin.Write(idx);
+<<<<<<< Updated upstream
+=======
+            if (!isFake)
+            {
+                string iconName = cup.iconName;
+                string finalIconName = "";
+                if (idx < 100 && iconName.Length > 4 && iconName.Remove(iconName.Length - 4) != Cup.defaultNames[cup.idx])
+                {
+                    finalIconName = iconName;
+                }
+                bmgSW.WriteLine($"  {0x10000 + idx:X}    = {cup.name}");
+                fileSW.WriteLine($"{idx:X}?{iconName}");
+            }
+
+>>>>>>> Stashed changes
             for (int i = 0; i < 4; i++)
             {
                 string name = cup.fileNames[i];
@@ -500,6 +694,12 @@ namespace PulsarPackCreator
                                 int trackIdx = (int)rest % 4;
                                 switch (type)
                                 {
+<<<<<<< Updated upstream
+=======
+                                    case (0x10000):
+                                        if ((int)rest < ctsCupCount) cups[(int)rest].name = content;
+                                        break;
+>>>>>>> Stashed changes
                                     case (0x20000):
                                         if (content.Contains("\\c{red3}"))
                                         {
@@ -555,8 +755,88 @@ namespace PulsarPackCreator
 
         private void OpenDir(string path) => Process.Start("explorer.exe", path);
 
+<<<<<<< Updated upstream
+=======
+        private async Task ExtractDefaultTPLs()
+        {
+            await File.WriteAllBytesAsync("temp/wszst.exe", PulsarRes.wszst);
+            await File.WriteAllBytesAsync("temp/wimgt.exe", PulsarRes.wimgt);
+            await File.WriteAllBytesAsync("temp/UIAssets.szs", PulsarRes.UIAssets);
+
+            ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
+            wszstProcessInfo.FileName = @"wszst.exe";
+            wszstProcessInfo.Arguments = "extract UIAssets.szs";
+            wszstProcessInfo.WorkingDirectory = @"temp/";
+            wszstProcessInfo.CreateNoWindow = true;
+            wszstProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            wszstProcessInfo.UseShellExecute = false;
+
+            Process wszstProcess = new Process();
+            wszstProcess.StartInfo = wszstProcessInfo;
+            wszstProcess.Start();
+            await wszstProcess.WaitForExitAsync();
+
+            ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
+            wimgtProcessInfo.FileName = @"temp/wimgt.exe";
+            wimgtProcessInfo.CreateNoWindow = true;
+            wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            wimgtProcessInfo.UseShellExecute = false;
+
+            Process wimgtProcess = new Process();
+            wimgtProcess.StartInfo = wimgtProcessInfo;
+
+            for (int i = 0; i < Cup.maxCupIcons; i++)
+            {
+                if (cancelToken.IsCancellationRequested)
+                {
+                    return;
+                }
+                wimgtProcessInfo.Arguments = $"decode temp/UIAssets.d/button/timg/icon_{i:D2}.tpl --dest \"temp/{Cup.defaultNames[i]}.png\" -o";
+                wimgtProcess.Start();
+                if (i == 0)
+                {
+                    wimgtProcess.WaitForExit();
+                    DisplayImage(CupIcon.Text);
+                }
+                else await wimgtProcess.WaitForExitAsync(cancelToken.Token);
+
+            }
+
+        }
+
+        private bool DisplayImage(string path)
+        {
+            if (path == "") return false;
+            bool isDefault = Cup.defaultNames.Contains(path.Remove(path.Length - 4));
+            string filePath = isDefault ? $"temp/{path}" : $"input/CupIcons/{path}";
+
+            if (!File.Exists(filePath))
+            {
+                if (isDefault) //has not finished extracting all default tpls
+                {
+                    return false;
+                }
+                else
+                {
+                    MsgWindow.Show($"{path} does not exist.");
+                    return false;
+                }
+            }
+            BitmapImage src = new BitmapImage();
+            src.BeginInit();
+            src.UriSource = new Uri(filePath, UriKind.Relative);
+            src.CacheOption = BitmapCacheOption.OnLoad;
+            src.EndInit();
+            IconDisplay.Source = src;
+            IconDisplay.Stretch = Stretch.Uniform;
+            return true;
+
+        }
+
+>>>>>>> Stashed changes
 
 
 
     }
 }
+*/

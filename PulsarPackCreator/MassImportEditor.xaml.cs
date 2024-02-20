@@ -43,7 +43,7 @@ namespace PulsarPackCreator
             {
                 if (!CheckTrackName(cur))
                 {
-                    MsgWindow.Show($"Track {cur} has an invalid name as it contains one of <>:\"/\\|?*", this);
+                    MsgWindow.Show($"Track {cur} has an invalid name as it contains one of <>:\"/|?*", this);
                       return;
                 }
             }

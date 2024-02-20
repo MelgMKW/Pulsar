@@ -57,11 +57,11 @@ void ExpGhostSelect::OnActivate() {
     if(Info::HasTrophies()) {
         u32 bmgId;
         const TextInfo text = GetCourseBottomText(CupsConfig::sInstance->winningCourse, &bmgId);
-        this->bottomText.SetMsgId(bmgId, &text);
+        this->bottomText.SetMessage(bmgId, &text);
     }
-    this->ctrlMenuPageTitleText.SetMsgId(BMG_CHOOSE_GHOST_DATA);
+    this->ctrlMenuPageTitleText.SetMessage(BMG_CHOOSE_GHOST_DATA);
     this->Reset();
-    this->selectGhostButton.SetMsgId(BMG_SELECT_GHOST);
+    this->selectGhostButton.SetMessage(BMG_SELECT_GHOST);
 }
 
 //Creates space by making the usual 3 buttons smaller, could be done without a BRCTR but this is easier to maintain
@@ -106,7 +106,7 @@ void ExpGhostSelect::OnSelectGhostChange(ToggleButton& button, u32) {
     }
     TextInfo text;
     text.intToPass[0] = this->selectedGhostsCount;
-    this->ctrlMenuPageTitleText.SetMsgId(BMG_GHOST_SELECTED_COUNTER, &text);
+    this->ctrlMenuPageTitleText.SetMessage(BMG_GHOST_SELECTED_COUNTER, &text);
     this->SetToggleBMG();
 }
 
@@ -134,7 +134,7 @@ void ExpGhostSelect::OnNewPage() {
 void ExpGhostSelect::SetToggleBMG() {
     ToggleButton& button = this->selectGhostButton;
     const u32 bmgId = button.GetState() == false ? BMG_SELECT_GHOST : BMG_GHOST_SELECTED;
-    button.SetMsgId(bmgId);
+    button.SetMessage(bmgId);
 }
 
 void ExpGhostSelect::Reset() {
@@ -185,7 +185,7 @@ void BeforeEntranceAnimations(Pages::TTSplits* page) {
         page->ctrlRaceCount.isHidden = false;
         page->ctrlRaceCount.Animate();
         page->PlaySound(0xDD, -1);
-        page->savedGhostMessage.SetMsgId(UI::BMG_SAVED_GHOST);
+        page->savedGhostMessage.SetMessage(UI::BMG_SAVED_GHOST);
     }
 
     //Finish Time Leaderboard check and request
@@ -211,13 +211,13 @@ void BeforeEntranceAnimations(Pages::TTSplits* page) {
             }
             page->ctrlRaceTimeArray[0]->EnableFlashingAnimation();
             page->PlaySound(0xDD, -1);
-            page->savedGhostMessage.SetMsgId(UI::BMG_SAVED_GHOST);
+            page->savedGhostMessage.SetMessage(UI::BMG_SAVED_GHOST);
 
         }
         else if(position < 0) page->ctrlRaceCount.isHidden = true;
         if(hasFlap || position >= 0) {
             bool gotTrophy = manager->SaveGhost(entry, position, hasFlap);
-            if(gotTrophy) page->savedGhostMessage.SetMsgId(UI::BMG_TROPHY_EARNED);
+            if(gotTrophy) page->savedGhostMessage.SetMessage(UI::BMG_TROPHY_EARNED);
         }
     }
 }
@@ -235,7 +235,7 @@ void TrophyBMG(CtrlMenuInstructionText& bottomText, u32 bmgId) {
     text.bmgToPass[0] = BMG_TT_MODE_BOTTOM_CUP + system->ttMode;
     bmgId = BMG_TT_BOTTOM_CUP_NOTROPHY;
     if(totalCount > 0 && Info::HasTrophies()) bmgId = BMG_TT_BOTTOM_CUP;
-    bottomText.SetMsgId(bmgId, &text);
+    bottomText.SetMessage(bmgId, &text);
 }
 kmCall(0x8084144c, TrophyBMG);
 
@@ -247,7 +247,7 @@ void IndividualTrophyBMG(Pages::CourseSelect& courseSelect, CtrlMenuCourseSelect
         u32 bmgId;
         const TextInfo text = GetCourseBottomText(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::sInstance->lastSelectedCup)
             + button.buttonId, &bmgId);
-        courseSelect.bottomText->SetMsgId(bmgId, &text);
+        courseSelect.bottomText->SetMessage(bmgId, &text);
     }
 }
 kmCall(0x807e54ec, IndividualTrophyBMG);

@@ -10,6 +10,7 @@ namespace Pulsar {
 namespace UI {
 class CtrlRaceSpeedo : public CtrlRaceBase {
 public:
+    CtrlRaceSpeedo(u8 digits) : digits(digits) /*, frameCounter(0)*/ {}
     void Init() override;
     void OnUpdate() override;
     static u32 Count();
@@ -32,7 +33,12 @@ private:
     };
     void Load(const char* variant, u8 id);
     void Animate(const SpeedArg* args = nullptr);
+<<<<<<< Updated upstream
 
+=======
+    const u8 digits;
+    //u32 frameCounter;
+>>>>>>> Stashed changes
 };
 }//namespace UI
 }//namespace Pulsar

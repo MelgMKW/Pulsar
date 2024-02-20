@@ -1,13 +1,17 @@
 {
   "version": 2,
+<<<<<<< Updated upstream
   "dgSpecHash": "JXzXugtqzAdfV5cOQKRL3LCMIMYftiKdB0wuMvejn+lgiV7ae7SWfrlSLcjgrENsKaSZzSoERYh/+pP0E/gpWw==",
+=======
+  "dgSpecHash": "F1Ko1yFnSIIW64C6n6vjj4x5HxxmtO4PU9verOu/sHOgmpqGKPayRuBxcj49a2aem7RfEl2fC/k0s3pqGmCtAA==",
+>>>>>>> Stashed changes
   "success": true,
   "projectFilePath": "C:\\Modding\\Coding\\Kamek\\Engine\\KamekSource\\Kamek.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.1\\microsoft.net.illink.tasks.8.0.1.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.1\\microsoft.netcore.app.runtime.win-x64.8.0.1.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.1\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.1.nupkg.sha512",
-    "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.1\\microsoft.aspnetcore.app.runtime.win-x64.8.0.1.nupkg.sha512"
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.2\\microsoft.net.illink.tasks.8.0.2.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.2\\microsoft.netcore.app.runtime.win-x64.8.0.2.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.2\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.2.nupkg.sha512",
+    "C:\\Users\\admin\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.2\\microsoft.aspnetcore.app.runtime.win-x64.8.0.2.nupkg.sha512"
   ],
   "logs": []
 }

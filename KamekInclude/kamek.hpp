@@ -21,6 +21,29 @@
 #include <core/nw4r/ut/List.hpp>
  //just for usability in other structs
 
+/*
+template<int size>
+struct String {
+    String() {}
+
+    const char* operator&() const {
+        return cString;
+    }
+    char* operator&() {
+        return cString;
+    }
+    const char& operator[](u32 pos) const {
+        return cString[pos];
+    }
+    char& operator[](u32 pos) {
+        return cString[pos];
+    }
+
+    char cString[size];
+};
+*/
+
+
 namespace aux {
 typedef char yes[1];
 typedef char no[2];

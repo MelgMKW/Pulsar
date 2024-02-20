@@ -10,7 +10,7 @@ namespace Pulsar {
 
 CupsConfig* CupsConfig::sInstance = nullptr;
 
-CupsConfig::CupsConfig(const Cups& rawCups) : regsMode(rawCups.regsMode),
+CupsConfig::CupsConfig(const CupsHolder& rawCupsHolder, const CupTextHolder& rawText) : regsMode(rawCupsHolder.cups.regsMode),
 //Cup actions initialization
 hasOddCups(false),
 winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup(PULSARCUPID_FIRSTREG), lastSelectedCupButtonIdx(0)
@@ -21,6 +21,8 @@ winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup
     }
     hasRegs = regsMode > 0;
 
+    const Cups& rawCups = rawCupsHolder.cups;
+
     u32 count = rawCups.ctsCupCount;
     if(count & 1) {
         ++count;
@@ -30,7 +32,11 @@ winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup
     ctsCupCount = count;
     for(int i = 0; i < 4; ++i) trophyCount[i] = rawCups.trophyCount[i];
     cups = new Cup[count];
-    memcpy(cups, &rawCups.cups, sizeof(Cup) * count);
+    memcpy(cups, &rawCups.cupsArray, sizeof(Cup) * count);
+
+    cupText = EGG::Heap::alloc<wchar_t>(rawText.header.dataSize, 4);
+    memcpy(cupText, &rawText.text, rawText.header.dataSize);
+
 }
 
 //Converts trackID to track slot using table
@@ -83,13 +89,17 @@ void CupsConfig::ToggleCTs(bool enabled) {
     ctsCupCount = count;
 }
 
-PulsarId CupsConfig::RandomizeTrack(Random& random) const {
+PulsarId CupsConfig::RandomizeTrack(Random* random) const {
+    Random rand;
+    if(random == nullptr) {
+        random = &rand;
+    }
     u32 pulsarId;
     if(this->HasRegs()) {
-        pulsarId = random.NextLimited(this->GetCtsTrackCount() + 32);
+        pulsarId = random->NextLimited(this->GetCtsTrackCount() + 32);
         if(pulsarId > 31) pulsarId += (0x100 - 32);
     }
-    else pulsarId = random.NextLimited(this->GetCtsTrackCount()) + 0x100;
+    else pulsarId = random->NextLimited(this->GetCtsTrackCount()) + 0x100;
     return static_cast<PulsarId>(pulsarId);
 }
 

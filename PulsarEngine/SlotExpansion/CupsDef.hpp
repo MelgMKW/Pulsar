@@ -12,9 +12,13 @@ struct Track {
     u8 slot;
     u8 musicSlot;
     u32 crc32;
+    s32 cextNameOffset;
+    s32 cextAuthorOffset;
 };
+
 struct Cup {
     u32 idx;
+    s32 cextNameOffset;
     Track tracks[4];
 };
 
@@ -23,7 +27,7 @@ struct Cups {
     u8 regsMode;
     u8 padding[1];
     u16 trophyCount[4];
-    Cup cups[1]; //CUPS
+    Cup cupsArray[1]; //CUPS
 };
 #pragma pack(pop)
 
@@ -45,22 +49,31 @@ inline PulsarId operator+(PulsarId src, u32 rhs) {
     return ret;
 }
 
-
+class CupTextHolder;
 class CupsConfig {
 public:
     static CupsConfig* sInstance;
     static const u32 RegsCRC32[];
 
-    CupsConfig(const Cups& rawCups);
+    CupsConfig(const CupsHolder& rawCupHolder, const CupTextHolder& rawText);
 
     //Cup Functions
     int GetTotalCupCount() const { return ctsCupCount + HasRegs() * 8; } //good
     int GetCtsTrackCount() const { return ctsCupCount * 4; } //used by random, good, but also by settings and path
+    int GetCupIconCount() const { return cupIconCount; }
     int GetEffectiveTrackCount() const { return (definedCTsCupCount + HasRegs() * 8) * 4; } //settings and froom msgs
     void ToggleCTs(bool enabled);
     // Ghosts
     int GetCRC32(PulsarId id) const;
     void GetTrackGhostFolder(char* dest, PulsarId pulsarId) const;
+
+    //Tracks
+    const Track& GetTrack(PulsarId id) {
+        u32 realId = ConvertTrack_PulsarIdToRealId(id);
+
+
+
+    }
 
     //Slot Getters
     CourseId GetCorrectTrackSlot() const;
@@ -71,6 +84,7 @@ public:
 
 
     //Validity
+    bool HasCupText() const { return hasCupText; }
     bool IsValidCup(PulsarCupId id) {
         if(this->hasRegs && IsRegCup(id)) return true;
         else {
@@ -83,7 +97,7 @@ public:
     //Slot Expansion
     void SaveSelectedCourse(const PushButton& courseButton);
     PulsarCupId GetNextCupId(PulsarCupId cupId, s32 direction) const;
-    PulsarId RandomizeTrack(Random& random) const;
+    PulsarId RandomizeTrack(Random* random = nullptr) const;
     static bool IsRegsSituation();
 
     //Reg Check
@@ -102,6 +116,18 @@ public:
     static inline PulsarId ConvertTrack_PulsarCupToTrack(PulsarCupId pulsarCupId) { return static_cast<PulsarId>(pulsarCupId * 4); }
     static const u8 idToCourseId[32];
 
+    wchar_t* GetCupName(PulsarCupId id) {
+        return  reinterpret_cast<wchar_t*>(reinterpret_cast<u8*>(cupText) + cups[id].cextNameOffset);
+    }
+    wchar_t* GetTrackName(PulsarId id) {
+        return  reinterpret_cast<wchar_t*>(reinterpret_cast<u8*>(cupText) + cups[ConvertCup_PulsarTrackToCup(id)].tracks[id % 4].cextNameOffset);
+    }
+    wchar_t* GetTrackAuthor(PulsarId id) {
+        return  reinterpret_cast<wchar_t*>(reinterpret_cast<u8*>(cupText) + cups[ConvertCup_PulsarTrackToCup(id)].tracks[id % 4].cextAuthorOffset);
+    }
+
+
+
 public:
     PulsarId        winningCourse; //0x0
     PulsarId        selectedCourse; //0x4
@@ -109,6 +135,7 @@ public:
     u32             lastSelectedCupButtonIdx; //0xc
 
 private:
+    bool hasCupText;
     bool hasRegs;      //0x10
     bool hasOddCups;   //0x11
     const u8 regsMode; //0x12
@@ -116,7 +143,10 @@ private:
     u32 definedCTsCupCount; //0x14
     u32  ctsCupCount; //0x18
     u16  trophyCount[4]; //0x1c
+    u32 cupIconCount;
     Cup* cups; //0x24
+    wchar_t* cupText;
+
 }; //0x28
 
 }//namespace Pulsar

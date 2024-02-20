@@ -9,6 +9,11 @@
     <ApplicationIcon>Resources\Pulsar.ico</ApplicationIcon>
   </PropertyGroup>
 
+	<ItemGroup>
+		<ApplicationDefinition Remove="App.xaml" />
+		<Page Include="App.xaml" />
+	</ItemGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>embedded</DebugType>
   </PropertyGroup>
@@ -19,6 +24,7 @@
 
 	<PropertyGroup>
 		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+		<StartupObject>PulsarPackCreator.App</StartupObject>
 	</PropertyGroup>
 
   <ItemGroup>

@@ -115,7 +115,7 @@ void VSRaceRandomFix(SectionParams* m98) { //properly randomizes tracks and sets
     bool isRepeat;
     for(int i = 0; i < 32; ++i) {
         do {
-            id = cupsConfig->RandomizeTrack(random);
+            id = cupsConfig->RandomizeTrack(&random);
             isRepeat = false;
             for(int j = 0; j < i; ++j) {
                 if(m98->vsTracks[j] == id) {

@@ -6,10 +6,10 @@ using System.Windows;
 
 namespace PulsarPackCreator
 {
-    public partial class MainWindow : Window
+    class Leaderboard : Window
     {
         
-        private string DisplayTimes(PulsarGame.TimeEntry[] entries, int idx)
+        public static string DisplayTimes(PulsarGame.TimeEntry[] entries, int idx)
         {
             
             string times = "";
@@ -28,7 +28,7 @@ namespace PulsarPackCreator
             }
             return times;
         }
-        private void ImportLeaderboard(byte[] raw)
+        public static void ImportLeaderboard(byte[] raw)
         {                       
             PulsarGame.Leaderboard ldb = PulsarGame.BytesToStruct<PulsarGame.Leaderboard>(raw); 
             string display = ldb.trackName;
@@ -42,7 +42,7 @@ namespace PulsarPackCreator
             MsgWindow.Show(display, $"{ldb.trackName} Leaderboard");
         }
 
-        private T CreateSubCat<T>(byte[] raw, int offset) where T : struct
+        public static T CreateSubCat<T>(byte[] raw, int offset) where T : struct
         {
             byte[] catRaw = raw.Skip(offset).Take(Marshal.SizeOf(typeof(T))).ToArray();
             return PulsarGame.BytesToStruct<T>(catRaw);         

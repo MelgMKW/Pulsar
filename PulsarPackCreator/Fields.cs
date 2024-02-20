@@ -1,8 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+<<<<<<< Updated upstream
+=======
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+>>>>>>> Stashed changes
 using System.IO;
 using System.Reflection;
 using System.Windows;
+<<<<<<< Updated upstream
+=======
+using System.Windows.Automation;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+>>>>>>> Stashed changes
 using static PulsarGame;
 
 namespace PulsarPackCreator
@@ -10,9 +21,15 @@ namespace PulsarPackCreator
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+<<<<<<< Updated upstream
     public partial class MainWindow : Window
     {       
 
+=======
+    partial class MainWindow : Window
+    {
+      
+>>>>>>> Stashed changes
         public static int SECTIONCOUNT = 3;
         public static int CONFIGVERSION = 1;
         public static int INFOVERSION = 1;
@@ -33,10 +50,14 @@ namespace PulsarPackCreator
         public UInt16[] trophyCount;
 
         //Info
-        Parameters parameters;
+        public Parameters parameters { get; private set; }
 
         //Tracks
         public List<Cup> cups;
+
+        //Regs Ghosts
+        public UInt16 curRegsCup = 0;
+        public string[,,] regsExperts = new string[8, 4, 4];
 
         //Windows
         public static MassImportWindow importWindow;
@@ -44,6 +65,12 @@ namespace PulsarPackCreator
         public static SettingsWindow settingsWindow;
         public static MsgWindow msgWindow;
 
+<<<<<<< Updated upstream
+=======
+        public Task extractTPL;     
+        
+
+>>>>>>> Stashed changes
         //public List<byte> extSlotToTrackId;
         //public List<byte> extSlotToMusicSlot;
         //public List<string> fileNames;
@@ -63,8 +90,12 @@ namespace PulsarPackCreator
             importWindow = new MassImportWindow(this);
             crashWindow = new CrashWindow();
             settingsWindow = new SettingsWindow();
+<<<<<<< Updated upstream
             msgWindow = new MsgWindow();
 
+=======
+            messageWindow = new MsgWindow();           
+>>>>>>> Stashed changes
 
             string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             Title = "Pulsar Pack Creator " + version.Substring(0, version.Length - 2);
@@ -115,16 +146,34 @@ namespace PulsarPackCreator
             CCMirror.Text = $"{parameters.probMirror}";
             CupCount.Text = $"{ctsCupCount}";
 
+            UpdateCurRegsPage(0);
+
             Show();
             msgWindow.Owner = this;
 
+<<<<<<< Updated upstream
             bool checkUpdates = Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate;
+=======
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+            Directory.CreateDirectory("temp/");
+            Directory.CreateDirectory("input");
+            Directory.CreateDirectory("input/CupIcons");
+            Directory.CreateDirectory($"input/{ttModeFolders[0, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[1, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
+            Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
+            extractTPL = IO.IOBase.ExtractDefaultTPLs();
+            
+            bool checkUpdates = Properties.Settings.Default.AutoUpdate;
+            
+>>>>>>> Stashed changes
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
 
                 if (args[1].Contains(".pul"))
                 {
+<<<<<<< Updated upstream
                     OpenPulFile(args[1]);
                     Environment.CurrentDirectory = args[0].Substring(0, args[0].LastIndexOf('\\') + 1);
                 }               
@@ -132,6 +181,9 @@ namespace PulsarPackCreator
                 {
                     checkUpdates = false;
                     SettingsWindow.DisplayChangelog(args[3]);
+=======
+                    MsgWindow.Show(ex.ToString());
+>>>>>>> Stashed changes
                 }
             }
 
@@ -139,6 +191,7 @@ namespace PulsarPackCreator
             {
                 SettingsWindow.TryUpdate();
             }
+<<<<<<< Updated upstream
 
             if (!Directory.Exists("input"))
             {
@@ -149,6 +202,10 @@ namespace PulsarPackCreator
                 Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
             }
 
+=======
+            File.WriteAllText("temp/PulsarBMG.txt", PulsarRes.BMG);
+           
+>>>>>>> Stashed changes
         }
     }
 }

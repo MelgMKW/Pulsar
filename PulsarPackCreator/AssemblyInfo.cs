@@ -29,5 +29,10 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 
+<<<<<<< Updated upstream
 [assembly: AssemblyVersion("1.0.18")] //combined version, always increments
 [assembly: AssemblyFileVersion("1.0.5")] //Code.pul version
+=======
+[assembly: AssemblyInformationalVersion("1.1.3")] //combined version, always increments
+[assembly: AssemblyFileVersion("1.1.2")] //Code.pul version
+>>>>>>> Stashed changes

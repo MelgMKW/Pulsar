@@ -96,8 +96,7 @@ void ExpCupSelect::OnStartPress(u32 hudSlotId) {
     const GameMode gamemode = RaceData::sInstance->menusScenario.settings.gamemode;
     const bool isValid = gamemode == MODE_TIME_TRIAL || gamemode == MODE_VS_RACE;
     if(isValid && this->randomizedId == -1) {
-        Random random;
-        this->randomizedId = CupsConfig::sInstance->RandomizeTrack(random);
+        this->randomizedId = CupsConfig::sInstance->RandomizeTrack();
     }
 }
 
@@ -113,7 +112,7 @@ void ExpCupSelect::AfterControlUpdate() {
         this->randomControl.isHidden = false;
         const SectionPad& pad = SectionMgr::sInstance->pad;
         const ControllerType controllerType = pad.GetType(pad.GetCurrentID(0));
-        this->randomControl.SetMsgId(BMG_RANDOM_CUP);
+        this->randomControl.SetMessage(BMG_RANDOM_CUP);
 
         bool isInaccessible = true;
         PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
@@ -184,7 +183,7 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
     }
     else {
         u32 tplId = realCupId;
-        if(realCupId > 99) {
+        if(realCupId > CupsConfig::sInstance->GetCupIconCount()) {
             wchar_t cupName[0x20];
             swprintf(cupName, 0x20, L"Cup %d", realCupId);
             info.strings[0] = cupName;
@@ -192,10 +191,10 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
             realCupId = 0;
             bmgId = BMG_TEXT;
         }
-        else  bmgId = BMG_CUPS;
+        else bmgId = BMG_CUPS;
         snprintf(tplName, 0x20, "icon_%02d.tpl", tplId);
     }
-    control.SetMsgId(bmgId + realCupId, &info);
+    control.SetMessage(bmgId + realCupId, &info);
     ChangeImage(control, "icon", tplName);
     ChangeImage(control, "icon_light_01", tplName);
     ChangeImage(control, "icon_light_02", tplName);

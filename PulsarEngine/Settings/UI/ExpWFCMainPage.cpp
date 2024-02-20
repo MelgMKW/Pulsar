@@ -42,7 +42,7 @@ void ExpWFCMain::ExtOnButtonSelect(PushButton& button, u32 hudSlotId) {
         u32 bmgId = BMG_SETTINGS_BOTTOM + 1;
         if(this->topSettingsPage == PAGE_VS_TEAMS_VIEW) bmgId += 1;
         else if(this->topSettingsPage == PAGE_BATTLE_MODE_SELECT) bmgId += 2;
-        this->bottomText.SetMsgId(bmgId, 0);
+        this->bottomText.SetMessage(bmgId, 0);
     }
     else this->OnButtonSelect(button, hudSlotId);
 }

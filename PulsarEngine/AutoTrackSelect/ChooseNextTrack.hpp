@@ -55,12 +55,15 @@ public:
     const u32* GetVariantsIdxArray() const override;
     bool IsPausePage() const override;
     const char* GetButtonsBRCTRName() const override;
+
+private:
     void OnRightArrowSelect(SheetSelectControl& control, u32 hudSlotId);
     void OnLeftArrowSelect(SheetSelectControl& control, u32 hudSlotId);
     void OnButtonClick(PushButton& button, u32 hudSlotId); //8055a0f4
 
+public:
     bool IsHost() const { return this->status <= STATUS_HOST_FINALSENT; }
-    bool IsReady() {
+    bool IsReady() const {
         if(this->status == STATUS_FINALHOSTRECEIVED) return true;
         else if(status == STATUS_HOST_FINALSENT) return true;
         {

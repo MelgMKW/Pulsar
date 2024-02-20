@@ -48,6 +48,10 @@
             <Setter Property="TextAlignment"            Value="Center"/>
             <Setter Property="TextWrapping"             Value="Wrap"/>
             <Setter Property="Margin"                   Value="15,23,15,28"/>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         </Style>
 
         <Style BasedOn="{StaticResource Boxes}" TargetType="TextBox" x:Key="FileBoxes">
@@ -117,11 +121,30 @@
                 <ColumnDefinition Width="71*"/>
                 <ColumnDefinition Width="154*"/>
             </Grid.ColumnDefinitions>
+<<<<<<< Updated upstream
             <TextBox Style="{StaticResource Boxes}" x:Name="CupCount" Margin="72,0,0,0" Width="100" PreviewTextInput="NumbersOnlyBox" TextChanged="OnCupCountChange"  />
             <TextBox Style="{StaticResource Boxes}" x:Name="GoToCup" Margin="432,0,135,0" Width="100" PreviewTextInput="OnGoToCupInput" TextChanged="OnGoToCupChange" Grid.Column="1"  />
             <TextBlock Style="{StaticResource Blocks}" x:Name="CupCountLabel" Text="Cup Count" Margin="-150,2,0,0" />
             <TextBlock Style="{StaticResource Blocks}" x:Name="CupIdLabel"    Text="Cup 1"     Margin="79,-1,363,1" Grid.Column="1" FontSize="18"/>
             <TextBlock Style="{StaticResource Blocks}" x:Name="GotoLabel" Text="Go To Cup" Margin="565,2,0,0" HorizontalAlignment="Left" Grid.Column="1" />
+=======
+            <TextBox Style="{StaticResource Boxes}" x:Name="CupCount" Margin="0,-29,0,0"     Width="100" Height="24" DataObject.Pasting="NumbersOnlyPasting" PreviewTextInput="NumbersOnlyBox" TextChanged="OnCupCountChange"  />
+            <TextBox Style="{StaticResource Boxes}" x:Name="CupName"  Margin="100,28,0,0"    Width="200" Height="24" ContextMenu="{x:Null}" TextChanged="OnCupNameChange"  />
+            <TextBox Style="{StaticResource Boxes}" x:Name="GoToCup"  Margin="0,-29,135,0"   Width="100" Height="24" DataObject.Pasting="OnGoToCupPasting" PreviewTextInput="OnGoToCupInput" TextChanged="OnGoToCupChange" Grid.Column="2"  HorizontalAlignment="Right"/>
+            <TextBox Style="{StaticResource Boxes}" x:Name="CupIcon"  Margin="-100,28,135,0" Width="200" Height="24" LostKeyboardFocus="OnCupIconLostKBFocus" TextChanged="OnCupIconChange" Grid.Column="2"  HorizontalAlignment="Right"/>
+            <TextBlock Style="{StaticResource Blocks}" x:Name="CupCountLabel" Text="Cup Count" Margin="-200,2,0,0" />
+            <TextBlock Style="{StaticResource Blocks}" x:Name="CupNameLabel"  Text="Cup Name"  Margin="-200,36,0,0" />
+            <TextBlock Style="{StaticResource Blocks}" x:Name="CupIdLabel"    Text="Cup 1"     Margin="0,15,150,0" Grid.Column="1" FontSize="18"/>
+            <TextBlock Style="{StaticResource Blocks}" x:Name="GotoLabel"     Text="Go To Cup" Margin="200,2,0,0"  Grid.Column="2" />
+            <TextBlock Style="{StaticResource Blocks}" x:Name="IconLabel"     Text="Cup Icon"  Margin="200,36,0,0" Grid.Column="2" />
+            <Border BorderBrush="Black" BorderThickness="2" Grid.Column="1" Margin="150,3,50,3">
+                <Border.Background>
+                    <ImageBrush ImageSource="/Resources/mkwiiBG.png"/>
+                </Border.Background>
+                <Image x:Name="IconDisplay"  Grid.Column="1"/>
+            </Border>
+
+>>>>>>> Stashed changes
 
         </Grid>
 
@@ -206,13 +229,30 @@
                 </DockPanel>
             </TabItem>
             <TabItem Name="Options" Header="Options">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="12*" />
+                        <RowDefinition Height="6*" />
+                        <RowDefinition Height="10*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.4*" />
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="4*" />
+                    </Grid.ColumnDefinitions>
 
-                <Canvas>
-                    <TextBlock Grid.Column="1" Margin="60,76,0,0" Text="Misc Settings" Style="{StaticResource Blocks}"/>
-                    <TextBlock Grid.Column="1" Margin="199,76,0,0" Text="CC Distribution Online" Style="{StaticResource Blocks}"/>
+                    <TextBox   x:Name="ModFolder"     Grid.Column="3"  Width="127" Height="24"  TextChanged="OnModFolderChange" Style="{StaticResource Boxes}" Margin="9,22,57,18"/>
+                    <TextBlock Text="Mod Folder Name" Grid.Column="2" Style="{StaticResource Blocks}" HorizontalAlignment="Left" Margin="34,26,0,0"/>
 
 
-                    <StackPanel Margin="17,97,622,157">
+
+
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Text="Misc Settings" Style="{StaticResource Blocks}"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Margin="0,30,-10,0">
                         <ComboBox x:Name="Regs" Width="165" Height="20" SelectionChanged="OnRegsChange" Margin="5"                              Style="{StaticResource ComboBoxes}"   />
                         <CheckBox x:Name="TTTrophies" Content="Time Trials Trophies" Checked="OnTrophiesToggle"  Unchecked="OnTrophiesToggle"   Style="{StaticResource OptCheckBoxes}"/>
                         <CheckBox x:Name="CC200"      Content="200cc"                Checked="On200CCToggle"     Unchecked="On200CCToggle"      Style="{StaticResource OptCheckBoxes}"/>
@@ -221,6 +261,7 @@
                         <CheckBox x:Name="MegaTC"     Content="Mega Thunder Cloud"   Checked="OnMegaTCToggle"    Unchecked="OnMegaTCToggle"     Style="{StaticResource OptCheckBoxes}"/>
                     </StackPanel>
 
+<<<<<<< Updated upstream
                     <StackPanel Canvas.Left="193" Canvas.Top="97">
                         <TextBox x:Name="CC100"    PreviewTextInput="NumbersOnlyBox" TextChanged="On100ccChange"  Margin="30,0,0,0" Width="27" Height="22" Style="{StaticResource Boxes}"/>
                         <TextBox x:Name="CC150"    PreviewTextInput="NumbersOnlyBox" TextChanged="On150ccChange"  Margin="30,0,0,0" Width="27" Height="22" Style="{StaticResource Boxes}"/>
@@ -236,12 +277,29 @@
 
                     <TextBox x:Name="Wiimmfi" Canvas.Left="104" Canvas.Top="274" Width="43" Text="" TextChanged="OnWiimmfiRegionChange" PreviewTextInput="NumbersOnlyBox"  Style="{StaticResource Boxes}"/>
                     <TextBlock Text="Wiimmfi Region" Canvas.Left="14" Canvas.Top="299" Style="{StaticResource Blocks}"/>
+=======
+                    <TextBlock  Grid.Row="1" Grid.Column="2" Text="CC Distribution Online" Style="{StaticResource Blocks}"/>
+                    <StackPanel Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="0,30,-30,0">
+                        <TextBox x:Name="CC100"    Margin="30,0,0,0" DataObject.Pasting="NumbersOnlyPasting" PreviewTextInput="NumbersOnlyBox" TextChanged="On100ccChange"     Width="50" Height="22" Style="{StaticResource Boxes}"/>
+                        <TextBox x:Name="CC150"    Margin="30,0,0,0" DataObject.Pasting="NumbersOnlyPasting" PreviewTextInput="NumbersOnlyBox" TextChanged="On150ccChange"     Width="50" Height="22" Style="{StaticResource Boxes}"/>
+                        <TextBox x:Name="CCMirror" Margin="30,0,0,0" DataObject.Pasting="NumbersOnlyPasting" PreviewTextInput="NumbersOnlyBox" IsReadOnly="True"               Width="50" Height="22" Style="{StaticResource Boxes}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" HorizontalAlignment="Right" Margin="0,30,10,0">
+                        <TextBlock x:Name="CC100Label" Margin="-50,0,0,0" Text="% 100cc"  FontSize="14" Foreground="{DynamicResource fg}" Height="23"/>
+                        <TextBlock x:Name="CC150Label" Margin="-50,0,0,0" Text="% 150cc"  FontSize="14" Foreground="{DynamicResource fg}" Height="22"/>
+                        <TextBlock x:Name="CCMirLabel" Margin="-50,0,0,0" Text="% Mirror" FontSize="14" Foreground="{DynamicResource fg}" Height="21"/>
+                    </StackPanel>
 
-                    <ComboBox x:Name="TrackBlocking" Canvas.Left="119" Canvas.Top="275" Width="43" Height="19" HorizontalContentAlignment="Center" SelectionChanged="OnTrackBlockingChange" Style="{StaticResource ComboBoxes}"/>
-                    <TextBlock Text="Track Blocking" Canvas.Left="14" Canvas.Top="325" Style="{StaticResource Blocks}"/>
+                    <TextBlock Text="Wiimmfi Region" Grid.Row="3" Grid.Column="1" Margin="1,6,0,0" HorizontalAlignment="Left" Style="{StaticResource Blocks}" />
+                    <TextBox x:Name="Wiimmfi" Grid.Row="3" Grid.Column="1" Margin="108,3,40,103" Width="50" Height="23" Text="" TextChanged="OnWiimmfiRegionChange" DataObject.Pasting="NumbersOnlyPasting" PreviewTextInput="NumbersOnlyBox"  Style="{StaticResource Boxes}"  />
+
+                    <TextBlock Text="Track Blocking" Grid.Row="3" Grid.Column="1" Margin="1,33,0,0" HorizontalAlignment="Left" Style="{StaticResource Blocks}"/>
+                    <ComboBox x:Name="TrackBlocking" Grid.Row="3" Grid.Column="1" Margin="110,32,0,0" Width="43" Height="19" HorizontalContentAlignment="Center" SelectionChanged="OnTrackBlockingChange" Style="{StaticResource ComboBoxes}" HorizontalAlignment="Left"/>
+>>>>>>> Stashed changes
+
 
                     <DatePicker xml:lang="en-GB" x:Name="dateSelector" Language="en-GB" Foreground="{DynamicResource fg}" SelectedDateChanged="OnDateChange"
-                                Grid.Column="1"  Canvas.Left="429" Canvas.Top="76" Width="185" >
+                                   Grid.Row="1" Grid.Column="3" Width="185" >
 
                         <DatePicker.Resources>
                             <Style TargetType="DatePickerTextBox">
@@ -250,12 +308,14 @@
                             </Style>
                         </DatePicker.Resources>
                     </DatePicker>
+                    <Button x:Name="EditBMG" Grid.Row="1" Grid.Column="4" VerticalAlignment="Top" Content="Edit Pulsar BMGs" FontSize="14" Width="120" Height="25" Click="OnEditPulsarBMGsClick"/>
 
 
 
-                </Canvas>
+
+                </Grid>
             </TabItem>
-            <TabItem Name="Ghosts" Header="Ghosts">
+            <TabItem Name="Ghosts" Header="CTs Ghosts">
                 <DockPanel>
                     <Button DockPanel.Dock="Left" Content="&lt;" FontWeight="Bold" FontSize="18" Click="OnLeftArrowClick" />
                     <Button DockPanel.Dock="Right" Content="&gt;" FontWeight="Bold" FontSize="18" Click="OnRightArrowClick" />
@@ -309,7 +369,60 @@
                 </DockPanel>
 
             </TabItem>
+            <TabItem Name="RegsGhosts" Header="Regs Ghosts">
+                <DockPanel>
+                    <Button DockPanel.Dock="Left" Content="&lt;" FontWeight="Bold" FontSize="18" Click="OnLeftRegsArrowClick" />
+                    <Button DockPanel.Dock="Right" Content="&gt;" FontWeight="Bold" FontSize="18" Click="OnRightRegsArrowClick" />
+                    <Grid Name="RegsGhostGrid" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="2*" />
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*" />
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="RegsGhost11" Grid.Row="1" Grid.Column="1" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost12" Grid.Row="1" Grid.Column="2" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost13" Grid.Row="1" Grid.Column="3" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost14" Grid.Row="1" Grid.Column="4" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
 
+                        <TextBox x:Name="RegsGhost21" Grid.Row="2" Grid.Column="1" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost22" Grid.Row="2" Grid.Column="2" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost23" Grid.Row="2" Grid.Column="3" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost24" Grid.Row="2" Grid.Column="4" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+
+                        <TextBox x:Name="RegsGhost31" Grid.Row="3" Grid.Column="1" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost32" Grid.Row="3" Grid.Column="2" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost33" Grid.Row="3" Grid.Column="3" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost34" Grid.Row="3" Grid.Column="4" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop" Style="{StaticResource GhostBoxes}"/>
+
+                        <TextBox x:Name="RegsGhost41" Grid.Row="4" Grid.Column="1" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop"  Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost42" Grid.Row="4" Grid.Column="2" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop"  Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost43" Grid.Row="4" Grid.Column="3" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop"  Style="{StaticResource GhostBoxes}"/>
+                        <TextBox x:Name="RegsGhost44" Grid.Row="4" Grid.Column="4" TextChanged="OnRegsGhostChange" PreviewDragOver="OnDrag" PreviewDrop="OnRKGDrop"  Style="{StaticResource GhostBoxes}"/>
+
+                        <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Margin="-60,5,0,0" Width="250" Text="Optional Expert Files (no .rkg extension)" Style="{StaticResource TopLabels}"/>
+
+                        <TextBlock Name="RegsGhostTrackName1" Grid.Row="1" Grid.Column="0" Text="Track 1" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock Name="RegsGhostTrackName2" Grid.Row="2" Grid.Column="0" Text="Track 2" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock Name="RegsGhostTrackName3" Grid.Row="3" Grid.Column="0" Text="Track 3" Style="{StaticResource TrackLabels}"/>
+                        <TextBlock Name="RegsGhostTrackName4" Grid.Row="4" Grid.Column="0" Text="Track 4" Style="{StaticResource TrackLabels}"/>
+
+                        <TextBlock Grid.Column="1" Text="150cc"          Style="{StaticResource GhostTopLabels}"/>
+                        <TextBlock Grid.Column="2" Text="200cc"          Style="{StaticResource GhostTopLabels}"/>
+                        <TextBlock Grid.Column="3" Text="150cc Feather"  Style="{StaticResource GhostTopLabels}"/>
+                        <TextBlock Grid.Column="4" Text="200cc Feather"  Style="{StaticResource GhostTopLabels}"/>
+                    </Grid>
+                </DockPanel>
+
+            </TabItem>
         </TabControl>
 
     </DockPanel>

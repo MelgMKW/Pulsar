@@ -85,7 +85,7 @@ kmCall(0x808570c4, CharCheerGetCorrectArguments);
 void PatchFinishRaceBMGID(LayoutUIControl& control, u32 bmgId, const TextInfo* text) {
     const SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
     if(sectionId >= SECTION_WATCH_GHOST_FROM_CHANNEL && sectionId <= SECTION_WATCH_GHOST_FROM_MENU) bmgId = BMG_FINISH;
-    control.SetMsgId(bmgId, text);
+    control.SetMessage(bmgId, text);
 }
 kmCall(0x8085728c, PatchFinishRaceBMGID);
 }//namespace UI
