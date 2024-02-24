@@ -167,6 +167,7 @@ void ChooseNextTrack::OnButtonClick(PushButton& button, u32 hudSlotId) {
     if(button.buttonId == 5) {
         PulsarId next = cupsConfig->RandomizeTrack();
         if(cupsConfig->winningCourse == next) next = cupsConfig->RandomizeTrack();
+        cupsConfig->winningCourse = next;
     }
     else cupsConfig->winningCourse = static_cast<PulsarId>(button.buttonId);
     cupsConfig->selectedCourse = cupsConfig->winningCourse;

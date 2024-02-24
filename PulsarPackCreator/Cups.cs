@@ -136,7 +136,7 @@ namespace Pulsar_Pack_Creator
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost, defaultGhost},
                                                     {defaultGhost, defaultGhost, defaultGhost,defaultGhost} };
-                if (idx < 100)
+                if (idx < maxCupIcons)
                 {
                     name = defaultNames[idx];
                     iconName = $"{name}.png";
@@ -164,7 +164,7 @@ namespace Pulsar_Pack_Creator
                     musicSlots[i] = track.musicSlot;
                 }
 
-                if (idx < 100)
+                if (idx < maxCupIcons)
                 {
                     name = defaultNames[idx];
                     iconName = $"{name}.png";
@@ -401,8 +401,7 @@ namespace Pulsar_Pack_Creator
                 CupIdLabel.Text = $"Cup {curCup + 1}";
                 CupName.Text = cup.name;
                 CupIcon.Text = cup.iconName;
-                if (cup.idx < 100) DisplayImage(cup.iconName);
-                else IconDisplay.Source = null;
+                DisplayImage(cup.iconName);
             }
 
         }

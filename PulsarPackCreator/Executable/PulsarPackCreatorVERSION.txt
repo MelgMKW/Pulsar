@@ -5,13 +5,12 @@ Creator Changes:
 -Cup names and icons are no longer limited to 100. If you use more than 100 icons, the images resolution will gradually get reduced to preserve a small UIAssets.szs file.
 -Now includes Wiimm tools dlls.
 -No longer adds a space to every track on import.
--No longer builds the XML on Build Config Only click.
+-Now asks if the XML should be created on Build Config Only click.
 -Now creates semi-unique (the mod name and a random 0-255 number) riivolution patch IDs on every build to prevent conflicts.
 -Only one instance of the software can now exist.
 -Fixed text being allowed in various number-only boxes and leading to a crash.
 -Fixed bad date imports when trying to import config files built on a different locale.
 -Fixed bad CC distribution imports.
--Numbers only boxes are actually what their name implies now.
 -Improved build and import code.
 Engine Changes:
 -Host always wins now provides a random button.

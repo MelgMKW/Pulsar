@@ -312,8 +312,14 @@ public class PulsarGame
                 Type elementType = field.Field.FieldType.GetElementType();
                 int elementSize = Marshal.SizeOf(elementType);
                 int arrayOffset = field.Offset + offSet;
-
-                for (int i = arrayOffset; i < arrayOffset + elementSize * arrayLength; i += elementSize)
+                if (elementType.IsPrimitive)
+                {
+                    for (int i = 0; i < arrayLength; i++)
+                    {
+                        Array.Reverse(data, arrayOffset + i * elementSize, elementSize);
+                    }                       
+                }
+                else for (int i = arrayOffset; i < arrayOffset + elementSize * arrayLength; i += elementSize)
                 {
                     RespectEndianness(elementType, data, i);
                 }
@@ -465,6 +471,7 @@ public class PulsarGame
         public byte hasUMTs;
         public byte hasFeather;
         public byte hasMegaTC;
+        [Endian(Endianness.BigEndian)]
         public ushort cupIconCount;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 41)]
         public byte[] reservedSpace;
@@ -508,9 +515,9 @@ public class PulsarGame
         }
         [Endian(Endianness.BigEndian)]
         public uint idx;
-        [Endian(Endianness.BigEndian), MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4), Endian(Endianness.BigEndian)]
         public Track[] tracks;
-    }
+    }  
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct Cups

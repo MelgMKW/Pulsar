@@ -397,7 +397,7 @@ namespace Pulsar_Pack_Creator
                         isOptionsError = true;
                         break;
                     case IO.Result.NoIcon:
-                        message = $"{error} cup icon was not found.";
+                        message = $"Cup Icon \"{error}\" was not found.";
                         break;
                     case IO.Result.WBMGT:
                         message = $"{error} Please do not remove the #BMG header at the top of the pulsar bmg text file.";
@@ -420,7 +420,11 @@ namespace Pulsar_Pack_Creator
 
         public bool DisplayImage(string path)
         {
-            if (path == "") return false;
+            if (path == "")
+            {
+                IconDisplay.Source = null;
+                return false;
+            }
             bool isDefault = Cup.defaultNames.Contains(path.Remove(path.Length - 4));
             string filePath = isDefault ? $"temp/{path}" : $"input/CupIcons/{path}";
 

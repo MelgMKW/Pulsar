@@ -51,7 +51,7 @@ namespace Pulsar_Pack_Creator.IO
         protected const int fileMagic = 0x46494C45;
         protected const ulong bmgMagic = 0x4D455347626D6731;
 
-        private static string wiimmFolderPath = "";
+        protected static string wiimmFolderPath = "";
 
         protected static readonly uint SECTIONCOUNT = 4;
         protected static readonly uint CONFIGVERSION = 1;
@@ -131,7 +131,14 @@ namespace Pulsar_Pack_Creator.IO
         {
             try
             {
-                if (!File.Exists(@"C:\Program Files\Wiimm\SZS\cygwin1.dll"))
+                bool hasWiimm = false;
+                string envPath = Environment.GetEnvironmentVariable("Path");
+                if(envPath != null)
+                {
+                    hasWiimm = envPath.Contains(@"Wiimm\SZS");                  
+                }
+                                          
+                if (!hasWiimm)
                 {
                     wiimmFolderPath = "temp/";
                     await File.WriteAllBytesAsync("temp/cygz.dll", PulsarRes.cygz);
@@ -175,7 +182,7 @@ namespace Pulsar_Pack_Creator.IO
                     {
                         return;
                     }
-                    wimgtProcessInfo.Arguments = $"decode temp/UIAssets.d/button/timg/icon_{i:D2}.tpl --dest \"temp/{MainWindow.Cup.defaultNames[i]}.png\" -o";
+                    wimgtProcessInfo.Arguments = $"decode temp/UIAssets.d/button/timg/icon_{i:D3}.tpl --dest \"temp/{MainWindow.Cup.defaultNames[i]}.png\" -o";
                     wimgtProcess.Start();
                     if (i == 0)
                     {

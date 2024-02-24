@@ -151,7 +151,7 @@ namespace Pulsar_Pack_Creator.IO
                     bool hasCustomIcons = false;
                     Process wimgtProcess = new Process();
                     ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
-                    wimgtProcessInfo.FileName = @"temp/wimgt.exe";
+                    wimgtProcessInfo.FileName = $"{wiimmFolderPath}wimgt.exe";
                     //wimgtProcessInfo.WorkingDirectory = @"temp/";
                     wimgtProcessInfo.CreateNoWindow = true;
                     wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -163,14 +163,19 @@ namespace Pulsar_Pack_Creator.IO
                     for (int i = 0; i < ctsCupCount; i++)
                     {
                         MainWindow.Cup cup = cups[i];
-                        if ((i >= 100  || cup.iconName != $"{MainWindow.Cup.defaultNames[i]}.png"))
+                        if (i >= 100 || cup.iconName != $"{MainWindow.Cup.defaultNames[i]}.png")
                         {
+                            if(cup.iconName.Length <= 4)
+                            {
+                                error = $"{cup.iconName} of cup {i+1}";
+                                return Result.NoIcon;
+                            }
                             hasCustomIcons = true;
                             bool isDefault = MainWindow.Cup.defaultNames.Contains(cup.iconName.Remove(cup.iconName.Length - 4));
                             string realIconName = isDefault ? $"temp/{cup.iconName}" : $"input/CupIcons/{cup.iconName}";
                             if (!File.Exists(realIconName))
                             {
-                                error = realIconName;
+                                error = $"{realIconName} of cup {i+1}";
                                 return Result.NoIcon;
                             }
                             cupIcons.Add((realIconName, i));
@@ -186,7 +191,7 @@ namespace Pulsar_Pack_Creator.IO
                             {
                                 new Bitmap(image, size, size).Save($"temp/{elem.Item2}.png");
                             }
-                            wimgtProcessInfo.Arguments = $"encode temp/{elem.Item2}.png --dest temp/UIAssets.d/button/timg/icon_{elem.Item2:D2}.tpl --transform CMPR -o";
+                            wimgtProcessInfo.Arguments = $"encode temp/{elem.Item2}.png --dest temp/UIAssets.d/button/timg/icon_{elem.Item2:D3}.tpl --transform CMPR -o";
                             wimgtProcess.Start();
                             error = wimgtProcess.StandardError.ReadToEnd();
                             if (error != "") return Result.WIMGT;
@@ -279,7 +284,7 @@ namespace Pulsar_Pack_Creator.IO
 
                 string iconName = cup.iconName;
                 string finalIconName = "";
-                if (idx < 100 && iconName.Length > 4 && iconName.Remove(iconName.Length - 4) != MainWindow.Cup.defaultNames[cup.idx])
+                if (iconName.Length > 4 && (idx >= 100 || iconName.Remove(iconName.Length - 4) != MainWindow.Cup.defaultNames[cup.idx]))
                 {
                     finalIconName = iconName;
                 }
