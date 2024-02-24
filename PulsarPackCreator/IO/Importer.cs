@@ -1,17 +1,12 @@
-﻿using PulsarPackCreator;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata;
-using System.Reflection.PortableExecutable;
 using System.Runtime.InteropServices;
-using System.Windows;
 
 
-namespace PulsarPackCreator.IO
+namespace Pulsar_Pack_Creator.IO
 {
     class Importer : IOBase
     {
@@ -24,11 +19,11 @@ namespace PulsarPackCreator.IO
 
         readonly byte[] raw;
         List<MainWindow.Cup> cups;
-        public new ushort ctsCupCount;
+        public new ushort ctsCupCount { get; private set; }
         uint configVersion;
         uint cupVersion;
-        public string date;
-        string[,,] regsExperts;
+        public string date { get; private set; }
+        public string[,,] regsExperts { get; private set; }
 
         public Result ImportV1()
         {
@@ -48,7 +43,7 @@ namespace PulsarPackCreator.IO
 
             nint offset = header.offsetToCups + Marshal.OffsetOf(typeof(PulsarGame.CupsHolder), "cups") + Marshal.OffsetOf(typeof(PulsarGame.Cups), "cupsArray");
             nint size = Marshal.SizeOf(typeof(PulsarGame.Cup));
-               
+
 
             for (int i = 0; i < ctsCupCount; i++)
             {
@@ -124,7 +119,7 @@ namespace PulsarPackCreator.IO
             return Result.Success;
         }
         */
-        
+
         public Result Import()
         {
 
@@ -136,7 +131,7 @@ namespace PulsarPackCreator.IO
 
                 //Read HEADER
                 configVersion = header.version;
-                if (header.magic != binMagic || header.version > CONFIGVERSION) return Result.InvalidConfigFile;
+                if (header.magic != configMagic || header.version > CONFIGVERSION) return Result.InvalidConfigFile;
 
                 Result ret = Result.UnknownError;
                 if (configVersion == 1)
@@ -169,11 +164,11 @@ namespace PulsarPackCreator.IO
             if (magic != infoMagic || infoVersion != INFOVERSION) return Result.BadInfo;
 
             PulsarGame.Info info = raw.info;
-            parameters.prob100cc = (int)info.prob100cc;
-            parameters.prob150cc = (int)info.prob150cc;
+            parameters.prob100cc = info.prob100cc;
+            parameters.prob150cc = info.prob150cc;
             parameters.probMirror = 100 - (parameters.prob100cc + parameters.prob150cc);
-            parameters.wiimmfiRegion = (int)info.wiimmfiRegion;
-            parameters.trackBlocking = (int)info.trackBlocking;
+            parameters.wiimmfiRegion = info.wiimmfiRegion;
+            parameters.trackBlocking = info.trackBlocking;
             parameters.hasTTTrophies = info.hasTTTrophies == 1 ? true : false;
             parameters.has200cc = info.has200cc == 1 ? true : false;
             parameters.hasUMTs = info.hasUMTs == 1 ? true : false;
@@ -221,7 +216,7 @@ namespace PulsarPackCreator.IO
             bmgSize = 0;
             using (BigEndianReader bin = new BigEndianReader(new MemoryStream(raw)))
             {
-                
+
                 ulong magic = bin.ReadUInt64();
                 if (magic != bmgMagic) return Result.BadBMG;
                 bmgSize = bin.ReadInt32();
@@ -318,7 +313,7 @@ namespace PulsarPackCreator.IO
                             if (split.Length > 1 && split[1] != "") cups[(int)idx].iconName = split[1];
                         }
                     }
-                    else if (curLine.Contains(":"))
+                    else if (curLine.Contains("*"))
                     {
                         string[] split = curLine.Split("=");
                         if (uint.TryParse(split[0], NumberStyles.HexNumber, null, out uint id))
@@ -327,10 +322,10 @@ namespace PulsarPackCreator.IO
                             if (cupIdx < 8)
                             {
                                 int trackIdx = (int)id % 4;
-                                string[] names = split[1].Split(":");
-                                if (names.Length > 0 && names.Length < 4)
+                                string[] names = split[1].Split("*");
+                                if (names.Length > 0 && names.Length <= 4)
                                 {
-                                    for (int i = 1; i < names.Length; i++)
+                                    for (int i = 0; i < names.Length; i++)
                                     {
                                         regsExperts[cupIdx, trackIdx, i] = names[i];
                                     }
@@ -363,7 +358,7 @@ namespace PulsarPackCreator.IO
                 curLine = fileSR.ReadLine();
             }
         }
-      
+
     }
 
 

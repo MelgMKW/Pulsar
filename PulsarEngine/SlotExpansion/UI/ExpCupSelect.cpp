@@ -110,27 +110,26 @@ void ExpCupSelect::AfterControlUpdate() {
     }
     else {
         this->randomControl.isHidden = false;
-        const SectionPad& pad = SectionMgr::sInstance->pad;
-        const ControllerType controllerType = pad.GetType(pad.GetCurrentID(0));
         this->randomControl.SetMessage(BMG_RANDOM_CUP);
 
         bool isInaccessible = true;
         PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
         if(this->randomizedId != PULSARID_NONE) {
             SheetSelectControl::SheetSelectButton* arrow;
-            const u32 randomizedCupIdx = CupsConfig::ConvertCup_PulsarIdToIdx(CupsConfig::ConvertCup_PulsarTrackToCup(this->randomizedId));
-            const u32 button0Idx = CupsConfig::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[0]->buttonId));
-            const u32 button7Idx = CupsConfig::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[7]->buttonId));
+            const u32 subtraHend = !cupsConfig->HasRegs() * 8;
+            const u32 randomizedCupButtonIdx = CupsConfig::ConvertCup_PulsarIdToIdx(CupsConfig::ConvertCup_PulsarTrackToCup(this->randomizedId)) - subtraHend;
+            const u32 button0Idx = CupsConfig::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[0]->buttonId)) - subtraHend;
+            const u32 button7Idx = CupsConfig::ConvertCup_PulsarIdToIdx(static_cast<PulsarCupId>(buttons[7]->buttonId)) - subtraHend;
             const u32 cupCount = cupsConfig->GetTotalCupCount();
 
             bool isCurOnScreen = false;
             for(int i = 0; i < 8; ++i) {
                 u32 cupI = (button0Idx + i) % cupCount;
-                if(cupI == randomizedCupIdx) isCurOnScreen = true;
+                if(cupI == randomizedCupButtonIdx) isCurOnScreen = true;
             }
-            u32 low = nw4r::ut::Abs<s32>(randomizedCupIdx - button0Idx);
+            u32 low = nw4r::ut::Abs<s32>(randomizedCupButtonIdx - button0Idx);
             low = nw4r::ut::Min(low, cupCount - low);
-            u32 high = nw4r::ut::Abs<s32>(randomizedCupIdx - button7Idx);
+            u32 high = nw4r::ut::Abs<s32>(randomizedCupButtonIdx - button7Idx);
             high = nw4r::ut::Min(high, cupCount - high);
             if(!isCurOnScreen) {
                 if(high <= low) arrow = &this->arrows.rightArrow;
@@ -138,7 +137,7 @@ void ExpCupSelect::AfterControlUpdate() {
                 arrow->Select(0);
             }
             else {
-                u32 finalButtonIdx = nw4r::ut::Abs<s32>(randomizedCupIdx - button7Idx);
+                u32 finalButtonIdx = nw4r::ut::Abs<s32>(randomizedCupButtonIdx - button7Idx);
                 finalButtonIdx = 7 - nw4r::ut::Min(finalButtonIdx, cupCount - finalButtonIdx);
                 buttons[finalButtonIdx]->Select(0);
                 buttons[finalButtonIdx]->HandleClick(0, 0);
@@ -183,16 +182,19 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
     }
     else {
         u32 tplId = realCupId;
-        if(realCupId > Info::GetCupIconCount()) {
+
+        u16 iconCount = Info::GetCupIconCount();
+        if(iconCount == 0) iconCount = 100;
+        if(realCupId > iconCount) {
             wchar_t cupName[0x20];
             swprintf(cupName, 0x20, L"Cup %d", realCupId);
             info.strings[0] = cupName;
-            tplId = tplId % 100;
+            tplId = tplId % iconCount;
             realCupId = 0;
             bmgId = BMG_TEXT;
         }
         else bmgId = BMG_CUPS;
-        snprintf(tplName, 0x20, "icon_%02d.tpl", tplId);
+        snprintf(tplName, 0x20, "icon_%03d.tpl", tplId);
     }
     control.SetMessage(bmgId + realCupId, &info);
     ChangeImage(control, "icon", tplName);

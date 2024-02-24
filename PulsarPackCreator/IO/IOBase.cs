@@ -1,18 +1,14 @@
-﻿using PulsarPackCreator;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
 using System.Threading;
-using System.Configuration;
+using System.Threading.Tasks;
 
 
-namespace PulsarPackCreator.IO
+namespace Pulsar_Pack_Creator.IO
 {
     public enum Result
     {
@@ -22,6 +18,7 @@ namespace PulsarPackCreator.IO
         NoDate,
         NoWiimmfi,
         NoModName,
+        NoIcon,
 
         InvalidConfigFile,
         BadInfo,
@@ -29,13 +26,15 @@ namespace PulsarPackCreator.IO
         BadText,
         BadBMG,
         BadFile,
-        
 
+        WBMGT,
+        WIMGT,
+        WSZST,
         UnknownError,
     };
     abstract class IOBase
     {
-        
+
 
         public IOBase(MainWindow window)
         {
@@ -44,39 +43,44 @@ namespace PulsarPackCreator.IO
 
         }
         protected MainWindow.Parameters parameters;
-        protected readonly UInt16 ctsCupCount;
-        protected const int binMagic =  0x50554C53;
+        protected readonly ushort ctsCupCount;
+        protected const int configMagic = 0x50554C53;
         protected const int infoMagic = 0x494E464F;
         protected const int cupsMagic = 0x43555053;
         protected const int textMagic = 0x54455854;
         protected const int fileMagic = 0x46494C45;
         protected const ulong bmgMagic = 0x4D455347626D6731;
 
+        private static string wiimmFolderPath = "";
 
-        protected static readonly int SECTIONCOUNT = 4;
-        protected static readonly int CONFIGVERSION = 1;
-        protected static readonly int INFOVERSION = 1;
-        protected static readonly int CUPSVERSION = 1;
-        protected static readonly int TEXTVERSION = 1;
+        protected static readonly uint SECTIONCOUNT = 4;
+        protected static readonly uint CONFIGVERSION = 1;
+        protected static readonly uint INFOVERSION = 1;
+        protected static readonly uint CUPSVERSION = 1;
+        protected static readonly uint TEXTVERSION = 1;
 
         public string error;
         public static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
-        protected static void RequestBMGAction(bool isEncode) //else will decode
-        {
-            File.WriteAllBytes("temp/wbmgt.exe", PulsarRes.wbmgt);
+        protected Result RequestBMGAction(bool isEncode) //else will decode
+        {           
             ProcessStartInfo processInfo = new ProcessStartInfo();
-            processInfo.FileName = @"wbmgt.exe";
+            processInfo.FileName = $"{wiimmFolderPath}wbmgt.exe";
             processInfo.Arguments = isEncode ? "encode BMG.txt" : "decode bmg.bmg --no-header --export";
             processInfo.WorkingDirectory = @"temp/";
             processInfo.CreateNoWindow = true;
             processInfo.WindowStyle = ProcessWindowStyle.Hidden;
             processInfo.UseShellExecute = false;
+            processInfo.RedirectStandardError = true;
+            //processInfo.RedirectStandardOutput = true;
 
             Process process = new Process();
             process.StartInfo = processInfo;
             process.Start();
+            //string output = process.StandardOutput.ReadToEnd();
+            error = process.StandardError.ReadToEnd();
             process.WaitForExit();
+            return error != "" ? Result.WBMGT : Result.Success;
         }
         public long RoundUp(long value, uint aligment)
         {
@@ -125,47 +129,66 @@ namespace PulsarPackCreator.IO
 
         public async static Task ExtractDefaultTPLs()
         {
-            await File.WriteAllBytesAsync("temp/wszst.exe", PulsarRes.wszst);
-            await File.WriteAllBytesAsync("temp/wimgt.exe", PulsarRes.wimgt);
-            await File.WriteAllBytesAsync("temp/UIAssets.szs", PulsarRes.UIAssets);
-
-            ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
-            wszstProcessInfo.FileName = @"wszst.exe";
-            wszstProcessInfo.Arguments = "extract UIAssets.szs";
-            wszstProcessInfo.WorkingDirectory = @"temp/";
-            wszstProcessInfo.CreateNoWindow = true;
-            wszstProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            wszstProcessInfo.UseShellExecute = false;
-
-            Process wszstProcess = new Process();
-            wszstProcess.StartInfo = wszstProcessInfo;
-            wszstProcess.Start();
-            await wszstProcess.WaitForExitAsync();
-
-            ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
-            wimgtProcessInfo.FileName = @"temp/wimgt.exe";
-            wimgtProcessInfo.CreateNoWindow = true;
-            wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            wimgtProcessInfo.UseShellExecute = false;
-
-            Process wimgtProcess = new Process();
-            wimgtProcess.StartInfo = wimgtProcessInfo;
-
-            for (int i = 0; i < MainWindow.Cup.maxCupIcons; i++)
+            try
             {
-                if (cancelToken.IsCancellationRequested)
+                if (!File.Exists(@"C:\Program Files\Wiimm\SZS\cygwin1.dll"))
                 {
-                    return;
+                    wiimmFolderPath = "temp/";
+                    await File.WriteAllBytesAsync("temp/cygz.dll", PulsarRes.cygz);
+                    await File.WriteAllBytesAsync("temp/cygcrypto-1.1.dll", PulsarRes.cygcrypto_1_1);
+                    await File.WriteAllBytesAsync("temp/cygncursesw-10.dll", PulsarRes.cygncursesw_10);
+                    await File.WriteAllBytesAsync("temp/cygpng16-16.dll", PulsarRes.cygpng16_16);
+                    await File.WriteAllBytesAsync("temp/cygwin1.dll", PulsarRes.cygwin1);
+                    await File.WriteAllBytesAsync("temp/wszst.exe", PulsarRes.wszst);
+                    await File.WriteAllBytesAsync("temp/wimgt.exe", PulsarRes.wimgt);
+                    await File.WriteAllBytesAsync("temp/wbmgt.exe", PulsarRes.wbmgt);
                 }
-                wimgtProcessInfo.Arguments = $"decode temp/UIAssets.d/button/timg/icon_{i:D2}.tpl --dest \"temp/{MainWindow.Cup.defaultNames[i]}.png\" -o";
-                wimgtProcess.Start();
-                if (i == 0)
+
+               
+                await File.WriteAllBytesAsync("temp/UIAssets.szs", PulsarRes.UIAssets);
+
+                ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
+                wszstProcessInfo.FileName = $"{wiimmFolderPath}wszst.exe";
+                wszstProcessInfo.Arguments = "extract UIAssets.szs";
+                wszstProcessInfo.WorkingDirectory = @"temp/";
+                wszstProcessInfo.CreateNoWindow = true;
+                wszstProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                wszstProcessInfo.UseShellExecute = false;
+
+                Process wszstProcess = new Process();
+                wszstProcess.StartInfo = wszstProcessInfo;
+                wszstProcess.Start();
+                await wszstProcess.WaitForExitAsync();
+
+                ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
+                wimgtProcessInfo.FileName = $"{wiimmFolderPath}wimgt.exe";
+                wimgtProcessInfo.CreateNoWindow = true;
+                wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                wimgtProcessInfo.UseShellExecute = false;
+
+                Process wimgtProcess = new Process();
+                wimgtProcess.StartInfo = wimgtProcessInfo;
+
+                for (int i = 0; i < MainWindow.Cup.maxCupIcons; i++)
                 {
-                    wimgtProcess.WaitForExit();
-                    MainWindow window = System.Windows.Application.Current.MainWindow as MainWindow;
-                    window.DisplayImage(window.CupIcon.Text);
+                    if (cancelToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                    wimgtProcessInfo.Arguments = $"decode temp/UIAssets.d/button/timg/icon_{i:D2}.tpl --dest \"temp/{MainWindow.Cup.defaultNames[i]}.png\" -o";
+                    wimgtProcess.Start();
+                    if (i == 0)
+                    {
+                        wimgtProcess.WaitForExit();
+                        MainWindow window = System.Windows.Application.Current.MainWindow as MainWindow;
+                        window.DisplayImage(window.CupIcon.Text);
+                    }
+                    else await wimgtProcess.WaitForExitAsync(cancelToken.Token);
                 }
-                else await wimgtProcess.WaitForExitAsync(cancelToken.Token);
+            }
+            catch(Exception ex)
+            {
+                MsgWindow.Show(ex.Message);
             }
 
         }

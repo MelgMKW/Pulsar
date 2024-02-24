@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PulsarPackCreator {
+namespace Pulsar_Pack_Creator {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PulsarPackCreator {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PulsarPackCreator.PulsarRes", typeof(PulsarRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Pulsar_Pack_Creator.PulsarRes", typeof(PulsarRes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -100,6 +100,56 @@ namespace PulsarPackCreator {
         public static byte[] CommonAssets {
             get {
                 object obj = ResourceManager.GetObject("CommonAssets", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygcrypto_1_1 {
+            get {
+                object obj = ResourceManager.GetObject("cygcrypto_1_1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygncursesw_10 {
+            get {
+                object obj = ResourceManager.GetObject("cygncursesw_10", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygpng16_16 {
+            get {
+                object obj = ResourceManager.GetObject("cygpng16_16", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygwin1 {
+            get {
+                object obj = ResourceManager.GetObject("cygwin1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygz {
+            get {
+                object obj = ResourceManager.GetObject("cygz", resourceCulture);
                 return ((byte[])(obj));
             }
         }

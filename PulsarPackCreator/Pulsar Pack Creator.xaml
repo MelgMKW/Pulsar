@@ -1,4 +1,4 @@
-﻿<Window x:Class="PulsarPackCreator.MainWindow"
+﻿<Window x:Class="Pulsar_Pack_Creator.MainWindow"
         Name="MainSoftWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Pulsar Pack Creator VERSION" Height="550" Width="1000" Background="{DynamicResource AppBg}"
+        Title="Pulsar Pack Creator VERSION" Height="600" Width="1000" Background="{DynamicResource AppBg}"
         HorizontalAlignment="Center" VerticalAlignment="Center"
         AllowDrop="True"
         Drop="OnDropFile"
@@ -44,6 +44,7 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontSize"                 Value="14"/>
             <Setter Property="Width"                    Value="160"/>
+            <Setter Property="Height"                   Value="55"/>
             <Setter Property="BorderThickness"          Value="2"/>
             <Setter Property="TextAlignment"            Value="Center"/>
             <Setter Property="TextWrapping"             Value="Wrap"/>
@@ -86,6 +87,7 @@
         </Style>
 
         <Style BasedOn="{StaticResource Boxes}" TargetType="TextBox" x:Key="GhostBoxes">
+            <Setter Property="Margin" Value="15,-8,15,0"/>
             <Setter Property="Text"   Value="RKG File"/>
         </Style>
         <Style BasedOn="{StaticResource TopLabels}" TargetType="TextBlock" x:Key="GhostTopLabels">
@@ -112,10 +114,11 @@
             <Button x:Name = "SettingsButton" Content = "Program Settings" Width = "100" Height = "20" Click="OnSettingsClick"/>
 
         </StackPanel>
-        <Grid DockPanel.Dock="Bottom">
+        <Grid DockPanel.Dock="Bottom" Height="60">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="71*"/>
-                <ColumnDefinition Width="154*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <TextBox Style="{StaticResource Boxes}" x:Name="CupCount" Margin="0,-29,0,0"     Width="100" Height="24" DataObject.Pasting="NumbersOnlyPasting" PreviewTextInput="NumbersOnlyBox" TextChanged="OnCupCountChange"  />

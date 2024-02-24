@@ -1,6 +1,6 @@
 ﻿
 /*
-using PulsarPackCreator;
+using Pulsar_Pack_Creator;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,17 +16,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
-using static PulsarPackCreator.MsgWindow;
+using static Pulsar_Pack_Creator.MsgWindow;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private long RoundUp(long value, UInt32 aligment)
+        private long RoundUp(long value, uint aligment)
         {
             return (value + (aligment - 1)) & ~(aligment - 1);
         }
@@ -90,7 +90,7 @@ namespace PulsarPackCreator
                 CCMirror.Text = $"{parameters.probMirror}";
                 ModFolder.Text = $"{parameters.modFolderName}";
                 Wiimmfi.Text = $"{parameters.wiimmfiRegion}";
-                TrackBlocking.SelectedValue = blockingValues[Array.IndexOf(blockingValues, (UInt16)parameters.trackBlocking)];
+                TrackBlocking.SelectedValue = blockingValues[Array.IndexOf(blockingValues, (ushort)parameters.trackBlocking)];
                 dateSelector.SelectedDate = DateTime.Parse(date);
                 UpdateCurCup(0);
                 MsgWindow.Show("Configuration successfully imported.");
@@ -124,8 +124,8 @@ namespace PulsarPackCreator
 
         private void ReadInfo(PulsarGame.InfoHolder raw)
         {
-            UInt32 infoMagic = raw.header.magic;
-            UInt32 infoVersion = raw.header.version;
+            uint infoMagic = raw.header.magic;
+            uint infoVersion = raw.header.version;
             if (infoMagic != 0x494E464F || infoVersion != INFOVERSION) throw new Exception();
 
             PulsarGame.Info info = raw.info;
@@ -145,8 +145,8 @@ namespace PulsarPackCreator
         {
 
 
-            UInt32 cupMagic = raw.header.magic;
-            UInt32 cupVersion = raw.header.version;
+            uint cupMagic = raw.header.magic;
+            uint cupVersion = raw.header.version;
             if (cupMagic != 0x43555053 || cupVersion != CUPSVERSION) throw new Exception();
             cups.Clear();
             PulsarGame.Cups rawCups = raw.cups;
@@ -179,7 +179,7 @@ namespace PulsarPackCreator
         {
             using (BigEndianReader bin = new BigEndianReader(new MemoryStream(raw)))
             {
-                UInt32 fileMagic = bin.ReadUInt32();
+                uint fileMagic = bin.Readuint();
                 if (fileMagic != 0x46494C45) throw new Exception();
                 bin.BaseStream.Position -= 4;
                 using (BigEndianWriter file = new BigEndianWriter(File.Create("temp/files.txt")))
@@ -435,7 +435,7 @@ namespace PulsarPackCreator
             Random random = new Random();
             byte[] randBytes = new byte[4];
             random.NextBytes(randBytes);
-            bin.Write(BitConverter.ToUInt32(randBytes, 0));
+            bin.Write(BitConverter.Touint(randBytes, 0));
             bin.Write(parameters.prob100cc);
             bin.Write(parameters.prob150cc);
             bin.Write(parameters.wiimmfiRegion);
@@ -470,7 +470,7 @@ namespace PulsarPackCreator
             long trophyPos = bin.BaseStream.Position;
             bin.BaseStream.Position += 8;
 
-            UInt16[] trophyCount = new UInt16[4] { 0, 0, 0, 0 };
+            ushort[] trophyCount = new ushort[4] { 0, 0, 0, 0 };
             for (int id = 0; id < ctsCupCount; id++)
             {
                 Cup cup = cups[id];
@@ -478,7 +478,7 @@ namespace PulsarPackCreator
             }
             if (ctsCupCount % 2 == 1)
             {
-                UInt32 idx = cups[0].idx;
+                uint idx = cups[0].idx;
                 cups[0].idx = ctsCupCount;
                 WriteCup(cups[0], bin, bmgSW, fileSW, crcToFile, true, ref trophyCount);
                 cups[0].idx = idx;
@@ -487,17 +487,17 @@ namespace PulsarPackCreator
             bin.BaseStream.Position = trophyPos;
             for (int i = 0; i < 4; i++)
             {
-                UInt16 count = parameters.hasTTTrophies ? trophyCount[i] : (UInt16)0;
+                ushort count = parameters.hasTTTrophies ? trophyCount[i] : (ushort)0;
                 bin.Write(count);
             }
             bin.BaseStream.Position = sizePosition;
             bin.Write((int)(curPosition - sizePosition - 4));
             bin.BaseStream.Position = curPosition;
         }
-        private void WriteCup(Cup cup, BigEndianWriter bin, StreamWriter bmgSW, StreamWriter fileSW, StreamWriter crcToFile, bool isFake, ref UInt16[] trophyCount)
+        private void WriteCup(Cup cup, BigEndianWriter bin, StreamWriter bmgSW, StreamWriter fileSW, StreamWriter crcToFile, bool isFake, ref ushort[] trophyCount)
         {
             string modFolder = $"output/{parameters.modFolderName}";
-            UInt32 idx = cup.idx;
+            uint idx = cup.idx;
             string[] fileInfo = Directory.GetFiles("input/", "*", SearchOption.AllDirectories);
             fileInfo = fileInfo.Select(s => s.ToLowerInvariant()).ToArray();
             bin.Write(idx);
@@ -544,8 +544,8 @@ namespace PulsarPackCreator
                             }
                             using BigEndianReader rkg = new BigEndianReader(File.Open(rkgName, FileMode.Open));
                             rkg.BaseStream.Position = 0xC;
-                            UInt16 halfC = rkg.ReadUInt16();
-                            UInt16 newC = (UInt16)((halfC & ~(0x7F << 2)) + (0x26 << 2)); //change ghostType to expert
+                            ushort halfC = rkg.Readushort();
+                            ushort newC = (ushort)((halfC & ~(0x7F << 2)) + (0x26 << 2)); //change ghostType to expert
 
                             rkg.BaseStream.Position = 0;
                             byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
@@ -585,11 +585,11 @@ namespace PulsarPackCreator
             {
                 if (curLine != "")
                 {
-                    UInt32 bmgId;
-                    bool ret = UInt32.TryParse(curLine.Substring(1, 5), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out bmgId);
+                    uint bmgId;
+                    bool ret = uint.TryParse(curLine.Substring(1, 5), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out bmgId);
                     if (!ret)
                     {
-                        ret = UInt32.TryParse(curLine.Substring(2, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out bmgId);
+                        ret = uint.TryParse(curLine.Substring(2, 4), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out bmgId);
                     }
                     if (ret)
                     {
@@ -597,8 +597,8 @@ namespace PulsarPackCreator
                         else if (bmgId >= 0x10000 && bmgId < 0x60000)
                         {
                             string content = curLine.Split('=')[1].TrimStart(' ');
-                            UInt32 type = bmgId & 0xFFFF0000;
-                            UInt32 rest = bmgId & 0xFFFF;
+                            uint type = bmgId & 0xFFFF0000;
+                            uint rest = bmgId & 0xFFFF;
                             int cupIdx = (int)rest / 4;
                             if (cupIdx < ctsCupCount)
                             {
@@ -638,13 +638,13 @@ namespace PulsarPackCreator
                     if (curLine.Contains("?"))
                     {
                         string[] split = curLine.Split("?");
-                        UInt32 idx = UInt32.Parse(split[0], NumberStyles.HexNumber);
+                        uint idx = uint.Parse(split[0], NumberStyles.HexNumber);
                         if (split.Length > 1 && split[1] != "") cups[(int)idx].iconName = split[1];
                     }
                     else
                     {
                         string[] split = curLine.Split("=");
-                        UInt32 id = UInt32.Parse(split[0], NumberStyles.HexNumber);
+                        uint id = uint.Parse(split[0], NumberStyles.HexNumber);
 
                         int cupIdx = (int)id / 4;
                         if (cupIdx < ctsCupCount)

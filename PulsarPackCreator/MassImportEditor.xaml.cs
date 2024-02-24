@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using static PulsarPackCreator.MainWindow;
+using static Pulsar_Pack_Creator.MainWindow;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     /// <summary>
     /// Interaction logic for parent.xaml
@@ -33,18 +33,18 @@ namespace PulsarPackCreator
 
             string[] namesImport = NamesImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
             string[] authorsImport = AuthorsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
-            string[] versionsImport =  VersionsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
+            string[] versionsImport = VersionsImport.Text.Replace("\r", "").Trim('\n').Split("\n").ToArray();
             string[] slotsImport = SlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
             string[] musicSlotsImport = MusicSlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
 
             string[][] importStringArrays = { namesImport, authorsImport, versionsImport, slotsImport, musicSlotsImport };
 
-            foreach(string cur in namesImport)
+            foreach (string cur in namesImport)
             {
                 if (!CheckTrackName(cur))
                 {
                     MsgWindow.Show($"Track {cur} has an invalid name as it contains one of <>:\"/|?*", this);
-                      return;
+                    return;
                 }
             }
             TextBox[] imports = new TextBox[] { NamesImport, AuthorsImport, SlotsImport, MusicSlotsImport };

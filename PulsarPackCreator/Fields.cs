@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using static PulsarGame;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -19,25 +14,18 @@ namespace PulsarPackCreator
 
     partial class MainWindow : Window
     {
-      
-        public static int SECTIONCOUNT = 3;
-        public static int CONFIGVERSION = 1;
-        public static int INFOVERSION = 1;
-        public static int CUPSVERSION = 1;
-        
-
-        
-        public static UInt16[] blockingValues = { 0, 2, 4, 8, 16, 32 };
+   
+        public static ushort[] blockingValues = { 0, 2, 4, 8, 16, 32 };
         public static string[] regsValues = { "No regular tracks", "8 first cups = regular cups", "8 last cups = regular cups" };
 
         //Dynamic
-        public UInt16 curCup = 0;
+        public ushort curCup = 0;
 
         //Userdata
         //Options
-        public UInt16 ctsCupCount = 1;
+        public ushort ctsCupCount = 1;
         public string date = "01/01/2000";
-        public UInt16[] trophyCount;
+        public ushort[] trophyCount;
 
         //Info
         public Parameters parameters { get; private set; }
@@ -46,7 +34,7 @@ namespace PulsarPackCreator
         public List<Cup> cups;
 
         //Regs Ghosts
-        public UInt16 curRegsCup = 0;
+        public ushort curRegsCup = 0;
         public string[,,] regsExperts = new string[8, 4, 4];
 
         //Windows
@@ -56,8 +44,8 @@ namespace PulsarPackCreator
         public static SettingsWindow settingsWindow;
         public static MsgWindow messageWindow;
 
-        public Task extractTPL;     
-        
+        public Task extractTPL;
+
 
         //public List<byte> extSlotToTrackId;
         //public List<byte> extSlotToMusicSlot;
@@ -65,24 +53,24 @@ namespace PulsarPackCreator
         //public List<string> trackNames;
         //public List<string> authorNames;
 
-     
+
         public MainWindow()
         {
-            trophyCount = new UInt16[4];
+            trophyCount = new ushort[4];
             parameters = new Parameters();
             cups = new List<Cup>();
             Cup initial = new Cup(0);
             cups.Add(initial);
             InitializeComponent();
- 
+
             importWindow = new MassImportWindow(this);
             crashWindow = new CrashWindow();
             settingsWindow = new SettingsWindow();
 
-            messageWindow = new MsgWindow();           
+            messageWindow = new MsgWindow();
 
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            Title = "Pulsar Pack Creator " + version.Substring(0, version.Length - 2);
+            string version = (Assembly.GetExecutingAssembly().GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute).InformationalVersion.ToString();
+            Title = "Pulsar Pack Creator " + version;
 
             TrackBlocking.ItemsSource = blockingValues;
             TrackBlocking.SelectedValue = blockingValues[0];
@@ -90,14 +78,14 @@ namespace PulsarPackCreator
             Regs.ItemsSource = regsValues;
             Regs.SelectedValue = regsValues[0];
 
-            Slot1.ItemsSource =  MarioKartWii.idxToAbbrev;
-            Slot2.ItemsSource =  MarioKartWii.idxToAbbrev;
-            Slot3.ItemsSource =  MarioKartWii.idxToAbbrev;
-            Slot4.ItemsSource =  MarioKartWii.idxToAbbrev;
-            Music1.ItemsSource = MarioKartWii.idxToAbbrev;
-            Music2.ItemsSource = MarioKartWii.idxToAbbrev;
-            Music3.ItemsSource = MarioKartWii.idxToAbbrev;
-            Music4.ItemsSource = MarioKartWii.idxToAbbrev;
+            Slot1.ItemsSource = MarioKartWii.idxToAbbrev;
+            Slot2.ItemsSource = MarioKartWii.idxToAbbrev;
+            Slot3.ItemsSource = MarioKartWii.idxToAbbrev;
+            Slot4.ItemsSource = MarioKartWii.idxToAbbrev;
+            Music1.ItemsSource = MarioKartWii.musicIdxToAbbrev;
+            Music2.ItemsSource = MarioKartWii.musicIdxToAbbrev;
+            Music3.ItemsSource = MarioKartWii.musicIdxToAbbrev;
+            Music4.ItemsSource = MarioKartWii.musicIdxToAbbrev;
 
             File1.Text = initial.fileNames[0];
             File2.Text = initial.fileNames[0];
@@ -120,10 +108,13 @@ namespace PulsarPackCreator
             Slot2.SelectedValue = MarioKartWii.idxToAbbrev[0];
             Slot3.SelectedValue = MarioKartWii.idxToAbbrev[0];
             Slot4.SelectedValue = MarioKartWii.idxToAbbrev[0];
-            Music1.SelectedValue = MarioKartWii.idxToAbbrev[0];
-            Music2.SelectedValue = MarioKartWii.idxToAbbrev[0];
-            Music3.SelectedValue = MarioKartWii.idxToAbbrev[0];
-            Music4.SelectedValue = MarioKartWii.idxToAbbrev[0];
+            Music1.SelectedValue = MarioKartWii.musicIdxToAbbrev[0];
+            Music2.SelectedValue = MarioKartWii.musicIdxToAbbrev[0];
+            Music3.SelectedValue = MarioKartWii.musicIdxToAbbrev[0];
+            Music4.SelectedValue = MarioKartWii.musicIdxToAbbrev[0];
+
+            CupName.Text = Cup.defaultNames[0];
+            CupIcon.Text = $"{Cup.defaultNames[0]}.png";
 
             CC100.Text = $"{parameters.prob100cc}";
             CC150.Text = $"{parameters.prob150cc}";
@@ -144,9 +135,9 @@ namespace PulsarPackCreator
             Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
             Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
             extractTPL = IO.IOBase.ExtractDefaultTPLs();
-            
-            bool checkUpdates = PulsarPackCreator.Properties.Settings.Default.AutoUpdate;
-            
+
+            bool checkUpdates = Properties.Settings.Default.AutoUpdate;
+
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
@@ -162,7 +153,7 @@ namespace PulsarPackCreator
                     {
                         checkUpdates = false;
                         SettingsWindow.DisplayChangelog(args[3]);
-                        
+
                     }
                 }
                 catch (Exception ex)
@@ -186,7 +177,7 @@ namespace PulsarPackCreator
             }
 
             File.WriteAllText("temp/PulsarBMG.txt", PulsarRes.BMG);
-           
+
         }
     }
 }

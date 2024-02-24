@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     public partial class MsgWindow : Window
     {
@@ -46,16 +46,16 @@ namespace PulsarPackCreator
             if (owner == null || !owner.IsLoaded)
             {
                 owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
-                if(owner == null || owner == window) owner = main;
+                if (owner == null || owner == window) owner = main;
             }
-            
-            if(window.IsLoaded) window.Close();
-            window.Owner = owner;       
+
+            if (window.IsLoaded) window.Close();
+            window.Owner = owner;
             window.Title = caption;
             window.TextSpace.Text = text;
             window.result = false;
 
-            Thickness margin = new Thickness(0,0,10,5);
+            Thickness margin = new Thickness(0, 0, 10, 5);
             if (button == MsgWindowButton.OK)
             {
                 window.No.Visibility = Visibility.Hidden;

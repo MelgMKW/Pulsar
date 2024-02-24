@@ -73,5 +73,7 @@ kmWrite32(0x80534350, 0x60000000);
 kmWrite32(0x80534BBC, 0x60000000);
 kmWrite32(0x80723D10, 0x281D0009);
 kmWrite32(0x80723D40, 0x3BA00009);
+
+kmWrite24(0x808AAA0C, 'PUL'); //time_number -> time_numPUL
 }//namespace Race
 }//namespace Pulsar

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -72,7 +72,7 @@ namespace PulsarPackCreator
 
         private void UpdateCurRegsPage(short direction)
         {
-            curRegsCup = (UInt16)((curRegsCup + 8 + direction) % 8);
+            curRegsCup = (ushort)((curRegsCup + 8 + direction) % 8);
 
             RegsGhostTrackName1.Text = PulsarGame.MarioKartWii.idxToFullNames[curRegsCup * 4];
             RegsGhostTrackName2.Text = PulsarGame.MarioKartWii.idxToFullNames[curRegsCup * 4 + 1];
@@ -80,7 +80,7 @@ namespace PulsarPackCreator
             RegsGhostTrackName4.Text = PulsarGame.MarioKartWii.idxToFullNames[curRegsCup * 4 + 3];
 
             for (int row = 0; row < 4; row++)
-            {               
+            {
                 for (int col = 0; col < 4; col++)
                 {
                     SetRegsExpertName(regsExperts[curRegsCup, row, col], row, col);

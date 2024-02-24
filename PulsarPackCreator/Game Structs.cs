@@ -1,6 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using Pulsar_Pack_Creator;
 using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 public class PulsarGame
 {
@@ -107,7 +108,7 @@ public class PulsarGame
         };
 
 
-        public enum CourseId : UInt32
+        public enum CourseId : uint
         {
             COURSEID_NONE = 0xFFFFFFFF,
 
@@ -172,7 +173,7 @@ public class PulsarGame
             NO_TRACK_SELECTED = 0x43,
             RANDOM = 0xFF
         }
-        public enum KartId : UInt32
+        public enum KartId : uint
         {
             STANDARD_KART_S = 0x00,
             STANDARD_KART_M = 0x01,
@@ -212,7 +213,7 @@ public class PulsarGame
             PHANTOM = 0x23
         }
 
-        public enum CharacterId : UInt32
+        public enum CharacterId : uint
         {
             MARIO = 0x00,
             BABY_PEACH = 0x01,
@@ -266,108 +267,108 @@ public class PulsarGame
         }
     } //class Mario Kart Wii
 
-        public static string[] ttModes = { "150cc:", "200cc:", "150cc Feather:", "200cc Feather:" };
-        public static string[,] ttModeFolders = { { "150", "150Experts" }, { "200", "200Experts" }, { "150F", "150FeaExperts" }, { "200F", "200FeaExperts" } };
+    public static string[] ttModes = { "150cc:", "200cc:", "150cc Feather:", "200cc Feather:" };
+    public static string[,] ttModeFolders = { { "150", "150Experts" }, { "200", "200Experts" }, { "150F", "150FeaExperts" }, { "200F", "200FeaExperts" } };
 
 
-        [AttributeUsage(AttributeTargets.Field)]
-        public class EndianAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Field)]
+    public class EndianAttribute : Attribute
+    {
+        public Endianness Endianness { get; private set; }
+
+        public EndianAttribute(Endianness endianness)
         {
-            public Endianness Endianness { get; private set; }
-
-            public EndianAttribute(Endianness endianness)
-            {
-                this.Endianness = endianness;
-            }
+            this.Endianness = endianness;
         }
+    }
 
-        public enum Endianness
-        {
-            BigEndian,
-            LittleEndian
-        }
+    public enum Endianness
+    {
+        BigEndian,
+        LittleEndian
+    }
 
-        private static void RespectEndianness(Type type, byte[] data, int offSet = 0)
-        {
-            var fields = type.GetFields().Where(f => f.IsDefined(typeof(EndianAttribute), false))
-                .Select(f => new
-                {
-                    Field = f,
-                    Attribute = (EndianAttribute)f.GetCustomAttributes(typeof(EndianAttribute), false)[0],
-                    Offset = Marshal.OffsetOf(type, f.Name).ToInt32()
-                }).ToList();
-            foreach (var field in fields)
+    private static void RespectEndianness(Type type, byte[] data, int offSet = 0)
+    {
+        var fields = type.GetFields().Where(f => f.IsDefined(typeof(EndianAttribute), false))
+            .Select(f => new
             {
-                if (field.Field.FieldType.IsArray)
-                {
-                    //handle arrays, assuming fixed length
-                    object attr = field.Field.GetCustomAttributes(typeof(MarshalAsAttribute), false).FirstOrDefault();
-                    MarshalAsAttribute marshalAsAttribute = attr as MarshalAsAttribute;
-                    if (marshalAsAttribute == null || marshalAsAttribute.SizeConst == 0)
-                        throw new NotSupportedException(
-                            "Array fields must be decorated with a MarshalAsAttribute with SizeConst specified.");
+                Field = f,
+                Attribute = (EndianAttribute)f.GetCustomAttributes(typeof(EndianAttribute), false)[0],
+                Offset = Marshal.OffsetOf(type, f.Name).ToInt32()
+            }).ToList();
+        foreach (var field in fields)
+        {
+            if (field.Field.FieldType.IsArray)
+            {
+                //handle arrays, assuming fixed length
+                object attr = field.Field.GetCustomAttributes(typeof(MarshalAsAttribute), false).FirstOrDefault();
+                MarshalAsAttribute marshalAsAttribute = attr as MarshalAsAttribute;
+                if (marshalAsAttribute == null || marshalAsAttribute.SizeConst == 0)
+                    throw new NotSupportedException(
+                        "Array fields must be decorated with a MarshalAsAttribute with SizeConst specified.");
 
-                    int arrayLength = marshalAsAttribute.SizeConst;
-                    Type elementType = field.Field.FieldType.GetElementType();
-                    int elementSize = Marshal.SizeOf(elementType);
-                    int arrayOffset = field.Offset + offSet;
+                int arrayLength = marshalAsAttribute.SizeConst;
+                Type elementType = field.Field.FieldType.GetElementType();
+                int elementSize = Marshal.SizeOf(elementType);
+                int arrayOffset = field.Offset + offSet;
 
-                    for (int i = arrayOffset; i < arrayOffset + elementSize * arrayLength; i += elementSize)
-                    {
-                        RespectEndianness(elementType, data, i);
-                    }
-                }
-                else if (!field.Field.FieldType.IsPrimitive) //or !field.Field.FiledType.GetFields().Length == 0
+                for (int i = arrayOffset; i < arrayOffset + elementSize * arrayLength; i += elementSize)
                 {
-                    //handle nested structs
-                    RespectEndianness(field.Field.FieldType, data, field.Offset);
-                }
-                else
-                {
-                    //handle primitive types
-                    Array.Reverse(data, offSet + field.Offset, Marshal.SizeOf(field.Field.FieldType));
+                    RespectEndianness(elementType, data, i);
                 }
             }
-        }
-
-
-        public static T BytesToStruct<T>(byte[] rawData) where T : struct
-        {
-            T result = default(T);
-
-            RespectEndianness(typeof(T), rawData);
-
-            GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);
-
-            try
+            else if (!field.Field.FieldType.IsPrimitive) //or !field.Field.FiledType.GetFields().Length == 0
             {
-                IntPtr rawDataPtr = handle.AddrOfPinnedObject();
-                result = (T)Marshal.PtrToStructure(rawDataPtr, typeof(T));
+                //handle nested structs
+                RespectEndianness(field.Field.FieldType, data, field.Offset);
             }
-            finally
+            else
             {
-                handle.Free();
+                //handle primitive types
+                Array.Reverse(data, offSet + field.Offset, Marshal.SizeOf(field.Field.FieldType));
             }
-
-            return result;
         }
+    }
 
-    /*
-        public static byte[] BytesFromStruct<T>(T structure, bool respectEndianness = true) where T : struct
+
+    public static T BytesToStruct<T>(byte[] rawData) where T : struct
+    {
+        T result = default(T);
+
+        RespectEndianness(typeof(T), rawData);
+
+        GCHandle handle = GCHandle.Alloc(rawData, GCHandleType.Pinned);
+
+        try
         {
-            int size = Marshal.SizeOf(structure);
-            byte[] bytes = new byte[size];
-            nint ptr = Marshal.AllocHGlobal(size);
-
-            Marshal.StructureToPtr(structure, ptr, true);
-            Marshal.Copy(ptr, bytes, 0, size);
-            Marshal.FreeHGlobal(ptr);
-
-            if (respectEndianness) RespectEndianness(typeof(T), bytes);
-
-            return bytes;
+            IntPtr rawDataPtr = handle.AddrOfPinnedObject();
+            result = (T)Marshal.PtrToStructure(rawDataPtr, typeof(T));
         }
-    */
+        finally
+        {
+            handle.Free();
+        }
+
+        return result;
+    }
+
+    
+    public static byte[] BytesFromStruct<T>(T structure, bool respectEndianness = true) where T : struct
+    {
+        int size = Marshal.SizeOf(structure);
+        byte[] bytes = new byte[size];
+        nint ptr = Marshal.AllocHGlobal(size);
+
+        Marshal.StructureToPtr(structure, ptr, true);
+        Marshal.Copy(ptr, bytes, 0, size);
+        Marshal.FreeHGlobal(ptr);
+
+        if (respectEndianness) RespectEndianness(typeof(T), bytes);
+
+        return bytes;
+    }
+    
 
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -376,38 +377,38 @@ public class PulsarGame
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x4c)]
         public byte[] mii;
         [Endian(Endianness.BigEndian)]
-        public UInt32 rkgCRC32;
+        public uint rkgCRC32;
         [Endian(Endianness.BigEndian)]
-        public UInt16 minutes;
+        public ushort minutes;
         public byte seconds;
         public byte padding;
         [Endian(Endianness.BigEndian)]
-        public UInt16 milliseconds;
+        public ushort milliseconds;
         public byte isActive;
         public byte padding2;
         [Endian(Endianness.BigEndian)]
-        public UInt32 character;
+        public uint character;
         [Endian(Endianness.BigEndian)]
-        public UInt32 kart;
+        public uint kart;
         [Endian(Endianness.BigEndian)]
-        public UInt32 controller;
+        public uint controller;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct Leaderboard
     {
         [Endian(Endianness.BigEndian)]
-        public UInt32 magic;
+        public uint magic;
         [Endian(Endianness.BigEndian)]
-        public UInt32 version;
+        public uint version;
         [Endian(Endianness.BigEndian)]
-        public UInt32 crc32;
+        public uint crc32;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 48)]
         public string trackName;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public byte[] hasTrophy;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public UInt32[] reserved;
+        public uint[] reserved;
         [Endian(Endianness.BigEndian), MarshalAs(UnmanagedType.ByValArray, SizeConst = 44)]
         public TimeEntry[] entries;
     }
@@ -416,27 +417,33 @@ public class PulsarGame
     public struct SectionHeader
     {
         [Endian(Endianness.BigEndian)]
-        public UInt32 magic;
+        public uint magic;
         [Endian(Endianness.BigEndian)]
-        public UInt32 version;
+        public uint version;
         [Endian(Endianness.BigEndian)]
-        public UInt32 dataSize; //size without the header
+        public uint dataSize; //size without the header
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct BinaryHeader
     {
+        public BinaryHeader(uint magic, uint curVersion)
+        {
+            this.magic = magic;
+            version = curVersion;
+        }
+
         [Endian(Endianness.BigEndian)]
-        public UInt32 magic;
+        public uint magic;
         [Endian(Endianness.BigEndian)]
-        public UInt32 version;
+        public uint version;
         [Endian(Endianness.BigEndian)]
         public Int32 offsetToInfo; //from start of the header
         [Endian(Endianness.BigEndian)]
         public Int32 offsetToCups;
         [Endian(Endianness.BigEndian)]
         public Int32 offsetToBMG;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 14)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
         public string modFolderName;
     }
 
@@ -444,26 +451,33 @@ public class PulsarGame
     public struct Info
     {
         [Endian(Endianness.BigEndian)]
-        public UInt32 roomKey; //transmitted to other players
+        public uint roomKey; //transmitted to other players
         [Endian(Endianness.BigEndian)]
-        public UInt32 prob100cc;
+        public uint prob100cc;
         [Endian(Endianness.BigEndian)]
-        public UInt32 prob150cc;
+        public uint prob150cc;
         [Endian(Endianness.BigEndian)]
-        public UInt32 wiimmfiRegion;
+        public int wiimmfiRegion;
         [Endian(Endianness.BigEndian)]
-        public UInt32 trackBlocking;
+        public uint trackBlocking;
         public byte hasTTTrophies;
         public byte has200cc;
         public byte hasUMTs;
         public byte hasFeather;
         public byte hasMegaTC;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 43)]
-        byte[] reservedSpace;
+        public ushort cupIconCount;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 41)]
+        public byte[] reservedSpace;
     }
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct InfoHolder
     {
+        public InfoHolder(uint magic, uint curVersion)
+        {
+            this.header.magic = magic;
+            this.header.version = curVersion;
+        }
+
         [Endian(Endianness.BigEndian)]
         public SectionHeader header;
         [Endian(Endianness.BigEndian)]
@@ -476,14 +490,24 @@ public class PulsarGame
         public byte slot;
         public byte musicSlot;
         [Endian(Endianness.BigEndian)]
-        public UInt32 crc32;
+        public uint crc32;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct Cup
     {
+        public Cup(MainWindow.Cup uiCup, uint[] crc32)
+        {
+            tracks = new Track[4];
+            idx = uiCup.idx;
+            for (int i = 0; i < 4; i++) {             
+                tracks[i].slot = uiCup.slots[i];
+                tracks[i].musicSlot = uiCup.musicSlots[i];
+                tracks[i].crc32 = crc32[i];
+            }            
+        }
         [Endian(Endianness.BigEndian)]
-        public UInt32 idx;
+        public uint idx;
         [Endian(Endianness.BigEndian), MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public Track[] tracks;
     }
@@ -492,11 +516,11 @@ public class PulsarGame
     public struct Cups
     {
         [Endian(Endianness.BigEndian)]
-        public UInt16 ctsCupCount;
+        public ushort ctsCupCount;
         public byte regsMode;
         public byte padding;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4), Endian(Endianness.BigEndian)]
-        public UInt16[] trophyCount;
+        public ushort[] trophyCount;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1), Endian(Endianness.BigEndian)]
         public Cup[] cupsArray; //CUPS
     };
@@ -504,6 +528,12 @@ public class PulsarGame
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct CupsHolder
     {
+        public CupsHolder(uint magic, uint curVersion)
+        {
+            this.header.magic = magic;
+            this.header.version = curVersion;
+        }
+
         [Endian(Endianness.BigEndian)]
         public SectionHeader header;
         [Endian(Endianness.BigEndian)]
@@ -521,7 +551,7 @@ public class PulsarGame
         public CupsHolder cupsHolder;
         //BMG rawBmg;
     }
-    public enum OSError : UInt32
+    public enum OSError : uint
     {
         OSERROR_DSI = 2,
         OSERROR_ISI = 3,
@@ -532,15 +562,15 @@ public class PulsarGame
     public struct GPR
     {
         [Endian(Endianness.BigEndian)]
-        public UInt32 name;
+        public uint name;
         [Endian(Endianness.BigEndian)]
-        public UInt32 gpr;
+        public uint gpr;
     }
 
     public struct FPR
     {
         [Endian(Endianness.BigEndian)]
-        public UInt32 name;
+        public uint name;
         [Endian(Endianness.BigEndian)]
         public double fpr;
     }
@@ -548,26 +578,26 @@ public class PulsarGame
     public struct StackFrame
     {
         [Endian(Endianness.BigEndian)]
-        public UInt32 spName;
+        public uint spName;
         [Endian(Endianness.BigEndian)]
-        public UInt32 sp;
+        public uint sp;
         [Endian(Endianness.BigEndian)]
-        public UInt32 lrName;
+        public uint lrName;
         [Endian(Endianness.BigEndian)]
-        public UInt32 lr;
+        public uint lr;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct ExceptionFile
     {
         [Endian(Endianness.BigEndian)]
-        public UInt32 magic;
+        public uint magic;
         [Endian(Endianness.BigEndian)]
-        public UInt32 region;
+        public uint region;
         [Endian(Endianness.BigEndian)]
-        public UInt32 reserved;
+        public uint reserved;
         [Endian(Endianness.BigEndian)]
-        public UInt32 error;
+        public uint error;
         [Endian(Endianness.BigEndian)]
         public GPR srr0;
         [Endian(Endianness.BigEndian)]

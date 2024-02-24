@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -18,11 +18,11 @@ namespace PulsarPackCreator
             public bool hasUMTs = false;
             public bool hasFeather = false;
             public bool hasMegaTC = false;
-            public int prob100cc = 10;
-            public int prob150cc = 65; //mirror = 100 - (100cc + 150cc)
-            public int probMirror = 25;
+            public uint prob100cc = 10;
+            public uint prob150cc = 65; //mirror = 100 - (100cc + 150cc)
+            public uint probMirror = 25;
             public int wiimmfiRegion = -1;
-            public int trackBlocking = 0;
+            public uint trackBlocking = 0;
             public string modFolderName;
         };
         private void OnOptionsClick(object sender, RoutedEventArgs e)
@@ -38,7 +38,7 @@ namespace PulsarPackCreator
         private void OnTrackBlockingChange(object sender, SelectionChangedEventArgs e)
         {
             ComboBox box = sender as ComboBox;
-            parameters.trackBlocking = (UInt16)box.SelectedValue;
+            parameters.trackBlocking = (ushort)box.SelectedValue;
         }
 
         private void OnWiimmfiRegionChange(object sender, TextChangedEventArgs e)
@@ -64,7 +64,7 @@ namespace PulsarPackCreator
         {
             ComboBox box = sender as ComboBox;
             parameters.regsMode = (byte)box.SelectedIndex;
-            RegsGhosts.Visibility = box.SelectedIndex > 0 ? Visibility.Visible : Visibility.Collapsed;            
+            RegsGhosts.Visibility = box.SelectedIndex > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
         private void OnTrophiesToggle(object sender, RoutedEventArgs e)
         {
@@ -118,16 +118,16 @@ namespace PulsarPackCreator
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
-                int Prob100 = int.Parse(CC100Box.Text);
+                uint Prob100 = uint.Parse(CC100Box.Text);
                 if (Prob100 == 100) CC150Box.Text = "0";
-                int Prob150 = int.Parse(CC150Box.Text);
+                uint Prob150 = uint.Parse(CC150Box.Text);
                 if (Prob100 + Prob150 > 100)
                 {
                     MsgWindow.Show("The sum of all probabilities should not exceed 100");
                     CC100Box.Text = $"{parameters.prob100cc}";
                     return;
                 }
-                int ProbMirror = 100 - (Prob100 + Prob150);
+                uint ProbMirror = 100 - (Prob100 + Prob150);
                 parameters.prob100cc = Prob100;
                 parameters.probMirror = ProbMirror;
                 CCMirror.Text = $"{parameters.probMirror}";
@@ -143,16 +143,16 @@ namespace PulsarPackCreator
             }
             if (CC100Box != null && CC150Box != null && CC100Box.Text != "" && CC150Box.Text != "")
             {
-                int Prob150 = int.Parse(CC150Box.Text);
+                uint Prob150 = uint.Parse(CC150Box.Text);
                 if (Prob150 == 100) CC100Box.Text = "0";
-                int Prob100 = int.Parse(CC100Box.Text);
+                uint Prob100 = uint.Parse(CC100Box.Text);
                 if (Prob100 + Prob150 > 100)
                 {
                     MsgWindow.Show("The sum of all info.probabilities should not exceed 100");
                     CC150Box.Text = $"{parameters.prob150cc}";
                     return;
                 }
-                int ProbMirror = 100 - (Prob100 + Prob150);
+                uint ProbMirror = 100 - (Prob100 + Prob150);
                 parameters.prob150cc = Prob150;
                 parameters.probMirror = ProbMirror;
                 CCMirror.Text = $"{parameters.probMirror}";
@@ -170,7 +170,7 @@ namespace PulsarPackCreator
                 startInfo.UseShellExecute = true;
                 System.Diagnostics.Process.Start(startInfo);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MsgWindow.Show(ex.ToString());
             }

@@ -91,6 +91,7 @@ void SetGhostInfoTrackBMG(GhostInfoControl* control, const char* textBoxName) {
 }
 kmCall(0x805e2a4c, SetGhostInfoTrackBMG);
 
+kmWrite32(0x808406e8, 0x388000ff); //store 0xFF on timeout instead of -1
 kmWrite32(0x808415ac, 0x388000ff);
 kmWrite32(0x80643004, 0x3be000ff);
 kmWrite32(0x80644104, 0x3b5b0000);

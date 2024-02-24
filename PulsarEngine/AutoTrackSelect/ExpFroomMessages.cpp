@@ -101,7 +101,13 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
             if(rowIdx + messages->curPageIdx * 4 == messages->msgCount - 1) {
                 return BMG_RANDOM_TRACK;
             }
-            else return GetTrackBMGId(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(messages->curPageIdx)) + rowIdx);
+            else {
+                CupsConfig* cupsConfig = CupsConfig::sInstance;
+                bool hasRegs = cupsConfig->HasRegs();
+                u32 idx = messages->curPageIdx;
+                if(!hasRegs) idx += 8;
+                return GetTrackBMGId(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(idx)) + rowIdx);
+            }
         }
 
     }

@@ -3,7 +3,7 @@ using System.Buffers.Binary;
 using System.IO;
 using System.Text;
 
-namespace PulsarPackCreator.IO
+namespace Pulsar_Pack_Creator.IO
 {
     public class BigEndianWriter : BinaryWriter
     {

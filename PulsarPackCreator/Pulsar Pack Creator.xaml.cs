@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,9 +10,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static PulsarPackCreator.MsgWindow;
+using static Pulsar_Pack_Creator.MsgWindow;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -47,8 +48,8 @@ namespace PulsarPackCreator
             settingsWindow.Load();
         }
 
-        
-       
+
+
         private void NumbersOnlyBox(object sender, TextCompositionEventArgs e)
         {
             string text = e.Text;
@@ -100,18 +101,18 @@ namespace PulsarPackCreator
         {
             byte[] raw = File.ReadAllBytes(path);
             int magic = raw[3] | (raw[2] << 8) | (raw[1] << 16) | (raw[0] << 24);
-  
+
             if (magic == 0x50554c53)
             {
                 Import(raw);
             }
-                               
+
             else if (magic == 0x50554c44)
             {
                 crashWindow.Show();
                 crashWindow.ImportCrash(raw);
             }
-            else if(magic == 0x50554C4C)
+            else if (magic == 0x50554C4C)
             {
                 IO.IOBase.ImportLeaderboard(raw);
             }
@@ -246,7 +247,7 @@ namespace PulsarPackCreator
 
         private void OnMainWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (PulsarPackCreator.Properties.Settings.Default.ExitRemind == true)
+            if (Pulsar_Pack_Creator.Properties.Settings.Default.ExitRemind == true)
             {
                 MsgWindowResult ret = MsgWindow.Show("Are you sure you want to close the creator?", MsgWindowButton.YesNo);
                 if (ret == MsgWindowResult.No)
@@ -255,15 +256,15 @@ namespace PulsarPackCreator
                 }
             }
         }
- 
+
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri("pack://application:,,,/Resources/transparent.png");
             image.EndInit();
-            Application.Current.Resources["imageBg"] = image;           
-            SettingsWindow.ApplyColorMode();           
+            Application.Current.Resources["imageBg"] = image;
+            SettingsWindow.ApplyColorMode();
         }
 
         private void OnImportConfigClick(object sender, RoutedEventArgs e)
@@ -312,8 +313,16 @@ namespace PulsarPackCreator
                 CCMirror.Text = $"{parameters.probMirror}";
                 ModFolder.Text = $"{parameters.modFolderName}";
                 Wiimmfi.Text = $"{parameters.wiimmfiRegion}";
-                TrackBlocking.SelectedValue = blockingValues[Array.IndexOf(blockingValues, (UInt16)parameters.trackBlocking)];
-                dateSelector.SelectedDate = DateTime.Parse(date);
+                TrackBlocking.SelectedValue = blockingValues[Array.IndexOf(blockingValues, (ushort)parameters.trackBlocking)];
+
+                Array.Copy(importer.regsExperts, regsExperts, regsExperts.Length);
+                
+                DateTime importDate;
+                bool dateParse = DateTime.TryParse(date, out importDate);
+                if (dateParse)
+                {
+                    dateSelector.SelectedDate = importDate;
+                }
                 CC100.TextChanged += On100ccChange;
                 CC150.TextChanged += On150ccChange;
                 UpdateCurCup(0);
@@ -332,11 +341,11 @@ namespace PulsarPackCreator
                     msg = importer.error;
                     break;
             }
-            MsgWindow.Show(msg);                 
+            MsgWindow.Show(msg);
         }
 
         private void OnBuildConfigClick(object sender, RoutedEventArgs e)
-        {           
+        {
             MsgWindowResult result = MsgWindow.Show("Do you also want to create the XML?", MsgWindowButton.YesNo);
             IO.Builder builder = new IO.Builder(this, result == MsgWindowResult.Yes ? IO.Builder.BuildParams.ConfigAndXML : IO.Builder.BuildParams.ConfigOnly);
             IO.Result ret = builder.Build();
@@ -352,7 +361,7 @@ namespace PulsarPackCreator
 
         private void HandleBuildRet(IO.Result ret, string error)
         {
-            if(ret == IO.Result.Success)
+            if (ret == IO.Result.Success)
             {
                 MsgWindowResult result = MsgWindow.Show("Pack successfully created. Do you want to open the output folder?", "Pack created", MsgWindowButton.YesNo);
                 if (result == MsgWindowResult.Yes)
@@ -377,13 +386,28 @@ namespace PulsarPackCreator
                         break;
                     case IO.Result.NoDate:
                         message = "Please select a date.";
+                        isOptionsError = true;
                         break;
                     case IO.Result.NoWiimmfi:
                         message = "Please select a Wiimfi region";
+                        isOptionsError = true;
                         break;
                     case IO.Result.NoModName:
                         message = "Please specify a mod folder name.";
-                        break;                        
+                        isOptionsError = true;
+                        break;
+                    case IO.Result.NoIcon:
+                        message = $"{error} cup icon was not found.";
+                        break;
+                    case IO.Result.WBMGT:
+                        message = $"{error} Please do not remove the #BMG header at the top of the pulsar bmg text file.";
+                        break;
+                    case IO.Result.WIMGT:
+                        message = $"Custom cup icon creation failure: {error}.";
+                        break;
+                    case IO.Result.WSZST:
+                        message = $"{error}";
+                        break;
                 }
                 if (isOptionsError)
                 {
