@@ -30,7 +30,7 @@ kmCall(0x8062213c, AddCustomLayers);
 
 void AutoVote::OnActivate() {
     Pages::AutoEnding* msg = SectionMgr::sInstance->curSection->Get<Pages::AutoEnding>(PAGE_AUTO_ENDING2);
-    msg->SetMessageWindowText(BMG_READY_TO_RACE, nullptr);
+    msg->SetMsgIdWindowText(BMG_READY_TO_RACE, nullptr);
     this->AddPageLayer(PAGE_AUTO_ENDING2, 0);
 }
 
@@ -54,7 +54,7 @@ void AutoVote::OnUpdate() {
     if(status == 6) {
         Pages::MessageBox* messageBox = sectionMgr->curSection->Get<Pages::MessageBox>();
         messageBox->Reset();
-        messageBox->SetMessageWindowText(0xfb2);
+        messageBox->SetMsgIdWindowText(0xfb2);
         const PtmfHolder_1A<Page, void, Pages::Click&>& onMessageClickPtmf = this->onDisconnectHandler;
         messageBox->masterPageOnClickHandler = &onMessageClickPtmf;
         this->AddPageLayer(PAGE_MESSAGEBOX, 0);

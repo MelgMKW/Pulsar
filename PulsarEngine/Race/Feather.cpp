@@ -61,7 +61,7 @@ bool ConditionalIgnoreInvisibleWalls(float radius, CourseMgr& mgr, const Vec3& p
     }
     return mgr.IsCollidingAddEntry(position, prevPosition, acceptedFlags, info, &kclFlags, 0, radius);
 }
-kmCall(0x805b68dc, ConditionalIgnoreInvisibleWalls);
+//kmCall(0x805b68dc, ConditionalIgnoreInvisibleWalls);
 
 u8 ConditionalFastFallingBody(const Kart::Sub& sub) {
     if(Info::IsFeather()) {
@@ -76,7 +76,7 @@ u8 ConditionalFastFallingBody(const Kart::Sub& sub) {
     }
     return sub.link.GetPlayerIdx();
 }
-kmCall(0x805967ac, ConditionalFastFallingBody);
+//kmCall(0x805967ac, ConditionalFastFallingBody);
 
 
 void ConditionalFastFallingWheels(float unk_float, Kart::WheelPhysicsHolder* wheelPhysicsHolder, Vec3& gravityVector, const Mtx34& wheelMat) {
@@ -94,7 +94,7 @@ void ConditionalFastFallingWheels(float unk_float, Kart::WheelPhysicsHolder* whe
     }
     wheelPhysicsHolder->Update(gravityVector, wheelMat, unk_float);
 }
-kmCall(0x805973b4, ConditionalFastFallingWheels);
+//kmCall(0x805973b4, ConditionalFastFallingWheels);
 
 
 s32 HandleGroundFeatherCollision(const Kart::Collision& collision) {

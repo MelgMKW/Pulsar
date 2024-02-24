@@ -731,8 +731,8 @@ __vt__19UpDownDisplayedText = 0x808bf3d8
 GetTextControl__22TextUpDownValueControlCFv = 0x80642988
 InitText__22TextUpDownValueControlFb = 0x80640aa0
 OnSelect__22TextUpDownValueControlFbUi = 0x80640b68
-SetMessage__22TextUpDownValueControlFUi = 0x80600cdc
-SetMessageAnimated__22TextUpDownValueControlFUi = 0x80640d0c
+SetMsgId__22TextUpDownValueControlFUi = 0x80600cdc
+SetMsgIdAnimated__22TextUpDownValueControlFUi = 0x80640d0c
 OnClick__22TextUpDownValueControlFv = 0x80640dfc
 Animate__22TextUpDownValueControlFUi = 0x80640e68
 Get3rdAnimStartFrame__22TextUpDownValueControlCFv = 0x80640f00
@@ -1683,5 +1683,6 @@ GXTexModeSync= 0x8016eb70
 GXTokenInterruptHandler= 0x8016eccc
 StateGX_ChangeProjectionv= 0x802417fc
 TPLGetGXTexObjFromPalette= 0x801b7544
-
+volumes__21SoundPlayersVolumeMgr= 0x809c26b8
+behaviourTable__Q24Item9Behaviour= 0x809c36a0
 

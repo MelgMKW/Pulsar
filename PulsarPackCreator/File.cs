@@ -241,7 +241,8 @@ namespace PulsarPackCreator
                     using (StreamWriter crcToFile = new StreamWriter($"{modFolder}/Ghosts/FolderToTrackName.txt"))
                     {
                         bmgSW.WriteLine(bmgSW.NewLine);
-                        bmgSW.WriteLine($"  {0x2847:X}    = Version created {date}");
+                        bmgSW.WriteLine($"  {0x2847:X}    = Press the A Button");
+                        bmgSW.WriteLine($"  {0x8000:X}    = Version Created {date}");
                         fileSW.WriteLine("FILE");
 
                         bin.Write(0x50554C53); //"PULS"
@@ -291,8 +292,7 @@ namespace PulsarPackCreator
                 xml[29] = xml[29].Replace("{$pack}", parameters.modFolderName);
                 xml[30] = xml[30].Replace("{$pack}", parameters.modFolderName);
                 xml[31] = xml[31].Replace("{$pack}", parameters.modFolderName);
-                xml[32] = xml[32].Replace("{$pack}", parameters.modFolderName);
-                xml[37] = xml[39].Replace("{$pack}", parameters.modFolderName);
+                xml[37] = xml[37].Replace("{$pack}", parameters.modFolderName);
             
                 File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
                 File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
@@ -300,7 +300,7 @@ namespace PulsarPackCreator
             }
             catch(FileNotFoundException ex)
             {
-                //Directory.Delete(modFolder, true);
+                Directory.Delete($"{modFolder}", true);
                 MsgWindow.Show(ex.Message);
                 return false;
             }
@@ -342,8 +342,7 @@ namespace PulsarPackCreator
                     string modFolder = $"output/{parameters.modFolderName}";
                     File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
                     Directory.CreateDirectory($"{modFolder}/Assets");
-                    Directory.CreateDirectory($"{modFolder}/CTsBRSTMs");
-                    Directory.CreateDirectory($"{modFolder}/My Stuff");
+                    Directory.CreateDirectory($"{modFolder}/Assets/BRSTM");
                     File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
                     File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
                     File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
@@ -591,7 +590,7 @@ namespace PulsarPackCreator
                     }
                     if (ret)
                     {
-                        if (bmgId == 0x2847) date = curLine.Split(' ')[curLine.Split(' ').Length - 1];
+                        if (bmgId == 0x8000) date = curLine.Split(' ')[curLine.Split(' ').Length - 1];
                         else if (bmgId >= 0x10000 && bmgId < 0x60000)
                         {
                             string content = curLine.Split('=')[1].TrimStart(' ');

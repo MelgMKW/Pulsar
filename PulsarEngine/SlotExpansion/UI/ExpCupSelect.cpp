@@ -196,11 +196,11 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
     }
     else {
         u32 tplId = realCupId;
-        if(realCupId > 99) {
+        if(realCupId > 150) {
             wchar_t cupName[0x20];
             swprintf(cupName, 0x20, L"Cup %d", realCupId);
             info.strings[0] = cupName;
-            tplId = tplId % 100;
+            tplId = tplId % 150;
             realCupId = 0;
             bmgId = BMG_TEXT;
         }

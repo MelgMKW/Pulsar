@@ -1,23 +1,57 @@
 <wiidisc version="1">
 	<id game="RMC"/>
 	<options>
-		<section name="{$pack}">
-			<option name="Pack">
-				<choice name="Enabled">
-					<patch id="PackLoadPack"/>
+		<section name="OptPack Pulsar Alpha">
+			<option name="OptPack Core">
+				<choice name="On">
+					<patch id="optpulsar" />
+					<patch id="optpulsarcore"/>
+					<patch id="opttracks" />
+					<patch id="musicloaderoptpulsar" />
+					<patch id="itemlandoptpulsar" />
 				</choice>
 			</option>
-			<option name="My Stuff">
-				<choice name="From CTGP-r">
-					<patch id="CTGPLoad"/>
+			<option name="My Stuff Modifications">
+				<choice name="My Stuff">
+					<patch id="mystuff1opt" />
 				</choice>
-				<choice name="From Pack">
-					<patch id="PackLoad"/>
+				<choice name="My Stuff 2">
+					<patch id="mystuff2opt" />
+				</choice>
+		         <choice name="CTGP-R Music">
+					<patch id="ctgprmusicopt" />
+				</choice>
+		         <choice name="CTGP+MyStuff">
+					<patch id="ctgprmusicopt" />
+					<patch id="mystuffopt" />
+				</choice>
+		         <choice name="CTGP+MyStuff2">
+					<patch id="ctgprmusicopt" />
+					<patch id="mystuff2opt" />
+				</choice>
+		         <choice name="Music 1 Only">
+					<patch id="musicopt" />
+				</choice>
+		         <choice name="Music 2 Only">
+					<patch id="musicopt" />
+				</choice>
+			</option>
+			<option name="Disable Music">
+				<choice name="On">
+					<patch id="disablemusicoptpulsar" />
+				</choice>
+			</option>
+			<option name="Default Combo">
+				<choice name="Funky+Flame">
+					<patch id="combofunkyoptpulsar" />
+				</choice>
+				<choice name="Daisy+Mach">
+					<patch id="combodaisyoptpulsar" />
 				</choice>
 			</option>
 		</section>
 	</options>	
-	<patch id="PackLoadPack">
+	<patch id="optpulsarcore">
 		<memory offset="0x80242698" value="4BDC1968" original="4e800020" /> <!--RMCP DOL-->
 		<memory offset="0x8000A3F4" value="4bff9c0c" original="4e800020" /> <!--RMCP REL-->
 		<memory offset="0x802417dc" value="4BDC2824" original="4e800020" /> <!--RMCE DOL-->
@@ -26,17 +60,707 @@
 		<memory offset="0x8000A350" value="4BFF9CB0" original="4e800020" /> <!--RMCJ REL-->		
 		<memory offset="0x80242a0c" value="4BDC15f4" original="4e800020" /> <!--RMCK DOL-->
 		<memory offset="0x8000A4FC" value="4BFF9B04" original="4e800020" /> <!--RMCK REL-->
-	    <memory valuefile="/{$pack}/Binaries/Loader.pul" offset="0x80004000"/>
-		<folder external="/{$pack}/Binaries" disc="/Binaries" create="true"/>
-		<folder external="/{$pack}/Tracks" disc="/Race/Course" create="true"/>
-		<folder external="/{$pack}/Assets" disc="/" create="true"/>
-		<folder external="/{$pack}/CTBRSTM" disc="/Sound/strm" create="true"/>
+	    <memory valuefile="/optpackghost/Binaries/Loader.pul" offset="0x80004000"/>
+		<folder external="/optpackghost/Binaries" disc="/Binaries" create="true"/>
+		<folder external="/optpackghost/Assets" disc="/" create="true"/>
 	</patch>	
+	<patch id="optpulsar">		
+		<folder external="/optpackghost/menuandstuff" disc="/" create="true" /> 
+        <file disc="/Scene/UI/Award_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+        <file disc="/Scene/UI/Channel_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_U.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+	
+        <file disc="/Scene/UI/Award_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+        <file disc="/Scene/UI/Channel_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_M.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+	
+        <file disc="/Scene/UI/Award_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+        <file disc="/Scene/UI/Channel_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_Q.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		
+		<file disc="/Scene/UI/Award_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+        <file disc="/Scene/UI/Channel_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_E.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+	
+        <file disc="/Scene/UI/Award_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+        <file disc="/Scene/UI/Channel_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_S.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+	
+        <file disc="/Scene/UI/Award_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+        <file disc="/Scene/UI/Channel_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_F.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		
+		<file disc="/Scene/UI/Award_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+        <file disc="/Scene/UI/Channel_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_G.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		
+		<file disc="/Scene/UI/Award_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+        <file disc="/Scene/UI/Channel_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_I.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		
+		<file disc="/Scene/UI/Award_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Channel_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_J.szs" external="/optpackghost/menuandstuff/SuperMenu_X.szs" />
+		
+		<file disc="/Scene/UI/Award.szs" external="/optpackghost/menuandstuff/Award.szs" />
+		<file disc="/Scene/UI/Channel.szs" external="/optpackghost/menuandstuff/Channel.szs" />		
+		<file disc="/Scene/UI/Event.szs" external="/optpackghost/menuandstuff/Event.szs" />
+		<file disc="/Scene/UI/Present.szs" external="/optpackghost/menuandstuff/Present.szs" />
+		<file disc="/Scene/UI/Title.szs" external="/optpackghost/menuandstuff/Title.szs" />
+		<file disc="/Scene/UI/Globe.szs" external="/optpackghost/menuandstuff/Globe.szs" />
+		<file disc="/Scene/UI/Channel.szs" external="/optpackghost/menuandstuff/Channel.szs" />
+		<file disc="/Scene/Model/Earth.szs" external="/optpackghost/menuandstuff/Earth.szs" />
+		<file disc="/Scene/UI/Race.szs" external="/optpackghost/menuandstuff/Race.szs" />
+		<file disc="/Scene/UI/MenuSingle.szs" external="/optpackghost/menuandstuff/MenuSingle.szs" />
+		<file disc="/Scene/UI/MenuOther.szs" external="/optpackghost/menuandstuff/MenuOther.szs" />
+		<file disc="/Scene/UI/MenuMulti.szs" external="/optpackghost/menuandstuff/MenuMulti.szs" />
+		
+		<file disc="/Boot/Strap/us/English.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/us/French.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/us/Spanish_US.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/eu/Dutch.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/eu/English.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/eu/French.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/eu/German.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/eu/Italian.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/eu/Spanish_EU.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		<file disc="/Boot/Strap/JP/jp.szs" external="/optpackghost/sys/straps/strap.szs" create="true"/>
+		
+		<file disc="/rel/StaticR.rel" external="/optpackghost/sys/regions/{$__region}/StaticR.rel" />  
+		<file disc="main.dol" external="/optpackghost/sys/regions/{$__region}/main.dol" />
+	</patch>			
+	<patch id="opttracks">	
+		<file disc="/Race/Course/0.szs"   external="/optpack/tracks/044.szs" create="True"/>
+		<file disc="/Race/Course/1.szs"   external="/optpack/tracks/1c5.szs" create="True"/>
+		<file disc="/Race/Course/2.szs"   external="/optpack/tracks/1be.szs" create="True"/>
+		<file disc="/Race/Course/3.szs"   external="/optpack/tracks/112.szs" create="True"/>
+		<file disc="/Race/Course/4.szs"   external="/optpack/tracks/183.szs" create="True"/>
+		<file disc="/Race/Course/5.szs"   external="/optpack/tracks/0ec.szs" create="True"/>
+		<file disc="/Race/Course/6.szs"   external="/optpack/tracks/105.szs" create="True"/>
+		<file disc="/Race/Course/7.szs"   external="/optpack/tracks/1b0.szs" create="True"/>
+		<file disc="/Race/Course/8.szs"   external="/optpack/tracks/1ac.szs" create="True"/>
+		<file disc="/Race/Course/9.szs"   external="/optpack/tracks/046.szs" create="True"/>
+		<file disc="/Race/Course/10.szs"  external="/optpack/tracks/0b5.szs" create="True"/>
+		<file disc="/Race/Course/11.szs"  external="/optpack/tracks/0b2.szs" create="True"/>
+		<file disc="/Race/Course/12.szs"  external="/optpack/tracks/079.szs" create="True"/>
+		<file disc="/Race/Course/13.szs"  external="/optpack/tracks/06f.szs" create="True"/>
+		<file disc="/Race/Course/14.szs"  external="/optpack/tracks/118.szs" create="True"/>
+		<file disc="/Race/Course/15.szs"  external="/optpack/tracks/1c0.szs" create="True"/>
+		<file disc="/Race/Course/16.szs"  external="/optpack/tracks/179.szs" create="True"/>
+		<file disc="/Race/Course/17.szs"  external="/optpack/tracks/1a4.szs" create="True"/>
+		<file disc="/Race/Course/18.szs"  external="/optpack/tracks/1fd.szs" create="True"/>
+		<file disc="/Race/Course/19.szs"  external="/optpack/tracks/14c.szs" create="True"/>
+		<file disc="/Race/Course/20.szs"  external="/optpack/tracks/0c7.szs" create="True"/>
+		<file disc="/Race/Course/21.szs"  external="/optpack/tracks/1ab.szs" create="True"/>
+		<file disc="/Race/Course/22.szs"  external="/optpack/tracks/0b4.szs" create="True"/>
+		<file disc="/Race/Course/23.szs"  external="/optpack/tracks/1ca.szs" create="True"/>
+		<file disc="/Race/Course/24.szs"  external="/optpack/tracks/1cd.szs" create="True"/>
+		<file disc="/Race/Course/25.szs"  external="/optpack/tracks/12e.szs" create="True"/>
+		<file disc="/Race/Course/26.szs"  external="/optpack/tracks/085.szs" create="True"/>
+		<file disc="/Race/Course/27.szs"  external="/optpack/tracks/1eb.szs" create="True"/>
+		<file disc="/Race/Course/28.szs"  external="/optpack/tracks/16d.szs" create="True"/>
+		<file disc="/Race/Course/29.szs"  external="/optpack/tracks/1d7.szs" create="True"/>
+		<file disc="/Race/Course/30.szs"  external="/optpack/tracks/04e.szs" create="True"/>
+		<file disc="/Race/Course/31.szs"  external="/optpack/tracks/146.szs" create="True"/>
+		<file disc="/Race/Course/32.szs"  external="/optpack/tracks/119.szs" create="True"/>
+		<file disc="/Race/Course/33.szs"  external="/optpack/tracks/1e5.szs" create="True"/>
+		<file disc="/Race/Course/34.szs"  external="/optpack/tracks/11a.szs" create="True"/>
+		<file disc="/Race/Course/35.szs"  external="/optpack/tracks/11a.szs" create="True"/>
+		<file disc="/Race/Course/36.szs"  external="/optpack/tracks/066.szs" create="True"/>
+		<file disc="/Race/Course/37.szs"  external="/optpack/tracks/0f5.szs" create="True"/>
+		<file disc="/Race/Course/38.szs"  external="/optpack/tracks/125.szs" create="True"/>
+		<file disc="/Race/Course/39.szs"  external="/optpack/tracks/0e8.szs" create="True"/>
+		<file disc="/Race/Course/40.szs"  external="/optpack/tracks/174.szs" create="True"/>
+		<file disc="/Race/Course/41.szs"  external="/optpack/tracks/1ef.szs" create="True"/>
+		<file disc="/Race/Course/42.szs"  external="/optpack/tracks/17a.szs" create="True"/>
+		<file disc="/Race/Course/43.szs"  external="/optpack/tracks/0a5.szs" create="True"/>
+		<file disc="/Race/Course/44.szs"  external="/optpack/tracks/0c8.szs" create="True"/>
+		<file disc="/Race/Course/45.szs"  external="/optpack/tracks/051.szs" create="True"/>
+		<file disc="/Race/Course/46.szs"  external="/optpack/tracks/1da.szs" create="True"/>
+		<file disc="/Race/Course/47.szs"  external="/optpack/tracks/052.szs" create="True"/>
+		<file disc="/Race/Course/48.szs"  external="/optpack/tracks/0fc.szs" create="True"/>
+		<file disc="/Race/Course/49.szs"  external="/optpack/tracks/103.szs" create="True"/>
+		<file disc="/Race/Course/50.szs"  external="/optpack/tracks/053.szs" create="True"/>
+		<file disc="/Race/Course/51.szs"  external="/optpack/tracks/10b.szs" create="True"/>
+		<file disc="/Race/Course/52.szs"  external="/optpack/tracks/13b.szs" create="True"/>
+		<file disc="/Race/Course/53.szs"  external="/optpack/tracks/197.szs" create="True"/>
+		<file disc="/Race/Course/54.szs"  external="/optpack/tracks/1ee.szs" create="True"/>
+		<file disc="/Race/Course/55.szs"  external="/optpack/tracks/054.szs" create="True"/>
+		<file disc="/Race/Course/56.szs"  external="/optpack/tracks/1e3.szs" create="True"/>
+		<file disc="/Race/Course/57.szs"  external="/optpack/tracks/11d.szs" create="True"/>
+		<file disc="/Race/Course/58.szs"  external="/optpack/tracks/056.szs" create="True"/>
+		<file disc="/Race/Course/59.szs"  external="/optpack/tracks/059.szs" create="True"/>
+		<file disc="/Race/Course/60.szs"  external="/optpack/tracks/057.szs" create="True"/>
+		<file disc="/Race/Course/61.szs"  external="/optpack/tracks/1a7.szs" create="True"/>
+		<file disc="/Race/Course/62.szs"  external="/optpack/tracks/15e.szs" create="True"/>
+		<file disc="/Race/Course/63.szs"  external="/optpack/tracks/1a5.szs" create="True"/>
+		<file disc="/Race/Course/64.szs"  external="/optpack/tracks/110.szs" create="True"/>
+		<file disc="/Race/Course/65.szs"  external="/optpack/tracks/140.szs" create="True"/>
+		<file disc="/Race/Course/66.szs"  external="/optpack/tracks/11f.szs" create="True"/>
+		<file disc="/Race/Course/67.szs"  external="/optpack/tracks/1a3.szs" create="True"/>
+		<file disc="/Race/Course/68.szs"  external="/optpack/tracks/145.szs" create="True"/>
+		<file disc="/Race/Course/69.szs"  external="/optpack/tracks/0fa.szs" create="True"/>
+		<file disc="/Race/Course/70.szs"  external="/optpack/tracks/064.szs" create="True"/>
+		<file disc="/Race/Course/71.szs"  external="/optpack/tracks/1b5.szs" create="True"/>
+		<file disc="/Race/Course/72.szs"  external="/optpack/tracks/1c6.szs" create="True"/>
+		<file disc="/Race/Course/73.szs"  external="/optpack/tracks/13e.szs" create="True"/>
+		<file disc="/Race/Course/74.szs"  external="/optpack/tracks/05a.szs" create="True"/>
+		<file disc="/Race/Course/75.szs"  external="/optpack/tracks/1d5.szs" create="True"/>
+		<file disc="/Race/Course/76.szs"  external="/optpack/tracks/05b.szs" create="True"/>
+		<file disc="/Race/Course/77.szs"  external="/optpack/tracks/05c.szs" create="True"/>
+		<file disc="/Race/Course/78.szs"  external="/optpack/tracks/1f7.szs" create="True"/>
+		<file disc="/Race/Course/79.szs"  external="/optpack/tracks/19f.szs" create="True"/>
+		<file disc="/Race/Course/80.szs"  external="/optpack/tracks/102.szs" create="True"/>
+		<file disc="/Race/Course/81.szs"  external="/optpack/tracks/1d3.szs" create="True"/>
+		<file disc="/Race/Course/82.szs"  external="/optpack/tracks/061.szs" create="True"/>
+		<file disc="/Race/Course/83.szs"  external="/optpack/tracks/182.szs" create="True"/>
+		<file disc="/Race/Course/84.szs"  external="/optpack/tracks/0ff.szs" create="True"/>
+		<file disc="/Race/Course/85.szs"  external="/optpack/tracks/062.szs" create="True"/>
+		<file disc="/Race/Course/86.szs"  external="/optpack/tracks/135.szs" create="True"/>
+		<file disc="/Race/Course/87.szs"  external="/optpack/tracks/1a9.szs" create="True"/>
+		<file disc="/Race/Course/88.szs"  external="/optpack/tracks/165.szs" create="True"/>
+		<file disc="/Race/Course/89.szs"  external="/optpack/tracks/094.szs" create="True"/>
+		<file disc="/Race/Course/90.szs"  external="/optpack/tracks/067.szs" create="True"/>
+		<file disc="/Race/Course/91.szs"  external="/optpack/tracks/1d4.szs" create="True"/>
+		<file disc="/Race/Course/92.szs"  external="/optpack/tracks/153.szs" create="True"/>
+		<file disc="/Race/Course/93.szs"  external="/optpack/tracks/155.szs" create="True"/>
+		<file disc="/Race/Course/94.szs"  external="/optpack/tracks/0f1.szs" create="True"/>
+		<file disc="/Race/Course/95.szs"  external="/optpack/tracks/13f.szs" create="True"/>
+		<file disc="/Race/Course/96.szs"  external="/optpack/tracks/121.szs" create="True"/>
+		<file disc="/Race/Course/97.szs"  external="/optpack/tracks/069.szs" create="True"/>
+		<file disc="/Race/Course/98.szs"  external="/optpack/tracks/1a1.szs" create="True"/>
+		<file disc="/Race/Course/99.szs"  external="/optpack/tracks/06a.szs" create="True"/>
+		<file disc="/Race/Course/100.szs" external="/optpack/tracks/151.szs" create="True"/>
+		<file disc="/Race/Course/101.szs" external="/optpack/tracks/0f9.szs" create="True"/>
+		<file disc="/Race/Course/102.szs" external="/optpack/tracks/10d.szs" create="True"/>
+		<file disc="/Race/Course/103.szs" external="/optpack/tracks/1b7.szs" create="True"/>
+		<file disc="/Race/Course/104.szs" external="/optpack/tracks/115.szs" create="True"/>
+		<file disc="/Race/Course/105.szs" external="/optpack/tracks/05f.szs" create="True"/>
+		<file disc="/Race/Course/106.szs" external="/optpack/tracks/11b.szs" create="True"/>
+		<file disc="/Race/Course/107.szs" external="/optpack/tracks/167.szs" create="True"/>
+		<file disc="/Race/Course/108.szs" external="/optpack/tracks/185.szs" create="True"/>
+		<file disc="/Race/Course/109.szs" external="/optpack/tracks/07e.szs" create="True"/>
+		<file disc="/Race/Course/110.szs" external="/optpack/tracks/04a.szs" create="True"/>
+		<file disc="/Race/Course/111.szs" external="/optpack/tracks/07a.szs" create="True"/>
+		<file disc="/Race/Course/112.szs" external="/optpack/tracks/073.szs" create="True"/>
+		<file disc="/Race/Course/113.szs" external="/optpack/tracks/1a0.szs" create="True"/>
+		<file disc="/Race/Course/114.szs" external="/optpack/tracks/075.szs" create="True"/>
+		<file disc="/Race/Course/115.szs" external="/optpack/tracks/04f.szs" create="True"/>
+		<file disc="/Race/Course/116.szs" external="/optpack/tracks/07c.szs" create="True"/>
+		<file disc="/Race/Course/117.szs" external="/optpack/tracks/07d.szs" create="True"/>
+		<file disc="/Race/Course/118.szs" external="/optpack/tracks/11e.szs" create="True"/>
+		<file disc="/Race/Course/119.szs" external="/optpack/tracks/0b1.szs" create="True"/>
+		<file disc="/Race/Course/120.szs" external="/optpack/tracks/071.szs" create="True"/>
+		<file disc="/Race/Course/121.szs" external="/optpack/tracks/1f9.szs" create="True"/>
+		<file disc="/Race/Course/122.szs" external="/optpack/tracks/116.szs" create="True"/>
+		<file disc="/Race/Course/123.szs" external="/optpack/tracks/05d.szs" create="True"/>
+		<file disc="/Race/Course/124.szs" external="/optpack/tracks/161.szs" create="True"/>
+		<file disc="/Race/Course/125.szs" external="/optpack/tracks/17b.szs" create="True"/>
+		<file disc="/Race/Course/126.szs" external="/optpack/tracks/1d2.szs" create="True"/>
+		<file disc="/Race/Course/127.szs" external="/optpack/tracks/1cb.szs" create="True"/>
+		<file disc="/Race/Course/128.szs" external="/optpack/tracks/099.szs" create="True"/>
+		<file disc="/Race/Course/129.szs" external="/optpack/tracks/07f.szs" create="True"/>
+		<file disc="/Race/Course/130.szs" external="/optpack/tracks/1e9.szs" create="True"/>
+		<file disc="/Race/Course/131.szs" external="/optpack/tracks/081.szs" create="True"/>
+		<file disc="/Race/Course/132.szs" external="/optpack/tracks/201.szs" create="True"/>
+		<file disc="/Race/Course/133.szs" external="/optpack/tracks/16a.szs" create="True"/>
+		<file disc="/Race/Course/134.szs" external="/optpack/tracks/089.szs" create="True"/>
+		<file disc="/Race/Course/135.szs" external="/optpack/tracks/180.szs" create="True"/>
+		<file disc="/Race/Course/136.szs" external="/optpack/tracks/084.szs" create="True"/>
+		<file disc="/Race/Course/137.szs" external="/optpack/tracks/1cc.szs" create="True"/>
+		<file disc="/Race/Course/138.szs" external="/optpack/tracks/202.szs" create="True"/>
+		<file disc="/Race/Course/139.szs" external="/optpack/tracks/074.szs" create="True"/>
+		<file disc="/Race/Course/140.szs" external="/optpack/tracks/096.szs" create="True"/>
+		<file disc="/Race/Course/141.szs" external="/optpack/tracks/0b0.szs" create="True"/>
+		<file disc="/Race/Course/142.szs" external="/optpack/tracks/1b3.szs" create="True"/>
+		<file disc="/Race/Course/143.szs" external="/optpack/tracks/1b2.szs" create="True"/>
+		<file disc="/Race/Course/144.szs" external="/optpack/tracks/164.szs" create="True"/>
+		<file disc="/Race/Course/145.szs" external="/optpack/tracks/0b7.szs" create="True"/>
+		<file disc="/Race/Course/146.szs" external="/optpack/tracks/1fa.szs" create="True"/>
+		<file disc="/Race/Course/147.szs" external="/optpack/tracks/195.szs" create="True"/>
+		<file disc="/Race/Course/148.szs" external="/optpack/tracks/129.szs" create="True"/>
+		<file disc="/Race/Course/149.szs" external="/optpack/tracks/0fe.szs" create="True"/>
+		<file disc="/Race/Course/150.szs" external="/optpack/tracks/08c.szs" create="True"/>
+		<file disc="/Race/Course/151.szs" external="/optpack/tracks/08c.szs" create="True"/>
+		<file disc="/Race/Course/152.szs" external="/optpack/tracks/08d.szs" create="True"/>
+		<file disc="/Race/Course/153.szs" external="/optpack/tracks/08d.szs" create="True"/>
+		<file disc="/Race/Course/154.szs" external="/optpack/tracks/091.szs" create="True"/>
+		<file disc="/Race/Course/155.szs" external="/optpack/tracks/091.szs" create="True"/>
+		<file disc="/Race/Course/156.szs" external="/optpack/tracks/120.szs" create="True"/>
+		<file disc="/Race/Course/157.szs" external="/optpack/tracks/0e3.szs" create="True"/>
+		<file disc="/Race/Course/158.szs" external="/optpack/tracks/068.szs" create="True"/>
+		<file disc="/Race/Course/159.szs" external="/optpack/tracks/076.szs" create="True"/>
+		<file disc="/Race/Course/160.szs" external="/optpack/tracks/082.szs" create="True"/>
+		<file disc="/Race/Course/161.szs" external="/optpack/tracks/1e7.szs" create="True"/>
+		<file disc="/Race/Course/162.szs" external="/optpack/tracks/086.szs" create="True"/>
+		<file disc="/Race/Course/163.szs" external="/optpack/tracks/09c.szs" create="True"/>
+		<file disc="/Race/Course/164.szs" external="/optpack/tracks/04b.szs" create="True"/>
+		<file disc="/Race/Course/165.szs" external="/optpack/tracks/088.szs" create="True"/>
+		<file disc="/Race/Course/166.szs" external="/optpack/tracks/0cb.szs" create="True"/>
+		<file disc="/Race/Course/167.szs" external="/optpack/tracks/077.szs" create="True"/>
+		<file disc="/Race/Course/168.szs" external="/optpack/tracks/1f2.szs" create="True"/>
+		<file disc="/Race/Course/169.szs" external="/optpack/tracks/1c7.szs" create="True"/>
+		<file disc="/Race/Course/170.szs" external="/optpack/tracks/1a8.szs" create="True"/>
+		<file disc="/Race/Course/171.szs" external="/optpack/tracks/13a.szs" create="True"/>
+		<file disc="/Race/Course/172.szs" external="/optpack/tracks/189.szs" create="True"/>
+		<file disc="/Race/Course/173.szs" external="/optpack/tracks/19a.szs" create="True"/>
+		<file disc="/Race/Course/174.szs" external="/optpack/tracks/08e.szs" create="True"/>
+		<file disc="/Race/Course/175.szs" external="/optpack/tracks/12a.szs" create="True"/>
+		<file disc="/Race/Course/176.szs" external="/optpack/tracks/1e2.szs" create="True"/>
+		<file disc="/Race/Course/177.szs" external="/optpack/tracks/1d6.szs" create="True"/>
+		<file disc="/Race/Course/178.szs" external="/optpack/tracks/193.szs" create="True"/>
+		<file disc="/Race/Course/179.szs" external="/optpack/tracks/090.szs" create="True"/>
+		<file disc="/Race/Course/180.szs" external="/optpack/tracks/093.szs" create="True"/>
+		<file disc="/Race/Course/181.szs" external="/optpack/tracks/0c1.szs" create="True"/>
+		<file disc="/Race/Course/182.szs" external="/optpack/tracks/065.szs" create="True"/>
+		<file disc="/Race/Course/183.szs" external="/optpack/tracks/12c.szs" create="True"/>
+		<file disc="/Race/Course/184.szs" external="/optpack/tracks/14e.szs" create="True"/>
+		<file disc="/Race/Course/185.szs" external="/optpack/tracks/0c9.szs" create="True"/>
+		<file disc="/Race/Course/186.szs" external="/optpack/tracks/1c2.szs" create="True"/>
+		<file disc="/Race/Course/187.szs" external="/optpack/tracks/0f4.szs" create="True"/>
+		<file disc="/Race/Course/188.szs" external="/optpack/tracks/16e.szs" create="True"/>
+		<file disc="/Race/Course/189.szs" external="/optpack/tracks/0e7.szs" create="True"/>
+		<file disc="/Race/Course/190.szs" external="/optpack/tracks/1f5.szs" create="True"/>
+		<file disc="/Race/Course/191.szs" external="/optpack/tracks/194.szs" create="True"/>
+		<file disc="/Race/Course/192.szs" external="/optpack/tracks/06b.szs" create="True"/>
+		<file disc="/Race/Course/193.szs" external="/optpack/tracks/0ef.szs" create="True"/>
+		<file disc="/Race/Course/194.szs" external="/optpack/tracks/087.szs" create="True"/>
+		<file disc="/Race/Course/195.szs" external="/optpack/tracks/09a.szs" create="True"/>
+		<file disc="/Race/Course/196.szs" external="/optpack/tracks/1c1.szs" create="True"/>
+		<file disc="/Race/Course/197.szs" external="/optpack/tracks/13d.szs" create="True"/>
+		<file disc="/Race/Course/198.szs" external="/optpack/tracks/169.szs" create="True"/>
+		<file disc="/Race/Course/199.szs" external="/optpack/tracks/149.szs" create="True"/>
+		<file disc="/Race/Course/200.szs" external="/optpack/tracks/0f3.szs" create="True"/>
+		<file disc="/Race/Course/201.szs" external="/optpack/tracks/16c.szs" create="True"/>
+		<file disc="/Race/Course/202.szs" external="/optpack/tracks/152.szs" create="True"/>
+		<file disc="/Race/Course/203.szs" external="/optpack/tracks/177.szs" create="True"/>
+		<file disc="/Race/Course/204.szs" external="/optpack/tracks/128.szs" create="True"/>
+		<file disc="/Race/Course/205.szs" external="/optpack/tracks/122.szs" create="True"/>
+		<file disc="/Race/Course/206.szs" external="/optpack/tracks/06e.szs" create="True"/>
+		<file disc="/Race/Course/207.szs" external="/optpack/tracks/203.szs" create="True"/>
+		<file disc="/Race/Course/208.szs" external="/optpack/tracks/098.szs" create="True"/>
+		<file disc="/Race/Course/209.szs" external="/optpack/tracks/1a6.szs" create="True"/>
+		<file disc="/Race/Course/210.szs" external="/optpack/tracks/09f.szs" create="True"/>
+		<file disc="/Race/Course/211.szs" external="/optpack/tracks/0a0.szs" create="True"/>
+		<file disc="/Race/Course/212.szs" external="/optpack/tracks/1e6.szs" create="True"/>
+		<file disc="/Race/Course/213.szs" external="/optpack/tracks/0e4.szs" create="True"/>
+		<file disc="/Race/Course/214.szs" external="/optpack/tracks/0a1.szs" create="True"/>
+		<file disc="/Race/Course/215.szs" external="/optpack/tracks/1f6.szs" create="True"/>
+		<file disc="/Race/Course/216.szs" external="/optpack/tracks/181.szs" create="True"/>
+		<file disc="/Race/Course/217.szs" external="/optpack/tracks/0a2.szs" create="True"/>
+		<file disc="/Race/Course/218.szs" external="/optpack/tracks/12b.szs" create="True"/>
+		<file disc="/Race/Course/219.szs" external="/optpack/tracks/109.szs" create="True"/>
+		<file disc="/Race/Course/220.szs" external="/optpack/tracks/0a3.szs" create="True"/>
+		<file disc="/Race/Course/221.szs" external="/optpack/tracks/190.szs" create="True"/>
+		<file disc="/Race/Course/222.szs" external="/optpack/tracks/097.szs" create="True"/>
+		<file disc="/Race/Course/223.szs" external="/optpack/tracks/19d.szs" create="True"/>
+		<file disc="/Race/Course/224.szs" external="/optpack/tracks/1d1.szs" create="True"/>
+		<file disc="/Race/Course/225.szs" external="/optpack/tracks/0a4.szs" create="True"/>
+		<file disc="/Race/Course/226.szs" external="/optpack/tracks/1f8.szs" create="True"/>
+		<file disc="/Race/Course/227.szs" external="/optpack/tracks/1ba.szs" create="True"/>
+		<file disc="/Race/Course/228.szs" external="/optpack/tracks/0a6.szs" create="True"/>
+		<file disc="/Race/Course/229.szs" external="/optpack/tracks/0a7.szs" create="True"/>
+		<file disc="/Race/Course/230.szs" external="/optpack/tracks/18a.szs" create="True"/>
+		<file disc="/Race/Course/231.szs" external="/optpack/tracks/05e.szs" create="True"/>
+		<file disc="/Race/Course/232.szs" external="/optpack/tracks/06d.szs" create="True"/>
+		<file disc="/Race/Course/233.szs" external="/optpack/tracks/0b3.szs" create="True"/>
+		<file disc="/Race/Course/234.szs" external="/optpack/tracks/15b.szs" create="True"/>
+		<file disc="/Race/Course/235.szs" external="/optpack/tracks/1b4.szs" create="True"/>
+		<file disc="/Race/Course/236.szs" external="/optpack/tracks/0a9.szs" create="True"/>
+		<file disc="/Race/Course/237.szs" external="/optpack/tracks/1ea.szs" create="True"/>
+		<file disc="/Race/Course/238.szs" external="/optpack/tracks/0ab.szs" create="True"/>
+		<file disc="/Race/Course/239.szs" external="/optpack/tracks/1f4.szs" create="True"/>
+		<file disc="/Race/Course/240.szs" external="/optpack/tracks/0d6.szs" create="True"/>
+		<file disc="/Race/Course/241.szs" external="/optpack/tracks/047.szs" create="True"/>
+		<file disc="/Race/Course/242.szs" external="/optpack/tracks/1e4.szs" create="True"/>
+		<file disc="/Race/Course/243.szs" external="/optpack/tracks/08a.szs" create="True"/>
+		<file disc="/Race/Course/244.szs" external="/optpack/tracks/0ac.szs" create="True"/>
+		<file disc="/Race/Course/245.szs" external="/optpack/tracks/191.szs" create="True"/>
+		<file disc="/Race/Course/246.szs" external="/optpack/tracks/0cd.szs" create="True"/>
+		<file disc="/Race/Course/247.szs" external="/optpack/tracks/168.szs" create="True"/>
+		<file disc="/Race/Course/248.szs" external="/optpack/tracks/060.szs" create="True"/>
+		<file disc="/Race/Course/249.szs" external="/optpack/tracks/14f.szs" create="True"/>
+		<file disc="/Race/Course/250.szs" external="/optpack/tracks/1e1.szs" create="True"/>
+		<file disc="/Race/Course/251.szs" external="/optpack/tracks/148.szs" create="True"/>
+		<file disc="/Race/Course/252.szs" external="/optpack/tracks/10a.szs" create="True"/>
+		<file disc="/Race/Course/253.szs" external="/optpack/tracks/14a.szs" create="True"/>
+		<file disc="/Race/Course/254.szs" external="/optpack/tracks/0ae.szs" create="True"/>
+		<file disc="/Race/Course/255.szs" external="/optpack/tracks/0ed.szs" create="True"/>
+		<file disc="/Race/Course/256.szs" external="/optpack/tracks/200.szs" create="True"/>
+		<file disc="/Race/Course/257.szs" external="/optpack/tracks/14b.szs" create="True"/>
+		<file disc="/Race/Course/258.szs" external="/optpack/tracks/08f.szs" create="True"/>
+	    <file disc="/Race/Course/259.szs" external="/optpack/tracks/101.szs" create="True"/>
+		<file disc="/Race/Course/260.szs" external="/optpack/tracks/1e8.szs" create="True"/>
+		<file disc="/Race/Course/261.szs" external="/optpack/tracks/19e.szs" create="True"/>
+		<file disc="/Race/Course/262.szs" external="/optpack/tracks/117.szs" create="True"/>
+		<file disc="/Race/Course/263.szs" external="/optpack/tracks/0e5.szs" create="True"/>
+		<file disc="/Race/Course/264.szs" external="/optpack/tracks/166.szs" create="True"/>
+		<file disc="/Race/Course/265.szs" external="/optpack/tracks/175.szs" create="True"/>
+		<file disc="/Race/Course/266.szs" external="/optpack/tracks/184.szs" create="True"/>
+	    <file disc="/Race/Course/267.szs" external="/optpack/tracks/1bf.szs" create="True"/>
+	    <file disc="/Race/Course/268.szs" external="/optpack/tracks/131.szs" create="True"/>
+	    <file disc="/Race/Course/269.szs" external="/optpack/tracks/18e.szs" create="True"/>
+	    <file disc="/Race/Course/270.szs" external="/optpack/tracks/1c8.szs" create="True"/>
+	    <file disc="/Race/Course/271.szs" external="/optpack/tracks/1d0.szs" create="True"/>
+	    <file disc="/Race/Course/272.szs" external="/optpack/tracks/18c.szs" create="True"/>
+	    <file disc="/Race/Course/273.szs" external="/optpack/tracks/0f0.szs" create="True"/>
+	    <file disc="/Race/Course/274.szs" external="/optpack/tracks/196.szs" create="True"/>
+	    <file disc="/Race/Course/275.szs" external="/optpack/tracks/0b6.szs" create="True"/>
+	    <file disc="/Race/Course/276.szs" external="/optpack/tracks/0b6.szs" create="True"/>
+	    <file disc="/Race/Course/277.szs" external="/optpack/tracks/1a2.szs" create="True"/>
+	    <file disc="/Race/Course/278.szs" external="/optpack/tracks/1df.szs" create="True"/>
+	    <file disc="/Race/Course/279.szs" external="/optpack/tracks/1fb.szs" create="True"/>
+	    <file disc="/Race/Course/280.szs" external="/optpack/tracks/17d.szs" create="True"/>
+	    <file disc="/Race/Course/281.szs" external="/optpack/tracks/1ed.szs" create="True"/>
+	    <file disc="/Race/Course/282.szs" external="/optpack/tracks/147.szs" create="True"/>
+	    <file disc="/Race/Course/283.szs" external="/optpack/tracks/0d5.szs" create="True"/>
+	    <file disc="/Race/Course/284.szs" external="/optpack/tracks/18d.szs" create="True"/>
+	    <file disc="/Race/Course/285.szs" external="/optpack/tracks/048.szs" create="True"/>
+	    <file disc="/Race/Course/286.szs" external="/optpack/tracks/16b.szs" create="True"/>
+	    <file disc="/Race/Course/287.szs" external="/optpack/tracks/1c9.szs" create="True"/>
+	    <file disc="/Race/Course/288.szs" external="/optpack/tracks/123.szs" create="True"/>
+	    <file disc="/Race/Course/289.szs" external="/optpack/tracks/1f3.szs" create="True"/>
+	    <file disc="/Race/Course/290.szs" external="/optpack/tracks/132.szs" create="True"/>
+	    <file disc="/Race/Course/291.szs" external="/optpack/tracks/058.szs" create="True"/>
+	    <file disc="/Race/Course/292.szs" external="/optpack/tracks/0b9.szs" create="True"/>
+	    <file disc="/Race/Course/293.szs" external="/optpack/tracks/0ba.szs" create="True"/>
+	    <file disc="/Race/Course/294.szs" external="/optpack/tracks/159.szs" create="True"/>
+	    <file disc="/Race/Course/295.szs" external="/optpack/tracks/141.szs" create="True"/>
+	    <file disc="/Race/Course/296.szs" external="/optpack/tracks/055.szs" create="True"/>
+	    <file disc="/Race/Course/297.szs" external="/optpack/tracks/055.szs" create="True"/>
+	    <file disc="/Race/Course/298.szs" external="/optpack/tracks/0f2.szs" create="True"/>
+	    <file disc="/Race/Course/299.szs" external="/optpack/tracks/106.szs" create="True"/>
+	    <file disc="/Race/Course/300.szs" external="/optpack/tracks/0f8.szs" create="True"/>		
+		<file disc="/Race/Course/301.szs" external="/optpack/tracks/160.szs" create="True"/>
+	    <file disc="/Race/Course/302.szs" external="/optpack/tracks/0bb.szs" create="True"/>
+	    <file disc="/Race/Course/303.szs" external="/optpack/tracks/18f.szs" create="True"/>
+	    <file disc="/Race/Course/304.szs" external="/optpack/tracks/0be.szs" create="True"/>
+	    <file disc="/Race/Course/305.szs" external="/optpack/tracks/16f.szs" create="True"/>
+	    <file disc="/Race/Course/306.szs" external="/optpack/tracks/0c0.szs" create="True"/>
+	    <file disc="/Race/Course/307.szs" external="/optpack/tracks/0bf.szs" create="True"/>
+	    <file disc="/Race/Course/308.szs" external="/optpack/tracks/187.szs" create="True"/>
+	    <file disc="/Race/Course/309.szs" external="/optpack/tracks/188.szs" create="True"/>
+	    <file disc="/Race/Course/310.szs" external="/optpack/tracks/04d.szs" create="True"/>
+	    <file disc="/Race/Course/311.szs" external="/optpack/tracks/0bc.szs" create="True"/>
+	    <file disc="/Race/Course/312.szs" external="/optpack/tracks/0c3.szs" create="True"/>
+	    <file disc="/Race/Course/313.szs" external="/optpack/tracks/108.szs" create="True"/>
+	    <file disc="/Race/Course/314.szs" external="/optpack/tracks/095.szs" create="True"/>
+	    <file disc="/Race/Course/315.szs" external="/optpack/tracks/172.szs" create="True"/>
+	    <file disc="/Race/Course/316.szs" external="/optpack/tracks/1bc.szs" create="True"/>
+	    <file disc="/Race/Course/317.szs" external="/optpack/tracks/0ad.szs" create="True"/>
+	    <file disc="/Race/Course/318.szs" external="/optpack/tracks/1de.szs" create="True"/>
+	    <file disc="/Race/Course/319.szs" external="/optpack/tracks/1c3.szs" create="True"/>
+	    <file disc="/Race/Course/320.szs" external="/optpack/tracks/049.szs" create="True"/>
+		<file disc="/Race/Course/321.szs" external="/optpack/tracks/10c.szs" create="True"/>
+		<file disc="/Race/Course/322.szs" external="/optpack/tracks/157.szs" create="True"/>
+		<file disc="/Race/Course/323.szs" external="/optpack/tracks/0c5.szs" create="True"/>
+		<file disc="/Race/Course/324.szs" external="/optpack/tracks/080.szs" create="True"/>
+		<file disc="/Race/Course/325.szs" external="/optpack/tracks/127.szs" create="True"/>
+		<file disc="/Race/Course/326.szs" external="/optpack/tracks/139.szs" create="True"/>
+		<file disc="/Race/Course/327.szs" external="/optpack/tracks/09d.szs" create="True"/>
+		<file disc="/Race/Course/328.szs" external="/optpack/tracks/09b.szs" create="True"/>
+		<file disc="/Race/Course/329.szs" external="/optpack/tracks/0af.szs" create="True"/>
+		<file disc="/Race/Course/330.szs" external="/optpack/tracks/10f.szs" create="True"/>
+		<file disc="/Race/Course/331.szs" external="/optpack/tracks/0dc.szs" create="True"/>
+		<file disc="/Race/Course/332.szs" external="/optpack/tracks/070.szs" create="True"/>
+		<file disc="/Race/Course/333.szs" external="/optpack/tracks/1db.szs" create="True"/>
+		<file disc="/Race/Course/334.szs" external="/optpack/tracks/0ca.szs" create="True"/>
+		<file disc="/Race/Course/335.szs" external="/optpack/tracks/158.szs" create="True"/>	
+		<file disc="/Race/Course/336.szs" external="/optpack/tracks/158.szs" create="True"/>
+		<file disc="/Race/Course/337.szs" external="/optpack/tracks/1e0.szs" create="True"/>
+		<file disc="/Race/Course/338.szs" external="/optpack/tracks/144.szs" create="True"/>
+		<file disc="/Race/Course/339.szs" external="/optpack/tracks/0cf.szs" create="True"/>
+		<file disc="/Race/Course/340.szs" external="/optpack/tracks/1b9.szs" create="True"/>
+		<file disc="/Race/Course/341.szs" external="/optpack/tracks/1b1.szs" create="True"/>
+		<file disc="/Race/Course/342.szs" external="/optpack/tracks/0c4.szs" create="True"/>
+		<file disc="/Race/Course/343.szs" external="/optpack/tracks/0d0.szs" create="True"/>
+		<file disc="/Race/Course/344.szs" external="/optpack/tracks/111.szs" create="True"/>
+		<file disc="/Race/Course/345.szs" external="/optpack/tracks/1b8.szs" create="True"/>
+		<file disc="/Race/Course/346.szs" external="/optpack/tracks/14d.szs" create="True"/>
+		<file disc="/Race/Course/347.szs" external="/optpack/tracks/0d1.szs" create="True"/>
+		<file disc="/Race/Course/348.szs" external="/optpack/tracks/10e.szs" create="True"/>
+		<file disc="/Race/Course/349.szs" external="/optpack/tracks/170.szs" create="True"/>
+		<file disc="/Race/Course/350.szs" external="/optpack/tracks/1bb.szs" create="True"/>
+		<file disc="/Race/Course/351.szs" external="/optpack/tracks/0c2.szs" create="True"/>
+		<file disc="/Race/Course/352.szs" external="/optpack/tracks/15f.szs" create="True"/>
+		<file disc="/Race/Course/353.szs" external="/optpack/tracks/0f6.szs" create="True"/>
+		<file disc="/Race/Course/354.szs" external="/optpack/tracks/0c6.szs" create="True"/>
+		<file disc="/Race/Course/355.szs" external="/optpack/tracks/0a8.szs" create="True"/>
+		<file disc="/Race/Course/356.szs" external="/optpack/tracks/0d2.szs" create="True"/>
+		<file disc="/Race/Course/357.szs" external="/optpack/tracks/0d3.szs" create="True"/>
+		<file disc="/Race/Course/358.szs" external="/optpack/tracks/162.szs" create="True"/>
+		<file disc="/Race/Course/359.szs" external="/optpack/tracks/0e9.szs" create="True"/>
+		<file disc="/Race/Course/360.szs" external="/optpack/tracks/0e9.szs" create="True"/>
+		<file disc="/Race/Course/361.szs" external="/optpack/tracks/13c.szs" create="True"/>
+		<file disc="/Race/Course/362.szs" external="/optpack/tracks/133.szs" create="True"/>
+		<file disc="/Race/Course/363.szs" external="/optpack/tracks/083.szs" create="True"/>
+	    <file disc="/Race/Course/364.szs" external="/optpack/tracks/0d4.szs" create="True"/>
+		<file disc="/Race/Course/365.szs" external="/optpack/tracks/199.szs" create="True"/>
+		<file disc="/Race/Course/366.szs" external="/optpack/tracks/176.szs" create="True"/>
+		<file disc="/Race/Course/367.szs" external="/optpack/tracks/04c.szs" create="True"/>
+		<file disc="/Race/Course/368.szs" external="/optpack/tracks/09e.szs" create="True"/>
+		<file disc="/Race/Course/369.szs" external="/optpack/tracks/100.szs" create="True"/>
+		<file disc="/Race/Course/370.szs" external="/optpack/tracks/1aa.szs" create="True"/>
+		<file disc="/Race/Course/371.szs" external="/optpack/tracks/11c.szs" create="True"/>
+		<file disc="/Race/Course/372.szs" external="/optpack/tracks/0d9.szs" create="True"/>
+		<file disc="/Race/Course/373.szs" external="/optpack/tracks/0ee.szs" create="True"/>
+		<file disc="/Race/Course/374.szs" external="/optpack/tracks/1ce.szs" create="True"/>
+		<file disc="/Race/Course/375.szs" external="/optpack/tracks/1f0.szs" create="True"/>
+		<file disc="/Race/Course/376.szs" external="/optpack/tracks/0b8.szs" create="True"/>
+		<file disc="/Race/Course/377.szs" external="/optpack/tracks/0fb.szs" create="True"/>
+		<file disc="/Race/Course/378.szs" external="/optpack/tracks/1ff.szs" create="True"/>
+		<file disc="/Race/Course/379.szs" external="/optpack/tracks/08b.szs" create="True"/>
+		<file disc="/Race/Course/380.szs" external="/optpack/tracks/1f1.szs" create="True"/>
+		<file disc="/Race/Course/381.szs" external="/optpack/tracks/06c.szs" create="True"/>
+		<file disc="/Race/Course/382.szs" external="/optpack/tracks/072.szs" create="True"/>
+		<file disc="/Race/Course/383.szs" external="/optpack/tracks/0ea.szs" create="True"/>
+		<file disc="/Race/Course/384.szs" external="/optpack/tracks/0ea.szs" create="True"/>
+		<file disc="/Race/Course/385.szs" external="/optpack/tracks/0d7.szs" create="True"/>
+		<file disc="/Race/Course/386.szs" external="/optpack/tracks/18b.szs" create="True"/>
+		<file disc="/Race/Course/387.szs" external="/optpack/tracks/126.szs" create="True"/>
+		<file disc="/Race/Course/388.szs" external="/optpack/tracks/1dd.szs" create="True"/>
+		<file disc="/Race/Course/389.szs" external="/optpack/tracks/1ec.szs" create="True"/>
+		<file disc="/Race/Course/390.szs" external="/optpack/tracks/134.szs" create="True"/>
+		<file disc="/Race/Course/391.szs" external="/optpack/tracks/15d.szs" create="True"/>
+		<file disc="/Race/Course/392.szs" external="/optpack/tracks/092.szs" create="True"/>
+		<file disc="/Race/Course/393.szs" external="/optpack/tracks/192.szs" create="True"/>
+		<file disc="/Race/Course/394.szs" external="/optpack/tracks/17c.szs" create="True"/>
+		<file disc="/Race/Course/395.szs" external="/optpack/tracks/136.szs" create="True"/>
+		<file disc="/Race/Course/396.szs" external="/optpack/tracks/1dc.szs" create="True"/>
+		<file disc="/Race/Course/397.szs" external="/optpack/tracks/198.szs" create="True"/>
+		<file disc="/Race/Course/398.szs" external="/optpack/tracks/0d8.szs" create="True"/>
+		<file disc="/Race/Course/399.szs" external="/optpack/tracks/171.szs" create="True"/>
+		<file disc="/Race/Course/400.szs" external="/optpack/tracks/1ad.szs" create="True"/>
+		<file disc="/Race/Course/401.szs" external="/optpack/tracks/045.szs" create="True"/>
+		<file disc="/Race/Course/402.szs" external="/optpack/tracks/113.szs" create="True"/>
+		<file disc="/Race/Course/403.szs" external="/optpack/tracks/0db.szs" create="True"/>
+		<file disc="/Race/Course/404.szs" external="/optpack/tracks/156.szs" create="True"/>
+		<file disc="/Race/Course/405.szs" external="/optpack/tracks/063.szs" create="True"/>
+		<file disc="/Race/Course/406.szs" external="/optpack/tracks/1fe.szs" create="True"/>
+		<file disc="/Race/Course/407.szs" external="/optpack/tracks/1d9.szs" create="True"/>
+		<file disc="/Race/Course/408.szs" external="/optpack/tracks/15c.szs" create="True"/>
+		<file disc="/Race/Course/409.szs" external="/optpack/tracks/142.szs" create="True"/>
+		<file disc="/Race/Course/410.szs" external="/optpack/tracks/19b.szs" create="True"/>
+		<file disc="/Race/Course/411.szs" external="/optpack/tracks/0dd.szs" create="True"/>
+		<file disc="/Race/Course/412.szs" external="/optpack/tracks/150.szs" create="True"/>
+		<file disc="/Race/Course/413.szs" external="/optpack/tracks/0e0.szs" create="True"/>
+		<file disc="/Race/Course/414.szs" external="/optpack/tracks/130.szs" create="True"/>
+		<file disc="/Race/Course/415.szs" external="/optpack/tracks/0ce.szs" create="True"/>
+		<file disc="/Race/Course/416.szs" external="/optpack/tracks/0bd.szs" create="True"/>
+		<file disc="/Race/Course/417.szs" external="/optpack/tracks/0aa.szs" create="True"/>
+		<file disc="/Race/Course/418.szs" external="/optpack/tracks/186.szs" create="True"/>
+		<file disc="/Race/Course/419.szs" external="/optpack/tracks/173.szs" create="True"/>
+		<file disc="/Race/Course/420.szs" external="/optpack/tracks/163.szs" create="True"/>
+		<file disc="/Race/Course/421.szs" external="/optpack/tracks/07b.szs" create="True"/>
+		<file disc="/Race/Course/422.szs" external="/optpack/tracks/0f7.szs" create="True"/>
+		<file disc="/Race/Course/423.szs" external="/optpack/tracks/0e1.szs" create="True"/>
+		<file disc="/Race/Course/424.szs" external="/optpack/tracks/0eb.szs" create="True"/>
+		<file disc="/Race/Course/425.szs" external="/optpack/tracks/0de.szs" create="True"/>
+		<file disc="/Race/Course/426.szs" external="/optpack/tracks/0e2.szs" create="True"/>
+		<file disc="/Race/Course/427.szs" external="/optpack/tracks/1af.szs" create="True"/>
+		<file disc="/Race/Course/428.szs" external="/optpack/tracks/19c.szs" create="True"/>
+		<file disc="/Race/Course/429.szs" external="/optpack/tracks/1cf.szs" create="True"/>
+		<file disc="/Race/Course/430.szs" external="/optpack/tracks/050.szs" create="True"/>
+		<file disc="/Race/Course/431.szs" external="/optpack/tracks/143.szs" create="True"/>
+		<file disc="/Race/Course/432.szs" external="/optpack/tracks/137.szs" create="True"/>
+		<file disc="/Race/Course/433.szs" external="/optpack/tracks/114.szs" create="True"/>
+		<file disc="/Race/Course/434.szs" external="/optpack/tracks/107.szs" create="True"/>
+		<file disc="/Race/Course/435.szs" external="/optpack/tracks/17f.szs" create="True"/>
+		<file disc="/Race/Course/436.szs" external="/optpack/tracks/12f.szs" create="True"/>
+		<file disc="/Race/Course/437.szs" external="/optpack/tracks/138.szs" create="True"/>
+		<file disc="/Race/Course/438.szs" external="/optpack/tracks/0df.szs" create="True"/>
+		<file disc="/Race/Course/439.szs" external="/optpack/tracks/1fc.szs" create="True"/>
+		<file disc="/Race/Course/440.szs" external="/optpack/tracks/078.szs" create="True"/>
+		<file disc="/Race/Course/441.szs" external="/optpack/tracks/104.szs" create="True"/>
+		<file disc="/Race/Course/442.szs" external="/optpack/tracks/0e6.szs" create="True"/>
+		<file disc="/Race/Course/443.szs" external="/optpack/tracks/154.szs" create="True"/>
+		<file disc="/Race/Course/444.szs" external="/optpack/tracks/12d.szs" create="True"/>
+		<file disc="/Race/Course/445.szs" external="/optpack/tracks/0fd.szs" create="True"/>
+		<file disc="/Race/Course/446.szs" external="/optpack/tracks/0da.szs" create="True"/>
+		<file disc="/Race/Course/447.szs" external="/optpack/tracks/1c4.szs" create="True"/>
+</patch>
+	<patch id="musicloaderoptpulsar">
+		<file disc="/sound/strm/20.brstm"  external="/optpack/music/0c7.brstm"  create="True"/>
+		<file disc="/sound/strm/71.brstm"  external="/optpack/music/1b5.brstm"  create="True"/>
+		<file disc="/sound/strm/79.brstm"  external="/optpack/music/19f.brstm"  create="True"/>
+		<file disc="/sound/strm/84.brstm"  external="/optpack/music/0ff.brstm"  create="True"/>
+		<file disc="/sound/strm/94.brstm"  external="/optpack/music/0f1.brstm"  create="True"/>
+		<file disc="/sound/strm/111.brstm" external="/optpack/music/07a.brstm"  create="True"/>
+		<file disc="/sound/strm/116.brstm" external="/optpack/music/07c.brstm"  create="True"/>
+		<file disc="/sound/strm/120.brstm" external="/optpack/music/071.brstm"  create="True"/>
+		<file disc="/sound/strm/124.brstm" external="/optpack/music/161.brstm"  create="True"/>
+		<file disc="/sound/strm/140.brstm" external="/optpack/music/096.brstm"  create="True"/>
+		<file disc="/sound/strm/159.brstm" external="/optpack/music/076.brstm"  create="True"/>
+		<file disc="/sound/strm/168.brstm" external="/optpack/music/1ee.brstm"  create="True"/>
+		<file disc="/sound/strm/185.brstm" external="/optpack/music/0c9.brstm"  create="True"/>
+		<file disc="/sound/strm/194.brstm" external="/optpack/music/087.brstm"  create="True"/>
+		<file disc="/sound/strm/229.brstm" external="/optpack/music/0a7.brstm"  create="True"/>
+		<file disc="/sound/strm/259.brstm" external="/optpack/music/101.brstm"  create="True"/>
+		<file disc="/sound/strm/281.brstm" external="/optpack/music/1e9.brstm"  create="True"/>
+		<file disc="/sound/strm/283.brstm" external="/optpack/music/0d5.brstm"  create="True"/>
+		<file disc="/sound/strm/305.brstm" external="/optpack/music/16f.brstm"  create="True"/>
+		<file disc="/sound/strm/329.brstm" external="/optpack/music/0af.brstm"  create="True"/>
+		<file disc="/sound/strm/330.brstm" external="/optpack/music/10f.brstm"  create="True"/>
+		<file disc="/sound/strm/331.brstm" external="/optpack/music/0dc.brstm"  create="True"/>
+		<file disc="/sound/strm/332.brstm" external="/optpack/music/070.brstm"  create="True"/>
+		<file disc="/sound/strm/340.brstm" external="/optpack/music/1b9.brstm"  create="True"/>
+		<file disc="/sound/strm/350.brstm" external="/optpack/music/1bb.brstm"  create="True"/>
+		<file disc="/sound/strm/351.brstm" external="/optpack/music/0c2.brstm"  create="True"/>
+		<file disc="/sound/strm/382.brstm" external="/optpack/music/072.brstm"  create="True"/>
+		<file disc="/sound/strm/390.brstm" external="/optpack/music/134.brstm"  create="True"/>
+		<file disc="/sound/strm/430.brstm" external="/optpack/music/050.brstm"  create="True"/>
+		<file disc="/sound/strm/431.brstm" external="/optpack/music/143.brstm"  create="True"/>
+		<file disc="/sound/strm/432.brstm" external="/optpack/music/137.brstm"  create="True"/>
+		<file disc="/sound/strm/433.brstm" external="/optpack/music/114.brstm"  create="True"/>
+		<file disc="/sound/strm/435.brstm" external="/optpack/music/17f.brstm"  create="True"/>	
+		<file disc="/sound/strm/436.brstm" external="/optpack/music/12f.brstm"  create="True"/>
+		<file disc="/sound/strm/446.brstm" external="/optpack/music/0da.brstm"  create="True"/>
+		<file disc="/sound/strm/447.brstm" external="/optpack/music/1c4.brstm"  create="True"/>		
 
-	<patch id="CTGPLoad">
-		<folder external="/ctgpr/My Stuff" />
-	</patch>	
-	<patch id="PackLoad">
-		<folder external="/{$pack}/My Stuff" />
+		<file disc="/sound/strm/20_f.brstm"  external="/optpack/music/0c7_f.brstm"  create="True"/>
+		<file disc="/sound/strm/71_f.brstm"  external="/optpack/music/1b5_f.brstm"  create="True"/>
+		<file disc="/sound/strm/79_f.brstm"  external="/optpack/music/19f_f.brstm"  create="True"/>
+		<file disc="/sound/strm/84_f.brstm"  external="/optpack/music/0ff_f.brstm"  create="True"/>
+		<file disc="/sound/strm/94_f.brstm"  external="/optpack/music/0f1_f.brstm"  create="True"/>
+		<file disc="/sound/strm/111_f.brstm" external="/optpack/music/07a_f.brstm"  create="True"/>
+		<file disc="/sound/strm/116_f.brstm" external="/optpack/music/07c_f.brstm"  create="True"/>
+		<file disc="/sound/strm/120_f.brstm" external="/optpack/music/071_f.brstm"  create="True"/>
+		<file disc="/sound/strm/124_f.brstm" external="/optpack/music/161_f.brstm"  create="True"/>
+		<file disc="/sound/strm/140_f.brstm" external="/optpack/music/096_f.brstm"  create="True"/>
+		<file disc="/sound/strm/159_f.brstm" external="/optpack/music/076_f.brstm"  create="True"/>
+		<file disc="/sound/strm/168_f.brstm" external="/optpack/music/1ee_f.brstm"  create="True"/>
+		<file disc="/sound/strm/185_f.brstm" external="/optpack/music/0c9_f.brstm"  create="True"/>
+		<file disc="/sound/strm/194_f.brstm" external="/optpack/music/087_f.brstm"  create="True"/>
+		<file disc="/sound/strm/229_f.brstm" external="/optpack/music/0a7_f.brstm"  create="True"/>
+		<file disc="/sound/strm/259_f.brstm" external="/optpack/music/101_f.brstm"  create="True"/>
+		<file disc="/sound/strm/281_f.brstm" external="/optpack/music/1e9_f.brstm"  create="True"/>
+		<file disc="/sound/strm/283_f.brstm" external="/optpack/music/0d5_f.brstm"  create="True"/>
+		<file disc="/sound/strm/305_f.brstm" external="/optpack/music/16f_f.brstm"  create="True"/>
+		<file disc="/sound/strm/329_f.brstm" external="/optpack/music/0af_f.brstm"  create="True"/>
+		<file disc="/sound/strm/330_f.brstm" external="/optpack/music/10f_f.brstm"  create="True"/>
+		<file disc="/sound/strm/331_f.brstm" external="/optpack/music/0dc_f.brstm"  create="True"/>
+		<file disc="/sound/strm/332_f.brstm" external="/optpack/music/070_f.brstm"  create="True"/>
+		<file disc="/sound/strm/340_f.brstm" external="/optpack/music/1b9_f.brstm"  create="True"/>
+		<file disc="/sound/strm/350_f.brstm" external="/optpack/music/1bb_f.brstm"  create="True"/>
+		<file disc="/sound/strm/351_f.brstm" external="/optpack/music/0c2_f.brstm"  create="True"/>
+		<file disc="/sound/strm/382_f.brstm" external="/optpack/music/072_f.brstm"  create="True"/>
+		<file disc="/sound/strm/390_f.brstm" external="/optpack/music/134_f.brstm"  create="True"/>
+		<file disc="/sound/strm/430_f.brstm" external="/optpack/music/050_f.brstm"  create="True"/>	
+		<file disc="/sound/strm/431_f.brstm" external="/optpack/music/143_f.brstm"  create="True"/>
+		<file disc="/sound/strm/432_f.brstm" external="/optpack/music/137_f.brstm"  create="True"/>	
+		<file disc="/sound/strm/433_f.brstm" external="/optpack/music/114_f.brstm"  create="True"/>
+		<file disc="/sound/strm/435_f.brstm" external="/optpack/music/17f_f.brstm"  create="True"/>	
+		<file disc="/sound/strm/436_f.brstm" external="/optpack/music/12f_f.brstm"  create="True"/>
+		<file disc="/sound/strm/446_f.brstm" external="/optpack/music/0da_f.brstm"  create="True"/>
+		<file disc="/sound/strm/447_f.brstm" external="/optpack/music/1c4_f.brstm"  create="True"/>	
+	</patch>
+	<patch id="ctgprmusicopt">
+		<folder external="/ctgpr/My Stuff" disc="/sound/" />
+		<folder external="/ctgpr/My Stuff" disc="/sound/strm" />
+	</patch>
+	<patch id="musicopt">
+		<folder external="/optpackghost/My Stuff" disc="/sound/" />
+		<folder external="/optpackghost/My Stuff" disc="/sound/strm" />
+	</patch>
+	<patch id="music2opt">
+		<folder external="/optpackghost/My Stuff2" disc="/sound/" />
+		<folder external="/optpackghost/My Stuff2" disc="/sound/strm" />     
+	</patch>		
+	<patch id="mystuffopt">
+		<folder external="/optpackghost/My Stuff" recursive="false" />
+		<folder external="/optpackghost/My Stuff" disc="/" />
+	</patch>		
+	<patch id="mystuff2opt">
+		<folder external="/optpackghost/My Stuff2" recursive="false" />
+		<folder external="/optpackghost/My Stuff2" disc="/" />
+	</patch>
+	<patch id="disablemusicoptpulsar">
+		<memory offset="0x80001512" value="0001" />
+	</patch>
+	<patch id="combofunkyoptpulsar">
+		<memory offset="0x80001540" value="0001" />
+	</patch>
+	<patch id="combodaisyoptpulsar">
+		<memory offset="0x80001542" value="0001" />
+	</patch>
+	<patch id="itemlandoptpulsar">
+		<memory offset="0x80001520" value="0001" />
+	</patch>
+	<patch id="nohudopt">
+		<file disc="main.dol" external="/optpackghost/nohud/main.dol" />
+		<file disc="/Scene/UI/Race.szs" external="/optpackghost/nohud/Race.szs" />
+        <file disc="/Scene/UI/Award_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
+        <file disc="/Scene/UI/Channel_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Event_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Globe_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuMulti_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/MenuOther_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" /> 
+		<file disc="/Scene/UI/MenuSingle_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Present_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Race_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
+		<file disc="/Scene/UI/Title_U.szs" external="/optpackghost/nohud/SuperMenu_X.szs" />
 	</patch>
 </wiidisc>

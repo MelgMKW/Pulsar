@@ -12,15 +12,15 @@ if "%1" equ "-d" SET "cwDWARF=-g"
 
 :: Destination (change as necessary)
 SET "SOURCE=Pulsar"
-SET "RIIVO=C:\Users\admin\Documents\Dolphin Emulator\Load\Riivolution\Pulsar"
-SET "ENGINE=C:\Modding\Coding\Kamek\Common\KamekInclude"
-SET "CREATOR=C:\Modding\Coding\Kamek\Pulsar\PulsarPackCreator\Resources"
+SET "RIIVO=I:\Users\Omar\Desktop\OptPack Dolphin\Dolphin-x64\User\Load\Riivolution\optpackghost"
+SET "ENGINE=I:\Users\Omar\Desktop\Mario_Kart_Wii\OptPack_Files\BuilderPulsar\Pulsar\KamekInclude"
+SET "CREATOR=I:\Users\Omar\Desktop\Mario_Kart_Wii\OptPack_Files\BuilderPulsar\Pulsar\PulsarPackCreator\Resources"
 echo %RIIVO%
 
 
 :: CPP compilation settings
-SET CC="../Common/cw/mwcceppc.exe"
-SET CFLAGS=-I- -i "../Common/KamekInclude" -i "../Common/GameSource" -i "../Common/GameSource/MarioKartWii" -i PulsarEngine ^
+SET CC="mwcceppc.exe"
+SET CFLAGS=-I- -i "I:\Users\Omar\Desktop\Mario_Kart_Wii\OptPack_Files\BuilderPulsar\Pulsar\KamekInclude" -i "I:\Users\Omar\Desktop\Mario_Kart_Wii\OptPack_Files\BuilderPulsar\Pulsar\GameSource" -i "I:\Users\Omar\Desktop\Mario_Kart_Wii\OptPack_Files\BuilderPulsar\Pulsar\GameSource\MarioKartWii" -i PulsarEngine ^
   -opt all -inline auto -enum int -proc gekko -fp hard -sdata 0 -sdata2 0 -maxerrors 1 -func_align 4 %cwDWARF%
 SET DEFINE=
 
@@ -40,7 +40,7 @@ FOR %%H IN (%CPPFILES%) DO (
 
 :: Link
 echo Linking... %time%
-"../Common/Kamek" "build/kamek.o" %OBJECTS% %debug% -dynamic -externals="../Common/GameSource/symbols.txt" -versions="../Common/GameSource/versions.txt" -output-combined=build\Code.pul
+"Kamek.exe" "build/kamek.o" %OBJECTS% %debug% -dynamic -externals="I:\Users\Omar\Desktop\Mario_Kart_Wii\OptPack_Files\BuilderPulsar\Pulsar\GameSource\symbols.txt" -versions="I:\Users\Omar\Desktop\Mario_Kart_Wii\OptPack_Files\BuilderPulsar\Pulsar\GameSource\versions.txt" -output-combined=build\Code.pul
 
 if %ErrorLevel% equ 0 (
     xcopy /Y build\*.pul "%RIIVO%\Binaries" >nul
@@ -50,3 +50,4 @@ if %ErrorLevel% equ 0 (
 
 :end
 ENDLOCAL
+PAUSE

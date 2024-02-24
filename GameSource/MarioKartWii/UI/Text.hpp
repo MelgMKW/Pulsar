@@ -47,8 +47,8 @@ public:
     TextPaneHandler(); //805cda34
     ~TextPaneHandler(); //805cda50
     void Init(lyt::TextBox* pane); //805cdbe4
-    void SetMessage(const BMGHolder& curFileBmgs, const BMGHolder& commonBmgs, u32 bmgId, const TextInfo* text = nullptr); //805cdd00
-    void ResetMessage(); //805cedcc
+    void SetMsgId(const BMGHolder& curFileBmgs, const BMGHolder& commonBmgs, u32 bmgId, const TextInfo* text = nullptr); //805cdd00
+    void ReSetMsgId(); //805cedcc
     void Draw(const lyt::DrawInfo& drawInfo); //805cee08
     lyt::TextBox* pane; //0
     CharacterInfo* characterArray; //size max char count

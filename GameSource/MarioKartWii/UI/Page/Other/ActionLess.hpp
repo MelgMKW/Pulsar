@@ -16,7 +16,7 @@ class ActionLess : public Page { //has to be ended by another Page
     void AfterControlUpdate() override; //0x4c 805bac4c, ends the page
     int GetRuntimeTypeInfo() const override; //0x60 805bb28c
     virtual void ResetText() = 0; //0x64
-    virtual void SetMessageWindowText(u32 bmgId, const TextInfo* text = nullptr) = 0; //0x68
+    virtual void SetMsgIdWindowText(u32 bmgId, const TextInfo* text = nullptr) = 0; //0x68
     void RequestEnd(bool canEnd); //805bac84
     ManipulatorManager manipulatorManager;
     bool canEnd; //0x54
@@ -31,7 +31,7 @@ public:
     void OnInit() override; //0x28 805bad8c
     int GetRuntimeTypeInfo() const override; //0x60 805bb280
     void ResetText() override; //0x64 805bae80
-    void SetMessageWindowText(u32 bmgId, const TextInfo* text = nullptr) override; //0x68 805bae90
+    void SetMsgIdWindowText(u32 bmgId, const TextInfo* text = nullptr) override; //0x68 805bae90
     BusySymbol busySymbol; //0x58
     MessageWindowControlScaleFade messageWindow; //type SimpleMessageWindowControl if 0x50
     BlackBackControlForMessage bg; //0x340
@@ -45,7 +45,7 @@ public:
     void OnInit() override; //0x28 805bb024
     int GetRuntimeTypeInfo() const override; //0x60 805bb26c
     void ResetText() override; //0x64 805bb1c0
-    void SetMessageWindowText(u32 bmgId, const TextInfo* text = nullptr) override; //0x68 805bb218
+    void SetMsgIdWindowText(u32 bmgId, const TextInfo* text = nullptr) override; //0x68 805bb218
     void SetTitleText(u32 bmgId, const TextInfo* text = nullptr); //805bb210
     CtrlMenuPageTitleText titleText; //0x58 to 0x1CC
     BusySymbol busySymbol; //0x1CC to 0x340

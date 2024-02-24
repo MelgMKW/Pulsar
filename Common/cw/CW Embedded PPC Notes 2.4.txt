@@ -1,0 +1,636 @@
+========================================================================
+Metrowerks PPC Release Notes
+========================================================================
+
+Version: 2.4.2 ( __MWERKS__ == 0x2402 )
+Date:    June 13th, 2001
+Authors: Mark Anderson, Bob Campbell, Rommel Manuel and Doug Saylor
+
+========================================================================
+New Features since 2.4
+========================================================================
+
+Note the 2.4 compiler was only released for Mac OS, 2.4.1 and 2.4.2 are 
+being released for both platfoms.
+
+-   #pragma switch_tables on | off | reset // default on
+	Use to enable/disable generation of switch tables
+
+-   __declspec(interrupt [SRR DAR DSISR enable fprs vrs nowarn])
+    Options within [] are optional and have same names and meaning as 
+    options used with #pragma interrupt ...
+    Use __declspec(interrupt) just before the function prototype you
+    want to be an interrupt routine, e.g.
+    __declspec(interrupt) void Machine_Check_Handler(void);
+    Embedded only.
+
+-   Global register variables
+
+    You can assign a global variable to a register
+
+    register int reg_variable asm ("r14");
+
+    In place of register, you can use extern, static or nothing at all.
+
+    For gprs use 'r', fprs use 'f' and altivec vectors use 'v'.  Global register
+    variables are assigned to the lowest nonvolatile registers.  Allow though we
+    reserve only the 3 highest nonvolatile registers of each register type, the
+    more global register variables you define, the more register pressure is
+    created during register coloring which can cause spilling and hence poor
+    performance; we recommend that you benchmark your program to see what the
+    best trade off is.  Start from the lowest nonvolatile register and increment 
+    up for as many as you need.  Gaps aren't allowed; if you want a gap for some 
+    reason, create an extern dummy variable declaration for the register in the 
+    gap.
+
+    extern int __dummy_glob_reg asm ("r15");
+
+    Global register declarations must occur before code is generated so it is 
+    advisable to put your declarations in a header file.
+
+    #pragma unsafe_global_reg_vars on | off | reset // default: on for EPPC, off for desktop
+    It is assumed for Embedded that you will be using global register variables
+    during interrupts.  If that isn't true, set unsafe_global_reg_vars to off.
+    If global register variables are defined and unsafe_global_reg_vars is on,
+    the compiler will store this information in the object file to be used by the 
+    linker to insure that all project c/c++ files have been compiled with the
+    header file mentioned above included.  When unsafe_global_reg_vars is
+    off, every call from a module that is using global register variables
+    to a module that isn't using global register variables will be safe.  For
+    example:
+    
+    // foo.c
+    #include "stdio.h"
+    
+    static int x, y asm ("r14"); // y is global register variable, x is not
+    
+    static void foo_print(void)
+    {
+    	printf("x is %d; y is %d\r\n", x, y);
+    }
+    
+    extern void good_foo(void)
+    {
+    	x = 1;
+    	y = 2;
+    	
+    	// any function that good_foo() calls will restore r14 before it
+    	//
+    	foo_print(); // will print correct values of x and y
+    	// indirectly calling printf will not affect y since printf will 
+    	// save r14 if it uses it before and then restore it before it returns
+    	foo_print(); // will print correct values of x and y
+    }
+
+    extern void bad_foo(void)
+    {
+    	// even if bad_foo() is called after good_foo(), r14 may have been 
+    	// trashed by whoever is calling bad_foo().
+    	foo_print(); 
+    }
+
+    #pragma ignore_global_reg_vars on | off | reset // default: off
+    Set to on if you want to have a certain function load or store to the variable's
+    memory location.
+
+-   #pragma min_struct_alignment 4 | 8 | 16 | 32 | 64 | 128 | on | off | reset
+	Use to increase aggregate alignments for better memory access.
+	Default is 4, on is 4, off uses the standard alignment for that type.
+	Only applies if optimization level is > 0. 
+    
+-   #pragma rel109_offset 0 | 1 | 2 | 3 now defaults to 0 which matches
+    gcc and diab compilers.  The CW linker is able to do the right
+    thing regardless of the offset but other linkers objected. 
+    (Embedded only)
+    
+-   #pragma misaligned_mem_access on |off | reset
+    When true, compiler will copy structs without regard to alignment.
+    All libraries should be rebuilt.
+    Default is on for Desktop but off for Embedded
+    
+-   #pragma no_register_save_helpers on |off | reset
+    This pragma will save and restore registers without calling
+    helper functions. 
+
+-   #pragma optimizewithasm on | off 
+    This pragma enables the optimizer to function on inline
+    assembler blocks. This option is off by default below 
+    optimization level 3. Level 3 and greater it is on
+    by default.
+
+-   #pragma has8bytebitfields on |off | reset added for support of 
+    > 32 bit bitfields.
+
+-   Redundant Load optimizations, the aliasing optimizations related
+    to preventing redundant loads has been improved. This is especially
+    important for AltiVec where at the machine level all loads look like
+    pointer loads.
+
+-   More branchless compare optimizations:
+    a)  added branchless compares against zero
+        (for example "a = (b == 0)" etc)
+    b)  added negated branchless compares
+        (for example "a = -(b == 0)" etc)
+
+-   Implemented branchless ABS optimizations based on "The PowerPC
+    Compiler Writer's Guide" 3.2.3.3. Can detect several different
+    cases (note that __abs() was a existing PowerPC intrinsic which
+    implemented the branchless absolute value):
+    a)  a = a > 0 ? a : -a           ==>> a = __abs(a)
+    b)  a = a >= 0 ? a : -a          ==>> a = __abs(a)
+    c)  a = a < 0 ? -a : a           ==>> a = __abs(a)
+    d)  a = a <= 0 ? -a : a          ==>> a = __abs(a)
+    e)  if (a < 0) a = -a            ==>> a = __abs(a)
+    f)  if (a>=0) s+= a; else s-= a; ==>> s += __abs(a)
+
+-   Implemented branchless MIN or MAX optimizations based on "The PowerPC
+    Compiler Writer's Guide" 3.2.3.4
+    
+    Max:
+        a > b ? a : b   ==>>    MAX(a, b)
+        a >= b ? a : b  ==>>    MAX(a, b)
+
+    Min:
+        a < b ? a : b   ==>>    MIN(a, b)
+        a <= b ? a : b  ==>>    MIN(a, b)
+
+-   Support for > 32 bit bitfields.
+
+-   Implemented scheduler for 7450.
+
+-   Any file included in a project that ends with .axp is treated as an 
+    anti-export file. This is similar to a .exp file but it specifically 
+    suppresses symbols from being exported. This is most useful when 
+    dealing with complex shared libraries where you want to export 
+    almost all symbols except for a few included from libraries.
+
+    An important use of this functionality is to enable exception 
+    throwing across shared libraries. Each shared libraries needs its 
+    own copy of the exception handler globals to be private. Choosing 
+    to export "all globals" conflicts with this. The easiest solution is 
+    continue to export "all globals" but specify the exception global 
+    symbols in a .axp file. The exact list will be provided in a future 
+    release note.
+
+
+========================================================================
+New Features since 2.3.2
+========================================================================
+
+* Constant variables can (sometimes) be used in statement level assembler
+
+  const int SizeConst = 32;
+  
+  asm {
+    li  r5,SizeConst
+  	
+  	/* or in the old style */
+    lwz  r5,SizeConst(rtoc)
+    lwz  r5,0(r5)
+  }
+  
+  There still are cases where the compiler can't tell if the user intended
+  to read the address of the actual variable or to use the constant value.
+  In the MacOS case the compiler looks at the base register (in instructions
+  like ADDI and ORI) if the base register matches the base register of
+  the object it is assume that the user a) knows what they are doing, and
+  b) that they want the object reference.
+
+* Floating point constants can now be pooled. The benefit of this is
+  in a reduction of TOC pointers used by routines that access more
+  than a single floating point constant. If store small data in toc
+  is off or if pool strings is on, floating point constants will be
+  pooled. This can be overridden with the pragma pool_fp_consts (on|off).
+  {Mac OS Only}
+
+* Added Use #pragma and ".exp" file option to the PPC PEF Linker.
+  {Mac OS Only}
+
+========================================================================
+Processor Specific Details
+========================================================================
+"elf" Processor
+	[ELF PROCESSOR SELECT]
+	     Selecting the elf processor is currently done by -proc 801
+	     on the command line.
+
+	[ISEL]
+		The compiler now supports generation of the ISEL instruction.
+		
+		#pragma get_isel	[on/off/always/1-254]
+			on  	  	: Generate with default weight of 10
+			off 	  	: Never Generate ISEL
+			always    	: Generate no matter the weights - if possible.
+			1 -- 254  	: Specify weight limit for ISEL
+	
+	The weighting system is arbitrary. Most instructions are one. 
+	Divides are twenty and multiplies are ten. Function calls are five.
+			
+	The compiler now generates ISELs for statements such as the following :
+
+	Note that the "?" operator generates ISELs with the same restrictions 
+	as below.
+
+	if (X) Y = Z;
+
+	Examples:
+	
+	(<simple conditional>) ? <simple assignment> : <simple assignment>;
+
+	if (<simple conditional>) 
+	   <simple assignment>;
+	else
+	   <simple assignment>;
+
+	<simple conditional>	: No logicals [&&,||]
+
+	<simple assignment>	: No conditionals 
+				: No side-effects
+				: No memory references
+				: No function calls					 
+					 
+	Examples of what will NOT produce ISELs:
+
+		if (a) c = b ? 1:2;   
+
+	No ISEL will be generated for the if  but the ? operator will have one.
+	This is because there can not be a condition side effect (something that
+	alters  the CR register) inside an ISEL.
+						
+  		if (b) a++;
+		if (c) d += 3;
+	
+	No ISEL will be generated because side effects are not allowed in the body 
+	of the conditional.
+
+		if (d) c = *q;
+
+	No ISEL will be generated because memory references are not allowed in
+	the body of the conditional.
+
+		if (a && b) c = 1;
+		if (a || b) c = 1;
+
+	No ISEL will be generated because of the possibility os a short circuit.
+
+		if (a) foobar (x);
+
+	No ISEL will be generated because of the function call which may have side effects.
+
+	[ELF FLOATING POINT]
+
+	The floating point software emulation routines now support the elf SIMD.
+	When the elf processor is selected (-proc 801) software 
+	emulation and the "elf_floatingpoint" are turned on by default.
+	The following pragma maybe used to toggle support when wished.
+
+	    #pragma elf_floatingpoint
+		    on : Software emulation now make
+		         calls to the vector unit.
+		    off: Standard software floating point.
+
+========================================================================
+Backend Pragmas
+========================================================================
+
+#pragma scheduling <value>
+    401         schedule for 401 (embedded only)
+    403         schedule for 403 (embedded only)
+    505         schedule for 505 (embedded only)
+    509         schedule for 509 (embedded only)
+    555         schedule for 555 (embedded only)
+    601         schedule for 601
+    602         schedule for 602 (embedded only)
+    603         schedule for 603
+    604         schedule for 604
+    740         schedule for 740 (embedded only)
+    750         schedule for 750
+    801         schedule for 801 (embedded only)
+    821         schedule for 821 (embedded only)
+    823         schedule for 823 (embedded only)
+    850         schedule for 850 (embedded only)
+    860         schedule for 860 (embedded only)
+    8240        schedule for 8240 (embedded only)
+    8260        schedule for 8260 (embedded only)
+    7400        schedule for 7400 (aka G4 Processor)
+    7450        schedule for 7450 (aka G4 Processor)
+    altivec     schedule for 7400 (aka G4 Processor)
+    PPC603e     schedule for 603e
+    PPC604e     schedule for 604e
+    PPC403GA    schedule for 403GA (embedded only)
+    PPC403GB    schedule for 403GB (embedded only)
+    PPC403GC    schedule for 403GC (embedded only)
+    PPC403GCX   schedule for 403GCX (embedded only)
+    
+    
+    off
+    once
+    twice
+    on
+
+(note "603e" and 604e look like invalid float constants that is why they start with PPC)
+
+========================================================================
+Bugs Fixed in This Version (2.4.5)
+========================================================================
+
+IR0105-0137   Generating SIZE and cfrg for code resource targets
+WB1-24199     Incorrectly multiplies longs with long longs; generating a 
+              mullhwu instruction where it should be multiplying signed 
+              values.
+WB1-22806     Need UI to specify a Mach-O dynamic library's install
+              location
+WB1-22523     Erroneously enforces 'size' flag for shared library targets
+
+========================================================================
+Bugs Fixed in This Version (2.4.2 - Pro 6.3 patch)
+========================================================================
+
+IR0106-0128   Optimization bug at opt level 3 and up
+WB1-23963     Constant propogation propogates a signed negative constant
+              into an ORI which takes unsigned immediates
+WB1-23888     Crash when there is an ambiguous register name in an asm
+              statement.
+WB1-23651     Incorrect initialization of zero length array.
+WB1-23645     Crash with pragma sym on when sym is off in the project 
+              window. (Embedded only)
+WB1-23605     Internal Compiler Error 'Operands.c' Line: 534; on typecast
+              from float to long long
+WB1-23463     Generating a signed right shift instead of an unsigned 
+              right shift
+WB1-23462     Incorrectly optimizes an if/else statement if the body of 
+              the "if" modifies the condition
+WB1-23416     Crash when an asm variable is used as both a register and
+              memory variable.
+WB1-23337     Same as WB1-23462.
+WB1-23120     Incorrect/missing 7400 SPRs in inline assembler
+WB1-23031     When the return type of a virtual function is a typedefed 
+              const &, the wrong function is called
+WB1-22881     Incorrectly optimizes a right shift and a __rlwimi intrinsic
+WB1-22801     Throw and catch not working correctly
+WB1-13740     Enabled C++ interrupt functions (Embedded only)
+
+========================================================================
+Bugs Fixed in This Version (2.4.1 - Pro 6.2 patch)
+========================================================================
+
+No Bug#        Pointer arguments to functions don't show up in debug info
+No Bug#        The current compiler no longer reserves a physical 
+               register for saving the caller's stack pointer when it 
+               has to align the stack. Instead it uses a virtual 
+               register. Fixed a bug in the way that the virtual callerSP 
+               register is handed.
+No Bug#        Bug in the scheduler where a load was moved past a store.
+IR0009-0132    Duplicate of WB1-17193 (calling profiler before
+               string pool is initialized).
+IR0004-0681    Optimize away a load where the value has just
+               been stored (AltiVec case).
+IL9812-1590    Support >32K stack frames.
+WB1-22734      Mach-O Link Error: internal link edit command failed
+WB1-22714      Link error when using the MacOS Packager and "Create alias 
+               to Classic executable" is turned OFF
+WB1-22679      When linking PPC targets as code resources, the linker 
+               includes a SIZE resource into the resource file
+WB1-22676      When building Classic applications, SIZE resource is 
+               created with id 0 instead of -1
+WB1-22384      Mach-O compiler was incorrectly marking imported symobls 
+               "private extern" when using #pragma export or .exp file
+               to specify exported symbols
+WB1-22002      Incorrect struct alignment. On MacOS, structs (without 
+               AltiVec members) should be 8-byte aligned if the first 
+               member is a double, and 4-byte aligned otherwise. 
+WB1-21648      Use of __alignof__ wasn't taking into consideration 
+               minimum alignment of structs/classes. (Embedded only)
+WB1-21646      Casting to a vector type another vector type when the 
+               object is global confused the parser.
+WB1-21604      ICE when compiling printf.c and wprintf.c with "Make 
+               String read-only" off
+WB1-21543      Compiler crash when parsing an asm block in a template
+               function
+WB1-21467      ICE when IR Optimizer tries to propagate a class into a 
+               register in the statement level assembler.
+WB1-21458      Bug in rematerializer. (Embedded only)
+WB1-21410      When building a ROM image with . = (.+0xfff)& ~0xfff; in 
+               an lcf file between section declarations, the linker 
+               updates the executable addresses but not the rom image 
+               addresses. (Embedded only)
+WB1-21408      Linker reports files mentioned in lcf file but missing
+               from project. (Embedded only)
+WB1-21365      Internal Compiler Error 'CInit.c' Line: 1164; on 
+               typecasted to vector non-vector array.
+WB1-21359      Codegen error for a signed divide by a power of 2
+WB1-21159      Codegen error breaks exceptions under OS X. Same as 
+               WB1-20979.
+WB1-21158      Duplicate of WB1-21156.
+WB1-21156      Codegen bug with profiling enabled. Same as WB1-21110.
+WB1-21151      Codegen error in long long arithmetic.
+WB1-21110      Compiler was not always allocating the minimum outgoing 
+               parameter area of at least 32 bytes on the stack.
+WB1-21106      Little Endian altivec arrays were only getting byte 
+               swapped for the first element and unspecified length 
+               arrays of vectors longer than 16 members would cause an
+               ICE.
+WB1-21086      Internal Compiler Error  'StructMoves.c' Line: 460.
+WB1-20979      codegen error when optimizing a conditional that reads
+               through a pointer
+WB1-20856      slow down with scheduler on and all other optimizations 
+               off.
+WB1-20853      'Merge into output' flag for shared libraries was not 
+               working correctly; the linker was generating the wrong 
+               size 'cfrg' resource.
+WB1-20735      ICE with "rlwimi." inline assembler instruction.
+WB1-20522	   dcbf instruction would get first operand colored to r0.
+WB1-20316      VRSAVE not updated correctly when no local variables
+               are assigned to altivec registers.
+WB1-20118      incorrect handling of Altivec types in precompiled
+               headers.
+WB1-20569      incorrect handling of the mtfsfi, cmpwi instructions in
+               the inline assembler.
+WB1-20462      Internal compiler error 'PCodeInfo.c' Line 412
+WB1-20015	   64 bit bitfield fix.
+WB1-20010	   Interrupt functions weren't saving and restoring regs
+               correctly (broken during >32k stackframe implementation).
+               (Embedded only.)
+WB1-20008	   Certain functions with >32k frames would access local
+               variables incorrectly.
+WB1-19915      internal compiler error with bctrl and mcrxr instructions
+               in the inline assembler.
+WB1-19913      inline assembler problem with using a base register
+               initialization of base register was stripped out because
+               the base register was not marked as used.
+WB1-19861      #pragma warn_resultnotused always reports an error if a 
+               function returns a struct, even if the result is used
+WB1-19859      __PROFILE_EXIT() not called in functions with early
+               exit code.
+WB1-19749      ROM builds were inserting space for the bss sections.
+               (Embedded Only)
+WB1-19737      Bug in the generation of optimizer information when
+               "bl" is used in statement level assembler.
+WB1-19504      Duplicate of WB1-16750
+WB1-19499      incorrect computation of liveonexit in the case of nested
+               loops where the inner loop starts with the value in the
+               induction variable it had when it last finished.
+WB1-19428      Duplicate of WB1-20118
+WB1-19192      Duplicate of WB1-16750
+WB1-19184      Bug in handling of induction variables in the case
+               of a post dec/inc in the condition of an empty
+               while loop.
+WB1-19059      Internal compiler error 'CException.c' line 2338.
+WB1-19043      incorrect debug information for constant global variables
+WB1-19003      Optimize multiple loads of a constant vector variable.
+WB1-18991      vector initialization was incorrect for some patterns.
+WB1-18568      Duplicate of WB1-16750
+WB1-18585      no local AltiVec variables exist, VRSAVE may not be
+               set in cases where it needs to be set.
+WB1-18524      Setting up parameters to function call could confuse an
+               optimization for vector arrays.
+WB1-18523      vector initialization with signed chars was converted to
+               splat of signed short.
+WB1-18455      Duplicate of IR0009-0132, WB1-17193
+WB1-17701      optimize single bit tests of bitfield values.
+WB1-17489      Duplicate of WB1-16750
+WB1-17315      problem with padding in structs after single byte unions.
+WB1-17192      profiler is being called before string pool is initialized.
+WB1-17143      reinstated the macros __IEEEdoubles__ and
+               __fourbyteints___. These macros are only included
+               for compatibility with Mac OS 68K programs. And should
+               not be used in new code.
+WB1-16750      ICE if compiler could possibly generate an fsel 
+               instruction, but doesn't.
+WB1-16555      The compiler was not using templated copy constructors when 
+               attempting to make a type conversion.
+WB1-16543      Incorrect 'ambiguous access to overloaded function' Front
+               End error.
+WB1-16215      Const variables will now be accessed as a variable in the 
+               inline assembler when @ha, @l, etc. are used but as an 
+               immediate otherwise.
+WB1-15707      DWARF static objects no longer have '$' in name.
+               Embedded only.
+WB1-15262      Extend debug information to indicate which register contains
+               which part of a long long assigned when it is assigned to
+               a register.
+WB1-14778      incorrect frame destruction was loading from a register
+               which had already been restored to it's previous value.
+WB1-14414      When you put a file name in an lcf file, (foo.a), the linker 
+               will also use xfoo.a. (Embedded Only)
+WB1-14342      Improved 64 bit (long long) constant shifts, 32 bit
+               rotates written in C with (x << n) | (x >> 32 -n), and
+               32 x 32 multiplys generating a 64 bit long long.
+WB1-14341      Allow controlling alignment of functions relative to
+               cache-lines. (See function_align pragma). Default is
+               now 16 bytes.
+WB1-12133      altivec vectors constants wrong in little endian mode.
+               (Embedded Only)
+WB1-12003      Possible bug in statement level assembler using "bl"
+               to jump to a label with in the function.
+WB1-11696      double to int conversion was broken in little endian mode.
+               (Embedded Only)
+WB1-10806      long to double conversion broken in little endian mode
+               (Embedded Only)
+WB1-5506       Incorrect memory access to packed structures on 4xx.  See
+               #pragma misaligned_mem_access on | off | reset above.
+               (Embedded Only)
+WB1-3985       "Suppress Warning Messages" in the Mac PPC Linker does not
+               suppress messages about missing symbols from ".arr" files.
+               (Mac OS PEF Only)
+    
+========================================================================
+Bugs Fixed in Version (2.4)
+========================================================================
+
+WB1-16678      Converting to a counting loop even though the final
+               value of the counter is defined in the loop
+WB1-9826       Altivec leaf routines tweek the stack frame, but don't 
+               generate a valid back link
+WB1-13161      ICE on altivec leaf routine.
+WB1-14262      (same as WB1-15428) variable usage for inline assembler 
+               at Optimization Level 0
+WB1-11605      __VEC__ and __ALTIVEC__ were defined wrong
+WB1-16454      When profiling is tured on in AltiVec functions, 
+               __PROFILE_EXIT is generated _after_ the blr
+WB1-18050      duplicate of WB1-16454
+WB1-16284      Windows-hosted linker wrote code resources with the
+               resource ID in the wrong byte order.
+WB1-15768      Linker crash on Windows host when using link mode slower
+WB1-15572      Loop unrolled incorrectly when there is a conditional in 
+               the body of the loop.
+WB1-15432      ICE when converting vector arrays to use registers
+IR0004-1035    Generate an error if more than one frfree directive is 
+               used in an asm function
+IR0003-0781    Linker crash on Windows host when using link mode slower
+WB1-14848      Linker was generating corrupted SYM info (FRTE)
+WB1-14995      #pragma altivec_vrsave allon wasn't updating the vrsave 
+               register if the parent function didn't use any vector regs
+IR0006-0008    Optimizer was losing volatile information, causing
+               a volatile load to get moved out of a loop.
+WB1-13645      Mach-O compiler did not correctly generate code for
+               an extern defined with in the body of a function.
+IL9901-1307    peephole bug related to using ostringstream.
+IR0003-0601    enable branch optimizations at level 3 or 4. Branch
+               optimizations are normally controled by the peephole
+               flag, but levels 3 and 4 insert branches which the
+               branch optimizer should remove.
+WB1-6096       When possible put variables declared "const" in the
+               read only section.
+IR0001-1329    Crashing bug with STL template class map<>
+IR0003-0553    Modified handling of global optimizer so even when the
+               global optimizer is disabled the "used before defined"
+               code is still run to detect variables which are used
+               before they are initialized.
+IR0002-0572-1  Allow using a ".exp" file and still export functions
+               marked with the pragma or __declspec. This is a new
+               option in the linker prefs panel.
+WB1-11990      ECOWX instruction did not mark first register as used.
+WB1-11962      bug with "/=" operator when both operands are the same
+               time, but are smaller than int.
+WB1-11862      Vector float max value gives "illegal initialization of
+               Altivec vector data" error message.
+IR9909-0272    ICE when referencing a "const long numSize = 32" from
+               a li instruction.
+WB1-11208      Support "gcc" style __BIG_ENDIAN__ macro.
+IR0001-1850    Correctly report syntax error in a AltiVec initialization.
+IR9907-0485    C++ arrays need to be 16 byte aligned to handle altivec
+               This changes the runtime code which handles destruction
+               so that any programs using the new[] operator need to
+               be recompiled and linked.
+WB1-11756      Linker now warns if the size of the PEF container
+               is larger than the allocated application size.
+               (Lack of this message is not an indication that
+               there is space to run the application, but the
+               message is provided as a hint to the user if they
+               are building a application which will not launch).
+IR0002-1252    Function Inliner was not handling "always_inline"
+               correctly.
+IR0002-0349    Static initialization of a larger number of inlined
+               constructors (which were constant) was not optimized
+               correctly.
+WB1-11591      Arrays not handled correctly when used as arguments to
+               intrinsic functions
+IR0001-0759    AltiVec alignment of structures breaks when you use a
+               typedef'ed vector instead of an actual vector type
+               (example explains it better)
+IR0001-0916    Improper alignment of AltiVec vector members in C++
+               classes
+IR9911-1505    Unsitching a loop in a function which has exactly 26
+               basic blocks caused an address error.
+
+
+========================================================================
+Contacting Metrowerks
+========================================================================
+
+For bug reports, technical questions, and suggestions, please use the
+forms in the Release Notes folder on the CD, and send them to:
+
+cw_bug@metrowerks.com
+cw_support@metrowerks.com
+cw_suggestion@metrowrks.com
+
+See the CodeWarrior on the Nets document in the Release Notes folder for
+more contact information, including a list of Internet newsgroups,
+online services, and patch and update sites.
+
+========================================================================
+Mark Anderson, Bob Campbell, Rommel Manuel and Doug Saylor
+CodeWarrior C/C++ PowerPC Engineering Team
+Metrowerks Corporation, A Motorola Company

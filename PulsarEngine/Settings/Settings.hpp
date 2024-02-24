@@ -191,6 +191,7 @@ private:
 //Use these 3 for "u32 setting" in GetSettingValue, the return will be the value of the other enums
 enum MenuSettings {
     SETTINGMENU_RADIO_FASTMENUS = 0,
+    SETTINGMENU_RADIO_DISABLEMUSIC = 1,
     SETTINGMENU_SCROLL_BOOT = 0 + 6
 };
 
@@ -216,6 +217,11 @@ enum HostSettings {
 enum MenuSettingFastMenus {
     MENUSETTING_FASTMENUS_DISABLED = 0x0,
     MENUSETTING_FASTMENUS_ENABLED = 0x1
+};
+
+enum MenuSettingDisableMusic {
+    MENUSETTING_DISABLEMUSIC_DISABLED = 0x0,
+    MENUSETTING_DISABLEMUSIC_ENABLED = 0x1
 };
 
 enum MenuSettingBoot {
@@ -257,7 +263,7 @@ enum RaceSettingSOMDigits {
     HOSTSETTING_SOM_DIGITS_0,
     HOSTSETTING_SOM_DIGITS_1,
     HOSTSETTING_SOM_DIGITS_2,
-    HOSTSETTING_SOM_DIGITS_3,
+    HOSTSETTING_SOM_DIGITS_3
 };
 
 //HOST SETTINGS

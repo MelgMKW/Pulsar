@@ -32,6 +32,7 @@ struct PitchModuler { //curModulingValue / 5 is added to curPitch; very suptle e
 }; //0x10
 
 class SoundPlayersVolumeMgr {
+    public:
     static SoundPlayersVolumeMgr* sInstance; //809c27ec
     static SoundPlayersVolumeMgr* CreateInstance(); //8070eff4
     static void DestroyInstance(); //8070f0e8

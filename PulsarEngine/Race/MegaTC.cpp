@@ -20,7 +20,5 @@ void LoadCorrectTCBRRES(Item::ObjKumo& objKumo, const char* mdlName, const char*
     else objKumo.LoadGraphicsImplicitBRRES(mdlName, shadowSrc, 1, anmParam, static_cast<nw4r::g3d::ScnMdl::BufferOption>(0), nullptr);
 }
 kmCall(0x807af568, LoadCorrectTCBRRES);
-
-
 }//namespace Race
 }//namespace Pulsar

@@ -22,7 +22,7 @@ namespace UI {
 class TextUpDownValueControlwID: public TextUpDownValueControl {
 public:
     TextUpDownValueControlwID() {};
-    void SetMessage(u32 optionId) override; //this is needed because usually the bottom message does not vary while scrolling
+    void SetMsgId(u32 optionId) override; //this is needed because usually the bottom message does not vary while scrolling
     u32 id; //the onScroll handler doesn't pass the ID
 };
 */

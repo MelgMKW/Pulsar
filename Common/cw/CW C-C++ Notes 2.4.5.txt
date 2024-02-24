@@ -1,0 +1,193 @@
+===============================================================================
+Metrowerks CodeWarrior C/C++ Compiler Release Notes
+===============================================================================
+Version: 2.4.5 ( __MWERKS__ == 0x2405 )
+Date:    17 August 2001
+Author:  Andreas Hommel
+===============================================================================
+
+(This details changes made since the 2.4 series of tools that were
+released as Pro 6.  Also check the Back End release notes for 
+additional details.)
+
+===============================================================================
+New Features in this Version
+===============================================================================
+
+*  #pragma warn_ptr_int_conv on | off | reset (default: off)
+
+   This #pragma will generate an error a pointer is converted to an
+   integral type that is not big enough to represent all pointer values:
+
+      #pragma warn_ptr_int_conv on
+      char *cp;
+      char c = (char)cp;
+
+         =>
+
+      Warning : integral type is not large enough to hold pointer
+
+   This was added in 2.4 but it was never documented
+
+*  improved default assignments operator code for unions
+
+*  global optimizer improvement for converting more signed divisions into 
+   shifts (PowerPC compiler only)
+
+===============================================================================
+Bugs Fixed in this Version
+===============================================================================
+
+*  fixes a crash with templates an illegal copy-ctors (WB1-22746)
+
+*  fixes a crash with illegal recursive variable array members (IR0108-0054)
+
+*  a class can no longer be derived from an unspecialized class template
+
+*  fixes a spurious "incomplete type" error with nested class array members
+   in class templates
+
+*  fixes a spurious "illegal use of abstract base class" error with conversion
+   function results that are bound to a reference (WB1-17569)
+
+*  fixes a bug where certain template argument dependent sizeof() expression
+   where not accepted
+   
+*  fixes a bug with static member function templates that are called using
+   an '.' or '-> expression (WB1-17060)
+
+*  fixes a bug with member pointer qualifier combination during template
+   argument deduction (WB1-17060)
+
+*  fixes a potential crash during the expansion of certain illegal macros
+   (WB1-16109)
+
+*  fixes a "bug" where "enum { a = -1, b = 0xFFFFFFFF }" wasn't accepted in
+   non ANSI-strict mode
+
+*  fixes a bug in the ANSI C compiler that allowed tentative definitions of
+   incomplete data
+
+*  fixes a bug with top-most function parameter cv-qualifiers and type
+   deduction (IR0010-0071)
+
+*  fixes a bug with unsigned preprocessor evaluations
+
+*  fixes a ICE bug with function try blocks that have more than one exception
+   handler
+
+*  fixes a bug with nested non-standard aligned non-template classes that are
+   defined inside a class template (WB1-17315)
+
+*  fixes a bug with specialized inline template functions (WB1-18424)
+
+*  fixes a bug where decl-specifiers are ignored when the type specifier
+   is a reference typedef (WB1-18290, WB1-18526)
+
+*  const zero initialized variables can now be used a null pointer constant
+
+*  fixes a bug with static_casts that convert "void *" to a pointer to
+   incomplete class type
+
+*  fixes a bug with non-reference argumet "X::operator=(X)" assignment
+   operators that are called from a compiler generate default assignment
+   operator
+
+*  fixes an ICE bug with nested enums in class templates
+
+*  fixes an ICE bug with default template template arguments
+
+*  fixes a global optimizer bug where it wasn't treating intrinsic function
+   calls conservatively enough (WB1-17341)
+
+*  fixes a global optimizer bug where exprX + exprY < exprX was being
+   simplified to exprY < 0 (WB1-18158)
+
+*  fixes an ICE bug in the global optimizer when it autovectorized certain
+   loops for x86
+
+*  fixes a global optimizer bug with conditional operator regeneration
+
+*  fixes a global optimizer bug where a common subexpression elimination
+   followed by a normal arithmetic transformation sometimes resulted in the
+   elimination of necessary catch blocks (WB1-18645)
+
+*  fixes a global optimizer bug where sequences of ifs and else ifs that
+   contained tests for adjacent integral values were sometimes simplified
+   incorrectly (WB1-19165)
+
+*  fixes a bug in the global optimizer's loop unroller, where it was 
+   incorrectly deciding that a loop had a computable number of iterations.
+
+*  fixes two global optimizer bugs in the handling of bitfields wider than
+   32 bits.  The first involved scalarization, and the second involved sign
+   extension.  These bugs only appeared when support for 8-byte 
+   bitfields was enabled in the 2.4.1 PowerPC compiler.
+   
+*  fixes an incorrect global optimizer tranformation of (a >>= b) 
+   assignments into (a = a >> b) assignments.  The sign of the shift was not 
+   being preserved.  This bug only affected the 2.4.1 PowerPC compiler.
+   
+*  fixes an incorrect global optimizer tranformation of if-else patterns
+   that enabled both blocks of code to execute sometimes.  This bug only 
+   affected the 2.4.1 PowerPC compiler. (WB1-23462)
+   
+*  fixes an incorrect global optimizer tranformation of postincrements,
+   preincrements, postdecrements and predecrements into normal assignments.
+   This bug only affected the 2.4.1 PowerPC compiler.
+
+*  fixes a global optimizer bug in the incorrect dead store elimination of
+   referenced assignments.  This bug only affected the 2.4.1 PowerPC compiler.
+
+*  fixes an incorrect global optimizer transformation on postincrements and
+   postdecrecements of volatile variables.  This bug only affected the x86
+   compiler.
+
+*  fixes a NULL pointer exception in the global optimizer.  This bug only 
+   affected the 2.4.1 PowerPC compiler. (WB1-25482)
+
+*  fixes a global optimizer bug that led to the elimination of necessary 
+   logical AND operations.
+
+*  fixes a stack overflow in the global optimizer.  (WB1-26663)
+
+*  fixes a crash with illegal source files in the preprocessor (WB1-21094)
+
+*  fixes an ambiguous name lookup bug with template parameters and "using"
+
+*  fixes a bug with compiler generated non-reference assignment operator
+   (e.g. X::operator=(X)) calls in default assigmennt operator functions
+
+===============================================================================
+Known Bugs and Incompatibilities in this Version
+===============================================================================
+
+===============================================================================
+New error messages
+===============================================================================
+
+===============================================================================
+Features Previously Added
+===============================================================================
+
+===============================================================================
+Bugs Previously Fixed
+===============================================================================
+
+===============================================================================
+Contacting Metrowerks
+===============================================================================
+
+Use the forms found in the Release Notes folder on the CD to submit:
+
+    Technical Support    cw_support@metrowerks.com
+    Report Bugs:         cw_bug@metrowerks.com
+    Suggestions:         cw_suggestion@metrowerks.com
+
+See the CodeWarrior_on_the_Nets document in the Release Notes folder for
+more contact information, including a list of Internet newsgroups,
+online services, and factory update sites.
+
+===============================================================================
+
+Metrowerks Corporation

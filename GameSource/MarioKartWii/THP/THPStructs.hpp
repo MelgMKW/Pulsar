@@ -119,7 +119,7 @@ extern s32 WorkBuffer[16]; //0x20 aligned
 extern OS::MessageQueue PrepareReadyQueue; //809bed40
 extern OS::MessageQueue UsedTextureSetQueue; //809bed60
 extern OS::Message PrepareReadyMessage; //809bed80
-extern OS::Message UsedTextureSetMessage[3]; //809bed84
+extern OS::Message UsedTextureSetMsgId[3]; //809bed84
 extern VI::RetraceCallback OldVIPostCallback; //809BED90
 extern s16 SoundBuffer[2][32 * 3 * 2]; //809BEDA0
 extern s32 SoundBufferIndex; //809BF0A0

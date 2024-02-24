@@ -1,0 +1,3 @@
+C:\Modding\Coding\Kamek\Engine\Kamek.pdb
+C:\Modding\Coding\Kamek\Engine\Kamek.dll.config
+C:\Modding\Coding\Kamek\Engine\Kamek.exe

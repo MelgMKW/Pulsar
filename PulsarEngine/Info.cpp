@@ -28,5 +28,7 @@ bool Info::IsUMTs() {
 bool Info::IsMegaTC() {
     return Info::HasMegaTC() && !CupsConfig::IsRegsSituation();
 }
-
+bool Info::IsAllItemsCanLand() {
+    return Info::HasAllItemsCanLand() && !CupsConfig::IsRegsSituation();
+}
 }//namespace Pulsar

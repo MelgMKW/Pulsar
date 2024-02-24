@@ -1,0 +1,228 @@
+
+Metrowerks Assembler for Embedded PowerPC.
+Copyright (c)1998-2002 Metrowerks, Inc.
+All rights reserved.
+Version 2.2.2
+Runtime Built: Sep 16 2002 11:29:27
+
+Please enter 'mwasmeppc -help' for information about options.
+
+-------------------------------------------------------------------------------
+General Command-Line Options                                                   
+                                                                               
+   All the options are passed to the linker unless otherwise noted.            
+                                                                               
+   Please see '-help usage' for details about the meaning of this help.        
+-------------------------------------------------------------------------------
+  -help [keyword[,...]]      # global; for this tool;                          
+                             #   display help                                  
+     usage                   #    show usage information                       
+     [no]spaces              #    insert blank lines between options in        
+                             #      printout                                   
+     all                     #    show all standard options                    
+     [no]normal              #    show only standard options                   
+     [no]obsolete            #    show obsolete options                        
+     [no]ignored             #    show ignored options                         
+     [no]deprecated          #    show deprecated options                      
+     [no]meaningless         #    show options meaningless for this target     
+     [no]compatible          #    show compatibility options                   
+     opt[ion]=name           #    show help for a given option; for 'name',    
+                             #      maximum length 63 chars                    
+     search=keyword          #    show help for an option whose name or help   
+                             #      contains 'keyword' (case-sensitive); for   
+                             #      'keyword', maximum length 63 chars         
+     group=keyword           #    show help for groups whose names contain     
+                             #      'keyword' (case-sensitive); for 'keyword', 
+                             #      maximum length 63 chars                    
+     tool=keyword[,...]      #    categorize groups of options by tool;        
+                             #      default                                    
+        all                  #       show all options available in this tool   
+        this                 #       show options executed by this tool;       
+                             #         default                                 
+        other|skipped        #       show options passed to another tool       
+        both                 #       show options used in all tools            
+                             #                                                 
+                             #                                                 
+  -version                   # global; for this tool;                          
+                             #   show version, configuration, and build date   
+  -timing                    # global; collect timing statistics               
+  -progress                  # global; show progress and version               
+  -v[erbose]                 # global; verbose information; cumulative;        
+                             #   implies -progress                             
+  -search                    # global; search access paths for source files    
+                             #   specified on the command line; may specify    
+                             #   object code and libraries as well; this       
+                             #   option provides the IDE's 'access paths'      
+                             #   functionality                                 
+  -[no]wraplines             # global; word wrap messages; default             
+  -maxerrors max             # specify maximum number of errors to print, zero 
+                             #   means no maximum; default is 0                
+  -maxwarnings max           # specify maximum number of warnings to print,    
+                             #   zero means no maximum; default is 0           
+  -msgstyle keyword          # global; set error/warning message style         
+     mpw                     #    use MPW message style                        
+     std                     #    use standard message style; default          
+     gcc                     #    use GCC-like message style                   
+     IDE                     #    use CW IDE-like message style                
+     parseable               #    use context-free machine-parseable message   
+                             #      style                                      
+                             #                                                 
+  -[no]stderr                # global; use separate stderr and stdout streams; 
+                             #   if using -nostderr, stderr goes to stdout     
+
+-------------------------------------------------------------------------------
+Preprocessing, Precompiling, and Input File Control Options                    
+-------------------------------------------------------------------------------
+  -c                         # global; compile only, do not link; default      
+  -[no]codegen               # global; generate object code                    
+  -[no]convertpaths          # global; interpret #include filepaths specified  
+                             #   for a foreign operating system; i.e.,         
+                             #   <sys/stat.h> or <:sys:stat.h>; when enabled,  
+                             #   '/' and ':' will separate directories and     
+                             #   cannot be used in filenames (note: this is    
+                             #   not a problem on Win32, since these           
+                             #   characters are already disallowed in          
+                             #   filenames; it is safe to leave the option     
+                             #   'on'); default                                
+  -cwd keyword               # specify #include searching semantics:  before   
+                             #   searching any access paths, the path          
+                             #   specified by this option will be searched     
+     proj                    #    begin search in current working directory;   
+                             #      default                                    
+     source                  #    begin search in directory of source file     
+     explicit                #    no implicit directory; only search '-I' or   
+                             #      '-ir' paths                                
+     include                 #    begin search in directory of referencing     
+                             #      file                                       
+                             #                                                 
+  -D+ | -d[efine]            # cased; define symbol 'name' to 'value' if       
+    name[=value]             #   specified, else '1'                           
+  -[no]defaults              # global; same as '-[no]stdinc'; default          
+  -dis[assemble]             # global; disassemble files to stdout             
+  -E                         # global; cased; preprocess source files          
+  -ext extension             # global; specify extension for generated object  
+                             #   files; with a leading period ('.'), appends   
+                             #   extension; without, replaces source file's    
+                             #   extension; for 'extension', maximum length 14 
+                             #   chars; default is none                        
+  -gccinc[ludes]             # global; adopt GCC #include semantics:  add '-I' 
+                             #   paths to system list if '-I-' is not          
+                             #   specified, and search directory of            
+                             #   referencing file first for #includes (same as 
+                             #   '-cwd include')                               
+  -i- | -I-                  # global; change target for '-I' access paths to  
+                             #   the system list; implies '-cwd explicit';     
+                             #   while compiling, user paths then system paths 
+                             #   are searched when using '#include "..."; only 
+                             #   system paths are searched with '#include      
+                             #   <...>'                                        
+  -I+ | -i path              # global; cased; append access path to current    
+                             #   #include list(see '-gccincludes' and '-I-')   
+  -include file              # prefix text file or precompiled header onto all 
+                             #   source files                                  
+  -ir path                   # global; append a recursive access path to       
+                             #   current #include list                         
+  -[no]keepobj[ects]         # global; keep object files generated after       
+                             #   invoking linker; if disabled, intermediate    
+                             #   object files are temporary and deleted after  
+                             #   link stage; objects are always kept when      
+                             #   compiling                                     
+  -M                         # global; cased; scan source files for            
+                             #   dependencies and emit Makefile, do not        
+                             #   generate object code                          
+  -MM                        # global; cased; like -M, but do not list system  
+                             #   include files                                 
+  -MD                        # global; cased; like -M, but write dependency    
+                             #   map to a file and generate object code        
+  -MMD                       # global; cased; like -MD, but do not list system 
+                             #   include files                                 
+  -make                      # global; scan source files for dependencies and  
+                             #   emit Makefile, do not generate object code    
+  -nofail                    # continue working after errors in earlier files  
+  -nolink                    # global; compile only, do not link; default      
+  -noprecompile              # do not precompile any files based on the        
+                             #   filename extension                            
+  -nosyspath                 # global; treat #include <...> like #include      
+                             #   "..."; always search both user and system     
+                             #   path lists                                    
+  -o file|dir                # specify output filename or directory for object 
+                             #   file(s) or text output, or output filename    
+                             #   for linker if called                          
+  -P                         # global; cased; preprocess and send output to    
+                             #   file; do not generate code                    
+  -precompile file|dir       # generate precompiled header from source; write  
+                             #   header to 'file' if specified, or put header  
+                             #   in 'dir'; if argument is "", write header to  
+                             #   source-specified location; if neither is      
+                             #   defined, header filename is derived from      
+                             #   source filename; note: the driver can tell    
+                             #   whether to precompile a file based on its     
+                             #   extension; '-precompile file source' then is  
+                             #   the same as '-c -o file source'               
+  -preprocess                # global; preprocess source files                 
+  -prefix file               # prefix text file or precompiled header onto all 
+                             #   source files                                  
+  -S                         # global; cased; disassemble and send output to   
+                             #   file                                          
+  -[no]stdinc                # global; use standard system include paths       
+                             #   (specified by the environment variable        
+                             #   %MWCIncludes%); added after all system '-I'   
+                             #   paths; default                                
+  -U+ | -u[ndefine] name     # cased; undefine symbol 'name'                   
+
+-------------------------------------------------------------------------------
+Assembler Control Options                                                      
+-------------------------------------------------------------------------------
+  -[no]case                  # make identifiers case-sensitive; default        
+  -[no]colons                # require labels to be followed by colons (':');  
+                             #   default                                       
+  -list                      # create a listing file                           
+  -[no]period                # global; require directives to be preceded with  
+                             #   a period ('.'); default                       
+  -[no]space                 # allow spaces in the operand field; default      
+
+-------------------------------------------------------------------------------
+Project Options                                                                
+-------------------------------------------------------------------------------
+  -big                       # generate code and link for a big-endian target; 
+                             #   default                                       
+  -little                    # generate code and link for a little-endian      
+                             #   target                                        
+  -proc[essor] keyword       # specify processor for assembler                 
+     401                     #                                                 
+     403                     #                                                 
+     505                     #                                                 
+     509                     #                                                 
+     555                     #                                                 
+     601                     #                                                 
+     602                     #                                                 
+     603                     #                                                 
+     603e                    #                                                 
+     604                     #                                                 
+     604e                    #                                                 
+     740                     #                                                 
+     750                     #                                                 
+     821                     #                                                 
+     823                     #                                                 
+     850                     #                                                 
+     860                     #                                                 
+     7400                    #                                                 
+     8240                    #                                                 
+     8260                    #                                                 
+     860                     #                                                 
+     gekko                   #                                                 
+     generic                 #    ; default                                    
+                             #                                                 
+
+-------------------------------------------------------------------------------
+Debugging Control Options                                                      
+-------------------------------------------------------------------------------
+  -g                         # global; cased; generate debugging information;  
+                             #   same as '-sym full'                           
+  -sym keyword[,...]         # global; specify debugging options               
+     off                     #    do not generate debugging information;       
+                             #      default                                    
+     on                      #    turn on debugging information                
+     full[path]              #    store full paths to source files             
+                             #                                                 
+

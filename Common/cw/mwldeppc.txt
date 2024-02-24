@@ -1,0 +1,286 @@
+
+Metrowerks Linker for Embedded PowerPC.
+Copyright (c) 2002, Metrowerks Corporation
+All rights reserved.
+Version 2.4.7 build 92
+Runtime Built: Sep 16 2002 11:26:57
+
+Please enter 'mwldeppc -help' for information about options.
+
+-------------------------------------------------------------------------------
+General Command-Line Options                                                   
+                                                                               
+   Please see '-help usage' for details about the meaning of this help.        
+-------------------------------------------------------------------------------
+  -help [keyword[,...]]      # global; for linker;                             
+                             #   display help                                  
+     usage                   #    show usage information                       
+     [no]spaces              #    insert blank lines between options in        
+                             #      printout                                   
+     all                     #    show all standard options                    
+     [no]normal              #    show only standard options                   
+     [no]obsolete            #    show obsolete options                        
+     [no]ignored             #    show ignored options                         
+     [no]deprecated          #    show deprecated options                      
+     [no]meaningless         #    show options meaningless for this target     
+     [no]compatible          #    show compatibility options                   
+     opt[ion]=name           #    show help for a given option; for 'name',    
+                             #      maximum length 63 chars                    
+     search=keyword          #    show help for an option whose name or help   
+                             #      contains 'keyword' (case-sensitive); for   
+                             #      'keyword', maximum length 63 chars         
+     group=keyword           #    show help for groups whose names contain     
+                             #      'keyword' (case-sensitive); for 'keyword', 
+                             #      maximum length 63 chars                    
+                             #                                                 
+  -version                   # global; for linker;                             
+                             #   show version, configuration, and build date   
+  -timing                    # global; collect timing statistics               
+  -progress                  # global; show progress and version               
+  -v[erbose]                 # global; verbose information; cumulative;        
+                             #   implies -progress                             
+  -search                    # global; search access paths for source files    
+                             #   specified on the command line; may specify    
+                             #   object code and libraries as well; this       
+                             #   option provides the IDE's 'access paths'      
+                             #   functionality                                 
+  -[no]wraplines             # global; word wrap messages; default             
+  -maxerrors max             # specify maximum number of errors to print, zero 
+                             #   means no maximum; default is 0                
+  -maxwarnings max           # specify maximum number of warnings to print,    
+                             #   zero means no maximum; default is 0           
+  -msgstyle keyword          # global; set error/warning message style         
+     mpw                     #    use MPW message style                        
+     std                     #    use standard message style; default          
+     gcc                     #    use GCC-like message style                   
+     IDE                     #    use CW IDE-like message style                
+     parseable               #    use context-free machine-parseable message   
+                             #      style                                      
+                             #                                                 
+  -[no]stderr                # global; use separate stderr and stdout streams; 
+                             #   if using -nostderr, stderr goes to stdout     
+
+-------------------------------------------------------------------------------
+Command-Line Linker Options                                                    
+-------------------------------------------------------------------------------
+  -dis[assemble]             # global; disassemble object code and do not      
+                             #   link; implies '-nostdlib'                     
+  -L+ | -l path              # global; cased; add library search path; default 
+                             #   is to search current working directory and    
+                             #   then system directories (see '-defaults');    
+                             #   search paths have global scope over the       
+                             #   command line and are searched in the order    
+                             #   given                                         
+  -lr path                   # global; like '-l', but add recursive library    
+                             #   search path                                   
+  -l+file                    # cased; add a library by searching access paths  
+                             #   for file named lib<file>.<ext> where <ext> is 
+                             #   a typical library extension; added before     
+                             #   system libraries (see '-defaults')            
+  -[no]defaults              # global; same as -[no]stdlib; default            
+  -nofail                    # continue importing or disassembling after       
+                             #   errors in earlier files                       
+  -[no]stdlib                # global; use system library access paths         
+                             #   (specified by %MWLibraries%) and add system   
+                             #   libraries (specified by %MWLibraryFiles%);    
+                             #   default                                       
+  -S                         # global; cased; disassemble and send output to   
+                             #   file; do not link; implies '-nostdlib'        
+
+-------------------------------------------------------------------------------
+ELF Linker Options                                                             
+-------------------------------------------------------------------------------
+  -m[ain] symbol             # set main entry point for application or shared  
+                             #   library; for 'symbol', maximum length 63      
+                             #   chars; default is '__start'                   
+  -noentry | -nomain         # do not use an entry point                       
+  -map [filename]            # generate link map file; if parameter specified, 
+                             #   set output filename for map file; default is  
+                             #   <outfile>.MAP                                 
+  -[no]mapunused |           # include list of unused symbols in map file;     
+    -[no]unused              #   implies '-map'                                
+  -o file                    # specify output filename                         
+  -srec [filename]           # generate an S-record file; if parameter         
+                             #   specified, specify filename for S-record      
+                             #   file; default is <outfile>.mot                
+  -sreceol keyword           # set end-of-line separator for S-record file;    
+                             #   implies '-srec'                               
+     mac                     #    Macintosh                                    
+     dos                     #    DOS; default                                 
+     unix                    #    Unix                                         
+                             #                                                 
+  -sreclength length         # specify length of S-records; implies '-srec';   
+                             #   for 'length', range 8 - 255; default is 26    
+
+-------------------------------------------------------------------------------
+ELF Linker Address Options                                                     
+                                                                               
+   If a linker command file is passed, -codeaddr, -dataaddr, -sdataaddr, and   
+   -sdata2addr are ignored.                                                    
+                                                                               
+   If a linker command file is not passed, the linker will start the code      
+   sections at 0x00010000 and follow contiguously with the large const         
+   sections, the large data sections, the small data section, the small const  
+   section and then the bss sections.  If you pass one or more of -codeaddr,   
+   -dataaddr, -sdataaddr and -sdata2addr, the addresses you pass affect the    
+   starting addresses of the sections referred to.                             
+                                                                               
+   All addresses are valid, including 0x0.                                     
+-------------------------------------------------------------------------------
+  -lcf filename              # use the linker command file in <filename> for   
+                             #   code and data addresses; -codeaddr,           
+                             #   -dataaddr, -sdataaddr and -sdata2addr are     
+                             #   ignored if -lcf is present; <filename> must   
+                             #   end in '.lcf'                                 
+  -codeaddr addr             # set address for code; default is 65536          
+  -dataaddr addr             # set address for data; default is to have large  
+                             #   data sections follow the code and large const 
+                             #   sections                                      
+  -sdataaddr addr            # set address for small data; default is to have  
+                             #   .sdata/.sbss sections follow the large data   
+                             #   sections                                      
+  -sdata2addr addr           # set address for small constant data; default is 
+                             #   to have .sdata2/.sbss2 sections follow the    
+                             #   .sbss section                                 
+  -stackaddr addr            # the stack; default is 0x3dfff0                  
+  -heapaddr addr             # set address for the heap; default is computed   
+                             #   by starting with the stack address and        
+                             #   subtracting the heapsize and stacksize        
+  -romaddr addr              # set address for ROM image;default is not to     
+                             #   generate a ROM image                          
+  -rambuffer addr            # set address for RAM buffer used by ROM images;  
+                             #   default is to not generate a ROM image;       
+                             #   '-rambuffer' is ignored if '-romaddr' is      
+                             #   absent                                        
+
+-------------------------------------------------------------------------------
+Embedded PPC Project Options                                                   
+-------------------------------------------------------------------------------
+  -application               # global; for linker;                             
+                             #   generate an application; same as '-xm a'      
+  -library                   # global; for linker;                             
+                             #   generate a static library; same as '-xm l'    
+  -partial | -r              # for linker;                                     
+                             #   perform a partial link of objects; unresolved 
+                             #   symbols are not errors                        
+  -opt_partial | -r1         # for linker;                                     
+                             #   perform final work on a partial link; allows  
+                             #   use of LCF file and creates tables for static 
+                             #   constructors / destructors and C++ exception  
+                             #   initialization; implies '-r'                  
+  -resolved_partial | -r2    # for linker;                                     
+                             #   perform resolved final partial link;          
+                             #   unresolved symbols are errors; implies '-r1'  
+  -strip_partial             # for linker;                                     
+                             #   perform dead-stripping on partial link;       
+                             #   requires '-r1' or '-r2'                       
+  -big                       # generate code and link for a big-endian target; 
+                             #   default                                       
+  -little                    # generate code and link for a little-endian      
+                             #   target                                        
+  -proc[essor] keyword       # specify processor for scheduling and inline     
+                             #   assembler                                     
+     401                     #                                                 
+     403                     #                                                 
+     505                     #                                                 
+     509                     #                                                 
+     555                     #                                                 
+     601                     #                                                 
+     602                     #                                                 
+     603                     #                                                 
+     603e                    #                                                 
+     604                     #                                                 
+     604e                    #                                                 
+     740                     #                                                 
+     750                     #                                                 
+     801                     #                                                 
+     821                     #                                                 
+     823                     #                                                 
+     850                     #                                                 
+     860                     #                                                 
+     7400                    #                                                 
+     7450                    #                                                 
+     8240                    #                                                 
+     8260                    #                                                 
+     e500                    #                                                 
+     gekko                   #                                                 
+     generic                 #    ; default                                    
+                             #                                                 
+  -fp keyword                # specify floating-point code generation options  
+     none|off                #    no floating point                            
+     soft[ware]              #    software FP emulation; default               
+     hard[ware]              #    hardware FP codegen                          
+     fmadd                   #    same as '-fp hard' and '-fp_contract'        
+                             #                                                 
+  -sdatathreshold short      # set maximum size in bytes of mutable data       
+                             #   objects before they are moved from small data 
+                             #   sections; default is 8                        
+  -sdata[threshold] short    # set maximum size in bytes for mutable data      
+                             #   objects before being spilled from small data  
+                             #   section into data section; default is 8       
+  -sdata2[threshold] short   # set maximum size in bytes for constant data     
+                             #   objects before being spilled from constant    
+                             #   section into data section; default is 8       
+  -heapsize long             # for linker;                                     
+                             #   set size of data heap in kilobytes; default   
+                             #   is 1024                                       
+  -stacksize long            # for linker;                                     
+                             #   set size of stack in kilobytes; default is 64 
+  -model keyword             # specify code model                              
+     absolute                #    absolute code and data addressing; default   
+     other                   #    other code model                             
+                             #                                                 
+
+-------------------------------------------------------------------------------
+Debugging Control Options                                                      
+-------------------------------------------------------------------------------
+  -g                         # global; cased; generate debugging information;  
+                             #   same as '-sym full'                           
+  -sym keyword[,...]         # global; specify debugging options               
+     off                     #    do not generate debugging information;       
+                             #      default                                    
+     on                      #    turn on debugging information                
+                             #                                                 
+
+-------------------------------------------------------------------------------
+Warning Options                                                                
+-------------------------------------------------------------------------------
+  -w[arn[ings]]              # global; warning options                         
+    keyword[,...]            #                                                 
+     off                     #    turn off all warnings                        
+     on                      #    turn on all warnings                         
+     [no]cmdline             #    command-line parser warnings                 
+     [no]err[or] |           #    treat warnings as errors                     
+       [no]iserr[or]         #                                                 
+     display|dump            #    display list of active warnings              
+                             #                                                 
+
+-------------------------------------------------------------------------------
+Embedded PowerPC Disassembler Options                                          
+-------------------------------------------------------------------------------
+  -fmt | -format keyword     # compatibility;                                  
+                             #   specify formatting options                    
+     [no]x                   #    [don't] show extended mnemonics; default     
+                             #                                                 
+  -show keyword[,...]        # specify display options                         
+     only|none               #    as in '-show none' or, e.g.,                 
+                             #      '-show only,code,data'                     
+     all                     #    show everything                              
+     [no]binary              #    show binary information, such as address and 
+                             #      opcodes, for object code; default          
+     [no]code | [no]text     #    show .text sections; default                 
+     [no]data                #    show data; default                           
+     [no]detail              #    show detailed dump information               
+     [no]extended            #    show extended mnemonics; default             
+     [no]exceptions |        #    show exception tables; implies '-show data'  
+       [no]xtab[les]         #                                                 
+     [no]headers             #    show object headers; default                 
+     [no]debug | [no]dwarf   #    show DWARF information                       
+     [no]tables              #    show string and symbol tables; default       
+     [no]xtables             #    show exception tables                        
+                             #                                                 
+  -[no]relocate              # for DWARF information, relocate addends in      
+                             #   .rela.text and .rela.debug                    
+  -xtables on|off            # compatibility;                                  
+                             #   show exception tables; default is off         
+

@@ -1,0 +1,13 @@
+INCREMENT Win32_CWIDE_Limited metrowks 5.500 permanent uncounted \
+	B3CDA540C23B VENDOR_STRING="CodeWarrior IDE 4.2 or later, \
+	Windows, limited" HOSTID=ANY ck=122 TS_OK
+FEATURE Win32_CWIDE_Unlimited metrowks 5.5 31-mar-2012 uncounted \
+	D98D7EDE04EB HOSTID=ANY ck=186 TS_OK
+FEATURE Win32_Plugins_PPC_Nintendo metrowks 2 31-mar-2012 uncounted \
+	916378C8B403 HOSTID=ANY TS_OK
+FEATURE Win32_Plugins_PPC metrowks 8 31-mar-2012 uncounted \
+	72A8060B08ED HOSTID=ANY TS_OK
+FEATURE Win32_PLUGINS_DBG_PPC metrowks 8 31-mar-2012 uncounted \
+	5CCF4A75F409 HOSTID=ANY TS_OK
+FEATURE Win32_CWIDE_Limited metrowks 5.5 permanent uncounted \
+	00E825C5615A HOSTID=ANY TS_OK

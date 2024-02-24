@@ -1,0 +1,39 @@
+========================================================================
+Metrowerks GameCube Release Notes
+========================================================================
+
+Version: 2.4.1 ( __MWERKS__ == 0x2401 )
+Date:    April 9th, 2001
+Authors: Bob Campbell, Mark Anderson, Doug Saylor, Rommel Manuel, and Xin Li
+
+========================================================================
+Bugs Fixed in This Linker Version (2.4.1)
+========================================================================
+
+WB1-22180:		Building PLF files is causing an warning message to appear with no information in it.
+Fixed the problem that IDE renamed DLL before linking (Build# 37)
+
+
+========================================================================
+Bugs Fixed in This Compiler Version (2.4.1)
+========================================================================
+
+
+
+========================================================================
+Contacting Metrowerks
+========================================================================
+
+For bug reports, technical questions, and suggestions, please use the
+forms in the Release Notes folder on the CD, and send them to
+
+support@metrowerks.com
+
+See the CodeWarrior on the Nets document in the Release Notes folder for
+more contact information, including a list of Internet newsgroups,
+online services, and patch and update sites.
+
+========================================================================
+Bob Campbell, Rommel Manuel, Mark Anderson, Doug Saylor, Xin Li
+CodeWarrior C/C++ PowerPC Engineering Team
+Metrowerks Corporation

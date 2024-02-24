@@ -39,11 +39,11 @@ void BattleGlitchEnable() {
 Settings::Hook BattleGlitch(BattleGlitchEnable);
 
 
-kmWrite32(0x8085C914, 0x38000000); //times at the end of races in VS
+//kmWrite32(0x8085C914, 0x38000000); //times at the end of races in VS
 void DisplayTimesInsteadOfNames(CtrlRaceResult& result, u8 id) {
     result.DisplayFinishTime(id);
 }
-kmCall(0x8085d460, DisplayTimesInsteadOfNames); //for WWs
+//kmCall(0x8085d460, DisplayTimesInsteadOfNames); //for WWs
 
 //don't hide position tracker (MrBean35000vr)
 kmWrite32(0x807F4DB8, 0x38000001);

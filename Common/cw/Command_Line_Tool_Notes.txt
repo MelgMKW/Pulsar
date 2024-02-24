@@ -1,0 +1,138 @@
+========================================================================
+Metrowerks Command-Line Tools Release Notes
+========================================================================
+
+
+Version: Metrowerks CodeWarrior for Embedded PowerPC Release 4
+Date:    30 November 1998
+Author:  Ed Swartz, Command-Line Tools Engineer
+
+
+========================================================================
+
+
+To use the command-line tools, several environment variables must be
+changed or defined.  This may be done in autoexec.bat in Windows 95/98
+or in the Environment tab under the System control panel in Windows NT. 
+In the following, "%CWFolder%" refers to the path where CodeWarrior for
+EPPC R4 was installed.
+
+
+Note that it is not necessary to include quote marks when defining
+environment variables that include spaces.  Windows does not strip out
+the quotes and this leads to "unknown directory" warnings.  Use the
+following syntax if defining variables in batch files or at the command
+line:
+
+
+     set CWFolder=C:\Program Files\Metrowerks\CodeWarrior
+
+
+------------------------------------------------------------------------
+
+
+The PATH variable should include:
+
+
+     %CWFolder%\Bin
+     %CWFolder%\PowerPC_EABI_Tools\Command_Line_Tools
+     
+The first path contains the FlexLM license manager DLL, and the second
+path contains the tools.
+
+
+In order for FlexLM to work properly, you can simply copy the following
+file into the directory from which you will be using the command line
+tools:
+	..\CodeWarrior\license.dat
+	
+
+
+Alternately, you can define the variable LM_LICENSE_FILE as:
+
+     %CWFolder%\license.dat
+
+
+This variable points to license information.  It may point to alternate
+versions of this file, as needed.
+
+
+------------------------------------------------------------------------
+
+
+Several environment variables are used at runtime to search for system
+include paths and libraries which can shorten command lines for many
+tasks.  All of the variables mentioned below are lists which are
+separated by semicolons (';') in Windows and colons (':') in Solaris.
+
+
+Unless '-nodefaults' is passed to on the command line, the compiler searches
+for an environment variable called 'MWCEABIPPCIncludes' or 'MWCIncludes' (in
+that order) which contains a list of system access paths to be searched
+after the system access paths specified by the user.  The assembler also
+does this, using the variables 'MWAsmEABIPPCIncludes' or 'MWAsmIncludes'.
+
+
+Analogously, unless '-nodefaults' or '-disassemble' is given, the linker
+will search the environment for a list of system access paths and system
+library files to be added to the end of the search and link orders.  The
+variable 'MWEABIPPCLibraries' or 'MWLibraries' contains a list of system
+library paths to search for files, libraries, and command files.
+
+
+Associated with this list is the variable 'MWEABIPPCLibraryFiles' or
+'MWLibraryFiles' which contains a list of libraries (or object files or
+command files) to add to the end of the link order.  These files may be
+located in any of the cumulative access paths at runtime.
+
+
+If you are only building for one target, it is okay to use 'MWCIncludes',
+'MWAsmIncludes', 'MWLibraries', and 'MWLibraryFiles'.  The target-specific
+versions of the variables come in handy when targeting multiple targets,
+since the target-specific variables override the generic variables.  Note
+that if the target-specific variable exists, the generic variable will not
+be used; the contents of the two variables will not be combined.
+
+
+------------------------------------------------------------------------
+
+
+Files specified on the command line are identified by contents and file
+extension, as in the IDE.  
+
+
+The C/C++ compiler will accept non-standard file extensions as source
+by default, without a warning.  The linker must be able to identify
+all files as object code, libraries, or command files, or else they
+will be ignored.
+
+
+Linker command files must end in ".lcf".  They may be simply
+added to the link line, for example:
+
+
+     mwldeppc file.o lib.a commandfile.lcf
+
+
+========================================================================
+Contacting Metrowerks
+========================================================================
+
+
+For bug reports, technical questions, and suggestions, please use the
+forms in the Release Notes folder on the CD, and send them to
+
+
+<emb_support@metrowerks.com>
+
+
+See the CodeWarrior on the Nets document in the Release Notes folder
+for more contact information, including a list of Internet newsgroups,
+online services, and patch and update sites.
+
+
+========================================================================
+
+
+Ed Swartz
+Metrowerks Corporation

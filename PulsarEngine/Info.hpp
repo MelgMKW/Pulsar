@@ -15,6 +15,7 @@ public:
     static inline bool HasUMTs() { return sInstance->hasUMTs; }
     static inline bool HasFeather() { return sInstance->hasFeather; }
     static inline bool HasMegaTC() { return sInstance->hasMegaTC; }
+    static inline bool HasAllItemsCanLand() { return sInstance->hasAllItemsCanLand; }
     static inline u32 GetWiimmfiRegion() { return sInstance->wiimmfiRegion; }
     static inline u32 GetProb100() { return sInstance->prob100cc; }
     static inline u32 GetProb150() { return sInstance->prob150cc; }
@@ -26,6 +27,7 @@ public:
     static bool IsFeather();
     static bool IsUMTs();
     static bool IsMegaTC();
+    static bool IsAllItemsCanLand();
 
     /*
 Wiimmfi being wiimmfi means I can't use a kmCall or a even a kmBranch because a wiimmfi function that USES THE LR gets injected,
@@ -53,6 +55,7 @@ private:
     bool hasUMTs;
     bool hasFeather;
     bool hasMegaTC;
+    bool hasAllItemsCanLand;
     u8 reservedSpace[43];
 };
 

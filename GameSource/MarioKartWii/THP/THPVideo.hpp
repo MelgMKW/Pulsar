@@ -11,8 +11,8 @@ extern OS::Thread VideoDecodeThread; //809c04b8
 extern u8 VideoDecodeThreadStack[4 * 1024]; //809c07d0
 extern OS::MessageQueue FreeTextureSetQueue; //809c17d0
 extern OS::MessageQueue DecodedTextureSetQueue; //809c17f0
-extern OS::Message FreeTextureSetMessage[3]; //809c1810
-extern OS::Message DecodedTextureSetMessage[3]; //809c181c
+extern OS::Message FreeTextureSetMsgId[3]; //809c1810
+extern OS::Message DecodedTextureSetMsgId[3]; //809c181c
 extern s32 First; //809C1828
 
 

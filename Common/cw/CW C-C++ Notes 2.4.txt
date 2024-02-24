@@ -1,0 +1,711 @@
+===============================================================================
+Metrowerks CodeWarrior C/C++ Compiler Release Notes
+===============================================================================
+Version: 2.4 ( __MWERKS__ == 0x2400 )
+Date:    5 September 2000
+Author:  Andreas Hommel
+===============================================================================
+
+(This details changes made since the 2.3 series of tools that were
+released as Pro5.  Also check the Back End and IR Optimizer 
+release notes for additional details.)
+
+===============================================================================
+New Features in this Version
+===============================================================================
+
+*  The function argument and operator matching, the function template
+   deduction, and type conversion code  have been rewritten to conform
+   to the ANSI standard (the previous implementation was a mix of ARM
+   and ANSI rules). These changes will require changes in some C++
+   programs (you will also need a new version of the MSL C++ library).
+   
+   The old argument matching can be enabled with this #pragma
+
+     #pragma old_argmatch on | off | reset (default: off)
+
+   (this #pragma may not be supported in all future compiler releases)
+
+*  template template arguments are now supported
+
+		template< typename T > struct A { T a; };
+
+		template< template<typename T> class U > struct B
+		{
+			U<int> ui;
+		};
+
+		B<A> ba;
+
+		int main()
+		{
+			ba.ui.a = 1;
+		}
+
+*  conversion function templates are now supported
+
+      struct X {
+         template<typename T> operator T*() { static T t; return &t; }
+      };
+
+      X x;
+
+      int *ip = x;
+      long *lp = x;
+
+   Conversion function templates cannot be specialized or explicitly
+   instantiated in this release.
+
+*  Member templates can now be specialized:
+
+      template<typename T> struct X {
+         template<typename U> void f();
+      };
+      template<> template<> void X<long>::f<int>() { /* ... */ }
+
+   Explicit specializations are only accepted in namespace scope, class-scope
+   specializations are no longer accpeted by the compiler (as required by the
+   C++ standard).
+
+   Specializing conversion function templates is currently not supported.
+
+*  Placement delete declarations and definitions are now supported.
+
+*  Support for GCC 'typeof':
+
+		char	*cp;
+		int		*ip;
+		long	*lp;
+
+		__typeof__(*cp) c;	// equivalent to "char c;"
+		__typeof__(*ip) i;	// equivalent to "int i;"
+		__typeof__(*lp) l;	// equivalent to "long l;"
+
+   Two new keywords:
+
+      '__typeof__' (always available)
+      'typeof' (only available when #pragma gcc_extensions is 'on')
+
+
+*  The 'const strings' option (#pragma const_strings on | off | reset)
+   now defaults to 'on' in C++ programs. The type of string literals
+   is now "const char[n]" (or "const wchar_t[n]" for wide strings).
+   However, string literals can be implicitly converted to "char*" or
+   "wchar_t*" (see C++ Standard 4.2p2).
+
+*  #pragma supress_warnings on | off | reset (default: off)
+
+   This #pragma can be used to disable all warning messages
+
+
+*  #pragma inline_bottom_up on | off | reset (default: depends on target)
+
+   This #pragma can be used to enable/disable the bottom-up function inlining
+   method that will generate faster/smaller code for some (but not all) programs
+   with a lot of nested inline function calls.
+
+*  Support for "long long" multi character constants (non-ANSI feature)
+
+      unsigned long long  ul = '12345678';
+                          // = 0x3132333435363738;
+
+*  Some C++ exception handling optimizations that will generate smaller
+   binaries.
+
+*  #pragma new_mangler on | off | reset (default: off)
+
+   This #pragma can be used to enable an experimental C++ function name mangler
+   that will include the return type in mangled function template instance
+   names (as required by the ANSI C++ standard). There will be other changes
+   with this in future compiler releases, so using this is currently not
+   recommended unless you really need return types in mangled function
+   template names.
+
+   This currently does not affect the WinABI name mangler.
+
+*  Support for GCC-style syntax for specifying a range of values in 
+   a switch statement using the syntax "case low ... high:", eg:
+
+		switch(x)
+		{
+		case 0 ... 3:
+		case 5 ... 10:
+			break;	// will match on [0..3],[5..10]
+		}
+
+   Not all backends have enabled this front end option, and it is
+   only available in non-ANSI strict mode.
+
+===============================================================================
+Bugs Fixed in this Version
+===============================================================================
+
+*  fixes a bug with function try block exception table generation
+
+*  fixes a incorrect expression transformation, where (a&3)&(b&3) was
+   being transformed into (a&3)&3 instead of (a&3)&b (IR9911-0577)
+
+*  fixes a name collision error with member functions in unnamed
+   namespaces (IR9911-0354)
+
+*  fixes a bug with tentative 'static' definitions (IR9912-0428I,
+   R9912-0303)
+
+*  fixes an ICE with missing template argument lists (IR9911-0520)
+
+*  fixes a bug where a constructor template was not used to convert
+   function arguments (IR9911-0400-1)
+
+*  fixes a bug with 'const' template argument deductions
+   (IL9904-0996, IR9908-4022)
+
+*  fixes a bug with declaring a member function template outside of
+   a non- template class (IL9905-0416, IR9907-1026)
+
+*  fixes an ICE with member template typename lookup (IR9911-0698-2)
+
+*  fixes a problem with unnamed namespace members in template
+   that are used in template argument lists (IR9912-2039)
+
+*  fixes a bug with template argument dependent unary '&' expressions
+
+*  template parameter default-arguments are no longer accepted
+   in template functions (IR9909-0984)
+
+*  fixes a crash/ICE with illegal)nested inline function definitions
+   (IR0002-0896)
+
+*  fixes some problems where static_cast<> was not accepting legal
+   conversions (IR0001-0044, IL9811-1098, IL9812-1328, MW02455)
+
+*  fixes a bug with unused template-argument-dependent function-
+   default-arguments (IR9909-1096, WB1-3866, WB1-3858)
+
+*  fixes a bug with qualified namespace name lookup (IR0001-1672-2)
+
+*  fixes a bug with ambiguous function argument parsing (WB1-11735)
+
+*  it is no longer possible to use 'signed' or 'unsigned' type specifiers
+   for 'wchar_t' declarations (IR0002-1749-1)
+
+*  the pascal string escape sequence now also works for wide string
+   literals (a non-ANSI extension) (IR0001-1670) 
+
+*  fixes a bug where static_cast was ignoring access restrictions
+   (IR9907-1654)
+
+*  fixes a bug that allowed the creation of an abstract class temporary
+   (IR9912-1687-2)
+
+*  fixes a bug with wide strings/chars in macro definitions (WB1-11523)
+
+*  fixes a bug where protected/private access protection was ignored for
+   member template functions (IR9907-2144)
+
+*  fixes a bug with illegal partial specializations (IR0001-1375)
+
+*  fixes an ICE bug with certain nested template class instantiations
+   (IR9910-0347)
+
+*  the compiler will print a error when an implicitly declared copy-assigment
+   operators for classes with non-static const or reference members is used
+   (IL9902-2038 / IL9902-1740)
+
+*  the compile will no longe allow you use 'this' as an lvalue (IL9811-0807)
+
+*  fixes a bug where the cv-qualifers in array allocations are droped
+   (IR0004-1108-1)
+
+*  no longer allows class definitions in friend declarations (IR0005-0168)
+
+*  the compiler now accepts static_casts from NULL to an incomplete
+   class type (IR0004-1390)
+
+======================
+2.4 Beta release fixes
+======================
+
+*  fixes a bug with class conversions in ?: expressions
+   (IR0004-1340)
+
+*  fixes an order-of-evaluation bug with very complex expressions
+   that use placement new allocations to initialize class temporaries
+   (IR0004-1230)
+
+*  fix for broken "MPW C pointer rules" (IR0004-1453-3)
+
+*  fixes a spurious ambiguous funccall error with ctor templates (IR0005-0160)
+
+*  fixes a bug with overloaded pointer-to-member function argument matching
+   (IR0005-0152)
+
+*  changed type of MacOS-style 4-byte character constant (eg 'MTWK') to
+   "unsigned long" as in previous compiler releases
+
+*  fixes a bug with ptm-template-argument cv-qualifer merging (IR0006-0014)
+
+*  fixes a cv-qualifier bug with pointer members in 'const' member functions
+   (IR0006-0294)
+
+*  fixes a number of of bugs with template template parameters
+   (IR0006-0241 / IR0006-0270 / IR0006-0271 / IR0006-0272)
+
+*  fixes an ICE with ambiguous template function arguments
+   (IR0006-0240)
+
+*  fixes a class template instantiation bug with qualified nested classes
+   (IR0006-0258)
+
+*  fixes an ICE with classes that have a virtual and nonvirtual base class
+   with the same name (IR0007-0128)
+
+*  fixes a bug with array reference initializations in aggregates
+
+*  fixes a problem in the enumeration list parser
+
+*  fixes a crash/ICE with "MPW C pointer rules" (IR0007-0179)
+
+*  fixes an IR optimizer bug in the constant folder.  The == and != 
+   operations were incorrectly marked as associative.  That allowed the 
+   constant folder to rewrite ((x==1)==0) to (x==(0==1)), for example.
+
+*  fixes a multiple definition bug with explicit specializations
+   and "inline" (IR0008-0048)
+
+*  fixes an argument matching bug with inherited using declarations 
+
+*  fixes a crash/ICE with certain default arguments (IR0008-0077)
+
+*  fixes an IR optimizer bug in the Common Subexpression Elimination phase
+   that could create a use of an uninitialized temporary (WB1-16852)
+
+*  fixes a crash during syntax check or compile of certain template argument 
+   dependent expressions (IR0009-0044)
+
+*  fixes a crash while trying to deduce a matching function template in the
+   presence of partial specialization arguments (WB1-16533)
+
+*  fixes an illegal conversion bug with ( <expr-list> ) initializations for
+   array references (IR0008-0727)
+
+===============================================================================
+Known Bugs and Incompatibilities in this Version
+===============================================================================
+
+===============================================================================
+New error messages
+===============================================================================
+
+	"illegal or unsupported __attribute__"
+
+		Error   : illegal or unsupported __attribute__
+		Test2.cp line 1   int a __attribute__((bogus)); 
+
+	"cannot create object file '%f'"
+
+	"error writing to object file '%f'"
+
+	"__alignof__() is not supported for SOM classes"
+
+	"illegal macro argument name '%u'"
+
+	"case has an empty range of values"
+
+	"'long long' switch() is not supported"
+
+		back-end does not support 'long long' switch statements
+
+	"'long long' case range is not supported"
+
+		back-end does not support 'long long' case ranges
+
+	"expression has no side effect"
+		see #pragma warn_no_side_effect
+
+	"result of function call is not used"
+		see #pragma warn_resultnotused
+
+	"illegal non-type template argument"
+
+	"cannot find matching deallocation function for '%t'"
+
+		struct X {
+					X();
+			void	operator delete(void *,char *);
+		};
+		void f(X *xp)
+		{
+			xp = new X;	//	error (implicitly calls delete when exception is thrown)
+			delete xp;	//	error
+		}
+
+	"illegal operand '%t'",
+	"illegal operands '%t' %u '%t'",
+	"illegal use of default template-argument",
+	"illegal UUID syntax",
+	"__uuidof() is not supported for SOM classes",
+	"illegal access from '%t' to protected/private member '%o'",
+	"integral type is not large enough to hold pointer",
+	"unknown x86 assembler instruction mnemonic",
+	"illegal use of const/volatile function qualifier sequence"
+	"illegal optimization level for this limited version of CodeWarrior"
+	"no UUID defined for type '%t'"
+
+	"using implicit copy assigment for class with const or reference member ('%t')"
+		struct A
+		{
+			const int mem;
+			A(int i) : mem(i) { }
+		};
+
+		int main(void)
+		{
+			A a(5);
+			a = A(7);	// error
+		}
+
+	"unimplemented assembler instruction/directive"
+	"override of dllimport function '%u' only has application scope"
+
+
+===============================================================================
+Features Previously Added
+===============================================================================
+
+Version: 2.3.x ( __MWERKS__ > 0x2300 )
+
+*  Support for the ISO C++ section 16.8 value for the predefined macro
+   "__cplusplus".  This is set to "199711L" to indicate conformance with 
+   the ISO C++ specification.  (The original C++ ARM only required that 
+   this macro be defined, so this change should not break existing code.)
+
+*  Support for ISO C++ section 2.5 alternate tokens for '#', '{', '}', '[',
+   and ']'.  The mapping table is
+
+   <% == {     %> == }     <: == [     :> == ]     %: == #     %:%: == ##
+
+   These complement the existing "and", "bitor", "or", "xor", "compl",
+   "bitand", "and_eq", "or_eq", "xor_eq", "not", and "not_eq" alternate
+   tokens which were already implemented.
+
+   Note: There are some instances in code where you now have to put an
+   extra space between "<" and ":" to prevent the alternate token
+   substitution, eg:
+
+      reinterpret_cast<::type>(1)		// wrong
+      reinterpret_cast< ::type>(1)		// OK
+      a<::global						// wrong
+      a< ::global						// OK
+      class_template<::type>			// wrong
+      class_template< ::type>			// OK
+
+*  Support for #pragma fullpath_prepdump on|off|reset (default off)
+
+   This option can be used to show the full path of any included files in
+   the comments in a preprocessor dump.  WIth it turned off, only the
+   filename portion of the path is shown.
+
+*  Support for #pragma line_prepdump on|off|reset (default off)
+
+   This option can be used to uncomment the "#line ..." directives
+   in a preprocessor dump. This option it will also preserve the
+   vertical line spacing by inserting empty lines.
+
+*  "#pragma gcc_extensions on" now allows the following non-ANSI C
+   extensions:
+
+   -  automatic struct/array variables can now be initialized with
+      non-const values, eg:
+
+		int foo(int arg)
+		{
+			int arr[2] = { arg, arg+1 };
+		}
+
+   -  sizeof( void ) == 1 /  sizeof( function-type ) == 1
+
+*  C++ code improvements:
+
+   -  avoid NULL checks in class -> base class conversions
+   -  more virtual function calls are rewritten to static
+      function calls
+
+*  use a direct copy for non-class new initializations instead of
+   runtime copy function call.
+
+*  The C9X feature __func__ is supported as a predefined identifier
+   that names the current function.  The GCC extensions __FUNCTION__ 
+   and __PRETTY_FUNCTION__ are also supported, with __FUNCTION__ having
+   the same value as __func__ and __PRETTY_FUNCTION__ mapping to the
+   complete C++ name of the function.
+
+*  #pragma warn_no_side_effect on|off| reset (default: off)
+
+      #pragma warn_no_side_effect on
+      
+      void foo(int a,int b)
+      {
+      	a+b;			//	warning: expression has no side effect
+      	(void)(a+b);	//	'void' cast suppresses warning
+      }
+      
+
+*  #pragma warn_resultnotused on|off|reset (default: off)
+
+      #pragma warn_resultnotused on
+      
+      extern int bar();
+      void foo()
+      {
+      	bar();			//	warning: result of function call is not used
+      	(void)bar();	//	'void' cast suppresses warning
+      }
+
+*  __option(<x>) will now return 'false' instead of an error message
+   if <x> is an unknown option/#pragma.
+
+*  the "no implict 'int' in C++" rule is now enforced
+
+	static a = 1; // error: no implict 'int' in C++
+	extern f();   // error: no implict 'int' in C++
+
+*  the 'template' keyword prefix is now accpeted in qualifed names. The
+   correct usage of the prefix is currently not enforced or checked.
+
+*  #pragma opt_strength_reduction_strict on|off|reset (default: off)
+   
+   This option can be used to disable strength reduction optimizations
+   which could be unsafe because the induction variable has an
+   unsigned type smaller than the pointer type.  Previously, this
+   was controlled solely by the ANSI strict setting.  For example,
+   
+      #include <assert.h>
+      #pragma optimization_level 4
+      #pragma optimize_for_size off
+      #pragma opt_strength_reduction_strict on
+      
+      void main(void)
+      {
+          int arr[260] = {0};
+          int *ptr;
+          unsigned char index;
+          
+          ptr = &arr[1];
+          
+          for (index = -1;index != 3;index++)
+              ptr[index] = 42;
+          
+          /* reduction in strength would change this loop into:
+             temp = &ptr[-1];
+             for (index = -1; index != 3; index++)
+             {
+             	*temp = 42;
+             	temp++;
+             }
+          */
+          
+          assert(arr[0]  == 0);
+          assert(arr[1]  == 42);
+          assert(arr[2]  == 42);
+          assert(arr[3]  == 42);
+          assert(arr[256] == 42);
+          assert(arr[257] == 0);
+          assert(arr[258] == 0);
+          assert(arr[259] == 0);
+      }
+
+*  The ARM Conformance switch on the C/C++ Language preference panel now
+   controls the initial value of the two internal settings listed below.
+   Code that directly uses "#pragma ARM_conform" may need to be modified
+   to use one or both of the new pragmas.
+
+   #pragma ARM_conform [on | off | reset]
+
+   This option controls conformance to the original ARM specification in 
+   several areas:
+
+   -  "protected" access base classes are allowed
+
+   -  the precendence of the conditional operator is different between
+      the ISO C++ 1998 standard and ARM.
+
+   -  The WinABI name mangler will try to be as compatible with Microsoft's
+      VC++ 6 implementation as possible.  This changes the name mangling
+      for function templates, makes the type wchar_t equivalent to
+      unsigned short, and makes struct and class types mangle differently.
+
+   #pragma ARM_scoping [on | off | reset]
+
+   This pragma controls the scope of variables declared in the condition
+   expressions of if, while, and for statements.  When ARM_scoping is on,
+   variables declared in those expressions will be valid until the end of
+   the block that contains the statement.  When ARM_scoping is off, those
+   variables will only be valid until the end of the statement.
+
+===============================================================================
+Bugs Previously Fixed
+===============================================================================
+
+Version: 2.3.x ( __MWERKS__ > 0x2300 )
+
+*  fixes an ICE with certain nested template default argument
+   deductions (IR9907-1259)
+
+*  fixes a bug with pointers-to-member -> pointers-to-member
+   reinterpret_casts (IL9903-0265 / IR9907-0097-1)
+
+*  fixes a template base class bug in the browser data
+
+*  fixes a bug with section declspecs in static class members
+
+*  fixes a bug when incementing converted base class pointers
+   (IR9905-3318)
+
+*  fixes a bug with template argument dependent qualifed templates in
+   class declarations (IR9905-3817)
+
+*  "7.3.3 5: A using-declaration for a member shall be a
+	member-declaration" violations are now detected as an error
+
+*  fixes an internal compiler error with certain illegal template
+   code examples (WB1-6668)
+
+*  fixes a bug that made it possible to access data members of an
+   incomplete class (IR9905-4173)
+
+*  fixes a bug with certain nested template instantiations (IR9905-3711)
+
+*  fixes an ICE with class/member template parameter list mismatches
+
+*  fixes a bug with const/volatile and partial templ<T *>
+   specializations (IR9907-0095)
+
+*  fixes a suprious "derived function differs from virtual base function
+   in return type only" error with certain static member overloads
+
+*  fixes a codegen bug with certain virtual functions that are
+   overloaded by a static member function (IR9907-1901)
+
+*  fixes a bug with non-template argument dependent using-declarations
+   in class templates (IR9907-0096)
+
+*  fixes a vtable setup bug in class templates without a constructor
+   function (IR9907-1093)
+
+*  fixes an ambiguous variable name lookup bug if a variable is
+   visible through a using declaration and a using directive
+
+*  fixes a bug that can trash memory during the construction or
+   destruction of classes with virtual base classes if the alignment
+   mode is changed within a translation unit
+
+*  fixed bugs IR9910-1516 and IR9910-1302
+
+*  fixes IR optimizer bugs in range propagation (IR9909-0700)
+
+     x &= 255; 
+     x &= 255; /* redundant, can be eliminated */
+     x += y;   /* x's range should now be unknown */
+     x &= 255; /* must not be eliminated,       */
+               /* because of x's unknown range! */
+     x -= 1;   /* x's range should now be -1 through 254 */
+     x &= 255; /* must not be eliminated               */
+               /* because of x's negative lower bound! */
+
+*  fixes an IR optimizer bug that caused a crash in the reduction of 
+   certain if statement conditions
+
+*  fixes an IR optimizer bug where the generation of a conditional 
+   operator did not preserve the order of sequence points in certain 
+   unordered regions
+   
+     int func(int condition, int value1, int value2)
+     {
+         int var1, var2;
+         
+         if (condition)
+             var1 = (var2 = value1);
+         else
+             var1 = value2;
+         
+         return var2 + var1;
+     }
+
+   was being transformed incorrectly into
+   
+     int func(int condition, int value1, int value2)
+     {
+         int var2;
+         
+         return var2 + (condition ? (var2 = value1) : value2);
+     }
+
+*  fixes an IR optimizer bug in the regeneration of a conditional 
+   operator when the address of the variable had been taken
+   
+*  fixes an IR optimizer bug which appeared when returns were nested 
+   strangely inside if statements
+   
+*  fixes an IR optimizer bug for those compilers whose code generators 
+   don't tell the optimizer the effects of inline assembly statements.  
+   The optimizer was removing labels that were referenced only by 
+   assembly statements, sometimes causing a crash when the code 
+   generator could not find the expected label.
+   
+*  fixes an IR loop optimizer bug which was causing flow control 
+   problems in static initialization code (IR9907-0480)
+
+*  fixes an IR optimizer bug where the compiler was removing volatile loads
+   from otherwise dead assignments (IR9907-0477)
+
+*  removes an invalid expression transformation from the IR optimizer, 
+   where (y-x) - (x-z) was being transformed into y+z (IR9907-0104)
+
+*  fixes an incorrect expression transformation in the IR optimizer, 
+   where (x+y) + (z-x) was being transformed into x+x instead of y+z
+
+*  fixes a bug that allowed illegal accesses to private member variables
+   in DTSOM classes (IR9907-0307-1)
+
+*  fixes a ICE bug with non-type template argument deduction (IR9907-2411)
+
+*  fixed an operator precedence bug in the preprocessor's expression
+   parser
+
+*  fixes a bug with template argument dependent exception specifications
+   in template member functions
+
+*  fixes a bug with pointer-to-members that are found via a using
+   declaration (IR9908-3919)
+   
+*  fixes a nested class template deduction problem (IR9908-3854)
+
+*  fixes a suprious "const member not initialized" error (IR9908-3917-1)
+
+*  fixes a CError.c ICE followup error message WB1-9428
+
+*  fixes a bug with template argument dependent qualified names
+   non-type arguments (IR9907-2527 / IR9908-4284 / IR9909-0401)
+
+*  fixes a "#pragma warn_no_side_effect on" related ICE (IR9909-2028)
+
+*  fixes a precompiled header ICE with anonymous unions (IR9907-2300)
+
+
+===============================================================================
+Contacting Metrowerks
+===============================================================================
+
+Use the forms found in the Release Notes folder on the CD to submit:
+
+    Technical Support    cw_support@metrowerks.com
+    Report Bugs:         cw_bug@metrowerks.com
+    Suggestions:         cw_suggestion@metrowerks.com
+
+See the CodeWarrior_on_the_Nets document in the Release Notes folder for
+more contact information, including a list of Internet newsgroups,
+online services, and factory update sites.
+
+===============================================================================
+
+Metrowerks Corporation
