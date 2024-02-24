@@ -13,6 +13,7 @@ struct Track {
     u8 musicSlot;
     u32 crc32;
 };
+
 struct Cup {
     u32 idx;
     Track tracks[4];
@@ -83,7 +84,7 @@ public:
     //Slot Expansion
     void SaveSelectedCourse(const PushButton& courseButton);
     PulsarCupId GetNextCupId(PulsarCupId cupId, s32 direction) const;
-    PulsarId RandomizeTrack(Random& random) const;
+    PulsarId RandomizeTrack(Random* random = nullptr) const;
     static bool IsRegsSituation();
 
     //Reg Check

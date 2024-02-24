@@ -1,17 +1,14 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows;
-using System.Drawing;
-using static PulsarPackCreator.MainWindow;
-using System.Windows.Shapes;
 using System.Runtime.Versioning;
+using System.Windows;
+using static Pulsar_Pack_Creator.MainWindow;
 
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     /// <summary>
     /// Interaction logic for parent.xaml
@@ -43,7 +40,7 @@ namespace PulsarPackCreator
             {
                 if (!CheckTrackName(cur))
                 {
-                    MsgWindow.Show($"Track {cur} has an invalid name as it contains one of <>:\"/\\|?*", this);
+                    MsgWindow.Show($"Track {cur} has an invalid name as it contains one of <>:\"/|?", this);
                     return;
                 }
             }
@@ -58,11 +55,13 @@ namespace PulsarPackCreator
                 return;
             }
 
+            /*
             if (namesImport.Length > 100 || iconImport.Length > 100)
             {
                 MsgWindow.Show("You can only customize the names and images of up to 100 cups.");
                 return;
             }
+            */
 
             for (int i = 0; i < iconImport.Length; i++)
             {

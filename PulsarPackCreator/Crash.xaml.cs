@@ -1,14 +1,10 @@
-﻿using Pulsar_Pack_Creator;
-using System;
+﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Windows;
-using System.Windows.Interop;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     public partial class CrashWindow : Window
     {
@@ -40,7 +36,7 @@ namespace PulsarPackCreator
         {
             PulsarGame.ExceptionFile rawFile = PulsarGame.BytesToStruct<PulsarGame.ExceptionFile>(raw);
             region = ((char)(byte)rawFile.region);
-            
+
             PulsarGame.OSError error = (PulsarGame.OSError)rawFile.error;
             string errorString;
             if (error == PulsarGame.OSError.OSERROR_DSI) errorString = "DSI";
@@ -80,13 +76,13 @@ namespace PulsarPackCreator
             }
             CrashText.Text = crash;
         }
-            
+
         private void OnDropFile(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                BigEndianReader bin = new BigEndianReader(File.Open(files[0], FileMode.Open));
+                IO.BigEndianReader bin = new IO.BigEndianReader(File.Open(files[0], FileMode.Open));
                 int magic = bin.ReadInt32();
                 bin.BaseStream.Position -= 4;
                 if (magic == 0x50554c44)
@@ -97,7 +93,7 @@ namespace PulsarPackCreator
             }
         }
 
-        private string CheckSymbols(UInt32 address)
+        private string CheckSymbols(uint address)
         {
             try
             {
@@ -115,9 +111,9 @@ namespace PulsarPackCreator
                         if (splices[idx] == "#") throw new Exception();
                         string[] curSplice = splices[idx].Split(' ');
                         int isNegative = curSplice[2].Contains('-') ? -1 : 1;
-                        UInt32 palAddress = (UInt32)((int)address - isNegative * int.Parse(curSplice[2].Replace("-0x", "").Replace("+0x", ""), NumberStyles.HexNumber));
-                        if (UInt32.Parse(curSplice[0], NumberStyles.HexNumber) <= palAddress &&
-                        palAddress < UInt32.Parse(curSplice[1], NumberStyles.HexNumber))
+                        uint palAddress = (uint)((int)address - isNegative * int.Parse(curSplice[2].Replace("-0x", "").Replace("+0x", ""), NumberStyles.HexNumber));
+                        if (uint.Parse(curSplice[0], NumberStyles.HexNumber) <= palAddress &&
+                        palAddress < uint.Parse(curSplice[1], NumberStyles.HexNumber))
                         {
                             address = palAddress;
                             break;
@@ -130,8 +126,8 @@ namespace PulsarPackCreator
                 {
                     string[] curLine = lines[i].Split(' ');
                     string[] nextLine = lines[i + 1].Split(' ');
-                    if (UInt32.Parse(curLine[0], NumberStyles.HexNumber) <= address &&
-                        address < UInt32.Parse(nextLine[0], NumberStyles.HexNumber))
+                    if (uint.Parse(curLine[0], NumberStyles.HexNumber) <= address &&
+                        address < uint.Parse(nextLine[0], NumberStyles.HexNumber))
                     {
                         return region == 'P' ? curLine[1] : $"{curLine[1]}(0x{address:X8})";
                     }

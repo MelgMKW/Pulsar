@@ -20,11 +20,17 @@ void ExpFroomMessages::OnModeButtonClick(PushButton& button, u32 hudSlotId) {
 }
 
 void ExpFroomMessages::OnCourseButtonClick(PushButton& button, u32 hudSlotId) {
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
     u32 clickedIdx = clickedButtonIdx;
     u32 id = button.buttonId;
-    CupsConfig* cupsConfig = CupsConfig::sInstance;
     PulsarId pulsarId = static_cast<PulsarId>(id);
-    if(clickedIdx < 2) pulsarId = cupsConfig->ConvertTrack_IdxToPulsarId(id); //vs or teamvs
+    if(clickedIdx < 2) {
+        if(id == this->msgCount - 1) {
+            pulsarId = cupsConfig->RandomizeTrack();
+        }
+        else pulsarId = cupsConfig->ConvertTrack_IdxToPulsarId(id); //vs or teamvs
+
+    }
     else pulsarId = pulsarId + 0x20U;
     cupsConfig->winningCourse = pulsarId;
     PushButton& clickedButton = this->messages[0].buttons[clickedIdx];
@@ -46,7 +52,7 @@ void OnStartButtonFroomMsgActivate() {
         if(msg->isOnModeSelection) {
             msg->isOnModeSelection = false;
             if(msg->clickedButtonIdx >= 2) msg->msgCount = 10;
-            else msg->msgCount = CupsConfig::sInstance->GetEffectiveTrackCount();
+            else msg->msgCount = CupsConfig::sInstance->GetEffectiveTrackCount() + 1;
             msg->onModeButtonClickHandler.ptmf = &ExpFroomMessages::OnCourseButtonClick;
 
         }
@@ -91,7 +97,19 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
         if(messages->clickedButtonIdx >= 2) {
             return BMG_BATTLE + messages->curPageIdx * 4 + rowIdx;
         }
-        else return GetTrackBMGId(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(messages->curPageIdx)) + rowIdx);
+        else {
+            if(rowIdx + messages->curPageIdx * 4 == messages->msgCount - 1) {
+                return BMG_RANDOM_TRACK;
+            }
+            else {
+                CupsConfig* cupsConfig = CupsConfig::sInstance;
+                bool hasRegs = cupsConfig->HasRegs();
+                u32 idx = messages->curPageIdx;
+                if(!hasRegs) idx += 8;
+                return GetTrackBMGId(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(idx)) + rowIdx);
+            }
+        }
+
     }
     else return Pages::FriendRoomManager::GetMessageBmg(packet, 0);
 }

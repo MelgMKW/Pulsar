@@ -37,7 +37,7 @@ void CtrlRaceTrackInfoDisplay::Load() {
     u32 authorId = BMG_NINTENDO;
     if(bmgId >= BMG_TRACKS) authorId = bmgId + BMG_AUTHORS - BMG_TRACKS;
     info.bmgToPass[1] = authorId;
-    this->SetMsgId(BMG_INFO_DISPLAY, &info);
+    this->SetMessage(BMG_INFO_DISPLAY, &info);
 }
 
 }//namespace UI

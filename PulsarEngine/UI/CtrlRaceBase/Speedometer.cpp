@@ -38,7 +38,7 @@ void CtrlRaceSpeedo::Load(const char* variant, u8 id) {
         nullptr
     };
 
-    loader.Load(UI::raceFolder, "speedometer", variant, anims);
+    loader.Load(UI::raceFolder, "PULSpeedo", variant, anims);
 
     this->Animate();
     return;

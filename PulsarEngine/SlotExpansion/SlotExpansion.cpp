@@ -73,6 +73,7 @@ kmCall(0x80540820, FormatTrackPath);
 kmCall(0x80540870, FormatTrackPath);
 kmCall(0x80541bc4, FormatTrackPath);
 kmWrite32(0x80531fbc, 0x38800000); //fix incorrect courseId array read
+kmWrite32(0x805407d4, 0x48000020); //prevent reuse of szs if same courseId
 
 //Fixes GP since it usually uses racedata's courseId which only holds the slot
 RacedataScenario* UseCorrectCourse(RacedataScenario* scenario) {
@@ -107,7 +108,7 @@ void VSRaceRandomFix(SectionParams* m98) { //properly randomizes tracks and sets
     bool isRepeat;
     for(int i = 0; i < 32; ++i) {
         do {
-            id = cupsConfig->RandomizeTrack(random);
+            id = cupsConfig->RandomizeTrack(&random);
             isRepeat = false;
             for(int j = 0; j < i; ++j) {
                 if(m98->vsTracks[j] == id) {

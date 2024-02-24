@@ -15,7 +15,6 @@ public:
         Settings::Mgr::GetInstance()->RequestSave();
     }
     static void UpdateCupData(PulsarCupId id, LayoutUIControl& control);
-    void OnActivate() override;
     void AfterControlUpdate() override;
     UIControl* CreateControl(u32 controlId) override;
     void OnMoviesActivate(u32 r4) override;

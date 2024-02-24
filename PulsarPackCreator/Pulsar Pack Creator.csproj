@@ -21,6 +21,15 @@
 		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Remove="File.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ApplicationDefinition Remove="App.xaml"/>
+		<Page Include="App.xaml"/>
+	</ItemGroup>
+
   <ItemGroup>
     <None Remove="Resources\mkwiiBG.png" />
     <None Remove="Resources\Pulsar.ico" />

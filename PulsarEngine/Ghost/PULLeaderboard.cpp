@@ -47,9 +47,9 @@ void Leaderboard::CreateFile(PulsarId id) {
 void Leaderboard::SetTrack(PulsarId id) {
     if(CupsConfig::IsReg(id)) return;
     this->crc32 = CupsConfig::sInstance->GetCRC32(id);
-    wchar_t trackName[0x100];
+    char trackName[0x100];
     UI::GetTrackBMG(trackName, id);
-    snprintf(this->name, trackNameLen, "%ls", trackName);
+    snprintf(this->name, trackNameLen, "%s", trackName);
 }
 
 

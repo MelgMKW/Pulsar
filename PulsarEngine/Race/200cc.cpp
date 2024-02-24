@@ -61,7 +61,7 @@ void FixGhostBrakeDrifting(Input::GhostWriter* writer, u16 buttonActions, u8 qua
     register Input::ControllerHolder* controllerHolder;
     asm(mr controllerHolder, r30;);
     EnableBrakeDrifting(*controllerHolder);
-    writer->WriteFrame(controllerHolder->inputStates[0].buttonActions, quantisedStickX, quantisedStickY, motionControlFlickUnmirrored);
+    writer->WriteFrame(controllerHolder->inputStates[0].buttonActions & ~0x20, quantisedStickX, quantisedStickY, motionControlFlickUnmirrored);
 }
 kmCall(0x80521828, FixGhostBrakeDrifting);
 

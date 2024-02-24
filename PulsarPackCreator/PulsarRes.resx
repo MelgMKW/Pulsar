@@ -118,17 +118,29 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="BMG100" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\BMG100.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="BMG200" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\BMG200.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="BMG" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\BMG.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Code" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Code.pul;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="CommonAssets" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\CommonAssets.szs;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cygcrypto_1_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\cygcrypto-1.1.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cygncursesw_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\cygncursesw-10.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cygpng16_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\cygpng16-16.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cygwin1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\cygwin1.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cygz" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\cygz.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="Files" xml:space="preserve">
     <value />

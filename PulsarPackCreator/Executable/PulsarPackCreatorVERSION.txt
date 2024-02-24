@@ -1,3 +1,41 @@
+·Updated to 1.2.0
+Creator Changes:
+-Added a new tab to edit regular tracks experts. It is only visible if regs are enabled.
+-Added a button to edit Pulsar BMGs directly. Note that you will need to edit these BMGs every time, since BMG ids could be removed, changed or added by any given update. For your own custom BMGs, taking MenuSingle_X.szs "common.bmg" file, editing it to your needs and putting it in UIAssets is a guaranteed permanent solution.
+-Cup names and icons are no longer limited to 100. If you use more than 100 icons, the images resolution will gradually get reduced to preserve a small UIAssets.szs file.
+-Now includes Wiimm tools dlls.
+-No longer adds a space to every track on import.
+-Now asks if the XML should be created on Build Config Only click.
+-Now creates semi-unique (the mod name and a random 0-255 number) riivolution patch IDs on every build to prevent conflicts.
+-Only one instance of the software can now exist.
+-Fixed text being allowed in various number-only boxes and leading to a crash.
+-Fixed bad date imports when trying to import config files built on a different locale.
+-Fixed bad CC distribution imports.
+-Improved build and import code.
+Engine Changes:
+-Host always wins now provides a random button.
+-Speedometer assets (in RaceAssets.szs) are now called PULSpeedo to prevent conflicts with CTGP's speedometer.
+-COOB no longer activates on normal AREAs type 10.
+-Fixed a crash that occured if you didn't select a track after selecting a cup online.
+-Fixed an offline bug where a given SZS would get reused if it was on the same track slot as the previously played track.
+-Fixed a badly ported NTSC-U address that was causing a crash when an item landed on the Maple Treeway bridge.
+-Fixed infinite track randomizing issues.
+-Lap splits are now displayed for up to 9 laps (credit to WingCapMan for the UI assets).
+-Rear-view inputs no longer get stored into ghost files. Files that were already saved with rear-view inputs will unfortunately look backwards when replayed.
+
+·Updated to 1.1.3
+Creator Changes:
+-Fixed bad XMLs getting created.
+
+·Updated to 1.1.2
+Creator Changes:
+-Trying to build a pack of over 100 cups no longer throws an exception.
+-Fixed mass import window scaling issue.
+-Now creates a CTBRSTM folder inside the pack folder. This is where BRSTM expansion files need to be put.
+-Now creates a My Stuff folder.
+Engine Changes:
+-Fixed author display BMG issue in VS intro.
+
 ·Updated to 1.1.1
 Creator Changes:
 -Import no longer fails for configs of over 100 cups.

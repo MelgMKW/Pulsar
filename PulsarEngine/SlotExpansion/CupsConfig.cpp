@@ -89,13 +89,17 @@ void CupsConfig::ToggleCTs(bool enabled) {
     ctsCupCount = count;
 }
 
-PulsarId CupsConfig::RandomizeTrack(Random& random) const {
+PulsarId CupsConfig::RandomizeTrack(Random* random) const {
+    Random rand;
+    if(random == nullptr) {
+        random = &rand;
+    }
     u32 pulsarId;
     if(this->HasRegs()) {
-        pulsarId = random.NextLimited(this->GetCtsTrackCount() + 32);
+        pulsarId = random->NextLimited(this->GetCtsTrackCount() + 32);
         if(pulsarId > 31) pulsarId += (0x100 - 32);
     }
-    else pulsarId = random.NextLimited(this->GetCtsTrackCount()) + 0x100;
+    else pulsarId = random->NextLimited(this->GetCtsTrackCount()) + 0x100;
     return static_cast<PulsarId>(pulsarId);
 }
 

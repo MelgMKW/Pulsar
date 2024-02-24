@@ -1,19 +1,19 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
-using static PulsarPackCreator.MsgWindow;
-using System;
-using System.Runtime.InteropServices;
 using System.Windows.Interop;
-using System.Collections.Generic;
 using System.Windows.Media.Imaging;
+using static Pulsar_Pack_Creator.MsgWindow;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     public partial class SettingsWindow : Window
     {
@@ -60,7 +60,7 @@ namespace PulsarPackCreator
         private void OnUpdateClick(object sender, RoutedEventArgs e)
         {
             bool hasUpdate = TryUpdate();
-            if(!hasUpdate) MsgWindow.Show("You are already using the latest version.", this);
+            if (!hasUpdate) MsgWindow.Show("You are already using the latest version.", this);
         }
 
         private void OnSaveSettingsClick(object sender, RoutedEventArgs e)
@@ -68,17 +68,27 @@ namespace PulsarPackCreator
             Hide();
         }
 
-        public static string GetChangelog()
+        public static bool GetChangelog(out string changelog)
         {
-            using (HttpClient client = new HttpClient())
-            {
-                return client.GetStringAsync("https://pulsar.brawlbox.co.uk/PulsarPackCreatorVERSION.txt").Result;
+            try { 
+                using (HttpClient client = new HttpClient())
+                {
+                    changelog = client.GetStringAsync("https://pulsar.brawlbox.co.uk/PulsarPackCreatorVERSION.txt").Result; ;
+                    return true;
+                }
             }
+            catch(Exception ex)
+            {
+                changelog = ex.Message;
+                return false;        }
         }
 
-        public static string GetVersion()
+        public static bool GetVersion(out string version)
         {
-            return GetChangelog().Split("\r\n")[0].Replace("·Updated to ", "");
+            bool ret = GetChangelog(out string changelog);
+            version = changelog;
+            if (ret) version = version.Split("\r\n")[0].Replace("·Updated to ", "");
+            return ret;
         }
 
         public static bool TryUpdate()
@@ -162,29 +172,40 @@ namespace PulsarPackCreator
         public static bool CheckUpdates()
         {
             string version = (Assembly.GetExecutingAssembly().GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute).InformationalVersion.ToString();
-            string newVersion = GetVersion();
+            bool ret = GetVersion(out string newVersion);
+            if (!ret)
+            {
+                MsgWindow.Show(newVersion, "Update server uncontactable");
+                return false;
+            }
+                
+                
             return newVersion != version;
         }
 
         public static void DisplayChangelog(string oldVersion)
         {
-            string[] allChangelogs = GetChangelog().Split("\r\n");
-            string changelog = allChangelogs[0];
-            for (int i = 1; i < allChangelogs.Length; i++)
-            {
-                string curLine = allChangelogs[i];
-                if (curLine.Contains("·Updated"))
-                {
-                    string version = curLine.Split(" ")[2];
-                    if (version == oldVersion) break;
-                }
-                else if(curLine != "")
-                {
-                    changelog += $"\n{curLine}";
-                }
-            }
+            bool ret = GetChangelog(out string changelogRaw);
 
-            MsgWindow.Show(changelog);
+           if (ret) {
+                string[] allChangelogs = changelogRaw.Split("\r\n");
+                string changelog = allChangelogs[0];
+                for (int i = 1; i < allChangelogs.Length; i++)
+                {
+                    string curLine = allChangelogs[i];
+                    if (curLine.Contains("·Updated"))
+                    {
+                        string version = curLine.Split(" ")[2];
+                        if (version == oldVersion) break;
+                    }
+                    else if (curLine != "")
+                    {
+                        changelog += $"\n{curLine}";
+                    }
+                }
+
+                MsgWindow.Show(changelog);
+            }
         }
 
         private void OnExitRemindToggle(object sender, RoutedEventArgs e)
@@ -221,13 +242,13 @@ namespace PulsarPackCreator
                     attribute = DWMWA_USE_IMMERSIVE_DARK_MODE;
                 }
                 int useImmersiveDarkMode = isLight ? 0 : 1;
-                foreach(Window window in windows)
+                foreach (Window window in windows)
                 {
                     WindowInteropHelper helper = new WindowInteropHelper(window);
                     HwndSource source = HwndSource.FromHwnd(helper.EnsureHandle());
                     DwmSetWindowAttribute(source.Handle, attribute, ref useImmersiveDarkMode, sizeof(int));
                 }
-            }              
+            }
         }
 
 
@@ -259,7 +280,7 @@ namespace PulsarPackCreator
             Application.Current.Resources["fg"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(fg.A, fg.R, fg.G, fg.B));
             Application.Current.Resources["AppBg"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(appBg.A, appBg.R, appBg.G, appBg.B));
             //Application.Current.Resources["ComboBox.Static.Background"] = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(bg.A, bg.R, bg.G, bg.B));
-            
+
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             if (mode == ColorMode.Space_Mode)
@@ -275,7 +296,7 @@ namespace PulsarPackCreator
                 Application.Current.Resources["imageBg"] = image;
 
             }
-            
+
         }
     }
 }

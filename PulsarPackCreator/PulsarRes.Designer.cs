@@ -61,22 +61,26 @@ namespace Pulsar_Pack_Creator {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized string similar to #BMG
+        ///
+        ///   58a  = {CC}cc
+        ///   7dd	= Wiimmfi
+        ///   7de	= Riivolution Channel
+        ///   7e8	= Play via Wiimmfi!
+        ///   7e9	= Play with a friend via Wiimmfi!
+        ///   7ea	= Return to Riivolution!
+        ///   7f1	= Wiimmfi (1P)
+        ///   7f2	= Wiimmfi (2P)
+        ///   818	= You will now disconnect\nfrom Wiimmfi and\nreturn to the main menu.
+        ///   841	= \z{602,0} and \z{802,120000}\nwill connect to Wiimmfi\ntogether. Is this OK?
+        ///   bbf  = {CC}cc\n\z{800,32}Bikes Only
+        ///   bc3  = {CC}cc\n\z{800,32}Karts and Bikes
+        ///   d54  = {CC}cc
+        ///   d58  = {CC}cc clas [rest of string was truncated]&quot;;.
         /// </summary>
-        public static byte[] BMG100 {
+        public static string BMG {
             get {
-                object obj = ResourceManager.GetObject("BMG100", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] BMG200 {
-            get {
-                object obj = ResourceManager.GetObject("BMG200", resourceCulture);
-                return ((byte[])(obj));
+                return ResourceManager.GetString("BMG", resourceCulture);
             }
         }
         
@@ -96,6 +100,56 @@ namespace Pulsar_Pack_Creator {
         public static byte[] CommonAssets {
             get {
                 object obj = ResourceManager.GetObject("CommonAssets", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygcrypto_1_1 {
+            get {
+                object obj = ResourceManager.GetObject("cygcrypto_1_1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygncursesw_10 {
+            get {
+                object obj = ResourceManager.GetObject("cygncursesw_10", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygpng16_16 {
+            get {
+                object obj = ResourceManager.GetObject("cygpng16_16", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygwin1 {
+            get {
+                object obj = ResourceManager.GetObject("cygwin1", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] cygz {
+            get {
+                object obj = ResourceManager.GetObject("cygz", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -249,7 +303,7 @@ namespace Pulsar_Pack_Creator {
         ///		&lt;section name=&quot;{$pack}&quot;&gt;
         ///			&lt;option name=&quot;Pack&quot;&gt;
         ///				&lt;choice name=&quot;Enabled&quot;&gt;
-        ///					&lt;patch id=&quot;PackLoadPack&quot;/&gt;
+        ///					&lt;patch id=&quot;{$pack}LoadPack&quot;/&gt;
         ///				&lt;/choice&gt;
         ///			&lt;/option&gt;
         ///			&lt;option name=&quot;My Stuff&quot;&gt;
@@ -257,13 +311,13 @@ namespace Pulsar_Pack_Creator {
         ///					&lt;patch id=&quot;CTGPLoad&quot;/&gt;
         ///				&lt;/choice&gt;
         ///				&lt;choice name=&quot;From Pack&quot;&gt;
-        ///					&lt;patch id=&quot;PackLoad&quot;/&gt;
+        ///					&lt;patch id=&quot;{$pack}Load&quot;/&gt;
         ///				&lt;/choice&gt;
         ///			&lt;/option&gt;
         ///		&lt;/section&gt;
         ///	&lt;/options&gt;	
-        ///	&lt;patch id=&quot;PackLoadPack&quot;&gt;
-        ///		&lt;memory offset=&quot;0x80242698&quot; value=&quot;4BDC1968&quot; original=&quot;4e8000 [rest of string was truncated]&quot;;.
+        ///	&lt;patch id=&quot;{$pack}LoadPack&quot;&gt;
+        ///		&lt;memory offset=&quot;0x80242698&quot; value=&quot;4BDC1968&quot; origina [rest of string was truncated]&quot;;.
         /// </summary>
         public static string XML {
             get {

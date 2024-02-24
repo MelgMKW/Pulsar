@@ -1,45 +1,41 @@
-﻿using Pulsar_Pack_Creator;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation;
-using System.Windows.Media.Imaging;
 using static PulsarGame;
 
-namespace PulsarPackCreator
+namespace Pulsar_Pack_Creator
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+
+    partial class MainWindow : Window
     {
-
-        public static int SECTIONCOUNT = 3;
-        public static int CONFIGVERSION = 1;
-        public static int INFOVERSION = 1;
-        public static int CUPSVERSION = 1;
-
-        public static UInt16[] blockingValues = { 0, 2, 4, 8, 16, 32 };
+   
+        public static ushort[] blockingValues = { 0, 2, 4, 8, 16, 32 };
         public static string[] regsValues = { "No regular tracks", "8 first cups = regular cups", "8 last cups = regular cups" };
 
         //Dynamic
-        public UInt16 curCup = 0;
+        public ushort curCup = 0;
 
         //Userdata
         //Options
-        public UInt16 ctsCupCount = 1;
+        public ushort ctsCupCount = 1;
         public string date = "01/01/2000";
+        public ushort[] trophyCount;
 
         //Info
-        Parameters parameters;
+        public Parameters parameters { get; private set; }
 
         //Tracks
         public List<Cup> cups;
+
+        //Regs Ghosts
+        public ushort curRegsCup = 0;
+        public string[,,] regsExperts = new string[8, 4, 4];
 
         //Windows
         public static MassImportWindow importWindow;
@@ -49,7 +45,8 @@ namespace PulsarPackCreator
         public static MsgWindow messageWindow;
 
         public Task extractTPL;
-        public CancellationTokenSource cancelToken;
+
+
         //public List<byte> extSlotToTrackId;
         //public List<byte> extSlotToMusicSlot;
         //public List<string> fileNames;
@@ -59,20 +56,18 @@ namespace PulsarPackCreator
 
         public MainWindow()
         {
+            trophyCount = new ushort[4];
             parameters = new Parameters();
             cups = new List<Cup>();
             Cup initial = new Cup(0);
             cups.Add(initial);
-            
             InitializeComponent();
 
             importWindow = new MassImportWindow(this);
-            cupsImportWindow = new MassCupsImportWindow(this);
             crashWindow = new CrashWindow();
             settingsWindow = new SettingsWindow();
-            messageWindow = new MsgWindow();
-            cancelToken = new CancellationTokenSource();
 
+            messageWindow = new MsgWindow();
 
             string version = (Assembly.GetExecutingAssembly().GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute)) as AssemblyInformationalVersionAttribute).InformationalVersion.ToString();
             Title = "Pulsar Pack Creator " + version;
@@ -120,11 +115,13 @@ namespace PulsarPackCreator
 
             CupName.Text = Cup.defaultNames[0];
             CupIcon.Text = $"{Cup.defaultNames[0]}.png";
-            
+
             CC100.Text = $"{parameters.prob100cc}";
             CC150.Text = $"{parameters.prob150cc}";
             CCMirror.Text = $"{parameters.probMirror}";
             CupCount.Text = $"{ctsCupCount}";
+
+            UpdateCurRegsPage(0);
 
             Show();
             messageWindow.Owner = this;
@@ -137,9 +134,10 @@ namespace PulsarPackCreator
             Directory.CreateDirectory($"input/{ttModeFolders[1, 1]}");
             Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
             Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
-            extractTPL = ExtractDefaultTPLs();
-            bool checkUpdates = Pulsar_Pack_Creator.Properties.Settings.Default.AutoUpdate;
-            
+            extractTPL = IO.IOBase.ExtractDefaultTPLs();
+
+            bool checkUpdates = Properties.Settings.Default.AutoUpdate;
+
             string[] args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
@@ -155,9 +153,10 @@ namespace PulsarPackCreator
                     {
                         checkUpdates = false;
                         SettingsWindow.DisplayChangelog(args[3]);
+
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MsgWindow.Show(ex.Message);
                 }
@@ -167,7 +166,18 @@ namespace PulsarPackCreator
             {
                 SettingsWindow.TryUpdate();
             }
-           
+
+            if (!Directory.Exists("input"))
+            {
+                Directory.CreateDirectory("input");
+                Directory.CreateDirectory($"input/{ttModeFolders[0, 1]}");
+                Directory.CreateDirectory($"input/{ttModeFolders[1, 1]}");
+                Directory.CreateDirectory($"input/{ttModeFolders[2, 1]}");
+                Directory.CreateDirectory($"input/{ttModeFolders[3, 1]}");
+            }
+
+            File.WriteAllText("temp/PulsarBMG.txt", PulsarRes.BMG);
+
         }
     }
 }

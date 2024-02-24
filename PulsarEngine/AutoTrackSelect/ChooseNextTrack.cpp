@@ -82,7 +82,9 @@ void ChooseNextTrack::OnActivate() {
     this->pageId = PAGE_TT_PAUSE_MENU;
     RaceMenu::OnActivate();
     this->pageId = PAGE_GHOST_RACE_ENDMENU;
+    //this->buttons[3].SetMessage(BMG_RANDOM_TRACK);
     this->UpdateButtonInfo(0); //to fix the bad IDs from the array
+    this->message->positionAndscale[1].position.y = 180.0f;
     this->countdown.SetInitial(10.0f);
     this->countdown.isActive = true;
     this->countdownControl.AnimateCurrentCountDown();
@@ -107,10 +109,10 @@ int ChooseNextTrack::GetMessageBMG() const {
     return this->controlBMGId;
 }
 u32 ChooseNextTrack::GetButtonCount() const {
-    return 4;
+    return this->isBattle ? 4 : 5;
 }
 const u32* ChooseNextTrack::GetVariantsIdxArray() const {
-    static const u32 array[4] ={ 0,1,2,4 }; //can't use 3 because 808da7a8 of variant names
+    static const u32 array[5] ={ 0,1,2,4,5 }; //can't use 3 because 808da7a8 of variant names
     return array;
 }
 
@@ -141,7 +143,7 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
         for(int i = 0; i < 4; ++i) {
             u32 curId = this->curPageIdx * 4 + i;
             this->buttons[i].buttonId = curId + 0x20;
-            this->buttons[i].SetMsgId(BMG_BATTLE + curId);
+            this->buttons[i].SetMessage(BMG_BATTLE + curId);
         }
     }
     else {
@@ -155,14 +157,19 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
         this->curPageIdx = ret;
         for(int i = 0; i < 4; ++i) {
             this->buttons[i].buttonId = this->curPageIdx * 4 + i;
-            this->buttons[i].SetMsgId(UI::GetTrackBMGId(static_cast<PulsarId>(this->buttons[i].buttonId)));
+            this->buttons[i].SetMessage(UI::GetTrackBMGId(static_cast<PulsarId>(this->buttons[i].buttonId)));
         }
     }
 }
 
 void ChooseNextTrack::OnButtonClick(PushButton& button, u32 hudSlotId) {
     CupsConfig* cupsConfig = CupsConfig::sInstance;
-    cupsConfig->winningCourse = static_cast<PulsarId>(button.buttonId);
+    if(button.buttonId == 5) {
+        PulsarId next = cupsConfig->RandomizeTrack();
+        if(cupsConfig->winningCourse == next) next = cupsConfig->RandomizeTrack();
+        cupsConfig->winningCourse = next;
+    }
+    else cupsConfig->winningCourse = static_cast<PulsarId>(button.buttonId);
     cupsConfig->selectedCourse = cupsConfig->winningCourse;
     this->EndStateAnimated(button.GetAnimationFrameSize(), 0);
     RaceData::sInstance->menusScenario.settings.courseId = cupsConfig->GetCorrectTrackSlot();

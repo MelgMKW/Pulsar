@@ -1,4 +1,4 @@
-﻿<Window x:Class="PulsarPackCreator.MassImportWindow"
+﻿<Window x:Class="Pulsar_Pack_Creator.MassImportWindow"
         Name="MassImport"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -31,7 +31,7 @@
             <Setter Property="BorderThickness"              Value="2"/>
             <Setter Property="TextAlignment"                Value="Center"/>
             <Setter Property="TextWrapping"                 Value="Wrap"/>
-            <Setter Property="Height"                       Value="650"/>
+            <Setter Property="Height"                       Value="700"/>
             <Setter Property="VerticalScrollBarVisibility"  Value="Auto"/>
             <Setter Property="AcceptsReturn"                Value="True"/>
         </Style>
@@ -49,9 +49,9 @@
             </Grid.ColumnDefinitions>
 
             <Button x:Name="SaveImport" Grid.Column="4"
-                    Margin="70,723,0,0" Height="25" Width="60"
+                    Margin="124,753,0,0" Height="25" Width="60"
                     Content="Save"  
-                    Click="OnSaveImportClick" RenderTransformOrigin="0.504,0.847" />
+                    Click="OnSaveImportClick" />
             <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0">
                 <TextBox x:Name="NamesImport"        Width="240"  Style="{StaticResource Boxes}"/>
             </Border>

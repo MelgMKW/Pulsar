@@ -40,13 +40,13 @@ void FixStartMessageFroom(CtrlRaceWifiStartMessage* startMsg, u32 bmgId, TextInf
         info->intToPass[0] = sectionMgr->sectionParams->currentRaceNumber + 1;
         info->intToPass[1] = System::sInstance->racesPerGP + 1;
     }
-    startMsg->SetMsgId(bmgId, info);
+    startMsg->SetMessage(bmgId, info);
 }
 kmCall(0x807f8b7c, FixStartMessageFroom);
 
 void DisplayDate(CtrlMenuPressStart* start) {
     start->Load();
-    start->SetMsgId(BMG_DATE);
+    start->SetMessage(BMG_DATE);
 }
 kmCall(0x8063ac58, DisplayDate);
 
