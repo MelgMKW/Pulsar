@@ -319,7 +319,7 @@ int SettingsPanel::GetNextIdx(s32 direction) {
 }
 
 /*
-void TextUpDownValueControl::SetMsgId(u32 optionId) {
+void TextUpDownValueControl::SetMessage(u32 optionId) {
     TextUpDownValueControl::TextControl* text = this->activeTextValueControl;
     u32 id = this->GetTextId(text);
     const u32 bmgId = BMG_SCROLLER_SETTINGS +

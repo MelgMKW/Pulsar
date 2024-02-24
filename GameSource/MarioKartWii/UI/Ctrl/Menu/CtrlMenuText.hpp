@@ -20,7 +20,7 @@ public:
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 807e9898
     int GetRuntimeTypeInfo() const override; //0x28 807e9bec
     const char* GetClassName() const override; //0x2c 807e9230
-    void SetMsgId(u32 bmgId, const TextInfo* text = nullptr); //807e987c
+    void SetMessage(u32 bmgId, const TextInfo* text = nullptr); //807e987c
     void Load(bool r4); //807e947c
 }; //total size 0x174
 
@@ -31,7 +31,7 @@ public:
     int GetRuntimeTypeInfo() const override; //0x28 807e9be0
     const char* GetClassName() const override; //0x2c 807e9240
     void Load(); //807e9904
-    void SetMsgId(u32 bmgId, const TextInfo* text = nullptr); //807e9a38
+    void SetMessage(u32 bmgId, const TextInfo* text = nullptr); //807e9a38
 }; //total size 0x174
 
 class CtrlMenuBackButton : public PushButton {

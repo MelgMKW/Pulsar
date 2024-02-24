@@ -16,7 +16,7 @@ public:
     void AfterControlUpdate() override; //805f8edc
     int GetRuntimeTypeInfo() const override; //0x60 805f9698
     virtual void Reset(); //0x64 805f8f40
-    virtual void SetMsgIdWindowText(u32 bmgId, const TextInfo* text = nullptr) = 0; //0x68 805f9244
+    virtual void SetMessageWindowText(u32 bmgId, const TextInfo* text = nullptr) = 0; //0x68 805f9244
     virtual void SetButtonImage() = 0; //0x6c 805f92d4
     void OnClick(u32 hudSlotId); //805f8f54 ends page and triggers master page onclick ptmf
     static void TriggerPtmf(PtmfHolder_1A<Click, void, u32>* handler, u32 hudSlotId); //805f96a4
@@ -37,7 +37,7 @@ public:
     void AfterExitAnimations() override; //0x44 805f9290
     int GetRuntimeTypeInfo() const override; //0x60 805f968c
     void Reset() override; //0x64 805f9224
-    void SetMsgIdWindowText(u32 bmgId, const TextInfo* text = nullptr) override; //0x68 805f9244
+    void SetMessageWindowText(u32 bmgId, const TextInfo* text = nullptr) override; //0x68 805f9244
     void SetButtonImage() override; //0x6c 805f92d4
     u8 unknown_0x1A4;
     u8 padding[3];
@@ -57,7 +57,7 @@ public:
     void OnInit() override; //0x28 805f9474
     int GetRuntimeTypeInfo() const override; //0x60 805f9680
     void Reset() override; //0x64 805f95c0
-    void SetMsgIdWindowText(u32 bmgId, const TextInfo* text = nullptr) override; //0x68 805f9628 
+    void SetMessageWindowText(u32 bmgId, const TextInfo* text = nullptr) override; //0x68 805f9628 
     void SetButtonImage() override; //0x6c 805f9630
     void SetTitleText(); //805f9620
     void ActivateManipulatorManager(); //805f8eb8 
