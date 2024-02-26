@@ -1,3 +1,8 @@
+·Updated to 1.2.1
+Creator Changes:
+-Fixed battle arenas not working for music slots in the mass import window.
+-Fixed a crash on cups >100 when removing the name of the cup.
+
 ·Updated to 1.2.0
 Creator Changes:
 -Added a new tab to edit regular tracks experts. It is only visible if regs are enabled.
