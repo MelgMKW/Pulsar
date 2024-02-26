@@ -122,8 +122,8 @@ void SettingsPanel::OnInit() {
     textUpDown = new TextUpDownValueControl[this->scrollersCount];
     MenuInteractable::OnInit();
     this->SetTransitionSound(0, 0);
-    this->externControls[1]->SetMessage(BMG_SETTINGS_PAGE + this->GetNextIdx(1));
-    this->externControls[2]->SetMessage(BMG_SETTINGS_PAGE + this->GetNextIdx(-1));
+    this->externControls[1]->setmsgid(BMG_SETTINGS_PAGE + this->GetNextIdx(1));
+    this->externControls[2]->setmsgid(BMG_SETTINGS_PAGE + this->GetNextIdx(-1));
 };
 
 UIControl* SettingsPanel::CreateExternalControl(u32 id) {
@@ -158,9 +158,9 @@ UIControl* SettingsPanel::CreateControl(u32 id) {
         radioButtonControl.SetOnChangeHandler(this->onRadioButtonChangeHandler);
         radioButtonControl.id = id;
         u32 bmgCategory = BMG_RADIO_SETTINGS + (this->sheetIdx << 12);
-        radioButtonControl.SetMessage(id + bmgCategory);
+        radioButtonControl.setmsgid(id + bmgCategory);
         for(int i = 0; i < radioButtonControl.buttonsCount; ++i) {
-            radioButtonControl.optionButtonsArray[i].SetMessage((id + 1 << 4) + i + bmgCategory);
+            radioButtonControl.optionButtonsArray[i].setmsgid((id + 1 << 4) + i + bmgCategory);
         }
     }
     else if(id < (this->radioCount + this->scrollersCount)) {
@@ -183,8 +183,8 @@ UIControl* SettingsPanel::CreateControl(u32 id) {
         valueControl.Load(UI::controlFolder, "UpDownValue", "Value", "UpDownText", "Text");
         valueControl.SetOnTextChangeHandler(this->onTextChangeHandler);
         u32 bmgCategory = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12);
-        upDownControl.SetMessage(id + bmgCategory);
-        valueControl.activeTextValueControl->SetMessage((id + 1 << 4) + bmgCategory);
+        upDownControl.setmsgid(id + bmgCategory);
+        valueControl.activeTextValueControl->setmsgid((id + 1 << 4) + bmgCategory);
     }
     return nullptr;
 }
@@ -219,7 +219,7 @@ void SettingsPanel::OnExternalButtonSelect(PushButton& button, u32 r5) {
     const u32 id = button.buttonId;
     if(id == 1) bmgId += 1 + this->GetNextIdx(1);
     else if(id == 2) bmgId += 1 + this->GetNextIdx(-1);
-    this->bottomText->SetMessage(bmgId);
+    this->bottomText->setmsgid(bmgId);
 }
 
 int SettingsPanel::GetActivePlayerBitfield() const {
@@ -286,12 +286,12 @@ void SettingsPanel::OnButtonClick(PushButton& button, u32 direction) {
     SettingsPanel* nextPanel = SectionMgr::sInstance->curSection->Get<SettingsPanel>(id);
     this->LoadPrevPageById(id, button);
     nextPanel->externControls[0]->SelectInitialButton(0);
-    nextPanel->bottomText->SetMessage(BMG_SETTINGS_BOTTOM);
+    nextPanel->bottomText->setmsgid(BMG_SETTINGS_BOTTOM);
     this->SaveSettings(false);
 }
 
 void SettingsPanel::OnRadioButtonChange(RadioButtonControl& radioButtonControl, u32 hudSlotId, u32 optionId) {
-    this->bottomText->SetMessage(BMG_RADIO_SETTINGS + (this->sheetIdx << 12) + (radioButtonControl.id + 1 << 8) + optionId);
+    this->bottomText->setmsgid(BMG_RADIO_SETTINGS + (this->sheetIdx << 12) + (radioButtonControl.id + 1 << 8) + optionId);
 }
 
 void SettingsPanel::OnUpDownClick(UpDownControl& upDownControl, u32 hudSlotId) {
@@ -303,15 +303,15 @@ void SettingsPanel::OnTextChange(TextUpDownValueControl::TextControl& text, u32 
 
     const u32 bmgId = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12) + optionId;
     u32 id = this->GetTextId(text);
-    text.SetMessage(bmgId + (id + 1 << 4));
+    text.setmsgid(bmgId + (id + 1 << 4));
     if(!this->externControls[0]->IsSelected()) {
-        this->bottomText->SetMessage(bmgId + (id + 1 << 8));
+        this->bottomText->setmsgid(bmgId + (id + 1 << 8));
     }
 };
 
 void SettingsPanel::OnUpDownSelect(UpDownControl& upDownControl, u32 hudSlotId) {
     const u32 bmgId = BMG_SCROLLER_SETTINGS + (this->sheetIdx << 12) + (upDownControl.id + 1 << 8) + upDownControl.curSelectedOption;
-    this->bottomText->SetMessage(bmgId);
+    this->bottomText->setmsgid(bmgId);
 }
 
 int SettingsPanel::GetNextIdx(s32 direction) {
@@ -319,12 +319,12 @@ int SettingsPanel::GetNextIdx(s32 direction) {
 }
 
 /*
-void TextUpDownValueControl::SetMessage(u32 optionId) {
+void TextUpDownValueControl::setmsgid(u32 optionId) {
     TextUpDownValueControl::TextControl* text = this->activeTextValueControl;
     u32 id = this->GetTextId(text);
     const u32 bmgId = BMG_SCROLLER_SETTINGS +
         (this->parentGroup->GetParentPage<UI::SettingsPanel>()->sheetIdx << 12) + (this->id + 1 << 4) + optionId;
-    text->SetMessage(bmgId);
+    text->setmsgid(bmgId);
 }
 */
 

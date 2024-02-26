@@ -21,7 +21,7 @@ public:
     void AfterControlUpdate() override; //0x4c 80859e98
     int GetRuntimeTypeInfo() const override; //0x60 8085bd58
     virtual void SetNextPage(PageId id); //0x64 8063240c
-    virtual int GetMessageBMG() const = 0; //0x68
+    virtual int getmsgidBMG() const = 0; //0x68
     virtual u32 GetButtonCount() const = 0; //0x6c
     virtual const u32* GetVariantsIdxArray() const = 0; //0x70 returns an array of indexes used in the static variant array
     virtual bool IsPausePage() const = 0; //0x74

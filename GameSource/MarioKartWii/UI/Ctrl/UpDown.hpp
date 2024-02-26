@@ -13,8 +13,8 @@ public:
     virtual LayoutUIControl* GetTextControl() const = 0; //0x8 
     virtual void InitText(bool state) = 0; //0xc 
     virtual void OnSelect(bool state, u32 hudSlotId) = 0; //0x10 
-    virtual void SetMessage(u32 optionId) = 0; //0x14 
-    virtual void SetMessageAnimated(u32 optionId) = 0; //0x18 
+    virtual void setmsgid(u32 optionId) = 0; //0x14 
+    virtual void setmsgidAnimated(u32 optionId) = 0; //0x18 
     virtual void OnClick() = 0; //0x1c 
     virtual bool IsOKStop(u32 hudSlotId) = 0; //0x20
     virtual float Get3rdAnimStartFrame() const = 0; //0x24 
@@ -47,8 +47,8 @@ public:
     LayoutUIControl* GetTextControl() const override; //0x8 thunk 80642a98 func 80642988 just a blr
     void InitText(bool state) override; //0xc thunk 80642a90 func 80640aa0 bool is true if UpDownControl's parent manipulator manager has a manipulator that matches its own
     void OnSelect(bool state, u32 hudSlotId) override; //0x10 thunk 80642a88 func 80640b68
-    void SetMessage(u32 optionId) override; //0x14 thunk 80642a80 func 80640cdc
-    void SetMessageAnimated(u32 optionId) override; //0x18 thunk 80642a78 func 80640d0c
+    void setmsgid(u32 optionId) override; //0x14 thunk 80642a80 func 80640cdc
+    void setmsgidAnimated(u32 optionId) override; //0x18 thunk 80642a78 func 80640d0c
     void OnClick() override; //0x1c thunk 80642a70 func 80640dfc
     bool IsOKStop(u32 hudSlotId) override; //0x20 thunk 80642a68 func 80640e68 checks if animation is not OK to prevent double clicking the arrow
     float Get3rdAnimStartFrame() const override; //0x24 thunk 80642a60 func 80640f00unsure and it's never called

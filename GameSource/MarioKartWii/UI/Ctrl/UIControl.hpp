@@ -85,7 +85,7 @@ public:
     void ResetTextBoxMsg(const char* textBoxName); //8063deec
     void ResetMsg(); //8063dfc8
 
-    void SetMessage(u32 bmgId, const TextInfo* text = nullptr); //8063ddb4
+    void setmsgid(u32 bmgId, const TextInfo* text = nullptr); //8063ddb4
     void SetTextBoxMsg(const char* textBoxName, u32 bmgId, const TextInfo* text = nullptr); //8063dcbc
     void SetRootPane(const char* paneName); //8063da00
     void SetPicturePane(const char* mainPane, const char* picturePane);

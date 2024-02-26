@@ -16,7 +16,7 @@ public:
     GhostReplayPause(); //80624d7c 808bdb08
     ~GhostReplayPause() override; //80632f74
     int GetRuntimeTypeInfo() const override; //0x60 80632fe0
-    int GetMessageBMG() const override; //0x68 80632f44
+    int getmsgidBMG() const override; //0x68 80632f44
     u32 GetButtonCount() const override; //0x6c 80632f6c
     const u32* GetVariantsIdxArray() const override; //0x70 80632f60
     bool IsPausePage() const override; //0x74 80632f4c

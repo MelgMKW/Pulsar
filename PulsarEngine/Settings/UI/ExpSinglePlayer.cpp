@@ -126,7 +126,7 @@ void OnButtonSelect(Pages::SinglePlayer* page, PushButton& button, u32 hudSlotId
                     break;
             }
         }
-        page->bottomText->SetMessage(bmgId);
+        page->bottomText->setmsgid(bmgId);
     }
     else page->Pages::SinglePlayer::OnExternalButtonSelect(button, hudSlotId);
 }

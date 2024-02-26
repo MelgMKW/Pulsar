@@ -9,7 +9,7 @@ namespace UI {
 
 void PatchGlobeSearchBMG(Pages::GlobeSearch* globeSearch) {
     globeSearch->countdown.Update();
-    if(Pulsar::System::sInstance->deniesCount >= 3) globeSearch->messageWindow.LayoutUIControl::SetMessage(UI::BMG_TOO_MANY_DENIES);
+    if(Pulsar::System::sInstance->deniesCount >= 3) globeSearch->messageWindow.LayoutUIControl::setmsgid(UI::BMG_TOO_MANY_DENIES);
 }
 kmCall(0x8060926c, PatchGlobeSearchBMG);
 

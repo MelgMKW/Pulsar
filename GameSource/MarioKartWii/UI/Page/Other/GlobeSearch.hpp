@@ -43,7 +43,7 @@ public:
     int GetRuntimeTypeInfo() const override; //0x28 8060a68c
     const char* GetClassName() const override; //0x2c 80607d88
     void Load(const char* variant); //80607e2c
-    void SetMessage(u32 bmgId, const TextInfo* text = nullptr); //80607ef8
+    void setmsgid(u32 bmgId, const TextInfo* text = nullptr); //80607ef8
     void Hide(); //80607fb0
 }; //0x174
 

@@ -19,7 +19,7 @@ enum BMGType {
 };
 BMGType isCustom;
 
-int GetMsgIdxByBmgId(const BMGHolder& bmg, s32 bmgId) {
+int getmsgidxByBmgId(const BMGHolder& bmg, s32 bmgId) {
     const BMGMessageIds& msgIds = *bmg.messageIds;
     int ret = -1;
     for(int i = 0; i < msgIds.msgCount; ++i) {
@@ -33,11 +33,11 @@ int GetMsgIdxByBmgId(const BMGHolder& bmg, s32 bmgId) {
     return ret;
 }
 
-int GetMsgIdxById(const BMGHolder& normalHolder, s32 bmgId) {
+int getmsgidxById(const BMGHolder& normalHolder, s32 bmgId) {
     /*
     isCustom = false;
-    int ret = GetMsgIdxByBmgId(System::sInstance->GetBMG(), bmgId);
-    if(ret < 0) ret = GetMsgIdxByBmgId(normalHolder, bmgId);
+    int ret = getmsgidxByBmgId(System::sInstance->GetBMG(), bmgId);
+    if(ret < 0) ret = getmsgidxByBmgId(normalHolder, bmgId);
     else isCustom = true;
     return ret;
     */
@@ -48,16 +48,16 @@ int GetMsgIdxById(const BMGHolder& normalHolder, s32 bmgId) {
      }
      else {
          */
-    int ret = GetMsgIdxByBmgId(System::sInstance->GetBMG(), bmgId);
+    int ret = getmsgidxByBmgId(System::sInstance->GetBMG(), bmgId);
     if(ret < 0) {
         isCustom = BMG_NORMAL;
-        ret = GetMsgIdxByBmgId(normalHolder, bmgId);
+        ret = getmsgidxByBmgId(normalHolder, bmgId);
     }
     else isCustom = CUSTOM_BMG;
     return ret;
     //}
 }
-kmBranch(0x805f8c88, GetMsgIdxById);
+kmBranch(0x805f8c88, getmsgidxById);
 
 wchar_t* GetMsgByMsgIdx(const BMGHolder& bmg, s32 msgIdx) {
     const BMGInfo& info = *bmg.info;
@@ -113,7 +113,7 @@ kmBranch(0x805f8d2c, GetFont);
 
 const wchar_t* GetCustomMsg(s32 bmgId) {
     const BMGHolder& bmg = System::sInstance->GetBMG();
-    return GetMsgByMsgIdx(bmg, GetMsgIdxById(bmg, bmgId));
+    return GetMsgByMsgIdx(bmg, getmsgidxById(bmg, bmgId));
 }
 
 

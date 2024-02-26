@@ -50,7 +50,7 @@ public:
     void OnActivate() override;
     void OnUpdate() override;
     //int GetRuntimeTypeInfo() const override;
-    int GetMessageBMG() const override;
+    int getmsgidBMG() const override;
     u32 GetButtonCount() const override;
     const u32* GetVariantsIdxArray() const override;
     bool IsPausePage() const override;

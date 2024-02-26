@@ -101,7 +101,7 @@ class OptionChoice : public Page { //ID 0xc3 (2used buttons) and ID 0xc4(3 butto
     void OnButtonClick(PushButton& pushButton, u32 hudSlotId); //805febe4
     void OnBackPress(u32 hudSlotId); //805fed8c
     void SetTitleText(u32 bmgId); //805feb60 inlined
-    void SetMessageWindowText(u32 bmgId); //805feb6c inlined
+    void setmsgidWindowText(u32 bmgId); //805feb6c inlined
     void SetButtonText(u32 buttonId, u32 bmgId, u32 ed8); //805feb78 inlined
     void SetInitialButton(u8 buttonId); //805febdc
     static void TriggerPtmf(PtmfHolder_2A<OptionChoice, void, PushButton&, u32>* handler, PushButton& button, u32 hudSlotId); //806010a4

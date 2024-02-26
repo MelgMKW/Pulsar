@@ -11,7 +11,7 @@ public:
     QuitConfirmation(); //806250f0
     ~QuitConfirmation() override; //806324f4 vtable 808bd3c4
     int GetRuntimeTypeInfo() const override; //0x60 80632560
-    int GetMessageBMG() const override; //0x68 806324c4
+    int getmsgidBMG() const override; //0x68 806324c4
     u32 GetButtonCount() const override; //0x6c 806324ec
     const u32* GetVariantsIdxArray() const override; //0x70 806324e0
     bool IsPausePage() const override; //0x74 806324cc
