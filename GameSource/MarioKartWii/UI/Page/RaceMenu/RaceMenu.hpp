@@ -45,6 +45,20 @@ public:
     u32 controlBMGId; //0x340, used for message control 
 };//0x344
 size_assert(RaceMenu, 0x344);
+
+class RacePauseMgr {
+public:
+    static RacePauseMgr* sInstance; //809c4730
+    static RacePauseMgr* CreateInstance(); //8085ffd4
+    static void DestroyInstance(); //8086004c
+    RacePauseMgr(); //80860034
+    virtual ~RacePauseMgr(); //8086009c vtable 808db730
+    void RequestPause(); //808600dc
+    void RequestUnpause(); //80860100
+
+    u32 pauseCount; //+1 when pause, -1 when unpause, idk how it can be anything but 0/1
+}; //0x8
+
 }//namespace Pages
 //Also builds a layoutUIControl for controller
 #endif

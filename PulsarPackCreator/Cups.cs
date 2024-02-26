@@ -256,7 +256,7 @@ namespace Pulsar_Pack_Creator
                     return;
                 }
                 */
-                if (box.Text == "") box.Text = Cup.defaultNames[curCup];
+                if (box.Text == "" && curCup < Cup.maxCupIcons) box.Text = Cup.defaultNames[curCup];
                 cups[curCup].name = box.Text;
             }
         }
@@ -274,7 +274,7 @@ namespace Pulsar_Pack_Creator
                     return;
                 }
                 */
-                if (box.Text == "") box.Text = $"{Cup.defaultNames[curCup]}.png";
+                if (box.Text == "" && curCup < Cup.maxCupIcons) box.Text = $"{Cup.defaultNames[curCup]}.png";
             }
 
         }

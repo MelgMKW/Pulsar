@@ -584,7 +584,7 @@ GetClassName__15LayoutUIControlCFv = 0x8063d788
 func_0x30__15LayoutUIControlFv = 0x8063E61c
 LoadNewLayout__15LayoutUIControlFPCcPCc = 0x8063D954
 SetTextBoxMsg__15LayoutUIControlFPCcUiPC8TextInfo = 0x8063dcbc
-SetMsgId__15LayoutUIControlFUiPC8TextInfo = 0x8063ddb4
+SetMessage__15LayoutUIControlFUiPC8TextInfo = 0x8063ddb4
 SetMiiPane__15LayoutUIControlFPCcRC8MiiGroupUiUc = 0x8063e3dc
 SetPicturePane__15LayoutUIControlFPCcPCc = 0x8063e0f0
 __ct__24LayoutUIControlScaleFadeFv = 0x8063e674
@@ -822,13 +822,13 @@ Init__17ControlButtonInfoFv = 0x805ef958
 __vt__18CtrlMenuBackButton = 0x808d374c
 
 #Title
-SetMsgId__21CtrlMenuPageTitleTextFUiPC8TextInfo = 0x807e987c
+SetMessage__21CtrlMenuPageTitleTextFUiPC8TextInfo = 0x807e987c
 
 #TitleImage
 ChangeImage__10TitleImageFbUi = 0x8063a8d4
 
 #Instruction
-SetMsgId__23CtrlMenuInstructionTextFUiPC8TextInfo = 0x807e9a38
+SetMessage__23CtrlMenuInstructionTextFUiPC8TextInfo = 0x807e9a38
 __vt__23CtrlMenuInstructionText = 0x808d3698
 __dt__23CtrlMenuInstructionTextFv = 0x805c00c0
 Load__23CtrlMenuInstructionTextFv = 0x807e9904
@@ -1146,7 +1146,7 @@ __ct__Q25Pages10VSSettingsFv = 0x806284c8
 OnButtonDeselect__Q25Pages10VSSettingsFR10PushButtonUi = 0x808536b0
 
 #MatchingMessageWindow
-SetMsgId__Q25Pages21MatchingMessageWindowFUiPC8TextInfo = 0x80607ef8
+SetMessage__Q25Pages21MatchingMessageWindowFUiPC8TextInfo = 0x80607ef8
 
 #WFCMainPage
 __ct__Q25Pages11WFCMainMenuFv = 0x8064b640

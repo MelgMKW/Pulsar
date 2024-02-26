@@ -26,8 +26,8 @@ class EnableLakituAction {
     virtual void EnableAction() = 0; //if the conditions are met
 
     bool HasActionHappened() const; //80725a5c
-    u8 playerId;
-    bool isEnabled;
+    u8 playerId; //0x4
+    bool isEnabled; //0x5
     bool hasHappened; //held true forever except if certain conditions can reset the state
     u8 unknown_0x7[2];
 };

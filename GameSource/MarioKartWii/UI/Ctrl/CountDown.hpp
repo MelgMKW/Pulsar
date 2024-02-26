@@ -28,7 +28,7 @@ public:
     void AnimateCurrentCountDown(); //805c4380 changes tpls based on current countdown
     void Reset(); //805c4430
     CountDown* countdown; //0x174
-    bool unknown_0x178;
+    bool isTimerDone;
     u8 unknown_0x179[0x17C - 0x179];
 }; //total size 0x17C
 size_assert(CountDownTimerControl, 0x17c);

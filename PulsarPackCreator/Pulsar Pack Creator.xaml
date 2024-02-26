@@ -146,8 +146,8 @@
             </TabControl.Background>
             <TabItem Name="Cups" Header="Cups">
                 <DockPanel>
-                    <Button DockPanel.Dock="Left" Content="&lt;" FontWeight="Bold" FontSize="18" Click="OnLeftArrowClick" />
-                    <Button DockPanel.Dock="Right" Content="&gt;" FontWeight="Bold" FontSize="18" Click="OnRightArrowClick" />
+                    <Button x:Name="LeftArrow" DockPanel.Dock="Left" Content="&lt;" FontWeight="Bold" FontSize="18" Click="OnLeftArrowClick" />
+                    <Button x:Name="RightArrow"  DockPanel.Dock="Right" Content="&gt;" FontWeight="Bold" FontSize="18" Click="OnRightArrowClick" />
                     <Grid x:Name="CupsGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="0.7*"/>

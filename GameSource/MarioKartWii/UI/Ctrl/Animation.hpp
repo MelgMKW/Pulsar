@@ -50,7 +50,7 @@ public:
     //8063c650 unused assumes brlan has struct brlyt_brlanname.brlan, gets brlyt name from layout
     AnimationGroup& GetAnimationGroupById(u32 groupId) const; //8063c820
     AnimationGroup* animationGroups; //array of animation groups
-    u32 animationCount; //Unsure
+    u32 animationCount; //0x4 Unsure
     lyt::Pane* rootPane;
     MainLayout* layout; //0xC
 }; //Total Size 0x10

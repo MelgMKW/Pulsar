@@ -117,13 +117,13 @@ namespace Pulsar_Pack_Creator
                 byte slotIdx = FindSlotIndex(importStringArrays[3][line]);
                 if (slotIdx == 0xFF)
                 {
-                    MsgWindow.Show($"Track Slot {importStringArrays[3][line]} (Line {line}) is invalid.");
+                    MsgWindow.Show($"Track Slot {importStringArrays[3][line]} (Line {line+1}) is invalid.");
                     return;
                 }
-                byte musicSlotIdx = FindSlotIndex(importStringArrays[4][line]);
+                byte musicSlotIdx = FindMusicSlotIndex(importStringArrays[4][line]);
                 if (musicSlotIdx == 0xFF)
                 {
-                    MsgWindow.Show($"Music Slot {importStringArrays[4][line]} (Line {line}) is invalid.");
+                    MsgWindow.Show($"Music Slot {importStringArrays[4][line]} (Line {line+1}) is invalid.");
                     return;
                 }
             }
@@ -138,12 +138,12 @@ namespace Pulsar_Pack_Creator
                     return;
                 }
                 byte slotIdx = FindSlotIndex(importStringArrays[3][line]);
-                byte musicSlotIdx = FindSlotIndex(importStringArrays[4][line]);
+                byte musicSlotIdx = FindMusicSlotIndex(importStringArrays[4][line]);
                 parent.cups[cupIdx].trackNames[row] = importStringArrays[0][line];
                 parent.cups[cupIdx].authorNames[row] = importStringArrays[1][line];
                 parent.cups[cupIdx].versionNames[row] = importStringArrays[2][line];
                 parent.cups[cupIdx].slots[row] = PulsarGame.MarioKartWii.idxToCourseId[slotIdx];
-                parent.cups[cupIdx].musicSlots[row] = PulsarGame.MarioKartWii.idxToCourseId[musicSlotIdx];
+                parent.cups[cupIdx].musicSlots[row] = PulsarGame.MarioKartWii.musicIdxToCourseId[musicSlotIdx];
                 if (cupIdx == parent.curCup)
                 {
                     parent.UpdateCurCup(0);
@@ -173,6 +173,12 @@ namespace Pulsar_Pack_Creator
         {
             byte slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.idxToFullNames, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
             if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.idxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            return slotIdx;
+        }
+        private byte FindMusicSlotIndex(string slot)
+        {
+            byte slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.musicIdxToFullNames, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.musicIdxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
             return slotIdx;
         }
     }

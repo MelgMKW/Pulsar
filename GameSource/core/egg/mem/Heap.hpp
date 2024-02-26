@@ -29,9 +29,9 @@ public:
     virtual u32 getAllocatableSize(s32 alignment) = 0;
     virtual u32 adjust() = 0;
 
-    static void* alloc(u32 size, int align, Heap* heap);
+    static void* alloc(u32 size, int align, Heap* heap = nullptr);
     template<class T>
-    static inline T* alloc(u32 size, int align, Heap* heap) { return static_cast<T*>(alloc(size, align, heap)); }
+    static inline T* alloc(u32 size, int align, Heap* heap = nullptr) { return static_cast<T*>(alloc(size, align, heap)); }
 
     static Heap* findHeap(MEM::iHeapHead* rvlHeap);
     Heap* findParentHeap();
