@@ -110,7 +110,7 @@ void ExpCupSelect::AfterControlUpdate() {
     }
     else {
         this->randomControl.isHidden = false;
-        this->randomControl.setmsgid(BMG_RANDOM_CUP);
+        this->randomControl.SetMessage(BMG_RANDOM_CUP);
 
         bool isInaccessible = true;
         PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
@@ -196,7 +196,7 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
         else bmgId = BMG_CUPS;
         snprintf(tplName, 0x20, "icon_%03d.tpl", tplId);
     }
-    control.setmsgid(bmgId + realCupId, &info);
+    control.SetMessage(bmgId + realCupId, &info);
     ChangeImage(control, "icon", tplName);
     ChangeImage(control, "icon_light_01", tplName);
     ChangeImage(control, "icon_light_02", tplName);

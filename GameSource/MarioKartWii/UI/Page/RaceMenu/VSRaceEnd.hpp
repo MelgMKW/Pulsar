@@ -10,7 +10,7 @@ public:
     VSRaceEnd(); //80624e48
     ~VSRaceEnd() override; //80632b30 vtable 808bd820
     int GetRuntimeTypeInfo() const override; //0x60 80632b9c
-    int getmsgidBMG() const override; //0x68 80632aac
+    int GetMessageBMG() const override; //0x68 80632aac
     u32 GetButtonCount() const override; //0x6c 80632b00
     const u32* GetVariantsIdxArray() const override; //0x70 80632af4
     bool IsPausePage() const override; //0x74 80632ab4

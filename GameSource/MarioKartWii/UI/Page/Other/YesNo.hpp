@@ -19,7 +19,7 @@ public:
     int GetRuntimeTypeInfo() const override; //0x60 806531a0
     virtual void Reset(); //0x64 806525a0
 
-    void setmsgidBoxMsg(u32 bmgId, TextInfo* text); //806525fc
+    void SetMessageBoxMsg(u32 bmgId, TextInfo* text); //806525fc
     void SetButtonMsg(u32 buttonId, u32 bmgId, TextInfo* text, u32 r7); //80652604
     void OnButtonClick(PushButton& button, u32 hudSlotId); //80652678
     void SelectInitialButton(); //80652700

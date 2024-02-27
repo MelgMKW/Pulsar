@@ -40,19 +40,19 @@ void FixStartMessageFroom(CtrlRaceWifiStartMessage* startMsg, u32 bmgId, TextInf
         info->intToPass[0] = sectionMgr->sectionParams->currentRaceNumber + 1;
         info->intToPass[1] = System::sInstance->racesPerGP + 1;
     }
-    startMsg->setmsgid(bmgId, info);
+    startMsg->SetMessage(bmgId, info);
 }
 kmCall(0x807f8b7c, FixStartMessageFroom);
 
 void DisplayDate(CtrlMenuPressStart* start) {
     start->Load();
-    start->setmsgid(BMG_DATE);
+    start->SetMessage(BMG_DATE);
 }
 kmCall(0x8063ac58, DisplayDate);
 
 void CustomRoomDenyText(Pages::MessageBoxTransparent* msgBox, u32 bmgId, const TextInfo* info) {
     if(Pulsar::System::sInstance->isCustomDeny) bmgId = BMG_ROOM_DENY;
-    msgBox->setmsgidWindowText(bmgId, info);
+    msgBox->SetMessageWindowText(bmgId, info);
 }
 kmCall(0x805dd90c, CustomRoomDenyText);
 

@@ -117,7 +117,7 @@ public:
     void BeforeExitAnimations() override; //0x40 805da028
     void AfterControlUpdate() override; //0x4c 805da140
     int GetRuntimeTypeInfo() const override; //0x60 805de878
-    static u32 getmsgidBmg(const RKNet::ROOMPacket& packet, u32 r4); //805dacb0
+    static u32 GetMessageBmg(const RKNet::ROOMPacket& packet, u32 r4); //805dacb0
     void SetToSendPacket(const RKNet::ROOMPacket& packet); //805dae30
     void SetPacket(const RKNet::ROOMPacket& packet, u8 id); //805dae58
 

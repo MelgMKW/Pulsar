@@ -12,7 +12,7 @@ public:
     GPPause(); //80624af4 
     ~GPPause() override; //806333f0 vtable 808bddf0
     int GetRuntimeTypeInfo() const override; //0x60 8063345c
-    int getmsgidBMG() const override; //0x68 806333c0
+    int GetMessageBMG() const override; //0x68 806333c0
     u32 GetButtonCount() const override; //0x6c 806333e8
     const u32* GetVariantsIdxArray() const override; //0x70 806333dc
     bool IsPausePage() const override; //0x74 806333c8

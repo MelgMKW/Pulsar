@@ -76,7 +76,7 @@ void TeamSelect::BeforeEntranceAnimations() {
     if(this->toggle.GetState() != this->isEnabled) this->toggle.ToggleState(this->isEnabled);
     this->toggle.SelectInitialButton(0);
     const u32 bmgId = this->toggle.GetState() == false ? BMG_TEAMS_DISABLED : BMG_TEAMS_ENABLED;
-    this->toggle.setmsgid(bmgId);
+    this->toggle.SetMessage(bmgId);
     this->isLocked = false;
 
     for(int idx = 0; idx < 12; idx++) {
@@ -118,7 +118,7 @@ void TeamSelect::BeforeControlUpdate() {
                 arrow.manipulator.inaccessible = false;
                 if(arrow.IsSelected()) {
                     this->text.miis[0] = this->miiGroup->GetMii(this->arrowMiiIdx[arrow.buttonId]);
-                    this->name.setmsgid(BMG_MII_NAME, &this->text);
+                    this->name.SetMessage(BMG_MII_NAME, &this->text);
                 }
                 ++idx;
             }
@@ -186,13 +186,13 @@ void TeamSelect::OnArrowClick(PushButton& button, u32 hudSlotId) {
 
 void TeamSelect::OnArrowSelect(PushButton& button, u32 hudSlotId) {
     this->text.miis[0] = this->miiGroup->GetMii(this->arrowMiiIdx[button.buttonId]);
-    this->name.setmsgid(BMG_MII_NAME, &this->text);
+    this->name.SetMessage(BMG_MII_NAME, &this->text);
 }
 
 void TeamSelect::OnToggleButtonClick(ToggleButton& button, u32) {
     const u32 bmgId = button.GetState() == false ? BMG_TEAMS_DISABLED : BMG_TEAMS_ENABLED;
     this->isEnabled = button.GetState();
-    button.setmsgid(bmgId);
+    button.SetMessage(bmgId);
 }
 
 int TeamSelect::GetActivePlayerBitfield() const {

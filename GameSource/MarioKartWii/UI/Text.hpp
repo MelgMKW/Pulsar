@@ -17,7 +17,7 @@ public:
     BMGHolder(); //805f8b34
     void Load(const char* name); //805f8b90
     void Init(const BMGHeader& bmgFile); //805f8c00
-    s32 getmsgid(s32 bmgId) const; //805f8c88
+    s32 GetMessage(s32 bmgId) const; //805f8c88
     wchar_t* GetMsgByMsgId(s32 msgId) const; //805f8cf0
     u8* GetFontType(u32 msgId) const; //805f8d2c
     const BMGHeader* bmgFile; //0
@@ -47,8 +47,8 @@ public:
     TextPaneHandler(); //805cda34
     ~TextPaneHandler(); //805cda50
     void Init(lyt::TextBox* pane); //805cdbe4
-    void setmsgid(const BMGHolder& curFileBmgs, const BMGHolder& commonBmgs, u32 bmgId, const TextInfo* text = nullptr); //805cdd00
-    void Resetmsgid(); //805cedcc
+    void SetMessage(const BMGHolder& curFileBmgs, const BMGHolder& commonBmgs, u32 bmgId, const TextInfo* text = nullptr); //805cdd00
+    void ReSetMessage(); //805cedcc
     void Draw(const lyt::DrawInfo& drawInfo); //805cee08
     lyt::TextBox* pane; //0
     CharacterInfo* characterArray; //size max char count

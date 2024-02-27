@@ -58,7 +58,7 @@ void SetVSIntroBmgId(LayoutUIControl* trackName) {
     if(bmgId < BMG_TRACKS) authorId = BMG_NINTENDO;
     else authorId = bmgId + BMG_AUTHORS - BMG_TRACKS;
     info.bmgToPass[1] = authorId;
-    trackName->setmsgid(BMG_INFO_DISPLAY, &info);
+    trackName->SetMessage(BMG_INFO_DISPLAY, &info);
 
 }
 kmCall(0x808552cc, SetVSIntroBmgId);
@@ -80,7 +80,7 @@ void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
         info.bmgToPass[1] = cupBmgId;
 
     }
-    titleText.setmsgid(bmgId, &info);
+    titleText.SetMessage(bmgId, &info);
 }
 kmCall(0x808553b4, SetGPIntroInfo);
 
@@ -208,7 +208,7 @@ void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
         PushButton& curButton = course->courseButtons[i];
         curButton.buttonId = i;
         const u32 bmgId = GetTrackBMGByRowIdx(i);
-        curButton.setmsgid(bmgId);
+        curButton.SetMessage(bmgId);
         if(cupsConfig->lastSelectedCup * 4 + i == cupsConfig->selectedCourse) {
             coursePage->SelectButton(curButton);
         }

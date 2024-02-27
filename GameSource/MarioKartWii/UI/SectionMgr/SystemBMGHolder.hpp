@@ -7,7 +7,7 @@ class SystemBMGHolder : public BMGHolder { //Mario Kart wii, "Mario Kart Channel
     SystemBMGHolder(); //80637998
     ~SystemBMGHolder(); //806379c8
     void Init(); //80637a20
-    wchar_t* getmsgid(s32 bmgId); //80637a8c
+    wchar_t* GetMessage(s32 bmgId); //80637a8c
 };
 
 #endif

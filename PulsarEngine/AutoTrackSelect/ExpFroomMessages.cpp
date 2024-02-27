@@ -111,7 +111,7 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
         }
 
     }
-    else return Pages::FriendRoomManager::getmsgidBmg(packet, 0);
+    else return Pages::FriendRoomManager::GetMessageBmg(packet, 0);
 }
 kmCall(0x805dcb74, CorrectModeButtonsBMG);
 }//namespace UI

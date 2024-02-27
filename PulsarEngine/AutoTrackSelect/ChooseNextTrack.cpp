@@ -82,7 +82,7 @@ void ChooseNextTrack::OnActivate() {
     this->pageId = PAGE_TT_PAUSE_MENU;
     RaceMenu::OnActivate();
     this->pageId = PAGE_GHOST_RACE_ENDMENU;
-    //this->buttons[3].setmsgid(BMG_RANDOM_TRACK);
+    //this->buttons[3].SetMessage(BMG_RANDOM_TRACK);
     this->UpdateButtonInfo(0); //to fix the bad IDs from the array
     this->message->positionAndscale[1].position.y = 180.0f;
     this->countdown.SetInitial(10.0f);
@@ -105,7 +105,7 @@ void ChooseNextTrack::OnUpdate() {
     }
 }
 
-int ChooseNextTrack::getmsgidBMG() const {
+int ChooseNextTrack::GetMessageBMG() const {
     return this->controlBMGId;
 }
 u32 ChooseNextTrack::GetButtonCount() const {
@@ -143,7 +143,7 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
         for(int i = 0; i < 4; ++i) {
             u32 curId = this->curPageIdx * 4 + i;
             this->buttons[i].buttonId = curId + 0x20;
-            this->buttons[i].setmsgid(BMG_BATTLE + curId);
+            this->buttons[i].SetMessage(BMG_BATTLE + curId);
         }
     }
     else {
@@ -157,7 +157,7 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
         this->curPageIdx = ret;
         for(int i = 0; i < 4; ++i) {
             this->buttons[i].buttonId = this->curPageIdx * 4 + i;
-            this->buttons[i].setmsgid(UI::GetTrackBMGId(static_cast<PulsarId>(this->buttons[i].buttonId)));
+            this->buttons[i].SetMessage(UI::GetTrackBMGId(static_cast<PulsarId>(this->buttons[i].buttonId)));
         }
     }
 }
