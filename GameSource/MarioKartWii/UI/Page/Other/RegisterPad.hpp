@@ -120,7 +120,7 @@ size_assert(PairWiimotes, 0xbf0);
 
 class ConfirmPads : public Page {
 public:
-    static const PageId id = PAGE_CONFIRM_PAD;
+    static const PageId id = PAGE_CONFIRM_PAD; //ID 0x64
     ConfirmPads(); //80604cd8
     ~ConfirmPads() override; //80604ea0 vtable 808ba6b8
     PageId GetNextPage() const override; //0x10 806055cc

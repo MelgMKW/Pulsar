@@ -84,7 +84,48 @@ void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
 }
 kmCall(0x808553b4, SetGPIntroInfo);
 
+void SetGPBottomText(CtrlMenuInstructionText& bottomText, u32 bmgId, TextInfo& info) {
+    register ExpCupSelect* cupPage;
+    asm(mr cupPage, r31;);
+    PulsarCupId id = static_cast<PulsarCupId>(cupPage->ctrlMenuCupSelectCup.curCupID);
 
+    if(!CupsConfig::IsRegCup(id)) {
+        u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        register u32 cc;
+        asm(mr cc, r28;);
+        u8 status = Settings::Mgr::GetGPStatus(realCupId, cc);
+        u32 trophyBmg;
+        u32 rankBmg;
+        if(status == 0xFF) {
+            trophyBmg = BMG_GP_BLANK;
+            rankBmg= BMG_GP_BLANK;
+        }
+        else {
+            trophyBmg = BMG_GP_GOLD_TROPHY + (status & 0b11);
+            rankBmg = BMG_GP_RANK_3STARS + ((status & 0b111100) >> 2);
+        }
+        info.bmgToPass[1] = trophyBmg;
+        info.bmgToPass[2] = rankBmg;
+    }
+    bottomText.SetMessage(bmgId, &info);
+}
+kmCall(0x80841720, SetGPBottomText);
+
+void SaveGPResult(SavedGhostsHandler* handler) {
+    PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
+    if(!CupsConfig::IsRegCup(id)) {
+        u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        register u32 trophy;
+        asm(mr trophy, r31;);
+        register u32 cc;
+        asm(mr cc, r29;);
+        register GPRank rank;
+        asm(lwz rank, 0x68 (sp););
+        Settings::Mgr::SetGPStatus(realCupId, cc, trophy, rank);
+    }
+    else handler->NotifyNewLicenseContent();
+}
+kmCall(0x805bd2ac, SaveGPResult);
 
 void SetGhostInfoTrackBMG(GhostInfoControl* control, const char* textBoxName) {
     control->SetTextBoxMsg(textBoxName, GetCurTrackBMG());

@@ -48,10 +48,11 @@ public:
     virtual void SetScnOptions(g3d::ScnMdl* scnMdl, bool isVisible, bool doNotCalcWorldMatVtx); //0x20 8055cd68
     virtual void AppendToScnManager(); //0x24 8055bed4
 
+    //Mii is 
     void Init(ScnType type, g3d::ScnMdl::BufferOption option, Light* light, Mii* mii, u32 miiScnStrE8, s32 r9); //8055baa0
     void InitG3D(ScnType type, g3d::ScnMdl::BufferOption option, Mii* mii, ScnMgr* scnMgr,
         u32 scnObjDrawOptionsIdx, u32 miiScnStr0xE8, s32 r10); //8055bd00
-    g3d::ScnLeaf* CreateScn(ScnType type, g3d::ScnMdl::BufferOption option, Mii* mii, ScnMgr* scnMgr,
+    g3d::ScnLeaf* CreateScnLeaf(ScnType type, g3d::ScnMdl::BufferOption option, Mii* mii, ScnMgr* scnMgr,
         u32 miiScnStrE8, s32 r9, u8 idx); //8055bf10
 
     //Constructs a ScnMdl

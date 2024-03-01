@@ -22,13 +22,16 @@ public:
     }; //0x14 used to set ScnMdlSimple's cb
 
     struct MiiRequester {
-        MiiRenderMgr* next;
+        union {
+            MiiRequester* next; //stack structure, only when top of the stack
+            MiiTexObj* texObj; //filled when used, otherwise equal to next
+        }ptr;
         Mii* mii;  //0x4
         u32 r6Arg; //0x8
         u32 r8Arg; //0xc
         u32 r9Arg; //0x10
         u8 r10Arg; //0x14
-        u32 r7Arg; //0x18
+        bool* addStatus; //0x18
         nw4r::ut::Link link;
     }; //0x24
 
@@ -43,7 +46,7 @@ public:
     void InitMenuModels(); //8077f8d4
     void InitRaceModels(); //8077f8d4
     void AddMii(MiiTexObj* texObj, Mii* mii, u32 r6, u32 r7, u32 r8, u8 r9); //80781290
-    void RequestAddMii(MiiTexObj* texObj, Mii* mii, u32 r6, u8* miiTexObju8, u32 r8, u32 r9, u8 r10); //8078235c Gets Added to list
+    void RequestAddMii(MiiTexObj* texObj, Mii* mii, u32 r6, bool* addStatus, u32 r8, u32 r9, u8 r10); //8078235c Gets Added to list
     void SetTexture(EGG::MatTexture& matTexture); //80782100
     void ProcessTopAddRequest(); //807823e4 Using requester list
     void ProcessAllAddRequests(); //80782528
@@ -60,10 +63,10 @@ public:
     void* texBuffers2[4]; //0xa8
     u8 unknown_0xb8[0xd8 - 0x98];
     MiiDriverModel* ma_mii_fCopy; //0xd8
-    MiiDriverModel* ma_mii_f; //0xdc
+    MiiDriverModel* ma_mii_f; //0xdc used for CtrlRaceNameBalloon
     ModelDirector* icon_mii; //0xe0
     u8 unknown_0xe4[0xfc - 0xe4];
-    MiiHeadsModel* headsModel; //0xfc
+    MiiHeadsModel* headsModel; //0xfc used for CtrlRaceNameBalloon
     u8 unknown_0x100[4];
     RendererMii* renderer; //0x104
     u8 unknown_0x108[0x11c - 0x108];

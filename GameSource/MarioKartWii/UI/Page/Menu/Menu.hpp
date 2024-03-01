@@ -72,7 +72,7 @@ public:
     bool AreAllPlayersActive(); //808388f0 checks buttoninfo enabled for all local players
 
     MiiGroup* playerMiis; //from SectionParams //0x44
-    PushButton** externControls; //array to the PushButtons of all the buttons probably
+    PushButton** externControls; //0x48 array to the PushButtons
 
     u32 externControlCount; //0x4c
     PushButton* curSelect; //0x50

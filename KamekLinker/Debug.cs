@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Kamek
 {
@@ -35,10 +36,16 @@ namespace Kamek
                 catch
                 {
                     continue;
-                }
-            
-
+                }          
             }
+            readElf = new Process();
+            readElf.StartInfo.FileName = @"powershell.exe";
+            readElf.StartInfo.Verb = "runas";
+            readElf.StartInfo.CreateNoWindow = true;
+            readElf.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            readElf.StartInfo.UseShellExecute = false;
+            readElf.StartInfo.RedirectStandardOutput = true;
+
 
         }
 
@@ -47,24 +54,20 @@ namespace Kamek
             this.mapPath = mapPath;
         }
 
-        public void SetReadEld(string readElfPath)
+        public void SetReadElf(string readElfPath)
         {
             this.readElfPath = readElfPath;
         }
-        public void AnalyzeFile(string path)
+        public async Task AnalyzeFile(string path)
         {
-            using Process process = new Process();
-            {
-                process.StartInfo.FileName = @"powershell.exe";
-                process.StartInfo.Arguments = $@"{readElfPath} {path} -s >temp.txt";
-                process.StartInfo.Verb = "runas";
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.StartInfo.UseShellExecute = false;
-                process.Start();
-                process.WaitForExit();
-            }
-            string[] lines = File.ReadAllLines("temp.txt");
+            string output = "";
+                         
+            readElf.StartInfo.Arguments = $@"{readElfPath} {path} -s";
+            readElf.Start();
+            output = readElf.StandardOutput.ReadToEnd();
+            await readElf.WaitForExitAsync();
+            
+            string[] lines = output.Split("\r\n");
             List<string> funcLines = new List<string>();
             foreach (string line in lines)
             {
@@ -112,7 +115,6 @@ namespace Kamek
 
         public void Save()
         {
-            File.Delete("temp.txt");
             map.RemoveAll(x => x == "");
             map = map.OrderBy(x => uint.Parse(x.Split(' ')[0], NumberStyles.HexNumber)).ToList();
             map.Insert(0, ".text section layout");
@@ -122,6 +124,7 @@ namespace Kamek
         //Very bad and hardcoded but hard to guess where the binary gets allocated in a heap we do not know about yet
         static uint startAddr = 0x803992e0;
         static uint endAddr = 0x80510238;
+        Process readElf;
         List<string> map;
         List<uint> mapAddr;
         uint curAddr = startAddr;

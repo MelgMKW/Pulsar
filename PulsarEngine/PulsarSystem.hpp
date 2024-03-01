@@ -21,30 +21,44 @@ enum TTMode {
     TTMODE_200_FEATHER
 };
 
+enum SectionIndexes {
+    SECTION_INFO,
+    SECTION_CUPS,
+    SECTION_BMG
+};
+
 struct BinaryHeader {
     u32 magic;
     u32 version;
-    s32 offsetToInfo; //from start of the header
-    s32 offsetToCups;
-    s32 offsetToBMG;
+    s32 offsets[3];
+    //s32 offsetToInfo; //from start of the header
+    //s32 offsetToCups;
+    //s32 offsetToBMG;
     char modFolderName[IOS::ipcMaxFileName + 1];
 };
 
 struct SectionHeader {
     u32 magic;
     u32 version;
-    u32 dataSize; //size without the header
+    u32 size; //size without the header
 }; //0xc
 
 struct InfoHolder {
     static const u32 magic = 'INFO';
+    static const u32 index = SECTION_INFO;
     SectionHeader header;
     Info info;
 };
 struct CupsHolder {
     static const u32 magic = 'CUPS';
+    static const u32 index = SECTION_CUPS;
     SectionHeader header;
     Cups cups;
+};
+
+struct PulBMG {
+    static const u32 index = SECTION_BMG;
+    BMGHeader header;
 };
 
 struct ConfigFile {
@@ -54,9 +68,9 @@ struct ConfigFile {
     }
     static const char error[];
     static ConfigFile* LoadConfig(u32* readBytes);
-    template <typename T, s32 BinaryHeader::* offset>
+    template <typename T>
     inline const T& GetSection() const {
-        const T& section = *reinterpret_cast<const T*>(ut::AddU32ToPtr(this, this->header.*offset));
+        const T& section = *reinterpret_cast<const T*>(ut::AddU32ToPtr(this, this->header.offsets[T::index]));
         CheckSection(section);
         return section;
     }
@@ -72,8 +86,8 @@ struct ConfigFile {
 };
 
 template<>
-inline void ConfigFile::CheckSection<BMGHeader>(const BMGHeader& bmg) const {
-    if(bmg.magic != 0x4D455347626D6731) Debug::FatalError(error);
+inline void ConfigFile::CheckSection<PulBMG>(const PulBMG& bmg) const {
+    if(bmg.header.magic != 0x4D455347626D6731) Debug::FatalError(error);
 }
 
 class System {
@@ -83,18 +97,18 @@ private:
     //System functions
     void Init(const ConfigFile& bin);
     void InitInstances(const ConfigFile& bin, IOType type) const {
-        CupsConfig::sInstance = new CupsConfig(bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups);
-        Info::sInstance = new Info(bin.GetSection<InfoHolder, &BinaryHeader::offsetToInfo>().info);
+        CupsConfig::sInstance = new CupsConfig(bin.GetSection<CupsHolder>().cups);
+        Info::sInstance = new Info(bin.GetSection<InfoHolder>().info);
         this->InitIO(type);
-        this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder, &BinaryHeader::offsetToCups>().cups.trophyCount[0]);
+        this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder>().cups.trophyCount[0]);
     }
     void InitIO(IOType type) const;
     void InitCups(const ConfigFile& bin);
+    void InitSettings(u32 pageCount, const u16* totalTrophyCount) const;
 
 protected:
     static const u32 defaultSettingsPageCount = 5;
     //Virtual
-    virtual void InitSettings(u32 pageCount, const u16* totalTrophyCount) const;
     virtual void AfterInit() {};
 
 public:

@@ -50,7 +50,7 @@ SectionId BootIntoSection() {
         const SaveDataManager* save = SaveDataManager::sInstance;
         if(save->CheckLicenseMagic(bootSetting - 1)) {
             const LicenseManager* licenseManager = &save->licenses[bootSetting - 1];
-            if(licenseManager->miiID.createID != 0) {
+            if(licenseManager->miiID.intIds.avatarId != 0) {
                 section = SECTION_P1_WIFI;
                 //section = SECTION_SINGLE_PLAYER_FROM_MENU;
                 license = bootSetting - 1;

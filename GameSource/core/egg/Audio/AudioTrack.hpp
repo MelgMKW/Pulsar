@@ -22,7 +22,7 @@ class AudioTrack {
     AudioTrack(); //80213e1c
     AudioTrackCallback callback;
     virtual void Reset(); //at 0x8 80213e48 vtable 802a2980
-    virtual void Calc(); //80213edc
+    virtual bool Calc(); //80213edc
     void ApplyValueChange(u32 stepCount, float maxValue); //80213e5c
     bool ClampValue(float minValue, float maxValue); //80213f54
     u32 delay; //0xC number of steps in frames
@@ -34,7 +34,7 @@ class AudioTrack {
 class SimpleAudioTrack : public AudioTrack {
     SimpleAudioTrack(u32 r4, snd::SoundHandle* handle); //80213f88
     void Reset() override; //80213ffc vtable 802a2968
-    void Calc() override; //802141c0
+    bool Calc() override; //802141c0
     virtual void SetValueSmooth(u32 r4, u32 delay, float maxValue); //80214058
     virtual void SetValueSmoothAsync(u32 delay, float maxValue); //8021410c
     snd::SoundHandle* handle;

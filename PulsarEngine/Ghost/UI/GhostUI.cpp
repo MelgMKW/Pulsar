@@ -158,7 +158,7 @@ void BeforeEntranceAnimations(Pages::TTSplits* page) {
     entry.kart = RaceData::sInstance->racesScenario.players[0].kartId;
     entry.controllerType = sectionMgr->pad.GetType(sectionMgr->pad.GetCurrentID(0));
     const Mii* mii = m98->playerMiis.GetMii(0);
-    Mii::ComputeRFLStoreData(entry.miiData, &mii->createId);
+    Mii::ComputeRFLStoreData(entry.miiData, &mii->info.createID);
 
     //Find which lap is the best
     RaceInfoPlayer* raceInfoPlayer = RaceInfo::sInstance->players[0];

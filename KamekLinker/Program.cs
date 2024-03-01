@@ -91,11 +91,16 @@ namespace Kamek
                 else
                 {
                     Console.WriteLine("adding {0} as object..", arg);
-                    if (debug != null) debug.AnalyzeFile(arg);                                   
+                    
+                    if (debug != null)
+                    {
+                        //debug.AnalyzeFile(arg);
+                    }
                     using (var stream = new FileStream(arg, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
                         modules.Add(new Elf(stream));
                     }
+                    
                 }
             }
             if (debug != null) debug.Save();

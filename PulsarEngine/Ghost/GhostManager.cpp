@@ -193,12 +193,24 @@ bool Manager::SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap) {
 void Manager::CreateAndSaveFiles(Manager* manager) {
     char path[IOS::ipcMaxPath];
     const RKG& rkg = manager->rkg;
-    snprintf(path, IOS::ipcMaxPath, "%s/%01dm%02ds%03d.rkg", IO::sInstance->GetName(),
-        rkg.header.minutes, rkg.header.seconds, rkg.header.milliseconds);
-    IO* loader = IO::sInstance;
-    loader->CreateAndOpen(path, FILE_MODE_WRITE);
-    loader->Overwrite(GetRKGLength(rkg), &rkg);
-    loader->Close();
+    s8 repeatCount = manager->leaderboard.GetRepeatCount(rkg);
+
+    IO* io = IO::sInstance;
+    const u32 minutes = rkg.header.minutes;
+    const u32 seconds = rkg.header.seconds;
+    const u32 milliseconds = rkg.header.milliseconds;
+    const char* format = "%s/%01dm%02ds%03d.rkg";
+    const char* folder = io->GetFolderName();
+    char letter = '@';
+    if(repeatCount > 0) {
+        format = "%s/%01dm%02ds%02d%c.rkg";
+        letter += repeatCount;
+    }
+    snprintf(path, IOS::ipcMaxPath, format, folder, minutes, seconds, milliseconds, letter);
+
+    io->CreateAndOpen(path, FILE_MODE_WRITE);
+    io->Overwrite(GetRKGLength(rkg), &rkg);
+    io->Close();
 
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     char folderPath[IOS::ipcMaxPath];

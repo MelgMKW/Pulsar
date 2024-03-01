@@ -28,7 +28,7 @@ public:
         math::MTX34* viewPosMtxArray, math::MTX33* viewNrmMtxArray, math::MTX34* viewTexMtxArray, int nView, int numViewMtx);
 
     bool IsDerivedFrom(TypeObj type) const override; //0x8 80072db0 vtable 80273200
-    void G3dProc(u32 r4, u32 r5, void* info); //0xC 800714b0
+    void G3dProc(u32 g3dproc, u32 param, void* info); //0xC 800714b0
     ~ScnMdlSimple() override; //0x10 80072c90
     TypeObj GetTypeObj() const override; //0x14 80072e50
     const char* GetTypeName() const override; //0x18 80072e20

@@ -23,23 +23,34 @@
 
 /*
 template<int size>
-struct String {
-    String() {}
-
-    const char* operator&() const {
-        return cString;
-    }
-    char* operator&() {
-        return cString;
-    }
-    const char& operator[](u32 pos) const {
-        return cString[pos];
-    }
-    char& operator[](u32 pos) {
-        return cString[pos];
-    }
+struct StringStack {
+    operator const char* () const { return &cString[0]; }
+    operator char* () { return &cStringPtr[0]; }
+    const char& operator[](u32 pos) const { return cString[pos]; }
+    char& operator[](u32 pos) { return cString[pos]; }
 
     char cString[size];
+};
+
+template<int size>
+struct StringHeap {
+    operator const char* () const { return cStringPtr; }
+    operator char* () { return cStringPtr; }
+    const char& operator[](u32 pos) const { return cStringPtr[pos]; }
+    char& operator[](u32 pos) { return cStringPtr[pos]; }
+
+    char* cStringPtr;
+};
+
+template<bool B, class T, class F>
+struct conditional { typedef T type; };
+
+template<class T, class F>
+struct conditional<false, T, F> { typedef F type; };
+
+template<int size>
+struct String {
+    typedef typename conditional<size >= 100, StringHeap<size>, StringStack<size> >::type Impl;
 };
 */
 

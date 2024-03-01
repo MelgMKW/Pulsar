@@ -79,18 +79,18 @@ public:
         T& operator*() const {
             return *operator->();
         }
-        T* operator->() const { return GetPointerFromNode(it.operator->()); }
-        Iterator& operator++() { ++it; return *this; }
+        T* operator->() const { return GetPointerFromNode(itImpl.operator->()); }
+        Iterator& operator++() { ++itImpl; return *this; }
         Iterator operator++(int) { const Iterator it(*this); ++*this; return it; }
-        Iterator& operator--() { --it; return *this; }
+        Iterator& operator--() { --itImpl; return *this; }
         Iterator operator--(int) { const Iterator it(*this); --*this; return it; }
-        friend bool operator==(Iterator it1, Iterator it2) { return it1.it == it2.it; }
+        friend bool operator==(Iterator it1, Iterator it2) { return it1.itImpl == it2.itImpl; }
         friend bool operator!=(Iterator it1, Iterator it2) { return !(it1 == it2); }
 
     private:
-        explicit Iterator(LinkListImpl::IteratorImpl it): it(it) {}
+        explicit Iterator(LinkListImpl::IteratorImpl it): itImpl(it) {}
 
-        LinkListImpl::IteratorImpl it;
+        LinkListImpl::IteratorImpl itImpl;
         friend class LinkList;
     };
 

@@ -17,6 +17,13 @@ enum Type {
     SETTINGSTYPE_HOST
 };
 
+enum SectionIndexes {
+    SECTION_PAGES,
+    SECTION_MISC,
+    SECTION_TROPHIES,
+    SECTION_GP
+};
+
 class Hook : public DoFuncsHook {
     static DoFuncsHook* settingsHooks;
 public:
@@ -27,7 +34,7 @@ public:
 struct TrackTrophy {
     u32 crc32;
     bool hastrophy[4];
-};
+}; //0x8
 
 
 struct Page {
@@ -43,6 +50,7 @@ struct Page {
 struct PagesHolder {
     static const u32 pageMagic = 'PAGE';
     static const u32 version = 1;
+    static const u32 index = SECTION_PAGES;
     Pulsar::SectionHeader header;
     u32 pageCount;
     Page pages[1];
@@ -51,62 +59,137 @@ struct PagesHolder {
 struct MiscParams {
     static const u32 miscMagic = 'MISC';
     static const u32 version = 1;
+    static const u32 index = SECTION_MISC;
     Pulsar::SectionHeader header;
-    u32 reserved[20];
-    PulsarCupId lastSelectedCup;
-    u32 trackCount;
+    u32 reserved[20]; //0xc
+    PulsarCupId lastSelectedCup; //0x5c
+    u32 trackCount; //0x60
 };
 
 struct TrophiesHolder {
     static const u32 tropMagic = 'TROP';
     static const u32 version = 1;
+    static const u32 index = SECTION_TROPHIES;
     Pulsar::SectionHeader header;
     u16 trophyCount[4];
     TrackTrophy trophies[1];
+};
+
+struct GPCupStatus {
+    u8 gpCCStatus[4]; //one per CC
+};
+struct GPSection {
+    static const u32 gpMagic = 'GP\0\0';
+    static const u32 version = 1;
+    static const u32 index = SECTION_GP;
+    enum Status {
+        GOLD_TROPHY = 0,
+        SILVER_TROPHY = 1,
+        BRONZE_TROPHY = 2,
+        NO_TROPHY = 3,
+
+        //2 bits for trophy
+        //4 bits for rank, 0 to 7
+        //3 2 1 a b c d e
+
+
+
+    };
+    Pulsar::SectionHeader header;
+    GPCupStatus gpStatus[1]; //one per cup
 };
 
 struct BinaryHeader {
     u32 magic;
     u32 version;
     u32 fileSize;
+    u32 sectionCount;
+    u32 offsets[1]; //0x10
+    //u32 offsetToPages;
+    //u32 offsetToMisc;
+    //u32 offsetToTrophies;
+    //u32 offsetToGP;
+};
+
+struct BinaryHeaderV1 {
+    u32 magic;
+    u32 version;
+    u32 fileSize;
     u32 offsetToPages;
     u32 offsetToMisc;
     u32 offsetToTrophies;
+    u32 offsetToGP;
 };
 
 class alignas(0x20) Binary {
     static const u32 binMagic = 'PULP';
+    static const u32 sectionCount = 4;
+    static const u32 curVersion = 3;
 
-    Binary(u32 curVersion, u32 pageCount) {
-        u32 trackCount = CupsConfig::sInstance->GetEffectiveTrackCount();
+    Binary(u32 curVersion, u32 pageCount, u32 trackCount) {
 
         header.magic = binMagic;
         header.version = curVersion;
-        header.offsetToPages = offsetof(Binary, pages);
-        header.offsetToMisc = header.offsetToPages + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1);
-        header.offsetToTrophies = header.offsetToMisc + sizeof(MiscParams);
-        header.fileSize = header.offsetToTrophies + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1);
+        header.offsets[PagesHolder::index]    = sizeof(BinaryHeader) + sizeof(u32) * (sectionCount - 1);
+        header.offsets[MiscParams::index]     = header.offsets[PagesHolder::index] + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1);
+        header.offsets[TrophiesHolder::index] = header.offsets[MiscParams::index] + sizeof(MiscParams);
+        header.offsets[GPSection::index]      = header.offsets[TrophiesHolder::index] + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1);
+        header.fileSize = header.offsets[GPSection::index] + sizeof(GPSection) + sizeof(GPCupStatus) * (trackCount / 4 - 1);
+        header.sectionCount = sectionCount;
 
-        PagesHolder& pages = this->GetSection<PagesHolder, &BinaryHeader::offsetToPages>();
+        PagesHolder& pages = this->GetSection<PagesHolder>();
         pages.header.magic = PagesHolder::pageMagic;
         pages.header.version = PagesHolder::version;
+        pages.header.size = sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1);
         pages.pageCount = pageCount;
 
-        MiscParams& params = this->GetSection<MiscParams, &BinaryHeader::offsetToMisc>();
+        MiscParams& params = this->GetSection<MiscParams>();
         params.header.magic = MiscParams::miscMagic;
         params.header.version = MiscParams::version;
+        params.header.size = sizeof(MiscParams);
         params.trackCount = trackCount;
         params.lastSelectedCup = PULSARCUPID_NONE;
 
-        TrophiesHolder& trophies = this->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
+        TrophiesHolder& trophies = this->GetSection<TrophiesHolder>();
         trophies.header.magic = TrophiesHolder::tropMagic;
         trophies.header.version = TrophiesHolder::version;
+        trophies.header.size = sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1);
 
+        GPSection& gp = this->GetSection<GPSection>();
+        gp.header.magic = GPSection::gpMagic;
+        gp.header.version = GPSection::version;
+        gp.header.size = sizeof(GPSection) + sizeof(GPCupStatus) * (trackCount / 4 - 1);
+        memset(&gp.gpStatus[0], 0xFF, gp.header.size);
     }
 
-    template<typename T, u32 BinaryHeader::* offset>
+    Binary(const Binary& old) { //V2 -> V3
+
+        const BinaryHeaderV1& oldHeader = reinterpret_cast<const BinaryHeaderV1&>(old.header);
+        const PagesHolder& oldPages = *reinterpret_cast<const PagesHolder*>(ut::AddU32ToPtr(&old, oldHeader.offsetToPages)); //
+        const MiscParams& oldParams = *reinterpret_cast<const MiscParams*>(ut::AddU32ToPtr(&old, oldHeader.offsetToMisc));
+        //const TrophiesHolder& oldTrophies = old.GetSection<TrophiesHolder>();
+
+        u32 pageCount = oldPages.pageCount;
+        u32 trackCount = oldParams.trackCount;
+
+        new(this) Binary(curVersion, pageCount, trackCount);
+
+        PagesHolder& pages = this->GetSection<PagesHolder>();
+        MiscParams& params = this->GetSection<MiscParams>();
+        TrophiesHolder& trophies = this->GetSection<TrophiesHolder>();
+
+        memcpy(&pages, &oldPages, pages.header.size + params.header.size + trophies.header.size);
+        GPSection& gp = this->GetSection<GPSection>();
+        memset(&gp.gpStatus[0], 0xFF, gp.header.size);
+    }
+
+    template<typename T>
     inline T& GetSection() {
-        return *reinterpret_cast<T*>(ut::AddU32ToPtr(this, this->header.*offset));
+        return *reinterpret_cast<T*>(ut::AddU32ToPtr(this, this->header.offsets[T::index]));
+    }
+    template<typename T>
+    inline const T& GetSection() const {
+        return *reinterpret_cast<const T*>(ut::AddU32ToPtr(this, this->header.offsets[T::index]));
     }
     template <class T>
     bool CheckSection(const T& t) { if(t.header.magic != T::magic) return false; return true; }
@@ -139,24 +222,25 @@ inline TrophiesHolder& Binary::GetSection<TrophiesHolder>() {
 
 
 class Mgr {
-protected:
+private:
 
     friend class System;
     friend class UI::SettingsPanel;
-    static const u32 curVersion = 2;
+
 
     static Mgr* sInstance;
     static void SaveTask(void*);
-    virtual void Init(u32 pageCount, const u16* totalTrophyCount, const char* path);
-    virtual int GetSettingsBinSize(u32 pageCount) const;
+    void Init(u32 pageCount, const u16* totalTrophyCount, const char* path);
+    int GetSettingsBinSize() const;
     char filePath[IOS::ipcMaxPath];
     Binary* rawBin;
-private:
+
 
     TrackTrophy* FindTrackTrophy(u32 crc32, TTMode mode) const;
     void UpdateTrackList();
     void SetSettingValue(Type type, u32 setting, u8 value);
     void AdjustTrackCount(u32 newTrackCount);
+    Binary* UpdateVersion(const Binary* old);
 
 public:
     Mgr() : rawBin(nullptr) {}
@@ -169,19 +253,36 @@ public:
         System::sInstance->taskThread->Request(&Mgr::SaveTask, nullptr, 0);
     }
     void Save();
-    void SetLastSelectedCup(PulsarCupId id) { this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>().lastSelectedCup = id; }
+    void SetLastSelectedCup(PulsarCupId id) { this->rawBin->GetSection<MiscParams>().lastSelectedCup = id; }
 
     void AddTrophy(u32 crc32, TTMode mode);
     bool HasTrophy(u32 crc32, TTMode mode) const;
     bool HasTrophy(PulsarId id, TTMode mode) const;
     u16 GetTotalTrophyCount(TTMode mode) const { return totalTrophyCount[mode]; }
-    int GetTrophyCount(TTMode mode) const { return this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>().trophyCount[mode]; }
+    int GetTrophyCount(TTMode mode) const { return this->rawBin->GetSection<TrophiesHolder>().trophyCount[mode]; }
+
+    //GP
+    static u8 GetGPStatus(u32 idx, u32 cc) {
+        Mgr* mgr = Mgr::sInstance;
+        GPSection& gp = mgr->rawBin->GetSection<GPSection>();
+        return gp.gpStatus[idx].gpCCStatus[cc];
+    }
+    static void SetGPStatus(u32 idx, u32 cc, u32 trophy, GPRank rank) {
+        Mgr* mgr = Mgr::sInstance;
+        GPSection& gp = mgr->rawBin->GetSection<GPSection>();
+        u8 newStatus = trophy | rank & 0b111100;
+        if(gp.gpStatus[idx].gpCCStatus[cc] != newStatus) {
+            gp.gpStatus[idx].gpCCStatus[cc] = newStatus;
+            mgr->RequestSave();
+        }
+    }
 
     static u8 GetSettingValue(Type type, u32 setting);
     static void Create();
 
 private:
     u16 totalTrophyCount[4];
+    u32 pageCount;
 
 };
 }//namespace Settings

@@ -88,7 +88,7 @@ public:
     static ScnGroup* Construct(G3dHeap* heap, u32* size, u32 maxChildren); //8006e390
     ScnGroup(G3dHeap* heap, ScnObj** array, u32 maxChildren);
     bool IsDerivedFrom(TypeObj type) const override; //0x8 8006ef70 vtable 802730d8
-    void G3dProc(u32 r4, u32 r5, void* info); //0xC 8006e6b0
+    void G3dProc(u32 g3dproc, u32 param, void* info) override; //0xC 8006e6b0
     ~ScnGroup() override; //0x10 8006eeb0
     TypeObj GetTypeObj() const override; //0x14 8006f030
     const char* GetTypeName() const override; //0x18 8006f000
@@ -98,6 +98,7 @@ public:
     virtual bool Remove(ScnObj* obj); //0x3c 8006edb0
 
     void DefG3dProcScnGroup(u32 g3dproc, u32 param, void* info); //8006e6f0
+    void ScnGroup_G3DPROC_GATHER_SCNOBJ(u32 param, IScnObjGather* collection); //8006e590
 
     ScnObj** scnObjs;
     u32 scnObjArraySize; //0xe0

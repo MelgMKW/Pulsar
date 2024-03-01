@@ -8,7 +8,7 @@ namespace nw4r {
 namespace g3d {
 
 class AnmObjChrRes;
-class AnmObjChr: public AnmObj {
+class AnmObjChr : public AnmObj {
 public:
     enum BindOption {
         BIND_ONE,
@@ -38,11 +38,11 @@ public:
     u16* const binding; //0x14 node to anim
 }; //0x18
 
-class AnmObjChrRes: public AnmObjChr, public FrameCtrl {
+class AnmObjChrRes : public AnmObjChr, public FrameCtrl {
     static AnmObjChrRes* Construct(G3dHeap* heap, u32* size, ResAnmChr resAnm, ResMdl resMdl, bool hasCache); //8005c7e0
     AnmObjChrRes(G3dHeap* heap, ResAnmChr resAnm, u16* binding, int numBinding, ChrAnmResult* cacheBuf); //inlined
     bool IsDerivedFrom(TypeObj type) const override; //0x8 8005d200 vtable 80272c80
-    void G3dProc(u32 r4, u32 r5, void* info) override; //0xC 8005d1b0
+    void G3dProc(u32 g3dproc, u32 param, void* info) override; //0xC 8005d1b0
     ~AnmObjChrRes() override; //0x10 8005d300
     TypeObj GetTypeObj() const override; //0x14 8005d2f0
     const char* GetTypeName() const override; //0x18 8005d2c0
@@ -61,10 +61,10 @@ class AnmObjChrRes: public AnmObjChr, public FrameCtrl {
     ChrAnmResult* const resultCache;
 };
 
-class AnmObjChrNode: public AnmObjChr {
+class AnmObjChrNode : public AnmObjChr {
 public:
     bool IsDerivedFrom(TypeObj type) const override; //0x8 8005d3d0 vtable 80272d30
-    void G3dProc(u32 r4, u32 r5, void* info) override; //0xC 8005bf80
+    void G3dProc(u32 g3dproc, u32 param, void* info) override; //0xC 8005bf80
     ~AnmObjChrNode() override; //0x10 8005b620
     TypeObj GetTypeObj() const override; //0x14 8005d520
     const char* GetTypeName() const override; //0x18 8005d4f0
@@ -84,7 +84,7 @@ public:
     AnmObjChrRes** const children; //0x1c
 };
 
-class AnmObjChrBlend: public AnmObjChrNode {
+class AnmObjChrBlend : public AnmObjChrNode {
 public:
     static AnmObjChrBlend* Construct(G3dHeap* heap, u32* size, ResMdl resMdl, int maxChildren = 4); //8005c000
     AnmObjChrBlend(G3dHeap* heap, u16* binding, int bindingCount, AnmObjChrRes** children, int arraySize, float* weightArray); //inlined

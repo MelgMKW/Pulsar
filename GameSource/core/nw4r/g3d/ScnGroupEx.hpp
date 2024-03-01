@@ -44,7 +44,7 @@ public:
     ScnGroupEx(G3dHeap* heap, ScnObj** array, u32 maxNumChildren, ScnObjGatherEx* collection,
         bool gatherOpa, bool gatherXlu);
     bool IsDerivedFrom(TypeObj type) const override; //0x8 80076710 vtable 802732f8
-    void G3dProc(u32 r4, u32 r5, void* info); //0xC 80076250
+    void G3dProc(u32 g3dproc, u32 param, void* info); //0xC 80076250
     ~ScnGroupEx() override; //0x10 80076580
     TypeObj GetTypeObj() const override; //0x14 800767b0
     const char* GetTypeName() const override; //0x18 80076780

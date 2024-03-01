@@ -9,7 +9,7 @@ namespace nw4r {
 namespace g3d {
 
 class AnmObjTexPatRes;
-class AnmObjTexPat: public AnmObj {
+class AnmObjTexPat : public AnmObj {
 public:
     bool IsDerivedFrom(TypeObj type) const override; //80059c10 vtable 80272b18
     ~AnmObjTexPat() override; //0x10 800589a0
@@ -25,11 +25,11 @@ public:
     u16* const binding; //0x14 node to anim
 };
 
-class AnmObjTexPatRes: public AnmObjTexPat, public FrameCtrl {
+class AnmObjTexPatRes : public AnmObjTexPat, public FrameCtrl {
 public:
     static AnmObjTexPatRes* Construct(G3dHeap* heap, u32* size, ResAnmTexPat res, ResMdl resMdl, bool bHasCache); //80059360
     bool IsDerivedFrom(TypeObj type) const override; //0x8 80059ba0 vtable 80272a40
-    void G3dProc(u32 r4, u32 r5, void* info) override; //0xc 80059950
+    void G3dProc(u32 g3dproc, u32 param, void* info) override; //0xc 80059950
     ~AnmObjTexPatRes() override; //0x10 80059ca0
     TypeObj GetTypeObj() const override; //0x14 80059c90
     const char* GetTypeName() const override; //0x18 80059c60
@@ -45,10 +45,10 @@ public:
     TexPatAnmResult* const  resultCache;
 };
 
-class AnmObjTexPatNode: public AnmObjTexPat {
+class AnmObjTexPatNode : public AnmObjTexPat {
 public:
     bool IsDerivedFrom(TypeObj type) const override; //0x8 80059d70 vtable 80272ad0
-    void G3dProc(u32 r4, u32 r5, void* info) override; //0xc 800590e0
+    void G3dProc(u32 g3dproc, u32 param, void* info) override; //0xc 800590e0
     ~AnmObjTexPatNode() override; //0x10 800589e0
     TypeObj GetTypeObj() const override; //0x14 80059ec0
     const char* GetTypeName() const override; //0x18 80059e90
@@ -66,7 +66,7 @@ public:
     AnmObjTexPatRes** const childrenArray;
 };
 
-class AnmObjTexPatOverride: public AnmObjTexPatNode {
+class AnmObjTexPatOverride : public AnmObjTexPatNode {
     static AnmObjTexPatOverride* Construct(G3dHeap* Heap, u32* size, ResMdl resMdl, int  maxChildren); //80059160
     bool IsDerivedFrom(TypeObj type) const override; //0x8 80059cf0 vtable 80272a88
     ~AnmObjTexPatOverride() override; //0x10 80059e20

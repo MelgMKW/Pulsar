@@ -15,6 +15,22 @@ enum BMG {
     BMG_SAVED_GHOST = 0x45b,
     BMG_FINISH = 0x4b5,
     BMG_TIME_TRIALS = 0xbb9,
+
+    BMG_GP_BOTTOM_TEXT = 0xd20,
+    BMG_GP_GOLD_TROPHY = 0xd2a,
+    BMG_GP_SILVER_TROPHY = 0xd2b,
+    BMG_GP_BRONZE_TROPHY = 0xd2c,
+    BMG_GP_RANK_3STARS = 0xd2d,
+    BMG_GP_RANK_2STARS = 0xd2e,
+    BMG_GP_RANK_1STAR = 0xd2f,
+    BMG_GP_RANK_A = 0xd30,
+    BMG_GP_RANK_B = 0xd31,
+    BMG_GP_RANK_C = 0xd32,
+    BMG_GP_RANK_D = 0xd33,
+    BMG_GP_RANK_E = 0xd34,
+    BMG_GP_RANK_F = 0xd35, //unused
+    BMG_GP_BLANK = 0xd36,
+
     BMG_CHOOSE_GHOST_DATA = 0xd4f,
     BMG_READY_TO_RACE = 0x1105,
     BMG_CHALLENGE_GHOST = 0x177b,

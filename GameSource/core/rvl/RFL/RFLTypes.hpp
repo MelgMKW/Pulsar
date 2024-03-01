@@ -1,10 +1,133 @@
-#ifndef _RFL_
-#define _RFL_
+#ifndef _RFL_TYPES_
+#define _RFL_TYPES_
 #include <types.hpp>
+#include <core/rvl/gx/GXStruct.hpp>
 #include <core/rvl/MEM/MEMexpHeap.hpp>
 
-//Riivolution Face Library
+//Revolution Face Library
 namespace RFL {
+
+enum ErrCode {
+    RFLErrcode_Success 			= 0,
+    RFLErrcode_NotAvailable,
+    RFLErrcode_NANDCommandfail,
+    RFLErrcode_Loadfail,
+    RFLErrcode_Savefail,
+    RFLErrcode_Fatal,
+    RFLErrcode_Busy,
+    RFLErrcode_Broken,
+    RFLErrcode_Exist,
+    RFLErrcode_DBFull,
+    RFLErrcode_DBNodata,
+    RFLErrcode_Controllerfail,
+    RFLErrcode_NWC24Fail,
+    RFLErrcode_MaxFiles,
+    RFLErrcode_MaxBlocks,
+    RFLErrcode_WrongParam,
+    RFLErrcode_NoFriends,
+    RFLErrcode_Isolation,
+    RFLErrcode_Unknown			= 255
+};
+
+enum DataSource {
+    RFLDataSource_Official, //table DB, store data
+    RFLDataSource_Hidden,
+    RFLDataSource_Controller1,
+    RFLDataSource_Controller2,
+    RFLDataSource_Controller3,
+    RFLDataSource_Controller4,
+    RFLDataSource_Default, //default player miis
+    RFLDataSource_Middle, //middleDB
+    RFLDataSource_Max
+};
+
+enum Resolution {
+    RFLResolution_64	= 0x40,
+    RFLResolution_128	= 0x80,
+    RFLResolution_256	= 0x100,
+    //M = mipmap
+    RFLResolution_64M	= 0x60,
+    RFLResolution_128M	= 0xe0,
+    RFLResolution_256M	= 0x1e0
+};
+
+enum FavoriteColor {
+    RFLFavoriteColor_Red,
+    RFLFavoriteColor_Orange,
+    RFLFavoriteColor_Yellow,
+    RFLFavoriteColor_YellowGreen,
+    RFLFavoriteColor_Green,
+    RFLFavoriteColor_Blue,
+    RFLFavoriteColor_SkyBlue,
+    RFLFavoriteColor_Pink,
+    RFLFavoriteColor_Purple,
+    RFLFavoriteColor_Brown,
+    RFLFavoriteColor_White,
+    RFLFavoriteColor_Black,
+    RFLFavoriteColor_Max
+};
+
+enum Expression {
+    RFLExp_Normal = 0,
+    RFLExp_Smile,
+    RFLExp_Anger,
+    RFLExp_Sorrow,
+    RFLExp_Surprise,
+    RFLExp_Blink,
+    RFLExp_OpenMouth,
+
+    RFLExp_Max
+};
+
+enum Sex {
+    RFLSex_Male,
+    RFLSex_Female,
+    RFLSex_All
+};
+
+enum Age {
+    RFLAge_Child,
+    RFLAge_Adult,
+    RFLAge_Elder,
+    RFLAge_All
+};
+
+enum Race {
+    RFLRace_Black,
+    RFLRace_White,
+    RFLRace_Asian,
+    RFLRace_All
+};
+
+enum ExpressionFlag {
+    RFLExpFlag_Normal = 0x1 << RFLExp_Normal,
+    RFLExpFlag_Smile = 0x1 << RFLExp_Smile,
+    RFLExpFlag_Anger = 0x1 << RFLExp_Anger,
+    RFLExpFlag_Sorrow = 0x1 << RFLExp_Sorrow,
+    RFLExpFlag_Surprise = 0x1 << RFLExp_Surprise,
+    RFLExpFlag_Blink = 0x1 << RFLExp_Blink,
+    RFLExpFlag_OpenMouth = 0x1 << RFLExp_OpenMouth
+};
+
+struct CreateID {
+    u8 data[8];
+};
+typedef u16 IDX;
+
+struct AdditionalInfo { //rlwinm (dolphin masks)
+    wchar_t	name[11];       //0x0
+    wchar_t	creator[11];    //0x16
+    CreateID createID;      //0x2c
+    u32	gender : 1;         //0x34    (1,31,31)
+    u32	birth_month : 4;    //0x34:1  (5,28,31)
+    u32	birth_day : 5;      //0x34:5  (10,28,31)
+    u32	favoriteColor : 4;  //0x34:9  (14,28,31)
+    u32	favorite : 1;       //0x34:13 (15,31,31)
+    u32	height : 7;         //0x34:14 (22,25,31, 0x1fc)
+    u32	build : 7;          //0x34:21 (29,25,31, 0x3f8)
+    u32	reserved : 3;       //0x34:24
+    GX::Color skinColor;    //0x38
+}; //0x38
 
 struct ResSection {
     u16 filesCount;
@@ -29,13 +152,6 @@ struct Loader {
 struct HDBManager {
     u8 unknown[0x4];
 };
-
-struct MiddleDB {
-    u8 unknown[0x18];
-};
-
-typedef u32 CreateID;
-typedef u16 ID;
 
 #pragma pack(push, 1)
 struct StoreData { //http://wiibrew.org/wiki/Mii_data#Mii_format
@@ -142,35 +258,6 @@ struct Manager {
     u8 heapBuffer[0x620A4]; //heap of size 0x620e0
 };
 
-extern Manager* manager; //80383568
-u32 GetWorkSize(u32 r3); //800bbb80
-u32 RFLInitRes(Manager* managerBuffer, Res* res, u32 resSize, u32 r6); //800bbf10
-u32 Init(Manager* managerBuffer, Res* res, u32 resSize, u32 r6); //800bbba0
-BOOL RFLAvailable(); //800bc370
-void* iAlloc(u32 size); //800bc3b0
-void* iAlloc32(u32 size); //800bc3b0
-void iFree(void* block); //800bc3d0
-DBManager* iGetDBManager(); //800bc3e0
-HDBManager* iGetHDBManager(); //800bc400
-Loader* iGetLoader(); //800bc420
-BOOL iGetWorking(); //800bc440
-Manager* iGetManager(); //800bc470
-u32 RFLWaitAsync(); //800bc540
-const char* GetArcFilePath(); //800bc6e0 https://wiki.tockdom.com/wiki/RFL_Res.dat_(File_Format)
-
-bool IsAvailableOfficialData(); //800c7290
-u32 GetAdditionalInfo(u32 r3, u32 r4, u32 r5, u32 r6); //800cb7e0
-u32 GetMiddleDBBufferSize(u32 size); //800c8850
-void InitMiddleDB(MiddleDB* middleDB, u32 r4, void* buffer, u32 r6); //800c8860
-BOOL UpdateMiddleDBAsync(MiddleDB* middleDB); //800c9550
-BOOL iUpdateMiddleDBAsync(MiddleDB* middleDB, u32 r4, u32 r5); //800c95b0
-u32 GetMiddleDBStoredSize(MiddleDB* middleDB); //800c9710
-void SetMiddleDBRandomMask(MiddleDB* middleDB, u8 r4, u8 r5, u8 r6); //800c97c0
-void SetMiddleDBHiddenMask(MiddleDB* middleDB, u8 hiddenMask); //800c97e0
-
-
-BOOL SearchOfficialData(CreateID createId, ID* id); //80527b5c idx is filled
-BOOL GetStoreData(StoreData* dest, u32 r4, ID id); //800c7df0
 
 
 

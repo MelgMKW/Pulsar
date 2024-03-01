@@ -16,7 +16,7 @@ Contributors:
 using namespace nw4r;
 
 class SoundTrack : public EGG::AudioTrack {
-    void Calc() override; //80717d2c vtable 808c91e0
+    bool Calc() override; //80717d2c vtable 808c91e0
     void SetValue(float minValue, float maxValue); //80717d08 if curVol > max then set to max, opposite for min
 
 };//total size 0x1C

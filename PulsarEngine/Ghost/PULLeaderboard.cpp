@@ -64,6 +64,17 @@ s32 Leaderboard::GetPosition(const Timer& other) const {
     return position;
 }
 
+s8 Leaderboard::GetRepeatCount(const RKG& rkg) const {
+    const TTMode mode = System::sInstance->ttMode;
+    const RKGHeader& header = rkg.header;
+    s8 repeats = 0;
+    for(int i = 0; i < 11; ++i) {
+        const PULTimeEntry& cur = this->entries[mode][i];
+        if(cur.milliseconds == header.milliseconds && cur.seconds == header.seconds && cur.minutes == header.minutes) repeats++;
+    }
+    return repeats;
+}
+
 //updates the ldb with a new entry and a rkg crc32
 void Leaderboard::Update(u32 position, const TimeEntry& entry, u32 rkgCRC32) {
     const TTMode mode = System::sInstance->ttMode;

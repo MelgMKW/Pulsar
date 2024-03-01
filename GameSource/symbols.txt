@@ -256,6 +256,7 @@ List_GetNth__Q24nw4r2utFPCQ34nw4r2ut4ListUs = 0x800af1c0
 List_GetNext__Q24nw4r2utFPCQ34nw4r2ut4ListPv = 0x800af180
 List_Append__Q24nw4r2utFPQ34nw4r2ut4ListPv = 0x800aef80
 List_Insert__Q24nw4r2utFPQ34nw4r2ut4ListPvPv = 0x800aeff0
+__dt__Q26detail12LinkListImplFv = 0x800af210
 Insert__Q44nw4r2ut6detail12LinkListImplFQ54nw4r2ut6detail12LinkListImpl12IteratorImplPQ34nw4r2ut12LinkListNode = 0x800af340
 Erase__Q44nw4r2ut6detail12LinkListImplFPQ34nw4r2ut12LinkListNode = 0x800af370
 
@@ -633,6 +634,7 @@ ScheduleDisconnection__7SectionFv = 0x80623054
 RequestBestTimeGhost__18SavedGhostsHandlerFUiUiUi8CourseIdb = 0x80621c78
 RequestDLdGhost__18SavedGhostsHandlerFUiUi8CourseIdb = 0x80621c3c
 LoadStaffGhost = 0x805427bc
+NotifyNewLicenseContent__18SavedGhostsHandlerFv = 0x80621410
 
 #SaveData
 sInstance__Q24NAND7Manager = 0x809bd720

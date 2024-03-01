@@ -6,7 +6,6 @@
 
 namespace Pulsar {
 namespace Settings {
-//SETTINGS, IMPLEMENT INIT AND SAVE BASED ON YOUR SPECIFIC SETTINGS
 DoFuncsHook* Hook::settingsHooks = nullptr;
 
 
@@ -16,13 +15,14 @@ void Mgr::SaveTask(void*) {
     Mgr::GetInstance()->Save();
 }
 
-int Mgr::GetSettingsBinSize(u32 pageCount) const {
+int Mgr::GetSettingsBinSize() const {
     u32 trackCount = CupsConfig::sInstance->GetEffectiveTrackCount();
 
     u32 size = sizeof(BinaryHeader)
         + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1)
         + sizeof(MiscParams)
-        + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1);
+        + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1)
+        + sizeof(GPSection) + sizeof(GPCupStatus) * (trackCount / 4 - 1);
     return size;
 }
 
@@ -34,10 +34,11 @@ void Mgr::Save() {
 };
 
 void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, const char *curMagic, u32 curVersion*/) {
+    this->pageCount = pageCount;
     for(int i = 0; i < 4; ++i) this->totalTrophyCount[i] = totalTrophyCount[i];
     strncpy(this->filePath, path, IOS::ipcMaxPath);
 
-    u32 size = this->GetSettingsBinSize(pageCount);
+    u32 size = this->GetSettingsBinSize();
     System* system = System::sInstance;
     IO* io = IO::sInstance;;
 
@@ -49,20 +50,24 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
     if(ret) {
         alignas(0x20) BinaryHeader header;
         ret = io->Read(sizeof(BinaryHeader), &header);
-        if(header.magic != Binary::binMagic || header.version != curVersion) ret = false;
+        if(header.magic != Binary::binMagic) ret = false;
         else {
             buffer = io->Alloc<Binary>(header.fileSize);
             io->Seek(0);
             io->Read(header.fileSize, buffer);
+            if(header.version != Binary::curVersion) {
+                buffer = this->UpdateVersion(buffer);
+                if(buffer == nullptr) ret = false;
+            }
         }
     }
-    else if(ret == false) {
+    if(ret == false) {
         buffer = io->Alloc<Binary>(size);
         memset(buffer, 0, size);
-        new(buffer) Binary(curVersion, pageCount);
+        new(buffer) Binary(Binary::curVersion, pageCount, CupsConfig::sInstance->GetEffectiveTrackCount());
     }
 
-    TrophiesHolder& trophies = buffer->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
+    TrophiesHolder& trophies = buffer->GetSection<TrophiesHolder>();
     for(int i = 0; i < 4; ++i) {
         u32 curTotalCount = this->GetTotalTrophyCount(static_cast<TTMode>(i));
         if(trophies.trophyCount[i] > curTotalCount) trophies.trophyCount[i] = curTotalCount;
@@ -73,7 +78,7 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
     io->Overwrite(this->rawBin->header.fileSize, this->rawBin);
     io->Close();
 
-    const PulsarCupId last = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>().lastSelectedCup;
+    const PulsarCupId last = this->rawBin->GetSection<MiscParams>().lastSelectedCup;
     CupsConfig* cupsConfig = CupsConfig::sInstance;
     if(last != -1 && cupsConfig->IsValidCup(last) && cupsConfig->GetTotalCupCount() > 8) {
         cupsConfig->lastSelectedCup = last;
@@ -83,8 +88,8 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
 }
 
 TrackTrophy* Mgr::FindTrackTrophy(u32 crc32, TTMode mode) const {
-    u32 trackCount = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>().trackCount;
-    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
+    u32 trackCount = this->rawBin->GetSection<MiscParams>().trackCount;
+    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder>();
 
     for(int i = 0; i < trackCount; ++i) if(trophiesHolder.trophies[i].crc32 == crc32) {
         return &trophiesHolder.trophies[i];
@@ -95,7 +100,7 @@ TrackTrophy* Mgr::FindTrackTrophy(u32 crc32, TTMode mode) const {
 void Mgr::AddTrophy(u32 crc32, TTMode mode) {
     TrackTrophy* trophy = this->FindTrackTrophy(crc32, mode);
     if(trophy != nullptr && !trophy->hastrophy[mode]) {
-        ++(this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>().trophyCount[mode]);
+        ++(this->rawBin->GetSection<TrophiesHolder>().trophyCount[mode]);
         trophy->hastrophy[mode] = true;
     }
 }
@@ -111,33 +116,17 @@ bool Mgr::HasTrophy(PulsarId id, TTMode mode) const {
 }
 
 u8 Mgr::GetSettingValue(Type type, u32 setting) {
-    return Mgr::sInstance->rawBin->GetSection<PagesHolder, &BinaryHeader::offsetToPages>().pages[type].settings[setting];
+    return Mgr::sInstance->rawBin->GetSection<PagesHolder>().pages[type].settings[setting];
 }
 
 void Mgr::SetSettingValue(Type type, u32 setting, u8 value) {
-    Mgr::sInstance->rawBin->GetSection<PagesHolder, &BinaryHeader::offsetToPages>().pages[type].settings[setting] = value;
+    Mgr::sInstance->rawBin->GetSection<PagesHolder>().pages[type].settings[setting] = value;
 }
-
-void Mgr::AdjustTrackCount(u32 newCount) {
-    Binary* oldBin = this->rawBin;
-
-    MiscParams& params = oldBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>();
-    TrophiesHolder& trophiesHolder = oldBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
-    u32 newSize = oldBin->header.fileSize + sizeof(TrackTrophy) * (newCount - params.trackCount);
-    params.trackCount = newCount;
-    Binary* buffer = IO::sInstance->Alloc<Binary>(newSize);
-
-    memcpy(buffer, oldBin, oldBin->header.fileSize);
-    buffer->header.fileSize = newSize;
-    this->rawBin = buffer;
-    delete oldBin;
-}
-
 
 void Mgr::UpdateTrackList() {
 
-    MiscParams& params = this->rawBin->GetSection<MiscParams, &BinaryHeader::offsetToMisc>();
-    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>();
+    MiscParams& params = this->rawBin->GetSection<MiscParams>();
+    TrophiesHolder& trophiesHolder = this->rawBin->GetSection<TrophiesHolder>();
 
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     const u32 oldTrackCount = params.trackCount;
@@ -184,7 +173,7 @@ void Mgr::UpdateTrackList() {
 
     if(oldTrackCount < trackCount) { //the surplus of tracks is simply put continuously at the end of the file, which has been resized to fit the additional tracks
         this->AdjustTrackCount(trackCount);
-        trophies = this->rawBin->GetSection<TrophiesHolder, &BinaryHeader::offsetToTrophies>().trophies;
+        trophies = this->rawBin->GetSection<TrophiesHolder>().trophies;
         u32 idx = oldTrackCount;
         for(int curNew = 0; curNew < trackCount; ++curNew) { //4032 4132
             if(missingCRCIndex[curNew] == 0xFFFF) {
@@ -197,8 +186,50 @@ void Mgr::UpdateTrackList() {
     }
     delete[](missingCRCIndex);
     delete[](toberemovedCRCIndex);
-
 }
+
+
+void Mgr::AdjustTrackCount(u32 newCount) {
+    Binary* oldBin = this->rawBin;
+    MiscParams& params = oldBin->GetSection<MiscParams>();
+    TrophiesHolder& trophiesHolder = oldBin->GetSection<TrophiesHolder>();
+    GPSection& gp = oldBin->GetSection<GPSection>();
+
+    u32 oldCount = params.trackCount;
+    u32 diff = newCount - oldCount;
+
+    u32 newSize = oldBin->header.fileSize
+        + sizeof(TrackTrophy) * (diff)
+        +sizeof(GPCupStatus) * (diff / 4); //GPSection
+
+    params.trackCount = newCount;
+    Binary* buffer = IO::sInstance->Alloc<Binary>(newSize);
+
+    u32 gpTotalSize = gp.header.size;
+    memcpy(buffer, oldBin, oldBin->header.fileSize - gpTotalSize);
+
+    buffer->header.offsets[GPSection::index] += sizeof(TrackTrophy) * (diff); //adjust offset before copying the section
+    memcpy(&buffer->GetSection<GPSection>(), &gp, gpTotalSize);
+
+    buffer->GetSection<TrophiesHolder>().header.size += sizeof(TrackTrophy) * (diff);
+    buffer->GetSection<GPSection>().header.size += sizeof(GPCupStatus) * (diff / 4);
+    buffer->header.fileSize = newSize;
+    this->rawBin = buffer;
+    delete oldBin;
+}
+
+Binary* Mgr::UpdateVersion(const Binary* old) {
+    Binary* ret;
+    if(old->header.version < 2) ret = nullptr;
+    else { //version = 2
+        ret = IO::sInstance->Alloc<Binary>(this->GetSettingsBinSize());
+        new(ret) Binary(*old);
+    }
+    delete old;
+    return ret;
+}
+
+
 } //namespace Settings
 } //namespace Pulsar
 
