@@ -20,6 +20,7 @@ public:
     static inline u32 GetProb150() { return sInstance->prob150cc; }
     static inline u32 GetTrackBlocking() { return  sInstance->trackBlocking; }
     static inline u16 GetCupIconCount() { return sInstance->cupIconCount; }
+    static inline u8 GetChooseNextTrackTimer() { return sInstance->chooseNextTrackTimer; }
     //Context checking
     static bool IsHAW(bool isHost);
     static bool Is200cc();
@@ -54,8 +55,10 @@ private:
     bool hasFeather;
     bool hasMegaTC;
     u16 cupIconCount;
-    u8 reservedSpace[41];
+    u8 chooseNextTrackTimer;
+    u8 reservedSpace[40];
 };
+
 
 }//namespace Pulsar
 

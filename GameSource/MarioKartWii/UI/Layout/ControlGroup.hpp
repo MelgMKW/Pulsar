@@ -32,7 +32,7 @@ public:
 
 
     UIControl** controlArray; //pointer to the array of controls
-    UIControl** controlArray2; //pointer to the array of controls, of length controlCount, idk what is the difference look the same in game
+    UIControl** zIdxOrderedArray; //pointer to the array of controls, of length controlCount, idk what is the difference look the same in game
     UIControl* parentControl; //0x8
     Page* parentPage;
     u32 controlCount; //0x10

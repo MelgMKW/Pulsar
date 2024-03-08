@@ -1,6 +1,7 @@
 #ifndef _ITEMOBJ_
 #define _ITEMOBJ_
 #include <kamek.hpp>
+#include <MarioKartWii/Item/ItemPlayer.hpp>
 #include <MarioKartWii/System/Identifiers.hpp>
 #include <MarioKartWii/3D/ClipInfoMgr.hpp>
 #include <MarioKartWii/Entity/EntityManager.hpp>
@@ -75,13 +76,14 @@ public:
     virtual void vf_0x14(); //0x14 807a05f4
     virtual void SpawnModel(); //0x18 8079d9fc
     virtual void vf_0x1c(); //0x1c 8079da9c
-    virtual bool SetInitialPosition(Player& player); //0x20 8079dcb4 returns 1 if it's a forward throw
+    virtual bool SetInitialPosition(PlayerSub& playerSub);; //0x20 8079dcb4 returns 1 if it's a forward throw
     virtual void OnCollision(); //0x24 8079dcbc
     virtual void vf_0x28(); //0x28 8079dd6c
     virtual void vf_0x2c(); //0x2c 8079dd70
     virtual void vf_0x30(); //0x30 8079dee4
     virtual void vf_0x34(); //0x34 8079e1f0
     void Update(bool r4); //8079efec
+    static float CalcSpeedAndDirection(bool r4, Vec3& direction); //80794e88
     static void GetQuatFromMat(Quat* dest, const Mtx34& src); //807b9dd4 probably global or another class
     static void AddEVENTEntry(ItemObjId itemObjId, u8 playerId);
     ItemObjId itemObjId;
@@ -92,7 +94,7 @@ public:
     Vec3 unknownVec_0x20[2];
     Vec3 basePosition; //0x38
     Vec3 curPosition; //0x44
-    Vec3 speed; //0X50
+    Vec3 speed; //0x50
     float unknown_0x5c;
     u8 unknown_0x60[0x6c - 0x60];
     u8 playerUsedItemId; //0x6c player id of who used the item in the 1st place
@@ -141,6 +143,22 @@ public:
 }; //total size 0x1A0
 size_assert(Obj, 0x1A0);
 
+//throw behind, forward, dropping counts as a special cased behind throw
+class ObjThrowable : public Obj {
+public:
+    //height also depends on speed because the game appears to try to keep time as a constant (for a given height)
+    void SetInitialPositionImpl(PlayerSub& playerSub, u32 groundEffectDelay, bool isThrow, float speed, float throwHeight, float dropHeight); //807b7104
+    float delayBeforeGroundEffect; //0x1a0 puff of smoke, small ground reaction, bomb standing up etc...
+};
+
+class ObjTargeting : public ObjThrowable {
+public:
+    //vtable 808d2280 idk why it has a vtable of its own
+    u8 unknown_0x1a4[0x1ec - 0x1a4];
+    Vec3ZeroInit unknown_vec3s[8]; //0x1ec
+};
+
+size_assert(ObjTargeting, 0x24c);
 class ObjHolder { //one instance per objID
 public:
 

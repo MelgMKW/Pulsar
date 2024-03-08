@@ -65,7 +65,7 @@ public:
     Kart::Pointers* kartPointers;
     Player* itemPlayer;
     u8 unknown_0x8[4];
-    Player* itemPlayer2;
+    Player* itemPlayer2; //0xC
     u8 id; //0x10
     u8 unknown0x11[0x14 - 0x11];
     ItemObjId itemObjId; //0x14 seems to only change for items you can hold "behind" (including triple shells)
@@ -98,6 +98,8 @@ size_assert(PlayerSub, 0x180);
 
 class Player {
 public:
+    Player(); //8079754c
+    ~Player(); //8079951c
     void Update(); //80797928
     void UseBlooper(); //807a81b4
     void UsePow(); //807b1b2c
@@ -113,9 +115,24 @@ public:
     void DecideItem(u16 playerItemBoxType, u16 cpuItemBoxType, u32 lotteryType); //80798c38 
     bool HasTripleItems(u8 checkRouletteOrInventory); //80798dbc r4 == 1 -> checks inventory
 
-    Kart::Pointers* kartPointers;
-    DriverController* model;
-    u8 unknown_0x8[0x18 - 0x8];
+    Kart::Pointers* kartPointers; //0x0
+    DriverController* model; //0x4
+    u8 unknown_0x8[4];
+    u16 bitfield; /*
+    Bitfield bits:
+    1 = 0x2:  has inventory item
+    2 = 0x4: is releasing dragged item (NOT triple items)
+    4 = 0x10: is holding throw button
+    5 = 0x20: is holding place item button
+    6 = 0x40: can use item (ie is not in hitstun)
+    8 = 0x100: is dragging item
+    10 = 0x400: is hitting an item
+    12 = 0x1000: has an active item (dragging a FIB or holding a triple or having an active golden/bill counts as having an active)
+    13 = 0x2000: is using item
+    14 = 0x4000: decrement current item
+    */
+
+    u8 unknown_0xE[0x18 - 0xE];
     u8 id; //0x18
     bool isHuman; //0x19
     bool isRemote; //0x1a

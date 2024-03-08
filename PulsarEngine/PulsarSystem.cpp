@@ -22,7 +22,14 @@ ConfigFile* ConfigFile::LoadConfig(u32* readBytes) {
     EGG::ExpHeap* mem2Heap = RKSystem::mInstance.sceneManager->currentScene->mem2Heap;
     ConfigFile* conf = static_cast<ConfigFile*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
         EGG::DvdRipper::ALLOC_FROM_HEAD, 0, readBytes, nullptr));
+
     if(conf == nullptr) Debug::FatalError(error);
+    else {
+        if(conf->header.version != conf->header.curVersion) Debug::FatalError("Old Config.pul file, please import and export it on the creator software to update it.");
+        ConfigFile::CheckSection(conf->GetSection<InfoHolder>());
+        ConfigFile::CheckSection(conf->GetSection<CupsHolder>());
+        ConfigFile::CheckSection(conf->GetSection<PulBMG>());
+    }
     return conf;
 }
 

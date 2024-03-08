@@ -5,7 +5,7 @@
 
 
 namespace Pulsar {
-void SetCC();
+static void SetCC();
 namespace UI {
 
 PageId ExpSinglePlayer::topSettingsPage = SettingsPanel::firstId;
@@ -37,7 +37,7 @@ UIControl* CreateExternalControls(Pages::SinglePlayer* page, u32 id) {
 kmWritePointer(0x808D9F84, CreateExternalControls);
 
 //kmWrite32(0x8084f080, 0x7F89E378); //get idx in r9
-void LoadCorrectBRCTR(PushButton& button, const char* folder, const char* ctr, const char* variant, u32 localPlayerField) {
+static void LoadCorrectBRCTR(PushButton& button, const char* folder, const char* ctr, const char* variant, u32 localPlayerField) {
     register int idx;
     asm(mr idx, r28;);
     Pages::SinglePlayer* page = button.parentGroup->GetParentPage<Pages::SinglePlayer>();
@@ -76,7 +76,7 @@ kmCall(0x8084f084, LoadCorrectBRCTR);
 //kmWrite32(0x8084f098, 0x60000000);
 
 //Hacky custom CalcDistance so that the navigating the single player menu is intuitive
-int FixCalcDistance(const ControlManipulator& subject, const ControlManipulator& other, Directions direction) {
+static int FixCalcDistance(const ControlManipulator& subject, const ControlManipulator& other, Directions direction) {
     const u32 subId = static_cast<PushButton*>(subject.actionHandlers[0]->subject)->buttonId;
     const u32 destId = static_cast<PushButton*>(other.actionHandlers[0]->subject)->buttonId;
     switch(subId) {
@@ -95,7 +95,7 @@ int FixCalcDistance(const ControlManipulator& subject, const ControlManipulator&
     return subject.CalcDistanceBothWrapping(other, direction);
 }
 
-void SetDistanceFunc(ControlsManipulatorManager& mgr) {
+static void SetDistanceFunc(ControlsManipulatorManager& mgr) {
     mgr.distanceFunc = &FixCalcDistance;
 }
 kmCall(0x8084ef68, SetDistanceFunc);
@@ -173,7 +173,7 @@ kmWritePointer(0x808BBED0, OnButtonClick);
 }//namespace UI
 
 //Sets the CC (based on the mode) when retrying after setting a time, as racedata's CC is overwritten usually
-void SetCC() {
+static void SetCC() {
     const System* system = System::sInstance;
     EngineClass cc = CC_150;
     if(system->ttMode == TTMODE_200 || system->ttMode == TTMODE_200_FEATHER) cc = CC_100;

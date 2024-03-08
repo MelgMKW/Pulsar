@@ -25,10 +25,10 @@ kmWrite32(0x80857540, 0x2c000035); //Fixes instant FINISH flash at the end
 kmWrite32(0x80859ed4, 0x48000048); //no immediate unload if ghost
 
 namespace Pulsar {
-void ChangeGhostOpacity(u8 focusedPlayerIdx);
+static void ChangeGhostOpacity(u8 focusedPlayerIdx);
 
 namespace UI {
-void CreateTTInterface(Section* section, PageId id) {
+static void CreateTTInterface(Section* section, PageId id) {
     section->CreateAndInitPage(PAGE_TT_INTERFACE);
     section->CreateAndInitPage(PAGE_TT_SPLITS);
     ChangeGhostOpacity(0);
@@ -37,7 +37,7 @@ kmCall(0x8062ccd4, CreateTTInterface);
 kmCall(0x8062cc5c, CreateTTInterface);
 kmCall(0x8062cc98, CreateTTInterface);
 
-PageId TTSplitsNextPage() {
+static PageId TTSplitsNextPage() {
     const SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
     if(sectionId == SECTION_TT || sectionId == SECTION_GHOST_RACE_1 || sectionId == SECTION_GHOST_RACE_2) return PAGE_TT_LEADERBOARDS;
     else if(sectionId == SECTION_GP) return PAGE_GPVS_LEADERBOARD_UPDATE;
@@ -46,14 +46,14 @@ PageId TTSplitsNextPage() {
 }
 kmBranch(0x808561dc, TTSplitsNextPage);
 
-PageId TTPauseNextPage(const Pages::RaceHUD& page) {
+static PageId TTPauseNextPage(const Pages::RaceHUD& page) {
     const SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
     if(sectionId >= SECTION_WATCH_GHOST_FROM_CHANNEL && sectionId <= SECTION_WATCH_GHOST_FROM_MENU) return PAGE_GHOST_REPLAY_PAUSE_MENU;
     return page.GetPausePageId();
 }
 kmCall(0x808569e0, TTPauseNextPage);
 
-void OnContinueButtonTTPauseClick(Pages::GhostReplayPause& page, PageId id) {
+static void OnContinueButtonTTPauseClick(Pages::GhostReplayPause& page, PageId id) {
     const u32 stage = RaceInfo::sInstance->stage;
     if(stage == 0x4) id = PAGE_TT_SPLITS; //if race is finished, repurpose the continue button
     page.nextPage = id;
@@ -61,7 +61,7 @@ void OnContinueButtonTTPauseClick(Pages::GhostReplayPause& page, PageId id) {
 }
 kmCall(0x8085a1e0, OnContinueButtonTTPauseClick);
 
-bool WillGhostBeCompared(const RaceData& racedata) {
+static bool WillGhostBeCompared(const RaceData& racedata) {
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
     const SectionId sectionId = sectionMgr->curSection->sectionId;
     register Timer* ghostTimer;
@@ -76,14 +76,14 @@ bool WillGhostBeCompared(const RaceData& racedata) {
 kmCall(0x808570a0, WillGhostBeCompared);
 kmWrite32(0x80857088, 0x40820018);
 kmWrite32(0x808570a4, 0x2C030001);
-u8 CharCheerGetCorrectArguments(int r3, u8 id) {
+static u8 CharCheerGetCorrectArguments(int r3, u8 id) {
     u8 ret = RaceData::sInstance->racesScenario.players[id].hudSlotId;
     if(ret == -1) ret = 0;
     return ret;
 }
 kmCall(0x808570c4, CharCheerGetCorrectArguments);
 
-void PatchFinishRaceBMGID(LayoutUIControl& control, u32 bmgId, const TextInfo* text) {
+static void PatchFinishRaceBMGID(LayoutUIControl& control, u32 bmgId, const TextInfo* text) {
     const SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
     if(sectionId >= SECTION_WATCH_GHOST_FROM_CHANNEL && sectionId <= SECTION_WATCH_GHOST_FROM_MENU) bmgId = BMG_FINISH;
     control.SetMessage(bmgId, text);
@@ -92,7 +92,7 @@ kmCall(0x8085728c, PatchFinishRaceBMGID);
 }//namespace UI
 
 
-int ChangePlayerType(const RaceDataPlayer& player, u8 id) {
+static int ChangePlayerType(const RaceDataPlayer& player, u8 id) {
     PlayerType type = RaceData::sInstance->racesScenario.players[id].playerType;
     if(type == PLAYER_GHOST && id == 0) return 0;
     return type;
@@ -120,7 +120,7 @@ bool PatchIsLocalCheck(const Kart::Player& kartPlayer) {
 }
 kmCall(0x80783770, PatchIsLocalCheck);
 
-bool EnableCPUDrivingAfterRace(const KartAIController& aiController) {
+static bool EnableCPUDrivingAfterRace(const KartAIController& aiController) {
     const u8 id = aiController.link.GetPlayerIdx();
     const PlayerType type = RaceData::sInstance->racesScenario.players[id].playerType;
     if(type == PLAYER_GHOST && id != 0) return true;
@@ -159,7 +159,7 @@ end:
 kmCall(0x808568b4, CreateSwitchPlayerPtmfs);
 kmCall(0x80856d38, CreateSwitchPlayerPtmfs);
 
-void CreateAdditionalCameras(RaceCameraMgr* mgr) {
+static void CreateAdditionalCameras(RaceCameraMgr* mgr) {
     const SectionId id = SectionMgr::sInstance->nextSectionId;
     if(id >= SECTION_WATCH_GHOST_FROM_CHANNEL && id <= SECTION_WATCH_GHOST_FROM_MENU) mgr->isOnlineSpectating = true;
     mgr->SetInstance(mgr);
@@ -176,7 +176,7 @@ RaceData* RemoveLiveview() {
 }
 kmCall(0x805a8c68, RemoveLiveview);
 
-void AddOpeningPanToEveryone(RaceCamera* camera, u8 playerId, GameScreen& screen, BCP* rawBCP, u8 r7) {
+static void AddOpeningPanToEveryone(RaceCamera* camera, u8 playerId, GameScreen& screen, BCP* rawBCP, u8 r7) {
     register RaceCameraMgr* mgr;
     asm(mr mgr, r31;);
     const SectionId id = SectionMgr::sInstance->nextSectionId;
@@ -192,7 +192,7 @@ void* PatchMiiHeadsOpacity(MiiHeadsModel& model, Mii* mii, MiiDriverModel* drive
 }
 kmCall(0x807dc0e8, PatchMiiHeadsOpacity);
 
-void ChangeGhostOpacity(u8 focusedPlayerIdx) {
+static void ChangeGhostOpacity(u8 focusedPlayerIdx) {
     const SectionId id = SectionMgr::sInstance->curSection->sectionId;
     if(id < SECTION_WATCH_GHOST_FROM_CHANNEL || id > SECTION_WATCH_GHOST_FROM_MENU) return;
     Kart::Manager* kartMgr = Kart::Manager::sInstance;

@@ -31,7 +31,7 @@ struct KBHeader {
 #define kBranchLink 65
 
 
-void DisplayError(const LoaderParams* funcs, const char* str) {
+static void DisplayError(const LoaderParams* funcs, const char* str) {
     u32 fg = 0xFFFFFFFF, bg = 0;
     funcs->OSFatal(&fg, &bg, str);
 }
@@ -138,7 +138,7 @@ inline void cacheInvalidateAddress(register u32 address) {
     asm(icbi 0, address;);
 }
 
-void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryLength, bool isDol) {
+static void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryLength, bool isDol) {
 
     static u32 text = 0;
     const KBHeader* header = (const KBHeader*)binary;
@@ -255,7 +255,7 @@ void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryLength, 
 }
 
 
-void LoadKamekBinaryFromDisc(LoaderParams* params)
+static void LoadKamekBinaryFromDisc(LoaderParams* params)
 {
     static void* codePulBuf = nullptr;
     static u32 fileLength = 0;

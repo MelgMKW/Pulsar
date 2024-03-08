@@ -34,7 +34,7 @@ public:
     u32 SetType(); //806fe084 returns the size of the heap that'll contain the sound heap
     void Initialize(EGG::Heap* heap); //806fdffc heap size is implictly obtained through size
     void DestroySoundHeap(); //806fe044
-    EGG::TDisposer<MarioKartWiiSoundHeap> disposer; //806fdae4 vtable 808c7a04
+    EGG::TDisposer<GameSoundHeap> disposer; //806fdae4 vtable 808c7a04
     bool isInitialized; //0x100
     u8 padding[3];
     u32 type; //0x104 only seems to be used to get the heap size

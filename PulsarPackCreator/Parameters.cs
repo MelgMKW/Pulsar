@@ -23,6 +23,7 @@ namespace Pulsar_Pack_Creator
             public uint probMirror = 25;
             public int wiimmfiRegion = -1;
             public uint trackBlocking = 0;
+            public byte chooseNextTrackTimer = 10;
             public string modFolderName;
         };
         private void OnOptionsClick(object sender, RoutedEventArgs e)
@@ -47,6 +48,21 @@ namespace Pulsar_Pack_Creator
             if (box.Text == "") return;
 
             parameters.wiimmfiRegion = int.Parse(box.Text);
+        }
+
+        private void OnHAWTimerChange(object sender, TextChangedEventArgs e)
+        {
+            TextBox box = sender as TextBox;
+            if (box.Text == "") return;
+            byte value = byte.Parse(box.Text);
+            if (value < 1 || value > 60)
+            {
+                MsgWindow.Show("The Host Always Wins Timer should be in the range of 1 to 60 seconds");
+                value = (byte)(value < 1 ? 1 : 60);
+                box.Text = $"{value}";
+            }
+
+            parameters.chooseNextTrackTimer = value;
         }
 
         private void OnModFolderChange(object sender, TextChangedEventArgs e)

@@ -18,7 +18,7 @@ namespace Race {
 
 
 //kmWrite32(0x805850c4, 0x7FC3F378); //to get kartMovement
-void CannonExitSpeed() {
+static void CannonExitSpeed() {
     const float ratio = Info::Is200cc() ? cannonExit : 1.0f;
     register Kart::Movement* kartMovement;
     asm(mr kartMovement, r30;);
@@ -47,7 +47,7 @@ void EnableBrakeDrifting(Input::ControllerHolder& controllerHolder) {
     }
 }
 
-void CalcBrakeDrifting() {
+static void CalcBrakeDrifting() {
     const SectionPad& pad = SectionMgr::sInstance->pad;
     for(int hudSlotId = 0; hudSlotId < 4; ++hudSlotId) {
         Input::ControllerHolder* controllerHolder = pad.GetControllerHolder(hudSlotId);
@@ -108,7 +108,7 @@ normal:
 kmCall(0x806faff8, BrakeDriftingSoundWrapper);
 
 kmWrite32(0x80698f88, 0x60000000);
-int BrakeEffectBikes(PlayerEffects& effects) {
+static int BrakeEffectBikes(PlayerEffects& effects) {
     const Kart::Player* kartPlayer = effects.kartPlayer;
     if(Info::Is200cc()) {
         if(IsBrakeDrifting(*kartPlayer->link.pointers->kartStatus)) effects.DisplayEffects2(effects.bikeDriftEffects, 25, 26, true);
@@ -119,7 +119,7 @@ int BrakeEffectBikes(PlayerEffects& effects) {
 kmCall(0x80698f8c, BrakeEffectBikes);
 
 kmWrite32(0x80698048, 0x60000000);
-int BrakeEffectKarts(PlayerEffects& effects) {
+static int BrakeEffectKarts(PlayerEffects& effects) {
     Kart::Player* kartPlayer = effects.kartPlayer;
     if(Info::Is200cc()) {
         if(IsBrakeDrifting(*kartPlayer->link.pointers->kartStatus)) effects.DisplayEffects2(effects.kartDriftEffects, 34, 36, true);

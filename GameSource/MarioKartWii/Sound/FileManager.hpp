@@ -19,8 +19,8 @@ class GroupBankRequester {
         u32 id;
         bool isBankId; //is groudId if false
         nw4r::ut::Link link;
-
     };
+
     struct ActorIDToBankId {
         u16 actorId;
         u8 padding[2];

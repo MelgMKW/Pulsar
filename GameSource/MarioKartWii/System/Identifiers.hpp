@@ -594,7 +594,7 @@ enum BRSARGroups {
     BRSAR_GROUP_CONTROLS        = 1, //PushButton sounds for example
     BRSAR_GROUP_MK_CHANNEL      = 2,
     BRSAR_GROUP_WFC             = 3,
-    BRSAR_GROUP_TITLE         = 5, //mostly the wave
+    BRSAR_GROUP_TITLE           = 5, //mostly the wave
     BRSAR_GROUP_CHANNEL         = 6,
     BRSAR_GROUP_OFFLINE_MENUS   = 7,
 

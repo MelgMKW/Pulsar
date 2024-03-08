@@ -25,7 +25,7 @@ namespace Pulsar_Pack_Creator.IO
         public string date { get; private set; }
         public string[,,] regsExperts { get; private set; }
 
-        public Result ImportV1()
+        public Result ImportV2()
         {
             PulsarGame.BinaryHeader header = PulsarGame.BytesToStruct<PulsarGame.BinaryHeader>(raw.ToArray());
 
@@ -70,56 +70,7 @@ namespace Pulsar_Pack_Creator.IO
             return Result.Success;
         }
 
-        /*
-        public Result ImportV2()
-        { 
-            PulsarGame.BinaryHeaderV2 header = PulsarGame.BytesToStruct<PulsarGame.BinaryHeaderV2>(raw.ToArray());
-                     
-            //Read HEADER
-            configVersion = header.version;
-            if (header.magic != binMagic || header.version > CONFIGVERSION) return Result.InvalidConfigFile;
-
-            parameters.modFolderName = header.modFolderName.TrimStart('/');
-
-            Result ret;
-            //INFO Reading
-            ret = ReadInfo(CreateSubCat<PulsarGame.InfoHolder>(raw, header.offsetToInfo));
-            if (ret != Result.Success) return ret;
-
-            //CUPS reading
-            ret = ReadCups(CreateSubCat<PulsarGame.CupsHolder>(raw, header.offsetToCups));
-            if (ret != Result.Success) return ret;
-
-            nint offset = header.offsetToCups + Marshal.OffsetOf(typeof(PulsarGame.CupsHolder), "cups") + Marshal.OffsetOf(typeof(PulsarGame.CupsV2), "cupsArray");
-            nint size= Marshal.SizeOf(typeof(PulsarGame.CupV2));
-
-            PulsarGame.TextHolder textHolder = CreateSubCat<PulsarGame.TextHolder>(raw, header.offsetToTEXT);
-            BigEndianReader textSR = new BigEndianReader(new MemoryStream(raw.Skip(header.offsetToTEXT + 0xC).Take((int)textHolder.header.dataSize).ToArray()));
-            for (int i = 0; i < ctsCupCount; i++)
-            {
-                PulsarGame.CupV2 cup = CreateSubCat<PulsarGame.CupV2>(raw, (int)offset);
-                ReadCup(cup, textSR);
-                offset += size;
-            }
-
-            //BMG
-            int bmgSize;
-            ret = ReadBMG(raw.Skip(header.offsetToBMG).Take(raw.Length - header.offsetToBMG).ToArray(), out bmgSize);
-            if (ret != Result.Success) return ret;
-
-            //FILE reading
-            ret = ReadFile(raw.Skip(header.offsetToBMG + bmgSize).Take(raw.Length - header.offsetToBMG).ToArray());
-            if (ret != Result.Success) return ret;
-
-            RequestBMGAction(false);
-            using StreamReader bmgSR = new StreamReader("temp/BMG.txt");
-            using StreamReader fileSR = new StreamReader("temp/files.txt");
-            ParseBMGAndFILE(bmgSR, fileSR);
-                              
-            return Result.Success;
-        }
-        */
-
+     
         public Result Import()
         {
 
@@ -138,7 +89,7 @@ namespace Pulsar_Pack_Creator.IO
                 {
                     ret = ImportV1();
                 }
-                //else ret = ImportV2();
+                else ret = ImportV2();
 
                 return ret;
             }
@@ -174,6 +125,8 @@ namespace Pulsar_Pack_Creator.IO
             parameters.hasUMTs = info.hasUMTs == 1 ? true : false;
             parameters.hasFeather = info.hasFeather == 1 ? true : false;
             parameters.hasMegaTC = info.hasMegaTC == 1 ? true : false;
+            int timer = info.chooseNextTrackTimer / 60;
+            parameters.chooseNextTrackTimer = (byte)(timer == 0 ? 10 : timer);
             return Result.Success;
         }
 
@@ -189,27 +142,27 @@ namespace Pulsar_Pack_Creator.IO
             return Result.Success;
         }
 
+        private Result ReadCups(PulsarGame.CupsHolderV1 raw)
+        {
+            uint magic = raw.header.magic;
+            cupVersion = raw.header.version;
+            if (magic != cupsMagic || cupVersion > CUPSVERSION) return Result.BadCups;
+            cups.Clear();
+            PulsarGame.CupsV1 rawCups = raw.cups;
+            ctsCupCount = rawCups.ctsCupCount;
+            parameters.regsMode = rawCups.regsMode;
+            return Result.Success;
+        }
+
+        private void ReadCup(PulsarGame.CupV1 raw)
+        {
+            cups.Add(new MainWindow.Cup(raw));
+        }
         private void ReadCup(PulsarGame.Cup raw)
         {
             cups.Add(new MainWindow.Cup(raw));
         }
 
-        /*
-        private void ReadCup(PulsarGame.CupV2 raw, BigEndianReader textBR)
-        {
-            cups.Add(new MainWindow.Cup(raw));
-            MainWindow.Cup cup = cups.Last();
-            textBR.BaseStream.Position = raw.cextNameOffset;
-            cup.name = textBR.ReadString();
-            for(int i = 0; i < 4; i++)
-            {
-                textBR.BaseStream.Position = raw.tracks[i].cextNameOffset;
-                cup.trackNames[i] = textBR.ReadString();
-                textBR.BaseStream.Position = raw.tracks[i].cextAuthorOffset;
-                cup.authorNames[i] = textBR.ReadString();
-            }
-        }
-        */
 
         private Result ReadBMG(byte[] raw, out int bmgSize)
         {
@@ -357,6 +310,51 @@ namespace Pulsar_Pack_Creator.IO
                 }
                 curLine = fileSR.ReadLine();
             }
+        }
+
+        public Result ImportV1()
+        {
+            PulsarGame.BinaryHeader header = PulsarGame.BytesToStruct<PulsarGame.BinaryHeader>(raw.ToArray());
+
+            //Read HEADER
+            parameters.modFolderName = header.modFolderName.TrimStart('/');
+
+            Result ret;
+            //INFO Reading
+            ret = ReadInfo(CreateSubCat<PulsarGame.InfoHolder>(raw, header.offsetToInfo));
+            if (ret != Result.Success) return ret;
+
+            //CUPS reading
+            ret = ReadCups(CreateSubCat<PulsarGame.CupsHolderV1>(raw, header.offsetToCups));
+            if (ret != Result.Success) return ret;
+
+            nint offset = header.offsetToCups + Marshal.OffsetOf(typeof(PulsarGame.CupsHolderV1), "cups") + Marshal.OffsetOf(typeof(PulsarGame.CupsV1), "cupsArray");
+            nint size = Marshal.SizeOf(typeof(PulsarGame.CupV1));
+
+
+            for (int i = 0; i < ctsCupCount; i++)
+            {
+                PulsarGame.CupV1 cup = CreateSubCat<PulsarGame.CupV1>(raw, (int)offset);
+                ReadCup(cup);
+                offset += size;
+            }
+
+            //BMG reading
+            int bmgSize;
+            ret = ReadBMG(raw.Skip(header.offsetToBMG).Take(raw.Length - header.offsetToBMG).ToArray(), out bmgSize);
+            if (ret != Result.Success) return ret;
+
+            //FILE reading
+            ret = ReadFile(raw.Skip(header.offsetToBMG + bmgSize).Take(raw.Length - header.offsetToBMG).ToArray());
+            if (ret != Result.Success) return ret;
+
+            RequestBMGAction(false);
+            using StreamReader bmgSR = new StreamReader("temp/BMG.txt");
+            using StreamReader fileSR = new StreamReader("temp/files.txt");
+
+            ParseBMGAndFILE(bmgSR, fileSR);
+
+            return Result.Success;
         }
 
     }

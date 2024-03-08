@@ -7,6 +7,9 @@
 
 namespace Pulsar {
 
+class CupsHolder;
+class CupsConfig;
+
 #pragma pack(push, 1)
 struct Track {
     u8 slot;
@@ -15,17 +18,9 @@ struct Track {
 };
 
 struct Cup {
-    u32 idx;
     Track tracks[4];
 };
 
-struct Cups {
-    u16 ctsCupCount;
-    u8 regsMode;
-    u8 padding[1];
-    u16 trophyCount[4];
-    Cup cups[1]; //CUPS
-};
 #pragma pack(pop)
 
 enum PulsarId {
@@ -40,11 +35,12 @@ enum PulsarCupId {
     PULSARCUPID_FIRSTCT = 0x40
 };
 
-
+/*
 inline PulsarId operator+(PulsarId src, u32 rhs) {
     PulsarId ret = static_cast<PulsarId>(rhs + src);
     return ret;
 }
+*/
 
 
 class CupsConfig {
@@ -52,13 +48,23 @@ public:
     static CupsConfig* sInstance;
     static const u32 RegsCRC32[];
 
-    CupsConfig(const Cups& rawCups);
+    CupsConfig(const CupsHolder& rawCups);
+
+    const Track& GetTrack(PulsarId id) const { //only for CTs
+        return this->tracks[id - 0x100];
+    }
+    PulsarId ConvertTrack_PulsarCupToTrack(PulsarCupId pulsarCupId, u32 rowIdx) const {
+        if(IsRegCup(pulsarCupId) || !this->isAlphabeticalLayout) return static_cast<PulsarId>(pulsarCupId * 4 + rowIdx);
+        else return static_cast<PulsarId>(alphabeticalArray[(pulsarCupId - 0x40) * 4 + rowIdx] + 0x100);
+    }
 
     //Cup Functions
     int GetTotalCupCount() const { return ctsCupCount + HasRegs() * 8; } //good
     int GetCtsTrackCount() const { return ctsCupCount * 4; } //used by random, good, but also by settings and path
     int GetEffectiveTrackCount() const { return (definedCTsCupCount + HasRegs() * 8) * 4; } //settings and froom msgs
     void ToggleCTs(bool enabled);
+    static void SetLayout();
+
     // Ghosts
     int GetCRC32(PulsarId id) const;
     void GetTrackGhostFolder(char* dest, PulsarId pulsarId) const;
@@ -69,8 +75,9 @@ public:
 
     bool HasRegs() const { return hasRegs; }
     bool HasOddCups() const { return hasOddCups; }
-
-
+    bool IsAlphabetical() const { return isAlphabeticalLayout; }
+    const u16* GetAlphabeticalArray() const { return alphabeticalArray; }
+    const u16* GetInvertedArray() const { return invertedAlphabeticalArray; }
     //Validity
     bool IsValidCup(PulsarCupId id) {
         if(this->hasRegs && IsRegCup(id)) return true;
@@ -100,7 +107,7 @@ public:
     static CourseId ConvertTrack_PulsarIdToRealId(PulsarId pulsarId);
     static PulsarId ConvertTrack_RealIdToPulsarId(CourseId id); //ONLY FOR REGS 
     PulsarId ConvertTrack_IdxToPulsarId(u32 idx) const; //Bad Function
-    static inline PulsarId ConvertTrack_PulsarCupToTrack(PulsarCupId pulsarCupId) { return static_cast<PulsarId>(pulsarCupId * 4); }
+
     static const u8 idToCourseId[32];
 
 public:
@@ -110,14 +117,18 @@ public:
     u32             lastSelectedCupButtonIdx; //0xc
 
 private:
+
     bool hasRegs;      //0x10
     bool hasOddCups;   //0x11
+    bool isAlphabeticalLayout;
     const u8 regsMode; //0x12
     //byte of padding 
     u32 definedCTsCupCount; //0x14
     u32  ctsCupCount; //0x18
     u16  trophyCount[4]; //0x1c
-    Cup* cups; //0x24
+    Track* tracks; //0x24
+    u16* alphabeticalArray; //0x28
+    u16* invertedAlphabeticalArray;
 }; //0x28
 
 }//namespace Pulsar

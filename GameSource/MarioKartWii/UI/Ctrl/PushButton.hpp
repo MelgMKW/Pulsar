@@ -45,7 +45,7 @@ public:
     void HandleDeselect(u32 hudSlotId, u32 r5); //805be130
     void HandleClick(u32 hudSlotId, u32 r5); //805be358
     void SetPlayerBitfield(u32 bitField); //805bdbd4
-    bool IsSelected(); //805bdf44
+    bool IsSelected() const; //805bdf44
 
     ControlManipulator manipulator; //0x174
     PtmfHolder_2A<PushButton, void, u32, u32> onSelectHandlerObj; //0x1F8

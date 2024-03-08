@@ -37,7 +37,7 @@ public:
     static SectionId curSection; //809c26ac
     static void OutputSoundToWiimotes(AudioHandle* handle, u32 outputLineBitfield); //80713c80 bitfield must have 1 set or main (tv) is silent
     u8 unknown_0x4[4];
-    u32 state; //01 before load, 02 after, 0x3 after pressing next race -> setting it to 3 midrace mutes most BRSAR sounds
+    u32 state; //0x8 01 before load, 02 after, 0x3 after pressing next race -> setting it to 3 midrace mutes most BRSAR sounds
     u8 unknown_0xC; //checks if it's 1 after pressing next race
     u8 unknown_0xD[3]; //likely padding
     SectionId sectionId; //0x10

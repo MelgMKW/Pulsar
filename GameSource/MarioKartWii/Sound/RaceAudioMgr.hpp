@@ -33,7 +33,7 @@ public:
     static RaceAudioMgr* CreateInstance(); //807104d0
     static void* DestroyInstance(); //80710520
 
-    RaceAudioMgr(); //80710688 also appends the Sound3DListeners (one per local player) to the 3DManager listg
+    RaceAudioMgr(); //80710688 also appends the Sound3DListeners (one per local player) to the 3DManager list
     ~RaceAudioMgr(); //807108e8
 
     void SetRaceState(RaceState raceState); //80711ac4 changes music accordingly etc...

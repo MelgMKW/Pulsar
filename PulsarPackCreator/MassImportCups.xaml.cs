@@ -75,41 +75,11 @@ namespace Pulsar_Pack_Creator
                 parent.cups[i].iconName = iconImport[i];
                 parent.cups[i].name = namesImport[i];
             }
+            Cup curCup = parent.cups[parent.curCup];
+            parent.CupName.Text = curCup.name;
+            parent.CupIcon.Text = curCup.iconName;
+            parent.DisplayImage(curCup.iconName);
             Hide();
-        }
-
-        [SupportedOSPlatform("windows")]
-        public static System.Drawing.Image ResizeImage(string path)
-        {
-            try
-            {
-                Image imgToResize = Image.FromFile(path);
-                // Get the image current width
-                int sourceWidth = imgToResize.Width;
-                // Get the image current height
-                int sourceHeight = imgToResize.Height;
-                float nPercent = 0;
-                float nPercentW = 0;
-                float nPercentH = 0;
-                // Calculate width and height with new desired size
-                nPercentW = (128.0f / sourceWidth);
-                nPercentH = (128.0f / sourceHeight);
-                nPercent = Math.Min(nPercentW, nPercentH);
-                // New Width and Height
-                int destWidth = (int)(sourceWidth * nPercent);
-                int destHeight = (int)(sourceHeight * nPercent);
-                Bitmap b = new Bitmap(destWidth, destHeight);
-                Graphics g = Graphics.FromImage(b);
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                // Draw image with new width and height
-                g.DrawImage(imgToResize, 0, 0, destWidth, destHeight);
-                g.Dispose();
-                return (Image)b;
-            }
-            catch
-            {
-                return null;
-            }
         }
 
     }

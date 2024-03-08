@@ -273,6 +273,7 @@ OpenExtStream__Q34nw4r3snd15DVDSoundArchiveFPQ44nw4r3snd15DVDSoundArchive13DvdFi
 GetSoundType__Q34nw4r3snd12SoundArchiveCFUi = 0x8009df30
 ReadStrmInfo__Q44nw4r3snd6detail14StrmFileLoaderFPQ54nw4r3snd6detail14StrmFileReader8StrmInfo = 0x800a5490
 DetailUtilCalcRandom__Q24nw4r3sndFv = 0x800ad050
+Stop__Q44nw4r3snd6detail10BasicSoundFi = 0x8008e330
 
 #math
 F_PI__Q24nw4r4math = 0x803878F8
@@ -479,7 +480,7 @@ LoadMii__8MiiGroupFUcUs = 0x805fa748
 GetMii__8MiiGroupFUc = 0x805fa930
 
 #Mii
-ComputeRFLStoreData__3MiiFRQ23RFL9StoreDataPCUi = 0x8052758c
+ComputeRFLStoreData__3MiiFRQ23RFL9StoreDataPCQ23RFL8CreateID = 0x8052758c
 
 
 #ScnManager
@@ -668,7 +669,7 @@ OnDeactivate__10PushButtonFv = 0x805bd710
 OnSelect__10PushButtonFv = 0x805be12c
 OnDeselect__10PushButtonFv = 0x805be354
 OnClick__10PushButtonFv = 0x805be42c
-IsSelected__10PushButtonFv = 0x805bdf44
+IsSelected__10PushButtonCFv = 0x805bdf44
 HandleSelect__10PushButtonFUiUi = 0x805bdffc
 HandleDeselect__10PushButtonFUiUi = 0x805be130
 HandleClick__10PushButtonFUiUi = 0x805be358
@@ -1247,6 +1248,14 @@ __ct__Q23EGG14EffectResourceFPvPv = 0x80225c98
 
 #Sound
 sInstance__12AudioManager = 0x809c2898
+Lock__12AudioManagerFv = 0x807178ec
+Unlock__12AudioManagerFv = 0x807178f8
+
+#SingleSoundPlayer
+sInstance__17SingleSoundPlayer = 0x809c2328
+PlaySound__17SingleSoundPlayerFUis = 0x806f8b7c
+PlayBGSound__17SingleSoundPlayerFUi = 0x806fa604
+StopSound__17SingleSoundPlayerFv = 0x806f90c4
 
 #LinkedRaceActor
 CannotPlaySounds__15LinkedRaceActorFv = 0x807028e4

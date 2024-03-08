@@ -1,10 +1,45 @@
 #include <kamek.hpp>
+#include <core/nw4r/snd.hpp>
+#include <MarioKartWii/Sound/RaceAudioMgr.hpp>
+#include <MarioKartWii/Sound/RSARSounds.hpp>
 #include <Sound/MiscSound.hpp>
+#include <Settings/Settings.hpp>
 
 namespace Pulsar {
 namespace Audio {
-
 using namespace nw4r;
+
+//RaceAudioMgr SetRaceState patch that skips the entire func, effectively disabling the mgr
+static void DisableRaceMusic(SingleSoundPlayer& soundsPlayer, u32 soundId, s16 delay) {
+    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
+    if(isEnabled) soundsPlayer.PlaySound(soundId, delay);
+}
+kmCall(0x80711fcc, DisableRaceMusic);
+kmCall(0x80711df4, DisableRaceMusic);
+kmCall(0x80712198, DisableRaceMusic);
+
+static void PreventPrepareRaceMusic(AudioManager* mgr, AudioHandle* handle, u32 soundId) {
+    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
+    if(isEnabled) mgr->PrepareSound(handle, soundId);
+}
+kmCall(0x806f8eb4, PreventPrepareRaceMusic);
+
+static void DisableMenuMusic(SingleSoundPlayer& soundsPlayer, u32 soundId, s16 delay) {
+    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
+    if(isEnabled) soundsPlayer.PlaySound(soundId, delay);
+}
+kmCall(0x806fa64c, DisableMenuMusic);
+kmCall(0x806fa664, DisableMenuMusic);
+
+static void ToggleMenuMusic() {
+    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
+    SingleSoundPlayer* soundsPlayer = SingleSoundPlayer::sInstance;
+    if(isEnabled) soundsPlayer->PlayBGSound(2);
+    else soundsPlayer->StopSound();
+}
+Settings::Hook ToggleMenuMusicHook(ToggleMenuMusic);
+
+
 snd::SoundStartable::StartResult PlayExtBRSEQ(snd::SoundStartable& startable, AudioHandle& handle, const char* fileName, const char* labelName, bool hold) {
     snd::SoundStartable::StartInfo startInfo;
     startInfo.seqSoundInfo.startLocationLabel = labelName;

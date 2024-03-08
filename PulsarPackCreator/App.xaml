@@ -14,8 +14,7 @@
                 <SolidColorBrush x:Key="AppBg" Color="#FD202020"/>
                 <SolidColorBrush x:Key="bg" Color="DimGray"/>
                 <SolidColorBrush x:Key="fg" Color="White"/>
-                <SolidColorBrush x:Key="comboHover" Color="#FF909090"/>
-                
+            <SolidColorBrush x:Key="comboHover" Color="#FF909090"/>
 
 
             <SolidColorBrush x:Key="ComboBox.Static.Border" Color="#FFACACAC"/>

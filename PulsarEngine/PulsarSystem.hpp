@@ -28,6 +28,7 @@ enum SectionIndexes {
 };
 
 struct BinaryHeader {
+    static const u32 curVersion = 2;
     u32 magic;
     u32 version;
     s32 offsets[3];
@@ -40,20 +41,27 @@ struct BinaryHeader {
 struct SectionHeader {
     u32 magic;
     u32 version;
-    u32 size; //size without the header
+    u32 size;
 }; //0xc
 
 struct InfoHolder {
     static const u32 magic = 'INFO';
     static const u32 index = SECTION_INFO;
+    static const u32 curVersion = 1;
     SectionHeader header;
     Info info;
 };
 struct CupsHolder {
     static const u32 magic = 'CUPS';
     static const u32 index = SECTION_CUPS;
+    static const u32 curVersion = 2;
     SectionHeader header;
-    Cups cups;
+    u16 ctsCupCount;
+    u8 regsMode;
+    u8 padding[1];
+    u16 trophyCount[4];
+    Track tracks[1];
+    //u16 alphabeticalIdx[1]; //slot 0's value = track index of the first track by alphabetical order
 };
 
 struct PulBMG {
@@ -71,12 +79,11 @@ struct ConfigFile {
     template <typename T>
     inline const T& GetSection() const {
         const T& section = *reinterpret_cast<const T*>(ut::AddU32ToPtr(this, this->header.offsets[T::index]));
-        CheckSection(section);
         return section;
     }
 
     template <class T>
-    inline void CheckSection(const T& t) const { if(t.header.magic != T::magic) Debug::FatalError(error); }
+    static inline void CheckSection(const T& t) { if(t.header.magic != T::magic || t.header.version != T::curVersion) Debug::FatalError(error); }
 
     static const u32 magic = 'PULS';
     BinaryHeader header;
@@ -86,7 +93,7 @@ struct ConfigFile {
 };
 
 template<>
-inline void ConfigFile::CheckSection<PulBMG>(const PulBMG& bmg) const {
+static inline void ConfigFile::CheckSection<PulBMG>(const PulBMG& bmg) {
     if(bmg.header.magic != 0x4D455347626D6731) Debug::FatalError(error);
 }
 
@@ -97,10 +104,11 @@ private:
     //System functions
     void Init(const ConfigFile& bin);
     void InitInstances(const ConfigFile& bin, IOType type) const {
-        CupsConfig::sInstance = new CupsConfig(bin.GetSection<CupsHolder>().cups);
+        CupsConfig::sInstance = new CupsConfig(bin.GetSection<CupsHolder>());
         Info::sInstance = new Info(bin.GetSection<InfoHolder>().info);
         this->InitIO(type);
-        this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder>().cups.trophyCount[0]);
+        this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder>().trophyCount[0]);
+        CupsConfig::sInstance->SetLayout();
     }
     void InitIO(IOType type) const;
     void InitCups(const ConfigFile& bin);

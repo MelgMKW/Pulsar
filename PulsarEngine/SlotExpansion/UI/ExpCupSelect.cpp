@@ -43,8 +43,18 @@ ExpCupSelect::ExpCupSelect() {
     }
 }
 
+void ExpCupSelect::OnActivate() {
+    this->randomizedId = PULSARID_NONE;
+    PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
+    for(int i = 0; i < 8; ++i) buttons[i]->manipulator.inaccessible = false;
+    this->arrows.leftArrow.manipulator.inaccessible = false;
+    this->arrows.rightArrow.manipulator.inaccessible = false;
+    Pages::CupSelect::OnActivate();
+}
+
+
 //Patch distance func to remove horizontal wrapping
-void CupSelectDistanceFunc(ControlsManipulatorManager* manipulator, u32 type) {
+static void CupSelectDistanceFunc(ControlsManipulatorManager* manipulator, u32 type) {
     if(CupsConfig::sInstance->GetCtsTrackCount() != 0) type = 1;
     manipulator->SetDistanceFunc(type);
 }

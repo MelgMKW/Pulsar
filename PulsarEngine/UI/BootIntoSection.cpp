@@ -9,10 +9,10 @@
 
 namespace Pulsar {
 //Implements the boot into wiimmfi setting
-u16 controllerOnStrap = 0x0;
+static u16 controllerOnStrap = 0x0;
 
 kmWrite32(0x8000785c, 0x3be00002); //li r31, 2 if KPAD controller was used
-bool CheckControllerStrap() {
+static bool CheckControllerStrap() {
     //"unsafe" function that relies on no stack frame being created, which is essentially guaranteed as this doesn't call any other function
     //I just prefer it to the asm version
     register u32 ret;
@@ -67,7 +67,7 @@ kmCall(0x80634f20, BootIntoSection);
 //kmWrite32(0x805243e4, 0x7F65DB78); //mr r5, r27 to get slot
 using namespace Input;
 //r4 usually uses Input::Manager dummy which is slot and controller independant
-void SetUpCorrectController(RealControllerHolder* realControllerHolder, const Controller* controller) {
+static void SetUpCorrectController(RealControllerHolder* realControllerHolder, const Controller* controller) {
     SectionPad& pad = SectionMgr::sInstance->pad;
     const u32 controllerID = pad.padInfos[0].controllerID;  //technically hooking into a loop 
     const ControllerType controllerType = pad.GetType(pad.padInfos[0].controllerID);
@@ -85,6 +85,6 @@ void SetUpCorrectController(RealControllerHolder* realControllerHolder, const Co
     realControllerHolder->SetController(controller, nullptr);
 }
 kmCall(0x805243f4, SetUpCorrectController);
-kmWrite32(0x8061af98, 0x60000000);
+//kmWrite32(0x8061af98, 0x60000000); silent controller changing
 
 }//namespace Pulsar

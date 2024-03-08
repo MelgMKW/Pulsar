@@ -10,6 +10,7 @@ namespace nw4r {
 namespace g3d {
 
 class IScnObjCallback;
+class IScnObjGather;
 
 class ScnObj : public G3dObj {
 public:

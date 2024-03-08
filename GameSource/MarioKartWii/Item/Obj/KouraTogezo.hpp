@@ -1,7 +1,7 @@
 #ifndef _ITEMOBJKOURATOGEZO_
 #define _ITEMOBJKOURATOGEZO_
 #include <kamek.hpp>
-#include <MarioKartWii/Item/Obj/Targeting.hpp>
+#include <MarioKartWii/Item/Obj/ItemObj.hpp>
 
 //_sinit_ at 807aea78
 namespace Item {
@@ -14,7 +14,7 @@ public:
     void UpdateModelPosition() override;  //0x10 807ac7d4
     void vf_0x14() override; //0x14 807ac9ec
     void SpawnModel() override; //0x18 807abf70
-    bool SetInitialPosition(Player& player) override; //0x20 807ac634
+    bool SetInitialPosition(PlayerSub& playerSub) override; //0x20 807ac634
     void OnCollision() override; //0x24 807ae414
     void vf_0x2c() override; //0x2c 807ae574
     void vf_0x30() override; //0x30 807ae6ec

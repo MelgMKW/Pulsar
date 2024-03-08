@@ -30,6 +30,7 @@ struct MiddleDB {
         } masks;
         u32 mask; //0x10
     } mask;
+    u8 data3[4];
 }; //0x18
 size_assert(MiddleDB, 0x18);
 

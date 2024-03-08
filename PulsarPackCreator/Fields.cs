@@ -64,6 +64,7 @@ namespace Pulsar_Pack_Creator
             InitializeComponent();
 
             importWindow = new MassImportWindow(this);
+            cupsImportWindow = new MassCupsImportWindow(this);
             crashWindow = new CrashWindow();
             settingsWindow = new SettingsWindow();
 

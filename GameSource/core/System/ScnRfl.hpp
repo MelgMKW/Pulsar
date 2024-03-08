@@ -4,6 +4,7 @@
 #include <core/nw4r/g3d/ScnObj.hpp>
 #include <core/rvl/RFL/RFLTypes.hpp>
 #include <core/rvl/RFL/RFLModel.hpp>
+#include <core/rvl/RFL/RFLMiddleDB.hpp>
 
 //Not part of RFL itself as that is a RVL lib and this depends on nw4r
 
@@ -52,9 +53,5 @@ public:
 
 }//namespace nw4r
 }//namespace g3d
-class SystemManager {
-
-}; //total size 0x1100
-
 
 #endif

@@ -92,8 +92,6 @@ struct GPSection {
         //4 bits for rank, 0 to 7
         //3 2 1 a b c d e
 
-
-
     };
     Pulsar::SectionHeader header;
     GPCupStatus gpStatus[1]; //one per cup
@@ -127,14 +125,14 @@ class alignas(0x20) Binary {
     static const u32 curVersion = 3;
 
     Binary(u32 curVersion, u32 pageCount, u32 trackCount) {
-
+        const u32 cupCount = trackCount / 4;
         header.magic = binMagic;
         header.version = curVersion;
         header.offsets[PagesHolder::index]    = sizeof(BinaryHeader) + sizeof(u32) * (sectionCount - 1);
         header.offsets[MiscParams::index]     = header.offsets[PagesHolder::index] + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1);
         header.offsets[TrophiesHolder::index] = header.offsets[MiscParams::index] + sizeof(MiscParams);
         header.offsets[GPSection::index]      = header.offsets[TrophiesHolder::index] + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1);
-        header.fileSize = header.offsets[GPSection::index] + sizeof(GPSection) + sizeof(GPCupStatus) * (trackCount / 4 - 1);
+        header.fileSize = header.offsets[GPSection::index] + sizeof(GPSection) + sizeof(GPCupStatus) * (cupCount - 1);
         header.sectionCount = sectionCount;
 
         PagesHolder& pages = this->GetSection<PagesHolder>();
@@ -158,8 +156,9 @@ class alignas(0x20) Binary {
         GPSection& gp = this->GetSection<GPSection>();
         gp.header.magic = GPSection::gpMagic;
         gp.header.version = GPSection::version;
-        gp.header.size = sizeof(GPSection) + sizeof(GPCupStatus) * (trackCount / 4 - 1);
-        memset(&gp.gpStatus[0], 0xFF, gp.header.size);
+
+        gp.header.size = sizeof(GPSection) + sizeof(GPCupStatus) * (cupCount - 1);
+        memset(&gp.gpStatus[0], 0xFF, sizeof(GPCupStatus) * cupCount);
     }
 
     Binary(const Binary& old) { //V2 -> V3
@@ -292,6 +291,8 @@ private:
 //Use these 3 for "u32 setting" in GetSettingValue, the return will be the value of the other enums
 enum MenuSettings {
     SETTINGMENU_RADIO_FASTMENUS = 0,
+    SETTINGMENU_RADIO_LAYOUT = 1,
+    SETTINGMENU_RADIO_MUSIC = 2,
     SETTINGMENU_SCROLL_BOOT = 0 + 6
 };
 
@@ -313,10 +314,21 @@ enum HostSettings {
     SETTINGHOST_SCROLL_GP_RACES = 0 + 6
 };
 
-//INDIVIDUAL SETTINGS
+//MENU SETTINGS
 enum MenuSettingFastMenus {
     MENUSETTING_FASTMENUS_DISABLED = 0x0,
     MENUSETTING_FASTMENUS_ENABLED = 0x1
+};
+
+enum MenuSettingLayout {
+    MENUSETTING_LAYOUT_DEFAULT = 0x0,
+    MENUSETTING_LAYOUT_ALPHABETICAL = 0x1
+};
+
+enum MenuSettingMusic {
+    MENUSETTING_MUSIC_DEFAULT = 0x0,
+    MENUSETTING_MUSIC_DISABLE_ALL = 0x1,
+    MENUSETTING_MUSIC_DISABLE_RACE = 0x2
 };
 
 enum MenuSettingBoot {

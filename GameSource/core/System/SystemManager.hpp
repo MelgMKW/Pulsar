@@ -1,5 +1,5 @@
-#ifndef _SYSTEM_
-#define _SYSTEM_
+#ifndef _SYSTEM_MANAGER_
+#define _SYSTEM_MANAGER_
 #include <types.hpp>
 #include <core/egg/mem/Heap.hpp>
 

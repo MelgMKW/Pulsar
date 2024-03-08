@@ -27,7 +27,7 @@ int Mgr::GetSettingsBinSize() const {
 }
 
 void Mgr::Save() {
-    IO* io = IO::sInstance;;
+    IO* io = IO::sInstance;
     io->OpenFile(this->filePath, FILE_MODE_WRITE);
     io->Overwrite(this->rawBin->header.fileSize, this->rawBin);
     io->Close();
@@ -40,16 +40,16 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
 
     u32 size = this->GetSettingsBinSize();
     System* system = System::sInstance;
-    IO* io = IO::sInstance;;
+    IO* io = IO::sInstance;
 
     Binary* buffer;
     bool ret = io->OpenFile(this->filePath, FILE_MODE_READ_WRITE);
-    if(ret == false) {
+    if(!ret) {
         io->CreateAndOpen(this->filePath, FILE_MODE_READ_WRITE);
     }
-    if(ret) {
+    else {
         alignas(0x20) BinaryHeader header;
-        ret = io->Read(sizeof(BinaryHeader), &header);
+        ret = io->Read(sizeof(BinaryHeader), &header) == sizeof(BinaryHeader);
         if(header.magic != Binary::binMagic) ret = false;
         else {
             buffer = io->Alloc<Binary>(header.fileSize);
@@ -61,7 +61,7 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
             }
         }
     }
-    if(ret == false) {
+    if(!ret) {
         buffer = io->Alloc<Binary>(size);
         memset(buffer, 0, size);
         new(buffer) Binary(Binary::curVersion, pageCount, CupsConfig::sInstance->GetEffectiveTrackCount());
@@ -82,7 +82,7 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
     CupsConfig* cupsConfig = CupsConfig::sInstance;
     if(last != -1 && cupsConfig->IsValidCup(last) && cupsConfig->GetTotalCupCount() > 8) {
         cupsConfig->lastSelectedCup = last;
-        cupsConfig->selectedCourse = static_cast<PulsarId>(last * 4);
+        cupsConfig->selectedCourse = static_cast<PulsarId>(cupsConfig->ConvertTrack_PulsarCupToTrack(last, 0));
         cupsConfig->lastSelectedCupButtonIdx = last & 1;
     }
 }

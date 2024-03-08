@@ -19,7 +19,7 @@ enum BMGType {
 };
 BMGType isCustom;
 
-int GetMsgIdxByBmgId(const BMGHolder& bmg, s32 bmgId) {
+static int GetMsgIdxByBmgId(const BMGHolder& bmg, s32 bmgId) {
     const BMGMessageIds& msgIds = *bmg.messageIds;
     int ret = -1;
     for(int i = 0; i < msgIds.msgCount; ++i) {
@@ -33,7 +33,7 @@ int GetMsgIdxByBmgId(const BMGHolder& bmg, s32 bmgId) {
     return ret;
 }
 
-int GetMsgIdxById(const BMGHolder& normalHolder, s32 bmgId) {
+static int GetMsgIdxById(const BMGHolder& normalHolder, s32 bmgId) {
     /*
     isCustom = false;
     int ret = GetMsgIdxByBmgId(System::sInstance->GetBMG(), bmgId);

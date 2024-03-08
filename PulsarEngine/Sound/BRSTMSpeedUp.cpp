@@ -17,7 +17,7 @@ namespace Pulsar {
 namespace Audio {
 
 using namespace nw4r;
-void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotId) {
+static void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotId) {
     //static u8 hudSlotIdFinalLap;
 
     u8 isSpeedUp = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SPEEDUP);

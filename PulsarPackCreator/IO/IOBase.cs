@@ -54,9 +54,9 @@ namespace Pulsar_Pack_Creator.IO
         protected static string wiimmFolderPath = "";
 
         protected static readonly uint SECTIONCOUNT = 4;
-        protected static readonly uint CONFIGVERSION = 1;
+        protected static readonly uint CONFIGVERSION = 2;
         protected static readonly uint INFOVERSION = 1;
-        protected static readonly uint CUPSVERSION = 1;
+        protected static readonly uint CUPSVERSION = 2;
         protected static readonly uint TEXTVERSION = 1;
 
         public string error;

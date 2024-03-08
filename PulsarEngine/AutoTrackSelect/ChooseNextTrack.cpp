@@ -19,18 +19,6 @@ void RaceControlButtonInfo::Update(const Input::ControllerHolder* controllerHold
         isMirror = RaceData::sInstance->racesScenario.settings.modeFlags & 1;
         if(isMirror) {
             modHolder->uiinputStates[0].stickX = -modHolder->uiinputStates[0].stickX;
-            /*
-            if((oldActions & 0x60) != 0x60) { //not left and right at the same time
-                if(oldActions & 0x20) {
-                    modHolder->uiinputStates[0].buttonActions |= 0x40;
-                    modHolder->uiinputStates[0].buttonActions &= ~0x20;
-                }
-                else if(oldActions & 0x40) {
-                    modHolder->uiinputStates[0].buttonActions |= 0x20;
-                    modHolder->uiinputStates[0].buttonActions &= ~0x40;
-                }
-            }
-            */
         }
     }
     ControlButtonInfo::Update(modHolder);
@@ -39,7 +27,7 @@ void RaceControlButtonInfo::Update(const Input::ControllerHolder* controllerHold
         modHolder->uiinputStates[0].stickX = -modHolder->uiinputStates[0].stickX;
     }
 }
-void BuildChooseNextTrack(Section& section, PageId id) {
+static void BuildChooseNextTrack(Section& section, PageId id) {
     section.CreateAndInitPage(id);
     if(Info::IsHAW(false)) {
         ChooseNextTrack* choose = new(ChooseNextTrack);
@@ -57,8 +45,7 @@ kmCall(0x8062f2a8, BuildChooseNextTrack); //0x76
 kmCall(0x8062f314, BuildChooseNextTrack); //0x77
 
 ChooseNextTrack::ChooseNextTrack() :
-    isBattle(RaceData::sInstance->racesScenario.settings.gamemode == MODE_PRIVATE_BATTLE),
-    curPageIdx(CupsConfig::sInstance->winningCourse / 4)//, lastSentFrames(-1), maxTimeDiff(0), readyWait(0)
+    isBattle(RaceData::sInstance->racesScenario.settings.gamemode == MODE_PRIVATE_BATTLE)
 {
     if(RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub].hostAid
         == RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub].localAid) {
@@ -75,7 +62,12 @@ ChooseNextTrack::ChooseNextTrack() :
     onButtonClickHandler.ptmf = &ChooseNextTrack::OnButtonClick;
     for(int i = 0; i < 6; ++i) new (&this->manipulatorManager.holders[0].info) RaceControlButtonInfo;
     for(int i = 0; i < 12; ++i) hasReceivedHostTrack[i] = false;
-    CupsConfig::sInstance->ToggleCTs(!CupsConfig::IsRegsSituation());
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+    PulsarId lastTrack = cupsConfig->winningCourse;
+    if(!this->isBattle && cupsConfig->IsAlphabetical() && lastTrack >= PULSARID_FIRSTCT) lastTrack = static_cast<PulsarId>(cupsConfig->GetInvertedArray()[lastTrack - PULSARID_FIRSTCT] + PULSARID_FIRSTCT);
+    curPageIdx = CupsConfig::ConvertCup_PulsarTrackToCup(lastTrack);
+    cupsConfig->ToggleCTs(!CupsConfig::IsRegsSituation());
+
 }
 
 void ChooseNextTrack::OnActivate() {
@@ -85,25 +77,35 @@ void ChooseNextTrack::OnActivate() {
     //this->buttons[3].SetMessage(BMG_RANDOM_TRACK);
     this->UpdateButtonInfo(0); //to fix the bad IDs from the array
     this->message->positionAndscale[1].position.y = 180.0f;
-    this->countdown.SetInitial(10.0f);
+    this->countdown.SetInitial(static_cast<float>(Info::GetChooseNextTrackTimer()));
     this->countdown.isActive = true;
     this->countdownControl.AnimateCurrentCountDown();
-
 }
 
 void ChooseNextTrack::OnUpdate() {
     this->countdown.Update();
     this->countdownControl.AnimateCurrentCountDown();
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
-    if(this->duration == 600) {
+    if(this->duration == Info::GetChooseNextTrackTimer()) {
         PulsarId lastTrack = cupsConfig->winningCourse;
         if(this->isBattle && lastTrack == N64_SKYSCRAPER) lastTrack = static_cast<PulsarId>(DELFINO_PIER);
-        else if(lastTrack % 4 == 3) lastTrack = static_cast<PulsarId>(cupsConfig->GetNextCupId(CupsConfig::ConvertCup_PulsarTrackToCup(lastTrack), 1) * 4);
-        else lastTrack = lastTrack + 1U;
+        else {
+            const bool isAlphabetical = cupsConfig->IsAlphabetical();
+
+            if(isAlphabetical && lastTrack >= PULSARID_FIRSTCT) lastTrack = static_cast<PulsarId>(cupsConfig->GetInvertedArray()[lastTrack - PULSARID_FIRSTCT] + PULSARID_FIRSTCT);
+            u32 rowIdx = lastTrack % 4;
+            PulsarCupId cupId = CupsConfig::ConvertCup_PulsarTrackToCup(lastTrack);
+            if(rowIdx == 3) {
+                cupId = cupsConfig->GetNextCupId(cupId, 1);
+                rowIdx = -1;
+            }
+            lastTrack = cupsConfig->ConvertTrack_PulsarCupToTrack(cupId, rowIdx + 1);
+        }
         this->buttons[0].buttonId = lastTrack;
         this->OnButtonClick(this->buttons[0], 0);
     }
 }
+
 
 int ChooseNextTrack::GetMessageBMG() const {
     return this->controlBMGId;
@@ -156,7 +158,7 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
         }
         this->curPageIdx = ret;
         for(int i = 0; i < 4; ++i) {
-            this->buttons[i].buttonId = this->curPageIdx * 4 + i;
+            this->buttons[i].buttonId = cupsConfig->ConvertTrack_PulsarCupToTrack(static_cast<PulsarCupId>(this->curPageIdx), i);
             this->buttons[i].SetMessage(UI::GetTrackBMGId(static_cast<PulsarId>(this->buttons[i].buttonId)));
         }
     }
@@ -177,7 +179,7 @@ void ChooseNextTrack::OnButtonClick(PushButton& button, u32 hudSlotId) {
     rsarSounds->PlayEndRaceMenuButtonClickSound();
 }
 
-void AddArrowsToChooseNext(Pages::RaceMenu& page, u32 controlCount) {
+static void AddArrowsToChooseNext(Pages::RaceMenu& page, u32 controlCount) {
     bool isChooseNext = false;
     const SectionId curSectionId = SectionMgr::sInstance->curSection->sectionId;
     if((curSectionId >= SECTION_P1_WIFI_FRIEND_VS || curSectionId >= SECTION_P2_WIFI_FRIEND_COIN)
@@ -200,7 +202,7 @@ void AddArrowsToChooseNext(Pages::RaceMenu& page, u32 controlCount) {
 }
 kmCall(0x80858ebc, AddArrowsToChooseNext);
 
-PageId CorrectPageAfterResults(PageId id) {
+static PageId CorrectPageAfterResults(PageId id) {
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
     if(Info::IsHAW(false)) {
         const ChooseNextTrack* page = sectionMgr->curSection->Get<ChooseNextTrack>(PAGE_GHOST_RACE_ENDMENU);

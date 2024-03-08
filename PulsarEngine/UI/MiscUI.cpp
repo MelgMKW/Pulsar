@@ -22,7 +22,7 @@ kmWrite32(0x8007B37C, 0x38000128);
 
 
 //Credit to Kazuki for making the original ASM code, and Brawlbox for porting it to C++
-void LaunchRiivolutionButton(SectionMgr* sectionMgr) {
+static void LaunchRiivolutionButton(SectionMgr* sectionMgr) {
     const SectionId id = sectionMgr->nextSectionId;
     if(id == SECTION_CHANNEL_FROM_MENU || id == SECTION_CHANNEL_FROM_CHECK_RANKINGS || id == SECTION_CHANNEL_FROM_DOWNLOADS) Debug::LaunchSoftware();
     else sectionMgr->LoadSection();
@@ -31,7 +31,7 @@ kmCall(0x80553a60, LaunchRiivolutionButton);
 
 //Top left message when a race is about to start in a froom
 
-void FixStartMessageFroom(CtrlRaceWifiStartMessage* startMsg, u32 bmgId, TextInfo* info) {
+static void FixStartMessageFroom(CtrlRaceWifiStartMessage* startMsg, u32 bmgId, TextInfo* info) {
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
     const SectionId id = sectionMgr->curSection->sectionId;
     if(id == SECTION_P1_WIFI_FRIEND_VS || id == SECTION_P1_WIFI_FRIEND_TEAMVS
@@ -44,7 +44,7 @@ void FixStartMessageFroom(CtrlRaceWifiStartMessage* startMsg, u32 bmgId, TextInf
 }
 kmCall(0x807f8b7c, FixStartMessageFroom);
 
-void DisplayDate(CtrlMenuPressStart* start) {
+static void DisplayDate(CtrlMenuPressStart* start) {
     start->Load();
     start->SetMessage(BMG_DATE);
 }

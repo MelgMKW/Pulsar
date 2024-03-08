@@ -105,10 +105,25 @@
         </DockPanel.Background>
         <StackPanel Orientation = "Horizontal" DockPanel.Dock="Bottom" Background="#FF202020" HorizontalAlignment="Center">
             <Button x:Name = "ImportConfig"  Content = "Import Config" Width = "100" Height = "20" Click="OnImportConfigClick"/>
-            <Button x:Name = "BuildConfig" Content = "Build Config Only" Width = "100" Height = "20" Click="OnBuildConfigClick"/>
-            <Button x:Name = "BuildPack" Content = "Build Full Pack" Width = "100" Height = "20" Click="OnBuildFullPackClick"/>
+            <Button x:Name = "Build" Content = "Build" Width = "100" Height = "20" Click="OnBuildClick">
+                <Button.ContextMenu>
+                    <ContextMenu Name="BuildCM" StaysOpen="true">
+                        <MenuItem Header="Build Config Only" Click="OnBuildConfigClick"/>
+                        <MenuItem Header="Build Config &amp; Tracks" Click="OnBuildConfigTracksClick"/>
+                        <MenuItem Header="Build Full Pack" Click="OnBuildFullPackClick"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+
             <Button x:Name = "Alphabetize" Content = "Alphabetize" Width = "100" Height = "20" Click="OnAlphabetizeClick"/>
-            <Button x:Name = "MassImport" Content = "Mass Import Names" Width = "120" Height = "20" Click="OnMassImportClick"/>
+            <Button x:Name = "MassImport" Content = "Mass Import" Width = "100" Height = "20" Click="OnMassImportClick">
+                <Button.ContextMenu>
+                    <ContextMenu Name="MassImportCM" StaysOpen="true">
+                        <MenuItem Header="Mass Import Tracks" Click="OnMassImportTracksClick"/>
+                        <MenuItem Header="Mass Import Cup Names &amp; Icons" Click="OnMassImportCupNamesClick"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
             <Button x:Name = "OpenInput" Content = "Open Input Folder" Width = "120" Height = "20" Click="OnOpenInputClick"/>
             <Button x:Name = "Crash" Content = "Check Crash" Width = "90" Height = "20" Click="OnCrashClick"/>
             <Button x:Name = "SettingsButton" Content = "Program Settings" Width = "100" Height = "20" Click="OnSettingsClick"/>
@@ -269,7 +284,9 @@
                     <TextBlock Text="Track Blocking" Grid.Row="3" Grid.Column="1" Margin="1,33,0,0" HorizontalAlignment="Left" Style="{StaticResource Blocks}"/>
                     <ComboBox x:Name="TrackBlocking" Grid.Row="3" Grid.Column="1" Margin="110,32,0,0" Width="43" Height="19" HorizontalContentAlignment="Center" SelectionChanged="OnTrackBlockingChange" Style="{StaticResource ComboBoxes}" HorizontalAlignment="Left"/>
 
-
+                    <TextBox   x:Name="HAWTimer" Text="10" Grid.Row="1" Grid.Column="4" Width="40" Margin="70,40,70,60" Height="24" TextChanged="OnHAWTimerChange" DataObject.Pasting="NumbersOnlyPasting" PreviewTextInput="NumbersOnlyBox" Style="{StaticResource Boxes}" />
+                    <TextBlock Text="Host Always Wins Timer" Grid.Row="1" Grid.Column="4" Margin="0,33,0,0" Style="{StaticResource Blocks}" />
+                    
                     <DatePicker xml:lang="en-GB" x:Name="dateSelector" Language="en-GB" Foreground="{DynamicResource fg}" SelectedDateChanged="OnDateChange"
                                    Grid.Row="1" Grid.Column="3" Width="185" >
 
