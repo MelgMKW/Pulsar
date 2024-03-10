@@ -347,7 +347,7 @@ namespace Pulsar_Pack_Creator.IO
                 string trackName = cup.trackNames[i];
                 if (cup.versionNames[i] != "" && cup.versionNames[i] != "Version")
                 {
-                    trackName += $" \\c{{red3}}{cup.versionNames[i]}\\c{{off}}";
+                    trackName += $"";
                 }
 
                 //AppendText(trackName);

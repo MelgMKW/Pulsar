@@ -4,7 +4,7 @@
 #include <UI/UI.hpp>
 #include <PulsarSystem.hpp>
 #include <MarioKartWii/GlobalFunctions.hpp>
-
+/*
 
 namespace Pulsar {
 
@@ -30,7 +30,7 @@ void RaceControlButtonInfo::Update(const Input::ControllerHolder* controllerHold
                     modHolder->uiinputStates[0].buttonActions &= ~0x40;
                 }
             }
-            */
+            
         }
     }
     ControlButtonInfo::Update(modHolder);
@@ -216,3 +216,5 @@ PageId CorrectPageAfterResults(PageId id) {
 kmBranch(0x80646754, CorrectPageAfterResults);
 }//namespace UI
 }//namespace Pulsar
+
+*/

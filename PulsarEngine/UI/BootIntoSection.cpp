@@ -85,6 +85,6 @@ void SetUpCorrectController(RealControllerHolder* realControllerHolder, const Co
     realControllerHolder->SetController(controller, nullptr);
 }
 kmCall(0x805243f4, SetUpCorrectController);
-kmWrite32(0x8061af98, 0x60000000);
+//kmWrite32(0x8061af98, 0x60000000);
 
 }//namespace Pulsar

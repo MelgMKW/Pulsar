@@ -4,6 +4,7 @@
 #include <MarioKartWii/UI/Ctrl/CtrlRace/CtrlRaceBalloon.hpp>
 #include <MarioKartWii/UI/Ctrl/CtrlRace/CtrlRaceResult.hpp>
 #include <MarioKartWii/Item/ItemManager.hpp>
+#include <MarioKartWii/Item/ItemPlayer.hpp>
 #include <MarioKartWii/GlobalFunctions.hpp>
 #include <Settings/Settings.hpp>
 #include <Info.hpp>
@@ -39,7 +40,7 @@ void BattleGlitchEnable() {
 Settings::Hook BattleGlitch(BattleGlitchEnable);
 
 
-//kmWrite32(0x8085C914, 0x38000000); //times at the end of races in VS
+kmWrite32(0x8085C914, 0x38000000); //times at the end of races in VS
 void DisplayTimesInsteadOfNames(CtrlRaceResult& result, u8 id) {
     result.DisplayFinishTime(id);
 }
@@ -93,5 +94,48 @@ kmCall(0x807ef3e0, ChangeItemWindowPane);
 kmCall(0x807ef444, ChangeItemWindowPane);
 
 kmWrite24(0x808A9FF3, 'PUL');
+
+/*const char* ChangeItemWindowPanebill(ItemId id, u32 itemCount) {
+    //const char* paneName;
+    if(!Pulsar::CupsConfig::IsRegsSituation() && id == BULLET_BILL) {
+    itemCount = 0;
+    }
+    itemCount = 1;
+}*/
+
+//kmCall(0x807BA5D0, ChangeItemWindowPanebill);
+//kmCall(0x807ba37c, ChangeItemWindowPanebill);
+
+/*
+//No Bullet Bill Icon
+void NoBulletBillIcon(PlayerRoulette * roulette, ItemId item) {
+  if(Pulsar::CupsConfig::IsRegsSituation()) roulette->unknown_0x24 = (u32) item;
+}
+kmCall(0x807a9b28, NoBulletBillIcon);
+kmWrite32(0x807BA5D0,0x60000000);// No Bullet Bill Icon*/
+
+//Accurate Item Roulette
+kmWrite32(0x807BB8EC,0x60000000);
+
+//TT Auto Scroll
+kmWrite32(0x80855B28,0x60000000);
+
+//RR Fix
+kmWrite32(0x8059BE30,0x60000000);
+
+//Vote Timer
+kmWrite32(0x80650254,0x60000000);
+
+//Look Behind
+kmWrite32(0x805A228C,0x60000000);
+
+//Pause before start
+kmWrite32(0x80856a28,0x48000050);
+
+//FC Everywhere
+
+//Funky as Default
+//kmWrite32(0x805E4208,0x38A00016);
+
 }//namespace Race
 }//namespace Pulsar
