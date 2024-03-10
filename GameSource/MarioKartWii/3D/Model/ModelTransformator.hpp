@@ -4,7 +4,6 @@
 #include <core/nw4r/g3d.hpp>
 #include <core/egg/3D/Scn.hpp>
 #include <MarioKartWii/Archive/ArchiveRoot.hpp>
-#include <MarioKartWii/Sound/Actors/RaceActor.hpp>
 #include <MarioKartWii/3D/Scn/ScnManager.hpp>
 #include <MarioKartWii/3D/Model/AnmHolder.hpp>
 
@@ -13,6 +12,9 @@ Contributors:
 -kHacker35000vr, Melg
 */
 using namespace nw4r;
+namespace Audio {
+class LinkedRaceActor;
+}//namespace Audio
 
 class ModelDirector;
 class ModelTransformator { //animation stuff
@@ -63,7 +65,7 @@ public:
     AnmHolder** activeAnms; //0x24 one per type, use type to access
     AnmHolder** prevAnimHolders; //0x28 when the first array is updated, 2nd copies what the modified idx contained
     AnmBlendHolder** activeAnmBlends; //0x2C
-    LinkedRaceActor* soundActor; //0x30
+    Audio::LinkedRaceActor* audioActor; //0x30
     u32 unknown_0x34;
     u16 bitfieldActiveAnmTypes; //0x38
     u8 padding[2];

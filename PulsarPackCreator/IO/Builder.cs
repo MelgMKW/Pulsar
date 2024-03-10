@@ -55,7 +55,7 @@ namespace Pulsar_Pack_Creator.IO
         readonly string modFolder;
         readonly string date;
 
-        PulsarGame.BinaryHeader configHeader = new PulsarGame.BinaryHeader(configMagic, CONFIGVERSION);
+        PulsarGame.BinaryHeader configHeader = new PulsarGame.BinaryHeader(configMagic, (int)CONFIGVERSION);
         PulsarGame.InfoHolder infoSection = new PulsarGame.InfoHolder(infoMagic, INFOVERSION);
         PulsarGame.CupsHolder cupsSection = new PulsarGame.CupsHolder(cupsMagic, CUPSVERSION);
         List<PulsarGame.Cup> cupList = new List<PulsarGame.Cup>();
@@ -113,6 +113,7 @@ namespace Pulsar_Pack_Creator.IO
                     if(bmgRet != Result.Success) return bmgRet;
 
                     string gameFolderName = $"/{parameters.modFolderName}";
+                    if (buildParams == BuildParams.ConfigOnly) configHeader.version *= -1;
                     configHeader.modFolderName = gameFolderName;
                     configHeader.offsetToInfo = Marshal.SizeOf(configHeader);
                     configHeader.offsetToCups = Marshal.SizeOf(infoSection) + configHeader.offsetToInfo;
@@ -398,7 +399,7 @@ namespace Pulsar_Pack_Creator.IO
             infoSection.info.hasFeather = Convert.ToByte(parameters.hasFeather);
             infoSection.info.hasMegaTC = Convert.ToByte(parameters.hasMegaTC);
             infoSection.info.cupIconCount = Math.Min((ushort)100, ctsCupCount);
-            infoSection.info.chooseNextTrackTimer = (byte)(parameters.chooseNextTrackTimer * 60);
+            infoSection.info.chooseNextTrackTimer = (byte)(parameters.chooseNextTrackTimer);
             infoSection.info.reservedSpace = new byte[40];
 
             infoSection.header.dataSize = (uint)Marshal.SizeOf(infoSection.info);

@@ -86,7 +86,7 @@ void ChooseNextTrack::OnUpdate() {
     this->countdown.Update();
     this->countdownControl.AnimateCurrentCountDown();
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
-    if(this->duration == Info::GetChooseNextTrackTimer()) {
+    if(this->duration == Info::GetChooseNextTrackTimer() * 60) {
         PulsarId lastTrack = cupsConfig->winningCourse;
         if(this->isBattle && lastTrack == N64_SKYSCRAPER) lastTrack = static_cast<PulsarId>(DELFINO_PIER);
         else {
@@ -162,11 +162,12 @@ void ChooseNextTrack::UpdateButtonInfo(s32 direction) {
             this->buttons[i].SetMessage(UI::GetTrackBMGId(static_cast<PulsarId>(this->buttons[i].buttonId)));
         }
     }
+    this->buttons[4].buttonId = -1;
 }
 
 void ChooseNextTrack::OnButtonClick(PushButton& button, u32 hudSlotId) {
     CupsConfig* cupsConfig = CupsConfig::sInstance;
-    if(button.buttonId == 5) {
+    if(button.buttonId == -1) {
         PulsarId next = cupsConfig->RandomizeTrack();
         if(cupsConfig->winningCourse == next) next = cupsConfig->RandomizeTrack();
         cupsConfig->winningCourse = next;
@@ -175,8 +176,8 @@ void ChooseNextTrack::OnButtonClick(PushButton& button, u32 hudSlotId) {
     cupsConfig->selectedCourse = cupsConfig->winningCourse;
     this->EndStateAnimated(button.GetAnimationFrameSize(), 0);
     RaceData::sInstance->menusScenario.settings.courseId = cupsConfig->GetCorrectTrackSlot();
-    RaceRSARSoundsPlayer* rsarSounds = static_cast<RaceRSARSoundsPlayer*>(RSARSoundsPlayer::sInstance);
-    rsarSounds->PlayEndRaceMenuButtonClickSound();
+    Audio::RaceRSARPlayer* rsarPlayer = static_cast<Audio::RaceRSARPlayer*>(Audio::RSARPlayer::sInstance);
+    rsarPlayer->PlayEndRaceMenuButtonClickSound();
 }
 
 static void AddArrowsToChooseNext(Pages::RaceMenu& page, u32 controlCount) {

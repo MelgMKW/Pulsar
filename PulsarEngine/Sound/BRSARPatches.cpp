@@ -5,7 +5,7 @@
 #include <core/nw4r/snd/DVDSoundArchive.hpp>
 
 namespace Pulsar {
-namespace Audio {
+namespace Sound {
 using namespace nw4r;
 //Reimplementation of CTGP's BRSTM volume patch
 bool LoadBRSTMVolume(snd::detail::StrmFileLoader& fileLoader, snd::detail::StrmFileReader::StrmInfo* info) {

@@ -13,6 +13,9 @@
 Contributors:
 -kHacker35000vr, Melg
 */
+namespace Audio {
+class LinkedRaceActor;
+}//namespace Audio
 class ClipInfo;
 class Mii;
 using namespace nw4r;
@@ -77,7 +80,7 @@ public:
 
     void Update(u32 scnMdlIdx); //8055d23c
     ModelTransformator* CreateTransformator(); //8055d9f0 mostly inlined
-    void SetSoundActor(LinkedRaceActor& actor); //8055dce4 
+    void SetAudioActor(Audio::LinkedRaceActor& actor); //8055dce4 
 
     void LinkEmptyAnm(u32 animId); //8055e274 will create an empty AnmHolder, used for conditional animations to prevent nullptr reads 
     void LinkAllAnimations(g3d::ResFile& brres); //8055eae0 gets the ResNames and then constructs (if needed) a Transformator and binds all to it

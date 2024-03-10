@@ -338,29 +338,8 @@ namespace Pulsar_Pack_Creator
                 CC150.TextChanged += On150ccChange;
                 UpdateCurCup(0);
                 UpdateCurRegsPage(0);
-                string[] massImportText = new string[5];
-                string[] massImportCupsNamesText = new string[2];
-                foreach(Cup cup in cups)
-                {
-                    for(int i = 0; i < 4; i++)
-                    {
-                        massImportText[0] += cup.trackNames[i] + "\n";
-                        massImportText[1] += cup.authorNames[i] + "\n";
-                        massImportText[2] += cup.versionNames[i] + "\n";
-                        massImportText[3] += PulsarGame.MarioKartWii.idxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[i])] + "\n";
-                        massImportText[4] += PulsarGame.MarioKartWii.musicIdxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cup.musicSlots[i])] + "\n";
-                    }
-                    massImportCupsNamesText[0] += cup.name + "\n";
-                    massImportCupsNamesText[1] += cup.iconName + "\n";
-                }
-                importWindow.NamesImport.Text = massImportText[0];
-                importWindow.AuthorsImport.Text = massImportText[1];
-                importWindow.VersionsImport.Text = massImportText[2];
-                importWindow.SlotsImport.Text = massImportText[3];
-                importWindow.MusicSlotsImport.Text = massImportText[4];
-
-                cupsImportWindow.CupsNameImport.Text = massImportCupsNamesText[0];
-                cupsImportWindow.CupsIconImport.Text = massImportCupsNamesText[1];
+                UpdateMassImport();
+                
             }
             string msg = "";
             switch (ret)
@@ -473,6 +452,32 @@ namespace Pulsar_Pack_Creator
             }
         }
 
+        private void UpdateMassImport()
+        {
+            string[] massImportText = new string[5];
+            string[] massImportCupsNamesText = new string[2];
+            foreach (Cup cup in cups)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    massImportText[0] += cup.trackNames[i] + "\n";
+                    massImportText[1] += cup.authorNames[i] + "\n";
+                    massImportText[2] += cup.versionNames[i] + "\n";
+                    massImportText[3] += PulsarGame.MarioKartWii.idxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[i])] + "\n";
+                    massImportText[4] += PulsarGame.MarioKartWii.musicIdxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cup.musicSlots[i])] + "\n";
+                }
+                massImportCupsNamesText[0] += cup.name + "\n";
+                massImportCupsNamesText[1] += cup.iconName + "\n";
+            }
+            importWindow.NamesImport.Text = massImportText[0];
+            importWindow.AuthorsImport.Text = massImportText[1];
+            importWindow.VersionsImport.Text = massImportText[2];
+            importWindow.SlotsImport.Text = massImportText[3];
+            importWindow.MusicSlotsImport.Text = massImportText[4];
+
+            cupsImportWindow.CupsNameImport.Text = massImportCupsNamesText[0];
+            cupsImportWindow.CupsIconImport.Text = massImportCupsNamesText[1];
+        }
         public bool DisplayImage(string path)
         {
             if (path == "")

@@ -8,7 +8,7 @@
 #include <MarioKartWii/3D/Model/ModelDirector.hpp>
 #include <MarioKartWii/3D/Model/ShadowModelDirector.hpp>
 #include <MarioKartWii/3D/Model/ModelCalc.hpp>
-#include <MarioKartWii/Sound/Actors/ItemSound.hpp>
+#include <MarioKartWii/Audio/Actors/ItemActor.hpp>
 #include <MarioKartWii/KCL/Collision.hpp>
 
 namespace Item {
@@ -138,7 +138,7 @@ public:
 
 
     u8 unknown_0x174[0x180 - 0x174];
-    ItemSound* sound; //0x180
+    Audio::ItemActor* sound; //0x180
     u8 unknown_0x184[0x1a0 - 0x184];
 }; //total size 0x1A0
 size_assert(Obj, 0x1A0);

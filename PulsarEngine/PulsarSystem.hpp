@@ -30,7 +30,7 @@ enum SectionIndexes {
 struct BinaryHeader {
     static const u32 curVersion = 2;
     u32 magic;
-    u32 version;
+    s32 version;
     s32 offsets[3];
     //s32 offsetToInfo; //from start of the header
     //s32 offsetToCups;
@@ -108,7 +108,6 @@ private:
         Info::sInstance = new Info(bin.GetSection<InfoHolder>().info);
         this->InitIO(type);
         this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder>().trophyCount[0]);
-        CupsConfig::sInstance->SetLayout();
     }
     void InitIO(IOType type) const;
     void InitCups(const ConfigFile& bin);

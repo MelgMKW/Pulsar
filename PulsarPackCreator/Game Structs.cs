@@ -499,7 +499,7 @@ public class PulsarGame
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct BinaryHeader
     {
-        public BinaryHeader(uint magic, uint curVersion)
+        public BinaryHeader(uint magic, int curVersion)
         {
             this.magic = magic;
             version = curVersion;
@@ -508,7 +508,7 @@ public class PulsarGame
         [Endian(Endianness.BigEndian)]
         public uint magic;
         [Endian(Endianness.BigEndian)]
-        public uint version;
+        public int version;
         [Endian(Endianness.BigEndian)]
         public Int32 offsetToInfo; //from start of the header
         [Endian(Endianness.BigEndian)]
@@ -539,7 +539,8 @@ public class PulsarGame
         public byte hasMegaTC;
         [Endian(Endianness.BigEndian)]
         public ushort cupIconCount;
-        public byte chooseNextTrackTimer;
+        [Endian(Endianness.BigEndian)]
+        public ushort chooseNextTrackTimer;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 40)]
         public byte[] reservedSpace;
     }

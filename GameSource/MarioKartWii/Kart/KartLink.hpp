@@ -3,13 +3,15 @@
 #include <kamek.hpp>
 #include <core/nw4r/ut/List.hpp>
 #include <MarioKartWii/Kart/KartValues.hpp>
-#include <MarioKartWii/Sound/Actors/KartSound.hpp>
-#include <MarioKartWii/Sound/Actors/CharacterSound.hpp>
 #include <MarioKartWii/File/BSP.hpp>
+#include <MarioKartWii/Audio/Actors/CharacterActor.hpp>
 
 namespace Input {
 class ControllerHolder;
 }//namespace Input
+namespace Audio {
+class KartActor;
+}//namespace Audio
 class KartAIController;
 class KartObjectCollision;
 class ShadowModelDirector;
@@ -18,6 +20,7 @@ class CameraParamBin;
 class ClipInfo;
 class Entity;
 class RaceCamera;
+class DriverController;
 
 namespace Kart {
 
@@ -89,9 +92,9 @@ public:
     const Sub& GetSub() const;	//805907770
     Movement& GetMovement();	//8059077c
     const Movement& GetMovement() const;	//80590788
-    KartSound& GetSound();	//80590794
-    CharacterSound& GetCharacterSound(); //805907a0
-    void PlayCharacterSound(CharacterSoundType type);	//805907b0
+    Audio::KartActor& GetKartActor();	//80590794
+    Audio::CharacterActor& GetCharacterActor(); //805907a0
+    void PlayCharacterSound(Audio::CharacterSourceType type);	//805907b0
     KartObjectCollision& GetObjectCollision(); //805907c0
     ShadowModelDirector& GetShadow(); //805907cc
     HitboxGroup& GetPhysicsHolderHitboxGroup();	//805907d8
@@ -120,7 +123,7 @@ public:
     int GetHopStickX() const; //80590a04
     KartType GetType() const; //80590a10
     u32 GetStatsWheelCount(); //80590a28
-    DriverController GetDriverController() const; //80590a40
+    DriverController& GetDriverController() const; //80590a40
     float GetTriggersCollisionRadius() const; //80590a4c
     u8 GetPlayerIdx() const;	//80590a5c
     bool IsBike() const;	//80590a6c

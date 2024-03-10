@@ -63,6 +63,26 @@ static void SetVSIntroBmgId(LayoutUIControl* trackName) {
 }
 kmCall(0x808552cc, SetVSIntroBmgId);
 
+static void SetAwardsResultCupInfo(LayoutUIControl& awardType, const char* textBoxName, u32 bmgId, TextInfo& info) {
+    PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
+    if(!CupsConfig::IsRegCup(id)) {
+        awardType.layout.GetPaneByName("cup_icon")->flag &= ~1;
+        u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        u32 cupBmgId;
+        u16 iconCount = Info::GetCupIconCount();
+        if(realCupId > iconCount - 1) {
+            wchar_t cupName[0x20];
+            swprintf(cupName, 0x20, L"Cup %d", realCupId);
+            info.strings[0] = cupName;
+            cupBmgId = BMG_TEXT;
+        }
+        else cupBmgId = BMG_CUPS + realCupId;
+        info.bmgToPass[1] = cupBmgId;
+    }
+    awardType.SetTextBoxMessage(textBoxName, bmgId, &info);
+}
+kmCall(0x805bcb88, SetAwardsResultCupInfo);
+
 static void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
 
     PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
@@ -70,7 +90,8 @@ static void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info
         titleText.layout.GetPaneByName("cup_icon")->flag &= ~1;
         u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
         u32 cupBmgId;
-        if(realCupId > 99) {
+        u16 iconCount = Info::GetCupIconCount();
+        if(realCupId > iconCount - 1) {
             wchar_t cupName[0x20];
             swprintf(cupName, 0x20, L"Cup %d", realCupId);
             info.strings[0] = cupName;
@@ -101,8 +122,8 @@ static void SetGPBottomText(CtrlMenuInstructionText& bottomText, u32 bmgId, Text
             rankBmg= BMG_GP_BLANK;
         }
         else {
-            trophyBmg = BMG_GP_GOLD_TROPHY + (status & 0b11);
-            rankBmg = BMG_GP_RANK_3STARS + ((status & 0b111100) >> 2);
+            trophyBmg = BMG_GP_GOLD_TROPHY + Settings::Mgr::ComputeTrophyFromStatus(status);
+            rankBmg = BMG_GP_RANK_3STARS + Settings::Mgr::ComputeRankFromStatus(status);
         }
         info.bmgToPass[1] = trophyBmg;
         info.bmgToPass[2] = rankBmg;
@@ -111,24 +132,24 @@ static void SetGPBottomText(CtrlMenuInstructionText& bottomText, u32 bmgId, Text
 }
 kmCall(0x80841720, SetGPBottomText);
 
-static void SaveGPResult(SavedGhostsHandler* handler) {
-    PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
+static void SaveGPResult(SavedGhostsHandler* handler, u32 r4, u32 r5, u32 r6, u32 r7, u32 r8, u32 r9, bool isNew) {
+    const PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
     if(!CupsConfig::IsRegCup(id)) {
-        u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        const u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        const GPRank rank = RaceData::sInstance->awardScenario.players[0].ComputeGPRank();
         register u32 trophy;
         asm(mr trophy, r31;);
         register u32 cc;
         asm(mr cc, r29;);
-        register GPRank rank;
-        asm(lwz rank, 0x68 (sp););
         Settings::Mgr::SetGPStatus(realCupId, cc, trophy, rank);
     }
-    else handler->NotifyNewLicenseContent();
+    else if(isNew) handler->NotifyNewLicenseContent();
 }
+kmWrite32(0x805bd1d4, 0x418200d8);
 kmCall(0x805bd2ac, SaveGPResult);
 
 static void SetGhostInfoTrackBMG(GhostInfoControl* control, const char* textBoxName) {
-    control->SetTextBoxMsg(textBoxName, GetCurTrackBMG());
+    control->SetTextBoxMessage(textBoxName, GetCurTrackBMG());
 }
 kmCall(0x805e2a4c, SetGhostInfoTrackBMG);
 
@@ -245,15 +266,18 @@ static void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
     Pages::CourseSelect* coursePage = curSection->Get<Pages::CourseSelect>();
     //channel ldb stuff ignored
     const u32 cupId = cupPage->clickedCupId;
+
+    PushButton* toSelect = &course->courseButtons[0];
     for(int i = 0; i < 4; ++i) {
         PushButton& curButton = course->courseButtons[i];
         curButton.buttonId = i;
         const u32 bmgId = GetTrackBMGByRowIdx(i);
         curButton.SetMessage(bmgId);
         if(cupsConfig->ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup, i) == cupsConfig->selectedCourse) {
-            coursePage->SelectButton(curButton);
+            toSelect = &curButton;
         }
     };
+    coursePage->SelectButton(*toSelect);
 };
 kmWritePointer(0x808d30d8, ExtCourseSelectCourseInitSelf); //807e5118
 

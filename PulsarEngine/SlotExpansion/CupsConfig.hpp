@@ -120,9 +120,8 @@ private:
 
     bool hasRegs;      //0x10
     bool hasOddCups;   //0x11
-    bool isAlphabeticalLayout;
-    const u8 regsMode; //0x12
-    //byte of padding 
+    bool isAlphabeticalLayout; //0x12
+    const u8 regsMode;  //0x13
     u32 definedCTsCupCount; //0x14
     u32  ctsCupCount; //0x18
     u16  trophyCount[4]; //0x1c

@@ -8,7 +8,7 @@
 struct CountDown {
     CountDown(); //805c3bcc
     ~CountDown(); //805c3bec
-    void SetInitial(const float countdown); //805c3c2c
+    void SetInitial(float countdown); //805c3c2c seconds
     void Update(); //805c3c44
     float countdown;
     bool isActive;

@@ -1,6 +1,6 @@
 #include <kamek.hpp>
 #include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
-#include <MarioKartWii/Sound/RaceAudioMgr.hpp>
+#include <MarioKartWii/Audio/RaceMgr.hpp>
 #include <PulsarSystem.hpp>
 #include <AutoTrackSelect/ExpFroomMessages.hpp>
 #include <SlotExpansion/UI/ExpansionUIMisc.hpp>

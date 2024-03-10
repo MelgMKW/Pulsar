@@ -440,8 +440,23 @@ namespace Pulsar_Pack_Creator
             }
             string[] sortedArray = new string[ctsCupCount * 4];
             Array.Copy(indexedArray, sortedArray, indexedArray.Length);
-            Array.Sort(sortedArray);
-            return (sortedArray, indexedArray);
+            sortedArray = sortedArray.OrderBy(x =>
+            {
+                string result = x;
+                int startOfSequence = x.IndexOf("\\c{");
+                while (startOfSequence != -1)
+                {                   
+                    if (startOfSequence != -1)
+                    {
+                        int endOfSequence = x.IndexOf("}");
+                        if (endOfSequence == -1) break;
+                        result = x.Remove(startOfSequence, endOfSequence);      
+                    }
+                    startOfSequence = x.IndexOf("\\c{");
+                }
+                return result;
+            }).ToArray();
+            return (sortedArray, indexedArray);            
         }
         private void OnAlphabetizeClick(object sender, RoutedEventArgs e)
         {
@@ -482,6 +497,7 @@ namespace Pulsar_Pack_Creator
             }
             cups = sortedCups;
             UpdateCurCup(0);
+            UpdateMassImport();
             MsgWindow.Show("Tracks have been sorted alphabetically.");
         }
     }

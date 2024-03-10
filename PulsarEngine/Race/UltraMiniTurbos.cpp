@@ -200,14 +200,14 @@ kmCall(0x8069c0a4, PatchFadeBoost);
 
 //Currently uses blue shell sounds for lack of a better one
 kmWrite32(0x807095b8, 0x40A00028); //changes beq to bge for UMT
-static void PatchUMTSound(KartSound& sound, u32 soundId, AudioHandle& handle) {
+static void PatchUMTSound(Audio::KartActor& sound, u32 soundId, Audio::Handle& handle) {
     if(sound.driftState == 4) {
         const char* seqName = "purpleMT.brseq";
         const char* labelName = "b";
-        snd::SoundStartable::StartResult ret = Audio::PlayExtBRSEQ(sound, handle, seqName, labelName, true);
+        snd::SoundStartable::StartResult ret = Sound::PlayExtBRSEQ(sound, handle, seqName, labelName, true);
         if(ret == snd::SoundStartable::START_SUCCESS) return;
     }
-    sound.KartSound::HoldSound(soundId, &handle);
+    sound.KartActor::HoldSound(soundId, &handle);
 
 };
 kmCall(0x807095f8, PatchUMTSound);

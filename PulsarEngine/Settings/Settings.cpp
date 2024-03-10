@@ -77,14 +77,6 @@ void Mgr::Init(u32 pageCount, const u16* totalTrophyCount, const char* path/*, c
     this->UpdateTrackList();
     io->Overwrite(this->rawBin->header.fileSize, this->rawBin);
     io->Close();
-
-    const PulsarCupId last = this->rawBin->GetSection<MiscParams>().lastSelectedCup;
-    CupsConfig* cupsConfig = CupsConfig::sInstance;
-    if(last != -1 && cupsConfig->IsValidCup(last) && cupsConfig->GetTotalCupCount() > 8) {
-        cupsConfig->lastSelectedCup = last;
-        cupsConfig->selectedCourse = static_cast<PulsarId>(cupsConfig->ConvertTrack_PulsarCupToTrack(last, 0));
-        cupsConfig->lastSelectedCupButtonIdx = last & 1;
-    }
 }
 
 TrackTrophy* Mgr::FindTrackTrophy(u32 crc32, TTMode mode) const {

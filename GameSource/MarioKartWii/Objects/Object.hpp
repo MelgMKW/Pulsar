@@ -3,7 +3,7 @@
 #include <kamek.hpp>
 #include <MarioKartWii/KMP/KMPManager.hpp>
 #include <MarioKartWii/File/Tables/GeoHitTable.hpp>
-#include <MarioKartWii/Sound/Actors/ObjectSound.hpp>
+#include <MarioKartWii/Audio/Actors/ObjectActor.hpp>
 #include <MarioKartWii/Route/RouteController.hpp>
 #include <MarioKartWii/3D/Model/ModelDirector.hpp>
 #include <MarioKartWii/3D/Model/ShadowModelDirector.hpp>
@@ -82,9 +82,9 @@ public:
     void LoadAnimationByType(u32 idx, AnmType type); //80820a90
     void LinkAnimations(char** brasd, char** idk, u32 brsadCount, u32 idkCount); //80820eb8
     void UpdateMatrix(); //80821640
-    AudioHandle* StartSoundLimited(u32 soundId, float volume); //808204fc
-    AudioHandle* HoldSoundLimited(u32 soundId); //8082051c
-    AudioHandle* StartNewSoundLimited(u32 soundId, float volume); //no overlap, if sound already started, does nothing
+    Audio::Handle* StartSoundLimited(u32 soundId, float volume); //808204fc
+    Audio::Handle* HoldSoundLimited(u32 soundId); //8082051c
+    Audio::Handle* StartNewSoundLimited(u32 soundId, float volume); //no overlap, if sound already started, does nothing
     bool StartSound(u32 soundId); //8082055c
     bool HoldSound(u32 soundId); //8082057c
     void StopAllSound(int fadeOutFrames); //8052059c 
@@ -97,7 +97,7 @@ public:
     ModelDirector* mdlLodDirector; //0xc
     ShadowModelDirector* shadowDirector; //0x10
     nw4r::g3d::ResFile rawBrres; //0x14
-    LinkedRaceActor* objectSound; //0x18 see object sound class
+    Audio::LinkedRaceActor* objectActor; //0x18 see object actor class
     ClipInfo* clipInfo; //0x1c
     RouteController* routeController; //0x20
     Entity* entity; //0x24

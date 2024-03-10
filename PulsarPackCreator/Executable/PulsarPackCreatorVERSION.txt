@@ -2,18 +2,22 @@
 MAJOR CHANGE:
 -Config.pul now uses version 2. If you want to use the new features, you need to import and reexport your config file.
 Creator Changes:
--Build and Import Mass now use context menus for better accessibility.
--Config only now builds the config without checking for files. The resulting file cannot be used in-game, but can be imported and modified in the software as needed.
+-Build and Mass Import now use context menus for better accessibility.
+-"Build Config Only" now builds the config without checking for files. The resulting file cannot be used in-game, but can be imported and modified in the software as needed.
 -The previous "Build Config Only" behaviour is now executed by "Build Config & Tracks"
 -Cup names and icons can now be imported without first having to import tracks.
 -Building no longer deletes the already existing output folder if it fails.
 -Mass importing tracks no longer requires versions.
+-Alphabetize now ignores escape sequences.
 Engine Changes:
+-Added a Disable Music setting.
 -Now has an in-game option to use an alphabetical layout.
--GPs are now tracked by the settings file.
+-GPs trophies and ranks are now tracked by the settings file.
 -Playing offline VS with the "In Order" setting no longer repeats the first selected track if it is not the first track of a cup.
--The LAP brctr no longer causes crashes for non-english users.
+-The LAP brctr no longer causes crashes for non-english players.
 -Duplicate times now create a new rkg file.
+-Fixed a bug where picking DS Yoshi Falls as the host as the end of a race would instead pick a random track.
+-Fixed randomizer getting stuck (the previous bug fix got lost due to a merge issue).
 
 ·Updated to 1.2.1
 Creator Changes:

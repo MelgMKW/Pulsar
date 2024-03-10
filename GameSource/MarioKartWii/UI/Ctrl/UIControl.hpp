@@ -82,11 +82,11 @@ public:
     virtual void LoadNewLayout(const char* folderName, const char* lytName); //0x38 8063d954 unused
 
     void LoadPictureLayout(const char* folderName, const char* lytName); //8063d9c0
-    void ResetTextBoxMsg(const char* textBoxName); //8063deec
+    void ResetTextBoxMessage(const char* textBoxName); //8063deec
     void ResetMsg(); //8063dfc8
 
     void SetMessage(u32 bmgId, const TextInfo* text = nullptr); //8063ddb4
-    void SetTextBoxMsg(const char* textBoxName, u32 bmgId, const TextInfo* text = nullptr); //8063dcbc
+    void SetTextBoxMessage(const char* textBoxName, u32 bmgId, const TextInfo* text = nullptr); //8063dcbc
     void SetRootPane(const char* paneName); //8063da00
     void SetPicturePane(const char* mainPane, const char* picturePane);
     void SetMiiPane(const char* pane, const MiiGroup& miiGroup, u32 miiIdx, u8 texMapIdx); //8063e3dc

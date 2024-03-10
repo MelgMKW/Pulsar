@@ -3,7 +3,6 @@
 #include <core/nw4r/ut/Misc.hpp>
 #include <core/rvl/dvd/dvd.hpp>
 #include <core/egg/dvd/DvdRipper.hpp>
-#include <MarioKartWii/Sound/RaceAudioMgr.hpp>
 #include <PulsarSystem.hpp>
 
 #include <Settings/Settings.hpp>
@@ -25,6 +24,7 @@ ConfigFile* ConfigFile::LoadConfig(u32* readBytes) {
 
     if(conf == nullptr) Debug::FatalError(error);
     else {
+        if(conf->header.version < 0) Debug::FatalError("Cannot use a \"Build Config Only\" file, please build full or with tracks.");
         if(conf->header.version != conf->header.curVersion) Debug::FatalError("Old Config.pul file, please import and export it on the creator software to update it.");
         ConfigFile::CheckSection(conf->GetSection<InfoHolder>());
         ConfigFile::CheckSection(conf->GetSection<CupsHolder>());
@@ -74,6 +74,17 @@ void System::Init(const ConfigFile& conf) {
     strncpy(this->modFolderName, conf.header.modFolderName, IOS::ipcMaxFileName);
 
     this->InitInstances(conf, type);
+
+    //Initialize last selected cup and courses
+    const PulsarCupId last = Settings::Mgr::sInstance->GetSavedSelectedCup();
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+    cupsConfig->SetLayout();
+    if(last != -1 && cupsConfig->IsValidCup(last) && cupsConfig->GetTotalCupCount() > 8) {
+        cupsConfig->lastSelectedCup = last;
+        cupsConfig->selectedCourse = static_cast<PulsarId>(cupsConfig->ConvertTrack_PulsarCupToTrack(last, 0));
+        cupsConfig->lastSelectedCupButtonIdx = last & 1;
+    }
+
     //Track blocking 
     Info* info = Info::sInstance;
     u32 trackBlocking = info->GetTrackBlocking();

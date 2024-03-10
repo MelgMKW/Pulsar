@@ -1,11 +1,11 @@
 #include <kamek.hpp>
-#include <MarioKartWii/Sound/AudioManager.hpp>
+#include <MarioKartWii/Audio/AudioManager.hpp>
 #include <SlotExpansion/CupsConfig.hpp>
 #include <SlotExpansion/UI/ExpansionUIMisc.hpp>
 
 
 namespace Pulsar {
-namespace Audio {
+namespace Sound {
 //Custom implementation of music slot expansion; this would break with regs
 //kmWrite32(0x8009e0dc, 0x7F87E378); //mr r7, r28 to get string length
 
@@ -43,7 +43,7 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
         if(CheckBRSTM(archive, track, isFinalLap) >= 0) found = true;
         else if(isFinalLap) {
             if(CheckBRSTM(archive, track, false) >= 0) found = true;
-            if(found) AudioManager::sInstance->soundArchivePlayer->soundPlayerArray->soundList.GetFront().ambientParam.pitch = 1.1f;
+            if(found) Audio::Manager::sInstance->soundArchivePlayer->soundPlayerArray->soundList.GetFront().ambientParam.pitch = 1.1f;
         }
         if(found) extFilePath = pulPath;
     }

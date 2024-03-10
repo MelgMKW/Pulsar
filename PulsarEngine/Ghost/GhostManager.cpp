@@ -201,7 +201,7 @@ void Manager::CreateAndSaveFiles(Manager* manager) {
     u32 milliseconds = rkg.header.milliseconds;
     const char* format = "%s/%01dm%02ds%03d.rkg";
     const char* folder = io->GetFolderName();
-    char letter = '@';
+    char letter = '?';
     if(repeatCount > 1) {
         format = "%s/%01dm%02ds%02d%c.rkg";
         letter += repeatCount;

@@ -179,7 +179,8 @@ class alignas(0x20) Binary {
 
         memcpy(&pages, &oldPages, pages.header.size + params.header.size + trophies.header.size);
         GPSection& gp = this->GetSection<GPSection>();
-        memset(&gp.gpStatus[0], 0xFF, gp.header.size);
+        const u32 cupCount = trackCount / 4;
+        memset(&gp.gpStatus[0], 0xFF, sizeof(GPCupStatus) * cupCount);
     }
 
     template<typename T>
@@ -259,6 +260,7 @@ public:
     bool HasTrophy(PulsarId id, TTMode mode) const;
     u16 GetTotalTrophyCount(TTMode mode) const { return totalTrophyCount[mode]; }
     int GetTrophyCount(TTMode mode) const { return this->rawBin->GetSection<TrophiesHolder>().trophyCount[mode]; }
+    PulsarCupId GetSavedSelectedCup() const { return this->rawBin->GetSection<MiscParams>().lastSelectedCup; }
 
     //GP
     static u8 GetGPStatus(u32 idx, u32 cc) {
@@ -266,11 +268,28 @@ public:
         GPSection& gp = mgr->rawBin->GetSection<GPSection>();
         return gp.gpStatus[idx].gpCCStatus[cc];
     }
+    static GPRank ComputeRankFromStatus(u8 gpStatus) {
+        return static_cast<GPRank>(gpStatus >> 2);
+    }
+    static u32 ComputeTrophyFromStatus(u8 gpStatus) {
+        return gpStatus & 0b11;
+    }
     static void SetGPStatus(u32 idx, u32 cc, u32 trophy, GPRank rank) {
         Mgr* mgr = Mgr::sInstance;
         GPSection& gp = mgr->rawBin->GetSection<GPSection>();
-        u8 newStatus = trophy | rank & 0b111100;
-        if(gp.gpStatus[idx].gpCCStatus[cc] != newStatus) {
+        u8 newStatus = trophy | (rank << 2);
+
+        const u8 oldStatus = gp.gpStatus[idx].gpCCStatus[cc];
+        bool isNew = false;
+        if(oldStatus == 0xFF) isNew = true;
+        else {
+            const GPRank oldRank = ComputeRankFromStatus(oldStatus);
+            const u32 oldTrophy = ComputeTrophyFromStatus(oldStatus);
+
+            if(trophy < oldTrophy) isNew = true;
+            else if(trophy == oldTrophy && rank < oldRank) isNew = true;
+        }
+        if(isNew) {
             gp.gpStatus[idx].gpCCStatus[cc] = newStatus;
             mgr->RequestSave();
         }

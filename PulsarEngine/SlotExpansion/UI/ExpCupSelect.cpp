@@ -192,10 +192,8 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
     }
     else {
         u32 tplId = realCupId;
-
         u16 iconCount = Info::GetCupIconCount();
-        if(iconCount == 0) iconCount = 100;
-        if(realCupId > iconCount) {
+        if(realCupId > iconCount - 1) {
             wchar_t cupName[0x20];
             swprintf(cupName, 0x20, L"Cup %d", realCupId);
             info.strings[0] = cupName;

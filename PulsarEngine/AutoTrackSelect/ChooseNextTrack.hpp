@@ -4,7 +4,7 @@
 #include <MarioKartWii/UI/Ctrl/SheetSelect.hpp>
 #include <MarioKartWii/UI/Page/RaceMenu/RaceMenu.hpp>
 #include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
-#include <MarioKartWii/Sound/RSARSounds.hpp>
+#include <MarioKartWii/Audio/RSARPlayer.hpp>
 #include <MarioKartWii/RKNet/RKNetController.hpp>
 #include <MarioKartWii/RKNet/EVENT.hpp>
 #include <MarioKartWii/UI/Ctrl/CountDown.hpp>

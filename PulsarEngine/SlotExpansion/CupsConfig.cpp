@@ -1,5 +1,5 @@
-#include <MarioKartWii/Sound/Race/AudioItemAlterationMgr.hpp>
-#include <MarioKartWii/Sound/RaceAudioMgr.hpp>
+#include <MarioKartWii/Audio/Race/AudioItemAlterationMgr.hpp>
+#include <MarioKartWii/Audio/RaceMgr.hpp>
 #include <MarioKartWii/RKNet/RKNetController.hpp>
 #include <MarioKartWii/GlobalFunctions.hpp>
 #include <Settings/Settings.hpp>
@@ -49,17 +49,17 @@ CourseId CupsConfig::GetCorrectTrackSlot() const {
 
 //MusicSlot
 inline int CupsConfig::GetCorrectMusicSlot() const {
-    register const RaceAudioMgr* mgr;
+    register const Audio::RaceMgr* mgr;
     asm(mr mgr, r30;);
     CourseId realId = mgr->courseId;
     if(realId <= 0x1F) { //!battle
         realId = ConvertTrack_PulsarIdToRealId(this->winningCourse);
         if(!IsReg(this->winningCourse)) realId = static_cast<CourseId>(this->GetTrack(this->winningCourse).musicSlot);
     }
-    int ret = AudioItemAlterationMgr::courseToSoundIdTable[realId];
-    register RaceState futureState;
+    int ret = Audio::ItemAlterationMgr::courseToSoundIdTable[realId];
+    register Audio::RaceState futureState;
     asm(mr futureState, r31;);
-    if(futureState == RACE_STATE_FAST && ret == SOUND_ID_GALAXY_COLOSSEUM) ret = SOUND_ID_GALAXY_COLOSSEUM - 1;
+    if(futureState == Audio::RACE_STATE_FAST && ret == SOUND_ID_GALAXY_COLOSSEUM) ret = SOUND_ID_GALAXY_COLOSSEUM - 1;
     return ret;
 }
 

@@ -62,7 +62,7 @@ public:
     void Initialize(Arg* args) override; //8021347c 
     void Calc() override; //802135d0
     //snd::SoundHeapMgr vtable 802a2878
-    //ArcPlayer vtable 802a288c
+    //ArcPlayer vtable 802a288c at 0xf8
     ~SimpleAudioMgr() override; //thunk 802136a4 function 802133d4
     void* OpenDVDArchive(const char* filePath, snd::SoundHeap* heap) override; //thunk 802119fc function 8021361c
     void* OpenNANDArchive(const char* filePath, snd::SoundHeap* heap) override; //thunk 802119f4 function 80213624

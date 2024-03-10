@@ -81,7 +81,7 @@ namespace Pulsar_Pack_Creator.IO
                 //PulsarGame.CupsHolder cupsHolder = CreateSubCat<PulsarGame.CupsHolder>(raw, header.offsetToCups);
 
                 //Read HEADER
-                configVersion = header.version;
+                configVersion = (uint)Math.Abs(header.version);
                 if (header.magic != configMagic || header.version > CONFIGVERSION) return Result.InvalidConfigFile;
 
                 Result ret = Result.UnknownError;
@@ -125,7 +125,7 @@ namespace Pulsar_Pack_Creator.IO
             parameters.hasUMTs = info.hasUMTs == 1 ? true : false;
             parameters.hasFeather = info.hasFeather == 1 ? true : false;
             parameters.hasMegaTC = info.hasMegaTC == 1 ? true : false;
-            int timer = info.chooseNextTrackTimer / 60;
+            int timer = info.chooseNextTrackTimer;
             parameters.chooseNextTrackTimer = (byte)(timer == 0 ? 10 : timer);
             return Result.Success;
         }

@@ -14,7 +14,7 @@ class Player;
 }
 class ModelDirector;
 class ShadowModelDirector;
-class ObjectSound;
+class ObjectActor;
 
 namespace Lakitu {
 
@@ -186,7 +186,7 @@ class Player : public PlayerBase, public AI::Base {
     Movement* movement;
     void* lightStruct;
     ParamsSubSub* subsub; //8074bf28 ctor
-    ObjectSound* sound; //0x214
+    ObjectActor* sound; //0x214
 };//total size 0x218
 
 }//namespace Lakitu
