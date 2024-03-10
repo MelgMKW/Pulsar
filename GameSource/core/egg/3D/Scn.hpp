@@ -14,7 +14,7 @@ namespace EGG {
 
 class ScnMdlEx {
 public:
-    explicit ScnMdlEx(g3d::ScnMdl* src); //80230458
+    explicit ScnMdlEx(g3d::ScnObj* src); //80230458
     g3d::ResMdl GetResMdl(); //80230fd4
     g3d::ResMat GetResMat(u32 matIdx); //8023101c
     g3d::ResMatMisc GetResMatMisc(u32 matIdx); //8023112c
@@ -23,7 +23,7 @@ public:
     u32 ReplaceMatsGXTexObj(const char* texName, GX::TexObj* texObj, bool setFilterAndWrapMode, void* r7, u8 countSetFilterAndWrap, bool useCopyMat);  //80230da0 
     u16 GetViewMtxCount(); //80230718
 
-    g3d::ScnMdl* scnMdl;
+    g3d::ScnObj* scnObj; //almost always scnMdl/scnMdlSimple except for miis where it is ScnRFL
     u32 type; //0x4
     u32 unknown_0x8[0x8];
     virtual ~ScnMdlEx(); //0x10 s80230690 vtable 802a31c8

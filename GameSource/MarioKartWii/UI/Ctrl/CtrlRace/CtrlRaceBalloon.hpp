@@ -36,13 +36,14 @@ class CtrlRaceNameBalloon : public LayoutUIControl {
     virtual const char* GetClassName() const; //0x2c 807efd0c
 
     void Load(u8 localPlayerCount, u8 hudSlotId, const RaceBalloons* raceBalloons); //807efd18, also sets 808d3e14 for battle glitch
+    void UpdateInfo(u8 hudSlotId); //807f0044
     u8 unknown_0x174[0x17C - 0x174];
     bool isOnline; //0x174
     u8 hudSlotId; //0x175
     u8 playerCount; //0x176
     u8 unknown_0x177;
     u32 nameSlotId; //0x178 from the associated racebaloons, get the id of the name currently displayed
-    const RaceBalloons* balloonClass; //0x17C
+    RaceBalloons* balloonClass; //0x17C
     nw4r::lyt::Pane* chase_name_null; //0x180
     nw4r::lyt::Pane* line; //0x184
 }; //total size 0x188

@@ -1,5 +1,5 @@
-#ifndef _Debug_
-#define _Debug_
+#ifndef _PUL_Debug_
+#define _PUL_Debug_
 #include <core/System/SystemManager.hpp>
 #include <core/RK/RKSystem.hpp>
 #include <core/rvl/ipc/ipc.hpp>
@@ -16,7 +16,7 @@ namespace Debug {
 void FatalError(const char* string);
 void LaunchSoftware();
 struct GPR {
-    void Set(const OS::Context& context, u32 idx, u32 regValue){
+    void Set(const OS::Context& context, u32 idx, u32 regValue) {
         gpr = context.gpr[idx];
         name = 'r00:' + regValue;
     }
@@ -25,7 +25,7 @@ struct GPR {
 };
 
 struct FPR {
-    void Set(const OS::Context& context, u32 idx, u32 regValue){
+    void Set(const OS::Context& context, u32 idx, u32 regValue) {
         fpr = context.fpr[idx];
         name = 'f00:' + regValue;
     }

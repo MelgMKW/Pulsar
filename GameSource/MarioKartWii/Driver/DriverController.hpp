@@ -7,7 +7,6 @@
 #include <MarioKartWii/Driver/Tico.hpp>
 #include <MarioKartWii/Driver/Toadette.hpp>
 #include <MarioKartWii/Mii/MiiHeadsModel.hpp>
-#include <MarioKartWii/Sound/Actors/CharacterSound.hpp>
 
 using namespace nw4r;
 class DriverController;
@@ -56,7 +55,7 @@ public:
     u32 GetBoneMatId(u32 boneId); //807d976c
 
     Kart::Link link;
-    CharacterSound* characterSound; //0xC
+    Audio::CharacterActor* characterActor; //0xC
     u8 unknown_0x10;
     u8 unknown_0x11[3];
     u32 unknown_0x14;

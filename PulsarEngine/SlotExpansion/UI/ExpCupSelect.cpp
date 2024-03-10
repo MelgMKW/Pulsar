@@ -43,8 +43,18 @@ ExpCupSelect::ExpCupSelect() {
     }
 }
 
+void ExpCupSelect::OnActivate() {
+    this->randomizedId = PULSARID_NONE;
+    PushButton** buttons = reinterpret_cast<PushButton**>(this->ctrlMenuCupSelectCup.childrenGroup.controlArray);
+    for(int i = 0; i < 8; ++i) buttons[i]->manipulator.inaccessible = false;
+    this->arrows.leftArrow.manipulator.inaccessible = false;
+    this->arrows.rightArrow.manipulator.inaccessible = false;
+    Pages::CupSelect::OnActivate();
+}
+
+
 //Patch distance func to remove horizontal wrapping
-void CupSelectDistanceFunc(ControlsManipulatorManager* manipulator, u32 type) {
+static void CupSelectDistanceFunc(ControlsManipulatorManager* manipulator, u32 type) {
     if(CupsConfig::sInstance->GetCtsTrackCount() != 0) type = 1;
     manipulator->SetDistanceFunc(type);
 }
@@ -182,10 +192,8 @@ void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& contr
     }
     else {
         u32 tplId = realCupId;
-
         u16 iconCount = Info::GetCupIconCount();
-        if(iconCount == 0) iconCount = 100;
-        if(realCupId > iconCount) {
+        if(realCupId > iconCount - 1) {
             wchar_t cupName[0x20];
             swprintf(cupName, 0x20, L"Cup %d", realCupId);
             info.strings[0] = cupName;

@@ -37,7 +37,7 @@ public:
 
     void CalculateGroupSizes(GroupSizeHolder* groupSizeHolder); //80226cfc
     static void AddSizeToGroup(void* block, ExpHeap* heap, GroupSizeHolder* groupSizeHolder); //80226ca0, non-official
-    //adds size to group's entry matching the block's group Id, used as a  MEMVisitor
+    //adds size to group's entry matching the block's group Id, used as a MEMVisitor
 };
 
 

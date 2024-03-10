@@ -17,17 +17,21 @@ namespace Pulsar_Pack_Creator.IO
         public enum BuildParams
         {
             ConfigOnly,
-            ConfigAndXML,
+            ConfigAndTracks,
             Full
         }
-        public Builder(MainWindow window, BuildParams buildParams) : base(window)
+        public Builder(MainWindow window, BuildParams buildParams, bool createXML) : base(window)
         {
-            modFolder = $"output/{parameters.modFolderName}";
+            modFolder = $"output/{parameters.modFolderName}temp";
             cups = window.cups.AsReadOnly();
 
             date = window.date;
             regsExperts = window.regsExperts;
+
+            trackNamesTuple = window.SortTracks();
+
             this.buildParams = buildParams;
+            this.createXML = createXML;
 
             string[] info = Directory.GetFiles("input/", "*", SearchOption.AllDirectories);
             inputFiles = info.Select(s => s.ToLowerInvariant()).ToArray();
@@ -44,13 +48,14 @@ namespace Pulsar_Pack_Creator.IO
 
         ReadOnlyCollection<MainWindow.Cup> cups;
         readonly string[,,] regsExperts;
-
+        readonly (string[], string[]) trackNamesTuple;
         readonly BuildParams buildParams;
+        readonly bool createXML;
         readonly string[] inputFiles;
         readonly string modFolder;
         readonly string date;
 
-        PulsarGame.BinaryHeader configHeader = new PulsarGame.BinaryHeader(configMagic, CONFIGVERSION);
+        PulsarGame.BinaryHeader configHeader = new PulsarGame.BinaryHeader(configMagic, (int)CONFIGVERSION);
         PulsarGame.InfoHolder infoSection = new PulsarGame.InfoHolder(infoMagic, INFOVERSION);
         PulsarGame.CupsHolder cupsSection = new PulsarGame.CupsHolder(cupsMagic, CUPSVERSION);
         List<PulsarGame.Cup> cupList = new List<PulsarGame.Cup>();
@@ -108,6 +113,7 @@ namespace Pulsar_Pack_Creator.IO
                     if(bmgRet != Result.Success) return bmgRet;
 
                     string gameFolderName = $"/{parameters.modFolderName}";
+                    if (buildParams == BuildParams.ConfigOnly) configHeader.version *= -1;
                     configHeader.modFolderName = gameFolderName;
                     configHeader.offsetToInfo = Marshal.SizeOf(configHeader);
                     configHeader.offsetToCups = Marshal.SizeOf(infoSection) + configHeader.offsetToInfo;
@@ -121,23 +127,23 @@ namespace Pulsar_Pack_Creator.IO
                     for (int i = 1; i < cupList.Count; i++)
                     {
                         cupStream.Write(PulsarGame.BytesFromStruct(cupList[i]));
-                    }
-
-                   
+                    }                                  
                     using BigEndianReader bmgReader = new BigEndianReader(File.Open("temp/bmg.bmg", FileMode.Open));
                     bin.Write(rawHeader);
                     bin.Write(rawInfo);
                     bin.Write(cupStream.ToArray());
+                    for (int i = 0; i < ctsCupCount * 4; i++)
+                    {
+                        bin.Write((ushort)Array.IndexOf(trackNamesTuple.Item2, trackNamesTuple.Item1[i]));
+                    }
                     bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));                   
                     bin.Write(fileSectStream.ToArray());                                  
                 }
             
 
                 File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
-                if(buildParams == BuildParams.ConfigOnly) return Result.Success;
-                CreateXML();
-                if(buildParams == BuildParams.ConfigAndXML) return Result.Success;
-                else
+                if(createXML) CreateXML();
+                if(buildParams == BuildParams.Full)
                 {
 
                     Directory.CreateDirectory($"{modFolder}/Assets");
@@ -208,9 +214,16 @@ namespace Pulsar_Pack_Creator.IO
                         wszstProcess.Start();
                         wszstProcess.WaitForExit();
                     }                   
-                    else File.Copy("temp/UIAssets.szs", $"{modFolder}/Assets/UIAssets.szs");
-                    return Result.Success;
+                    else File.Copy("temp/UIAssets.szs", $"{modFolder}/Assets/UIAssets.szs");                  
                 }
+                string finalDirName = $"output/{parameters.modFolderName}";
+                if (Directory.Exists(finalDirName))
+                {
+                    try { Directory.Delete(finalDirName, true); }
+                    catch { return Result.AlreadyInUse; }
+                }
+                Directory.Move(modFolder, finalDirName);
+                return Result.Success;
             }
             catch (Exception ex)
             {
@@ -267,8 +280,7 @@ namespace Pulsar_Pack_Creator.IO
             if(regsRet != Result.Success) return regsRet;
             cupsSection.cups.cupsArray = cupList.ToArray();
             cupsSection.cups.trophyCount = trophyCount;
-            cupsSection.header.dataSize = (uint)(Marshal.SizeOf(typeof(PulsarGame.Cup)) * (cupList.Count - 1) + Marshal.SizeOf(typeof(PulsarGame.Cups)));
-
+            cupsSection.header.dataSize = (uint)(Marshal.SizeOf(typeof(PulsarGame.Cup)) * (cupList.Count - 1) + Marshal.SizeOf(typeof(PulsarGame.Cups)) + Marshal.SizeOf(typeof(ushort)) * cupList.Count * 4);
 
             return Result.Success;
         }
@@ -295,49 +307,60 @@ namespace Pulsar_Pack_Creator.IO
             for (int i = 0; i < 4; i++)
             {
                 string name = cup.fileNames[i];
-                string curFile = $"input/{name}.szs".ToLowerInvariant();
-                if (!inputFiles.Contains(curFile))
+                if (buildParams == BuildParams.ConfigOnly)
                 {
-                    error = $"{curFile}";
-                    return Result.FileNotFound;
+                    crc32[i] = 0;
                 }
+                else
+                {
+                    string curFile = $"input/{name}.szs".ToLowerInvariant();
+                    if (!inputFiles.Contains(curFile))
+                    {
+                        error = $"{curFile}";
+                        return Result.FileNotFound;
+                    }
 
-                crc32[i] = BitConverter.ToUInt32(System.IO.Hashing.Crc32.Hash(File.ReadAllBytes(curFile)), 0);
-
+                    crc32[i] = BitConverter.ToUInt32(System.IO.Hashing.Crc32.Hash(File.ReadAllBytes(curFile)), 0);
+                }
                 if (!isFake)
                 {
-                    File.Copy($"input/{name}.szs", $"{modFolder}/Tracks/{idx * 4 + i}.szs", true);
-                    crcToFile.WriteLine($"{name} = {crc32[i]:X8}");
-                    string crc32Folder = $"{modFolder}/Ghosts/{crc32[i]:X8}";
+                    string crc32Folder = "";
+                    if (buildParams != BuildParams.ConfigOnly)
+                    {
+                        File.Copy($"input/{name}.szs", $"{modFolder}/Tracks/{idx * 4 + i}.szs", true);
+                        crcToFile.WriteLine($"{name} = {crc32[i]:X8}");
+                        crc32Folder = $"{modFolder}/Ghosts/{crc32[i]:X8}";
 
-                    Directory.CreateDirectory(crc32Folder);
+                        Directory.CreateDirectory(crc32Folder);
+                    }
                     for (int mode = 0; mode < 4; mode++)
                     {
                         string expertName = cup.expertFileNames[i, mode];
                         if (expertName != "RKG File" && expertName != "")
                         {
-                            string rkgName = $"input/{PulsarGame.ttModeFolders[mode, 1]}\\{expertName}.rkg".ToLowerInvariant();
-                            if (!inputFiles.Contains(rkgName))
+                            if (buildParams != BuildParams.ConfigOnly)
                             {
-                                error = $"{rkgName}";
-                                return Result.FileNotFound;
-                            }
+                                string rkgName = $"input/{PulsarGame.ttModeFolders[mode, 1]}\\{expertName}.rkg".ToLowerInvariant();
+                                if (!inputFiles.Contains(rkgName))
+                                {
+                                    error = $"{rkgName}";
+                                    return Result.FileNotFound;
+                                }
+                                using BigEndianReader rkg = new BigEndianReader(File.Open(rkgName, FileMode.Open));
+                                rkg.BaseStream.Position = 0xC;
+                                ushort halfC = rkg.ReadUInt16();
+                                ushort newC = (ushort)((halfC & ~(0x7F << 2)) + (0x26 << 2)); //change ghostType to expert
 
-                            using BigEndianReader rkg = new BigEndianReader(File.Open(rkgName, FileMode.Open));
-                            rkg.BaseStream.Position = 0xC;
-                            ushort halfC = rkg.ReadUInt16();
-                            ushort newC = (ushort)((halfC & ~(0x7F << 2)) + (0x26 << 2)); //change ghostType to expert
-
-                            rkg.BaseStream.Position = 0;
-                            byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
-                            Directory.CreateDirectory($"{crc32Folder}/{PulsarGame.ttModeFolders[mode, 0]}");
-                            using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{crc32Folder}/{PulsarGame.ttModeFolders[mode, 0]}/expert.rkg"));
-                            rkgBytes[0xC] = (byte)(newC >> 8);
-                            rkgBytes[0xD] = (byte)(newC & 0xFF);
-                            finalRkg.Write(rkgBytes);
-                            int rkgCrc32 = BitConverter.ToInt32(System.IO.Hashing.Crc32.Hash(rkgBytes), 0);
-                            finalRkg.Write(rkgCrc32);
-
+                                rkg.BaseStream.Position = 0;
+                                byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
+                                Directory.CreateDirectory($"{crc32Folder}/{PulsarGame.ttModeFolders[mode, 0]}");
+                                using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{crc32Folder}/{PulsarGame.ttModeFolders[mode, 0]}/expert.rkg"));
+                                rkgBytes[0xC] = (byte)(newC >> 8);
+                                rkgBytes[0xD] = (byte)(newC & 0xFF);
+                                finalRkg.Write(rkgBytes);
+                                int rkgCrc32 = BitConverter.ToInt32(System.IO.Hashing.Crc32.Hash(rkgBytes), 0);
+                                finalRkg.Write(rkgCrc32);
+                            }                                                      
                             trophyCount[mode]++;
                         }
                     }
@@ -376,7 +399,8 @@ namespace Pulsar_Pack_Creator.IO
             infoSection.info.hasFeather = Convert.ToByte(parameters.hasFeather);
             infoSection.info.hasMegaTC = Convert.ToByte(parameters.hasMegaTC);
             infoSection.info.cupIconCount = Math.Min((ushort)100, ctsCupCount);
-            infoSection.info.reservedSpace = new byte[41];
+            infoSection.info.chooseNextTrackTimer = (byte)(parameters.chooseNextTrackTimer);
+            infoSection.info.reservedSpace = new byte[40];
 
             infoSection.header.dataSize = (uint)Marshal.SizeOf(infoSection.info);
 
@@ -764,28 +788,30 @@ namespace Pulsar_Pack_Creator.IO
                             string expertName = regsExperts[cup, idx, mode];
                             if (expertName != "RKG File" && expertName != "" && expertName != null)
                             {
-                                string rkgName = $"input/{PulsarGame.ttModeFolders[mode, 1]}\\{expertName}.rkg".ToLowerInvariant();
-                                if (!inputFiles.Contains(rkgName))
-                                {
-                                    error = expertName;
-                                    return Result.FileNotFound;
-                                    throw new FileNotFoundException($"Regs Expert ghost {expertName}.rkg does not exist. Failed creating config.");
+                                if(buildParams != BuildParams.ConfigOnly) 
+                                { 
+                                    string rkgName = $"input/{PulsarGame.ttModeFolders[mode, 1]}\\{expertName}.rkg".ToLowerInvariant();
+                                    if (!inputFiles.Contains(rkgName))
+                                    {
+                                        error = expertName;
+                                        return Result.FileNotFound;
+                                    }
+                                    using BigEndianReader rkg = new BigEndianReader(File.Open(rkgName, FileMode.Open));
+                                    rkg.BaseStream.Position = 0xC;
+                                    ushort halfC = rkg.ReadUInt16();
+                                    ushort newC = (ushort)((halfC & ~(0x7F << 2)) + (0x26 << 2)); //change ghostType to expert
+
+                                    rkg.BaseStream.Position = 0;
+                                    byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
+
+                                    Directory.CreateDirectory($"{folderName}/{PulsarGame.ttModeFolders[mode, 0]}");
+                                    using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{folderName}/{PulsarGame.ttModeFolders[mode, 0]}/expert.rkg"));
+                                    rkgBytes[0xC] = (byte)(newC >> 8);
+                                    rkgBytes[0xD] = (byte)(newC & 0xFF);
+                                    finalRkg.Write(rkgBytes);
+                                    int rkgCrc32 = BitConverter.ToInt32(System.IO.Hashing.Crc32.Hash(rkgBytes), 0);
+                                    finalRkg.Write(rkgCrc32);
                                 }
-                                using BigEndianReader rkg = new BigEndianReader(File.Open(rkgName, FileMode.Open));
-                                rkg.BaseStream.Position = 0xC;
-                                ushort halfC = rkg.ReadUInt16();
-                                ushort newC = (ushort)((halfC & ~(0x7F << 2)) + (0x26 << 2)); //change ghostType to expert
-
-                                rkg.BaseStream.Position = 0;
-                                byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
-
-                                Directory.CreateDirectory($"{folderName}/{PulsarGame.ttModeFolders[mode, 0]}");
-                                using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{folderName}/{PulsarGame.ttModeFolders[mode, 0]}/expert.rkg"));
-                                rkgBytes[0xC] = (byte)(newC >> 8);
-                                rkgBytes[0xD] = (byte)(newC & 0xFF);
-                                finalRkg.Write(rkgBytes);
-                                int rkgCrc32 = BitConverter.ToInt32(System.IO.Hashing.Crc32.Hash(rkgBytes), 0);
-                                finalRkg.Write(rkgCrc32);
                                 trophyCount[mode]++;
                             }
                         }

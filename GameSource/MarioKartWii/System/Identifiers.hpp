@@ -307,9 +307,9 @@ enum PageId {
     PAGE_GP_REPLAY_PAUSE                = 0x38,
     PAGE_TT_IMMEDIATE_REPLAYPAUSE       = 0x39,
     PAGE_WIPE                           = 0x3A, //DONE
-    PAGE_PROBABLY_AWARD_INTERFACE       = 0x3B,
-    PAGE_PROBABLY_CONGRATS              = 0x3C,
-    PAGE_STAFF_ROLL                     = 0x3D,
+    PAGE_AWARD_FADE                     = 0x3B, //DONE
+    PAGE_AWARD_RESULTS                  = 0x3C, //DONE
+    PAGE_STAFF_ROLL                     = 0x3D, //DONE
     PAGE_ENDING_MOVIE                   = 0x3E, //DONE
     PAGE_CONGRATS_AFTER_CREDITS         = 0x3F,
     PAGE_WIFI_RACE_INTERFACE            = 0x40,
@@ -324,7 +324,7 @@ enum PageId {
     PAGE_LIVEVS_VIEW_INTERFACE          = 0x49, //DONE
     PAGE_LIVEBATTLE_VIEW_INTERFACE      = 0x4A,
     PAGE_START_RACE                     = 0x4B, //DONE
-    PAGE_AUTO_ENDING_TRANSPARENT        = 0x4C,
+    PAGE_AUTO_ENDING_TRANSPARENT        = 0x4C, //DONE
     PAGE_MESSAGE_BOX_TRANSPARENT        = 0x4D, //DONE
     PAGE_VOTERANDOM_MESSAGE_BOX         = 0x4E, //DONE
     PAGE_AUTO_ENDING                    = 0x4F, //DONE
@@ -343,12 +343,12 @@ enum PageId {
     PAGE_BACKMODEL                      = 0x5C, //DONE
     PAGE_BEHIND_DISCONNECTSOPTIONS      = 0x5D,
     PAGE_TOP_MENU_OVERLAY               = 0x5E, //DONE
-    PAGE_BLINKING_PRESS_A               = 0x5F,
+    PAGE_BLINKING_PRESS_A               = 0x5F, //DONE
     PAGE_MII_SELECT                     = 0x60, //DONE
-    PAGE_REGISTERED_PADS                = 0x61,
-    PAGE_REGISTER_PAD                   = 0x62,
-    PAGE_PAIR_WII_REMOTES               = 0x63,
-    PAGE_CONFIRM_PAD                    = 0x64,
+    PAGE_REGISTERED_PADS                = 0x61, //DONE
+    PAGE_REGISTER_PAD                   = 0x62, //DONE
+    PAGE_PAIR_WII_REMOTES               = 0x63, //DONE
+    PAGE_CONFIRM_PAD                    = 0x64, //DONE
     PAGE_LICENSE_SELECT                 = 0x65, //DONE
     PAGE_LICENSE_CHANGE_MII             = 0x66, //DONE
     PAGE_LICENSE_SETTINGS               = 0x67, //DONE
@@ -386,7 +386,7 @@ enum PageId {
     PAGE_WFC_DISCONNECT                 = 0x87, //DONE
     PAGE_DISCONNECT_MGR                 = 0x88, //DONE
     PAGE_DISCONNECT_ERROR               = 0x89, //DONE
-    PAGE_APPROVE2P_WFC                  = 0x8A,
+    PAGE_APPROVE2P_WFC                  = 0x8A, //DONE
     PAGE_WFC_MAIN                       = 0x8B, //DONE
     PAGE_WFC_MODE_SELECT                = 0x8C, //DONE
     PAGE_WFC_FRIENDS_MENU               = 0x8D, //DONE
@@ -395,7 +395,7 @@ enum PageId {
     PAGE_COUNTDOWN                      = 0x90, //DONE
     PAGE_VR                             = 0x91, //DONE
     PAGE_VOTE                           = 0x92, //DONE
-    PAGE_LIVE_VIEW_WAITING              = 0x93,
+    PAGE_LIVE_VIEW_WAITING              = 0x93, //DONE
     PAGE_DISABLEHOMEMENU                = 0x94, //DONE
     PAGE_GLOBE                          = 0x95, //DONE
     PAGE_FRIEND_LIST                    = 0x96, //DONE
@@ -433,11 +433,11 @@ enum PageId {
     PAGE_MKCHANNEL_EXPLANATION          = 0xCA, //DONE
     PAGE_ADD_MKCHANNEL_PROMPT           = 0xCB, //DONE
     PAGE_DRAWS_BENEATH_SECTION_OPTIONS  = 0xCC,
-    PAGE_OVERALL_RECORDS                = 0xCE,
-    PAGE_FAVOURITES                     = 0xCF,
-    PAGE_FRIEND_RECORDS                 = 0xD0,
-    PAGE_WFC_RECORDS                    = 0xD1,
-    PAGE_OTHER_RECORDS                  = 0xD2
+    PAGE_OVERALL_RECORDS                = 0xCE, //DONE
+    PAGE_FAVOURITES                     = 0xCF, //DONE
+    PAGE_FRIEND_RECORDS                 = 0xD0, //DONE
+    PAGE_WFC_RECORDS                    = 0xD1, //DONE
+    PAGE_OTHER_RECORDS                  = 0xD2  //DONE
 };
 
 enum SectionId {
@@ -594,7 +594,7 @@ enum BRSARGroups {
     BRSAR_GROUP_CONTROLS        = 1, //PushButton sounds for example
     BRSAR_GROUP_MK_CHANNEL      = 2,
     BRSAR_GROUP_WFC             = 3,
-    BRSAR_GROUP_TITLE         = 5, //mostly the wave
+    BRSAR_GROUP_TITLE           = 5, //mostly the wave
     BRSAR_GROUP_CHANNEL         = 6,
     BRSAR_GROUP_OFFLINE_MENUS   = 7,
 

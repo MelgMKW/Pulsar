@@ -20,15 +20,36 @@ struct ColorS10 {
 }; //0x8
 
 struct TexObj {
-    u32 dummy[8];
-}; //0x24
+    u32 mode0;
+    u32 mode1; //0x4
+    u32 image0; //0x8
+    u32 image3; //0xc
+    void* userData; //0x10
+    TexFmt format; //0x14
+    u32 tlutName; //0x18
+    u16 loadCnt; //0x1c
+    u8  loadFmt; //0x1e
+    u8  flags; //0x1f
+
+    //u32 dummy[8];
+}; //0x20
 
 struct TlutObj {
-    u32 dummy[3];
+    u32 tlut;
+    u32 loadTlut0;
+    u16 numEntries;
+    u8 padding[2];
+    //u32 dummy[3];
 };
 
 struct LightObj {
-    u32 dummy[16];
+    u32 reserved[3];
+    u32 color;
+    float a[3];
+    float k[3];
+    float lpos[3];
+    float ldir[3];
+    //u32 dummy[16];
 };
 
 struct RenderModeObj {

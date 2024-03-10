@@ -17,8 +17,8 @@ class LayoutUIControl;
 
 struct PositionAndScale {
     Vec3 position;
-    Vec2 scale;
-    u8 opacity;
+    Vec2 scale; //0xc 
+    u8 opacity; //0x10
     u8 unknown_0x15[0x18 - 0x15];
 }; //Total Size 0x18
 
@@ -48,7 +48,7 @@ public:
     void SetParentControlGroup(ControlGroup* controlGroup, u32 curZIdx); //8063d398
     void SetSoundIds(u32 onEntranceSoundId, u32 onExitSoundId); //8063d3a4
 
-    PositionAndScale positionAndscale[4]; //same structs repeats itself 4 times, but only the last one seems to do anything?
+    PositionAndScale positionAndscale[4]; //0x4 same structs repeats itself 4 times, but only the last one seems to do anything?
     ControlGroup* parentGroup; //0x64 
     ControlGroup childrenGroup; //0x68
     float drawPriority; //0x7c setting this to anything but 0 removes the element
@@ -82,11 +82,11 @@ public:
     virtual void LoadNewLayout(const char* folderName, const char* lytName); //0x38 8063d954 unused
 
     void LoadPictureLayout(const char* folderName, const char* lytName); //8063d9c0
-    void ResetTextBoxMsg(const char* textBoxName); //8063deec
+    void ResetTextBoxMessage(const char* textBoxName); //8063deec
     void ResetMsg(); //8063dfc8
 
     void SetMessage(u32 bmgId, const TextInfo* text = nullptr); //8063ddb4
-    void SetTextBoxMsg(const char* textBoxName, u32 bmgId, const TextInfo* text = nullptr); //8063dcbc
+    void SetTextBoxMessage(const char* textBoxName, u32 bmgId, const TextInfo* text = nullptr); //8063dcbc
     void SetRootPane(const char* paneName); //8063da00
     void SetPicturePane(const char* mainPane, const char* picturePane);
     void SetMiiPane(const char* pane, const MiiGroup& miiGroup, u32 miiIdx, u8 texMapIdx); //8063e3dc

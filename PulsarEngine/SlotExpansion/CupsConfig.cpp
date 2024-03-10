@@ -1,7 +1,8 @@
-#include <MarioKartWii/Sound/Race/AudioItemAlterationMgr.hpp>
-#include <MarioKartWii/Sound/RaceAudioMgr.hpp>
+#include <MarioKartWii/Audio/Race/AudioItemAlterationMgr.hpp>
+#include <MarioKartWii/Audio/RaceMgr.hpp>
 #include <MarioKartWii/RKNet/RKNetController.hpp>
 #include <MarioKartWii/GlobalFunctions.hpp>
+#include <Settings/Settings.hpp>
 #include <SlotExpansion/CupsConfig.hpp>
 #include <PulsarSystem.hpp>
 
@@ -10,10 +11,10 @@ namespace Pulsar {
 
 CupsConfig* CupsConfig::sInstance = nullptr;
 
-CupsConfig::CupsConfig(const Cups& rawCups) : regsMode(rawCups.regsMode),
+CupsConfig::CupsConfig(const CupsHolder& rawCups) : regsMode(rawCups.regsMode),
 //Cup actions initialization
 hasOddCups(false),
-winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup(PULSARCUPID_FIRSTREG), lastSelectedCupButtonIdx(0)
+winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup(PULSARCUPID_FIRSTREG), lastSelectedCupButtonIdx(0), isAlphabeticalLayout(false)
 {
     if(regsMode != 1) {
         lastSelectedCup = PULSARCUPID_FIRSTCT;
@@ -29,30 +30,36 @@ winningCourse(PULSARID_NONE), selectedCourse(PULSARID_FIRSTREG), lastSelectedCup
     definedCTsCupCount = count;
     ctsCupCount = count;
     for(int i = 0; i < 4; ++i) trophyCount[i] = rawCups.trophyCount[i];
-    cups = new Cup[count];
-    memcpy(cups, &rawCups.cups, sizeof(Cup) * count);
+
+    u16 ctsCount = count * 4;
+    tracks = new Track[ctsCount];
+    memcpy(tracks, &rawCups.tracks, sizeof(Track) * ctsCount);
+    alphabeticalArray = new u16[ctsCount];
+    memcpy(alphabeticalArray, reinterpret_cast<const u8*>(&rawCups.tracks) + sizeof(Track) * ctsCount, sizeof(u16) * ctsCount);
+    invertedAlphabeticalArray = new u16[ctsCount];
+    for(int i = 0; i < ctsCount; ++i) invertedAlphabeticalArray[alphabeticalArray[i]] = i;
 }
 
 //Converts trackID to track slot using table
 CourseId CupsConfig::GetCorrectTrackSlot() const {
     const CourseId realId = ConvertTrack_PulsarIdToRealId(this->winningCourse);
     if(IsReg(this->winningCourse)) return realId;
-    else return (CourseId)cups[realId / 4].tracks[realId % 4].slot;
+    else return static_cast<CourseId>(this->GetTrack(this->winningCourse).slot); //FIX HERE
 }
 
 //MusicSlot
 inline int CupsConfig::GetCorrectMusicSlot() const {
-    register const RaceAudioMgr* mgr;
+    register const Audio::RaceMgr* mgr;
     asm(mr mgr, r30;);
     CourseId realId = mgr->courseId;
     if(realId <= 0x1F) { //!battle
         realId = ConvertTrack_PulsarIdToRealId(this->winningCourse);
-        if(!IsReg(this->winningCourse)) realId = static_cast<CourseId>(cups[realId / 4].tracks[realId % 4].musicSlot);
+        if(!IsReg(this->winningCourse)) realId = static_cast<CourseId>(this->GetTrack(this->winningCourse).musicSlot);
     }
-    int ret = AudioItemAlterationMgr::courseToSoundIdTable[realId];
-    register RaceState futureState;
+    int ret = Audio::ItemAlterationMgr::courseToSoundIdTable[realId];
+    register Audio::RaceState futureState;
     asm(mr futureState, r31;);
-    if(futureState == RACE_STATE_FAST && ret == SOUND_ID_GALAXY_COLOSSEUM) ret = SOUND_ID_GALAXY_COLOSSEUM - 1;
+    if(futureState == Audio::RACE_STATE_FAST && ret == SOUND_ID_GALAXY_COLOSSEUM) ret = SOUND_ID_GALAXY_COLOSSEUM - 1;
     return ret;
 }
 
@@ -60,7 +67,7 @@ int CupsConfig::GetCRC32(PulsarId pulsarId) const {
     if(IsReg(pulsarId)) return RegsCRC32[pulsarId];
     else {
         const CourseId realId = ConvertTrack_PulsarIdToRealId(pulsarId);
-        return this->cups[realId / 4].tracks[realId % 4].crc32;
+        return this->GetTrack(pulsarId).crc32;
     }
 }
 
@@ -88,6 +95,11 @@ void CupsConfig::ToggleCTs(bool enabled) {
     }
     ctsCupCount = count;
 }
+
+void CupsConfig::SetLayout() {
+    CupsConfig::sInstance->isAlphabeticalLayout = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_LAYOUT) == MENUSETTING_LAYOUT_ALPHABETICAL;
+}
+Settings::Hook CTLayout(CupsConfig::SetLayout);
 
 PulsarId CupsConfig::RandomizeTrack(Random* random) const {
     Random rand;
@@ -126,11 +138,11 @@ PulsarCupId CupsConfig::GetNextCupId(PulsarCupId pulsarId, s32 direction) const 
 }
 
 void CupsConfig::SaveSelectedCourse(const PushButton& courseButton) {
-    this->selectedCourse = ConvertTrack_PulsarCupToTrack(this->lastSelectedCup) + courseButton.buttonId;
+    this->selectedCourse = ConvertTrack_PulsarCupToTrack(this->lastSelectedCup, courseButton.buttonId); //FIX HERE
     this->winningCourse = selectedCourse;
 }
 
-int GetCorrectMusicSlotWrapper() {
+static int GetCorrectMusicSlotWrapper() {
     return CupsConfig::sInstance->GetCorrectMusicSlot();
 }
 kmCall(0x80711fd8, GetCorrectMusicSlotWrapper);

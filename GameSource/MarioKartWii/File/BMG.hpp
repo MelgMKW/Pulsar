@@ -16,7 +16,7 @@ struct DataBlockHeader { //same as nw4r::lyt formats such as brlyt
 };
 
 struct MessageEntry {
-    u32 dat1Offset;
+    u32 dat1Offset; //offset to string
     u8 font;
     u8 padding[3];
 }; //0x8
@@ -49,7 +49,7 @@ struct BMGMessageIds { //bmgIds = value, MessageId = position of the array
     u8 format;
     u8 info;
     u8 reserved[4];
-    u32 messageIds[1]; //0x8
+    u32 messageIds[1]; //0x8 idx = bmgId, value = msgId
 };
 
 struct BMGMessageIdsBlock {

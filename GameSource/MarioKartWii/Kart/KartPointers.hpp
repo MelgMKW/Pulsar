@@ -16,8 +16,8 @@
 #include <MarioKartWii/Kart/KartStarAnm.hpp>
 #include <MarioKartWii/Driver/DriverController.hpp>
 #include <MarioKartWii/3D/Model/ModelDirector.hpp>
-#include <MarioKartWii/Sound/Actors/CharacterSound.hpp>
-#include <MarioKartWii/Sound/Actors/KartSound.hpp>
+#include <MarioKartWii/Audio/Actors/CharacterActor.hpp>
+#include <MarioKartWii/Audio/Actors/KartActor.hpp>
 #include <MarioKartWii/3D/Camera/Camera.hpp>
 #include <MarioKartWii/Objects/KartObject.hpp>
 #include <MarioKartWii/Entity/EntityManager.hpp>
@@ -36,7 +36,7 @@ public:
     Wheel** wheels; //0x10 
     DriverController* driverController; //0x14
     Sub* kartSub; //0x18
-    KartSound* kartSound; //0x1c
+    Audio::KartActor* kartActor; //0x1c
     ShadowModelDirector* kartShadow; //0x20
     RaceCamera* camera; //0x24
     Movement* kartMovement; //0x28

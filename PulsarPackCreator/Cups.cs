@@ -151,10 +151,31 @@ namespace Pulsar_Pack_Creator
             public Cup(PulsarGame.Cup raw) : this(0)
             {
                 List<Cup> cups = (GetWindow(App.Current.MainWindow) as MainWindow).cups;
-                uint rawIdx = raw.idx;
-                bool alreadyUsed = cups.Find(c => c.idx == rawIdx) != null;
+                this.idx = (uint)cups.Count;
 
-                this.idx = alreadyUsed ? (uint)cups.Count : rawIdx;
+                for (int i = 0; i < 4; i++)
+                {
+                    PulsarGame.Track track = raw.tracks[i];
+                    if (track.slot >= 0x20) slots[i] = 0x08; //remove battle slots from old config.pul
+                    else slots[i] = track.slot;
+                    musicSlots[i] = track.musicSlot;
+                }
+
+                if (idx < maxCupIcons)
+                {
+                    name = defaultNames[idx];
+                    iconName = $"{name}.png";
+                }
+                else
+                {
+                    name = "";
+                    iconName = "";
+                }
+            }
+            public Cup(PulsarGame.CupV1 raw) : this(0)
+            {
+                List<Cup> cups = (GetWindow(App.Current.MainWindow) as MainWindow).cups;
+                this.idx = (uint)cups.Count;
 
                 for (int i = 0; i < 4; i++)
                 {
@@ -256,7 +277,7 @@ namespace Pulsar_Pack_Creator
                     return;
                 }
                 */
-                if (box.Text == "") box.Text = Cup.defaultNames[curCup];
+                if (box.Text == "" && curCup < Cup.maxCupIcons) box.Text = Cup.defaultNames[curCup];
                 cups[curCup].name = box.Text;
             }
         }
@@ -274,7 +295,7 @@ namespace Pulsar_Pack_Creator
                     return;
                 }
                 */
-                if (box.Text == "") box.Text = $"{Cup.defaultNames[curCup]}.png";
+                if (box.Text == "" && curCup < Cup.maxCupIcons) box.Text = $"{Cup.defaultNames[curCup]}.png";
             }
 
         }
@@ -406,16 +427,8 @@ namespace Pulsar_Pack_Creator
 
         }
 
-        private void OnAlphabetizeClick(object sender, RoutedEventArgs e)
+        public (string[], string[]) SortTracks() //tuple sorted, unsorted
         {
-            List<Cup> sortedCups = new List<Cup>(new Cup[cups.Count()]);
-            for (ushort i = 0; i < cups.Count(); i++)
-            {
-                sortedCups[i] = new Cup(i);
-                sortedCups[i].name = cups[i].name;
-                sortedCups[i].iconName = cups[i].iconName;
-            }
-
             string[] indexedArray = new string[ctsCupCount * 4];
             for (int idx = 0; idx < ctsCupCount; idx++)
             {
@@ -427,12 +440,41 @@ namespace Pulsar_Pack_Creator
             }
             string[] sortedArray = new string[ctsCupCount * 4];
             Array.Copy(indexedArray, sortedArray, indexedArray.Length);
-            Array.Sort(sortedArray);
+            sortedArray = sortedArray.OrderBy(x =>
+            {
+                string result = x;
+                int startOfSequence = x.IndexOf("\\c{");
+                while (startOfSequence != -1)
+                {                   
+                    if (startOfSequence != -1)
+                    {
+                        int endOfSequence = x.IndexOf("}");
+                        if (endOfSequence == -1) break;
+                        result = x.Remove(startOfSequence, endOfSequence);      
+                    }
+                    startOfSequence = x.IndexOf("\\c{");
+                }
+                return result;
+            }).ToArray();
+            return (sortedArray, indexedArray);            
+        }
+        private void OnAlphabetizeClick(object sender, RoutedEventArgs e)
+        {
+            List<Cup> sortedCups = new List<Cup>(new Cup[cups.Count()]);
+            for (ushort i = 0; i < cups.Count(); i++)
+            {
+                sortedCups[i] = new Cup(i);
+                sortedCups[i].name = cups[i].name;
+                sortedCups[i].iconName = cups[i].iconName;
+            }
+
+           
+            (string[], string[]) trackNames = SortTracks();
             int cupIdx = 0;
             int trackIdx = 0;
-            foreach (string s in sortedArray)
+            foreach (string s in trackNames.Item1)
             {
-                int idx = Array.IndexOf(indexedArray, s);
+                int idx = Array.IndexOf(trackNames.Item2, s);
                 int oldCupIdx = idx / 4;
                 int oldTrackIdx = idx % 4;
 
@@ -455,6 +497,7 @@ namespace Pulsar_Pack_Creator
             }
             cups = sortedCups;
             UpdateCurCup(0);
+            UpdateMassImport();
             MsgWindow.Show("Tracks have been sorted alphabetically.");
         }
     }

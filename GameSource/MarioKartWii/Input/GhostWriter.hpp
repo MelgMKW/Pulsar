@@ -69,15 +69,15 @@ class GhostTrickStream : public GhostStream { //0x4ed8 = 0x276c * 2
     bool IsCurReadInputFinished(const Input* buffer) const override; //0x24 805250a8
 }; //0x18
 
-struct RKGInputs {
+struct RKGInputs { //0x88 of uncompressed rkg
     u16 actionInputsCount;
     u16 directionInputsCount;
     u16 trickInputsCount;
-    u16 unused; //presumably for a 4th section
-    GhostStream::Input actionInputs[1]; //0x14 real size  actionInputscount
+    u16 unused; //presumably for a 4th section &~0x20
+    GhostStream::Input actionInputs[1]; //0x8 real size  actionInputscount
     //GhostStream::Input directionInputs
     //GhostStream::Input trickInputsCount
-    GhostStream::Input padding[0x13b5]; //0x14 actually padded until total length 0x2774
+    GhostStream::Input padding[0x13b5]; //0xa actually padded until total length 0x2774
 };
 //size 0x2774
 size_assert(RKGInputs, 0x2774);
@@ -102,8 +102,6 @@ public:
     u8 unknown_0x18[4];
 }; //0x1C 
 size_assert(GhostWriter, 0x1c);
-
-
 
 }//namespace Input
 #endif

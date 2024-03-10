@@ -256,6 +256,7 @@ List_GetNth__Q24nw4r2utFPCQ34nw4r2ut4ListUs = 0x800af1c0
 List_GetNext__Q24nw4r2utFPCQ34nw4r2ut4ListPv = 0x800af180
 List_Append__Q24nw4r2utFPQ34nw4r2ut4ListPv = 0x800aef80
 List_Insert__Q24nw4r2utFPQ34nw4r2ut4ListPvPv = 0x800aeff0
+__dt__Q26detail12LinkListImplFv = 0x800af210
 Insert__Q44nw4r2ut6detail12LinkListImplFQ54nw4r2ut6detail12LinkListImpl12IteratorImplPQ34nw4r2ut12LinkListNode = 0x800af340
 Erase__Q44nw4r2ut6detail12LinkListImplFPQ34nw4r2ut12LinkListNode = 0x800af370
 
@@ -272,6 +273,7 @@ OpenExtStream__Q34nw4r3snd15DVDSoundArchiveFPQ44nw4r3snd15DVDSoundArchive13DvdFi
 GetSoundType__Q34nw4r3snd12SoundArchiveCFUi = 0x8009df30
 ReadStrmInfo__Q44nw4r3snd6detail14StrmFileLoaderFPQ54nw4r3snd6detail14StrmFileReader8StrmInfo = 0x800a5490
 DetailUtilCalcRandom__Q24nw4r3sndFv = 0x800ad050
+Stop__Q44nw4r3snd6detail10BasicSoundFi = 0x8008e330
 
 #math
 F_PI__Q24nw4r4math = 0x803878F8
@@ -440,6 +442,7 @@ sInstance__8RaceData = 0x809bd728
 GetPlayerIdOfLocalPlayer__8RaceDataFUc = 0x80531f70
 GetHudSlotId__8RaceDataCFUc = 0x80531f18
 InitRNG__16RacedataScenarioFv = 0x8052f924
+ComputeGPRank__14RaceDataPlayerFv = 0x8052daf0
 
 #RaceInfo
 sInstance__8RaceInfo = 0x809bd730
@@ -478,7 +481,7 @@ LoadMii__8MiiGroupFUcUs = 0x805fa748
 GetMii__8MiiGroupFUc = 0x805fa930
 
 #Mii
-ComputeRFLStoreData__3MiiFRQ23RFL9StoreDataPCUi = 0x8052758c
+ComputeRFLStoreData__3MiiFRQ23RFL9StoreDataPCQ23RFL8CreateID = 0x8052758c
 
 
 #ScnManager
@@ -583,7 +586,7 @@ GetRuntimeTypeInfo__15LayoutUIControlCFv = 0x80636bd0
 GetClassName__15LayoutUIControlCFv = 0x8063d788
 func_0x30__15LayoutUIControlFv = 0x8063E61c
 LoadNewLayout__15LayoutUIControlFPCcPCc = 0x8063D954
-SetTextBoxMsg__15LayoutUIControlFPCcUiPC8TextInfo = 0x8063dcbc
+SetTextBoxMessage__15LayoutUIControlFPCcUiPC8TextInfo = 0x8063dcbc
 SetMessage__15LayoutUIControlFUiPC8TextInfo = 0x8063ddb4
 SetMiiPane__15LayoutUIControlFPCcRC8MiiGroupUiUc = 0x8063e3dc
 SetPicturePane__15LayoutUIControlFPCcPCc = 0x8063e0f0
@@ -633,6 +636,7 @@ ScheduleDisconnection__7SectionFv = 0x80623054
 RequestBestTimeGhost__18SavedGhostsHandlerFUiUiUi8CourseIdb = 0x80621c78
 RequestDLdGhost__18SavedGhostsHandlerFUiUi8CourseIdb = 0x80621c3c
 LoadStaffGhost = 0x805427bc
+NotifyNewLicenseContent__18SavedGhostsHandlerFv = 0x80621410
 
 #SaveData
 sInstance__Q24NAND7Manager = 0x809bd720
@@ -666,7 +670,7 @@ OnDeactivate__10PushButtonFv = 0x805bd710
 OnSelect__10PushButtonFv = 0x805be12c
 OnDeselect__10PushButtonFv = 0x805be354
 OnClick__10PushButtonFv = 0x805be42c
-IsSelected__10PushButtonFv = 0x805bdf44
+IsSelected__10PushButtonCFv = 0x805bdf44
 HandleSelect__10PushButtonFUiUi = 0x805bdffc
 HandleDeselect__10PushButtonFUiUi = 0x805be130
 HandleClick__10PushButtonFUiUi = 0x805be358
@@ -1244,26 +1248,34 @@ FadeEffects2__13PlayerEffectsFPPQ23EGG6EffectUiUib = 0x806a1b68
 __ct__Q23EGG14EffectResourceFPvPv = 0x80225c98
 
 #Sound
-sInstance__12AudioManager = 0x809c2898
+sInstance__Q25Audio7Manager = 0x809c2898
+Lock__Q25Audio7ManagerFv = 0x807178ec
+Unlock__Q25Audio7ManagerFv = 0x807178f8
+
+#SinglePlayer
+sInstance__Q25Audio12SinglePlayer = 0x809c2328
+PlaySound__Q25Audio12SinglePlayerFUis = 0x806f8b7c
+PlayBGSound__Q25Audio12SinglePlayerFUi = 0x806fa604
+StopSound__Q25Audio12SinglePlayerFv = 0x806f90c4
 
 #LinkedRaceActor
 CannotPlaySounds__15LinkedRaceActorFv = 0x807028e4
 
-#KartSound
-HoldSound__9KartSoundFUiP11AudioHandle = 0x80709338
-PlayBRSARSound__16RaceSoundHandlerFUiUi = 0x80716608
+#KartActor
+HoldSound__Q25Audio9KartActorFUiPQ25Audio6Handle = 0x80709338
 
 #RaceAudioManager
-sInstance__12RaceAudioMgr = 0x809c27f8
-SetRaceState__12RaceAudioMgrF9RaceState = 0x80711ac4
-trackIdxToCourseID__12RaceAudioMgr = 0x80895238
+sInstance__Q25Audio7RaceMgr = 0x809c27f8
+SetRaceState__Q25Audio7RaceMgrFQ25Audio9RaceState = 0x80711ac4
+trackIdxToCourseID__Q25Audio7RaceMgr = 0x80895238
+PrepareSound__Q23EGG9ArcPlayerFPQ34nw4r3snd11SoundHandleUi = 0x806f8d98
 
 #AudioItemAlterationMgr
-courseToSoundIdTable__22AudioItemAlterationMgr = 0x808a1d80
+courseToSoundIdTable__Q25Audio17ItemAlterationMgr = 0x808a1d80
 
 #RSARSoundsPlayer
-sInstance__16RSARSoundsPlayer = 0x809c2850
-PlayEndRaceMenuButtonClickSound__20RaceRSARSoundsPlayerFv = 0x80715ff0
+sInstance__Q25Audio10RSARPlayer = 0x809c2850
+PlayEndRaceMenuButtonClickSound__Q25Audio14RaceRSARPlayerFv = 0x80715ff0
 
 #GlobeMgr
 sInstance__8GlobeMgr = 0x809c2cb8

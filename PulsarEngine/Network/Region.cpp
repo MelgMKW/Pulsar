@@ -8,7 +8,7 @@
 namespace Pulsar {
 namespace Network {
 //Region Patch (Leseratte)
-void PatchLoginRegion() {
+static void PatchLoginRegion() {
     u32 region = Info::GetWiimmfiRegion();
     char path[0x9];
     snprintf(path, 0x9, "%08d", region + 100000);
@@ -27,7 +27,7 @@ PatchRegion(0x80659778);
 
 //kmWrite32(0x8065a038, 0x7C050378);
 //kmWrite32(0x8065a084, 0x7C050378);
-int GetFriendsSearchType(int curType, u32 regionId) {
+static int GetFriendsSearchType(int curType, u32 regionId) {
     register u8 friendRegionId;
     asm(mr friendRegionId, r0;);
     u8 region = Info::GetWiimmfiRegion();
@@ -40,7 +40,7 @@ kmBranch(0x8065a088, GetFriendsSearchType);
 
 
 
-u32 PatchRKNetControllerRegion() {
+static u32 PatchRKNetControllerRegion() {
     return Info::GetWiimmfiRegion();
 }
 kmCall(0x80653640, PatchRKNetControllerRegion);

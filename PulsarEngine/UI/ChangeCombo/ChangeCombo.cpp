@@ -123,7 +123,7 @@ void ExpVR::ChangeCombo(PushButton& changeComboButton, u32 hudSlotId) {
     this->EndStateAnimated(changeComboButton.GetAnimationFrameSize(), 0);
 }
 
-void AddChangeComboPages(Section* section, PageId id) {
+static void AddChangeComboPages(Section* section, PageId id) {
     section->CreateAndInitPage(id);
     section->CreateAndInitPage(PAGE_CHARACTER_SELECT);
     bool isBattle = IsBattle();

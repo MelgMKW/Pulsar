@@ -21,6 +21,40 @@
 #include <core/nw4r/ut/List.hpp>
  //just for usability in other structs
 
+/*
+template<int size>
+struct StringStack {
+    operator const char* () const { return &cString[0]; }
+    operator char* () { return &cStringPtr[0]; }
+    const char& operator[](u32 pos) const { return cString[pos]; }
+    char& operator[](u32 pos) { return cString[pos]; }
+
+    char cString[size];
+};
+
+template<int size>
+struct StringHeap {
+    operator const char* () const { return cStringPtr; }
+    operator char* () { return cStringPtr; }
+    const char& operator[](u32 pos) const { return cStringPtr[pos]; }
+    char& operator[](u32 pos) { return cStringPtr[pos]; }
+
+    char* cStringPtr;
+};
+
+template<bool B, class T, class F>
+struct conditional { typedef T type; };
+
+template<class T, class F>
+struct conditional<false, T, F> { typedef F type; };
+
+template<int size>
+struct String {
+    typedef typename conditional<size >= 100, StringHeap<size>, StringStack<size> >::type Impl;
+};
+*/
+
+
 namespace aux {
 typedef char yes[1];
 typedef char no[2];
@@ -41,6 +75,8 @@ struct is_base_of
 
     static const bool value = sizeof(check(aux::Host<Parent, Child>(), int())) == sizeof(aux::yes);
 };
+
+
 
 /*
 CW implements ptmfs with this pseudo-struct:

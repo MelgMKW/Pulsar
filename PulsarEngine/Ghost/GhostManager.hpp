@@ -24,7 +24,7 @@ public:
         IS_SETTING_RACE,
         IS_SAVING_GHOST
     };
-    typedef void(*RKGCallback)(const RKG& decompressed, CBTiming, int);
+    typedef void(*RKGCallback)(const RKG& decompressed, CBTiming timing, int index);
 
     static const Manager* GetInstance() { return sInstance; }
     static Manager* CreateInstance();

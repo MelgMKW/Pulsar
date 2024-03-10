@@ -8,14 +8,14 @@
 namespace  Pulsar {
 namespace UI {
 //When the player goes back to the main menu, MultiGhostMgr is destroyed
-void DestroyMultiGhostManager(Section& section, PageId pageId) {
+static void DestroyMultiGhostManager(Section& section, PageId pageId) {
     section.CreateAndInitPage(pageId);
     Ghosts::Manager::DestroyInstance();
 }
 kmCall(0x8062cf98, DestroyMultiGhostManager);
 
 //GhostInfoControl BRCTR
-void LoadCustomGhostInfoBRCTR(ControlLoader& loader, const char* folderName, const char* ctrName,
+static void LoadCustomGhostInfoBRCTR(ControlLoader& loader, const char* folderName, const char* ctrName,
     const char* variantName, const char** anims) {
     loader.Load(folderName, "PULGhostInfo", variantName, anims);
 }
@@ -65,7 +65,7 @@ void ExpGhostSelect::OnActivate() {
 }
 
 //Creates space by making the usual 3 buttons smaller, could be done without a BRCTR but this is easier to maintain
-void LoadButtonWithCustBRCTR(PushButton& button, const char* folderName, const char* ctrName, const char* variant,
+static void LoadButtonWithCustBRCTR(PushButton& button, const char* folderName, const char* ctrName, const char* variant,
     u32 localPlayerBitfield, u32 r8, bool inaccessible)
 {
     button.Load(folderName, "GhostListButton", variant, localPlayerBitfield, r8, inaccessible);
@@ -158,7 +158,7 @@ void BeforeEntranceAnimations(Pages::TTSplits* page) {
     entry.kart = RaceData::sInstance->racesScenario.players[0].kartId;
     entry.controllerType = sectionMgr->pad.GetType(sectionMgr->pad.GetCurrentID(0));
     const Mii* mii = m98->playerMiis.GetMii(0);
-    Mii::ComputeRFLStoreData(entry.miiData, &mii->createId);
+    Mii::ComputeRFLStoreData(entry.miiData, &mii->info.createID);
 
     //Find which lap is the best
     RaceInfoPlayer* raceInfoPlayer = RaceInfo::sInstance->players[0];
@@ -226,7 +226,7 @@ void BeforeEntranceAnimations(Pages::TTSplits* page) {
 kmWritePointer(0x808DA614, BeforeEntranceAnimations);
 
 
-void TrophyBMG(CtrlMenuInstructionText& bottomText, u32 bmgId) {
+static void TrophyBMG(CtrlMenuInstructionText& bottomText, u32 bmgId) {
     TextInfo text;
     const System* system = System::sInstance;
     const Settings::Mgr* settings = Settings::Mgr::GetInstance();
@@ -247,8 +247,8 @@ void IndividualTrophyBMG(Pages::CourseSelect& courseSelect, CtrlMenuCourseSelect
     }
     else {
         u32 bmgId;
-        const TextInfo text = GetCourseBottomText(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::sInstance->lastSelectedCup)
-            + button.buttonId, &bmgId);
+        CupsConfig* cupsConfig = CupsConfig::sInstance;
+        const TextInfo text = GetCourseBottomText(cupsConfig->ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup, button.buttonId), &bmgId); //FIX HERE
         courseSelect.bottomText->SetMessage(bmgId, &text);
     }
 }

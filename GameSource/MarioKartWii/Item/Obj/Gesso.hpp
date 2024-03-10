@@ -2,7 +2,7 @@
 #define _ITEMOBJGESSO_
 #include <kamek.hpp>
 #include <MarioKartWii/Item/Obj/ItemObj.hpp>
-#include <MarioKartWii/Sound/Actors/ItemSound.hpp>
+#include <MarioKartWii/Audio/Actors/ItemActor.hpp>
 #include <MarioKartWii/3D/Model/ModelDirector.hpp>
 
 //_sinit_ at 807a9a58
@@ -23,7 +23,7 @@ class GessoScreen { //one per Screen
     u8 unknown_0xc[0x1c - 0xc];
     bool isTwilightHouse;
     u8 padding[3];
-    GessoSound sound; //0x20
+    Audio::GessoActor actor; //0x20
     u8 unknown_0xc8[8]; //0xc8
 }; //0xd0
 size_assert(GessoScreen, 0xd0);

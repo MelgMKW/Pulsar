@@ -14,13 +14,13 @@ namespace UI {
 //Change brctr names
 kmWrite24(0x808a85ef, 'PUL'); //used by 807e5754
 
-void LoadCtrlMenuCourseSelectCupBRCTR(ControlLoader& loader, const char* folderName, const char* ctrName,
+static void LoadCtrlMenuCourseSelectCupBRCTR(ControlLoader& loader, const char* folderName, const char* ctrName,
     const char* variant, const char** animNames) {
     loader.Load(UI::buttonFolder, "PULrseSelectCup", variant, animNames); //Move to button to avoid duplication of cup icon tpls
 }
 kmCall(0x807e4538, LoadCtrlMenuCourseSelectCupBRCTR);
 
-void LoadCorrectTrackListBox(ControlLoader& loader, const char* folder, const char* normalBrctr, const char* variant, const char** anims) {
+static void LoadCorrectTrackListBox(ControlLoader& loader, const char* folder, const char* normalBrctr, const char* variant, const char** anims) {
     loader.Load(folder, "PULSelectNULL", variant, anims);
 }
 kmCall(0x807e5f24, LoadCorrectTrackListBox);
@@ -39,7 +39,7 @@ int GetTrackBMGByRowIdx(u32 cupTrackIdx) {
     PulsarCupId curCupId;
     if(cup == nullptr) curCupId = PULSARCUPID_FIRSTREG;
     else curCupId = static_cast<PulsarCupId>(cup->ctrlMenuCupSelectCup.curCupID);
-    return GetTrackBMGId(CupsConfig::ConvertTrack_PulsarCupToTrack(curCupId) + cupTrackIdx);
+    return GetTrackBMGId(CupsConfig::sInstance->ConvertTrack_PulsarCupToTrack(curCupId, cupTrackIdx)); //FIX HERE
 }
 kmWrite32(0x807e6184, 0x7FA3EB78);
 kmCall(0x807e6188, &GetTrackBMGByRowIdx);
@@ -50,7 +50,7 @@ int GetCurTrackBMG() {
     return GetTrackBMGId(CupsConfig::sInstance->winningCourse);
 }
 
-void SetVSIntroBmgId(LayoutUIControl* trackName) {
+static void SetVSIntroBmgId(LayoutUIControl* trackName) {
     u32 bmgId = GetCurTrackBMG();
     TextInfo info;
     info.bmgToPass[0] = bmgId;
@@ -63,14 +63,35 @@ void SetVSIntroBmgId(LayoutUIControl* trackName) {
 }
 kmCall(0x808552cc, SetVSIntroBmgId);
 
-void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
+static void SetAwardsResultCupInfo(LayoutUIControl& awardType, const char* textBoxName, u32 bmgId, TextInfo& info) {
+    PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
+    if(!CupsConfig::IsRegCup(id)) {
+        awardType.layout.GetPaneByName("cup_icon")->flag &= ~1;
+        u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        u32 cupBmgId;
+        u16 iconCount = Info::GetCupIconCount();
+        if(realCupId > iconCount - 1) {
+            wchar_t cupName[0x20];
+            swprintf(cupName, 0x20, L"Cup %d", realCupId);
+            info.strings[0] = cupName;
+            cupBmgId = BMG_TEXT;
+        }
+        else cupBmgId = BMG_CUPS + realCupId;
+        info.bmgToPass[1] = cupBmgId;
+    }
+    awardType.SetTextBoxMessage(textBoxName, bmgId, &info);
+}
+kmCall(0x805bcb88, SetAwardsResultCupInfo);
+
+static void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
 
     PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
     if(!CupsConfig::IsRegCup(id)) {
         titleText.layout.GetPaneByName("cup_icon")->flag &= ~1;
         u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
         u32 cupBmgId;
-        if(realCupId > 99) {
+        u16 iconCount = Info::GetCupIconCount();
+        if(realCupId > iconCount - 1) {
             wchar_t cupName[0x20];
             swprintf(cupName, 0x20, L"Cup %d", realCupId);
             info.strings[0] = cupName;
@@ -84,10 +105,51 @@ void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
 }
 kmCall(0x808553b4, SetGPIntroInfo);
 
+static void SetGPBottomText(CtrlMenuInstructionText& bottomText, u32 bmgId, TextInfo& info) {
+    register ExpCupSelect* cupPage;
+    asm(mr cupPage, r31;);
+    PulsarCupId id = static_cast<PulsarCupId>(cupPage->ctrlMenuCupSelectCup.curCupID);
 
+    if(!CupsConfig::IsRegCup(id)) {
+        u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        register u32 cc;
+        asm(mr cc, r28;);
+        u8 status = Settings::Mgr::GetGPStatus(realCupId, cc);
+        u32 trophyBmg;
+        u32 rankBmg;
+        if(status == 0xFF) {
+            trophyBmg = BMG_GP_BLANK;
+            rankBmg= BMG_GP_BLANK;
+        }
+        else {
+            trophyBmg = BMG_GP_GOLD_TROPHY + Settings::Mgr::ComputeTrophyFromStatus(status);
+            rankBmg = BMG_GP_RANK_3STARS + Settings::Mgr::ComputeRankFromStatus(status);
+        }
+        info.bmgToPass[1] = trophyBmg;
+        info.bmgToPass[2] = rankBmg;
+    }
+    bottomText.SetMessage(bmgId, &info);
+}
+kmCall(0x80841720, SetGPBottomText);
 
-void SetGhostInfoTrackBMG(GhostInfoControl* control, const char* textBoxName) {
-    control->SetTextBoxMsg(textBoxName, GetCurTrackBMG());
+static void SaveGPResult(SavedGhostsHandler* handler, u32 r4, u32 r5, u32 r6, u32 r7, u32 r8, u32 r9, bool isNew) {
+    const PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
+    if(!CupsConfig::IsRegCup(id)) {
+        const u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(id);
+        const GPRank rank = RaceData::sInstance->awardScenario.players[0].ComputeGPRank();
+        register u32 trophy;
+        asm(mr trophy, r31;);
+        register u32 cc;
+        asm(mr cc, r29;);
+        Settings::Mgr::SetGPStatus(realCupId, cc, trophy, rank);
+    }
+    else if(isNew) handler->NotifyNewLicenseContent();
+}
+kmWrite32(0x805bd1d4, 0x418200d8);
+kmCall(0x805bd2ac, SaveGPResult);
+
+static void SetGhostInfoTrackBMG(GhostInfoControl* control, const char* textBoxName) {
+    control->SetTextBoxMessage(textBoxName, GetCurTrackBMG());
 }
 kmCall(0x805e2a4c, SetGhostInfoTrackBMG);
 
@@ -95,14 +157,14 @@ kmWrite32(0x808406e8, 0x388000ff); //store 0xFF on timeout instead of -1
 kmWrite32(0x808415ac, 0x388000ff);
 kmWrite32(0x80643004, 0x3be000ff);
 kmWrite32(0x80644104, 0x3b5b0000);
-void CourseVoteBMG(VoteControl* vote, bool isCourseIdInvalid, PulsarId courseVote, MiiGroup& miiGroup, u32 playerId, bool isLocalPlayer, u32 team) {
+static void CourseVoteBMG(VoteControl* vote, bool isCourseIdInvalid, PulsarId courseVote, MiiGroup& miiGroup, u32 playerId, bool isLocalPlayer, u32 team) {
     u32 bmgId = courseVote;
     if(bmgId != 0x1101 && bmgId < 0x2498) bmgId = GetTrackBMGId(courseVote);
     vote->Fill(isCourseIdInvalid, bmgId, miiGroup, playerId, isLocalPlayer, team);
 }
 kmCall(0x806441b8, CourseVoteBMG);
 
-bool BattleArenaBMGFix(SectionId sectionId) {
+static bool BattleArenaBMGFix(SectionId sectionId) {
     register PulsarId id;
     asm(mr id, r28;);
     CupsConfig::sInstance->winningCourse = id;
@@ -112,7 +174,7 @@ kmCall(0x8083d02c, BattleArenaBMGFix);
 
 
 //kmWrite32(0x80644340, 0x7F64DB78);
-void WinningTrackBMG(PulsarId winningCourse) {
+static void WinningTrackBMG(PulsarId winningCourse) {
     register Pages::Vote* vote;
     asm(mr vote, r27;);
     vote->trackBmgId = GetTrackBMGId(winningCourse);
@@ -120,7 +182,7 @@ void WinningTrackBMG(PulsarId winningCourse) {
 kmCall(0x80644344, WinningTrackBMG);
 
 //Rewrote InitSelf to start with correct TPLs
-void ExtCupSelectCupInitSelf(CtrlMenuCupSelectCup* cups) {
+static void ExtCupSelectCupInitSelf(CtrlMenuCupSelectCup* cups) {
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     PulsarCupId selCup = cupsConfig->lastSelectedCup;
     cups->curCupID = selCup;
@@ -138,7 +200,7 @@ void ExtCupSelectCupInitSelf(CtrlMenuCupSelectCup* cups) {
 };
 kmWritePointer(0x808d324c, ExtCupSelectCupInitSelf); //807e5894
 
-void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
+static void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     for(int i = 0; i < 8; ++i) {
         CtrlMenuCourseSelectCupSub& cur = courseCups->cupIcons[i];
@@ -197,22 +259,25 @@ void ExtCourseSelectCupInitSelf(CtrlMenuCourseSelectCup* courseCups) {
 };
 kmWritePointer(0x808d3190, ExtCourseSelectCupInitSelf); //807e45c0
 
-void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
+static void ExtCourseSelectCourseInitSelf(CtrlMenuCourseSelectCourse* course) {
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     const Section* curSection = SectionMgr::sInstance->curSection;
     const Pages::CupSelect* cupPage = curSection->Get<Pages::CupSelect>();
     Pages::CourseSelect* coursePage = curSection->Get<Pages::CourseSelect>();
     //channel ldb stuff ignored
     const u32 cupId = cupPage->clickedCupId;
+
+    PushButton* toSelect = &course->courseButtons[0];
     for(int i = 0; i < 4; ++i) {
         PushButton& curButton = course->courseButtons[i];
         curButton.buttonId = i;
         const u32 bmgId = GetTrackBMGByRowIdx(i);
         curButton.SetMessage(bmgId);
-        if(cupsConfig->lastSelectedCup * 4 + i == cupsConfig->selectedCourse) {
-            coursePage->SelectButton(curButton);
+        if(cupsConfig->ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup, i) == cupsConfig->selectedCourse) {
+            toSelect = &curButton;
         }
     };
+    coursePage->SelectButton(*toSelect);
 };
 kmWritePointer(0x808d30d8, ExtCourseSelectCourseInitSelf); //807e5118
 

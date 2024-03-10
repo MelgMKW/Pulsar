@@ -15,6 +15,13 @@
 /KamekLinker/bin
 /KamekLinker/obj
 /KamekLinker/.vs
+\KamekLinker\.vs
+KamekLinker/.vs/
+KamekLinker\.vs/
+/KamekLinker/obj
+\KamekLinker\obh
+KamekLinker/obh/
+KamekLinker\obj/
 
 # Compiled Object files
 *.slo

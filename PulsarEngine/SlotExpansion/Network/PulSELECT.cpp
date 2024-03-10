@@ -31,7 +31,7 @@ void BeforeSELECTSend(RKNet::PacketHolder* packetHolder, CustomSELECTPacket* src
 }
 kmCall(0x80661040, BeforeSELECTSend);
 
-void AfterSELECTReception(CustomSELECTPacket* dest, CustomSELECTPacket* src, u32 packetSize) {
+static void AfterSELECTReception(CustomSELECTPacket* dest, CustomSELECTPacket* src, u32 packetSize) {
     if(CupsConfig::IsRegsSituation() || (src->pulSELPlayerData[1].starRank & 0x80 == 0)) {
         RKNet::SELECTPacket* normalPacket = reinterpret_cast<RKNet::SELECTPacket*>(src);
         const u8 courseVoteHud0 = CupsConfig::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->playersData[0].courseVote));
@@ -54,19 +54,19 @@ void AfterSELECTReception(CustomSELECTPacket* dest, CustomSELECTPacket* src, u32
 }
 kmCall(0x80661130, AfterSELECTReception);
 
-u8 GetEngineClass(const CustomSELECTHandler& select) {
+static u8 GetEngineClass(const CustomSELECTHandler& select) {
     if(select.toSendPacket.phase != 0) return select.toSendPacket.engineClass;
     return 0;
 }
 kmBranch(0x8066048c, GetEngineClass);
 
-u16 GetWinningCourse(const CustomSELECTHandler& select) {
+static u16 GetWinningCourse(const CustomSELECTHandler& select) {
     if(select.toSendPacket.phase == 2) return select.toSendPacket.pulWinningCourse;
     else return 0xFF;
 }
 kmBranch(0x80660450, GetWinningCourse);
 
-bool IsTrackDecided(CustomSELECTHandler* select) {
+static bool IsTrackDecided(CustomSELECTHandler* select) {
     return select->toSendPacket.pulWinningCourse != 0xFF;
 }
 kmBranch(0x80660d40, IsTrackDecided);
@@ -77,7 +77,7 @@ PulsarId FixRandom(Random& random) {
 }
 kmCall(0x80661f34, FixRandom);
 
-void DecideTrack(CustomSELECTHandler* select) {
+static void DecideTrack(CustomSELECTHandler* select) {
     Random random;
     System* system = System::sInstance;
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
@@ -132,7 +132,7 @@ CourseId SetCorrectSlot(CustomSELECTHandler* select) {
 }
 kmCall(0x80650ea8, SetCorrectSlot);
 
-void SetCorrectTrack(ArchiveRoot* root, PulsarId winningCourse) {
+static void SetCorrectTrack(ArchiveRoot* root, PulsarId winningCourse) {
     System* system = System::sInstance;
     CupsConfig* cupsConfig = CupsConfig::sInstance;
     system->lastTracks[system->curBlockingArrayIdx] = winningCourse;

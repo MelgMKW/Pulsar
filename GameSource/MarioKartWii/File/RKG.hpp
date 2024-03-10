@@ -1,7 +1,7 @@
 #ifndef _RKG_
 #define _RKG_
 #include <kamek.hpp>
-#include <core/rvl/RFL.hpp>
+#include <core/rvl/RFL/RFL.hpp>
 #include <MarioKartWii/Input/GhostWriter.hpp>
 
 enum GhostType {

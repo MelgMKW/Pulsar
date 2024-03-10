@@ -8,7 +8,7 @@
 struct CountDown {
     CountDown(); //805c3bcc
     ~CountDown(); //805c3bec
-    void SetInitial(const float countdown); //805c3c2c
+    void SetInitial(float countdown); //805c3c2c seconds
     void Update(); //805c3c44
     float countdown;
     bool isActive;
@@ -28,7 +28,7 @@ public:
     void AnimateCurrentCountDown(); //805c4380 changes tpls based on current countdown
     void Reset(); //805c4430
     CountDown* countdown; //0x174
-    bool unknown_0x178;
+    bool isTimerDone;
     u8 unknown_0x179[0x17C - 0x179];
 }; //total size 0x17C
 size_assert(CountDownTimerControl, 0x17c);

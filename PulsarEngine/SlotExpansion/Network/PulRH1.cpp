@@ -48,7 +48,7 @@ const u8* GetRH1aidArray(const RKNet::RH1Handler& rh1) {
 kmBranch(0x80664b34, GetRH1aidArray);
 
 
-bool IsThereAValidId() {
+static bool IsThereAValidId() {
     const RKNet::RH1Handler* rh1 = RKNet::RH1Handler::sInstance;
     bool isValid = false;
     for(int i = 0; i < 12; ++i) {
@@ -68,7 +68,7 @@ kmWrite32(0x80664084, 0x2C030000); //change comparison from r0 to r3
 kmWrite32(0x806652b4, 0x60000000); //nop track store
 kmWrite32(0x80665308, 0x60000000); //nop star rank store
 
-void ImportRH1ToPulRH1() {
+static void ImportRH1ToPulRH1() {
     register CustomRH1Packet* packet;
     asm(mr packet, r28;);
     register RKNet::RH1Data* data;

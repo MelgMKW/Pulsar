@@ -11,7 +11,7 @@ namespace Pulsar {
 namespace Debug {
 
 OS::Thread* crashThread = nullptr;
-u16 crashError = 0;
+static u16 crashError = 0;
 
 using namespace nw4r;
 
@@ -65,7 +65,7 @@ kmWrite32(0x80023948, 0x281e0007);
 //kmWrite32(0x80009324, 0x38800068);
 
 //Lines on the screen and x-pos
-void SetConsoleParams() {
+static void SetConsoleParams() {
     db::detail::ConsoleHead* console = EGG::Exception::console;
     console->viewLines = 0x16;
     console->viewPosX = 0x10;
@@ -104,7 +104,7 @@ ExceptionFile::ExceptionFile(const OS::Context& context) : magic('PULD'), region
     }
 }
 
-void WriteHeaderCrash(u16 error, const OS::Context* context, u32 dsisr, u32 dar) {
+static void WriteHeaderCrash(u16 error, const OS::Context* context, u32 dsisr, u32 dar) {
     crashError = error;
     crashThread = const_cast<OS::Thread*>(reinterpret_cast<const OS::Thread*>(context));
     db::ExceptionHead& exception = db::ExceptionHead::mInstance;
@@ -121,7 +121,7 @@ void WriteHeaderCrash(u16 error, const OS::Context* context, u32 dsisr, u32 dar)
 kmCall(0x80023484, WriteHeaderCrash);
 
 
-void CreateCrashFile(s32 channel, KPAD::Status buff[], u32 count) {
+static void CreateCrashFile(s32 channel, KPAD::Status buff[], u32 count) {
 
     IO* io = IO::sInstance;;
     bool exit = false;
@@ -180,7 +180,7 @@ void CreateCrashFile(s32 channel, KPAD::Status buff[], u32 count) {
 kmCall(0x80226610, CreateCrashFile);
 
 /*
-void OnCrashEnd() {
+static void OnCrashEnd() {
     IO* io = IO::sInstance;;
     if(file != nullptr) { //should always exist if the crash is after strap
         register u32* const addressPtr = (u32*)(crashThread->context.srr0 + 4);

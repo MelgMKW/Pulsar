@@ -37,7 +37,7 @@ namespace Pulsar_Pack_Creator
             string[] slotsImport = SlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
             string[] musicSlotsImport = MusicSlotsImport.Text.Replace("\r", "").Trim('\n').ToUpperInvariant().Split("\n").ToArray();
 
-            string[][] importStringArrays = { namesImport, authorsImport, versionsImport, slotsImport, musicSlotsImport };
+            string[][] importStringArrays = { namesImport, authorsImport, slotsImport, musicSlotsImport, versionsImport };
 
             foreach (string cur in namesImport)
             {
@@ -47,8 +47,15 @@ namespace Pulsar_Pack_Creator
                     return;
                 }
             }
-            TextBox[] imports = new TextBox[] { NamesImport, AuthorsImport, SlotsImport, MusicSlotsImport };
-            TextBlock[] labels = new TextBlock[] { NamesImportLabel, AuthorsImportLabel, SlotsImportLabel, MusicSlotsImportLabel };
+            List<TextBox> imports = new List<TextBox> { NamesImport, AuthorsImport, SlotsImport, MusicSlotsImport };
+            List<TextBlock> labels = new List<TextBlock> { NamesImportLabel, AuthorsImportLabel, SlotsImportLabel, MusicSlotsImportLabel };
+
+            bool isVersionsFilled = VersionsImport.Text != "";
+            if(isVersionsFilled)
+            {
+                imports.Add(VersionsImport);
+                labels.Add(VersionsImportLabel);
+            }
 
             List<TextBox> emptyBoxes = imports.Where(x => x.Text.Length == 0).ToList();
 
@@ -61,7 +68,7 @@ namespace Pulsar_Pack_Creator
                     {
                         message += ", ";
                     }
-                    int emptyBoxIdx = Array.IndexOf(imports, emptyBoxes[i]);
+                    int emptyBoxIdx = imports.IndexOf(emptyBoxes[i]);
 
                     message += labels[emptyBoxIdx].Text;
                 }
@@ -79,11 +86,11 @@ namespace Pulsar_Pack_Creator
 
             List<int> differentLengthIdxs = new List<int>();
             int baseLength = importStringArrays[0].Length;
-            for (int i = 0; i < imports.Length; i++)
+            for (int i = 0; i < imports.Count; i++)
             {
                 if (importStringArrays[i].Length != baseLength)
                 {
-                    differentLengthIdxs.Add(Array.IndexOf(imports, imports[i]));
+                    differentLengthIdxs.Add(imports.IndexOf(imports[i]));
                 }
             }
 
@@ -114,16 +121,16 @@ namespace Pulsar_Pack_Creator
             int cupIdx = parent.curCup;
             for (int line = 0; line < namesImport.Length; line++)
             {
-                byte slotIdx = FindSlotIndex(importStringArrays[3][line]);
+                byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
                 if (slotIdx == 0xFF)
                 {
-                    MsgWindow.Show($"Track Slot {importStringArrays[3][line]} (Line {line}) is invalid.");
+                    MsgWindow.Show($"Track Slot {importStringArrays[2][line]} (Line {line+1}) is invalid.");
                     return;
                 }
-                byte musicSlotIdx = FindSlotIndex(importStringArrays[4][line]);
+                byte musicSlotIdx = FindMusicSlotIndex(importStringArrays[3][line]);
                 if (musicSlotIdx == 0xFF)
                 {
-                    MsgWindow.Show($"Music Slot {importStringArrays[4][line]} (Line {line}) is invalid.");
+                    MsgWindow.Show($"Music Slot {importStringArrays[3][line]} (Line {line+1}) is invalid.");
                     return;
                 }
             }
@@ -137,28 +144,16 @@ namespace Pulsar_Pack_Creator
                     MsgWindow.Show("Tracklist exceeded existing number of cups.");
                     return;
                 }
-                byte slotIdx = FindSlotIndex(importStringArrays[3][line]);
-                byte musicSlotIdx = FindSlotIndex(importStringArrays[4][line]);
+                byte slotIdx = FindSlotIndex(importStringArrays[2][line]);
+                byte musicSlotIdx = FindMusicSlotIndex(importStringArrays[3][line]);
                 parent.cups[cupIdx].trackNames[row] = importStringArrays[0][line];
                 parent.cups[cupIdx].authorNames[row] = importStringArrays[1][line];
-                parent.cups[cupIdx].versionNames[row] = importStringArrays[2][line];
+                if(isVersionsFilled) parent.cups[cupIdx].versionNames[row] = importStringArrays[4][line];
                 parent.cups[cupIdx].slots[row] = PulsarGame.MarioKartWii.idxToCourseId[slotIdx];
-                parent.cups[cupIdx].musicSlots[row] = PulsarGame.MarioKartWii.idxToCourseId[musicSlotIdx];
+                parent.cups[cupIdx].musicSlots[row] = PulsarGame.MarioKartWii.musicIdxToCourseId[musicSlotIdx];
                 if (cupIdx == parent.curCup)
                 {
                     parent.UpdateCurCup(0);
-                    /*
-                    TextBox nameBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 2) as TextBox;
-                    nameBox.Text = importStringArrays[0][line];
-                    TextBox authorBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 3) as TextBox;
-                    authorBox.Text = importStringArrays[1][line];
-                    ComboBox slotBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 4) as ComboBox;
-                    slotBox.SelectedIndex = slotIdx;
-                    ComboBox musicSlotBox = parent.CupsGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == row && Grid.GetColumn(x) == 5) as ComboBox;
-                    musicSlotBox.SelectedIndex = musicSlotIdx;
-                    */
-
-
                 }
                 row++;
                 if (row == 4)
@@ -173,6 +168,12 @@ namespace Pulsar_Pack_Creator
         {
             byte slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.idxToFullNames, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
             if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.idxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            return slotIdx;
+        }
+        private byte FindMusicSlotIndex(string slot)
+        {
+            byte slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.musicIdxToFullNames, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
+            if (slotIdx == 0xFF) slotIdx = (byte)Array.FindIndex(PulsarGame.MarioKartWii.musicIdxToAbbrev, x => x.ToLowerInvariant() == slot.ToLowerInvariant());
             return slotIdx;
         }
     }

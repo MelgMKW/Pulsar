@@ -25,7 +25,7 @@ kmCall(0x800dc3bc, MoveSize);
 DWC::MatchCommand Process(DWC::MatchCommand type, const void* data, u32 dataSize) {
     const RKNet::RoomType roomType = RKNet::Controller::sInstance->roomType;
     const bool isCustom = roomType == RKNet::ROOMTYPE_FROOM_NONHOST || roomType == RKNet::ROOMTYPE_FROOM_HOST
-        || roomType == RKNet::ROOMTYPE_VS_REGIONAL;
+        || roomType == RKNet::ROOMTYPE_VS_REGIONAL || roomType == RKNet::ROOMTYPE_JOINING_REGIONAL;
 
     Pulsar::System* system = Pulsar::System::sInstance;
     system->isCustomDeny = false;
@@ -45,7 +45,7 @@ DWC::MatchCommand Process(DWC::MatchCommand type, const void* data, u32 dataSize
 }
 
 
-int GetSuspendType(int r3, const char* string) {
+static int GetSuspendType(int r3, const char* string) {
     DWC::Printf(r3, string);
     int errorType = 0x12000000;
     if(Pulsar::System::sInstance->isCustomDeny) errorType = 0x13000000;
@@ -54,7 +54,7 @@ int GetSuspendType(int r3, const char* string) {
 kmCall(0x800dc9e8, GetSuspendType);
 kmWrite32(0x800dc9f4, 0x906100d8);
 
-void HasBeenPulsarDenied(int r3, const char* string) {
+static void HasBeenPulsarDenied(int r3, const char* string) {
     register u32 error;
     asm(mr error, r0);
     bool isCustomDeny = false;
@@ -86,7 +86,7 @@ kmCall(0x800dc4a0, ProcessWrapper);
 void Send(DWC::MatchCommand type, u32 pid, u32 ip, u16 port, void* data, u32 dataSize) {
     const RKNet::RoomType roomType = RKNet::Controller::sInstance->roomType;
     const bool isCustom = roomType == RKNet::ROOMTYPE_FROOM_NONHOST || roomType == RKNet::ROOMTYPE_FROOM_HOST
-        || roomType == RKNet::ROOMTYPE_VS_REGIONAL;
+        || roomType == RKNet::ROOMTYPE_VS_REGIONAL || roomType == RKNet::ROOMTYPE_JOINING_REGIONAL;
     if(type == DWC::MATCH_COMMAND_RESERVATION && isCustom) {
         ResvPacket packet(*reinterpret_cast<const DWC::Reservation*>(data));
         System::sInstance->SetUserInfo(packet.pulInfo.userInfo);
@@ -97,7 +97,7 @@ void Send(DWC::MatchCommand type, u32 pid, u32 ip, u16 port, void* data, u32 dat
 }
 kmCall(0x800df078, Send);
 
-void ResetDenyCounter(UIControl* control, u32 soundId, u32 r5) {
+static void ResetDenyCounter(UIControl* control, u32 soundId, u32 r5) {
     control->PlaySound(soundId, r5);
     if(RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_VS_REGIONAL) {
         Pulsar::System::sInstance->deniesCount = 0;

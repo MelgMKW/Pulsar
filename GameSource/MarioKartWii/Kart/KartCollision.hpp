@@ -8,6 +8,7 @@
 
 namespace Kart {
 
+class Player;
 class Pointers;
 
 class Collision {

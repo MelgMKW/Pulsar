@@ -71,7 +71,7 @@ bool UpdateSpeedMultiplier(Kart::Boost& boost, bool* boostEnded) {
 kmCall(0x8057934c, UpdateSpeedMultiplier);
 
 //Expanded player effect, also hijacked to add custom breff/brefts to EffectsMgr
-void CreatePlayerEffects(EffectsMgr& mgr) { //adding the resource here as all other breff have been loaded at this point
+static void CreatePlayerEffects(EffectsMgr& mgr) { //adding the resource here as all other breff have been loaded at this point
     if(Info::IsUMTs()) {
         const ArchiveRoot* root = ArchiveRoot::sInstance;
         void* breff = root->GetFile(ARCHIVE_HOLDER_COMMON, System::breff, 0);
@@ -86,7 +86,7 @@ void CreatePlayerEffects(EffectsMgr& mgr) { //adding the resource here as all ot
 }
 kmCall(0x80554624, CreatePlayerEffects);
 
-void DeleteEffectRes(EffectsMgr& mgr) {
+static void DeleteEffectRes(EffectsMgr& mgr) {
     delete(pulEffects);
     pulEffects = nullptr;
     mgr.Reset();
@@ -95,7 +95,7 @@ kmCall(0x8051b198, DeleteEffectRes);
 
 
 //Loads the custom effects
-void LoadCustomEffects(ExpPlayerEffects& effects) {
+static void LoadCustomEffects(ExpPlayerEffects& effects) {
     effects.LoadEffects();
     if(effects.isBike == false && Info::IsUMTs()) {
         effects.rk_purpleMT = new EGG::Effect * [ExpPlayerEffects::UmtEffectsCount];
@@ -200,14 +200,14 @@ kmCall(0x8069c0a4, PatchFadeBoost);
 
 //Currently uses blue shell sounds for lack of a better one
 kmWrite32(0x807095b8, 0x40A00028); //changes beq to bge for UMT
-void PatchUMTSound(KartSound& sound, u32 soundId, AudioHandle& handle) {
+static void PatchUMTSound(Audio::KartActor& sound, u32 soundId, Audio::Handle& handle) {
     if(sound.driftState == 4) {
         const char* seqName = "purpleMT.brseq";
         const char* labelName = "b";
-        snd::SoundStartable::StartResult ret = Audio::PlayExtBRSEQ(sound, handle, seqName, labelName, true);
+        snd::SoundStartable::StartResult ret = Sound::PlayExtBRSEQ(sound, handle, seqName, labelName, true);
         if(ret == snd::SoundStartable::START_SUCCESS) return;
     }
-    sound.KartSound::HoldSound(soundId, &handle);
+    sound.KartActor::HoldSound(soundId, &handle);
 
 };
 kmCall(0x807095f8, PatchUMTSound);

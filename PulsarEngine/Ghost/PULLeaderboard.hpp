@@ -59,6 +59,7 @@ public:
     void SetTrack(PulsarId id);
     //void SwapEntries(LeaderboardEntry *entry1, LeaderboardEntry *entry2);
     s32 GetPosition(const Timer& other) const;
+    s8 GetRepeatCount(const RKG& rkg) const;
     void Update(u32 position, const TimeEntry& entry, u32 rkgCRC32);
     void Save(const char* folderPath);
     void AddTrophy() { this->hasTrophy[System::sInstance->ttMode] = true; }

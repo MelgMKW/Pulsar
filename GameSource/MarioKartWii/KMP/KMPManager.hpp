@@ -163,8 +163,8 @@ public:
     Vec3 xScale;
     u8 enemyLink;
     u8 itemLink;
-    u16 userData;
-    u16 rangeScale; //0x2a
+    s16 userData; //0x2a rawUserData % 100, only if not equal to 99
+    s16 soundTriggerIdx; //0x2c rawUserData % 100 - 1
     u16 unknown_0x2E;
 }; //total size 0x30
 

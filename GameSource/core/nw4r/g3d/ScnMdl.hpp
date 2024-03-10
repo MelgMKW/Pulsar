@@ -91,7 +91,7 @@ public:
     };
     static ScnMdl* Construct(G3dHeap* heap, u32* size, ResMdl mdl, u32 bufferOption, int nView = 1); //80073470
     bool IsDerivedFrom(TypeObj type) const override; //0x8 800757f0 vtable 80273248
-    void G3dProc(u32 r4, u32 r5, void* info); //0xC 80074770
+    void G3dProc(u32 g3dproc, u32 param, void* info); //0xC 80074770
     ~ScnMdl() override; //0x10 80075780
     TypeObj GetTypeObj() const override; //0x14 800758a0
     const char* GetTypeName() const override; //0x18 80075870

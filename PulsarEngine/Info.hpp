@@ -3,7 +3,7 @@
 #include <kamek.hpp>
 
 namespace Pulsar {
-
+#pragma pack(push, 1)
 class Info {
 public:
     friend class System;
@@ -20,7 +20,12 @@ public:
     static inline u32 GetProb100() { return sInstance->prob100cc; }
     static inline u32 GetProb150() { return sInstance->prob150cc; }
     static inline u32 GetTrackBlocking() { return  sInstance->trackBlocking; }
-    static inline u16 GetCupIconCount() { return sInstance->cupIconCount; }
+    static inline u16 GetCupIconCount() {
+        u16 count = sInstance->cupIconCount;
+        if(count == 0) count = 100;
+        return count;
+    }
+    static inline u16 GetChooseNextTrackTimer() { return sInstance->chooseNextTrackTimer; }
     //Context checking
     static bool IsHAW(bool isHost);
     static bool Is200cc();
@@ -57,8 +62,10 @@ private:
     bool hasMegaTC;
     bool hasAllItemsCanLand;
     u16 cupIconCount;
-    u8 reservedSpace[41];
+    u8 chooseNextTrackTimer;
+    u8 reservedSpace[40];
 };
+#pragma pack(pop)
 
 }//namespace Pulsar
 

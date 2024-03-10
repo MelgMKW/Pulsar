@@ -47,7 +47,7 @@ void UpdateLastSelCup(Pages::CupSelect* page, CtrlMenuCupSelectCup& cups, PushBu
     CupsConfig* cupsConfig = CupsConfig::sInstance;
     if(button.buttonId != cupsConfig->lastSelectedCup) {
         cupsConfig->lastSelectedCup = static_cast<PulsarCupId>(button.buttonId);
-        cupsConfig->selectedCourse = CupsConfig::ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup);
+        cupsConfig->selectedCourse = cupsConfig->ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup, 0);
     }
     PushButton** buttons = reinterpret_cast<PushButton**>(cups.childrenGroup.controlArray);
     for(int i = 0; i < 8; ++i) if(buttons[i] == &button) cupsConfig->lastSelectedCupButtonIdx = i;
@@ -59,7 +59,7 @@ kmCall(0x807e5da8, UpdateLastSelCup);
 
 
 //Loads correct file
-void FormatTrackPath(char* path, u32 length, const char* format, const char* fileName) {
+static void FormatTrackPath(char* path, u32 length, const char* format, const char* fileName) {
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     const PulsarId pulsarId = cupsConfig->winningCourse; //fileName already set through racedata's courseId, which has been set to realId before
     if(IsBattle() || CupsConfig::IsReg(pulsarId)) snprintf(path, 0x80, format, fileName);
@@ -78,7 +78,7 @@ kmWrite32(0x805407d4, 0x48000020); //prevent reuse of szs if same courseId
 //Fixes GP since it usually uses racedata's courseId which only holds the slot
 RacedataScenario* UseCorrectCourse(RacedataScenario* scenario) {
     CupsConfig* cupsConfig = CupsConfig::sInstance;
-    cupsConfig->winningCourse = CupsConfig::ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup) + static_cast<u32>(scenario->settings.raceNumber);
+    cupsConfig->winningCourse = cupsConfig->ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup, scenario->settings.raceNumber); //FIX HERE
     scenario->settings.courseId = cupsConfig->GetCorrectTrackSlot();
     return scenario;
 };
@@ -100,7 +100,7 @@ kmBranch(0x8052f224, UseCorrectCourseWrapper);
 kmPatchExitPoint(UseCorrectCourseWrapper, 0x8052f228);
 
 //Badly written, but does the job even though it can in theory hang forever, as unlikely as it is
-void VSRaceRandomFix(SectionParams* m98) { //properly randomizes tracks and sets the first one
+static void VSRaceRandomFix(SectionParams* m98) { //properly randomizes tracks and sets the first one
     m98->vsRaceLimit = 32;
     CupsConfig* cupsConfig = CupsConfig::sInstance;
     Random random;
@@ -127,14 +127,28 @@ kmBranch(0x805e32ec, VSRaceRandomFix);
 kmWrite32(0x8084e5e4, 0x60000000); //nop racedata courseId store since it's done in the function
 
 //Same as GP, racedata only ever has courseId
-void VSRaceOrderedFix(SectionParams* m98) {
-    m98->vsRaceLimit = 32;
+static void VSRaceOrderedFix(SectionParams* params) {
+    const Pages::CourseSelect* course = SectionMgr::sInstance->curSection->Get<Pages::CourseSelect>();
+    u32 rowIdx = 0;
+    for(int i = 0; i < 4; ++i) {
+        const CourseButton& cur = course->CtrlMenuCourseSelectCourse.courseButtons[i];
+        if(cur.IsSelected()) {
+            rowIdx = i;
+            break;
+        }
+    }
+    params->vsRaceLimit = 32;
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
-    const PulsarId initial = cupsConfig->winningCourse;
-    PulsarCupId cupId = CupsConfig::ConvertCup_PulsarTrackToCup(initial);
-    for(int i = 0; i < 8; ++i) {
-        for(int j = 0; j < 4; ++j) m98->vsTracks[i * 4 + j] = static_cast<CourseId>(cupId * 4 + j);
-        cupId = cupsConfig->GetNextCupId(cupId, 1);
+    //const PulsarId initial = cupsConfig->winningCourse;
+    PulsarCupId cupId = cupsConfig->lastSelectedCup;
+    u32 idx = 0;
+    while(idx < 32) {
+        params->vsTracks[idx] = static_cast<CourseId>(cupsConfig->ConvertTrack_PulsarCupToTrack(cupId, rowIdx));
+        ++idx;
+        ++rowIdx;
+        if(rowIdx == 4) {
+            cupId = cupsConfig->GetNextCupId(cupId, 1);
+        }
     }
 };
 kmCall(0x80840a24, VSRaceOrderedFix);
@@ -147,7 +161,7 @@ CourseId VSNextTrackFix(PulsarId pulsarId) {//properly sets the next track
 kmBranch(0x808606cc, VSNextTrackFix);
 
 kmWrite32(0x8085a944, 0x48000018);
-void DemoFix(register RaceData* raceData) {
+static void DemoFix(register RaceData* raceData) {
     register CourseId id;
     asm(mr id, r0;);
     asm(stw r0, 0x1758 (raceData););

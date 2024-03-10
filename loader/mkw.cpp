@@ -1,6 +1,6 @@
 #include <kamekLoader.hpp>
 
-void loadIntoMKW();
+static void loadIntoMKW();
 
 
 LoaderParams paramsPAL ={
@@ -50,7 +50,7 @@ LoaderParams paramsNTSC_K ={
 
 
 
-void LoadIntoMKW() {
+static void LoadIntoMKW() {
     u8 regionMem = *(u8*)(0x80000003);
 
     LoaderParams* params = nullptr;

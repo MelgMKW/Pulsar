@@ -13,6 +13,9 @@
 Contributors:
 -kHacker35000vr, Melg
 */
+namespace Audio {
+class LinkedRaceActor;
+}//namespace Audio
 class ClipInfo;
 class Mii;
 using namespace nw4r;
@@ -48,10 +51,11 @@ public:
     virtual void SetScnOptions(g3d::ScnMdl* scnMdl, bool isVisible, bool doNotCalcWorldMatVtx); //0x20 8055cd68
     virtual void AppendToScnManager(); //0x24 8055bed4
 
+    //Mii is 
     void Init(ScnType type, g3d::ScnMdl::BufferOption option, Light* light, Mii* mii, u32 miiScnStrE8, s32 r9); //8055baa0
     void InitG3D(ScnType type, g3d::ScnMdl::BufferOption option, Mii* mii, ScnMgr* scnMgr,
         u32 scnObjDrawOptionsIdx, u32 miiScnStr0xE8, s32 r10); //8055bd00
-    g3d::ScnLeaf* CreateScn(ScnType type, g3d::ScnMdl::BufferOption option, Mii* mii, ScnMgr* scnMgr,
+    g3d::ScnLeaf* CreateScnLeaf(ScnType type, g3d::ScnMdl::BufferOption option, Mii* mii, ScnMgr* scnMgr,
         u32 miiScnStrE8, s32 r9, u8 idx); //8055bf10
 
     //Constructs a ScnMdl
@@ -76,7 +80,7 @@ public:
 
     void Update(u32 scnMdlIdx); //8055d23c
     ModelTransformator* CreateTransformator(); //8055d9f0 mostly inlined
-    void SetSoundActor(LinkedRaceActor& actor); //8055dce4 
+    void SetAudioActor(Audio::LinkedRaceActor& actor); //8055dce4 
 
     void LinkEmptyAnm(u32 animId); //8055e274 will create an empty AnmHolder, used for conditional animations to prevent nullptr reads 
     void LinkAllAnimations(g3d::ResFile& brres); //8055eae0 gets the ResNames and then constructs (if needed) a Transformator and binds all to it

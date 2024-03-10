@@ -12,7 +12,7 @@
 namespace Pulsar {
 namespace Race {
 //From JoshuaMK, ported to C++ by Brawlbox and adapted as a setting
-int MiiHeads(RaceData* racedata, u32 unused, u32 unused2, u8 id) {
+static int MiiHeads(RaceData* racedata, u32 unused, u32 unused2, u8 id) {
     CharacterId charId = racedata->racesScenario.players[id].characterId;
     const RKNet::RoomType roomType =  RKNet::Controller::sInstance->roomType;
     bool isDisabled = false;
@@ -32,7 +32,7 @@ kmWrite32(0x807eb15c, 0x60000000);
 kmWrite32(0x807eb160, 0x88de01b4);
 
 //credit to XeR for finding the float address
-void BattleGlitchEnable() {
+static void BattleGlitchEnable() {
     float maxDistance = 7500.0f;
     if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BATTLE) == RACESETTING_BATTLE_GLITCH_ENABLED) maxDistance = 75000.0f;
     RaceBalloons::maxDistanceNames = maxDistance;
@@ -41,7 +41,7 @@ Settings::Hook BattleGlitch(BattleGlitchEnable);
 
 
 kmWrite32(0x8085C914, 0x38000000); //times at the end of races in VS
-void DisplayTimesInsteadOfNames(CtrlRaceResult& result, u8 id) {
+static void DisplayTimesInsteadOfNames(CtrlRaceResult& result, u8 id) {
     result.DisplayFinishTime(id);
 }
 //kmCall(0x8085d460, DisplayTimesInsteadOfNames); //for WWs

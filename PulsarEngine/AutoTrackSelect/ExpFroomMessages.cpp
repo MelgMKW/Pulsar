@@ -1,6 +1,6 @@
 #include <kamek.hpp>
 #include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
-#include <MarioKartWii/Sound/RaceAudioMgr.hpp>
+#include <MarioKartWii/Audio/RaceMgr.hpp>
 #include <PulsarSystem.hpp>
 #include <AutoTrackSelect/ExpFroomMessages.hpp>
 #include <SlotExpansion/UI/ExpansionUIMisc.hpp>
@@ -28,10 +28,13 @@ void ExpFroomMessages::OnCourseButtonClick(PushButton& button, u32 hudSlotId) {
         if(id == this->msgCount - 1) {
             pulsarId = cupsConfig->RandomizeTrack();
         }
-        else pulsarId = cupsConfig->ConvertTrack_IdxToPulsarId(id); //vs or teamvs
-
+        else {
+            PulsarCupId cupId =  static_cast<PulsarCupId>(cupsConfig->ConvertTrack_IdxToPulsarId(id) / 4);
+            pulsarId = cupsConfig->ConvertTrack_PulsarCupToTrack(cupId, id % 4);
+            //pulsarId = cupsConfig->ConvertTrack_IdxToPulsarId(id); //vs or teamvs
+        }
     }
-    else pulsarId = pulsarId + 0x20U;
+    else pulsarId = static_cast<PulsarId>(pulsarId + 0x20U); //Battle
     cupsConfig->winningCourse = pulsarId;
     PushButton& clickedButton = this->messages[0].buttons[clickedIdx];
     clickedButton.buttonId = clickedIdx;
@@ -39,7 +42,7 @@ void ExpFroomMessages::OnCourseButtonClick(PushButton& button, u32 hudSlotId) {
 }
 /*
 //kmWrite32(0x805dc47c, 0x7FE3FB78); //Get Page in r3
-void OnStartButtonFroomMsgActivate() {
+static void OnStartButtonFroomMsgActivate() {
     register ExpFroomMessages* msg;
     asm(mr msg, r31;);
 
@@ -67,7 +70,7 @@ kmCall(0x805dc480, OnStartButtonFroomMsgActivate);
 //kmWrite32(0x805dc498, 0x60000000);
 //kmWrite32(0x805dc4c0, 0x60000000);
 
-void OnBackPress(ExpFroomMessages& msg) {
+static void OnBackPress(ExpFroomMessages& msg) {
     if(Info::IsHAW(true) && msg.location == 1) {
         if(!msg.isOnModeSelection) {
             msg.isEnding = false;
@@ -78,13 +81,10 @@ void OnBackPress(ExpFroomMessages& msg) {
 }
 kmBranch(0x805dd32c, OnBackPress);
 
-void OnBackButtonClick() {
+static void OnBackButtonClick() {
     OnBackPress(*SectionMgr::sInstance->curSection->Get<ExpFroomMessages>());
 }
 kmBranch(0x805dd314, OnBackButtonClick);
-
-
-
 
 
 //kmWrite32(0x805dcb6c, 0x7EC4B378); //Get the loop idx in r4
@@ -106,7 +106,7 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
                 bool hasRegs = cupsConfig->HasRegs();
                 u32 idx = messages->curPageIdx;
                 if(!hasRegs) idx += 8;
-                return GetTrackBMGId(CupsConfig::ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(idx)) + rowIdx);
+                return GetTrackBMGId(cupsConfig->ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(idx), rowIdx)); //FIX HERE
             }
         }
 
@@ -117,17 +117,3 @@ kmCall(0x805dcb74, CorrectModeButtonsBMG);
 */
 }//namespace UI
 }//namespace Pulsar
-
-
-
-
-
-
-
-
-
-
-
-
-
-

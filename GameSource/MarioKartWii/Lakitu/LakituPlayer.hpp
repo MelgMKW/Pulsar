@@ -14,7 +14,7 @@ class Player;
 }
 class ModelDirector;
 class ShadowModelDirector;
-class ObjectSound;
+class ObjectActor;
 
 namespace Lakitu {
 
@@ -146,8 +146,12 @@ class Player : public PlayerBase, public AI::Base {
     virtual void OnStartUnknown();    //0x54 807254a0 from start: 0x68
     virtual void UpdateUnknown();     //0x58 807254c0 from start: 0x6c
 
+    u8 GetPlayerIdx() const; //8072239c
+    void StarteRespawnAction(); //807223a4
+    void DStartCountdownAction(); //807223bc
     void LoadGraphics(); //80722504 loads jugemu.brres, rod.brres, links anims
     void CreateEnableActions(); //80721ec0
+    u16 GetCountdownArmSwipeDuration; //8072240c
 
     //For example as countdown is happening, lakitu's base position is (0,250,320) offset from the player (with Z being forwards)
     //That is mapped to the world euclidean space
@@ -172,7 +176,7 @@ class Player : public PlayerBase, public AI::Base {
     u32 curActionAnimationIdx; //0x1ec 2 seems to be the arm animation for most actions
     u32 curActionAnimationLength; //0x1f0 used by backwards to know where to transition from the head shaking animation
 
-    //all of these actions are check by 807234a4, which only runs when the current actionHandler is "idle"
+    //all of these actions are checked by 807234a4, which only runs when the current actionHandler is "idle"
     EnableCountdownAction* enableCountdownAction; //0x1f4 
     EnableDisplayLapAction* enableDisplayLapAction; //0x1f8
     EnableRespawnAction* enableThirdAction; //0x1fc
@@ -182,7 +186,7 @@ class Player : public PlayerBase, public AI::Base {
     Movement* movement;
     void* lightStruct;
     ParamsSubSub* subsub; //8074bf28 ctor
-    ObjectSound* sound; //0x214
+    ObjectActor* sound; //0x214
 };//total size 0x218
 
 }//namespace Lakitu

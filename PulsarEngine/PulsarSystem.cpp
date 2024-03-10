@@ -3,7 +3,6 @@
 #include <core/nw4r/ut/Misc.hpp>
 #include <core/rvl/dvd/dvd.hpp>
 #include <core/egg/dvd/DvdRipper.hpp>
-#include <MarioKartWii/Sound/RaceAudioMgr.hpp>
 #include <PulsarSystem.hpp>
 
 #include <Settings/Settings.hpp>
@@ -22,7 +21,15 @@ ConfigFile* ConfigFile::LoadConfig(u32* readBytes) {
     EGG::ExpHeap* mem2Heap = RKSystem::mInstance.sceneManager->currentScene->mem2Heap;
     ConfigFile* conf = static_cast<ConfigFile*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
         EGG::DvdRipper::ALLOC_FROM_HEAD, 0, readBytes, nullptr));
+
     if(conf == nullptr) Debug::FatalError(error);
+    else {
+        if(conf->header.version < 0) Debug::FatalError("Cannot use a \"Build Config Only\" file, please build full or with tracks.");
+        if(conf->header.version != conf->header.curVersion) Debug::FatalError("Old Config.pul file, please import and export it on the creator software to update it.");
+        ConfigFile::CheckSection(conf->GetSection<InfoHolder>());
+        ConfigFile::CheckSection(conf->GetSection<CupsHolder>());
+        ConfigFile::CheckSection(conf->GetSection<PulBMG>());
+    }
     return conf;
 }
 
@@ -67,13 +74,24 @@ void System::Init(const ConfigFile& conf) {
     strncpy(this->modFolderName, conf.header.modFolderName, IOS::ipcMaxFileName);
 
     this->InitInstances(conf, type);
+
+    //Initialize last selected cup and courses
+    const PulsarCupId last = Settings::Mgr::sInstance->GetSavedSelectedCup();
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+    cupsConfig->SetLayout();
+    if(last != -1 && cupsConfig->IsValidCup(last) && cupsConfig->GetTotalCupCount() > 8) {
+        cupsConfig->lastSelectedCup = last;
+        cupsConfig->selectedCourse = static_cast<PulsarId>(cupsConfig->ConvertTrack_PulsarCupToTrack(last, 0));
+        cupsConfig->lastSelectedCupButtonIdx = last & 1;
+    }
+
     //Track blocking 
     Info* info = Info::sInstance;
     u32 trackBlocking = info->GetTrackBlocking();
     lastTracks = new PulsarId[trackBlocking];
     for(int i = 0; i < trackBlocking; ++i) lastTracks[i] = PULSARID_NONE;
 
-    const BMGHeader* const confBMG = &conf.GetSection<BMGHeader, &BinaryHeader::offsetToBMG>();
+    const BMGHeader* const confBMG = &conf.GetSection<PulBMG>().header;
     this->rawBmg = EGG::Heap::alloc<BMGHeader>(confBMG->fileLength, 0x4, heap);
     memcpy(this->rawBmg, confBMG, confBMG->fileLength);
     this->customBmgs.Init(*this->rawBmg);

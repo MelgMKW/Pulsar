@@ -30,8 +30,18 @@ namespace Pulsar_Pack_Creator
 
         private void OnMassImportClick(object sender, RoutedEventArgs e)
         {
+            MassImportCM.IsOpen = true;
+        }
+        private void OnMassImportTracksClick(object sender, RoutedEventArgs e)
+        {
             importWindow.Show();
         }
+
+        private void OnMassImportCupNamesClick(object sender, RoutedEventArgs e)
+        {
+            cupsImportWindow.Show();
+        }
+
         private void OnCrashClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
@@ -314,6 +324,7 @@ namespace Pulsar_Pack_Creator
                 ModFolder.Text = $"{parameters.modFolderName}";
                 Wiimmfi.Text = $"{parameters.wiimmfiRegion}";
                 TrackBlocking.SelectedValue = blockingValues[Array.IndexOf(blockingValues, (ushort)parameters.trackBlocking)];
+                HAWTimer.Text = $"{parameters.chooseNextTrackTimer}";
 
                 Array.Copy(importer.regsExperts, regsExperts, regsExperts.Length);
                 
@@ -327,6 +338,8 @@ namespace Pulsar_Pack_Creator
                 CC150.TextChanged += On150ccChange;
                 UpdateCurCup(0);
                 UpdateCurRegsPage(0);
+                UpdateMassImport();
+                
             }
             string msg = "";
             switch (ret)
@@ -344,19 +357,40 @@ namespace Pulsar_Pack_Creator
             MsgWindow.Show(msg);
         }
 
+        private void OnBuildClick(object sender, RoutedEventArgs e)
+        {
+            //MsgWindowResult result = MsgWindow.Show("Do you also want to create the XML?", MsgWindowButton.YesNo);
+            //IO.Builder builder = new IO.Builder(this, result == MsgWindowResult.Yes ? IO.Builder.BuildParams.ConfigAndXML : IO.Builder.BuildParams.ConfigOnly);
+            //IO.Result ret = builder.Build();
+            //HandleBuildRet(ret, builder.error);
+            BuildCM.IsOpen = true;
+        }
+
         private void OnBuildConfigClick(object sender, RoutedEventArgs e)
         {
             MsgWindowResult result = MsgWindow.Show("Do you also want to create the XML?", MsgWindowButton.YesNo);
-            IO.Builder builder = new IO.Builder(this, result == MsgWindowResult.Yes ? IO.Builder.BuildParams.ConfigAndXML : IO.Builder.BuildParams.ConfigOnly);
+            bool createXML = result.Equals(MsgWindowResult.Yes);
+            IO.Builder builder = new IO.Builder(this, IO.Builder.BuildParams.ConfigOnly, createXML);
             IO.Result ret = builder.Build();
             HandleBuildRet(ret, builder.error);
         }
-
-        private void OnBuildFullPackClick(object sender, RoutedEventArgs e)
+        private void OnBuildConfigTracksClick(object sender, RoutedEventArgs e)
         {
-            IO.Builder builder = new IO.Builder(this, IO.Builder.BuildParams.Full);
+            MsgWindowResult result = MsgWindow.Show("Do you also want to create the XML?", MsgWindowButton.YesNo);
+            bool createXML = result.Equals(MsgWindowResult.Yes);
+            IO.Builder builder = new IO.Builder(this, IO.Builder.BuildParams.ConfigAndTracks, createXML);
             IO.Result ret = builder.Build();
             HandleBuildRet(ret, builder.error);
+        }
+        private void OnBuildFullPackClick(object sender, RoutedEventArgs e)
+        {
+            IO.Builder builder = new IO.Builder(this, IO.Builder.BuildParams.Full, true);
+            IO.Result ret = builder.Build();
+            HandleBuildRet(ret, builder.error);
+        }
+        private void OnOpened(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void HandleBuildRet(IO.Result ret, string error)
@@ -418,6 +452,32 @@ namespace Pulsar_Pack_Creator
             }
         }
 
+        private void UpdateMassImport()
+        {
+            string[] massImportText = new string[5];
+            string[] massImportCupsNamesText = new string[2];
+            foreach (Cup cup in cups)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    massImportText[0] += cup.trackNames[i] + "\n";
+                    massImportText[1] += cup.authorNames[i] + "\n";
+                    massImportText[2] += cup.versionNames[i] + "\n";
+                    massImportText[3] += PulsarGame.MarioKartWii.idxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[i])] + "\n";
+                    massImportText[4] += PulsarGame.MarioKartWii.musicIdxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cup.musicSlots[i])] + "\n";
+                }
+                massImportCupsNamesText[0] += cup.name + "\n";
+                massImportCupsNamesText[1] += cup.iconName + "\n";
+            }
+            importWindow.NamesImport.Text = massImportText[0];
+            importWindow.AuthorsImport.Text = massImportText[1];
+            importWindow.VersionsImport.Text = massImportText[2];
+            importWindow.SlotsImport.Text = massImportText[3];
+            importWindow.MusicSlotsImport.Text = massImportText[4];
+
+            cupsImportWindow.CupsNameImport.Text = massImportCupsNamesText[0];
+            cupsImportWindow.CupsIconImport.Text = massImportCupsNamesText[1];
+        }
         public bool DisplayImage(string path)
         {
             if (path == "")
@@ -450,6 +510,5 @@ namespace Pulsar_Pack_Creator
             return true;
 
         }
-
     }
 }

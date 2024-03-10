@@ -12,7 +12,7 @@ namespace Network {
 //ROOMPacket bits arrangement: 0-4 GPraces
 //u8 racesPerGP = 0;
 
-void ConvertROOMPacketToData(u16 param) {
+static void ConvertROOMPacketToData(u16 param) {
     u8 raceCount;
     switch(param & 0xE) {
         case(0x2):

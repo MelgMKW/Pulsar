@@ -15,11 +15,11 @@ namespace AudioUtility {
 namespace HBM {
 
 typedef void(*Callback)(bool); //called by enter with bool = 0, by exit with bool = 1
-extern SimpleAudioMgr<>* simpleAudioMgr; //80386DBC
+extern SimpleAudioMgr* simpleAudioMgr; //80386DBC
 extern Callback cb; //80386DC4
 extern int fadeFrames; //80385F68
 
-void init(SimpleAudioMgr<>* mgr, Callback cb, int fadeFrames); //80214350
+void init(SimpleAudioMgr* mgr, Callback cb, int fadeFrames); //80214350
 void enter(); //80214360
 void exit(bool r3); //80214490
 

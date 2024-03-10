@@ -58,7 +58,7 @@ public:
     void Close();
 
     const int GetFileCount() const { return this->fileCount; }
-    const char* GetName() const { return this->folderName; };
+    const char* GetFolderName() const { return this->folderName; };
     //void RequestCreateFolder(const char* path); //up to 2 simultaneous
     void CloseFolder();
     void GetFolderFilePath(char* dest, u32 index) const;

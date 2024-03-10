@@ -1,9 +1,9 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Kart/KartManager.hpp>
 #include <MarioKartWii/Race/RaceInfo/RaceInfo.hpp>
-#include <MarioKartWii/Sound/RSARSounds.hpp>
-#include <MarioKartWii/Sound/RaceAudioMgr.hpp>
-#include <MarioKartWii/Sound/Actors/KartSound.hpp>
+#include <MarioKartWii/Audio/RSARPlayer.hpp>
+#include <MarioKartWii/Audio/RaceMgr.hpp>
+#include <MarioKartWii/Audio/Actors/KartActor.hpp>
 #include <MarioKartWii/UI/Ctrl/CtrlRace/CtrlRaceGhostDiffTime.hpp>
 #include <Settings/Settings.hpp>
 
@@ -14,23 +14,23 @@ speedup instead of transitioning to the _f file. The jingle will still play.
 */
 
 namespace Pulsar {
-namespace Audio {
+namespace Sound {
 
 using namespace nw4r;
-void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotId) {
+static void MusicSpeedup(Audio::RaceRSARPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotId) {
     //static u8 hudSlotIdFinalLap;
 
     u8 isSpeedUp = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SPEEDUP);
-    RaceAudioMgr* raceAudioMgr = RaceAudioMgr::sInstance;
+    Audio::RaceMgr* raceAudioMgr = Audio::RaceMgr::sInstance;
     const u8 maxLap = raceAudioMgr->maxLap;
     const u8 curLap = raceAudioMgr->lap;
     //const u8 idFirstFinalLap = hudSlotIdFinalLap;
     if(maxLap == 1) return;
     if(maxLap == RaceData::sInstance->racesScenario.settings.lapCount) {
 
-        register KartSound* kartSound;
-        asm(mr kartSound, r29;);
-        snd::detail::BasicSound& sound =  kartSound->soundArchivePlayer->soundPlayerArray[0].soundList.GetFront();
+        register Audio::KartActor* kartActor;
+        asm(mr kartActor, r29;);
+        snd::detail::BasicSound& sound =  kartActor->soundArchivePlayer->soundPlayerArray[0].soundList.GetFront();
         if(isSpeedUp == RACESETTING_SPEEDUP_ENABLED || sound.soundId == SOUND_ID_GALAXY_COLOSSEUM) {
             const RaceInfo* raceInfo = RaceInfo::sInstance;
             const Timer& raceTimer = raceInfo->timerMgr->timers[0];
@@ -42,7 +42,7 @@ void MusicSpeedup(RaceRSARSoundsPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotI
             if(maxLap != curLap) rsarSoundPlayer->PlaySound(SOUND_ID_FINAL_LAP, hudSlotId);
         }
         else if((maxLap != curLap) && (raceAudioMgr->raceState == 0x4 || raceAudioMgr->raceState == 0x6)) {
-            raceAudioMgr->SetRaceState(RACE_STATE_FAST);
+            raceAudioMgr->SetRaceState(Audio::RACE_STATE_FAST);
         }
     }
     else if(maxLap != curLap) {

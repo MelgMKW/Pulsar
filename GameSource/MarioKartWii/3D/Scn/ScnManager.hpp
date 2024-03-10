@@ -11,7 +11,7 @@
 #include <MarioKartWii/3D/Scn/Fog.hpp>
 #include <MarioKartWii/3D/Scn/GameScreen.hpp>
 #include <MarioKartWii/3D/TextureHolder.hpp>
-
+#include <MarioKartWii/Mii/Mii.hpp>
 
 enum ScnType {
     SCNTYPE_MDLSIMPLE,
@@ -31,12 +31,9 @@ struct ScnObjDrawOptions {
 
 class Light;
 class LightMgrHolder;
-
 class ModelDirector;
 
 using namespace nw4r;
-
-
 
 class ScnMgrCreator { //akin to EGG's sceneCreator
 public:
@@ -188,6 +185,10 @@ class ScnMgrMii : public ScnMgr {
     ScnMgrMii(u8 r4); //8059e98c
     ~ScnMgrMii() override; //8059e9e4 vtable 808b6920
     void LoadLights() override; //0x38 8059ea3c
+
+    static void ScnRflDrawProc(nw4r::g3d::ScnRfl* scnRfl, const RFL::CharModel* charModel,
+        u32 mask_diff, u32 mask_spec, GX::Color ambientColor, bool opa); //805afe88
+
     u8 r4arg;
     u8 padding[3];
 };//0x9c

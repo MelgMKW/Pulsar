@@ -69,22 +69,28 @@ public:
     LicenseManager(); //8054400c
     TimeEntry* GetTimeEntry(u32 index, CourseId id); //80548e30
     void StoreTimeEntry(const TimeEntry& entry, u32 index, CourseId id); //80548e90
-    wchar_t miiName[10];
-    u8 padding[2];
+    wchar_t miiName[11];
 
 #pragma pack(push, 1)
     union {
         RFL::CreateID createID; //0x16
-        u8 miiAvatarID0; //0x1a
-        u8 miiAvatarID1;
-        u8 miiAvatarID2;
-        u8 miiAvatarID3;
+        struct {
+            u32 avatarId;
+            u32 clientId;
+        }intIds;
+        struct {
+            u8 miiAvatarID0; //0x1a
+            u8 miiAvatarID1;
+            u8 miiAvatarID2;
+            u8 miiAvatarID3;
+            u8 miiClientID0; //0x1a
+            u8 miiClientID1;
+            u8 miiClientID2;
+            u8 miiClientID3;
+        };
     }miiID;
 
-    u8 miiClientID0; //0x1a
-    u8 miiClientID1;
-    u8 miiClientID2;
-    u8 miiClientID3;
+
 #pragma pack(pop)
 
     u8 unknown_0x1e[0xE20 - 0x1e];

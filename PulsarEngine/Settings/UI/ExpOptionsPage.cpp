@@ -34,7 +34,7 @@ void ExpOptions::ExpandedOnButtonClick(PushButton& pushButton, u32 hudSlotId) {
     }
 }
 
-void PatchOptionsBRCTR(PushButton* button, const char* folderName, const char* ctrName, const char* variant, u32 playerCount, u32 r8, bool inaccessible) {
+static void PatchOptionsBRCTR(PushButton* button, const char* folderName, const char* ctrName, const char* variant, u32 playerCount, u32 r8, bool inaccessible) {
     button->Load(folderName, "SettingsButton", variant, playerCount, r8, inaccessible);
 }
 kmCall(0x805fd7bc, PatchOptionsBRCTR); //so that the positions are correct

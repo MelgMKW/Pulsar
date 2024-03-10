@@ -12,13 +12,13 @@ Manager::RKGCallback Manager::cb = nullptr;
 char Manager::folderPath[IOS::ipcMaxPath] = "";
 
 Manager* Manager::CreateInstance() {
-    Manager* holder = Manager::sInstance;
-    if(holder == nullptr) {
-        holder = new(System::sInstance->heap, 0x20) Manager;
-        Manager::sInstance = holder;
+    Manager* manager = Manager::sInstance;
+    if(manager == nullptr) {
+        manager = new(System::sInstance->heap, 0x20) Manager;
+        Manager::sInstance = manager;
     }
-    holder->Reset();
-    return holder;
+    manager->Reset();
+    return manager;
 }
 
 void Manager::DestroyInstance() {
@@ -193,12 +193,25 @@ bool Manager::SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap) {
 void Manager::CreateAndSaveFiles(Manager* manager) {
     char path[IOS::ipcMaxPath];
     const RKG& rkg = manager->rkg;
-    snprintf(path, IOS::ipcMaxPath, "%s/%01dm%02ds%03d.rkg", IO::sInstance->GetName(),
-        rkg.header.minutes, rkg.header.seconds, rkg.header.milliseconds);
-    IO* loader = IO::sInstance;
-    loader->CreateAndOpen(path, FILE_MODE_WRITE);
-    loader->Overwrite(GetRKGLength(rkg), &rkg);
-    loader->Close();
+    s8 repeatCount = manager->leaderboard.GetRepeatCount(rkg);
+
+    IO* io = IO::sInstance;
+    const u32 minutes = rkg.header.minutes;
+    const u32 seconds = rkg.header.seconds;
+    u32 milliseconds = rkg.header.milliseconds;
+    const char* format = "%s/%01dm%02ds%03d.rkg";
+    const char* folder = io->GetFolderName();
+    char letter = '?';
+    if(repeatCount > 1) {
+        format = "%s/%01dm%02ds%02d%c.rkg";
+        letter += repeatCount;
+        milliseconds = milliseconds / 10;
+    }
+    snprintf(path, IOS::ipcMaxPath, format, folder, minutes, seconds, milliseconds, letter);
+
+    io->CreateAndOpen(path, FILE_MODE_WRITE);
+    io->Overwrite(GetRKGLength(rkg), &rkg);
+    io->Close();
 
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     char folderPath[IOS::ipcMaxPath];
@@ -232,7 +245,7 @@ kmCall(0x806394f0, Manager::InsertCustomGroupToList);
 //80856fec Race get ldr position for animation almost certainly
 //80855c6c save ghost (get ldr position) r4 timer r5 savedatamanagerlicence
 //8051ca80 write ghost file
-s32 PlayCorrectFinishAnim(LicenseManager*, const Timer& timer, CourseId courseId) {
+static s32 PlayCorrectFinishAnim(LicenseManager*, const Timer& timer, CourseId courseId) {
     return Manager::GetInstance()->GetLeaderboard().GetPosition(timer);
 }
 kmCall(0x80856fec, PlayCorrectFinishAnim);
@@ -240,14 +253,14 @@ kmCall(0x80856fec, PlayCorrectFinishAnim);
 
 
 //make racedata bigger to have 2 more rkgs
-int IncreaseRacedataSize() {
+static int IncreaseRacedataSize() {
     return 0xC3F0;
 }
 kmCall(0x8052fe78, IncreaseRacedataSize);
 kmWrite32(0x80531f44, 0x4800001c); //make it so the game will only use the first rkg buffer for normal ghost usage
 
 //Patch needed since we now have 4 rkgs which are used in order
-bool RacedataCheckCorrectRKG(u8 id) {
+static bool RacedataCheckCorrectRKG(u8 id) {
     u8 offset = 0;
     if(RaceData::sInstance->menusScenario.players[0].playerType != PLAYER_GHOST) offset = 1;
     return RaceData::sInstance->ghosts[id - offset].CheckValidity();
@@ -256,7 +269,7 @@ kmWrite32(0x8052f5c0, 0x5763063E);
 kmCall(0x8052f5c8, RacedataCheckCorrectRKG);
 
 //Same as above
-void GhostHeaderGetCorrectRKG(GhostData& header, u8 id) {
+static void GhostHeaderGetCorrectRKG(GhostData& header, u8 id) {
     u8 offset = 0;
     RaceData* racedata = RaceData::sInstance;
     RacedataScenario& scenario = racedata->menusScenario;
@@ -299,7 +312,7 @@ kmCall(0x805e144c, Manager::ExtendSetupGhostReplay);
 kmCall(0x805e1518, Manager::ExtendSetupGhostReplay);
 
 //m98 slot patch, used for ghost stuff (ghosts check that the rkg has the same trackID as the current for example)
-void SetCorrectGhostRaceSlot(const GhostList& list, s32 entryIdx) {
+static void SetCorrectGhostRaceSlot(const GhostList& list, s32 entryIdx) {
     list.InitSectionParamsParams(entryIdx);
     if(entryIdx >= 0 && entryIdx < list.count) {
         const CourseId slot = CupsConfig::sInstance->GetCorrectTrackSlot();

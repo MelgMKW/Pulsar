@@ -10,7 +10,7 @@ struct GOBJ {
     Vec3 rotation; //10
     Vec3 scale; //1c
     u16 routeID; //28
-    u16 settings[8]; //2a, 2c, 2e, 30, 32, 34, 36, 38
+    s16 settings[8]; //2a, 2c, 2e, 30, 32, 34, 36, 38
     u16 presenceFlags; //3a
 }; //0x3C
 

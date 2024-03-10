@@ -5,6 +5,8 @@
 #include <MarioKartWii/UI/Text.hpp>
 #include <MarioKartWii/Item/ItemManager.hpp>
 
+
+CharacterId GetMiiCharacterId(const Mii& mii); //80831af4
 bool IsOnlineSection(SectionId id); //80860484 online but outside of races 
 CourseId GetNextVSTrack(u32 raceNumber); //808606a4
 void TimerToTextInfo(Timer* timer, TextInfo& text); //808608e4

@@ -47,7 +47,7 @@ kmCall(0x80796d8c, ReplaceBlooperUseOtherPlayers); //replaces the small blooper 
 
 
 //kmWrite32(0x805b68d8, 0x7DE97B78); //mr r9, r15 to get playercollision
-bool ConditionalIgnoreInvisibleWalls(float radius, CourseMgr& mgr, const Vec3& position, const Vec3& prevPosition,
+static bool ConditionalIgnoreInvisibleWalls(float radius, CourseMgr& mgr, const Vec3& position, const Vec3& prevPosition,
     KCLBitfield acceptedFlags, CollisionInfo* info, KCLTypeHolder& kclFlags)
 {
     if(Info::IsFeather()) {
@@ -107,7 +107,7 @@ s32 HandleGroundFeatherCollision(const Kart::Collision& collision) {
 }
 kmWritePointer(0x808b54e8, HandleGroundFeatherCollision);
 
-u32 ConditionalBlooperTimer(u32 timer) {
+static u32 ConditionalBlooperTimer(u32 timer) {
     if(Info::IsFeather()) timer = 0;
     else timer--;
     return timer;

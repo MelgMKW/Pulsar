@@ -10,7 +10,7 @@ namespace Network {
 
 using namespace RKNet;
 
-inline u32 ShouldSendPacketHost(UI::ChooseNextTrack* choosePage) {
+static inline u32 ShouldSendPacketHost(UI::ChooseNextTrack* choosePage) {
     if(choosePage->status == UI::ChooseNextTrack::STATUS_HOST) {
         choosePage->status = UI::ChooseNextTrack::STATUS_HOST_TRACK_SENT;
         return EVENTACTION_NONE;
@@ -26,7 +26,7 @@ inline u32 ShouldSendPacketHost(UI::ChooseNextTrack* choosePage) {
     }
 }
 
-inline u32 ShouldSendPacketOther(UI::ChooseNextTrack* choosePage) {
+static inline u32 ShouldSendPacketOther(UI::ChooseNextTrack* choosePage) {
     if(choosePage->status == UI::ChooseNextTrack::STATUS_TRACKRECEIVED) {
         choosePage->status = UI::ChooseNextTrack::STATUS_CONFIRMATIONSENT;
         return EVENTACTION_SHOOT;
@@ -34,7 +34,7 @@ inline u32 ShouldSendPacketOther(UI::ChooseNextTrack* choosePage) {
     return -1;
 }
 
-void CustomEVENT(SectionMgr* sectionMgr, SectionId id) {
+static void CustomEVENT(SectionMgr* sectionMgr, SectionId id) {
 
     const Section* section = sectionMgr->curSection;
     const SectionParams* params = sectionMgr->sectionParams;
@@ -63,7 +63,7 @@ void CustomEVENT(SectionMgr* sectionMgr, SectionId id) {
 kmCall(0x8064f5fc, CustomEVENT);
 kmPatchExitPoint(CustomEVENT, 0x8064f648);
 
-bool ProcessCustomEVENT(EVENTType* type, const void* packet, u8 aid) { //returns true if custom packet
+static bool ProcessCustomEVENT(EVENTType* type, const void* packet, u8 aid) { //returns true if custom packet
     if((type->value & 0x1F) == 0x11) {
         SectionMgr* sectionMgr = SectionMgr::sInstance;
         UI::ChooseNextTrack* choosePage = sectionMgr->curSection->Get<UI::ChooseNextTrack>(PAGE_GHOST_RACE_ENDMENU);

@@ -17,7 +17,7 @@ class SceneCreator { //vtable got done away by the compiler
 }; //0x4 
 
 size_assert(SceneCreator, 0x4);
-class Scene: public EGG::Disposer {
+class Scene : public EGG::Disposer {
 public:
     Scene(); //8023ad10
     ~Scene() override;     //8023ad84, vtable 802a3de0
@@ -34,7 +34,7 @@ public:
     void* unknown_0x1c; //0x1c
     Scene* parent; //0x20
     Scene* child;
-    u32 id;
+    u32 id; //0x28
     SceneManager* manager; //0x2c
 }; //0x30
 size_assert(Scene, 0x30);

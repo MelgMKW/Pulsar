@@ -19,14 +19,14 @@ KartType PreventRSLCrash(PlayerEffects* effects, const Kart::Link& base) {
 kmCall(0x8068dfcc, PreventRSLCrash);
 kmWrite32(0x8068e2b0, 0x60000000);
 
-void* PreventRSBCrash(u32 shipManagerSize) {
+static void* PreventRSBCrash(u32 shipManagerSize) {
     if(ArchiveRoot::sInstance->GetFile(ARCHIVE_HOLDER_COURSE, "HeyhoShipGBA.brres", 0) == nullptr) return nullptr;
     return new u8[shipManagerSize];
 }
 kmCall(0x80827a34, PreventRSBCrash);
 kmWrite32(0x80827a3c, 0x41820018); //if ptr is nullptr, skip rSGB section
 
-void* PreventMHCrash(u32 carManagerSize) {
+static void* PreventMHCrash(u32 carManagerSize) {
     const ArchiveRoot* root = ArchiveRoot::sInstance;
     if(root->GetFile(ARCHIVE_HOLDER_COURSE, "K_car_body.brres") == nullptr
         || root->GetFile(ARCHIVE_HOLDER_COURSE, "K_truck.brres") == nullptr) return nullptr;
@@ -36,7 +36,7 @@ kmCall(0x808279ac, PreventMHCrash);
 kmWrite32(0x808279b4, 0x41820018); //if ptr is nullptr, skip MH section
 
 extern const char* matNamesMH[12]; //808d1860
-bool PreventMHMatCrash(const RaceData& racedata) {
+static bool PreventMHMatCrash(const RaceData& racedata) {
     if(racedata.racesScenario.settings.courseId != MOONVIEW_HIGHWAY) return false;
     nw4r::g3d::ResFile file;
     file.data = reinterpret_cast<nw4r::g3d::ResFileData*>(ArchiveRoot::sInstance->GetFile(ARCHIVE_HOLDER_COURSE, "course_model.brres", 0));

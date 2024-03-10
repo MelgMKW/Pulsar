@@ -1,9 +1,10 @@
 #ifndef _MII_
 #define _MII_
 #include <kamek.hpp>
-#include <core/rvl/RFL.hpp>
+#include <core/rvl/RFL/RFL.hpp>
 #include <core/rvl/gx/GX.hpp>
 #include <core/egg/mem/Heap.hpp>
+#include <core/System/ScnRfl.hpp>
 #include <MarioKartWii/System/Random.hpp>
 #include <MarioKartWii/System/Identifiers.hpp>
 
@@ -33,27 +34,53 @@ enum MiiId { //simply charId - 6
     MIIID_L_C_FEMALE =  MII_L_C_FEMALE - 6
 };
 
-class Mii { //has stuff like sex, type etc.. most likely
+enum MiiBuild {
+    MII_SMALL_BUILD,
+    MII_MEDIUM_BUILD, //if (104 - height) > build
+    MII_HEAVY_BUILD   //if (150 - height) > build
+};
+
+enum MiiType {
+    MII_TYPE_OFFICIAL = 0,
+    MII_TYPE_DEFAULT = 3,
+    MII_TYPE_USER = 6,
+    MII_TYPE_COPY = 7
+};
+
+class Mii {
 public:
 
     Mii() {}
     virtual ~Mii(); //80529034 vtable 808b3148
-    void Init(u32 r4); //80525f88 could be reset
+    void Init(u32 type); //80525f88 could be reset
     static bool ComputeRFLStoreData(RFL::StoreData& dest, const RFL::CreateID* createId); //8052758c
     static bool IsMiiId(CharacterId character); //805275ec
     static bool GetMiiId(const RFL::CreateID* createId, u32* r4, u16* id); //80527604
-    void Load(RFL::ID rflId, u32 r5); //80526020 rflId == 0 leads to empty mii
+    void Load(RFL::IDX rflId, u32 r5); //80526020 rflId == 0 leads to empty mii
+    bool InitMiddleDB(RFL::IDX rflId, u32 r5, u32 type); //80526460
 
-    u32 r4;
-    u16 rflId; //0x8
+    //rflId stored to idx if type == 3, presumably normal mii
+    bool GetRFLArgs(RFL::IDX rflIdx, u32 r5, u32 type, RFL::MiddleDB* dbDest, RFL::DataSource* sourceDest, RFL::IDX* idxDest); //80526460
+    nw4r::g3d::ScnRfl* CreateScnRfl(EGG::Allocator* allocator, RFL::Resolution resolution, u32 expressionFlag,
+        nw4r::g3d::ScnRfl* copyFrom, u32 sizeUserData); //8052663c copies copyFrom CharInfo if not null
+
+    u32 type;
+    u8 rflIdx; //0x8
     u8 padding[2];
-    u32 r5; //0xc some kind of rfl param GetMiiId matches that
-    RFL::StoreData rawMii; //0x10
-    u8 unknown_0x5C[0x68 - 0x5C];
-    wchar_t name[10]; //0x68
-    u8 unknown_0x7C[0x94 - 0x7c];
-    RFL::CreateID createId; //0x94
-    GX::TexObj texObj; //0x98
+    RFL::DataSource source; //0xc some kind of rfl param GetMiiId matches that
+    RFL::StoreData rawStoreMii; //0x10 used when the mii was loaded from the official store (player miis) or a file (rkg, etc...)
+    RFL::MiddleDB* middleDB; //0x5c
+    GX::Color rflToGXFavoriteColor; //0x60
+    RFL::FavoriteColor favoriteColor; //0x64
+    RFL::AdditionalInfo info; //0x68
+    bool isLoaded; //0xa4
+    bool isUserMii;
+    u8 unknown_0xa6[2]; //0xa6
+    MiiBuild weight; //0xa8
+    u8 unknown_0xac[0xae - 0xac]; //0xac
+    u8 unknown_0xae; //0xae
+    u8 padding2; //0xaf
+    u32 unknown_0xb0[2];
 }; //total size 0xB8
 size_assert(Mii, 0xb8);
 
@@ -102,9 +129,10 @@ class MiiManager {
     MiiManager(); //80526c80
     void Init(EGG::Heap* heap); //80526d94
     static Status GetStatus(); //805276e0
-    Mii* CreateMii(RFL::ID rflId, EGG::Heap* heap); //80527f84
-    Mii* CreateMii(const RFL::CreateID* id, EGG::Heap* heap); //80527b0c for official miis
-    Mii* CreateMii(u32 id, EGG::Heap* heap); //80527d60 checks that id is valid and will return nullptr if it isn't
+
+    Mii* CreateStoreMii(const RFL::CreateID* id, EGG::Heap* heap); //80527b0c for official miis
+    Mii* CreateOfficialMii(RFL::IDX rflIdx, EGG::Heap* heap); //80527d60 checks that id is valid and will return nullptr if it isn't
+    Mii* CreateDefaultMii(RFL::IDX rflId, EGG::Heap* heap); //80527f84
     Mii* CreateMii(const RFL::StoreData* storeData, EGG::Heap* heap); //80529330
     Mii* CreateMii(MiiCreationParams* params, Random* random, EGG::Heap* heap); //805287bc
     Mii* CreateRandomMii(EGG::Heap* heap, MiiCreationParams* params, Random* random); //805282b0
