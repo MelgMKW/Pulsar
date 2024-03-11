@@ -1,3 +1,4 @@
+/*
 #include <kamek.hpp>
 #include <MarioKartWii/Audio/AudioManager.hpp>
 #include <MarioKartWii/Audio/Other/AudioStreamsMgr.hpp>
@@ -6,7 +7,7 @@ namespace Pulsar {
 namespace Sound {
 /*Allows players to avoid multi BRSTMs if they desire. When a sound trigger KCL that'd lead to a channel switch is encountered,
 the game will check the BRASR's entry channel count against the current BRSTM's, and if the latter has fewert than needed,
-the channel switch will not happen*/
+the channel switch will not happen
 
 int CheckChannelCount(const Audio::StreamsMgr&, u32 channel, const nw4r::snd::detail::BasicSound& sound) {
     if(Audio::Manager::sInstance->soundArchivePlayer->soundArchive->GetSoundType(sound.soundId) !=
@@ -34,3 +35,4 @@ asmFunc ConditionalChannelSwitch() {
 kmCall(0x806fab78, ConditionalChannelSwitch);
 }//namespace Audio
 }//namespace Pulsar
+*/

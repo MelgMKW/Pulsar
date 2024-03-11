@@ -1699,3 +1699,4 @@ volumes__21SoundPlayersVolumeMgr= 0x809c26b8
 behaviourTable__Q24Item9Behaviour= 0x809c36a0
 DeactivateTc__Q24Kart8MovementFv= 0x80581a40
 GetLength__3RKGCFv = 0x8051d388
+volumes__Q25Audio16PlayersVolumeMgr = 0x809c26b8
