@@ -136,6 +136,13 @@ namespace Pulsar_Pack_Creator.IO
                     {
                         bin.Write((ushort)Array.IndexOf(trackNamesTuple.Item2, trackNamesTuple.Item1[i]));
                     }
+                    if (ctsCupCount % 2 == 1)
+                    {
+                        for(int i = 0; i < 4; i++)
+                        {
+                            bin.Write((ushort)Array.IndexOf(trackNamesTuple.Item2, trackNamesTuple.Item1[i]));
+                        }
+                    }
                     bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));                   
                     bin.Write(fileSectStream.ToArray());                                  
                 }
@@ -143,14 +150,16 @@ namespace Pulsar_Pack_Creator.IO
 
                 File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
                 if(createXML) CreateXML();
-                if(buildParams == BuildParams.Full)
+                if(buildParams != BuildParams.ConfigOnly)
                 {
-
+                    File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
                     Directory.CreateDirectory($"{modFolder}/Assets");
                     Directory.CreateDirectory($"{modFolder}/CTBRSTM");
                     Directory.CreateDirectory($"{modFolder}/My Stuff");
-                    File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);
-                    File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
+                }
+                if(buildParams == BuildParams.Full)
+                {                 
+                    File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);                  
                     File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
                     File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
 

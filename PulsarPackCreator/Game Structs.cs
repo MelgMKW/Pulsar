@@ -540,7 +540,7 @@ public class PulsarGame
         [Endian(Endianness.BigEndian)]
         public ushort cupIconCount;
         [Endian(Endianness.BigEndian)]
-        public ushort chooseNextTrackTimer;
+        public byte chooseNextTrackTimer;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 40)]
         public byte[] reservedSpace;
     }
