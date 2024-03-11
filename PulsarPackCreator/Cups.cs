@@ -443,16 +443,13 @@ namespace Pulsar_Pack_Creator
             sortedArray = sortedArray.OrderBy(x =>
             {
                 string result = x;
-                int startOfSequence = x.IndexOf("\\c{");
+                int startOfSequence = result.IndexOf("\\c{");
                 while (startOfSequence != -1)
-                {                   
-                    if (startOfSequence != -1)
-                    {
-                        int endOfSequence = x.IndexOf("}");
-                        if (endOfSequence == -1) break;
-                        result = x.Remove(startOfSequence, endOfSequence);      
-                    }
-                    startOfSequence = x.IndexOf("\\c{");
+                {                                      
+                    int endOfSequence = result.IndexOf("}");
+                    if (endOfSequence == -1) break;
+                    result = result.Remove(startOfSequence, endOfSequence + 1 - startOfSequence);                         
+                    startOfSequence = result.IndexOf("\\c{");
                 }
                 return result;
             }).ToArray();
