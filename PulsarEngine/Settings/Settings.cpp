@@ -126,7 +126,7 @@ void Mgr::UpdateTrackList() {
 
     EGG::Heap* heap = System::sInstance->heap;
     u16* missingCRCIndex = new (heap) u16[trackCount];
-    memset(missingCRCIndex, 0xFFFF, sizeof(u16) * trackCount);
+    memset(missingCRCIndex, 0xFFFF, sizeof(u16) * trackCount); //if it's 0xFFFF, it's missing
     u16* toberemovedCRCIndex = new (heap) u16[oldTrackCount];
     memset(toberemovedCRCIndex, 0xFFFF, sizeof(u16) * oldTrackCount);
 
@@ -134,7 +134,7 @@ void Mgr::UpdateTrackList() {
     for(int curNew = 0; curNew < trackCount; ++curNew) {
         for(int curOld = 0; curOld < oldTrackCount; ++curOld) {
             if(cupsConfig->GetCRC32(cupsConfig->ConvertTrack_IdxToPulsarId(curNew)) == trophies[curOld].crc32) {
-                missingCRCIndex[curNew] = curOld;
+                missingCRCIndex[curNew] = curOld; //this new track crc32 is already in the file
                 break;
             }
         }
@@ -143,7 +143,7 @@ void Mgr::UpdateTrackList() {
     for(int curOld = 0; curOld < oldTrackCount; ++curOld) {
         for(int curNew = 0; curNew < trackCount; ++curNew) {
             if(trophies[curOld].crc32 == cupsConfig->GetCRC32(cupsConfig->ConvertTrack_IdxToPulsarId(curNew))) {
-                toberemovedCRCIndex[curOld] = curNew;
+                toberemovedCRCIndex[curOld] = curNew; //this old track still exists
                 break;
             }
         }
@@ -156,7 +156,13 @@ void Mgr::UpdateTrackList() {
                     missingCRCIndex[curNew] = curOld; //found a spot to put the missing track in, reset that spot and use it for the new track
                     toberemovedCRCIndex[curOld] = 0;
                     trophies[curOld].crc32 = cupsConfig->GetCRC32(cupsConfig->ConvertTrack_IdxToPulsarId(curNew));
-                    for(int mode = 0; mode < 4; mode++) trophies[curOld].hastrophy[mode] = false;
+                    for(int mode = 0; mode < 4; mode++) {
+                        if(trophies[curOld].hastrophy[mode] == true) {
+                            trophies[curOld].hastrophy[mode] = false;
+                            trophiesHolder.trophyCount[mode]--;
+                        }
+                    }
+
                     break;
                 }
             }
@@ -171,10 +177,23 @@ void Mgr::UpdateTrackList() {
             if(missingCRCIndex[curNew] == 0xFFFF) {
                 trophies[idx].crc32 = cupsConfig->GetCRC32(cupsConfig->ConvertTrack_IdxToPulsarId(curNew));
                 for(int mode = 0; mode < 4; mode++) trophies[idx].hastrophy[mode] = false;
+
                 ++idx;
             }
         }
         this->Save();
+    }
+    else if(oldTrackCount > trackCount) {
+        for(int curOld = 0; curOld < oldTrackCount; ++curOld) { //4032 4132
+            if(toberemovedCRCIndex[curOld] == 0xFFFF) {
+                for(int mode = 0; mode < 4; mode++) {
+                    if(trophies[curOld].hastrophy[mode] == true) {
+                        trophies[curOld].hastrophy[mode] = false;
+                        trophiesHolder.trophyCount[mode]--;
+                    }
+                }
+            }
+        }
     }
     delete[](missingCRCIndex);
     delete[](toberemovedCRCIndex);

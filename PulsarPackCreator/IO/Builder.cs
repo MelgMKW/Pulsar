@@ -338,7 +338,7 @@ namespace Pulsar_Pack_Creator.IO
                     {
                         File.Copy($"input/{name}.szs", $"{modFolder}/Tracks/{idx * 4 + i}.szs", true);
                         crcToFile.WriteLine($"{name} = {crc32[i]:X8}");
-                        crc32Folder = $"{modFolder}/Ghosts/{crc32[i]:X8}";
+                        crc32Folder = $"{modFolder}/Ghosts/{crc32[i]:X8}".ToLowerInvariant();
 
                         Directory.CreateDirectory(crc32Folder);
                     }

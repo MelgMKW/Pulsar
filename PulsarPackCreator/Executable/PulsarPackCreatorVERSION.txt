@@ -1,3 +1,15 @@
+·Updated to 1.3.2
+Creator Changes:
+-Fixed mass import window height issues (a bug that was previously fixed but came back due to a merge issue).
+-Fixed some import bugs.
+-Fixed Linux ghost folder issues due to case-sensitivity.
+Engine Changes:
+-Fixed speedometer player 1 being in the wrong location in local multiplayer.
+-Fixed softlock when no one picked a track in battle.
+-Fixed music speedup not working correctly sometimes online.
+-Fixed ultra mini-turbos sparks not disappearing.
+-Fixed total trophy count not decreasing when a track gets replaced or removed.
+
 ·Updated to 1.3.1
 Creator Changes:
 -Fixed an infinite loop that happened when trying to build a pack with tracks containing escape sequences such as \c{red3}
