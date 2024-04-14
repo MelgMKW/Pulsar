@@ -20,6 +20,7 @@ namespace Pulsar_Pack_Creator
         {
             parent = parentWindow;
             InitializeComponent();
+            this.Height = SystemParameters.PrimaryScreenHeight * 0.7;
         }
         protected override void OnClosing(CancelEventArgs e)
         {

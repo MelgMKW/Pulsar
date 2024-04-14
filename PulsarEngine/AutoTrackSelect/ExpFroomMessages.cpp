@@ -94,7 +94,7 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
     register const ExpFroomMessages* messages;
     asm(mr messages, r19;);
     if(Info::IsHAW(true) && !messages->isOnModeSelection) {
-        if(messages->clickedButtonIdx >= 2) {
+        if(messages->clickedButtonIdx >= 2 && messages->clickedButtonIdx < 4) {
             return BMG_BATTLE + messages->curPageIdx * 4 + rowIdx;
         }
         else {
@@ -109,7 +109,6 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
                 return GetTrackBMGId(cupsConfig->ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(idx), rowIdx)); //FIX HERE
             }
         }
-
     }
     else return Pages::FriendRoomManager::GetMessageBmg(packet, 0);
 }

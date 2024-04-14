@@ -13,7 +13,11 @@ namespace Network {
 //u8 racesPerGP = 0;
 
 static void ConvertROOMPacketToData(u16 param) {
+    System* system = System::sInstance;
+    system->hasHAW = (param & 0x1);
+    system->disableMiiHeads = (param & 0b10000);
     u8 raceCount;
+
     switch(param & 0xE) {
         case(0x2):
             raceCount = 7;
@@ -36,10 +40,9 @@ static void ConvertROOMPacketToData(u16 param) {
         default:
             raceCount = 3;
     }
-    System* system = System::sInstance;
     system->racesPerGP = raceCount;
-    system->hasHAW = (param & 0x1);
-    system->disableMiiHeads = (param & 0b10000);
+
+
 }
 
 //Adds the settings to the free bits of the packet, only called for the host, msgType1 has 14 free bits as the game only has 4 gamemodes
@@ -47,6 +50,7 @@ void SetAllToSendPackets(RKNet::ROOMHandler& roomHandler, u32 packetArg) {
     RKNet::ROOMPacketReg packetReg ={ packetArg };
     const RKNet::Controller* controller = RKNet::Controller::sInstance;
     const u8 localAid = controller->subs[controller->currentSub].localAid;
+    Pulsar::System* system = Pulsar::System::sInstance;
     if((packetReg.packet.messageType) == 1 && localAid == controller->subs[controller->currentSub].hostAid) {
         const u8 hostParam = Info::IsHAW(true);
         packetReg.packet.message |= hostParam << 2; //uses bit 2 of message
@@ -57,7 +61,6 @@ void SetAllToSendPackets(RKNet::ROOMHandler& roomHandler, u32 packetArg) {
         packetReg.packet.message |= disableMiiHeads << 6; //uses bit 6
         ConvertROOMPacketToData(packetReg.packet.message >> 2); //5 right now (2-6) + 3 reserved (7-9)
         packetReg.packet.message |= (System::sInstance->SetPackROOMMsg() << 0xA & 0b1111110000000000); //6 bits for packs (10-15)
-
     }
     for(int i = 0; i < 12; ++i) if(i != localAid) roomHandler.toSendPackets[i] = packetReg.packet;
 }

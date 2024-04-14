@@ -32,16 +32,16 @@ kmWrite32(0x807eb160, 0x88de01b4);
 
 //credit to XeR for finding the float address
 static void BattleGlitchEnable() {
+    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BATTLE) == RACESETTING_BATTLE_GLITCH_ENABLED;
     float maxDistance = 7500.0f;
-    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BATTLE) == RACESETTING_BATTLE_GLITCH_ENABLED) maxDistance = 75000.0f;
+    if(isEnabled) maxDistance = 75000.0f;
     RaceBalloons::maxDistanceNames = maxDistance;
 }
-Settings::Hook BattleGlitch(BattleGlitchEnable);
-
+RaceLoadHook BattleGlitch(BattleGlitchEnable);
 
 kmWrite32(0x8085C914, 0x38000000); //times at the end of races in VS
 static void DisplayTimesInsteadOfNames(CtrlRaceResult& result, u8 id) {
-    result.DisplayFinishTime(id);
+    result.FillFinishTime(id);
 }
 kmCall(0x8085d460, DisplayTimesInsteadOfNames); //for WWs
 
@@ -49,7 +49,7 @@ kmCall(0x8085d460, DisplayTimesInsteadOfNames); //for WWs
 kmWrite32(0x807F4DB8, 0x38000001);
 
 //Draggable blue shells
-void DraggableBlueShells(Item::PlayerSub& sub) {
+static void DraggableBlueShells(Item::PlayerSub& sub) {
     if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BLUES) == RACESETTING_DRAGGABLE_BLUES_DISABLED) {
         sub.isNotDragged = true;
     }

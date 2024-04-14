@@ -31,7 +31,6 @@
             <Setter Property="BorderThickness"              Value="2"/>
             <Setter Property="TextAlignment"                Value="Center"/>
             <Setter Property="TextWrapping"                 Value="Wrap"/>
-            <Setter Property="Height"                       Value="700"/>
             <Setter Property="VerticalScrollBarVisibility"  Value="Auto"/>
             <Setter Property="AcceptsReturn"                Value="True"/>
         </Style>
@@ -47,31 +46,36 @@
                 <ColumnDefinition Width="10.25*"/>
                 <ColumnDefinition Width="10.25*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="14*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
 
-            <Button x:Name="SaveImport" Grid.Column="4"
-                    Margin="124,753,0,0" Height="25" Width="60"
+            <Button x:Name="SaveImport" Grid.Row="2" Grid.Column="4"
+                    Margin="024,0,0,0" Height="25" Width="60"
                     Content="Save"  
                     Click="OnSaveImportClick" />
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="0">
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="0">
                 <TextBox x:Name="NamesImport"        Width="240"  Style="{StaticResource Boxes}"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1">
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="1">
                 <TextBox x:Name="AuthorsImport"      Width="240" Style="{StaticResource Boxes}"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="2">
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="2">
                 <TextBox x:Name="VersionsImport"     Width="170"  Style="{StaticResource Boxes}"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="3">
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="3">
                 <TextBox x:Name="SlotsImport"        Width="170"  Style="{StaticResource Boxes}"/>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Grid.Column="4" Grid.ColumnSpan="2" >
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="4" Grid.ColumnSpan="2" >
                 <TextBox x:Name="MusicSlotsImport"   Width="170" Style="{StaticResource Boxes}"/>
             </Border>
-            <TextBlock x:Name="NamesImportLabel"        Grid.Column="0" Margin="56,19,55,743" Text="Track Names"         Style="{StaticResource Blocks}"/>
-            <TextBlock x:Name="AuthorsImportLabel"      Grid.Column="1" Margin="56,19,55,743" Text="Track Authors"       Style="{StaticResource Blocks}"/>
-            <TextBlock x:Name="VersionsImportLabel"     Grid.Column="2" Margin="18,19,18,743" Text="Versions (optional)" Style="{StaticResource Blocks}"/>
-            <TextBlock x:Name="SlotsImportLabel"        Grid.Column="3" Margin="18,19,18,743" Text="Slots"               Style="{StaticResource Blocks}"/>
-            <TextBlock x:Name="MusicSlotsImportLabel"   Grid.Column="4" Margin="18,19,18,743" Text="Music Slots"         Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="NamesImportLabel"        Grid.Row="0" Grid.Column="0" Margin="56,8,55,0" Text="Track Names"         Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="AuthorsImportLabel"      Grid.Row="0" Grid.Column="1" Margin="56,8,55,0" Text="Track Authors"       Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="VersionsImportLabel"     Grid.Row="0" Grid.Column="2" Margin="18,8,18,0" Text="Versions (optional)" Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="SlotsImportLabel"        Grid.Row="0" Grid.Column="3" Margin="18,8,18,0" Text="Slots"               Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="MusicSlotsImportLabel"   Grid.Row="0" Grid.Column="4" Margin="18,8,18,0" Text="Music Slots"         Style="{StaticResource Blocks}"/>
         </Grid>
     </Border>
 </Window>

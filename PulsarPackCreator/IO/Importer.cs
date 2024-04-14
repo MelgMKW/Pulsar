@@ -219,34 +219,45 @@ namespace Pulsar_Pack_Creator.IO
                         if (bmgId == 0x2847) date = curLine.Split(' ')[curLine.Split(' ').Length - 1];
                         else if (bmgId >= 0x10000 && bmgId < 0x60000)
                         {
-                            string content = curLine.Split('=')[1].TrimStart(' ');
-                            uint type = bmgId & 0xFFFF0000;
-                            uint rest = bmgId & 0xFFFF;
-                            int cupIdx = (int)rest / 4;
-                            if (cupIdx < ctsCupCount)
+                            string content = "";
+                            try
                             {
-                                int trackIdx = (int)rest % 4;
-                                switch (type)
-                                {
-                                    case 0x10000:
-                                        if ((int)rest < ctsCupCount) cups[(int)rest].name = content;
-                                        break;
-                                    case 0x20000:
-                                        if (content.Contains("\\c{red3}"))
-                                        {
-                                            string[] split = content.Split("\\c{red3}");
-
-                                            cups[cupIdx].trackNames[trackIdx] = split[0].Trim();
-                                            cups[cupIdx].versionNames[trackIdx] = split[1].Split("\\c{off}")[0];
-                                        }
-                                        else cups[cupIdx].trackNames[trackIdx] = content.Trim();
-                                        break;
-                                    case 0x30000:
-                                        cups[cupIdx].authorNames[trackIdx] = content;
-                                        break;
-                                }
+                                curLine.Split('=')[1].TrimStart(' ');
                             }
+                            catch
+                            {
+                                ret = false;
+                            }
+                            if (ret)
+                            {
+                                uint type = bmgId & 0xFFFF0000;
+                                uint rest = bmgId & 0xFFFF;
+                                int cupIdx = (int)rest / 4;
+                                if (cupIdx < ctsCupCount)
+                                {
+                                    int trackIdx = (int)rest % 4;
+                                    switch (type)
+                                    {
+                                        case 0x10000:
+                                            if ((int)rest < ctsCupCount) cups[(int)rest].name = content;
+                                            break;
+                                        case 0x20000:
+                                            if (content.Contains("\\c{red3}"))
+                                            {
+                                                string[] split = content.Split("\\c{red3}");
 
+                                                cups[cupIdx].trackNames[trackIdx] = split[0].Trim();
+                                                cups[cupIdx].versionNames[trackIdx] = split[1].Split("\\c{off}")[0];
+                                            }
+                                            else cups[cupIdx].trackNames[trackIdx] = content.Trim();
+                                            break;
+                                        case 0x30000:
+                                            cups[cupIdx].authorNames[trackIdx] = content;
+                                            break;
+                                    }
+                                }
+
+                            }
                         }
                     }
                 }

@@ -82,9 +82,10 @@ static void DecideTrack(CustomSELECTHandler* select) {
     System* system = System::sInstance;
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     const RKNet::Controller* controller = RKNet::Controller::sInstance;
+    const RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
     if(select->mode == RKNet::ONLINEMODE_PUBLIC_VS && !CupsConfig::IsRegsSituation()) {
 
-        const u32 availableAids = controller->subs[controller->currentSub].availableAids;
+        const u32 availableAids = sub.availableAids;
         u8 aids[12];
         u8 newVotesAids[12];
         int playerCount = 0;
@@ -94,9 +95,11 @@ static void DecideTrack(CustomSELECTHandler* select) {
             aids[playerCount] = aid;
             ++playerCount;
             bool isRepeatVote = false;
-            const CustomSELECTPacket* aidPacket = &select->receivedPackets[aid];
-            for(int i = 0; i < Info::GetTrackBlocking(); ++i) if(system->lastTracks[i] == aidPacket->pulSELPlayerData[0].pulCourseVote) {
-                isRepeatVote = true;
+            const PulsarId aidVote = static_cast<PulsarId>(aid == sub.localAid ? select->toSendPacket.pulSELPlayerData[0].pulCourseVote : select->receivedPackets[aid].pulSELPlayerData[0].pulCourseVote);
+            for(int i = 0; i < Info::GetTrackBlocking(); ++i) {
+                if(system->lastTracks[i] == aidVote) {
+                    isRepeatVote = true;
+                }
             }
             if(!isRepeatVote) {
                 newVotesAids[newVoters] = aid;
@@ -106,14 +109,14 @@ static void DecideTrack(CustomSELECTHandler* select) {
         u8 winner;
         if(newVoters > 0) winner = newVotesAids[random.NextLimited(newVoters)];
         else winner = aids[random.NextLimited(playerCount)];
-        u16 vote = select->receivedPackets[winner].pulSELPlayerData[0].pulCourseVote;
+        u16 vote = static_cast<PulsarId>(winner == sub.localAid ? select->toSendPacket.pulSELPlayerData[0].pulCourseVote : select->receivedPackets[winner].pulSELPlayerData[0].pulCourseVote);
         if(vote == 0xFF) vote = cupsConfig->RandomizeTrack(&random);
         select->toSendPacket.pulWinningCourse = vote;
         select->toSendPacket.winningVoterAid = winner;
         system->lastTracks[system->curBlockingArrayIdx] = static_cast<PulsarId>(vote);
         system->curBlockingArrayIdx = (system->curBlockingArrayIdx + 1) % Info::GetTrackBlocking();
     }
-    if(select->mode == RKNet::ONLINEMODE_PRIVATE_VS && Info::IsHAW(true)) {
+    else if(select->mode == RKNet::ONLINEMODE_PRIVATE_VS && Info::IsHAW(true)) {
         const u8 hostAid = controller->subs[controller->currentSub].hostAid;
         select->toSendPacket.winningVoterAid = hostAid;
         u16 hostVote = select->toSendPacket.pulSELPlayerData[0].pulCourseVote;
@@ -133,11 +136,11 @@ CourseId SetCorrectSlot(CustomSELECTHandler* select) {
 kmCall(0x80650ea8, SetCorrectSlot);
 
 static void SetCorrectTrack(ArchiveRoot* root, PulsarId winningCourse) {
-    System* system = System::sInstance;
     CupsConfig* cupsConfig = CupsConfig::sInstance;
-    system->lastTracks[system->curBlockingArrayIdx] = winningCourse;
+    //System* system = System::sInstance; ONLY STORE IF NON HOST
+    //system->lastTracks[system->curBlockingArrayIdx] = winningCourse;
+    //system->curBlockingArrayIdx = (system->curBlockingArrayIdx + 1) % Info::GetTrackBlocking();
     cupsConfig->winningCourse = winningCourse;
-    system->curBlockingArrayIdx = (system->curBlockingArrayIdx + 1) % Info::GetTrackBlocking();
     root->RequestLoadCourseAsync(static_cast<CourseId>(winningCourse));
 }
 kmCall(0x80644414, SetCorrectTrack);
@@ -331,7 +334,6 @@ end:
     )
 }
 kmCall(0x806617e8, CheckEngineClass);
-
 
 }//namespace Network
 }//namespace Pulsar
