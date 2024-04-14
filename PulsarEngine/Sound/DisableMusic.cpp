@@ -1,4 +1,3 @@
-/*
 #include <kamek.hpp>
 #include <MarioKartWii/Audio/Other/AudioValues.hpp>
 #include <Settings/Settings.hpp>
@@ -24,4 +23,3 @@ namespace Sound {
     Pulsar::Settings::Hook PatchMusicInstantly(SetMusicStateSettings);;
 } // namespace Sound
 } // namespace OptPack
-*/

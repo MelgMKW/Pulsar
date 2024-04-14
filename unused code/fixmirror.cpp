@@ -1,5 +1,4 @@
-/*
-#include <PulsarSystem.hpp>
+/*#include <PulsarSystem.hpp>
 #include <MarioKartWii/File/RKG.hpp>
 
 void FixRKG(RKG* rkg, RKG* decompressed){
@@ -34,5 +33,4 @@ void FixAllRKGs(){
     delete decompressed;
 }
 
-BootHook FixRKGsHook(FixAllRKGs, 4);
-*/
+BootHook FixRKGsHook(FixAllRKGs, 4);*/

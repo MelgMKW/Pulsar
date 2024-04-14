@@ -148,7 +148,7 @@ namespace Pulsar_Pack_Creator.IO
                 }
             
 
-                File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
+                File.Copy("temp/Config.pul", $"{modFolder}/binaries/Config.pul", true);
                 if(createXML) CreateXML();
                 if(buildParams != BuildParams.ConfigOnly)
                 {

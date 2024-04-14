@@ -18,7 +18,7 @@ kmWrite32(0x8054913C, 0x60000000);
 kmWrite32(0x80855f48, 0x48000148);
 
 //BMG size patch (Diamond)
-kmWrite32(0x8007B37C, 0x38000128);
+//kmWrite32(0x8007B37C, 0x38000128);
 
 
 //Credit to Kazuki for making the original ASM code, and Brawlbox for porting it to C++

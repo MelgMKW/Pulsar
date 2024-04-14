@@ -37,21 +37,24 @@ static void BattleGlitchEnable() {
     if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BATTLE) == RACESETTING_BATTLE_GLITCH_ENABLED) maxDistance = 75000.0f;
     RaceBalloons::maxDistanceNames = maxDistance;
 }
-Settings::Hook BattleGlitch(BattleGlitchEnable);
+static RaceLoadHook BattleGlitch(BattleGlitchEnable);
 
 
 kmWrite32(0x8085C914, 0x38000000); //times at the end of races in VS
 static void DisplayTimesInsteadOfNames(CtrlRaceResult& result, u8 id) {
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_TIMES) == MENUSETTING_TIMES_DISABLED)
+    result.DisplayName(id);
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_TIMES) == MENUSETTING_TIMES_ENABLED)
     result.DisplayFinishTime(id);
 }
-//kmCall(0x8085d460, DisplayTimesInsteadOfNames); //for WWs
+kmCall(0x8085d460, DisplayTimesInsteadOfNames); //for WWs
 
 //don't hide position tracker (MrBean35000vr)
 kmWrite32(0x807F4DB8, 0x38000001);
 
 //Draggable blue shells
 void DraggableBlueShells(Item::PlayerSub& sub) {
-    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BLUES) == RACESETTING_DRAGGABLE_BLUES_DISABLED) {
+    if(Pulsar::CupsConfig::IsRegsSituation()) {
         sub.isNotDragged = true;
     }
 }
@@ -95,25 +98,6 @@ kmCall(0x807ef444, ChangeItemWindowPane);
 
 kmWrite24(0x808A9FF3, 'PUL');
 
-/*const char* ChangeItemWindowPanebill(ItemId id, u32 itemCount) {
-    //const char* paneName;
-    if(!Pulsar::CupsConfig::IsRegsSituation() && id == BULLET_BILL) {
-    itemCount = 0;
-    }
-    itemCount = 1;
-}*/
-
-//kmCall(0x807BA5D0, ChangeItemWindowPanebill);
-//kmCall(0x807ba37c, ChangeItemWindowPanebill);
-
-/*
-//No Bullet Bill Icon
-void NoBulletBillIcon(PlayerRoulette * roulette, ItemId item) {
-  if(Pulsar::CupsConfig::IsRegsSituation()) roulette->unknown_0x24 = (u32) item;
-}
-kmCall(0x807a9b28, NoBulletBillIcon);
-kmWrite32(0x807BA5D0,0x60000000);// No Bullet Bill Icon*/
-
 //Accurate Item Roulette
 kmWrite32(0x807BB8EC,0x60000000);
 
@@ -132,10 +116,10 @@ kmWrite32(0x805A228C,0x60000000);
 //Pause before start
 kmWrite32(0x80856a28,0x48000050);
 
-//FC Everywhere
+//Show Namtags During Coundown
+kmWrite32(0x807F13F0,0x38600001);
 
-//Funky as Default
-//kmWrite32(0x805E4208,0x38A00016);
-
+//Timer at end of Race
+kmWrite32(0x8064DB2C,0x60000000); 
 }//namespace Race
 }//namespace Pulsar

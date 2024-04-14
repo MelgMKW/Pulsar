@@ -19,7 +19,7 @@ System::Inherit* System::inherit = nullptr;
 //Create Pulsar
 ConfigFile* ConfigFile::LoadConfig(u32* readBytes) {
     EGG::ExpHeap* mem2Heap = RKSystem::mInstance.sceneManager->currentScene->mem2Heap;
-    ConfigFile* conf = static_cast<ConfigFile*>(EGG::DvdRipper::LoadToMainRAM("Binaries/Config.pul", nullptr, mem2Heap,
+    ConfigFile* conf = static_cast<ConfigFile*>(EGG::DvdRipper::LoadToMainRAM("binaries/Config.pul", nullptr, mem2Heap,
         EGG::DvdRipper::ALLOC_FROM_HEAD, 0, readBytes, nullptr));
 
     if(conf == nullptr) Debug::FatalError(error);
@@ -113,7 +113,7 @@ void System::InitIO(IOType type) const {
         Debug::FatalError(path);
     }
     char ghostPath[IOS::ipcMaxPath];
-    snprintf(ghostPath, IOS::ipcMaxPath, "%s%s", modFolder, "/Ghosts");
+    snprintf(ghostPath, IOS::ipcMaxPath, "%s%s", modFolder, "/ghosts");
     io->CreateFolder(ghostPath);
 }
 #pragma suppress_warnings reset

@@ -17,7 +17,6 @@ bool Info::IsHAW(bool isRoomHost) {
 bool Info::Is200cc() {
     return Info::Has200cc() && !CupsConfig::IsRegsSituation() && RaceData::sInstance->racesScenario.settings.engineClass == CC_100;
 }
-
 bool Info::IsFeather() {
     return Info::HasFeather() && !CupsConfig::IsRegsSituation();
 }

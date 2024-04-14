@@ -74,8 +74,8 @@ int CupsConfig::GetCRC32(PulsarId pulsarId) const {
 void CupsConfig::GetTrackGhostFolder(char* dest, PulsarId pulsarId) const {
     const u32 crc32 = this->GetCRC32(pulsarId);
     const char* modFolder = System::sInstance->GetModFolder();
-    if(IsReg(pulsarId)) snprintf(dest, IOS::ipcMaxPath, "%s/Ghosts/%s", modFolder, &crc32);
-    else snprintf(dest, IOS::ipcMaxPath, "%s/Ghosts/%08x", modFolder, crc32);
+    if(IsReg(pulsarId)) snprintf(dest, IOS::ipcMaxPath, "%s/ghosts/%s", modFolder, &crc32);
+    else snprintf(dest, IOS::ipcMaxPath, "%s/ghosts/%08x", modFolder, crc32);
 }
 
 void CupsConfig::ToggleCTs(bool enabled) {
@@ -91,7 +91,7 @@ void CupsConfig::ToggleCTs(bool enabled) {
     }
     else {
         count = definedCTsCupCount;
-        hasRegs = regsMode > 0;
+        hasRegs = RKNet::Controller::sInstance->roomType != RKNet::ROOMTYPE_VS_REGIONAL;
     }
     ctsCupCount = count;
 }

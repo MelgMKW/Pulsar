@@ -15,9 +15,9 @@
 kmWrite32(0x80630450, 0x3880000d);  //To use the correct onInit
 kmWrite32(0x80630474, 0x3880000d);
 kmWrite32(0x80630498, 0x3880000d);
-kmWrite32(0x80631ce4, 0x2c030035);  //Music
-kmWrite32(0x806320ac, 0x2c030035);
-kmWrite32(0x80711444, 0x3803ffcb);
+//kmWrite32(0x80631ce4, 0x2c030035);  //Music
+//kmWrite32(0x806320ac, 0x2c030035);
+//kmWrite32(0x80711444, 0x3803ffcb);
 kmWrite32(0x8071e4a0, 0x38600000);  //Lakitu
 kmWrite32(0x807f1590, 0x60000000);  //Kart Name
 kmWrite32(0x80856e64, 0x2c040035); //Removes fade at the end
@@ -140,7 +140,7 @@ end:;
     blr;
     )
 }
-kmCall(0x80716064, PatchSoundIssues);
+//kmCall(0x80716064, PatchSoundIssues);
 
 asmFunc CreateSwitchPlayerPtmfs() {
     ASM(

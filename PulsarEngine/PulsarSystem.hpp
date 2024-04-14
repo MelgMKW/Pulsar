@@ -128,6 +128,9 @@ public:
     const char* GetModFolder() const { return modFolderName; }
     static void CreateSystem();
 
+    u32 noRaceProgressionTimer[4];
+    float lastRaceCompletion[4];
+
     //Network
     static asmFunc GetRaceCount();
 
@@ -177,6 +180,13 @@ public:
     };
     static Inherit* inherit;
     friend class Info;
+
+static inline void CacheInvalidateAddress(register u32 address) {
+        asm(dcbst 0, address;);
+        asm(sync;);
+        asm(icbi 0, address;);
+        asm(isync;);
+    }
 };
 } //namespace Pulsar
 

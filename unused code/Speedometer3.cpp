@@ -1,42 +1,32 @@
-#include <UI/CtrlRaceBase/Speedometer.hpp>
+/*#include <UI/CtrlRaceBase/Speedometer3.hpp>
 #include <Settings/Settings.hpp>
 
 namespace Pulsar {
 namespace UI {
-u32 CtrlRaceSpeedo::Count() {
+u32 CtrlRaceSpeedo3::Count() {
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_LEFT2) return 0;
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_LEFT) return 0;
+    if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_RIGHT) return 0;
     u32 localPlayerCount = RaceData::sInstance->racesScenario.localPlayerCount;
     const SectionId sectionId = SectionMgr::sInstance->curSection->sectionId;
     if(sectionId >= SECTION_WATCH_GHOST_FROM_CHANNEL && sectionId <= SECTION_WATCH_GHOST_FROM_MENU) localPlayerCount += 1;
     return localPlayerCount;
 }
-void CtrlRaceSpeedo::Create(Page& page, u32 index, u32 count) {
+void CtrlRaceSpeedo3::Create(Page& page, u32 index, u32 count) {
     u8 speedoType = (count == 3) ? 4 : count;
     for(int i = 0; i < count; ++i) {
-        CtrlRaceSpeedo* som = new(CtrlRaceSpeedo);
+        CtrlRaceSpeedo3* som = new(CtrlRaceSpeedo3);
         page.AddControl(index + i, *som, 0);
         char variant[0x20];
         int pos = i;
-        if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_CLASSIC) {
-            pos = 1;
-            snprintf(variant, 0x20, "Speedo_%1d_%1d", 1, 0);
-        } else if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_LEFT) {
-            pos = 1;
-            snprintf(variant, 0x20, "Speedo2_%1d_%1d", 1, 0);
-        } else if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_RIGHT) {
-            pos = 1; 
-            snprintf(variant, 0x20, "Speedo4_%1d_%1d", 4, 3);
-        } else if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_DISABLED){
-            snprintf(variant, 0x20, "Speedo3_%1d_%1d", 4, 2);
-        } else {
-            pos = 1;
-            snprintf(variant, 0x20, "Speedo_%1d_%1d", 1, 0);
-        }
+        if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_DISABLED) pos = 1;
+        snprintf(variant, 0x20, "Speedo3_%1d_%1d", 4, 2);
         som->Load(variant, i);
     }
 }
-static CustomCtrlBuilder SOM(CtrlRaceSpeedo::Count, CtrlRaceSpeedo::Create);
+static CustomCtrlBuilder SOM(CtrlRaceSpeedo3::Count, CtrlRaceSpeedo3::Create);
 
-void CtrlRaceSpeedo::Load(const char* variant, u8 id) {
+void CtrlRaceSpeedo3::Load(const char* variant, u8 id) {
     this->hudSlotId = id;
     ControlLoader loader(this);
     const char* anims[] ={
@@ -49,22 +39,14 @@ void CtrlRaceSpeedo::Load(const char* variant, u8 id) {
         "Thousandths", "Thousandths", nullptr,
         nullptr
     };
-    if(id == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_CLASSIC) {
-        loader.Load(UI::raceFolder, "PULSpeedo", variant, anims);
-    } else if(id == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_LEFT) {
-        loader.Load(UI::raceFolder, "PULSpeedo2", variant, anims);
-    } else if(id == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_RIGHT) {
-        loader.Load(UI::raceFolder, "PULSpeedo4", variant, anims);
-    } else if (id == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_DISABLED) {
-        loader.Load(UI::raceFolder, "PULSpeedo3", variant, anims);
-    } else {
-      loader.Load(UI::raceFolder, "PULSpeedo", variant, anims);
-    }
+
+    loader.Load(UI::raceFolder, "PULSpeedo3", variant, anims);
+
     this->Animate();
     return;
 }
 
-void CtrlRaceSpeedo::Init() {
+void CtrlRaceSpeedo3::Init() {
     this->HudSlotColorEnable("speed0", true);
     this->HudSlotColorEnable("speed1", true);
     this->HudSlotColorEnable("speed2", true);
@@ -73,12 +55,11 @@ void CtrlRaceSpeedo::Init() {
     this->HudSlotColorEnable("speed5", true);
     this->HudSlotColorEnable("speed6", true);
     this->HudSlotColorEnable("kmh", true);
-    this->HudSlotColorEnable("optpack", true);
     LayoutUIControl::Init();
     return;
 }
 
-void CtrlRaceSpeedo::OnUpdate() {
+void CtrlRaceSpeedo3::OnUpdate() {
     this->UpdatePausePosition();
     const u8 digits = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_SCROLL_SOM);
     const Kart::Pointers& pointers = Kart::Manager::sInstance->players[this->GetPlayerId()]->pointers;
@@ -127,7 +108,7 @@ void CtrlRaceSpeedo::OnUpdate() {
     return;
 }
 
-void CtrlRaceSpeedo::Animate(const SpeedArg* args) {
+void CtrlRaceSpeedo3::Animate(const SpeedArg* args) {
     for(int i = 0; i < 7; ++i) {
         AnimationGroup& group = this->animator.GetAnimationGroupById(i);
         float frame = 0.0f;
@@ -136,4 +117,4 @@ void CtrlRaceSpeedo::Animate(const SpeedArg* args) {
     }
 }
 }//namespace UI
-}//namespace Pulsar
+}//namespace Pulsar*/
