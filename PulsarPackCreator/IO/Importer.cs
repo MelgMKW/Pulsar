@@ -222,7 +222,7 @@ namespace Pulsar_Pack_Creator.IO
                             string content = "";
                             try
                             {
-                                curLine.Split('=')[1].TrimStart(' ');
+                                content = curLine.Split('=')[1].TrimStart(' ');
                             }
                             catch
                             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -440,19 +441,7 @@ namespace Pulsar_Pack_Creator
             }
             string[] sortedArray = new string[ctsCupCount * 4];
             Array.Copy(indexedArray, sortedArray, indexedArray.Length);
-            sortedArray = sortedArray.OrderBy(x =>
-            {
-                string result = x;
-                int startOfSequence = result.IndexOf("\\c{");
-                while (startOfSequence != -1)
-                {                                      
-                    int endOfSequence = result.IndexOf("}");
-                    if (endOfSequence == -1) break;
-                    result = result.Remove(startOfSequence, endOfSequence + 1 - startOfSequence);                         
-                    startOfSequence = result.IndexOf("\\c{");
-                }
-                return result;
-            }).ToArray();
+            sortedArray = sortedArray.OrderBy(x => Regex.Replace(x, @"\\[mMxzuc]{.*?}", "")).ToArray();
             return (sortedArray, indexedArray);            
         }
         private void OnAlphabetizeClick(object sender, RoutedEventArgs e)
