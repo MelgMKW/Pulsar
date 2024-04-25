@@ -128,7 +128,8 @@ kmWrite32(0x8084e5e4, 0x60000000); //nop racedata courseId store since it's done
 
 //Same as GP, racedata only ever has courseId
 static void VSRaceOrderedFix(SectionParams* params) {
-    const Pages::CourseSelect* course = SectionMgr::sInstance->curSection->Get<Pages::CourseSelect>();
+    register const Pages::CourseSelect* course;
+    asm(mr course, r29;);
     u32 rowIdx = 0;
     for(int i = 0; i < 4; ++i) {
         const CourseButton& cur = course->CtrlMenuCourseSelectCourse.courseButtons[i];
@@ -148,6 +149,7 @@ static void VSRaceOrderedFix(SectionParams* params) {
         ++rowIdx;
         if(rowIdx == 4) {
             cupId = cupsConfig->GetNextCupId(cupId, 1);
+            rowIdx = 0;
         }
     }
 };

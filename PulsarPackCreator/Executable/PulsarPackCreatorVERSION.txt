@@ -1,3 +1,18 @@
+·Updated to 1.3.4
+Creator Changes:
+-Fixed a pasting issue in track name boxes which allowed invalid characters and could lead to a corrupted config.
+Engine Changes:
+-Fixed a SELECT packet phase sync issue that was causing room hangs if the host disconnected.
+-Fixed the "Disable All" music option not disabling Wifi Waiting music.
+-Fixed "In Order" offline VS mode.
+
+·Updated to 1.3.3
+Creator Changes:
+-Fixed import bug which caused boxes to be empty.
+-Fixed alphabetisation of escape sequences in track names.
+Engine Changes:
+-Fixed a bad port in the battle glitch code.
+
 ·Updated to 1.3.2
 Creator Changes:
 -Fixed mass import window height issues (a bug that was previously fixed but came back due to a merge issue).

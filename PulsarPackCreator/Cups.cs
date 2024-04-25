@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Pulsar_Pack_Creator
 {
@@ -331,7 +332,7 @@ namespace Pulsar_Pack_Creator
                 e.Handled = true;
             }
         }
-        private void OnTracknameChange(object sender, TextChangedEventArgs e)
+        private void OnTrackNameChange(object sender, TextChangedEventArgs e)
         {
             TextBox box = sender as TextBox;
             if (box.IsKeyboardFocused)
@@ -341,6 +342,16 @@ namespace Pulsar_Pack_Creator
                 SetGhostLabelName(idx - firstTrackRow, box.Text);
             }
 
+        }
+
+        private void OnTrackNamePasting(object sender, DataObjectPastingEventArgs e)
+        {
+            String text = (String)e.DataObject.GetData(typeof(String));
+            if(!CheckTrackName(text))
+            {
+                e.CancelCommand();     
+                Dispatcher.BeginInvoke(new Action(() => MsgWindow.Show("Track names cannot contain any of <>\"/|?*")));        
+            }
         }
 
         private void OnAuthorChange(object sender, TextChangedEventArgs e)
