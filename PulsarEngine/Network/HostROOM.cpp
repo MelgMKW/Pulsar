@@ -12,6 +12,9 @@ namespace Network {
 //ROOMPacket bits arrangement: 0-4 GPraces
 //u8 racesPerGP = 0;
 
+/*OptPack Note: VP does this better, but I added "disableRegs" for the host setting toggle to either turn rts off or on in rooms.*/
+
+
 static void ConvertROOMPacketToData(u16 param) {
     System* system = System::sInstance;
     system->hasHAW = (param & 0x1);

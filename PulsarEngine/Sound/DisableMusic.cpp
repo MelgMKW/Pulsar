@@ -4,6 +4,10 @@
 #include <Settings/UI/SettingsPanel.hpp>
 #include <PulsarSystem.hpp>
 
+/*OptPack Note: Code by Brawlbox. Realistically, I could switch to Pulsars default, but on OptPack release music didnt disable wifi music and
+this just works and 99.9% also want the menu music disabled.*/
+
+
 namespace OptPack {
 namespace Sound {
     void SetMusicState(){
@@ -20,6 +24,6 @@ namespace Sound {
     kmBranch(0x80715e60, SetMusicState);//ingame music
     kmBranch(0x8070f598, SetMusicState);//wifi-music
     kmBranch(0x80717d64, SetMusicState);//replay music
-    Pulsar::Settings::Hook PatchMusicInstantly(SetMusicStateSettings);;
+    Pulsar::Settings::Hook PatchMusicInstantly(SetMusicStateSettings);
 } // namespace Sound
 } // namespace OptPack

@@ -5,6 +5,12 @@
 #include <PulsarSystem.hpp>
 #include <Settings/UI/SettingsPanel.hpp>
 #include <MarioKartWii/UI/Page/Menu/SinglePlayer.hpp>
+
+
+/*OptPack Note: This has toggles I use in OptPack. Some are unused or will be used in the future if i care enough to add them
+notably disables boot to wiimmfi I know about 0 people who use that and heard it has some bugs. Rather not have the headache.*/
+
+
 extern u32 U32_RBBG_HOOK_PT1;
 extern u32 U32_RBBG_HOOK_PT2;
 

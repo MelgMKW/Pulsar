@@ -5,6 +5,9 @@
 namespace OptPack {
 namespace Race {
 
+/*OptPack Note: Code by Gabriela. Basically disables the icon in all races expect in RT worldwides.*/
+
+
 void NoBulletBillIcon(Item::PlayerRoulette *roulette, ItemId item) {
   if(Pulsar::CupsConfig::IsRegsSituation()) roulette->unknown_0x24 = (u32) item;
 }

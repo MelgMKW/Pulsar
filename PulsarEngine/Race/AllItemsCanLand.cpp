@@ -4,6 +4,10 @@
 #include <MarioKartWii/Item/ItemBehaviour.hpp>
 #include <SlotExpansion/CupsConfig.hpp>
 
+
+/*OptPack Note: Code by Brawlbox, works well and disables in Regular Worldwides.*/
+
+
 namespace OptPack {
 namespace Race {
 int UseItem(Kart::Collision *kartCollision, ItemId id){

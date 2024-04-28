@@ -4,6 +4,7 @@
 #include <SlotExpansion/UI/ExpansionUIMisc.hpp>
 #include <Settings/Settings.hpp>
 
+/*OptPack Note: This adds a toggle for pack music to either disable or enable custom brstms in My Stuff or the music that comes with the pack*/
 
 namespace Pulsar {
 namespace Sound {

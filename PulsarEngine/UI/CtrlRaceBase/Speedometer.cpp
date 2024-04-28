@@ -1,6 +1,10 @@
 #include <UI/CtrlRaceBase/Speedometer.hpp>
 #include <Settings/Settings.hpp>
 
+
+/*OptPack Note: This has modifed to allow for more than pulsars defaults. The reason theres a extra speedo_ is because one contains the optpack logo for the disabled option
+This used to very inefficant before fixing it with if statements. Almost had 4 different cpp files for speedometer.*/
+
 namespace Pulsar {
 namespace UI {
 u32 CtrlRaceSpeedo::Count() {

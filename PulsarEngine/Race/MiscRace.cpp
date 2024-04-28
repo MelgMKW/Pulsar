@@ -11,6 +11,14 @@
 #include <MarioKartWii/Item/ItemSlot.hpp>
 #include <MarioKartWii/Race/RaceInfo/RaceInfo.hpp>
 
+
+/*OptPack Note: This adds a toggle for display times on WW screen. The code is inefficent, but I forgot how to make it faster and don't care enough. If it works, it works.
+This also removes the draggable blueshell toggle making it part of regsituations so it disables in RTwws, but still stays on everywhere else.
+Also has Kmwrites and ASMFUNC from different gecko codes. Notably anti-flicker for tracks with flickering issues in ghost races.+
+This also disabled friendly fire as requested by a player who plays battle.*/
+
+
+
 namespace Pulsar {
 namespace Race {
 //From JoshuaMK, ported to C++ by Brawlbox and adapted as a setting

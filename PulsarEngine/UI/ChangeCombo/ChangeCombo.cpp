@@ -4,6 +4,10 @@
 #include <UI/UI.hpp>
 #include <UI/ChangeCombo/ChangeCombo.hpp>
 
+/*OptPack Note: This has modifed to disable the combo button due to players pressing it in Mogis and Worldwides causing unbalanced rooms. Also crashes sometimes.*/
+
+
+
 namespace Pulsar {
 namespace UI {
 

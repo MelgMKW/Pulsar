@@ -6,6 +6,7 @@
 #include <SlotExpansion/CupsConfig.hpp>
 #include <PulsarSystem.hpp>
 
+/*OptPack Note: This has the host setting arugements for regular tracks and also disables regular tracks in Regionals.*/
 
 namespace Pulsar {
 

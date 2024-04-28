@@ -6,6 +6,8 @@
 #include <MarioKartWii/Driver/DriverManager.hpp>
 #include <Info.hpp>
 
+/*OptPack Note: Modifed to disable conditional out of bounds and other stuff has been disabled. I feel that its just broken to go through some oob causing more 
+position glitchs and no lapcounts*/
 
 namespace Pulsar {
 namespace Race {

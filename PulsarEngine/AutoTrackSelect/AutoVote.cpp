@@ -4,6 +4,8 @@
 #include <Settings/Settings.hpp>
 #include <AutoTrackSelect/AutoVote.hpp>
 #include <SlotExpansion/Network/PulSELECT.hpp>
+/*OptPack Note: I do not like this version of Host Always Wins. Its fast but with the amount of tracks I have makes the smaller menu harder to navigate.*/
+
 /*
 namespace Pulsar {
 namespace UI {

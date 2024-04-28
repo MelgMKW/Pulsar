@@ -11,6 +11,9 @@
 
 namespace Pulsar {
 namespace Network {
+
+/*OptPack Note: I really don't want people sitting AFK in rooms or worldwides. Maybe in future Ill have it set to 1 min instead of the games 24 seconds.*/
+
 //No disconnect for being idle (Bully)
 //kmWrite32(0x80521408, 0x38000000);
 //kmWrite32(0x8053EF6C, 0x38000000);

@@ -3,6 +3,7 @@
 #include <MarioKartWii/Kart/KartMovement.hpp>
 #include <Info.hpp>
 
+/*OptPack Note: Modifed to make the tc not do anything rather then give a mega, also disabled the custom brres file.*/
 
 namespace Pulsar {
 namespace Race {

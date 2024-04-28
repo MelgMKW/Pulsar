@@ -12,6 +12,9 @@
 
 //Very old code, but still does the job; clicking watch replay will add the TT interface, solidity to the main ghost, the speedometer, etc...
 
+
+/*OptPack Note: I enjoy the wifi music while ghost replay is going so I disabled patches to enable normal brstms*/
+
 kmWrite32(0x80630450, 0x3880000d);  //To use the correct onInit
 kmWrite32(0x80630474, 0x3880000d);
 kmWrite32(0x80630498, 0x3880000d);

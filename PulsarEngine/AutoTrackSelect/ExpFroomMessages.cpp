@@ -40,6 +40,9 @@ void ExpFroomMessages::OnCourseButtonClick(PushButton& button, u32 hudSlotId) {
     clickedButton.buttonId = clickedIdx;
     Pages::FriendRoomMessages::OnModeButtonClick(clickedButton, 0); //hudslot is unused
 }
+
+/*OptPack Note: I do not like this version of Host Always Wins. Its fast but with the amount of tracks I have makes the smaller menu harder to navigate.*/
+
 /*
 //kmWrite32(0x805dc47c, 0x7FE3FB78); //Get Page in r3
 static void OnStartButtonFroomMsgActivate() {

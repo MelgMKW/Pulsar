@@ -10,6 +10,9 @@
 #include <IO/IO.hpp>
 #include <SlotExpansion/CupsConfig.hpp>
 
+/*OptPack Note: The reason all folders are lowercase is because the optpack updater has issues with uppercase folders and I don't wanna run into issues. theres 0 difference.*/
+
+
 namespace Pulsar {
 
 System* System::sInstance = nullptr;

@@ -4,6 +4,7 @@
 #include <UI/UI.hpp>
 #include <PulsarSystem.hpp>
 #include <MarioKartWii/GlobalFunctions.hpp>
+/*OptPack Note: I do not like this version of Host Always Wins. Its fast but with the amount of tracks I have makes the smaller menu harder to navigate.*/
 /*
 
 namespace Pulsar {
