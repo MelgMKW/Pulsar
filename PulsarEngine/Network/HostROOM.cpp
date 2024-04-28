@@ -16,6 +16,7 @@ static void ConvertROOMPacketToData(u16 param) {
     System* system = System::sInstance;
     system->hasHAW = (param & 0x1);
     system->disableMiiHeads = (param & 0b10000);
+    system->disableRegs = (param & 0b100000);
     u8 raceCount;
 
     switch(param & 0xE) {
@@ -57,8 +58,10 @@ void SetAllToSendPackets(RKNet::ROOMHandler& roomHandler, u32 packetArg) {
 
         const u8 gpParam = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_SCROLL_GP_RACES);
         const u8 disableMiiHeads = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_ALLOW_MIIHEADS);
+        const u8 disableRegs= Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_ALLOW_REGS);
         packetReg.packet.message |= gpParam << 3; //uses bits 3-5
         packetReg.packet.message |= disableMiiHeads << 6; //uses bit 6
+        packetReg.packet.message |= disableRegs << 7; //uses bit 6
         ConvertROOMPacketToData(packetReg.packet.message >> 2); //5 right now (2-6) + 3 reserved (7-9)
         packetReg.packet.message |= (System::sInstance->SetPackROOMMsg() << 0xA & 0b1111110000000000); //6 bits for packs (10-15)
     }

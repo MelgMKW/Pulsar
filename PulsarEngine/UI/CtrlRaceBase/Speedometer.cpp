@@ -16,16 +16,16 @@ void CtrlRaceSpeedo::Create(Page& page, u32 index, u32 count) {
         page.AddControl(index + i, *som, 0);
         char variant[0x20];
         int pos = i;
-        if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_CLASSIC) {
+        if(count == 1 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_CLASSIC) {
             pos = 1;
             snprintf(variant, 0x20, "Speedo_%1d_%1d", 1, 0);
-        } else if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_LEFT) {
+        } else if(count == 1 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_LEFT) {
             pos = 1;
             snprintf(variant, 0x20, "Speedo2_%1d_%1d", 1, 0);
-        } else if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_RIGHT) {
+        } else if(count == 1 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_RIGHT) {
             pos = 1; 
             snprintf(variant, 0x20, "Speedo4_%1d_%1d", 4, 3);
-        } else if(i == 0 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_DISABLED){
+        } else if(count == 1 && Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SOM) == RACESETTING_SOM_DISABLED){
             snprintf(variant, 0x20, "Speedo3_%1d_%1d", 4, 2);
         } else {
             pos = 1;

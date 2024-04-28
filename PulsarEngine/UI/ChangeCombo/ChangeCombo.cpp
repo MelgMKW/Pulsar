@@ -30,7 +30,7 @@ void ExpVR::OnInit() {
     VR::OnInit();
 
     this->AddControl(0xF, this->randomComboButton, 0);
-    this->randomComboButton.Load(UI::buttonFolder, "PULiMemberConfirmButton", "Random", 1, 0, false);
+    this->randomComboButton.Load(UI::buttonFolder, "PULiMemberConfirmButton", "Random", 0, 0, false);
     this->randomComboButton.SetOnClickHandler(this->onRandomComboClick, 0);
 
     this->AddControl(0x10, this->changeComboButton, 0);

@@ -6,14 +6,14 @@ namespace Pulsar {
 namespace UI {
 
 int SettingsPanel::pageCount = 3;
-u8 SettingsPanel::radioButtonCount[SettingsPanel::maxPageCount] ={ 4, 5, 3 }; //menu, race, host
+u8 SettingsPanel::radioButtonCount[SettingsPanel::maxPageCount] ={ 4, 5, 4 }; //menu, race, host
 u8 SettingsPanel::scrollerCount[SettingsPanel::maxPageCount] ={ 0, 1, 1 }; //menu, race, host
 
 u8 SettingsPanel::buttonsPerPagePerRow[SettingsPanel::maxPageCount][8] = //first row is SettingsType, 2nd is rowIdx of radio
 {
     { 2, 2, 2, 2, 0, 0, 0, 0 }, //Menu 
     { 2, 2, 2, 2, 4, 0, 0, 0 }, //Race
-    { 2, 4, 2, 0, 0, 0, 0, 0 }, //Host
+    { 2, 4, 2, 2, 0, 0, 0, 0 }, //Host
 };
 
 u8 SettingsPanel::optionsPerPagePerScroller[SettingsPanel::maxPageCount][8] =

@@ -78,6 +78,59 @@ void CupsConfig::GetTrackGhostFolder(char* dest, PulsarId pulsarId) const {
     else snprintf(dest, IOS::ipcMaxPath, "%s/ghosts/%08x", modFolder, crc32);
 }
 
+
+void CupsConfig::ToggleCTs(bool enabled) {
+    u32 count;
+    bool isDisabled = false;
+    if(RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_FROOM_HOST || RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_FROOM_NONHOST) {
+        isDisabled = System::sInstance->disableRegs;
+    }
+    if(!enabled) {
+        if(lastSelectedCup > 7) {
+            hasRegs = true;
+            selectedCourse = PULSARID_FIRSTREG;
+            lastSelectedCup = PULSARCUPID_FIRSTREG; //CT cup -> regs
+            lastSelectedCupButtonIdx = 0;
+        }
+        count = 0;
+    }
+    else if(isDisabled){
+        count = definedCTsCupCount;
+        hasRegs = false;
+    }
+    else {
+        count = definedCTsCupCount;
+        hasRegs = (RKNet::Controller::sInstance->roomType != RKNet::ROOMTYPE_VS_REGIONAL) &&
+                  (RKNet::Controller::sInstance->roomType != RKNet::ROOMTYPE_JOINING_REGIONAL);
+    }
+    ctsCupCount = count;
+}
+/*
+void CupsConfig::ToggleCTs(bool enabled) {
+    u32 count;
+    if(!enabled) {
+        if(lastSelectedCup > 7) {
+            hasRegs = true;
+            selectedCourse = PULSARID_FIRSTREG;
+            lastSelectedCup = PULSARCUPID_FIRSTREG; //CT cup -> regs
+            lastSelectedCupButtonIdx = 0;
+        }
+        count = 0;
+    }
+    else if((RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_FROOM_HOST) && (System::sInstance->disableRegs) ||
+            (RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_FROOM_NONHOST) && (System::sInstance->disableRegs)){
+        count = definedCTsCupCount;
+        hasRegs = false;
+    }
+    else {
+        count = definedCTsCupCount;
+        hasRegs = (RKNet::Controller::sInstance->roomType != RKNet::ROOMTYPE_VS_REGIONAL) &&
+                  (RKNet::Controller::sInstance->roomType != RKNet::ROOMTYPE_JOINING_REGIONAL);
+    }
+    ctsCupCount = count;
+}
+*/
+/*
 void CupsConfig::ToggleCTs(bool enabled) {
     u32 count;
     if(!enabled) {
@@ -91,10 +144,11 @@ void CupsConfig::ToggleCTs(bool enabled) {
     }
     else {
         count = definedCTsCupCount;
-        hasRegs = RKNet::Controller::sInstance->roomType != RKNet::ROOMTYPE_VS_REGIONAL;
+        hasRegs = (RKNet::Controller::sInstance->roomType != RKNet::ROOMTYPE_VS_REGIONAL) &&
+                  (RKNet::Controller::sInstance->roomType != RKNet::ROOMTYPE_JOINING_REGIONAL);
     }
     ctsCupCount = count;
-}
+}*/
 
 void CupsConfig::SetLayout() {
     CupsConfig::sInstance->isAlphabeticalLayout = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_LAYOUT) == MENUSETTING_LAYOUT_ALPHABETICAL;

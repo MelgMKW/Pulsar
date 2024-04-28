@@ -148,6 +148,7 @@ public:
     //Network
     bool hasHAW;
     bool disableMiiHeads;
+    bool disableRegs;
     bool isCustomDeny;
     u8 deniesCount;
     u8 curBlockingArrayIdx;
