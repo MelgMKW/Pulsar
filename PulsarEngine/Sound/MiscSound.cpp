@@ -14,10 +14,12 @@ static void DisableRaceMusic(Audio::SinglePlayer& singlePlayer, u32 soundId, s16
     const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
     if(isEnabled) singlePlayer.PlaySound(soundId, delay);
 }
-kmCall(0x80711fcc, DisableRaceMusic);
-kmCall(0x80711df4, DisableRaceMusic);
-kmCall(0x80712198, DisableRaceMusic);
-kmCall(0x80711074, DisableRaceMusic);
+kmCall(0x80711fcc, DisableRaceMusic); //RaceMgr::SetRaceState
+kmCall(0x80711df4, DisableRaceMusic); //RaceMgr::SetRaceState
+kmCall(0x80712198, DisableRaceMusic); //RaceMgr::SetRaceState
+kmCall(0x80711074, DisableRaceMusic); //RaceMgr::SetRaceState
+kmCall(0x8064a398, DisableRaceMusic); //wifi waiting, hook at Page::LiveViewWaiting
+kmCall(0x8064a340, DisableRaceMusic); //wifi waiting
 
 static void PreventPrepareRaceMusic(u32 unused, Audio::Handle* handle, u32 soundId) {
     const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;

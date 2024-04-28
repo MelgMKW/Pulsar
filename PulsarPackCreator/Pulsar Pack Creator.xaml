@@ -196,10 +196,10 @@
                         <TextBox x:Name="File3" Grid.Row="3" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
                         <TextBox x:Name="File4" Grid.Row="4" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
 
-                        <TextBox x:Name="Name1" Grid.Row="1" Grid.Column="2" PreviewTextInput="OnTrackNameInput" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
-                        <TextBox x:Name="Name2" Grid.Row="2" Grid.Column="2" PreviewTextInput="OnTrackNameInput" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
-                        <TextBox x:Name="Name3" Grid.Row="3" Grid.Column="2" PreviewTextInput="OnTrackNameInput" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
-                        <TextBox x:Name="Name4" Grid.Row="4" Grid.Column="2" PreviewTextInput="OnTrackNameInput" TextChanged="OnTracknameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name1" Grid.Row="1" Grid.Column="2" DataObject.Pasting="OnTrackNamePasting" PreviewTextInput="OnTrackNameInput" TextChanged="OnTrackNameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name2" Grid.Row="2" Grid.Column="2" DataObject.Pasting="OnTrackNamePasting" PreviewTextInput="OnTrackNameInput" TextChanged="OnTrackNameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name3" Grid.Row="3" Grid.Column="2" DataObject.Pasting="OnTrackNamePasting" PreviewTextInput="OnTrackNameInput" TextChanged="OnTrackNameChange" Style="{StaticResource NameBoxes}"/>
+                        <TextBox x:Name="Name4" Grid.Row="4" Grid.Column="2" DataObject.Pasting="OnTrackNamePasting" PreviewTextInput="OnTrackNameInput" TextChanged="OnTrackNameChange" Style="{StaticResource NameBoxes}"/>
 
                         <TextBox x:Name="Author1" Grid.Row="1" Grid.Column="3" TextChanged="OnAuthorChange" Style="{StaticResource AuthorBoxes}"/>
                         <TextBox x:Name="Author2" Grid.Row="2" Grid.Column="3" TextChanged="OnAuthorChange" Style="{StaticResource AuthorBoxes}"/>

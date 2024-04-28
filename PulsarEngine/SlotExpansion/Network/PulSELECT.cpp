@@ -317,20 +317,20 @@ GetEngine(0x806615b8, 0x3f, 3, 24);
 //StoreEngine(0x806617e4, 0x3f, 0, 24);
 StoreEngine(0x80661cb8, 0x3f, 28, 29);
 
-asmFunc CheckEngineClass() {
+asmFunc CheckEngineClass() { //copies the engineclass part of the engine/phase bitfield, then checks if phase of host == 0, and if it isn't, changes own phase to r30 (1)
+    //r24 == rkNetSelectHandler, r28 == receivedPackets[loopIdx] - 0x40
     ASM(
-            nofralloc;
-            lbz r12, 0x3F (r24);
-            lbz r0, 0x77 (r28);
-            rlwimi r12, r0, 0, 28, 31;
-            rlwinm. r0, r0, 28, 28, 31;
-            stb r12, 0x3F (r24);
-            beq skip;
-            rlwimi r12, r30, 4, 24, 27;
-            stb r12, 0x3F (r24);
-        skip:
-            li r0, 0;
-            blr;
+        nofralloc;
+    lbz r0, 0x77 (r28);
+    lbz r12, 0x3F (r24);
+    rlwimi r12, r0, 0, 28, 31; //r12.engineClass = r0.engineClass
+    rlwinm.r0, r0, 28, 28, 31;
+    beq + end;
+    rlwimi r12, r30, 4, 24, 27; //r12.phase = r30
+end:
+    stb r12, 0x3F (r24);
+    li r0, 0;
+    blr;
     )
 }
 kmCall(0x806617e8, CheckEngineClass);
