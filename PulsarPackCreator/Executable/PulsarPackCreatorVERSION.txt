@@ -1,3 +1,12 @@
+·Updated to 1.3.5
+Creator Changes:
+-Staff ghosts will now be put in an Experts folder. This folder no longer needs to be moved to the NAND.
+-Edited the XML to reflect the various additions.
+Engine Changes:
+-Wifi Music can now be customized by putting a brstm called "wifi_bg.brstm" in My Stuff. That file supports up to 4 streams. Stream 1 is the main wifi menu, stream 2 is the friendlist, stream 3 is when clicking worldwide and stream 4 looks unused (but it could be used).
+-Now correctly keeps the ghost that was being raced when retrying a race after setting a new time.
+-Fixed a settings bug where the total size of the file was miscalculated which was causing heap corruption and crashes on boot.
+
 ·Updated to 1.3.4
 Creator Changes:
 -Fixed a pasting issue in track name boxes which allowed invalid characters and could lead to a corrupted config.

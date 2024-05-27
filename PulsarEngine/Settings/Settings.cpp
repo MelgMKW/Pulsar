@@ -18,7 +18,7 @@ void Mgr::SaveTask(void*) {
 int Mgr::GetSettingsBinSize() const {
     u32 trackCount = CupsConfig::sInstance->GetEffectiveTrackCount();
 
-    u32 size = sizeof(BinaryHeader)
+    u32 size = sizeof(BinaryHeader) + sizeof(u32) * (Binary::sectionCount - 1)
         + sizeof(PagesHolder) + sizeof(Page) * (pageCount - 1)
         + sizeof(MiscParams)
         + sizeof(TrophiesHolder) + sizeof(TrackTrophy) * (trackCount - 1)
@@ -125,9 +125,9 @@ void Mgr::UpdateTrackList() {
     const u32 trackCount = cupsConfig->GetEffectiveTrackCount();
 
     EGG::Heap* heap = System::sInstance->heap;
-    u16* missingCRCIndex = new (heap) u16[trackCount];
+    u16* missingCRCIndex = new (heap) u16[trackCount]; //24
     memset(missingCRCIndex, 0xFFFF, sizeof(u16) * trackCount); //if it's 0xFFFF, it's missing
-    u16* toberemovedCRCIndex = new (heap) u16[oldTrackCount];
+    u16* toberemovedCRCIndex = new (heap) u16[oldTrackCount]; //24
     memset(toberemovedCRCIndex, 0xFFFF, sizeof(u16) * oldTrackCount);
 
     TrackTrophy* trophies = trophiesHolder.trophies;

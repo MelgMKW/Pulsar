@@ -78,6 +78,8 @@ namespace Pulsar_Pack_Creator.IO
             Directory.CreateDirectory($"{modFolder}/Binaries");
             Directory.CreateDirectory($"{modFolder}/Tracks");
             Directory.CreateDirectory($"{modFolder}/Ghosts");
+            Directory.CreateDirectory($"{modFolder}/Ghosts/Experts");
+
             Directory.CreateDirectory("output/Riivolution");
             
 
@@ -362,8 +364,8 @@ namespace Pulsar_Pack_Creator.IO
 
                                 rkg.BaseStream.Position = 0;
                                 byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
-                                Directory.CreateDirectory($"{crc32Folder}/{PulsarGame.ttModeFolders[mode, 0]}");
-                                using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{crc32Folder}/{PulsarGame.ttModeFolders[mode, 0]}/expert.rkg"));
+                                using BigEndianWriter finalRkg = 
+     new BigEndianWriter(File.Create($"{modFolder}/Ghosts/Experts/{idx * 4 + i}_{PulsarGame.ttModeFolders[mode, 0]}.rkg"));
                                 rkgBytes[0xC] = (byte)(newC >> 8);
                                 rkgBytes[0xD] = (byte)(newC & 0xFF);
                                 finalRkg.Write(rkgBytes);
@@ -793,7 +795,7 @@ namespace Pulsar_Pack_Creator.IO
                     {
                         for (int mode = 0; mode < 4; mode++)
                         {
-                            string folderName = $"{modFolder}/Ghosts/{PulsarGame.MarioKartWii.regsGhostFolders[cup * 4 + idx]}";
+                            
                             string expertName = regsExperts[cup, idx, mode];
                             if (expertName != "RKG File" && expertName != "" && expertName != null)
                             {
@@ -812,9 +814,8 @@ namespace Pulsar_Pack_Creator.IO
 
                                     rkg.BaseStream.Position = 0;
                                     byte[] rkgBytes = rkg.ReadBytes((int)(rkg.BaseStream.Length - 4)); //-4 to remove crc32
-
-                                    Directory.CreateDirectory($"{folderName}/{PulsarGame.ttModeFolders[mode, 0]}");
-                                    using BigEndianWriter finalRkg = new BigEndianWriter(File.Create($"{folderName}/{PulsarGame.ttModeFolders[mode, 0]}/expert.rkg"));
+                                    string fileName = $"{modFolder}/Ghosts/Experts/{PulsarGame.MarioKartWii.regsGhostFolders[cup * 4 + idx]}_{PulsarGame.ttModeFolders[mode, 0]}.rkg";
+                                    using BigEndianWriter finalRkg = new BigEndianWriter(File.Create(fileName));
                                     rkgBytes[0xC] = (byte)(newC >> 8);
                                     rkgBytes[0xD] = (byte)(newC & 0xFF);
                                     finalRkg.Write(rkgBytes);
@@ -849,13 +850,15 @@ namespace Pulsar_Pack_Creator.IO
             xml[30] = xml[30].Replace("{$pack}", parameters.modFolderName);
             xml[31] = xml[31].Replace("{$pack}", parameters.modFolderName);
             xml[32] = xml[32].Replace("{$pack}", parameters.modFolderName);
-            xml[38] = xml[38].Replace("{$pack}", parameters.modFolderName);
+            xml[33] = xml[33].Replace("{$pack}", parameters.modFolderName);
+            xml[40] = xml[40].Replace("{$pack}", parameters.modFolderName);
+            xml[41] = xml[41].Replace("{$pack}", parameters.modFolderName);
 
             uint rand = (uint)new Random().Next(1 << 8); ;
             xml[6] = xml[6].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
             xml[14] = xml[14].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
             xml[19] = xml[19].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
-            xml[37] = xml[37].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
+            xml[39] = xml[39].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
             File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
         }
 

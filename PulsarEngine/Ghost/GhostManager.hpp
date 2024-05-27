@@ -32,10 +32,9 @@ public:
     static void SetCb(RKGCallback userCb) { cb = userCb; }
     const Leaderboard& GetLeaderboard() const { return this->leaderboard; }
     const GhostData& GetGhostData(u32 idx) const { return this->files[idx]; }
-    u32 GetRKGCount() const { return this->rkgCount; }
     u32 GetSelGhostIdx(u32 idx) const { return this->selGhostsIndex[idx]; }
 
-
+    bool HasExpert() const { return this->expertGhost.isActive; }
     const PulsarId GetPulsarId() const { return this->pulsarId; }
     const Timer& GetExpert() const { return this->expertGhost; }
     void ToggleGhostSaving(bool savingIsEnabled) {
@@ -91,11 +90,13 @@ private:
     u32 selGhostsIndex[3];
     u32 lastUsedSlot;
     bool areGhostsSaving;
-    u32 padding[20];
+    s32 expertEntryNum;
+    u32 padding[19];
     RKG rkg; //aligned for file operations
     Leaderboard leaderboard; //aligned for file operations
     TimeEntry entry;
 
+    static const u32 expertFileIdx = 39;
     friend class UI::ExpGhostSelect; //UI backend
     friend class Leaderboard;
     friend void UI::BeforeEntranceAnimations(Pages::TTSplits* page); //not formally part of ExpGhostSelect but calls "SaveGhost"

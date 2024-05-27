@@ -1,5 +1,7 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Audio/AudioManager.hpp>
+#include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
+#include <Sound/MiscSound.hpp>
 #include <SlotExpansion/CupsConfig.hpp>
 #include <SlotExpansion/UI/ExpansionUIMisc.hpp>
 
@@ -32,23 +34,32 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
     const char firstChar = extFilePath[0xC];
     const PulsarId track = CupsConfig::sInstance->winningCourse;
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
-    if((firstChar == 'n' || firstChar == 'S' || firstChar == 'r') && !CupsConfig::IsReg(track)) {
-        bool isFinalLap = false;
-        register u32 strLength;
-        asm(mr strLength, r28;);
-        const char finalChar = extFilePath[strLength];
-        if(finalChar == 'f' || finalChar == 'F') isFinalLap = true;
-
-        bool found = false;
-        if(CheckBRSTM(archive, track, isFinalLap) >= 0) found = true;
-        else if(isFinalLap) {
-            if(CheckBRSTM(archive, track, false) >= 0) found = true;
-            if(found) Audio::Manager::sInstance->soundArchivePlayer->soundPlayerArray->soundList.GetFront().ambientParam.pitch = 1.1f;
+    if((firstChar == 'n' || firstChar == 'S' || firstChar == 'r')) {
+        const SectionId section = SectionMgr::sInstance->curSection->sectionId;
+        register SoundIDs toPlayId;
+        asm(mr toPlayId, r20;);
+        if(toPlayId == SOUND_ID_KC && section >= SECTION_P1_WIFI && section <= SECTION_P2_WIFI_FROOM_COIN_VOTING) {
+            extFilePath = wifiMusicFile; //guaranteed to exist because it's been checked before
         }
-        if(found) extFilePath = pulPath;
+        else if(!CupsConfig::IsReg(track)) {
+            bool isFinalLap = false;
+            register u32 strLength;
+            asm(mr strLength, r28;);
+            const char finalChar = extFilePath[strLength];
+            if(finalChar == 'f' || finalChar == 'F') isFinalLap = true;
+
+            bool found = false;
+            if(CheckBRSTM(archive, track, isFinalLap) >= 0) found = true;
+            else if(isFinalLap) {
+                if(CheckBRSTM(archive, track, false) >= 0) found = true;
+                if(found) Audio::Manager::sInstance->soundArchivePlayer->soundPlayerArray->soundList.GetFront().ambientParam.pitch = 1.1f;
+            }
+            if(found) extFilePath = pulPath;
+        }
     }
     return archive->OpenExtStream(buffer, size, extFilePath, 0, length);
 }
 kmCall(0x8009e0e4, MusicSlotsExpand);
+
 }//namespace Audio
 }//namespace Pulsar

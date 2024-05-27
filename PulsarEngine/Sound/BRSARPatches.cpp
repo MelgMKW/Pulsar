@@ -24,9 +24,9 @@ kmCall(0x800a66f4, LoadBRSTMVolume);
 //kmWrite32(0x800a66f0, 0x389DFF00);
 
 //Automatic BRSAR patching from Elias_
-void BRSAREntrySizePatch(snd::DVDSoundArchive::DVDFileStream* stream, u32 begin, u32 r5) {
+void BRSAREntrySizePatch(snd::DVDSoundArchive::DVDFileStream* stream, s32 offset, u32 origin) {
     stream->size = 0x7FFFFFFF;
-    stream->Seek(begin, r5);
+    stream->Seek(offset, origin);
 }
 kmCall(0x80091354, BRSAREntrySizePatch);
 

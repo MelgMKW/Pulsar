@@ -10,6 +10,7 @@ namespace Pulsar {
 namespace Sound {
 
 snd::SoundStartable::StartResult PlayExtBRSEQ(snd::SoundStartable& startable, Audio::Handle& handle, const char* fileName, const char* labelName, bool hold);
+const char wifiMusicFile[] = "/sound/strm/wifi_bg.brstm";
 
 }//namespace Audio
 }//namespace Pulsar

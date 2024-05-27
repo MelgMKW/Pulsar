@@ -31,11 +31,14 @@
 		<folder external="/{$pack}/Tracks" disc="/Race/Course" create="true"/>
 		<folder external="/{$pack}/Assets" disc="/" create="true"/>
 		<folder external="/{$pack}/CTBRSTM" disc="/Sound/strm" create="true"/>
+		<folder external="/{$pack}/Ghosts/Experts" disc="/Experts" create="true" />
 	</patch>	
 	<patch id="CTGPLoad">
 		<folder external="/ctgpr/My Stuff" />
+		<file external="/ctgpr/My Stuff/wifi_bg.brstm" disc="/sound/strm/wifi_bg.brstm" create="true" />
 	</patch>	
 	<patch id="{$pack}Load">
 		<folder external="/{$pack}/My Stuff" />
+		<file external="/{$pack}/My Stuff/wifi_bg.brstm" disc="/sound/strm/wifi_bg.brstm" create="true" />
 	</patch>
 </wiidisc>

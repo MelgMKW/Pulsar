@@ -48,21 +48,37 @@ void Manager::Init(PulsarId id) {
     else io->ReadFolder(folderModePath); //Reads all files contained in the folder
 
     new (&this->leaderboard) Leaderboard(folderPath, id);
-
-    this->files = new (system->heap) GhostData[io->GetFileCount()];
-
-    u32 counter = 0;
     RKG* decompressed = new (system->heap) RKG;
-    for(int i = 0; i < io->GetFileCount(); ++i) {
-        this->rkg.ClearBuffer();
-        GhostData& curData = this->files[counter];
-        s32 ret = io->ReadFolderFile(&this->rkg, i, sizeof(RKG));
-        if(ret > 0 && rkg.CheckValidity()) {
+    this->files = new (system->heap) GhostData[1 + io->GetFileCount()];
 
+    //Check if expert exists, read it, insert it at the last position of the array
+    s32 expertCRC32 = -1;
+    DVDFileInfo info;
+    char expertName[IOS::ipcMaxPath];
+
+    if(cupsConfig->IsReg(id)) {
+        const u32 crc32 = cupsConfig->GetCRC32(pulsarId);
+        snprintf(expertName, IOS::ipcMaxPath, "/Experts/%s_%s.rkg", &crc32, System::ttModeFolders[system->ttMode]);
+    }
+    else {
+        snprintf(expertName, IOS::ipcMaxPath, "/Experts/%d_%s.rkg", cupsConfig->ConvertTrack_PulsarIdToRealId(id), System::ttModeFolders[system->ttMode]);
+    }
+    this->expertEntryNum = DVDConvertPathToEntryNum(expertName);
+    if(this->expertEntryNum >= 0) {
+
+        DVDFastOpen(this->expertEntryNum, &info);
+
+
+        GhostData& curData = this->files[0];
+        this->rkg.ClearBuffer();
+
+        DVDReadPrio(&info, &this->rkg, info.length, 0, 2);
+        if(this->rkg.CheckValidity()) {
             curData.Init(rkg);
+            expertCRC32 = this->GetRKGcrc32(this->rkg);
             if(this->cb != nullptr) {
                 rkg.DecompressTo(*decompressed);
-                this->cb(*decompressed, IS_LOADING_LEADERBOARDS, counter);
+                this->cb(*decompressed, IS_LOADING_LEADERBOARDS, 0);
             }
             curData.courseId = static_cast<CourseId>(id);
             if(curData.type == EXPERT_STAFF_GHOST) { //very easy to fake/manipulate, but 0 security so it doesn't matter
@@ -71,6 +87,24 @@ void Manager::Init(PulsarId id) {
                 this->expertGhost.milliseconds = rkg.header.milliseconds;
                 this->expertGhost.isActive = true;
             }
+            curData.padding = expertFileIdx;
+        }
+        DVDClose(&info);
+    }
+    u32 counter = this->HasExpert(); //starts at 1 if the expert for this track exists
+
+    for(int i = 0; i < io->GetFileCount(); ++i) {
+        this->rkg.ClearBuffer();
+        GhostData& curData = this->files[counter];
+        s32 ret = io->ReadFolderFile(&this->rkg, i, sizeof(RKG));
+        if(ret > 0 && this->rkg.CheckValidity() && this->GetRKGcrc32(this->rkg) != expertCRC32) {
+
+            curData.Init(rkg);
+            if(this->cb != nullptr) {
+                rkg.DecompressTo(*decompressed);
+                this->cb(*decompressed, IS_LOADING_LEADERBOARDS, counter);
+            }
+            curData.courseId = static_cast<CourseId>(id);
             curData.padding = i;
             ++counter;
         }
@@ -83,6 +117,7 @@ void Manager::Reset() {
     IO::sInstance->CloseFolder();
     this->pulsarId = PULSARID_NONE;
     this->lastUsedSlot = 0;
+    this->expertGhost.isActive = false;
     mainGhostIndex = 0xFF;
     for(int i = 0; i < 3; ++i) selGhostsIndex[i] = 0xFF;
     new(&this->expertGhost) Timer;
@@ -128,9 +163,15 @@ void Manager::DisableGhost(const GhostListEntry& entry) {
 }
 
 //Loads and checks validity of a RKG
-bool Manager::LoadGhost(RKG& rkg, u32 index) {
+bool Manager::LoadGhost(RKG& rkg, u32 fileIndex) {
     rkg.ClearBuffer();
-    IO::sInstance->ReadFolderFile(&rkg, index, sizeof(RKG));
+    if(fileIndex == expertFileIdx && this->HasExpert() == true) {
+        DVDFileInfo info;
+        DVDFastOpen(this->expertEntryNum, &info);
+        DVDReadPrio(&info, &rkg, info.length, 0, 2);
+        DVDClose(&info);
+    }
+    else IO::sInstance->ReadFolderFile(&rkg, fileIndex, sizeof(RKG));
     return rkg.CheckValidity();
 }
 
@@ -218,8 +259,23 @@ void Manager::CreateAndSaveFiles(Manager* manager) {
     cupsConfig->GetTrackGhostFolder(folderPath, manager->pulsarId);
     manager->leaderboard.Save(folderPath);
     Settings::Mgr::GetInstance()->Save(); //trophies
+
+    char prevGhostFile[IOS::ipcMaxPath];
+    u32 prevFileIndex = manager->files[manager->mainGhostIndex].padding;
+    if(prevFileIndex != expertFileIdx) io->GetFolderFilePath(prevGhostFile, prevFileIndex);
+
     manager->Init(cupsConfig->winningCourse);
-    manager->mainGhostIndex = 0;
+
+    if(prevFileIndex == expertFileIdx) manager->mainGhostIndex = 0;
+    else for(int i = 1; i < manager->rkgCount; ++i) {
+        char curFileName[IOS::ipcMaxPath];
+        io->GetFolderFilePath(curFileName, manager->files[i].padding);
+        if(strcmp(prevGhostFile, curFileName) == 0) {
+            manager->mainGhostIndex = i;
+            break;
+        }
+    }
+
     SectionMgr::sInstance->sectionParams->isNewTime = true;
 }
 
@@ -230,8 +286,15 @@ void Manager::InsertCustomGroupToList(GhostList* list, CourseId) { //check id he
     manager->Init(cupsConfig->winningCourse);
     u32 index = 0;
     for(int i = 0; i < IO::sInstance->GetFileCount(); ++i) {
-        if(index == 38) break;
+        if(index == 37) break;
         const GhostData& data = manager->GetGhostData(i);
+        if(data.isValid) {
+            list->entries[index].data = &data;
+            ++index;
+        }
+    }
+    if(manager->expertGhost.isActive == true) {
+        const GhostData& data =manager->GetGhostData(IO::sInstance->GetFileCount());
         if(data.isValid) {
             list->entries[index].data = &data;
             ++index;
@@ -323,6 +386,8 @@ kmCall(0x805c7b6c, SetCorrectGhostRaceSlot);
 kmCall(0x805c7d2c, SetCorrectGhostRaceSlot);
 kmCall(0x80639e54, SetCorrectGhostRaceSlot);
 kmCall(0x80639fb0, SetCorrectGhostRaceSlot);
+
+kmWrite32(0x8085b260, 0x60000000); //nop the check that replaces the currently raced ghost ONLY if it's a new best time and your pb
 }//namespace Ghosts
 }//namespace Pulsar
 

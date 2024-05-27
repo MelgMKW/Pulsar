@@ -32,7 +32,21 @@ static void DisableMenuMusic(Audio::SinglePlayer& singlePlayer, u32 soundId, s16
     if(isEnabled) singlePlayer.PlaySound(soundId, delay);
 }
 kmCall(0x806fa64c, DisableMenuMusic);
-kmCall(0x806fa664, DisableMenuMusic);
+
+static void DisableAndChangeBGMusic(Audio::SinglePlayer& singlePlayer, u32 soundId) {
+    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
+    if(isEnabled) {
+        if(soundId == SOUND_ID_WIFI_MUSIC) {
+            s32 entryNum = DVDConvertPathToEntryNum(wifiMusicFile);
+            if(entryNum >= 0) {
+                soundId = SOUND_ID_KC;
+                singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
+            }
+        }
+        singlePlayer.PlaySound(soundId, 0);
+    }
+}
+kmCall(0x806fa664, DisableAndChangeBGMusic);
 
 static void ToggleMenuMusic() {
     const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
