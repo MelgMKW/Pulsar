@@ -3,7 +3,6 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Objects/KCL/ObjectKCL.hpp>
 
-//Goomba, just as an example
 namespace Objects {
 
 class Airblock : public ObjectKCL { //ObjectNum 0x1 = 1

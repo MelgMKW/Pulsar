@@ -14,7 +14,7 @@ class SoundArchive {
 public:
     typedef u32 SoundId;
     typedef u32 GroupId;
-    typedef u32 PlayerId;
+    typedef u32 PlayerId; //in mkwii: see audioValues.hpp
     typedef u32 BankId;
     typedef u32 StringId;
     typedef u32 FileId;

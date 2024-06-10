@@ -30,6 +30,13 @@ struct CourseIDToMusicID {
 
 class RaceMgr {
 public:
+
+    struct ActorHolder {
+        static int Compare(ActorHolder* first, ActorHolder* second); //80710664
+        LinkedRaceActor* actor;
+        float lowestTaxicabDistanceToAnyPlayer;
+    };
+
     static RaceMgr* sInstance; //809c27f8
     static RaceMgr* CreateInstance(); //807104d0
     static void* DestroyInstance(); //80710520
@@ -40,6 +47,7 @@ public:
     void SetRaceState(RaceState raceState); //80711ac4 changes music accordingly etc...
     void SetKartActor(KartActor* sound); //80713754
     void Init(); //80710a00
+    void Shutdown(); //80710bac unlinks the actors, shutdowns all the sounds (ambience, etc...)
     void Calc(); //80710ca0
     void UpdateLocalPlayerParams(); //80711514
     void CheckRaceState(); //807125d4 can play final lap jingle, the winning/losing music etc...
@@ -49,9 +57,14 @@ public:
 
     void UpdatePlayerMatrix(); //80711198
     void StartRace(); //80711418 called by RSARSounds when trying to play the GO! sound
+    void SortAndToggleActors(); //80712b58
+    void UpdateActors(); //807114a4 inlined
+    void SetEngineVolume(u32 stepCount, float maxValue); //80711a0c inlined
+    void SetNonTrackVolumes(float volume); //80711960 see AudioMgr.hpp's enum
+    void SetNonTrackAndEngineVolumes(float volume); //80711a14
 
     EGG::TDisposer<RaceMgr> disposer; //80710340 vtable 808c8fdc
-    CourseId courseId;
+    CourseId courseId; //0x10   
     u8 unknown_0x14[4];
     KartActor* kartActors[4]; //0x18
     u8 lastUsedKartActorSlot; //0x28
@@ -68,12 +81,12 @@ public:
     u8 localPlayerCount; //0x4c
     u8 playerCount; //0x4d
     u8 unknown_0x4e[0x54 - 0x4e];
-    Track engineVolume;
+    Track engineVolume; //0x54
     u8 unknown_0x70[0x8];
     nw4r::ut::List raceActorsList; //0x78 contains all the LinkedRaceActors
     //in Calc a loop calls their update function
     Mtx34 playerMats[4]; //0x84 used for Sound3DListener's mtx
-    Vec3ZeroInit vec3s[4]; //0x144
+    Vec3 playerTargetPos[4]; //0x144 
     u8 unknown_0x174[4];
     static CourseIdxToCourseID trackIdxToCourseID[42];
 };//Total Size 0x178

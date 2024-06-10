@@ -11,9 +11,13 @@ public:
     void InitSelf()  override; //807a7ac0 vtable 808d1d60
     void UpdateModelPosition() override;  //0x10 807a7fec
     void SpawnModel() override; //807a7f1c
-    bool SetInitialPosition(PlayerSub& playerSub) override; //807a7940
+    bool SetInitialPosition(PlayerObj& playerSub) override; //807a7940
     void OnCollision() override; //807a8134
     void vf_0x30() override; //807a7a5c
+
+    void UpdateThunk(); //807a3904
+    void Update(); //807a79e0
+
     u8 unknown_0x1A4[4];
     bool isLocalMultiplayer; //0x1a8 for colors
     g3d::ResMatTevColor tevColors[2]; //0x1AC

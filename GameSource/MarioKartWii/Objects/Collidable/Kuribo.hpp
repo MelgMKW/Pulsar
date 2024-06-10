@@ -3,7 +3,6 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Objects/Collidable/ObjectCollidable.hpp>
 
-//Goomba, just as an example
 namespace Objects {
 
 class Kuribo : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 0x191 = 401

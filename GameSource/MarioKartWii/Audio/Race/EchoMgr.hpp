@@ -18,6 +18,7 @@ public:
     EchoMgr(); //807180c8
     ~EchoMgr(); //80718150
     void Init(float volume, float echo); //807181f4
+    void Shutdown(); //80718218 does nothing
     void Update(); //8071821c
     void SetVolume(u8 hudSlotId, u32 stepCount); //807182b8
     void SetEcho(u8 hudSlotId, u32 stepCount, float value); //807182d0

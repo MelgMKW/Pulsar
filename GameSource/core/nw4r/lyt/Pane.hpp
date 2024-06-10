@@ -84,10 +84,10 @@ public:
     u8 origin;
     u8 flag; //0xbb visible, infleunced alpha, location adjust, max
 
-    char name[0x11];
-    char userdata[9];
+    char name[0x11]; //0xbc
+    char userdata[9]; //0xcd
 
-    bool isUserAllocated;
+    bool isUserAllocated; //0xd6
     u8 _D7;
 }; // Total size 0xd8
 

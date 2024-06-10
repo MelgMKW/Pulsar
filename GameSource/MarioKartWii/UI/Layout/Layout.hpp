@@ -7,7 +7,7 @@
 #include <core/nw4r/lyt/Pane.hpp>
 #include <core/nw4r/lyt/Picture.hpp>
 #include <core/nw4r/lyt/TextBox.hpp>
-#include <MarioKartWii/UI/Text.hpp>
+#include <MarioKartWii/UI/Text/Text.hpp>
 #include <MarioKartWii/UI/Movie.hpp>
 using namespace nw4r;
 
@@ -30,10 +30,10 @@ class PaneTypeCounter : PaneAction {
     u32 moviePicPaneCount; //not sure which ones are counted
 };
 
-class TextPaneHandler::Initializer : PaneAction {
+class Text::PaneHandler::Initializer : PaneAction {
     //ctor inlined
     virtual void Calc(lyt::Pane* pane);//808b94f4 805e92d0 if pane is a text pane, increments curPaneId and calls init on the handler
-    TextPaneHandler* firstHandler;
+    Text::PaneHandler* firstHandler;
     u32 textPaneCount;
     u32 curPaneId;
 };
@@ -54,9 +54,10 @@ class PaneManager {
     static bool isPaneVisible(lyt::Pane* pane); //805e77f8
     static bool CheckForUserInfo(lyt::Pane* pane, char info); //805e7a6c
     static bool CheckForUserInfo2(lyt::Pane* pane, char info); //805e7aac
-    static char GetNextUserInfo(lyt::Pane* pane, char info); //805e7aec
+    static char GetNextUserInfo(lyt::Pane* pane, char info); //805e7aec the one after the arg
     static void DoAction(lyt::Pane* pane, PaneAction* action); //805e78f0 does it for a pane and all its parents
     static void SetTextBoxMessage(lyt::TextBox* pane, BMGHolder* curFileBmgs, BMGHolder* commonBmgs, u32 bmgId); //805e7804
+    static void ConvertColorS10ToUT(ut::Color& dest, const GX::ColorS10& source); //805e7b40
     PaneManager* prevHolder;
     class Initializer;
 };
@@ -77,7 +78,7 @@ class PicturePaneManager : PaneManager {
 class TextPaneHolder : PaneManager {
     TextPaneHolder(); //805e7db0
     virtual void Draw(lyt::DrawInfo* drawInfo); //805e805c vtable 808b9524
-    TextPaneHandler* handler;
+    Text::PaneHandler* handler;
 }; //total size 0xC
 
 class MoviePaneHolder : PaneManager {
@@ -162,13 +163,13 @@ public:
     void Animate(); //805e91a8
     void Update(lyt::Pane* pane); //805e91bc updates matrix
     void Draw(); //calls all the holders' draw
-    TextPaneHandler* GetTextPaneHandlerByName(const char* paneName) const; //805e9028
-    TextPaneHandler* GetTextPaneHandlerByPane(lyt::Pane* pane) const; //805e90a0 returns 0 if none are tied to the pane
+    Text::PaneHandler* GetTextPaneHandlerByName(const char* paneName) const; //805e9028
+    Text::PaneHandler* GetTextPaneHandlerByPane(lyt::Pane* pane) const; //805e90a0 returns 0 if none are tied to the pane
     MoviePaneHandler* GetMoviePaneHandlerByName(const char* paneName) const; //805e90e8
     MoviePaneHandler* GetMoviePaneHandlerByPane(lyt::Pane* pane) const; //805e9160
     char lytName[0x41]; //from 0x28 to 0x6c
     u8 padding[3];
-    TextPaneHandler* textPaneHandlerArray; //0x6c size nbr of text Panes
+    Text::PaneHandler* textPaneHandlerArray; //0x6c size nbr of text Panes
     u32 textPaneCount; //0x70
     MoviePaneHandler* moviePaneHandlerArray; //0x74
     u32 moviePaneCount; //0x78

@@ -43,6 +43,13 @@ static void DisableAndChangeBGMusic(Audio::SinglePlayer& singlePlayer, u32 sound
                 singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
             }
         }
+        else if(soundId == SOUND_ID_OFFLINE_MENUS) {
+            soundId = SOUND_ID_KC;
+            s32 entryNum = DVDConvertPathToEntryNum(wifiMusicFile);
+            if(entryNum >= 0) {
+                singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
+            }
+        }
         singlePlayer.PlaySound(soundId, 0);
     }
 }
@@ -56,6 +63,12 @@ static void ToggleMenuMusic() {
 }
 Settings::Hook ToggleMenuMusicHook(ToggleMenuMusic);
 
+static float CheckFanfare(const Audio::SinglePlayer& singlePlayer) {
+    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
+    if(isEnabled) return singlePlayer.GetFanfareLength();
+    else return -1.0f;
+}
+kmCall(0x80857860, CheckFanfare);
 
 snd::SoundStartable::StartResult PlayExtBRSEQ(snd::SoundStartable& startable, Audio::Handle& handle, const char* fileName, const char* labelName, bool hold) {
     snd::SoundStartable::StartInfo startInfo;
@@ -70,6 +83,7 @@ snd::SoundStartable::StartResult PlayExtBRSEQ(snd::SoundStartable& startable, Au
     }
     return snd::SoundStartable::START_ERR_USER;
 }
+
 
 //disable TF music delay
 kmWrite16(0x80711FE8, 0x00004800);

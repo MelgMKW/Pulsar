@@ -2,7 +2,7 @@
 #define _OBJECTCOLLIDABLE_
 #include <kamek.hpp>
 #include <MarioKartWii/Objects/Object.hpp>
-#include <Item/Obj/ItemObj.hpp>
+#include <MarioKartWii/Item/Obj/ItemObj.hpp>
 #include <MarioKartWii/Objects/ObjectCollision.hpp>
 
 /*
@@ -31,10 +31,10 @@ class ObjectCollidable : public Object { //collision is added as there is no KCL
     virtual ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer,
         ObjToItemInteraction default, ItemToObjInteraction itemToObj) const; //0xc4 806817a4
     //same as above but with items
-    virtual void OnWallCollision(const Kart::Player& kartPlayer, Vec3ZeroInit position); //0xc8 8081f548 sound and playereffectsx
+    virtual void OnWallCollision(const Kart::Player& kartPlayer, Vec3 position); //0xc8 8081f548 sound and playereffectsx
     //for objects that behave like walls such as goombas at low speeds
-    virtual void OnNormalCollision(const Kart::Player& kartPlayer, Vec3ZeroInit position); //0xcc 8081f5d8 sound and playereffects
-    virtual void ProcessCollision(ObjectCollision* collision, Vec3ZeroInit position); //0xd0 80681748 only called when in range of a given object
+    virtual void OnNormalCollision(const Kart::Player& kartPlayer, Vec3 position); //0xcc 8081f5d8 sound and playereffects
+    virtual void ProcessCollision(ObjectCollision* collision, Vec3 position); //0xd0 80681748 only called when in range of a given object
 
     virtual const Vec3& GetCollisionTranslation() const; //0xd4 8068173c
     virtual bool IsSolid() const; //0xd8 80681734

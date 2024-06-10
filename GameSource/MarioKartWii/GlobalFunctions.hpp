@@ -2,14 +2,14 @@
 #define _GLOBALFUNCTIONS_
 #include <MarioKartWii/System/Identifiers.hpp>
 #include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
-#include <MarioKartWii/UI/Text.hpp>
+#include <MarioKartWii/UI/Text/Text.hpp>
 #include <MarioKartWii/Item/ItemManager.hpp>
 
 
 CharacterId GetMiiCharacterId(const Mii& mii); //80831af4
 bool IsOnlineSection(SectionId id); //80860484 online but outside of races 
 CourseId GetNextVSTrack(u32 raceNumber); //808606a4
-void TimerToTextInfo(Timer* timer, TextInfo& text); //808608e4
+void TimerToTextInfo(Timer* timer, Text::Info& text); //808608e4
 u8 GetLocalPlayerCount(); //808605fc
 u8 GetActiveRaceDataPlayers(); //80860500
 SceneId IsGameplaySection(SectionId id); //808609fc
@@ -27,5 +27,9 @@ bool IsGhostRaceSection(SectionId id); //808604c0
 char* GetPath(const char* format, ...); //805aeec4
 void DivideColorByFloat(ut::Color& dest, const ut::Color& src, float divide); //805aee14 obviously part of another class
 int GetAreaReferencesByType(const Vec3& position, u32 areaType); //80786fc0
+
+//BMG
+u32 GetCupNameBMGId(u32 cupId); //80833638
+u32 GetPositionBMGId(u32 position); //80833764 position 1-indexed
 
 #endif

@@ -15,17 +15,17 @@ class AnimTransform;
 class AnimResource;
 namespace detail {
 struct BitGXNums {
-    u32                 texMap : 4;
-    u32                 texSRT : 4;
-    u32                 texCoordGen : 4;
-    u32                 indSRT : 2;
-    u32                 indStage : 3;
-    u32                 tevSwap : 1;
-    u32                 tevStage : 5;
-    u32                 chanCtrl : 1;
-    u32                 matCol : 1;
-    u32                 alpComp : 1;
-    u32                 blendMode : 1;
+    u32  texMap : 4;
+    u32  texSRT : 4;
+    u32  texCoordGen : 4;
+    u32  indSRT : 2;
+    u32  indStage : 3;
+    u32  tevSwap : 1;
+    u32  tevStage : 5;
+    u32  chanCtrl : 1;
+    u32  matCol : 1;
+    u32  alpComp : 1;
+    u32  blendMode : 1;
 };
 }
 

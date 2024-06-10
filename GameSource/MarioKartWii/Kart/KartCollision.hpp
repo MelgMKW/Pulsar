@@ -39,7 +39,7 @@ public:
     int HandleMushroomCollision(); //805731e0
     int HandleStarCollision(); //80573224
     int HandleFibCollision(); //8057325c
-    void ActivateOob(int unk0, int unk1, int unk2, int unk3); //80573b00
+    void ActivateOob(bool detachCamera, KCLTypeHolder* flags, bool isCPU, int isInBullet); //80573b00
     void UpdateRespawn(); //80573ed4
     void UpdateCollisionsInner(u32 playerIdx, Physics& kartPhysics, HitboxGroup* hitboxGroup,
         Quat* rotation, const Vec3& scale, bool enableHwg, Vec3* unk2, float unk0, float unk1); //805b6724

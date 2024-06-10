@@ -16,7 +16,7 @@ public:
 
 
     float* routePointsSized2; //0xc0
-    Vec3ZeroInit* routePointsSized3; //0xc4
+    Vec3* routePointsSized3; //0xc4
     u8 unknown_0xc8[4];
 }; //0xcc
 
@@ -32,7 +32,7 @@ public:
 
     float verticalHeave; //0xb0 setting0
     float* routePointsSized2; //0xb4 copyy of manager's
-    Vec3ZeroInit* routePointsSized3; //0xb8 cooppy of manhbgv
+    Vec3* routePointsSized3; //0xb8 cooppy of manhbgv
     u8 unknown_0xbc[0xf4 - 0xbc];
 }; //0xf4
 

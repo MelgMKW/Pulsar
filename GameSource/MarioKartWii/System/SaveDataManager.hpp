@@ -2,7 +2,7 @@
 #define _SAVEDATAMANAGER_
 #include <kamek.hpp>
 #include <core/egg/mem/Disposer.hpp>
-#include <core/rvl/DWC/DWC.hpp>
+#include <core/rvl/DWC/DWC_Account.hpp>
 #include <MarioKartWii/UI/SectionMgr/SectionPad.hpp>
 #include <MarioKartWii/Mii/Mii.hpp>
 #include <MarioKartWii/System/Timer.hpp>

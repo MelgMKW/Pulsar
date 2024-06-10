@@ -83,7 +83,7 @@ public:
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806d7328
     ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer,
         ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806d7780
-    void ProcessCollision(ObjectCollision* collision, Vec3ZeroInit position) override; //0xd0 806da660
+    void ProcessCollision(ObjectCollision* collision, Vec3 position) override; //0xd0 806da660
     const Vec3& GetSolidityCenter() const override; //0xe8 806d7cf8
 
     //ObjectCycleManager vtable 808c59d4 at 0xb0

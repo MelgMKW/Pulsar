@@ -12,10 +12,10 @@ namespace lyt {
 class FontRefLink {
 public:
     FontRefLink(); //80083f20
-    void Set(char const* fontName, ut::Font*); //80083f40
+    void Set(char const* fontName, ut::Font* font); //80083f40
     ut::LinkListNode link;
     char fontName[0x80]; //0x8
-    ut::Font* font;
+    ut::Font* font; //0x88 GameFont in mkwii
 }; //0x8c
 
 class ArcResourceAccessor {
@@ -35,7 +35,7 @@ public:
     ArcResourceAccessor accessor;
 }; //0XA4
 
-class MultiArcResourceAccessor: public ResourceAccessor {
+class MultiArcResourceAccessor : public ResourceAccessor {
 public:
     MultiArcResourceAccessor(); //80084070
     ~MultiArcResourceAccessor() override; //800840e0 vt 80273820

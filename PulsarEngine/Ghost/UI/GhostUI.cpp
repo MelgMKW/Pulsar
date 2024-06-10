@@ -56,7 +56,7 @@ void ExpGhostSelect::OnActivate() {
     const System* system = System::sInstance;
     if(Info::HasTrophies()) {
         u32 bmgId;
-        const TextInfo text = GetCourseBottomText(CupsConfig::sInstance->winningCourse, &bmgId);
+        const Text::Info text = GetCourseBottomText(CupsConfig::sInstance->winningCourse, &bmgId);
         this->bottomText.SetMessage(bmgId, &text);
     }
     this->ctrlMenuPageTitleText.SetMessage(BMG_CHOOSE_GHOST_DATA);
@@ -104,7 +104,7 @@ void ExpGhostSelect::OnSelectGhostChange(ToggleButton& button, u32) {
         this->selectedGhostsPages[mgr->lastUsedSlot] = -1;
         this->selectedGhostsCount -= 1;
     }
-    TextInfo text;
+    Text::Info text;
     text.intToPass[0] = this->selectedGhostsCount;
     this->ctrlMenuPageTitleText.SetMessage(BMG_GHOST_SELECTED_COUNTER, &text);
     this->SetToggleBMG();
@@ -227,7 +227,7 @@ kmWritePointer(0x808DA614, BeforeEntranceAnimations);
 
 
 static void TrophyBMG(CtrlMenuInstructionText& bottomText, u32 bmgId) {
-    TextInfo text;
+    Text::Info text;
     const System* system = System::sInstance;
     const Settings::Mgr* settings = Settings::Mgr::GetInstance();
     u32 trophyCount = settings->GetTrophyCount(system->ttMode);
@@ -248,21 +248,21 @@ void IndividualTrophyBMG(Pages::CourseSelect& courseSelect, CtrlMenuCourseSelect
     else {
         u32 bmgId;
         CupsConfig* cupsConfig = CupsConfig::sInstance;
-        const TextInfo text = GetCourseBottomText(cupsConfig->ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup, button.buttonId), &bmgId); //FIX HERE
+        const Text::Info text = GetCourseBottomText(cupsConfig->ConvertTrack_PulsarCupToTrack(cupsConfig->lastSelectedCup, button.buttonId), &bmgId); //FIX HERE
         courseSelect.bottomText->SetMessage(bmgId, &text);
     }
 }
 kmCall(0x807e54ec, IndividualTrophyBMG);
 
 //Global function as it is also used by CourseSelect
-const TextInfo GetCourseBottomText(PulsarId id, u32* bmgId) {
+const Text::Info GetCourseBottomText(PulsarId id, u32* bmgId) {
     const System* system = System::sInstance;
     const Settings::Mgr* settings = Settings::Mgr::GetInstance();
     if(settings->GetTotalTrophyCount(system->ttMode) > 0) *bmgId = BMG_TT_BOTTOM_COURSE;
     else *bmgId = BMG_TT_BOTTOM_COURSE_NOTROPHY;
 
     bool hasTrophy = Settings::Mgr::GetInstance()->HasTrophy(id, system->ttMode);
-    TextInfo text;
+    Text::Info text;
     text.bmgToPass[0] = BMG_TT_MODE_BOTTOM_CUP + system->ttMode;
     u32 passedBmgId = BMG_NO_TROPHY;
     if(hasTrophy) passedBmgId = BMG_TROPHY;

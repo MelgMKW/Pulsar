@@ -7,15 +7,16 @@
 namespace RKNet {
 struct RACEPacketHeader {
     u32 magic;
-    u32 crc32;
-    u8 headerSize;
-    u8 rh1Size;
-    u8 rh2Size;
-    u8 selectSize;
-    u8 racedataSize;
-    u8 userSize;
-    u8 itemSize;
-    u8 eventSize;
+    u32 crc32; //0x4
+    u8 headerSize; //0x8 counts this as the actual header
+    u8 rh1Size; //0x9
+    u8 rh2Size; //0xa
+    u8 selectSize; //0xb
+    u8 racedataSize; //0xc 
+    u8 userSize; //0xd
+    u8 itemSize; //0xe
+    u8 eventSize; //0xf
+    //void *data; //0x10
 };
 size_assert(RACEPacketHeader, 0x10);
 

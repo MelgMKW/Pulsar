@@ -71,7 +71,7 @@ public:
     void ChangeFromPage(u8 direction); //805dbb88 plays slide out animation and disables buttons
     bool IsActivated(); //805dbc20
     bool IsDeactivated(); //805dbc58
-    void SetButtonBmg(u8 id, u32 r5, u32 bmgId, const TextInfo* text = nullptr); //805dbc8c
+    void SetButtonBmg(u8 id, u32 r5, u32 bmgId, const Text::Info* text = nullptr); //805dbc8c
     void SetOnClickHandler(const PtmfHolder_2A<Pages::FriendRoomMessages, void, PushButton&, u32>& handler); //805dbcc4
     void SelectInitialButton(u32 hudSlotId, u8 id); //805dbd24
     u32 GetSelectedButtonId() const; //805dbd34

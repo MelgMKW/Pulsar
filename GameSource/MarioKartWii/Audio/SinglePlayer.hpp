@@ -72,8 +72,8 @@ public:
     bool canNotCancel; //0x10 All functions that may start/stop a sound check this bool, if it is true, they do nothing
     u8 padding[3];
     Handle handles[2]; //0x14
-    Handle activeHandle; //0x1c
-    Handle preparedHandle; //0x20
+    Handle* activeHandle; //0x1c
+    Handle* preparedHandle; //0x20
     bool canNotPrepareOther; //0x24 if true, when trying to prepare a sound, if there already is a prepared sound, it cannot be overwritten
     u8 padding2;
     s16 delay; //after first ends, to start 2nd

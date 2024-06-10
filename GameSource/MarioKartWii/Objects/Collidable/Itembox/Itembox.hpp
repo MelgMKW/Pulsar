@@ -17,7 +17,7 @@ class Itembox : public ObjectCollidable { //ObjectNum 0x65 = 101
     void UpdateShadow() override; //0x70 806c6a84
     void UpdateModelScale() override; //0x78 806c69e0
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80828cb8
-    void OnWallCollision(const Kart::Player& kartPlayer, Vec3ZeroInit position) override; //0xc8 806c69dc
+    void OnWallCollision(const Kart::Player& kartPlayer, Vec3 position) override; //0xc8 806c69dc
     bool IsSolid() const override; //806c69d4
     virtual bool IsActive() const; //0xec 806c69c0
 

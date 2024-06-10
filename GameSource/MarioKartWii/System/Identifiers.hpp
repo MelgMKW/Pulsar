@@ -249,12 +249,12 @@ enum SaveCourseId {
 enum PageId {
     PAGE_NONE = 0xFFFFFFFF,
     PAGE_EMPTY                          = 0x00,
-    PAGE_ESRB_NOTICE                    = 0x01,
-    PAGE_HZ60_SUGGESTION                = 0x02,
+    PAGE_ESRB_NOTICE                    = 0x01, //DONE
+    PAGE_HZ60_SUGGESTION                = 0x02, //DONE
     PAGE_CORRUPT_SAVE_MGR               = 0x03, //DONE
-    PAGE_CANT_SAVE                      = 0x04,
-    PAGE_SYSTEM_MEMORY_CORRUPT          = 0x05,
-    PAGE_MII_DATA_CORRUPT               = 0x06,
+    PAGE_CANNOT_SAVE                    = 0x04, //DONE
+    PAGE_SYSTEM_MEMORY_CORRUPT          = 0x05, //DONE
+    PAGE_MII_DATA_CORRUPT               = 0x06, //DONE
     PAGE_GP_INTRO                       = 0x07, //DONE
     PAGE_VS_INTRO                       = 0x08, //DONE
     PAGE_BATTLE_INTRO                   = 0x09, //DONE
@@ -265,16 +265,16 @@ enum PageId {
     PAGE_P1VS_INTERFACE                 = 0x0E, //DONE
     PAGE_P2VS_INTERFACE                 = 0x0F, //DONE
     PAGE_P3VS_INTERFACE                 = 0x10, //DONE
-    PAGE_P4VS_INTERFACE                 = 0x11,
-    PAGE_P1BATTLE_INTERFACE             = 0x12,
-    PAGE_P2BATTLE_INTERFACE             = 0x13,
-    PAGE_P3BATTLE_INTERFACE             = 0x14,
-    PAGE_P4BATTLE_INTERFACE             = 0x15,
+    PAGE_P4VS_INTERFACE                 = 0x11, //DONE
+    PAGE_P1BATTLE_INTERFACE             = 0x12, //DONE
+    PAGE_P2BATTLE_INTERFACE             = 0x13, //DONE
+    PAGE_P3BATTLE_INTERFACE             = 0x14, //DONE
+    PAGE_P4BATTLE_INTERFACE             = 0x15, //DONE
     PAGE_MISSION_TOURNAMENT_INTERFACE   = 0x16,
     PAGE_GP_PAUSE_MENU                  = 0x17, //DONE
     PAGE_VS_RACE_PAUSE_MENU             = 0x18, //DONE
     PAGE_TT_PAUSE_MENU                  = 0x19, //DONE
-    PAGE_BATTLE_PAUSE_MENU              = 0x1A,
+    PAGE_BATTLE_PAUSE_MENU              = 0x1A, //DONE
     PAGE_TOURNAMENT_PAUSE_MENU          = 0x1B,
     PAGE_GHOST_RACE_PAUSE_MENU          = 0x1C,
     PAGE_ABANDON_GHOST_RACE             = 0x1D,
@@ -283,8 +283,8 @@ enum PageId {
     PAGE_GP_ENDMENU                     = 0x20, //DONE
     PAGE_TT_ENDMENU                     = 0x21, //DONE
     PAGE_VS_RACEENDMENU                 = 0x22, //DONE
-    PAGE_BATTLEENDMENU                  = 0x23,
-    PAGE_BATTLE_ENDMENU                 = 0x24,
+    PAGE_BATTLEENDMENU                  = 0x23, //DONE
+    PAGE_BATTLE_FINALRACE_ENDMENU       = 0x24, //DONE
     PAGE_MISSION_ENDMENU                = 0x25,
     PAGE_TOURNAMENT_ENDMENU             = 0x26,
     PAGE_GHOST_RACE_ENDMENU             = 0x27,
@@ -298,9 +298,9 @@ enum PageId {
     PAGE_GPVS_LEADERBOARD_UPDATE        = 0x2F, //DONE
     PAGE_GPVS_TOTAL_LEADERBOARDS        = 0x30, //DONE
     PAGE_ONLINERACE_LEADERBOARDS_UPDATE = 0x31,
-    PAGE_TEAMVS_TOTAL_LEADERBOARDS      = 0x32,
-    PAGE_BATTLE_LEADERBOARDS_UPDATE     = 0x33,
-    PAGE_BATTLE_TOTAL_LEADERBOARDS      = 0x34,
+    PAGE_TEAMVS_TOTAL_LEADERBOARDS      = 0x32, //DONE
+    PAGE_BATTLE_LEADERBOARDS_UPDATE     = 0x33, //DONE
+    PAGE_BATTLE_TOTAL_LEADERBOARDS      = 0x34, //DONE
     PAGE_COMPETITIONL_LEADERBOARD       = 0x35,
     PAGE_GP_REPLAY_INTERFACE            = 0x36,
     PAGE_GHOST_RACE_INTERFACE           = 0x37,
@@ -311,7 +311,7 @@ enum PageId {
     PAGE_AWARD_RESULTS                  = 0x3C, //DONE
     PAGE_STAFF_ROLL                     = 0x3D, //DONE
     PAGE_ENDING_MOVIE                   = 0x3E, //DONE
-    PAGE_CONGRATS_AFTER_CREDITS         = 0x3F,
+    PAGE_CONGRATS_AFTER_CREDITS         = 0x3F, //DONE
     PAGE_WIFI_RACE_INTERFACE            = 0x40,
     PAGE_P2WIFI_RACE_INTERFACE          = 0x41,
     PAGE_WIFI_VS_INTERFACE              = 0x42, //DONE
@@ -339,9 +339,9 @@ enum PageId {
     PAGE_BLURRY_TITLE                   = 0x58, //DONE
     PAGE_TITLE_MOVIE                    = 0x59, //DONE
     PAGE_MAIN_MENU                      = 0x5A, //DONE
-    PAGE_BEHIND_UNLOCKS                 = 0x5B,
+    PAGE_MENU_BG                        = 0x5B, //DONE
     PAGE_BACKMODEL                      = 0x5C, //DONE
-    PAGE_BEHIND_DISCONNECTSOPTIONS      = 0x5D,
+    PAGE_OPTIONS_BG                     = 0x5D, //DONE
     PAGE_TOP_MENU_OVERLAY               = 0x5E, //DONE
     PAGE_BLINKING_PRESS_A               = 0x5F, //DONE
     PAGE_MII_SELECT                     = 0x60, //DONE
@@ -419,7 +419,8 @@ enum PageId {
     PAGE_RESIDES_BEHIND_0x4F_LOADS_0xB4 = 0xB3,
     PAGE_MKCHANNEL_DLD_GHOST_LIST       = 0xB4,
     PAGE_MKCHANNEL_ERASE_GHOST          = 0xB5,
-    PAGE_COMPETITION_FOR_WHEEL_ONLY     = 0xBA,
+    PAGE_COMPETITION_FOR_WHEEL_ONLY     = 0xBA, //DONE
+    PAGE_MESSAGE_BOARD_INVITATION       = 0xBF,
     PAGE_OPTIONS                        = 0xC0, //DONE
     PAGE_WIFI_OPTIONS                   = 0xC1, //DONE
     PAGE_OPTION_EXPLANATION             = 0xC2, //DONE
@@ -432,7 +433,8 @@ enum PageId {
     PAGE_INFO_BOX_WITH_OK_PROMPT        = 0xC9,
     PAGE_MKCHANNEL_EXPLANATION          = 0xCA, //DONE
     PAGE_ADD_MKCHANNEL_PROMPT           = 0xCB, //DONE
-    PAGE_DRAWS_BENEATH_SECTION_OPTIONS  = 0xCC,
+    PAGE_DRAWS_BENEATH_SECTION_OPTIONS  = 0xCC, //DONE
+    PAGE_UNLOCK                         = 0xCD, //DONE
     PAGE_OVERALL_RECORDS                = 0xCE, //DONE
     PAGE_FAVOURITES                     = 0xCF, //DONE
     PAGE_FRIEND_RECORDS                 = 0xD0, //DONE
@@ -455,15 +457,15 @@ enum SectionId {
     SECTION_TEST_D                      = 0xd,
     SECTION_TEST_E                      = 0xe,
     SECTION_TEST_F                      = 0xf,
-    SECTION_CREATE_NEW_SAVE             = 0x10,
-    SECTION_CORRUPT_SAVE                = 0x11,
-    SECTION_COUNTRY_CHANGED             = 0x12,
-    SECTION_GAME_CANNOT_BE_SAVED        = 0x13,
-    SECTION_CANNOT_ACCESS_SYSTEM_MEMORY = 0x14,
-    SECTION_CANNOT_ACCESS_MII_DATA      = 0x15,
-    SECTION_ESRB_NOTICE                 = 0x16,
-    SECTION_RECOMMEND_60HZ_1            = 0x17,
-    SECTION_RECOMMEND_60HZ_2            = 0x18,
+    SECTION_CREATE_NEW_SAVE             = 0x10, //DONE
+    SECTION_CORRUPT_SAVE                = 0x11, //DONE
+    SECTION_COUNTRY_CHANGED             = 0x12, //DONE
+    SECTION_GAME_CANNOT_BE_SAVED        = 0x13, //DONE
+    SECTION_CANNOT_ACCESS_SYSTEM_MEMORY = 0x14, //DONE
+    SECTION_CANNOT_ACCESS_MII_DATA      = 0x15, //DONE
+    SECTION_ESRB_NOTICE                 = 0x16, //DONE
+    SECTION_RECOMMEND_60HZ_1            = 0x17, //DONE
+    SECTION_RECOMMEND_60HZ_2            = 0x18, //DONE
     SECTION_GP_PANORAMA                 = 0x19,
     SECTION_VS_RACE_PANORAMA            = 0x1a, //DONE
     SECTION_BALLOON_BATTLE_PANORAMA     = 0x1b,
@@ -473,20 +475,20 @@ enum SectionId {
     SECTION_TT                          = 0x1f, //DONE
     SECTION_P1VS                        = 0x20, //DONE
     SECTION_P2VS                        = 0x21, //DONE
-    SECTION_P3VS                        = 0x22,
-    SECTION_P4VS                        = 0x23,
+    SECTION_P3VS                        = 0x22, //DONE
+    SECTION_P4VS                        = 0x23, //DONE
     SECTION_P1TEAM_VS                   = 0x24,
     SECTION_P2TEAM_VS                   = 0x25,
     SECTION_P3TEAM_VS                   = 0x26,
     SECTION_P4TEAM_VS                   = 0x27,
-    SECTION_P1BATTLE                    = 0x28,
-    SECTION_P2BATTLE                    = 0x29,
-    SECTION_P3BATTLE                    = 0x2a,
-    SECTION_P4BATTLE                    = 0x2b,
+    SECTION_P1BATTLE                    = 0x28, //DONE
+    SECTION_P2BATTLE                    = 0x29, //DONE
+    SECTION_P3BATTLE                    = 0x2a, //DONE
+    SECTION_P4BATTLE                    = 0x2b, //DONE
     SECTION_MISSION_MODE                = 0x2c,
     SECTION_TOURNAMENT                  = 0x2d,
     SECTION_GP_REPLAY                   = 0x2e,
-    SECTION_TT_REPLAY                   = 0x2f,
+    SECTION_TT_REPLAY                   = 0x2f, //DONE
     SECTION_GHOST_RACE_1                = 0x30,
     SECTION_GHOST_RACE_2                = 0x31,
     SECTION_WATCH_GHOST_FROM_CHANNEL    = 0x32,
@@ -532,7 +534,7 @@ enum SectionId {
     SECTION_P2_WIFI_SELECT_MII          = 0x5a, //DONE
     SECTION_P2_WIFI                     = 0x5b, //DONE
     SECTION_P2_WIFI_GLOBE_DISCONNECT    = 0x5c, //DONE
-    SECTION_UNKNOWN_5D                  = 0x5d,
+    SECTION_P2_WIFI_FROM_FIND_FRIEND    = 0x5d,
     SECTION_P2_WIFI_VS_VOTING           = 0x5e,
     SECTION_P2_WIFI_BATTLE_VOTING       = 0x5f,
     SECTION_P1_WIFI_FROOM_VS_VOTING     = 0x60,
@@ -579,14 +581,14 @@ enum SectionId {
     SECTION_TOURNAMENT_WHEEL_ONLY_BOSSES= 0x89,
     SECTION_INVITE_FRIENDS_MSG_BOARD    = 0x8a,
     SECTION_DOWNLOAD_LATEST_DATA        = 0x8b,
-    SECTION_OPTIONS                     = 0x8c,
+    SECTION_OPTIONS                     = 0x8c, //DONE
     SECTION_INSTALL_CHANNEL             = 0x8d,
     SECTION_CHOOSE_REGION               = 0x8e,
     SECTION_JOIN_MESSAGE_SERVICE        = 0x8f,
-    SECTION_MSG_UNLOCK_ORANGE1          = 0x90,
-    SECTION_MSG_UNLOCK_ORANGE2          = 0x91,
-    SECTION_MSG_UNLOCK_BLUE             = 0x92,
-    SECTION_MSG_UNLOCK_YELLOW           = 0x93,
+    SECTION_MSG_UNLOCK_ORANGE1          = 0x90, //DONE
+    SECTION_MSG_UNLOCK_ORANGE2          = 0x91, //DONE
+    SECTION_MSG_UNLOCK_BLUE             = 0x92, //DONE
+    SECTION_MSG_UNLOCK_YELLOW           = 0x93, //DONE
     SECTION_BROKEN_MISSION_MODE         = 0x94
 };
 
@@ -627,7 +629,7 @@ enum BRSARGroups {
     BRSAR_GROUP_rWS     = 0x21,
     BRSAR_GROUP_rDH     = 0x24,
     BRSAR_GROUP_rBC3    = 0x2D,
-    BRSAR_GROUP_rDKJP   = 0x2C,
+    BRSAR_GROUP_rDopP   = 0x2C,
     BRSAR_GROUP_rMC     = 0x20,
     BRSAR_GROUP_rMC3    = 0x27,
     BRSAR_GROUP_rPG     = 0x25,
@@ -672,6 +674,7 @@ enum BRSARGroups {
 };
 
 enum SoundIDs {
+    SOUND_ID_WIFI_MUSIC                     = 0x1,
     SOUND_ID_LC                             = 0x75,
     SOUND_ID_LC_F                           = 0x76,
     SOUND_ID_MMM                            = 0x77,
@@ -769,6 +772,7 @@ enum SoundIDs {
 
     SOUND_ID_GALAXY_COLOSSEUM               = 0xC9,
 
+    SOUND_ID_OFFLINE_MENUS                  = 0x55, //the music on cupselect
     SOUND_ID_RACE_INTRO                     = 0x56,
     SOUND_ID_WIFI_RACE_INTRO                = 0x5B,
     SOUND_ID_BATTLE_INTRO                   = 0x57,
@@ -791,7 +795,7 @@ enum SoundIDs {
     SOUND_ID_OPTIONS                        = 0x53,
     SOUND_ID_TT_INTRO_FANFARE               = 0x5A,
     SOUND_ID_RACE_INTRO_FANFARE             = 0x59,
-    SOUND_ID_GHOST_REPLAY                   = 0xCF,
+    SOUND_ID_GHOST_REPLAY                   = 0xCF, //also wifi waiting
     SOUND_ID_TROPHY_SHORT                   = 0xCC,
     SOUND_ID_TROPHY_LOSE                    = 0xCD,
     SOUND_ID_TROPHY_NORMAL                  = 0xCB,

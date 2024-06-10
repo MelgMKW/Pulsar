@@ -7,6 +7,8 @@ struct Mtx34 : EGG::Matrix34f {
     Vec3 GetColumnByIdx(u32 idx); //80537b80
 };
 
+typedef nw4r::math::MTX33 Mtx33;
+
 
 
 #endif

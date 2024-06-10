@@ -31,7 +31,7 @@ kmCall(0x80553a60, LaunchRiivolutionButton);
 
 //Top left message when a race is about to start in a froom
 
-static void FixStartMessageFroom(CtrlRaceWifiStartMessage* startMsg, u32 bmgId, TextInfo* info) {
+static void FixStartMessageFroom(CtrlRaceWifiStartMessage* startMsg, u32 bmgId, Text::Info* info) {
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
     const SectionId id = sectionMgr->curSection->sectionId;
     if(id == SECTION_P1_WIFI_FRIEND_VS || id == SECTION_P1_WIFI_FRIEND_TEAMVS
@@ -50,7 +50,7 @@ static void DisplayDate(CtrlMenuPressStart* start) {
 }
 kmCall(0x8063ac58, DisplayDate);
 
-void CustomRoomDenyText(Pages::MessageBoxTransparent* msgBox, u32 bmgId, const TextInfo* info) {
+void CustomRoomDenyText(Pages::MessageBoxTransparent* msgBox, u32 bmgId, const Text::Info* info) {
     if(Pulsar::System::sInstance->isCustomDeny) bmgId = BMG_ROOM_DENY;
     msgBox->SetMessageWindowText(bmgId, info);
 }

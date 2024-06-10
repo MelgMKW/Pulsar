@@ -26,8 +26,8 @@ struct PlayerInfo {
     u8 hudSlotid; //0 for P1, 1 for P2 on the same console etc....
     u8 unknown_0x2[2]; //never stored likely padding
     u32 team; //0x2 if no team (depending on the section), 0x0 blue, 0x1 red 0x1F8
-    u16 randomThing; //806519c4, no idea, gets the current license then does a bunch of operations 0x1FC
-    u16 randomThing2; //80651a20, very similar, but uses a different address to start the operations
+    u16 vr; //806519c4, no idea, gets the current license then does a bunch of operations 0x1FC
+    u16 br; //80651a20, very similar, but uses a different address to start the operations
 };//total size0xC
 
 namespace Pages {

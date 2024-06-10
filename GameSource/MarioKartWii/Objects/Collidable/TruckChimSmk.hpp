@@ -19,7 +19,7 @@ public:
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806df3f4
     ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer,
         ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806df558
-    void OnWallCollision(const Kart::Player& kartPlayer, Vec3ZeroInit position) override; //0xc8 806df770
+    void OnWallCollision(const Kart::Player& kartPlayer, Vec3 position) override; //0xc8 806df770
 
     u32 unknown_0xb0; //0xb0
     EGG::Effect* effect; //0xb4 based on variant, rk_truckChimSmkWCalc for ex

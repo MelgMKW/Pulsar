@@ -184,7 +184,7 @@ const char* regCupNames[8] ={ "kinoko", "koura", "flower", "banana", "star", "ko
 void ExpCupSelect::UpdateCupData(PulsarCupId pulsarCupId, LayoutUIControl& control) {
     u32 bmgId;
     char tplName[0x20];
-    TextInfo info;
+    Text::Info info;
     u32 realCupId = CupsConfig::ConvertCup_PulsarIdToRealId(pulsarCupId);
     if(CupsConfig::IsRegCup(pulsarCupId)) {
         snprintf(tplName, 0x20, "tt_cup_icon_%s_00.tpl", &cupTPLs[realCupId][8]);

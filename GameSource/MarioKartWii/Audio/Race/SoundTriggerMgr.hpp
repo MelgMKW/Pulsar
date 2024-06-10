@@ -17,12 +17,13 @@ public:
     ~SoundTriggerMgr(); //807185a4
     void Update(); //80718f48 effectively does nothing
     void Init(); //80718720 just calls ApplyTrigger
+    void Shutdown(); //80718f3c effectively does nothing because the bool is unused
     void ApplyTrigger(s32 variant, s32 hudSlotId, Kart::Player* kartPlayer); //80719044
     bool IsAPlayerOnVariant(s32 variant) const; //80718ef8
     bool IsPlayerAheadOfOtherLocal(u8 hudSlotId); //80718f84 inlined 
 
     EGG::TDisposer<SoundTriggerMgr> disposer; //807182e8 vtable 808c9418
-    bool unknown_0x10;
+    bool unused;
     u8 localPlayerCount; //0x11
     u8 curVariant[4]; //0x12
     u8 padding[2];

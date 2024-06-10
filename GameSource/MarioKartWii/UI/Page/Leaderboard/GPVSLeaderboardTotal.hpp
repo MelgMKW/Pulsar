@@ -14,7 +14,9 @@ public:
     PageId GetNextPage() const override; //0x10 8085cc40
     void OnInit() override; //0x28 8085c9b0
     int GetRuntimeTypeInfo() const override; //0x60 8085e5b0
-    void LoadRows() override; //0x68 8085cae8
+    void FillRows() override; //0x68 8085cae8
+
+    static void ComparePlayers(const Player* first, const Player* second); //8085cc84 qsort func
 }; //total size 0x1A8
 size_assert(GPVSLeaderboardTotal, 0x1A8);
 }//namespace Pages

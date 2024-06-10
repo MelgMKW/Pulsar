@@ -19,19 +19,20 @@ public:
     int GetRuntimeTypeInfo() const override; //0x60 806531a0
     virtual void Reset(); //0x64 806525a0
 
-    void SetMessageBoxMsg(u32 bmgId, TextInfo* text); //806525fc
-    void SetButtonMsg(u32 buttonId, u32 bmgId, TextInfo* text, u32 r7); //80652604
+    void SetMessageBoxMsg(u32 bmgId, Text::Info* text); //806525fc
+    void PrepareButton(u32 buttonId, u32 bmgId, Text::Info* text, u32 endAnimDir,
+        const PtmfHolder_2A<Page, void, u32, PushButton&> onClickPtmf); //80652604
     void OnButtonClick(PushButton& button, u32 hudSlotId); //80652678
     void SelectInitialButton(); //80652700
 
     static void TriggerPtmf(PtmfHolder_2A<YesNo, void, PushButton&, u32>& handler, PushButton& button, u32 hudSlotId); //806531ac
 
 
-    const PtmfHolder_2A<Page, void, u32, PushButton&>* onButtonClickObj[2]; //0x44 called by OnButtonClick, 1st arg is buttonId
+    PtmfHolder_2A<Page, void, u32, PushButton&>* onButtonClickObj[2]; //0x44 called by OnButtonClick, 1st arg is buttonId
     u32 unknown_0x44[2];
     ControlsManipulatorManager controlsManipulatorManager; //0x4c
     u32 clickedButtonId; //0x270
-    u32 unknown_0x274[2]; //0x274
+    u32 endAnimDir[2]; //0x274 animDir this page should end when a given button is clicked
     u32 initialButtonIdx; //0x27c
     PtmfHolder_2A<YesNo, void, PushButton&, u32> onClickHandler; //80652678
     PushButton buttons[2]; //0x294
@@ -74,7 +75,7 @@ public:
     void AfterExitAnimations() override; //0x44 80653160
     int GetRuntimeTypeInfo() const override; //0x60 8065317c
     void Reset() override; //806530d0
-    void SetTitleMsg(u32 bmgId, TextInfo* textInfo = nullptr); //8065313c
+    void SetTitleMsg(u32 bmgId, Text::Info* textInfo = nullptr); //8065313c
     CtrlMenuPageTitleText titleText; //0x8b8
 };
 size_assert(YesNoFull, 0xa2c);

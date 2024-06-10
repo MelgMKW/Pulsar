@@ -26,7 +26,7 @@ size_assert(GameHeapImpl, 0xF0);
 
 class GameHeap : public GameHeapImpl {
 public:
-    //a 2nd vtable existing (with the same funcs) shows this template system is incorrect OR that disposers work differently than though
+    //a 2nd vtable existing (with the same funcs) shows this template system is incorrect OR that disposers work differently than thought
     static GameHeap* sInstance; //809c2350 vtable 808c79f0 
     GameHeap* CreateInstance(); //806fdc1c
     void DestroyInstance(); //806fdcec

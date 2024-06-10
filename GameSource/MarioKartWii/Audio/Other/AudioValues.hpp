@@ -17,6 +17,7 @@ namespace Audio {
 using namespace nw4r;
 
 class Track : public EGG::AudioTrack {
+public:
     bool Calc() override; //80717d2c vtable 808c91e0
     void SetValue(float minValue, float maxValue); //80717d08 if curVol > max then set to max, opposite for min
 
@@ -37,8 +38,13 @@ class PlayersVolumeMgr {
     static PlayersVolumeMgr* CreateInstance(); //8070eff4
     static void DestroyInstance(); //8070f0e8
     ~PlayersVolumeMgr(); //8070f19c
-    void Calc(); //8070f3e8
-    void SetVolume(bool isFull); //8070f6b8 volume of the tracks will be 50% if bool is false
+    void Calc() const; //8070f3e8
+    void SetVolume(bool isFull) const; //8070f6b8 volume of the tracks will be 50% if bool is false
+    void ResetAllButUI() const; //8070f554
+    void Reset() const; //8070f59c
+    void PauseAllButTrackUI(bool pauseOrRestart) const; //8070f648 pause = true
+    void StopAllPlayersButTrackUI(); //8070f470
+    void MuteAllButTrackUI() const; //8070f4d0 inlined in func above
 
     EGG::TDisposer<PlayersVolumeMgr> disposer; //8070eec8 vtable 808c8f90
     static Track volumes[11]; //809c26b8 1 track = 1 soundPlayer

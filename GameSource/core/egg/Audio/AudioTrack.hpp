@@ -19,6 +19,7 @@ struct AudioTrackCallback {
 };
 
 class AudioTrack {
+public:
     AudioTrack(); //80213e1c
     AudioTrackCallback callback;
     virtual void Reset(); //at 0x8 80213e48 vtable 802a2980
@@ -28,7 +29,7 @@ class AudioTrack {
     u32 delay; //0xC number of steps in frames
     float maxValue; //0x10
     float curValue; //0x14
-    float step; //how much value increases every frame
+    float step; //how much value decreases every frame
 };
 
 class SimpleAudioTrack : public AudioTrack {

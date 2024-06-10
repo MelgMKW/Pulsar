@@ -49,7 +49,7 @@ kmCall(0x8085d460, DisplayTimesInsteadOfNames); //for WWs
 kmWrite32(0x807F4DB8, 0x38000001);
 
 //Draggable blue shells
-static void DraggableBlueShells(Item::PlayerSub& sub) {
+static void DraggableBlueShells(Item::PlayerObj& sub) {
     if(Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_BLUES) == RACESETTING_DRAGGABLE_BLUES_DISABLED) {
         sub.isNotDragged = true;
     }

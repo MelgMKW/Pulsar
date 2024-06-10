@@ -6,6 +6,13 @@
 #include <MarioKartWii/System/Timer.hpp>
 #include <MarioKartWii/Driver/DriverController.hpp>
 
+struct Timers {
+    u32 raceFrames; //copied from raceinfo
+    u32 raceFramesLastBit;
+    u32 raceFramesLast2Bits;
+    u32 raceFramesLast3Bits;
+};
+
 class DriverMgr {
 public:
     static DriverMgr* sInstance; //809c2f38
@@ -13,6 +20,8 @@ public:
     static void DestroyInstance(); //8078ca38
     static Random* GetRaceInfoRandom(); //807bd718
     static bool IsPlayerComputer(u8 playerId); //807bd5bc
+    static Timers* timers; //809c38c0
+
     DriverMgr(); //8078ca5c
     ~DriverMgr(); //8078ce24
     void InitAwards(); //8078d7e8

@@ -74,7 +74,7 @@ public:
     RFL::FavoriteColor favoriteColor; //0x64
     RFL::AdditionalInfo info; //0x68
     bool isLoaded; //0xa4
-    bool isUserMii;
+    bool isUserMii; //0xa5
     u8 unknown_0xa6[2]; //0xa6
     MiiBuild weight; //0xa8
     u8 unknown_0xac[0xae - 0xac]; //0xac

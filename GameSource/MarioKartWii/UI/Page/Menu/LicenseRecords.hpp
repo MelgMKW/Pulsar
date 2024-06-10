@@ -7,6 +7,7 @@
 namespace Pages {
 
 class LicenseRecords : public MenuInteractable { //ID 0xCE ID 0xD0 ID 0xD1 ID 0xD2
+    static const PageId id = PAGE_OVERALL_RECORDS;
     LicenseRecords(); //8062c0f4
     ~LicenseRecords() override; //8085ff34 vtable 808daeb0
     void OnInit() override; //0x28 8085f1bc
@@ -21,6 +22,7 @@ class LicenseRecords : public MenuInteractable { //ID 0xCE ID 0xD0 ID 0xD1 ID 0x
     UIControl* CreateControl(u32 controlId) override; //0x88 8085f310
     void SetButtonHandlers(PushButton& button) override; //0x8C 8085fed0
 
+    static Page* GetPageById(PageId id = PAGE_OVERALL_RECORDS); //8085f0ac
 }; //0x6c4
 size_assert(LicenseRecords, 0x6c4);
 }//namespace Pages

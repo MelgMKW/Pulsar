@@ -4,7 +4,7 @@
 #include <kamek.hpp>
 #include <core/rvl/ipc/ipc.hpp>
 #include <core/RK/RKSystem.hpp>
-#include <MarioKartWii/UI/Text.hpp>
+#include <MarioKartWii/UI/Text/Text.hpp>
 #include <MarioKartWii/System/Identifiers.hpp>
 #include <Debug/Debug.hpp>
 #include <IO/IO.hpp>

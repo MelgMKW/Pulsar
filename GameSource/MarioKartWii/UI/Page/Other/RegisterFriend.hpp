@@ -28,8 +28,8 @@ public:
     CtrlMenuPageTitleText titleText; //0x44
     u32 unknown_0x1b8; //0x1b8
     ManipulatorManager manipulatorManager;
-    TextInfo textInfo1; //0x1cc
-    TextInfo textInfo2; //0x1cc
+    Text::Info textInfo1; //0x1cc
+    Text::Info textInfo2; //0x1cc
     u8 unknown_0x354[0x368 - 0x354];
 
 };

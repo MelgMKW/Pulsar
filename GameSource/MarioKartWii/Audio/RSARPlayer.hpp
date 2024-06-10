@@ -1,6 +1,7 @@
 #ifndef _RACERSARSOUNDS_
 #define _RACERSARSOUNDS_
 #include <kamek.hpp>
+#include <MarioKartWii/Scene/GameScene.hpp>
 #include <MarioKartWii/UI/Page/Page.hpp>
 /*
 Contributors:
@@ -20,20 +21,25 @@ namespace Audio {
 class Handle;
 class RSARPlayer {
 public:
-    static RSARPlayer* CreateInstance(u32 type); //80713e90 1 = menu
+    static RSARPlayer* CreateInstance(SceneId sceneId); //80713e90 1 = menu
     static RSARPlayer* DestroyInstance(); //807140b4
     static RSARPlayer* sInstance; //809c2850
-    static void PlaySoundById(u32 soundId, u32 r4, Page* page); //807146a8 page unused
+    ~RSARPlayer(); //807168bc inlined
+    static Handle seqSoundHandle; //809c282c
+    static u32 curSeqSoundIds[4]; //809c2840 0 if nothing, so mostly 0
+    static bool PlaySoundById(u32 soundId, u32 r4, Page* page); //807146a8 page unused
+    static bool HoldSoundById(u32 soundId, u32 r4, Page* page); //8071476c only works if page is defocusing or exiting
+    static void StopSoundById(u32 soundId, int fadeFrames); //807155e4
     virtual void Close(); //0x8 8071412c vtable 808c90e8
     virtual void OnDeactivate(); //0xc 80714184 sets state to 2, and child classes check variables like if the player is a ghost
     virtual void Stop(); //0x10 80714190
     virtual void Calc(); //0x14 807141f8
     virtual void OnNewPageLayer(PageId pageId, PageState state); //0x18 80714370
-    virtual bool Prepare() = 0;
-    virtual bool PlaySound(u32 soundId, u8 hudslotid); //0x20 8071497c
-    virtual bool HoldSound(u32 soundId); //80715624 for continuous sounds like the OK after clicking "solo tt"
-    virtual void PrepareReverb(); //80715a70
-    virtual void Reset(); //80715a74
+    virtual bool Prepare() = 0; //0x1c
+    virtual bool PlaySound(u32 soundId, u8 hudslotid); //0x20 8071497c returns false if the sound is already playing (by using the static array)
+    virtual bool HoldSound(u32 soundId); //0x24 80715624 for continuous sounds like the OK after clicking "solo tt"
+    virtual void PrepareReverb(); //0x28 80715a70
+    virtual void Reset(); //0x2c 80715a74
     static bool HasFinishedLoadingGroups(); //807141ec on Stop, leads to DVDCancelAll if it returns false
     static bool IsDemo(); //80713dcc
     static SectionId curSection; //809c26ac
@@ -43,7 +49,7 @@ public:
     u8 unknown_0xC; //checks if it's 1 after pressing next race
     u8 unknown_0xD[3]; //likely padding
     SectionId sectionId; //0x10
-    bool isPaused;
+    bool isPaused; //0x14
     bool isRouletteSoundPlaying; //alternates 0/1 within the same frame, but only when the roulette sound is playing
     u8 padding[2];
 };//0x18
@@ -51,8 +57,8 @@ size_assert(RSARPlayer, 0x18);
 
 class MenuRSARPlayer : public RSARPlayer {
 public:
-    //ctor? 80715a98 inlined
-    void Close() override; //0x8 80715b7c vtable 808c90e8
+    MenuRSARPlayer(); //80715a98 inlined
+    void Close() override; //0x8 80715b7c vtable 808c90b8
     void OnDeactivate() override; //0xc 80715bd4 sets state to 2, and child classes check variables like if the player is a ghost
     void Stop() override; //0x10 807c5c3c
     void OnNewPageLayer(PageId pageId, PageState state) override; //0x18 80714374
@@ -62,6 +68,7 @@ public:
 
 class RaceRSARPlayer : public RSARPlayer {
 public:
+    RaceRSARPlayer(); //80715da4 inlined
     void Close() override; //0x8 80716404 vtable 808c9088
     void OnDeactivate() override; //0xc 80715e24
     void Stop() override; //0x10 80715e64
@@ -80,6 +87,25 @@ public:
 
     u8 unknown_0x18[4]; //probably for other types of sounds
 }; //total size 0x1C
+
+class TestRSARPlayer : public RSARPlayer { //sceneId 0x3
+public:
+    TestRSARPlayer(); //807167b8 inlined
+    virtual void Close(); //0x8 8071681c vtable 808c9058
+    virtual void OnDeactivate(); //0xc 80716874
+    virtual bool Prepare(); //0x1c 807167ec
+};
+
+class GlobeRSARPlayer : public RSARPlayer {
+public:
+    GlobeRSARPlayer(); //80716880 inlined
+    void Close() override; //0x8 80716ca4 vtable 808c9028
+    void OnDeactivate() override; //0xc 80716940
+    void Calc() override; //0x14 80716a20
+    bool Prepare() override; //0x1c 8071698c
+    void PrepareReverb() override; //80716b98
+};
+
 }//namespace Audio
 extern u32 currentlyPlayingSoundID[0x10]; //809c2840
 #endif

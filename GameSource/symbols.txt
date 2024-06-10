@@ -201,7 +201,7 @@ DCFlushRange = 0x801a162c
 DCInvalidateRange__FPvUi = 0x801a1600
 ICInvalidateRange = 0x801a1710
 DCStoreRange__FPvUi = 0x801a165c
-OSCalcCRC32 = 0x801d1ca0
+CalcCRC32__2OSFPvUi = 0x801d1ca0
 OSDisableInterrupts = 0x801a65ac
 OSRestoreInterrupts = 0x801a65d4
 OSGetCurrentContext = 0x801a1ecc
@@ -447,12 +447,13 @@ ComputeGPRank__14RaceDataPlayerFv = 0x8052daf0
 #RaceInfo
 sInstance__8RaceInfo = 0x809bd730
 IsAtLeastStage__8RaceinfoFUi = 0x80536230
+SetPlayerDisconnected__8RaceInfoFUc = 0x80533d84
 
 #RaceInfoPlayer
 __ct__14RaceInfoPlayerFUcUc = 0x80533ed8
 __dt__14RaceInfoPlayerFv = 0x80532f48
 FillTimerWithSplits__14RaceInfoPlayerFUcP5Timer = 0x8053572c
-
+Disconnect__14RaceInfoPlayerFv = 0x80534cbc
 
 #random
 __ct__6RandomFv = 0x80555464
@@ -569,8 +570,8 @@ SetPositionAnim__9UIControlFR16PositionAndScalef = 0x8063d194
 OnPlayAnimSound__9UIControlFv = 0x805BD2DC
 GetRuntimeTypeInfo__9UIControlCFv = 0x80606bdc
 GetClassName__9UIControlCFv = 0x8063d3c0
-func_0x30__9UIControlFv = 0x8063d608
-func_0x34__9UIControlFv = 0x805bd2d8
+vf_0x30__9UIControlFv = 0x8063d608
+vf_0x34__9UIControlFv = 0x805bd2d8
 InitControlGroup__9UIControlFUi = 0x8063d268
 AddControl__9UIControlFUiP9UIControl = 0x8063d278
 PlaySound__9UIControlFUiUi = 0x8063d74c
@@ -584,10 +585,10 @@ Update__15LayoutUIControlFv = 0x8063DB00
 Draw__15LayoutUIControlFUi = 0x8063DB84
 GetRuntimeTypeInfo__15LayoutUIControlCFv = 0x80636bd0
 GetClassName__15LayoutUIControlCFv = 0x8063d788
-func_0x30__15LayoutUIControlFv = 0x8063E61c
+vf_0x30__15LayoutUIControlFv = 0x8063E61c
 LoadNewLayout__15LayoutUIControlFPCcPCc = 0x8063D954
-SetTextBoxMessage__15LayoutUIControlFPCcUiPC8TextInfo = 0x8063dcbc
-SetMessage__15LayoutUIControlFUiPC8TextInfo = 0x8063ddb4
+SetTextBoxMessage__15LayoutUIControlFPCcUiPCQ24Text4Info = 0x8063dcbc
+SetMessage__15LayoutUIControlFUiPCQ24Text4Info = 0x8063ddb4
 SetMiiPane__15LayoutUIControlFPCcRC8MiiGroupUiUc = 0x8063e3dc
 SetPicturePane__15LayoutUIControlFPCcPCc = 0x8063e0f0
 __ct__24LayoutUIControlScaleFadeFv = 0x8063e674
@@ -826,13 +827,13 @@ Init__17ControlButtonInfoFv = 0x805ef958
 __vt__18CtrlMenuBackButton = 0x808d374c
 
 #Title
-SetMessage__21CtrlMenuPageTitleTextFUiPC8TextInfo = 0x807e987c
+SetMessage__21CtrlMenuPageTitleTextFUiPCQ24Text4Info = 0x807e987c
 
 #TitleImage
 ChangeImage__10TitleImageFbUi = 0x8063a8d4
 
 #Instruction
-SetMessage__23CtrlMenuInstructionTextFUiPC8TextInfo = 0x807e9a38
+SetMessage__23CtrlMenuInstructionTextFUiPCQ24Text4Info = 0x807e9a38
 __vt__23CtrlMenuInstructionText = 0x808d3698
 __dt__23CtrlMenuInstructionTextFv = 0x805c00c0
 Load__23CtrlMenuInstructionTextFv = 0x807e9904
@@ -845,7 +846,7 @@ GetButtonDriver__23CtrlMenuCharacterSelectF11CharacterId = 0x807e35b0
 buttonIdToCharacterId__23CtrlMenuCharacterSelect = 0x808a7de0
 
 #TextInfo
-__ct__8TextInfoFv = 0x805cd94c
+__ct__Q24Text4InfoFv = 0x805cd94c
 
 #CtrlRaceBase
 __vt__12CtrlRaceBase = 0x808d3a98
@@ -888,7 +889,8 @@ HasStarted__24CtrlRaceWifiStartMessageFv = 0x807F8BA4
 
 
 #CtrlResult
-DisplayFinishTime__14CtrlRaceResultFUc = 0x807f595c
+FillName__14CtrlRaceResultFUc = 0x807f52f4
+FillFinishTime__14CtrlRaceResultFUc = 0x807f595c
 
 #Votes
 Fill__11VoteControlFbUiRC8MiiGroupUibUi = 0x80642ca4 
@@ -1128,6 +1130,7 @@ SetButtonHandlers__Q25Pages11DriftSelectFR10PushButton = 0x8084e760
 CreateExternalControl__Q25Pages12SinglePlayerFUi = 0x8084efc4
 OnExternalButtonSelect__Q25Pages12SinglePlayerFR10PushButtonUi = 0x8084f688
 OnButtonClick__Q25Pages12SinglePlayerFR10PushButtonUi = 0x8084f298
+GetFanfareLength__Q25Audio12SinglePlayerCFv = 0x806f9728
 
 #GhostSelectPage
 __ct__Q25Pages11GhostSelectFv = 0x806395ec
@@ -1150,7 +1153,7 @@ __ct__Q25Pages10VSSettingsFv = 0x806284c8
 OnButtonDeselect__Q25Pages10VSSettingsFR10PushButtonUi = 0x808536b0
 
 #MatchingMessageWindow
-SetMessage__Q25Pages21MatchingMessageWindowFUiPC8TextInfo = 0x80607ef8
+SetMessage__Q25Pages21MatchingMessageWindowFUiPCQ24Text4Info = 0x80607ef8
 
 #WFCMainPage
 __ct__Q25Pages11WFCMainMenuFv = 0x8064b640
@@ -1254,6 +1257,7 @@ Unlock__Q25Audio7ManagerFv = 0x807178f8
 
 #SinglePlayer
 sInstance__Q25Audio12SinglePlayer = 0x809c2328
+PrepareSound__Q25Audio12SinglePlayerFUib = 0x806f8dcc
 PlaySound__Q25Audio12SinglePlayerFUis = 0x806f8b7c
 PlayBGSound__Q25Audio12SinglePlayerFUi = 0x806fa604
 StopSound__Q25Audio12SinglePlayerFv = 0x806f90c4
@@ -1333,6 +1337,10 @@ sInstance__Q25RKNet10Controller = 0x809c20d8
 UpdateAidsBelongingToPlayerIds__Q25RKNet10ControllerFv = 0x80659bc0
 Init__Q25RKNet10ControllerFUc = 0x80655c10
 ScheduleShutdown__Q25RKNet10ControllerFv = 0x806561a8
+ProcessPlayerDisconnect__Q25RKNet10ControllerFUi = 0x80658990
+
+#PacketMgr
+sInstance__Q25RKNet9PacketMgr = 0x809c1f50
 
 #PacketHolder
 sInstance__Q25RKNet13SELECTHandler = 0x809c2100

@@ -5,7 +5,7 @@
 
 //_sinit_ at 8084edf8
 namespace Pages {
-class TopMenuOverlay : public Menu { //ID 0x5e simply a MenuPage in its simplest form with no actions etc...
+class TopMenuOverlay : public Menu { //ID 0x5e but also 0xcc simply a MenuPage in its simplest form with no actions etc...
     static const PageId id = PAGE_TOP_MENU_OVERLAY;
     TopMenuOverlay(); //806261e8
     ~TopMenuOverlay() override; //8084ed6c vtable 808d9e48

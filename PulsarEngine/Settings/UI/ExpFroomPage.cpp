@@ -83,24 +83,22 @@ void ExpFroom::AfterControlUpdate() {
     globe->message.isHidden = hidden;
     globe->miiName.isHidden = hidden;
     for(FriendMatchingPlayer* player = &mgr->miiIcons[0]; player < &mgr->miiIcons[24]; player++) player->isHidden = hidden;
+    mgr->titleText.isHidden = hidden;
     if(hidden) { //these get updated by the game too, so only need to update their isHidden when they should be forced hidden
         this->startButton.isHidden = hidden;
         this->addFriendsButton.isHidden = hidden;
         waiting->messageWindow.isHidden = hidden;
-        mgr->titleText.isHidden = hidden;
         mgr->busySymbol.isHidden = hidden;
-        GlobeMgr::sInstance->earthmodel->isMiiShown = false;
-        GlobeMgr::sInstance->ResetGlobeMii();
+        GlobeMgr* globeMgr = GlobeMgr::sInstance;
+        globeMgr->earthmodel->isMiiShown = false;
+        globeMgr->ResetGlobeMii();
 
     }
     else { //if controls are enabled, teamsButton is only visible for hosts when >2players in room
         const RKNet::Controller* controller = RKNet::Controller::sInstance;
         const RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
         bool teamHidden = true;
-
-        if(sub.hostAid == sub.localAid && sub.playerCount >= 2) {
-            teamHidden = false;
-        }
+        if(sub.hostAid == sub.localAid && sub.playerCount >= 2) teamHidden = false;
         this->teamsButton.isHidden = teamHidden;
         this->teamsButton.manipulator.inaccessible = teamHidden;
     }

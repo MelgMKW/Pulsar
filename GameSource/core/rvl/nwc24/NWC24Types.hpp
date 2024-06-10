@@ -1,0 +1,143 @@
+#ifndef _NWC24MSGTYPES_ //to split into multiple files ultimately
+#define _NWC24MSGTYPES_
+#include <types.hpp>
+
+
+namespace NWC24 { //this is C, but don't care
+
+enum Error {
+    NWC24_OK                      = 0,
+    NWC24_ERROR_FATAL             = -1,
+    NWC24_ERROR_FAILED            = -2,
+    NWC24_ERROR_INVALID_VALUE     = -3,
+    NWC24_ERROR_NOT_SUPPORTED     = -4,
+    NWC24_ERROR_NULL              = -5,
+    NWC24_ERROR_FULL              = -6,
+    NWC24_ERROR_PROTECTED         = -7,
+    NWC24_ERROR_OVERFLOW          = -8,
+    NWC24_ERROR_LIB_NOT_OPENED    = -9,
+    NWC24_ERROR_LIB_OPENED        = -10,
+    NWC24_ERROR_NOMEM             = -11,
+    NWC24_ERROR_CONFIG            = -12,
+    NWC24_ERROR_NOT_FOUND         = -13,
+    NWC24_ERROR_BROKEN            = -14,
+    NWC24_ERROR_DONE              = -15,
+    NWC24_ERROR_FILE_OPEN         = -16,
+    NWC24_ERROR_FILE_CLOSE        = -17,
+    NWC24_ERROR_FILE_READ         = -18,
+    NWC24_ERROR_FILE_WRITE        = -19,
+    NWC24_ERROR_FILE_NOEXISTS     = -20,
+    NWC24_ERROR_FILE_OTHER        = -21,
+    NWC24_ERROR_MUTEX             = -22,
+    NWC24_ERROR_ALIGNMENT         = -23,
+    NWC24_ERROR_FORMAT            = -24,
+    NWC24_ERROR_STRING_END        = -25,
+    NWC24_ERROR_BUSY              = -26,
+    NWC24_ERROR_VER_MISMATCH      = -27,
+    NWC24_ERROR_HIDDEN            = -28,
+    NWC24_ERROR_INPROGRESS        = -29,
+    NWC24_ERROR_NOT_READY         = -30,
+    NWC24_ERROR_NETWORK           = -31,
+    NWC24_ERROR_SERVER            = -32,
+    NWC24_ERROR_CONFIG_NETWORK    = -33,
+    NWC24_ERROR_ID_NOEXISTS       = -34,
+    NWC24_ERROR_ID_GENERATED      = -35,
+    NWC24_ERROR_ID_REGISTERED     = -36,
+    NWC24_ERROR_ID_CRC            = -37,
+    NWC24_ERROR_NAND_CORRUPT      = -38,
+    NWC24_ERROR_DISABLED          = -39,
+    NWC24_ERROR_INVALID_OPERATION = -40,
+    NWC24_ERROR_FILE_EXISTS       = -41,
+    NWC24_ERROR_INTERNAL_IPC      = -42,
+    NWC24_ERROR_INTERNAL_VF       = -43,
+    NWC24_ERROR_ID_NOT_REGISTERED = -44,
+    NWC24_ERROR_VERIFY_SIGNATURE  = -45,
+    NWC24_ERROR_FILE_BROKEN       = -46,
+    NWC24_ERROR_INVALID_CHAR      = -47,
+    NWC24_ERROR_CANCELLED         = -48,
+    NWC24_ERROR_OLD_SYSTEM        = -49,
+    NWC24_ERROR_SCRIPT_VERSION    = -50,
+    NWC24_ERROR_GIVE_UP           = -51
+};
+
+enum MsgType {
+    NWC24_MSGTYPE_RVL_MENU_SHARED = 0,
+    NWC24_MSGTYPE_WII_MENU_SHARED = 0,
+    NWC24_MSGTYPE_RVL_APP = 1,
+    NWC24_MSGTYPE_WII_APP = 1,
+    NWC24_MSGTYPE_RVL_MENU = 2,
+    NWC24_MSGTYPE_WII_MENU = 2,
+    NWC24_MSGTYPE_RVL_APP_HIDDEN = 3,
+    NWC24_MSGTYPE_WII_APP_HIDDEN = 3,
+};
+enum MsgBoxId {
+    NWC24_SEND_BOX,
+    NWC24_RECV_BOX
+};
+
+enum MIMEType {
+    NWC24_VOID_MIMETYPE     = 0x00000000,
+    NWC24_TXT_PLAIN         = 0x00010000,
+    NWC24_TXT_HTML          = 0x00010001,
+    NWC24_IMG_JPEG          = 0x00020000,
+    NWC24_IMG_WII_PICTURE   = 0x00020001,
+    NWC24_APP_OCTET_STREAM  = 0x00030000,
+    NWC24_APP_WII_MSGBOARD  = 0x00030001,
+    NWC24_APP_WII_MINIDATA  = 0x00030002,
+    NWC24_MUL_MIXED         = 0x000F0000,
+    NWC24_MUL_ALTERNATIVE   = 0x000F0001,
+    NWC24_MUL_RELATED       = 0x000F0002
+
+};
+
+enum Charset {
+    NWC24_US_ASCII = 0x00000000,
+    NWC24_UTF_8 = 0x00010008,
+    NWC24_UTF_16 = 0x00010010,
+    NWC24_UTF_16BE = 0x00010010,   // same
+    NWC24_UTF_32 = 0x00010020,
+    NWC24_UTF_32BE = 0x00010020,   // same
+    NWC24_ISO_2022_JP = 0x00020000,
+    NWC24_SHIFT_JIS = 0x00020001,
+    NWC24_EUC_JP = 0x00020002,
+    NWC24_ISO_8859_1 = 0x00080001,
+    NWC24_ISO_8859_2 = 0x00080002,
+    NWC24_ISO_8859_3 = 0x00080003,
+    NWC24_ISO_8859_5 = 0x00080005,
+    NWC24_ISO_8859_7 = 0x00080007,
+    NWC24_ISO_8859_9 = 0x00080009,
+    NWC24_ISO_8859_10 = 0x0008000A,
+    NWC24_ISO_8859_15 = 0x0008000F,
+    NWC24_WINDOWS_1252 = 0x000F1252,
+    NWC24_CHARSET_UNKNOWN = 0xFFFFFFFF
+};
+
+enum Encoding {
+    NWC24_ENC_7BIT,
+    NWC24_ENC_8BIT,
+    NWC24_ENC_BASE64,
+    NWC24_ENC_QUOTED_PRINTABLE,
+    NWC24_MAX_ENCODINGS
+};
+
+struct CHJumpHeader {
+    u32 magic; //ChJp
+    u32 totalSize;
+    u32 numBlocks;
+    u32 options;
+    u64 titleId;
+}; //0x18
+
+struct CHJumpObj {
+    CHJumpHeader header;
+    u8 data[576];
+}; //0x258
+
+struct MsgObj {
+    u32 data[64];
+}; //0x40
+
+}//namespace NWC24
+
+
+#endif

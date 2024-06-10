@@ -52,7 +52,7 @@ int GetCurTrackBMG() {
 
 static void SetVSIntroBmgId(LayoutUIControl* trackName) {
     u32 bmgId = GetCurTrackBMG();
-    TextInfo info;
+    Text::Info info;
     info.bmgToPass[0] = bmgId;
     u32 authorId;
     if(bmgId < BMG_TRACKS) authorId = BMG_NINTENDO;
@@ -63,7 +63,7 @@ static void SetVSIntroBmgId(LayoutUIControl* trackName) {
 }
 kmCall(0x808552cc, SetVSIntroBmgId);
 
-static void SetAwardsResultCupInfo(LayoutUIControl& awardType, const char* textBoxName, u32 bmgId, TextInfo& info) {
+static void SetAwardsResultCupInfo(LayoutUIControl& awardType, const char* textBoxName, u32 bmgId, Text::Info& info) {
     PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
     if(!CupsConfig::IsRegCup(id)) {
         awardType.layout.GetPaneByName("cup_icon")->flag &= ~1;
@@ -83,7 +83,7 @@ static void SetAwardsResultCupInfo(LayoutUIControl& awardType, const char* textB
 }
 kmCall(0x805bcb88, SetAwardsResultCupInfo);
 
-static void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info) {
+static void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, Text::Info& info) {
 
     PulsarCupId id = CupsConfig::sInstance->lastSelectedCup;
     if(!CupsConfig::IsRegCup(id)) {
@@ -105,7 +105,7 @@ static void SetGPIntroInfo(LayoutUIControl& titleText, u32 bmgId, TextInfo& info
 }
 kmCall(0x808553b4, SetGPIntroInfo);
 
-static void SetGPBottomText(CtrlMenuInstructionText& bottomText, u32 bmgId, TextInfo& info) {
+static void SetGPBottomText(CtrlMenuInstructionText& bottomText, u32 bmgId, Text::Info& info) {
     register ExpCupSelect* cupPage;
     asm(mr cupPage, r31;);
     PulsarCupId id = static_cast<PulsarCupId>(cupPage->ctrlMenuCupSelectCup.curCupID);

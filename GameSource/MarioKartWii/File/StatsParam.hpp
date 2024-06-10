@@ -45,7 +45,8 @@ struct StatsParamFile {
         u32 mt;
         float speedFactors[32];
         float handlingFactors[32];
-        float rotatingItemObjParams[4];
+        Vec2 rotatingItemsRadius; //0x170
+        Vec2 rotatingItemsDistance;
         float vertical_tilt; //0x184
         float megaScale;
         float unknown_0x188;

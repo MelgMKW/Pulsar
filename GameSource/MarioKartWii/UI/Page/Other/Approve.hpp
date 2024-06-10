@@ -25,9 +25,9 @@ class Approve : public Page {//ID 0x52
     void OnClick(PushButton& button, u32 hudSlotId); //805c21c0
     void OnBackButtonClick(CtrlMenuBackButton& button, u32 hudSlotId); //805c223c
     void OnBackPress(u32 hudSlotId); //805c22b8
-    void SetTitleMessage(u32 bmgId, const TextInfo* text = nullptr); //805c21a8
-    void SetMessageWindowMessage(u32 bmgId, const TextInfo* text = nullptr); //805c21b0
-    void SetApproveButtonMessage(u32 bmgId, const TextInfo* text = nullptr); //805c21b8
+    void SetTitleMessage(u32 bmgId, const Text::Info* text = nullptr); //805c21a8
+    void SetMessageWindowMessage(u32 bmgId, const Text::Info* text = nullptr); //805c21b0
+    void SetApproveButtonMessage(u32 bmgId, const Text::Info* text = nullptr); //805c21b8
     static void TriggerApprovePtmf(PtmfHolder_2A<Page, void, Approve&, float>& handler, Approve* button, u32 hudSlotId);
     static void TriggerDisapprovePtmf(PtmfHolder_2A<Page, void, Approve&, float>& handler, Approve* button, u32 hudSlotId);
     CtrlMenuPageTitleText titleText; //0x44

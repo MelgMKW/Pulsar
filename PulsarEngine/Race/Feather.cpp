@@ -11,7 +11,7 @@ namespace Pulsar {
 namespace Race {
 //Credit CLF78 and Stebler, this is mostly a port of their version with slightly different hooks and proper arguments naming since this is C++
 void UseFeather(Item::Player& itemPlayer) {
-    const Kart::Pointers* pointers = itemPlayer.kartPointers;
+    const Kart::Pointers* pointers = itemPlayer.kartLink.pointers;
     pointers->kartMovement->specialFloor |= 0x4; //JumpPad
 
     Kart::Status* status = pointers->kartStatus; //Hijacking bitfield1 14th bit to create a feather state

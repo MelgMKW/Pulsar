@@ -12,7 +12,7 @@ public:
     //init 0xc
     //update 0x10
     //draw 0x14
-    void InitSelf() override; //0x18 807ec6e8 called setup pause position on sanbo
+    void InitSelf() override; //0x18 807ec6e8
     //OnUpdate 0x1c
     //SetPositionAnim 0x20
     //func_805bd2dc 0x24

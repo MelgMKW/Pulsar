@@ -15,6 +15,16 @@ Contributors:
 using namespace nw4r;
 
 namespace Audio {
+enum PlayerIds {
+    AUDIO_TRACK_BRSTM = 0,
+    AUDIO_UI = 1,
+    AUDIO_OBJECTS = 2,
+    AUDIO_ENGINE = 3,
+    AUDIO_KCL = 4,
+    AUDIO_LAKITU = 6,
+    AUDIO_CHARACTERS = 8
+};
+
 class Manager : public EGG::ExpAudioMgr {
 public:
     static void LoadGroup(u32 groupId);
@@ -60,6 +70,7 @@ public:
     //bool HoldSound(snd::SoundHandle* handle, const char* string) override; //0x7c 807179f8
 
     static void OpenBRSAR(); //80716d68
+    static void WriteSeqVariable(snd::SoundHandle* seqHandle, int varNo, s16 var); //80717c48
     void Init(EGG::Heap* heap); //80717150
     void InitSelf(EGG::Heap* heap); //8071724c
     void DestroyAudioInstances(); //80717104

@@ -97,7 +97,7 @@ public:
     GeoHitTableKartObjHolder* geoHitTableKartObj; //0x14
     ObjectArray arrays[5]; //0x18, 0x20, 0x28, 0x30, 0x38 use enum, doesn't have ObjectKCLs
     Object* object_0x40; //0x40
-    Vec3ZeroInit** positions; //0x44, no idea,size 0xC8
+    Vec3** positions; //0x44, no idea,size 0xC8
     ObjToKartHit* kartInteractionArray; //0x48
     u8 unknown_0x4C[4];
     Object* pseaOrVenice_Nami; //0x50

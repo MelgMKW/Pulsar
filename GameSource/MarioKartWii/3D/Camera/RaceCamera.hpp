@@ -56,7 +56,7 @@ public:
     void Init(); //805a70a0
     void Update(u16 r4); //805a7358
     GameCamera& camera;
-    Vec3ZeroInit* positions;
+    Vec3* positions;
     u8 unknown_0xc[0x7c - 0xc];
     BCPInfo info; //0x7c
     u8 unknown_0xb4[4];

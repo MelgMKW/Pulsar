@@ -96,7 +96,7 @@ wchar_t* GetMsg(const BMGHolder& normalHolder, s32 msgIdx) {
 }
 kmBranch(0x805f8cf0, GetMsg);
 
-const u8* GetFontType(const BMGHolder& bmg, s32 msgIdx) {
+const u8* GetFontIndex(const BMGHolder& bmg, s32 msgIdx) {
     const BMGInfo& info = *bmg.info;
     if(msgIdx < 0 || msgIdx >= info.msgCount) return nullptr;
     return &info.entries[msgIdx].font;
@@ -105,8 +105,8 @@ const u8* GetFontType(const BMGHolder& bmg, s32 msgIdx) {
 const u8* GetFont(const BMGHolder& normalHolder, s32 msgIdx) {
     const u8* ret = nullptr;
     //if(isCustom == CUP_TEXT) msgIdx = 0;
-    if(isCustom == CUSTOM_BMG) ret = GetFontType(System::sInstance->GetBMG(), msgIdx);
-    if(ret == nullptr) ret = GetFontType(normalHolder, msgIdx);
+    if(isCustom == CUSTOM_BMG) ret = GetFontIndex(System::sInstance->GetBMG(), msgIdx);
+    if(ret == nullptr) ret = GetFontIndex(normalHolder, msgIdx);
     return ret;
 }
 kmBranch(0x805f8d2c, GetFont);

@@ -2,22 +2,11 @@
 #define _NW4R_UT_FONT_
 #include <types.hpp>
 #include <core/nw4r/ut/CharStrmReader.hpp>
+#include <core/nw4r/ut/RawFont.hpp>
 #include <core/rvl/gx/GXEnum.hpp>
 
 namespace nw4r {
 namespace ut {
-enum FontEncoding {
-    FONT_ENCODING_UTF8,  //UTF-8
-    FONT_ENCODING_UTF16, //UTF-16
-    FONT_ENCODING_SJIS,  //ShiftJIS
-    FONT_ENCODING_CP1252 //CP1252
-};
-
-struct CharWidths {
-    s8 leftWith; //width of space to the left of glyph
-    u8 glyphWidth;
-    s8 charWidth; //total char width = left + glyph + right
-};
 
 struct Glyph {
     const void* texture;

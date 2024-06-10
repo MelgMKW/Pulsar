@@ -72,8 +72,8 @@ class ObjectCollisionPolyhedra : public ObjectCollision {
     bool unknown_0x20; //is3D?
     u8 vertexCount; //0x21
     u8 padding[2];
-    Vec3ZeroInit* vertexPositions; //0x24
-    Vec3ZeroInit* unknown_0x24; //0x28
+    Vec3* vertexPositions; //0x24
+    Vec3* unknown_0x24; //0x28
     float diameter; //0x2c 807f957c
     u8 unknown_0x30[0x38 - 0x30];
     Vec3 unknown_0x38;

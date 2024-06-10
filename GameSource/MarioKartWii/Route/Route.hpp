@@ -59,7 +59,7 @@ class Route {
     RoutePoint* pointsArray; //0xC
     bool normalsInitialized;
     u8 unknown_0x11[3];
-    Vec3ZeroInit* normals; //0x14 one per point, uses CourseMgr::IsColliding on a driveable surface, else (0, 1, 0)
+    Vec3* normals; //0x14 one per point, uses CourseMgr::IsColliding on a driveable surface, else (0, 1, 0)
     u8 unknown_0x18[4];
     s32* blightIndexes; //0x1c one per point, only for driveable surfaces, else -1
 

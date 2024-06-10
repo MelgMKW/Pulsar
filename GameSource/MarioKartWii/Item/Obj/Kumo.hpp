@@ -12,6 +12,10 @@ public:
     virtual void SpawnModel(); //0x18 807af200
     virtual void OnCollision(); //0x24 807b123c
     virtual void vf_0x2c(); //0x2c 807b0960
+
+    void UpdateThunk(); //807a3908
+    void Update(); //807af76c
+
     u8 unknown_0x1a0[0x200 - 0x1a0];
 };
 size_assert(ObjKumo, 0x200);

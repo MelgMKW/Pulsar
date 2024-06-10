@@ -26,7 +26,7 @@ public:
     Player* GetKartPlayer(u32 idx) const; //80590100
     void Init(); //8058fee0
     void Update(); //8058ffe8
-    Player* SetupPlayer(KartId kart, CharacterId character, bool isBike); //8058f5b4  
+    static Player* SetupPlayer(u8 playerIdx, KartId kart, CharacterId character, bool isBike); //8058f5b4  
 
     EGG::TDisposer<Manager> disposer; //0x10 8058fa10 vtable 808b6414
     Player** players;

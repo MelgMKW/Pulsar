@@ -88,6 +88,7 @@ public:
     static void Reset(); //80565030
 
     static ScnMgr* sInstance[2]; //809c1850 set with Register, 1st is main, 2nd is created for stuff like Miis
+
     ScnMgr(u32 r4, u32 r5, u32 groupCount); //80561f40
     ~ScnMgr() override; //805620bc vtable 808b4ad0
     virtual void vf_0xC();  //0xC 80564228
@@ -149,6 +150,9 @@ public:
     ScnGroupHolder** scnGroupHolders; //0x80 as many as groupCount
     TextureHolder* efbCopy; //0x84 for example used for WLscreenGC which just displays a copy of the player's screen
     u8 unknown_0x88[0x98 - 0x88]; //0x88
+
+    static TextureHolder* EFBCopyTexInstance; //809c1878
+    static void CreateEFBCopyTex(); //805649a0 used if a copy of the EFB is needed at some point
 }; //0x98
 size_assert(ScnMgr, 0x98);
 

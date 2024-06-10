@@ -41,6 +41,9 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
         if(toPlayId == SOUND_ID_KC && section >= SECTION_P1_WIFI && section <= SECTION_P2_WIFI_FROOM_COIN_VOTING) {
             extFilePath = wifiMusicFile; //guaranteed to exist because it's been checked before
         }
+        if(toPlayId == SOUND_ID_KC && (section >= SECTION_SINGLE_P_FROM_MENU && section <= SECTION_SINGLE_P_LIST_RACE_GHOST || section == SECTION_LOCAL_MULTIPLAYER)) {
+            extFilePath = offlineMusicFile; //guaranteed to exist because it's been checked before
+        }
         else if(!CupsConfig::IsReg(track)) {
             bool isFinalLap = false;
             register u32 strLength;

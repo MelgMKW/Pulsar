@@ -1,7 +1,7 @@
 #ifndef _SYSTEMBMGHOLDER_
 #define _SYSTEMBMGHOLDER_
 #include <kamek.hpp>
-#include <MarioKartWii/UI/Text.hpp>
+#include <MarioKartWii/UI/Text/Text.hpp>
 
 class SystemBMGHolder : public BMGHolder { //Mario Kart wii, "Mario Kart Channel" etc... based on SystemManager game language
     SystemBMGHolder(); //80637998

@@ -33,18 +33,19 @@ struct Friend {
 }; //total size 0xC
 
 class SplitRACEPointers {
+public:
     SplitRACEPointers(); //8065a3dc
     ~SplitRACEPointers(); //8065a474
 
     PacketHolder* header;
     PacketHolder* raceHeader1;
     PacketHolder* raceHeader2;
-    PacketHolder* select;
+    PacketHolder* select; //0xc
     PacketHolder* racedata;
     PacketHolder* user;
     PacketHolder* item;
     PacketHolder* event;
-};
+}; //0x20
 
 struct ConnectionUserData {
     u8 playersAtConsole;
@@ -168,7 +169,7 @@ public:
 
     EGG::ExpHeap* expHeap; //0x20
     EGG::TaskThread* taskThread; //0x24
-    ConnectionState connectionState; //0x28
+    ConnectionState connectionState; //0x28 
     u8 unknown_0x2c[0x38 - 0x2c];
     ControllerSub subs[2]; //0x38
     RoomType roomType; //0xe8
@@ -197,13 +198,14 @@ public:
     s32 vr; //0x2764
     s32 br; //0x2768
     s32 lastSendBufferUsed[12]; //0x276c last full send buffer used for each aid, 0 or 1
-    s32 lastReceivedBufferUsed[12][8]; //0x279c last Recived buffer used for each packet per aid, 1 or 0
+    s32 lastReceivedBufferUsed[12][8]; //0x279c last Received buffer used for each packet per aid, 1 or 0
     s32 currentSub; //0x291c index of the current sub to use, 0 or 1
     u8 aidsBelongingToPlayerIds[12]; //0x2920 index is player id, value is aid
     u32 disconnectedAids; //0x292c 1 if disconnected, index 1 << aid
     u32 disconnectedPlayerIds; //0x2930 index 1 << playerId
     u8 unknown_0x2934[0x29c8 - 0x2934];
 
+    static u32* splitRACEPointersBufferSizes; //8089a194
 };
 size_assert(Controller, 0x29c8);
 

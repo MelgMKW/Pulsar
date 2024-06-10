@@ -10,6 +10,35 @@
 #include <MarioKartWii/UI/FriendList.hpp>
 #include <MarioKartWii/Scene/GameScene.hpp>
 
+/*
+See GameScene.hpp for the hierarchical superior of sections and Page.hpp for the subdordinate
+
+The game uses Sections ("menus") to create graphical interfaces. Each Section is made of pages, which are controls containers.
+A control is any drawn element on the screen; a button, the background lines, the top title text etc...
+Each section contains specific pages that give the section its role.
+For example, the single player section contains the SinglePlayerMenu (the 4 modes buttons), CharacterSelect, KartSelect, DriftSelect, CupSelect, CourseSelect etc... pages
+The SinglePlayerMenu contains PushButton, CtrlMenuTitleText, CtrlMenuBackButton etc... controls
+
+Because sections only exist for a given role, an actual Section class instance is transient and is destroyed when the player changes "location".
+To perform permanent operations that need to be done irrespective of an instance, like...creating an instance but also destroying it, activating the faders (the black screens on load),
+the game uses a SectionMgr class, which creates and contains the current section.
+It also contains global parameters in SectionParams (miis, license, local player count etc...) and handles UI pad inputs in SectionPad
+
+Pages (and therefore controls) are drawn via a layer system. Up to 11 pages (in the array) can be active, and each page layer sits on top of the one below.
+A page does NOT have to be added as a layer on top of another and actually most often pages just replace another layer.
+For example going from CharacterSelect to KartSelect is merely the latter replacing the former, wheareas pausing the game in a race
+adds the pause page layer on top of the RaceHUD (the interface) page
+
+
+->The section is Init via Init and an identifier that is ultimately used in a massive switch in CreateSectionPages that will create the specific pages for this section.
+->The section is then Entered once everything has loaded. The initially displayed pages are selected through another massive switch in AddInitialLayers
+->The section is then updated every frame. This updates the page layers (a page might have requested to end, or requested another page layer to be added),
+updates the pages themselves (which mostly means calling Page::UpdateControls).
+-Section::UpdateLayers is a cornerstone function of this system. It checks for exited pages and deactivates them, selects the next page to be loaded uses the section layers but also the requested page,
+activates the topmost layer, resumes page if the layer on top of them was exited etc...
+->The section is exited via Exit when a page has requested a Section change (pressing next race at the end of one).This deactivates all pages, disposes them and destroys them
+*/
+
 
 class Section {
 public:

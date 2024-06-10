@@ -22,7 +22,7 @@ public:
     Sub* subs; //4xpointsCount
     u8 pointsCount; //0x10 simply totalPartCount
     u8 unknown_0x14[0x24 - 0x14];
-    Vec3ZeroInit* points; //0x24 count pointsCount
+    Vec3* points; //0x24 count pointsCount
     float unknown_0x28[2];
     float* distBtwEachPoints; //0x48 copy of arg
     float totalLength; //0x4c

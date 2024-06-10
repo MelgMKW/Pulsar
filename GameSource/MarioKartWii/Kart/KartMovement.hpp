@@ -270,11 +270,11 @@ public:
     JumpPadProperties jumpPadProperties;
     s16 rampBoost;
     u8 unknown_0x1c6[0x228 - 0x1c6];
-    float hopVelY;
-    float hopPosY;
+    float hopVelY; //0x228
+    float hopPosY; //0x22c
     float hopGravity;
     u8 unknown_0x234[0x248 - 0x234];
-    u32 drivingDirection; //0: forwards, 1: braking, 2: waiting on the backwards counter, 3: backwards
+    u32 drivingDirection; //0x248 0: forwards, 1: braking, 2: waiting on the backwards counter, 3: backwards
     s16 backwardsAllowCounter; //0x24c
     u8 unknown_0x24e[2];
     u32 specialFloor; //bit flags:

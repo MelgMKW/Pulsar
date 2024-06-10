@@ -3,6 +3,36 @@
 #include <core/RK/RKSceneManager.hpp>
 #include <MarioKartWii/Archive/ArchiveRoot.hpp>
 
+/*
+Scenes are the topmost cog of how Mario Kart Wii runs. They sit just below the main loop function of the game.
+
+A scene has a given role, and it fulfills that role by managing memory (creating and handling heaps), creating the cornerstone classes that need to exist for the entire duration of the scene,
+loading files (their actual use is then performed by the sub classes), and setting always present classes to the correct state.
+
+A scene does not describe a specific situation, rather they are tied to a generic location in the game.
+That is to say there is a common Scene for any menu, one for any type of race and one for WFC globe containing parts.
+
+At any given point, a scene is not unique. It can have a parent and a child. However only the current scene is drawn and updated.
+To do so, the game uses a SceneManager which gives the possibility to replace the current scene by its child or parent, add a child to it, destroy it etc...
+In practice, Mario Kart Wii seldom makes uses of these capabilities, and a scene change is only ever done to change location.
+Every GameScene has a common parent, the RootScene. That scene only exists to create the most global heaps of MEM1 and MEM2,
+and to create the class instances that need to exist no matter where in the game the player is. That RootScene is never drawn or updated, it is simply entered once on boot.
+The class instances that it creates are essential and some of the most important:
+-Inputs (via Input::Mgr)
+-NAND file loading (via NAND::Mgr)
+-Disc file loading (via ArchiveRoot)
+-UI (present anywhere in the game, via SectionMgr, which then creates a Section, the class describing a SPECIFIC location in the game, for example a Time Trial solo race)
+-Online capabilities (present in online races, globe parts but also online menus like voting, via RKNet::Controller, etc...)
+-Audio (via Audio::Mgr) the game uses a RootScene that always exists.
+-Font (via Font::Mgr)
+-Race information (via RaceData, describes race information that is useful for the next race such as the characters, the race count etc...)
+-Miis (via MiiManager)
+-Effects (via Effects::Mgr)
+
+For non-root scenes, they are constantly updated every frame, which mostly means updating the class instances they created and those of the rootscene
+*/
+
+
 enum SceneId {
     SCENE_ID_MENU = 0x1,
     SCENE_ID_RACE = 0x2,

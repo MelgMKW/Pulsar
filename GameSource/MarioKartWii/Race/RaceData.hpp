@@ -136,8 +136,9 @@ public:
     s16 rating; //vr or br, depending on mode
     u8 unknown_0xea[6];
 }; //Total size 0xf0
+size_assert(RaceDataPlayer, 0xf0);
 
-struct RacedataSettings { //0xb68 for race scenario
+struct RacedataSettings { //0xb68 for race scenario, 0x1758 for menu
 public:
     CourseId courseId; //http://wiki.tockdom.com/wiki/List_of_Identifiers#Courses
     EngineClass engineClass; //0x4
@@ -216,6 +217,7 @@ public:
 
     static u8 GetPlayerCount(); //8052dd30
     void Init(); //8052dd40
+
     void InitRace(); //805302c4, Inits MenusScenario, then copies to Races "CopyMenuToInRace"
     void InitAwards(); //80530864
     void InitCredits(); //80531070
@@ -242,4 +244,6 @@ extern "C" {
     KartId CharacterIdToKartIdByIdx(CharacterId id, u8 idx); //8081cef4
     char* CharacterIDToChar(CharacterId id); //80860acc
 }
+
+
 #endif

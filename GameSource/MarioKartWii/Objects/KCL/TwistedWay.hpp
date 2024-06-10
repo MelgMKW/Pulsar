@@ -3,7 +3,6 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Objects/KCL/ObjectKCL.hpp>
 
-//Goomba, just as an example
 namespace Objects {
 
 class TwistedWay : public ObjectKCL { //ObjectNum 0x1fe = 510
@@ -64,7 +63,7 @@ class TwistedWay : public ObjectKCL { //ObjectNum 0x1fe = 510
     void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir) override; //0x118 808145d8
     int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 8081483c
 
-    void IsCollidingImpl(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
+    bool IsCollidingImpl(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
         KCLTypeHolder* ret, u32 initialTime, float radius); //80815d64
     u32 someFrameCount; //0xac init at 1000
     float unknown_0xb0[4];

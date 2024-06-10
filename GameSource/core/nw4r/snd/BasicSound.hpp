@@ -170,7 +170,7 @@ public:
     u8 voiceOutCount; //0x8d
     u8 biquadFilterType; //0x8e
     u8 padding;
-    u32 soundId; //90
+    u32 soundId; //0x90
     MoveValue<float, int> extMoveVolume; //94
     float initVolume; //a4 ratio
     float extPan; //a8

@@ -6,7 +6,47 @@
 #include <MarioKartWii/Input/ControllerHolder.hpp>
 
 class ControlManipulator;
+/*
+Manipulators are the way the game links inputs to UI interactions. They are used to know "where" the player is, which control he is selecting and which button he is pressing.
 
+->Inputs are transformed into actions, since two or more inputs can describe the same action (dpad left == stick left). ButtonInfo (and ControlButtonInfo, which adds cursor information) do that transformation,
+via their Update function, which takes the Input controller information as an arg
+
+->There are two types of actions, global and on top of a control. Global means that doing the action will lead to a result no matter where, and on top of a control means the action will only have a consequence if it performed on top of a specific element (while it is selected).
+Actions are then tied to PTMFs. Since pressing A can have hundreds of different result, the game needs to know which function to call at a specific timing. A PTMF does so.
+It should be seen as a function pointer, except that it is also packaged with the pointer to the class of that function. For example, pressing A while a button is selected will call PushButton::HandleClick with specifically a pointer to that button,
+because the PTMF that contained that function and that button was tied to pressing A on that button. This is how the game not only knows which function to call but also with which control.
+
+->ManipulatorManagers are contained in Pages. A manipulator manager(Manipulator.hpp) comes in three types
+
+->ManipulatorManager, which is essentially a dummy class, but is necessary because a page is required to contain a manager
+
+->If the page only uses LayoutUIControl, which are non-interactable elements, but still wants to provide "global" interactions, then PageManipulatorManager is the class needed
+For example, the error page when you disconnect from online is a bunch of non-interactable elements (you cannot "click" on the message window),
+but if you press A, the forward press action, a global result is performed (it goes back to the main menu) irrespective of where the player is on the page.
+
+->If the page contains interactable elements like PushButtons, then ControlsManipulatorManager should be used:
+-That class still allows global actions, most notably used for Back presses (B button)
+-It contains a list of ControlManipulators (hence the name manager), and a distance function. Essentially, every control has a bounding box around it. That invisible box should be thought
+as the area in which a control is considered selected. The dimensions of that box are contained in the ControlManipulator.
+-When any movement (of the cursor or using the dpad/stick) is detected, the distance function is ran, and using the boxes, is able to determine which (if any) control should be selected next.
+The reason there are multiple distance functions is for wrapping (vertical or horizontal) which is not always present.
+
+->ControlManipulator is the class that links actions on top of a control to a control.
+-It contains all the PTMFs tied to each action, so that if an action is performed while the player is inside the bounding box of the control,
+the manager knows that it needs to call the ptmf of the "current" ControlManipulator
+-The consequence is that every single control that needs to be interactable MUST contain a ControlManipulator. When that control is loaded, ControlManipulator::Init should be called,
+then ControlManipulator::SetAction, which takes an action idx and a PTMF, then ControlsManipulatorManager::AddControlManipulator (with the manager of the page containing the control)
+which adds the manipulator to the manager. Once all of that is done, the control is now interactable and its ptmfs will be called.
+
+
+->The game provides various other functionalities.
+-Any control can be made completely inacessible by setting its ControlManipulator's isIaccessible bool. The control will be skipped over and cannot be selected
+-Specific local players can be forbidden from accessing the control, via ControlManipulator::SetEnabledHudSlots
+
+->The vf functions CheckActions perform the actual checking for actions and ptmf calling, but especially ControlsManipulatorManager::CheckActions is very complex and it is not recommended to hook there directly.
+
+*/
 enum Action { //each value represent an action, itself represented by an actionHandler in PushButton's pageElementActionHolder and a bool in the same struct 
     FORWARD_PRESS = 0, //2 or A
     BACK_PRESS    = 1, //1 or B
@@ -207,7 +247,7 @@ public:
     const PtmfHolder_2A<LayoutUIControl, void, u32, u32>* actionHandlers[9]; //each corresponds to an Action, size based on ctor
     bool repeatable[9]; //same
     u8 unknown_0x6D[3]; //padding?
-    u32 enabledHudSlotsBitfield; //if bit i is set, listens to play i
+    u32 enabledHudSlotsBitfield; //if bit i is set, listens to player i
     bool unknown_0x74; //r5 from init
     bool inaccessible; //0x75
     u8 unknown_0x76[2]; //padding?

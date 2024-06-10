@@ -153,7 +153,7 @@ public:
     float* distBtwParts; //0xf0 one per body part
     float* totalDistanceToHead; //0xf0, for each part
     u8 unknown_0xf8;
-    Vec3ZeroInit* vecs; //0xfc d4 vectors
+    Vec3* vecs; //0xfc d4 vectors
     float* float_0x100; //4xd4
     u8 unknown_0xd8[0x13c - 0x100];
 }; //0x13c

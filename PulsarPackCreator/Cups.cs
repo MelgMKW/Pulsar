@@ -447,7 +447,7 @@ namespace Pulsar_Pack_Creator
                 Cup cup = cups[idx];
                 for (int i = 0; i < 4; i++)
                 {
-                    indexedArray[cup.idx * 4 + i] = cup.trackNames[i];
+                    indexedArray[cup.idx * 4 + i] = cup.trackNames[i] + cup.versionNames[i];
                 }
             }
             string[] sortedArray = new string[ctsCupCount * 4];

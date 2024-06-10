@@ -82,6 +82,7 @@ public:
     virtual void SetupBRASD(snd::detail::AnimSoundFile* rawBRASD) = 0; //0x5c
     virtual void UpdateBRASDFrame(float frame) = 0; //0x60
 
+    void Toggle(bool isDisabled); //80702970
     bool CannotPlaySounds(); //807028e4 if it returns 1, the actor is forbidden from playing sounds
     const Vec3& GetKartPosition() const; //807029cc only call if the subject is Kart
     const Vec3& GetObjectPosition() const; //807029d4 called by RaceActor update, so that HAS to be overridden

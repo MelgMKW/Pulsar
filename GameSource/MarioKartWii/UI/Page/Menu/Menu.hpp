@@ -35,7 +35,7 @@ public:
     //virtual void OnMenuChange(); 0x58
     //virtual void func_0x5C(); 0x5c
     int GetRuntimeTypeInfo() const override; //0x60 805de838
-    virtual void OnExternalButtonSelect(PushButton& button, u32 hudSlotId); //0x64  808375ec
+    virtual void OnExternalButtonSelect(PushButton& button, u32 hudSlotId); //0x64 808375ec
     virtual int GetActivePlayerBitfield() const = 0; //0x68
     virtual int GetPlayerBitfield() const = 0; //0x6C;
     virtual ManipulatorManager& GetManipulatorManager() = 0; //0x70
@@ -46,7 +46,7 @@ public:
     virtual UIControl* CreateExternalControl(u32 externControlId); //0x84 80837164
     virtual UIControl* CreateControl(u32 controlId) = 0; //0x88
     virtual void SetButtonHandlers(PushButton& button); //0x8C 8083716C
-    virtual TextInfo& GetTextInfo(); //0x90 808372e0
+    virtual Text::Info& GetTextInfo(); //0x90 808372e0
     virtual void OnMoviesActivate(u32 r4); //0x94 808387f8
 
     void ChangeSectionById(SectionId id, PushButton& button); //80837e40
@@ -60,11 +60,11 @@ public:
     void LoadPrevPage(PushButton& button); //80837b4c gets delay from PushButton
     void LoadPrevPageWithDelay(float delay); //80837a44
     void HandleStartPress(u32 hudSlotId); //80838b14
-    void LoadMessageBoxPageWithDelay(u32 bmgId, const TextInfo* text, u32 hudSlotId, float delay); //80837f80
-    void LoadMessageBoxPage(u32 bmgId, const TextInfo* text, u32 hudSlotId, PushButton& button); //8083813c
-    void LoadMessageBoxTransparentPage(u32 bmgId, const TextInfo* text = nullptr); //808386a0
-    void LoadMessageBoxTransparentPageThenChangeSectionWithDelay(u32 bmgId, const TextInfo* text, SectionId id, float delay); //80838300
-    void LoadMessageBoxTransparentPageThenChangeSection(u32 bmgId, const TextInfo* text, SectionId id, float delay); //808384cc
+    void LoadMessageBoxPageWithDelay(u32 bmgId, const Text::Info* text, u32 hudSlotId, float delay); //80837f80
+    void LoadMessageBoxPage(u32 bmgId, const Text::Info* text, u32 hudSlotId, PushButton& button); //8083813c
+    void LoadMessageBoxTransparentPage(u32 bmgId, const Text::Info* text = nullptr); //808386a0
+    void LoadMessageBoxTransparentPageThenChangeSectionWithDelay(u32 bmgId, const Text::Info* text, SectionId id, float delay); //80838300
+    void LoadMessageBoxTransparentPageThenChangeSection(u32 bmgId, const Text::Info* text, SectionId id, float delay); //808384cc
     void ChangeToPrevSection(Pages::Click* clickPage); //808387ac
     bool IsMultiplayer(); //808388b4
     void LoadMovies(char** thpNames, bool isVisible); //80838884
@@ -81,7 +81,7 @@ public:
     CtrlMenuInstructionText* bottomText; //0x2bc
     CtrlMenuMovieButton* movies[20]; //0x2C0
     u32 curMovieCount; //0x310
-    TextInfo text; //0x314
+    Text::Info text; //0x314
     u32 internControlCount; //3D8
     bool hasBackButton; //0x3DC, calls 0x68 and 0x8C virtual
     u8 extraControlype; //affects controlCount

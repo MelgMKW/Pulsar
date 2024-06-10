@@ -38,7 +38,7 @@ private:
     u8 selectedGhostsCount;
 };
 
-const TextInfo GetCourseBottomText(PulsarId id, u32* bmgId);
+const Text::Info GetCourseBottomText(PulsarId id, u32* bmgId);
 
 }//namespace UI
 }//namespace Pulsar

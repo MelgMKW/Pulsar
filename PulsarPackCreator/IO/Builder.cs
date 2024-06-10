@@ -114,6 +114,87 @@ namespace Pulsar_Pack_Creator.IO
                     Result bmgRet = RequestBMGAction(true);
                     if(bmgRet != Result.Success) return bmgRet;
 
+                                                                            
+
+                    
+                    if(createXML) CreateXML();
+                    if(buildParams != BuildParams.ConfigOnly)
+                    {
+                        File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
+                        Directory.CreateDirectory($"{modFolder}/Assets");
+                        Directory.CreateDirectory($"{modFolder}/CTBRSTM");
+                        Directory.CreateDirectory($"{modFolder}/My Stuff");
+                    }
+                    if(buildParams == BuildParams.Full)
+                    {                 
+                        File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);                  
+                        File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
+                        File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
+
+                        bool hasCustomIcons = false;
+                        Process wimgtProcess = new Process();
+                        ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
+                        wimgtProcessInfo.FileName = $"{wiimmFolderPath}wimgt.exe";
+                        //wimgtProcessInfo.WorkingDirectory = @"temp/";
+                        wimgtProcessInfo.CreateNoWindow = true;
+                        wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        wimgtProcessInfo.UseShellExecute = false;
+                        wimgtProcessInfo.RedirectStandardError = true;
+                        wimgtProcess.StartInfo = wimgtProcessInfo;
+
+                        List<(string, int)> cupIcons = new List<(string, int)>();
+                        for (int i = 0; i < ctsCupCount; i++)
+                        {
+                            MainWindow.Cup cup = cups[i];
+                            if (i >= 100 || cup.iconName != $"{MainWindow.Cup.defaultNames[i]}.png")
+                            {
+                                if(cup.iconName.Length <= 4)
+                                {
+                                    error = $"{cup.iconName} of cup {i+1}";
+                                    return Result.NoIcon;
+                                }
+                                hasCustomIcons = true;
+                                bool isDefault = MainWindow.Cup.defaultNames.Contains(cup.iconName.Remove(cup.iconName.Length - 4));
+                                string realIconName = isDefault ? $"temp/{cup.iconName}" : $"input/CupIcons/{cup.iconName}";
+                                if (!File.Exists(realIconName))
+                                {
+                                    error = $"{realIconName} of cup {i+1}";
+                                    return Result.NoIcon;
+                                }
+                                cupIcons.Add((realIconName, i));
+                            }
+                            else if(cup.iconName == "") cupIcons.Add((MainWindow.Cup.defaultNames[i], i)); //if 
+                        }
+                        if (hasCustomIcons)
+                        {
+                            int size = 128 / (1 + (cupIcons.Count - 1) / 100);
+                            foreach((string, int) elem in cupIcons)
+                            {
+                                using (Image image = Image.FromFile(elem.Item1))
+                                {
+                                    new Bitmap(image, size, size).Save($"temp/{elem.Item2}.png");
+                                }
+                                wimgtProcessInfo.Arguments = $"encode temp/{elem.Item2}.png --dest temp/UIAssets.d/button/timg/icon_{elem.Item2:D3}.tpl --transform CMPR -o";
+                                wimgtProcess.Start();
+                                error = wimgtProcess.StandardError.ReadToEnd();
+                                if (error != "") return Result.WIMGT;
+                                wimgtProcess.WaitForExit();
+                            }
+                            ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
+                            wszstProcessInfo.FileName = @"wszst.exe";
+                            wszstProcessInfo.Arguments = $"create temp/UIAssets.d --dest \"{modFolder}/Assets/UIAssets.szs\" -o";
+                            wszstProcessInfo.CreateNoWindow = true;
+                            wszstProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                            wszstProcessInfo.UseShellExecute = false;
+                            Process wszstProcess = new Process();
+                            wszstProcess.StartInfo = wszstProcessInfo;
+                            wszstProcess.Start();
+                            wszstProcess.WaitForExit();
+                            infoSection.info.cupIconCount = (ushort)cupIcons.Count;
+                        }                   
+                        else File.Copy("temp/UIAssets.szs", $"{modFolder}/Assets/UIAssets.szs");                  
+                    }
+
                     string gameFolderName = $"/{parameters.modFolderName}";
                     if (buildParams == BuildParams.ConfigOnly) configHeader.version *= -1;
                     configHeader.modFolderName = gameFolderName;
@@ -129,7 +210,7 @@ namespace Pulsar_Pack_Creator.IO
                     for (int i = 1; i < cupList.Count; i++)
                     {
                         cupStream.Write(PulsarGame.BytesFromStruct(cupList[i]));
-                    }                                  
+                    }
                     using BigEndianReader bmgReader = new BigEndianReader(File.Open("temp/bmg.bmg", FileMode.Open));
                     bin.Write(rawHeader);
                     bin.Write(rawInfo);
@@ -140,93 +221,16 @@ namespace Pulsar_Pack_Creator.IO
                     }
                     if (ctsCupCount % 2 == 1)
                     {
-                        for(int i = 0; i < 4; i++)
+                        for (int i = 0; i < 4; i++)
                         {
                             bin.Write((ushort)Array.IndexOf(trackNamesTuple.Item2, trackNamesTuple.Item1[i]));
                         }
                     }
-                    bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));                   
-                    bin.Write(fileSectStream.ToArray());                                  
-                }
-            
+                    bin.Write(bmgReader.ReadBytes((int)bmgReader.BaseStream.Length));
+                    bin.Write(fileSectStream.ToArray());
 
+                } //using memorystream
                 File.Copy("temp/Config.pul", $"{modFolder}/Binaries/Config.pul", true);
-                if(createXML) CreateXML();
-                if(buildParams != BuildParams.ConfigOnly)
-                {
-                    File.WriteAllBytes($"{modFolder}/Binaries/Loader.pul", PulsarRes.Loader);
-                    Directory.CreateDirectory($"{modFolder}/Assets");
-                    Directory.CreateDirectory($"{modFolder}/CTBRSTM");
-                    Directory.CreateDirectory($"{modFolder}/My Stuff");
-                }
-                if(buildParams == BuildParams.Full)
-                {                 
-                    File.WriteAllBytes($"{modFolder}/Binaries/Code.pul", PulsarRes.Code);                  
-                    File.WriteAllBytes($"{modFolder}/Assets/RaceAssets.szs", PulsarRes.RaceAssets);
-                    File.WriteAllBytes($"{modFolder}/Assets/CommonAssets.szs", PulsarRes.CommonAssets);
-
-                    bool hasCustomIcons = false;
-                    Process wimgtProcess = new Process();
-                    ProcessStartInfo wimgtProcessInfo = new ProcessStartInfo();
-                    wimgtProcessInfo.FileName = $"{wiimmFolderPath}wimgt.exe";
-                    //wimgtProcessInfo.WorkingDirectory = @"temp/";
-                    wimgtProcessInfo.CreateNoWindow = true;
-                    wimgtProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    wimgtProcessInfo.UseShellExecute = false;
-                    wimgtProcessInfo.RedirectStandardError = true;
-                    wimgtProcess.StartInfo = wimgtProcessInfo;
-
-                    List<(string, int)> cupIcons = new List<(string, int)>();
-                    for (int i = 0; i < ctsCupCount; i++)
-                    {
-                        MainWindow.Cup cup = cups[i];
-                        if (i >= 100 || cup.iconName != $"{MainWindow.Cup.defaultNames[i]}.png")
-                        {
-                            if(cup.iconName.Length <= 4)
-                            {
-                                error = $"{cup.iconName} of cup {i+1}";
-                                return Result.NoIcon;
-                            }
-                            hasCustomIcons = true;
-                            bool isDefault = MainWindow.Cup.defaultNames.Contains(cup.iconName.Remove(cup.iconName.Length - 4));
-                            string realIconName = isDefault ? $"temp/{cup.iconName}" : $"input/CupIcons/{cup.iconName}";
-                            if (!File.Exists(realIconName))
-                            {
-                                error = $"{realIconName} of cup {i+1}";
-                                return Result.NoIcon;
-                            }
-                            cupIcons.Add((realIconName, i));
-                        }
-                        else if(cup.iconName == "") cupIcons.Add((MainWindow.Cup.defaultNames[i], i)); //if 
-                    }
-                    if (hasCustomIcons)
-                    {
-                        int size = 128 / (1 + (cupIcons.Count - 1) / 100);
-                        foreach((string, int) elem in cupIcons)
-                        {
-                            using (Image image = Image.FromFile(elem.Item1))
-                            {
-                                new Bitmap(image, size, size).Save($"temp/{elem.Item2}.png");
-                            }
-                            wimgtProcessInfo.Arguments = $"encode temp/{elem.Item2}.png --dest temp/UIAssets.d/button/timg/icon_{elem.Item2:D3}.tpl --transform CMPR -o";
-                            wimgtProcess.Start();
-                            error = wimgtProcess.StandardError.ReadToEnd();
-                            if (error != "") return Result.WIMGT;
-                            wimgtProcess.WaitForExit();
-                        }
-                        ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
-                        wszstProcessInfo.FileName = @"wszst.exe";
-                        wszstProcessInfo.Arguments = $"create temp/UIAssets.d --dest \"{modFolder}/Assets/UIAssets.szs\" -o";
-                        wszstProcessInfo.CreateNoWindow = true;
-                        wszstProcessInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        wszstProcessInfo.UseShellExecute = false;
-                        Process wszstProcess = new Process();
-                        wszstProcess.StartInfo = wszstProcessInfo;
-                        wszstProcess.Start();
-                        wszstProcess.WaitForExit();
-                    }                   
-                    else File.Copy("temp/UIAssets.szs", $"{modFolder}/Assets/UIAssets.szs");                  
-                }
                 string finalDirName = $"output/{parameters.modFolderName}";
                 if (Directory.Exists(finalDirName))
                 {

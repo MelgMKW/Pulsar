@@ -12,13 +12,53 @@ Melg
 #include <MarioKartWii/UI/Ctrl/UIControl.hpp>
 #include <MarioKartWii/UI/Ctrl/Manipulator.hpp>
 
+
+/*
+See Section.hpp for the hierarchical superior of sections and UIControl.hpp for the subordinate
+
+How a page works:
+->The page is built via its ctor, but every control is loaded via OnInit (called right after the ctor)
+->When the page's section is exiting, vf OnDispose is called right before the dtor is called
+
+Page::UpdateState checks for the updateState bool and simply changes the state according to the current state:
+-It goes DEACTIVATED->ACTIVATING->ENTERING->ACTIVE->EXITING->EXITED->DEACTIVATED
+
+-> Initially, a page is DEACTIVATED, no virtual functions are called
+->The page is activated either because it was added as a layer on top of another page,
+or because it was set as the next page (via vf GetNextPage)
+The game calls Page::Activate, which changes the state to ACTIVATING, and calls the vf OnActivate (a single time)
+->After that function has ran, the state is again changed to ENTERING. Three functions are called once:
+-vf BeforeEntranceAnimations
+-then Page::AnimateControls that makes the controls look like they're coming into the screen (because the state is 3)
+-vf AfterEntranceAnimations, but only after the animations have been performed
+
+->The state is then changed to Active which is the "idle" state of a running page:
+-All controls are updated every frame via Page::UpdateControls:
+This calls vf BeforeControlUpdate, then ControlGroup::Update, then vf AfterControlUpdate and only then AnimateControls
+
+->A page ends because a back button was pressed, or the page ended by itself or a timer made the page end:
+-Any of these situations culminate in Page::EndState being called, which simply sets the updateState bool to true
+-Page::StartExit is called which sets the state to EXITING and  calls vf BeforeExitAnimations
+-vf StartExitAnimations is called, but only after the animations have been performed
+
+->Because the state is now EXITED, the page is automatically deactivated via Page::Deactivate which calls vf OnDeactivate
+and sets the state to DEACTIVATED
+
+->If a page is added as a layer (instead of just replacing the previous page), for example like a pause page,
+then once it ends, the page "under" is resumed via vf OnResume
+
+->While a page's state is ENTERING, ACTIVE, EXITING or EXITED, vf OnUpdate is called every frame
+
+*/
+
 enum PageState {
-    STATE_UNLOADED   = 0,
-    STATE_ENTERING   = 1,
-    STATE_ACTIVATING = 2,
-    STATE_FOCUSED    = 3,
-    STATE_DEFOCUSING = 4,
-    STATE_EXITING    = 5
+    STATE_UNLOADED    = 0,
+    STATE_DEACTIVATED = 1,
+    STATE_ACTIVATING  = 2,
+    STATE_ENTERING    = 3,
+    STATE_ACTIVE      = 4,
+    STATE_EXITING     = 5,
+    STATE_EXITED      = 6
 };
 
 class Page {
@@ -43,7 +83,7 @@ public:
     virtual void BeforeControlUpdate(); //0x48 805bb230 just a blr
     virtual void AfterControlUpdate(); //0x4c 805bf2d8 just a blr
     virtual void OnUpdate(); //0x50 805bb22c just a blr
-    virtual void OnResume(); //0x54 805bb228 just a blr
+    virtual void OnResume(); //0x54 805bb228 just a blr called when a layer on top of the page is removed
     virtual void OnSectionChange(); //0x58 805bb224 just a blr
     virtual void func_0x5C(); //0x5c 805bb220 just a blr
     virtual int GetRuntimeTypeInfo() const; //0x60 805bed68 returns 809C1d10
@@ -54,7 +94,7 @@ public:
     void Deactivate(); //80601c08
     void IncrementDuration(); //80601c48
     void CheckActions(); //80601c64
-    void UpdateState(); //80601d24
+    bool UpdateState(); //80601d24 returns true if the state was effectively changed
     void Exit(); //80601f44
     void Enter(); //80602144
     void UpdateControls(); //806022cc
@@ -81,12 +121,12 @@ public:
     //static Page* GetPageById(PageId type);
 
     PageId pageId;
-    PageState currentState; //0x8 = focus, idk others
-    bool goToNextStage; //0xc
+    PageState currentState; //0x8
+    bool updateState; //0xc
     u8 padding[3];
     u32 animationDirection;
     float animationDelay; //0x14
-    float defocusAnimDelay;
+    float exitAnimDelay;
     u32 curStateDuration; //0x1C
     u32 duration; //0x20
     ControlGroup controlGroup; //0x24
@@ -99,7 +139,7 @@ public:
         u32 animationDirection; //0x4
         PageState pageState; //0x8
         float animationDelay; //0xC
-        float direction; //0x10 = 1/-1  if animdirection = 0/1 and state = activating or defocusing
+        float direction; //0x10 = 1/-1  if animdirection = 0/1 and state = activating or active
         float directionOneTenth; //0x14
         float negatedDirection; //just direction * -1
         float delay; //0x1c
@@ -109,7 +149,7 @@ public:
 
     class OnStateChangeControlAnimator : ControlGroupAction {
         void Calc(UIControl* control) override; //808ba624 80602960 resets initial position on load/unload for example
-        float direction; //0x4 = 1/-1  if animdirection = 0/1 and state = activating or defocusing
+        float direction; //0x4 = 1/-1  if animdirection = 0/1 and state = activating or exiting
     };
 
     class MaxAnimDelayGetter : ControlGroupAction {

@@ -3,7 +3,6 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Objects/KCL/ObjectKCL.hpp>
 
-//Goomba, just as an example
 namespace Objects {
 
 class Aurora : public ObjectKCL { //ObjectNum 0x204 = 516

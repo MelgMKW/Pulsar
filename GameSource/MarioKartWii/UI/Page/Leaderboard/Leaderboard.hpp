@@ -2,7 +2,7 @@
 #define _LEADERBOARDPAGE_
 #include <MarioKartWii/UI/Page/Page.hpp>
 
-//_sinit_ at 8085c3cc
+//_sinit_ at 8085e644
 namespace Pages {
 class Leaderboard : public Page { //used for tt leaderboard, GP/VS score table etc..
 public:
@@ -14,9 +14,8 @@ public:
     void AfterControlUpdate() override; //0x4c 8085c0c4
     int GetRuntimeTypeInfo() const override; //0x60 8085c390
     virtual bool CanEnd() = 0; //0x64
-    virtual void LoadRows() = 0; //0x68
-    virtual void func_0x6c() = 0;
-    virtual int GetRowCount() const = 0; //0x70, 6 for example in TTs (top 5 and flap)
+    virtual void FillRows() = 0; //0x68
+
 
     u32 maxDuration; //300 frames online, 600 online Compared to the page frame counter
     PtmfHolder_1A<Leaderboard, void, u32> onUnfocusHandler; //ends state

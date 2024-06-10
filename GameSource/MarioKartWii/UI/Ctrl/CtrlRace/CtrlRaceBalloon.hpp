@@ -20,11 +20,11 @@ public:
     CtrlRaceNameBalloon* ctrlRaceNameBalloon[3]; //0x8 can display up to 4 names?
     u32 hudSlotId; //0x14
     u8 unknown_0x18[0x20 - 0x18];
-    //Vec3ZeroInit positions[12]; //0x20 to 0xb0
+    //Vec3 positions[12]; //0x20 to 0xb0
     float unknown_0xB4; //807f1f24
     u32 unknown_0xB8[2]; //807f1f24
     CtrlRaceItemBalloon* ctrlRaceItemBalloon; //0xc0
-    static float maxDistanceNames;
+    static float maxDistanceNames; //808d3e14
 }; //total size 0xC4
 
 class CtrlRaceNameBalloon : public LayoutUIControl {

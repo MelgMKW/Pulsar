@@ -18,6 +18,7 @@ class LiveViewWaiting : public Page { //ID 0x93
     void BeforeExitAnimations() override; //0x40 8064a324
     void AfterExitAnimations() override; //0x44 8064a3c8
     void AfterControlUpdate() override; //0x4c 8064a298
+    int GetRuntimeTypeInfo() const override; //0x60 8064a3d4
 
     BusySymbol busySymbol; //0x44
     MessageWindowControlScaleFade messageWindow; //0x1b8

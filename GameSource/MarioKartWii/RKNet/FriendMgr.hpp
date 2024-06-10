@@ -2,7 +2,7 @@
 #define _RKNETFRIENDMGR_
 #include <kamek.hpp>
 #include <core/rvl/os/mutex.hpp>
-#include <core/rvl/DWC/DWC.hpp>
+#include <core/rvl/DWC/DWC_Account.hpp>
 
 namespace RKNet {
 class FriendMgr {
@@ -13,7 +13,7 @@ public:
     virtual ~FriendMgr(); //806573dc vtable 808c0988
     bool isBuddyFriend(u8 idx); //8066375c
     OS::Mutex mutex;
-    DWC::UserData myUserData[2]; //01c
+    DWC::AccUserData myUserData[2]; //0x1c
     DWC::Friend friends[30][2]; //0x9c
     u32 friendPids[30]; //0x36c
     DWC::FriendUpdate* friendUpdate; //0x3e4

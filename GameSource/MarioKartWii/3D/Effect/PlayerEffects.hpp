@@ -58,7 +58,7 @@ public:
 
     bool unknown_0x4;
     u8 unknown_0x5[0xB - 0x5];
-    bool hasOnlyOnePage; //ScnManager pageCoutn if <2 then true
+    bool hasMultipleScreens; //ScnManager screenCount if <2 then false
     bool unknown_0xC;
     bool isInsideDrift; //0xd
     bool isAutomaticDrift; //0xe
@@ -175,7 +175,7 @@ public:
     CharacterId characterId; //0x120
     u32 isBike; //yes it's a word 124
     bool isBlueFalcon; //0x128
-    bool isRealPlayer; //0x219
+    bool isRealPlayer; //0x129
     u8 unknown_0x12A;
     bool isGhost; //0x12b
     bool isTTReplay; //0x12c

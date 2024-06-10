@@ -51,7 +51,7 @@ public:
     CtrlRaceWifiFinishMessage** CtrlRaceWifiFinishMessageArray; //0x74 one per hud slot
     u32 framesAfterFinish; //0x78, interface fades at 120 frames
     Pause* pausePage; //0x7C, only set when in an actual pause, as an added page layer
-    PageManipulatorManager inputController;
+    PageManipulatorManager manipulatorManager;
     PtmfHolder_1A<Page, void, u32>* onPauseHandler; //0x1c4
     PtmfHolder_1A<Page, void, u32>* onNextPlayerSwitchHandler; //0x1c8
     PtmfHolder_1A<Page, void, u32>* onPrevPlayerSwitchHandler; //0x1cc

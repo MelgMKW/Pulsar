@@ -147,6 +147,9 @@ public:
     float GetSpeedRatioCapped() const;	//80590dc0
     float GetSpeedRatio() const; //80590dd0
     bool HasCamera() const; //80590de0
+
+    void ResetEndCamera() const; //80590ed8 removes 0x40 from camera bitfield
+
     void SetCamera(RaceCamera* camera); //80590def8
     u32 GetScreenIdx() const; //80590e04
     void UpdateCameraOnRespawn() const; //80590e28
@@ -193,8 +196,8 @@ public:
     void ResetInertia(const Vec3& scale) const; //80591664
     void StartOobWipe(u32 state); //80591784
     u32 GetOobWipeState() const; //805917a0
-    Zipper& GetZipper(); //80591904
-    Trick& GetTrick(); //80591914
+    Zipper& GetZipper() const; //80591904
+    Trick& GetTrick() const; //80591914
     void InitLights(u8 srcLightObjIdx); //80591924
     void SetLightObjIdx(u8 srcLightObjIdx); //8059197c
 

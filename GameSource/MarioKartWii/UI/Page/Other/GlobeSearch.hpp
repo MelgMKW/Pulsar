@@ -43,7 +43,7 @@ public:
     int GetRuntimeTypeInfo() const override; //0x28 8060a68c
     const char* GetClassName() const override; //0x2c 80607d88
     void Load(const char* variant); //80607e2c
-    void SetMessage(u32 bmgId, const TextInfo* text = nullptr); //80607ef8
+    void SetMessage(u32 bmgId, const Text::Info* text = nullptr); //80607ef8
     void Hide(); //80607fb0
 }; //0x174
 
@@ -62,6 +62,8 @@ public:
     void AfterControlUpdate() override; //0x4c 806092c0
     void OnResume() override; //0x54 80609a30
     int GetRuntimeTypeInfo() const override; //0x60 8060a680
+
+    void PrepareLiveView(); //80609e84
     u8 unknown_0x44[4];
     PageManipulatorManager manipulatorManager; //0x48
     u8 unknown_0x18c[4];

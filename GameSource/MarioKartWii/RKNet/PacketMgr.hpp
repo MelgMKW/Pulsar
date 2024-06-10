@@ -58,7 +58,7 @@ public:
 
 
     u8 unknown_0x0;
-    bool isSomoneLagging;
+    bool isSomeoneLagging;
     u8 unknown_0x2[2];
     u32 aidsWithSelectId;
     u32 aidsWithNewROOMorSELECT;
