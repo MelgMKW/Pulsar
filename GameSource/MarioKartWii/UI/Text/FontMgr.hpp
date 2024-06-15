@@ -44,6 +44,8 @@ public:
 }; //0x24
 
 class FontMgr {
+    FontMgr(); //805d130c
+    ~FontMgr(); //805d132c
     static FontMgr* sInstance; //809c1bf8
     static FontMgr* CreateInstance(); //805d13c4
     static void DestroyInstance(); //805d1414

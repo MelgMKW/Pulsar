@@ -12,7 +12,7 @@ namespace EGG {
 
 class Frustum {
 public:
-    Frustum(u32 type, Vector2f* aspectRatios, u32 r6); //aspect ratio = width / height
+    Frustum(u32 type, Vector2f* aspectRatios, u32 r6); //r5 = width and height aspect ratio = width / height
     Frustum(const Frustum& other); //80227724
     void CopyToG3D_Perspective(g3d::Camera& camera); //802277fc
     void CopyToG3D_Orthographic(g3d::Camera& camera); //80227868

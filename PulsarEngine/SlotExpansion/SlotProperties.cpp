@@ -1,7 +1,7 @@
 
 #include <kamek.hpp>
 #include <MarioKartWii/Archive/ArchiveRoot.hpp>
-#include <MarioKartWii/3D/Effect/EffectMgr.hpp>
+#include <MarioKartWii/Effect/EffectMgr.hpp>
 #include <MarioKartWii/3D/Model/ModelDirector.hpp>
 #include <MarioKartWii/Race/RaceData.hpp>
 #include <MarioKartWii/File/Tables/ObjFlow.hpp>
@@ -9,7 +9,7 @@
 
 //A bunch of patches to prevent common slot related crashes
 kmWrite32(0x8068dfc8, 0x60000000);
-KartType PreventRSLCrash(PlayerEffects* effects, const Kart::Link& base) {
+KartType PreventRSLCrash(Effects::Player* effects, const Kart::Link& base) {
     bool isSherbet = true;
     if(RaceData::sInstance->racesScenario.settings.courseId != N64_SHERBET_LAND
         || ArchiveRoot::sInstance->GetFile(ARCHIVE_HOLDER_COURSE, "ice.brres", 0) == nullptr) isSherbet = false;

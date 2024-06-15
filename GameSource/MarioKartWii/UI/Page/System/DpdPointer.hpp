@@ -2,8 +2,7 @@
 #define _POINTERPAGE_
 #include <kamek.hpp>
 #include <MarioKartWii/UI/Page/System/System.hpp>
-#include <MarioKartWii/3D/Effect/EffectMgr.hpp>
-
+#include <core/egg/Effect/Effect.hpp>
 //_sinit_ at 805c9750
 
 namespace Pages {

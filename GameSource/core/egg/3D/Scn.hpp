@@ -54,21 +54,22 @@ class ScnProcHolder { //non official
 public:
     IScnProc* parent;
     g3d::ScnProc* proc;
-    u16 unknown_0x8;
+    u16 idx;
     bool isOpa;
     u8 unknown_0xB;
 }; //0xC
 
 class IScnProc {
     void Initialize(u16 procCount, u32 r5); //8022a05c
-    void Configure(u16 idx, u8 priority, bool isOpa); //8022a164
+    void Configure(u16 idxOfProcToConfig, u8 priority, bool isOpa); //8022a164
     void RemoveFromScnGroup(nw4r::g3d::ScnGroup* scnGroup); //8022a294
     static void Run(g3d::ScnProc* proc, bool isOpa); //8022a314 
+    void InsertProcsToScnGroup(g3d::ScnGroup* group); //8022a210
 
     ScnProcHolder* holders;
-    u16 unknown_0x4;
+    u16 procCount; //= amount of holders
     u8 padding[2];
-    virtual void Draw(); //0x8
+    virtual void Draw(u16 scnProcIdx); //0x8
     virtual ~IScnProc();
 }; //0xC
 
@@ -78,11 +79,13 @@ public:
     //ScnRootEx vtable 802a3e58 at 0xB4
     ~ScnRenderer() override; //8023ba18 
     //Parent vtable 802a3e90 at 0xC0
-    void Draw() override; // thunk 8023c68c func 8023c280
+    void Draw(u16 scnProcIdx) override; // thunk 8023c68c func 8023c280
     //~IScnProc() override; //thunk 8023c684
 
     void SetPriorityDrawOpa(nw4r::g3d::ScnObj* scnObj, u32 priorityStructIdx, u32 addedPriority); //8023c328
     void SetPriorityDrawXlu(nw4r::g3d::ScnObj* scnObj, u32 priorityStructIdx, u32 addedPriority); //8023c394
+
+    void ConfigureProc(IScnProc* iScnProc, u8 r5, u8 r6, u32 idxOfProcToConfig); //8023c400
 
     u8 unknown_0xc4[0xf0 - 0xc4];
 }; //0xf0

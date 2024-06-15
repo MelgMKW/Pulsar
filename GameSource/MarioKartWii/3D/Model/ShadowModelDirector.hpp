@@ -38,17 +38,5 @@ public:
     u32 state; //0x44
 }; //0x48
 
-class ScnProcShadows : public EGG::IScnProc {
-public:
-    void Draw() override; //0x8 805b3a6c vtable 808b70a0
-    ~ScnProcShadows() override; //805b40b8
-};
-
-class ScnProcShadows2 : public EGG::IScnProc { //2nd list of ShadowModelsMgr
-public:
-    void Draw() override; //0x8 805b3a78 vtable 808b7090
-    ~ScnProcShadows2() override; //805b4060
-};
-
 //809c1f40 shadowMgr
 #endif

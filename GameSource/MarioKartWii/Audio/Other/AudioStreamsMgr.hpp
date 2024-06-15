@@ -17,6 +17,7 @@ namespace Audio {
 using namespace nw4r;
 
 class StreamsMgr {
+public:
     static StreamsMgr* sInstance; //809c2330
     static StreamsMgr* CreateInstance(); //806fa0ac
     static void DestroyInstance(); //806fa154

@@ -44,11 +44,18 @@ public:
     u32 RetireParticleAll(); //800268e0
     void SetRootMtx(const math::MTX34& mtx); //80026f30
 
-    EffectSystem* system;
-    ActivityList activityList;
-    u32 groupID;
-    CallBack callBack;
-    u32 flags;
+    u16 GetNumEmitter() const; //80026da0
+    Emitter* GetEmitter(u16 idx); //80026db0
+
+    EffectSystem* system; //0x20
+    ActivityList activityList; //0x24
+    u32 groupID; //0x40
+    CallBack callBack; //0x44
+    u32 flags; //0x50
+    math::MTX34 rootMtx; //0x54
+    math::VEC3 velocity; //0x84
+    ut::List particleManager;   //0x90
+    DrawOrderBase* drawOrderFunc; //0x9c
 }; //0xa0
 
 }//namespace ef

@@ -15,7 +15,7 @@ public:
     void LoadAnimations() override; //0x5c 807772c8
 
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80775c58
-    ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer,
+    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
         ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 80775ce0
 
     virtual void vf_0xec(); //0xec 8077731c
@@ -25,7 +25,7 @@ public:
     virtual void UpdateMtxWithRot(); //0xfc 80775b1c
     virtual void UpdatePosition(); //0x100 80775c2c
     virtual void vf_0x104(); //0x104 8077588c
-    virtual void vf_0x108(); //0x108 80775d2c
+    virtual void SpinOut(); //0x108 80775d2c
 
     u32 state; //0xb0 0 : normal, 5 disable rotation
     Vec3 dir; //0xb4
@@ -60,7 +60,7 @@ public:
     void UpdateWithRot() override; //0xf0 8077637c
     void UpdateNoRot() override; //0xf4 807766e8
     void vf_0x104() override; //0x104 80776af0
-    void vf_0x108() override; //0x108 80776d90
+    void SpinOut() override; //0x108 80776d90
 
     u8 unknown_0xd8[4]; //0xd8
     u32 unknown_0xdc; //0xdc

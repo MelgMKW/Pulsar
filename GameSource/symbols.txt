@@ -176,8 +176,8 @@ GenerateAbsPath__4nandFPcPCc = 0x8019e020
 Read__4KPADFiPQ24KPAD6StatusUi = 0x80197380
 
 
-PSVECAdd = 0x8019abe4
-PSVECMag = 0x8019ac68
+PSVECAdd__3MTXFPC3VecPC3VecP3Vec = 0x8019abe4
+PSVECMag__3MTXFPC3Vec = 0x8019ac68
 
 #NAND
 Create__4NANDFPCcUcUc = 0x8019b43c
@@ -214,6 +214,8 @@ SleepThread__2OSFPQ22OS11ThreadQueue = 0x801aa9b8
 DetachThread__2OSFPQ22OS6Thread = 0x801aa4ec
 CancelThread__2OSFPQ22OS6Thread = 0x801aa1d4
 current__Q22OS6Thread = 0x800000e4
+
+LockMutex__2OSFPQ22OS5Mutex = 0x801a7ee4
 
 #PAD
 Read__3PADFPQ23PAD6Status = 0x801af44c
@@ -271,6 +273,10 @@ detail_StartSound__Q34nw4r3snd14SoundStartableFPQ34nw4r3snd11SoundHandleUiPCQ44n
 detail_HoldSound__Q34nw4r3snd14SoundStartableFPQ34nw4r3snd11SoundHandleUiPCQ44nw4r3snd14SoundStartable9StartInfo = 0x800a3f90
 OpenExtStream__Q34nw4r3snd15DVDSoundArchiveFPQ44nw4r3snd15DVDSoundArchive13DvdFileStreamUiPcUiUi = 0x800912c0
 GetSoundType__Q34nw4r3snd12SoundArchiveCFUi = 0x8009df30
+detail_ReadStrmSoundInfo__Q34nw4r3snd12SoundArchiveCFUiPQ44nw4r3snd12SoundArchive13StrmSoundInfo = 0x8009df60
+SetTrackVolume__Q44nw4r3snd6detail9StrmSoundFUiif = 0x800a8a00
+__ct__Q34nw4r3snd15StrmSoundHandleFPQ34nw4r3snd11SoundHandle = 0x800a8de0
+DetachSound__Q34nw4r3snd15StrmSoundHandleFv = 0x800a8ef0
 ReadStrmInfo__Q44nw4r3snd6detail14StrmFileLoaderFPQ54nw4r3snd6detail14StrmFileReader8StrmInfo = 0x800a5490
 DetailUtilCalcRandom__Q24nw4r3sndFv = 0x800ad050
 Stop__Q44nw4r3snd6detail10BasicSoundFi = 0x8008e330
@@ -296,7 +302,7 @@ PostAddFileFromMemoryA__5GHTTPFPPQ25GHTTP7GHIPostPCcPCviPCcPCc = 0x80113944
 
 #EGG
 #System
-mInstance__8RKSystem = 0x802a4080
+mInstance__Q23EGG7TSystem = 0x802a4080
 
 #Math
 Mult__Q23EGG5QuatfFRCQ23EGG5QuatfRCQ23EGG8Vector3fRQ23EGG5Quatf = 0x8023a540
@@ -1239,15 +1245,15 @@ SSL_Initialised = 0x80386d4c
 
 
 #Effects
-Reset__10EffectsMgrFv = 0x8067b8f0
+Reset__Q27Effects3MgrFv = 0x8067b8f0
 Update__10EffectsMgrFv = 0x8067cb88
-__ct__13PlayerEffectsFPQ24Kart6Player = 0x8068df98
-__dt__13PlayerEffectsFv = 0x8068e888
-LoadEffects__13PlayerEffectsFv = 0x8068f044
-DisplayPrimaryEffects__13PlayerEffectsFPPQ23EGG6EffectUiUiRC5Mtx34RC4Vec3b = 0x806975d4
-FadeEffects__13PlayerEffectsFPPQ23EGG6EffectUiUiRC5Mtx34RC4Vec3b = 0x80697788
-DisplayEffects2__13PlayerEffectsFPPQ23EGG6EffectUiUib = 0x806a19d8
-FadeEffects2__13PlayerEffectsFPPQ23EGG6EffectUiUib = 0x806a1b68
+__ct__Q27Effects6PlayerFPQ24Kart6Player = 0x8068df98
+__dt__Q27Effects6PlayerFv = 0x8068e888
+LoadEffects__Q27Effects6PlayerFv = 0x8068f044
+CreateAndUpdateEffectsByIdx__Q27Effects6PlayerFPPQ23EGG6EffectUiUiRC5Mtx34RC4Vec3b = 0x806975d4
+FollowFadeEffectsByIdx__Q27Effects6PlayerFPPQ23EGG6EffectUiUiRC5Mtx34RC4Vec3b = 0x80697788
+CreateAndUpdateEffectsByIdxVelocity__Q27Effects6PlayerFPPQ23EGG6EffectUiUiUi = 0x806a19d8
+FollowFadeEffectsByIdxVelocity__Q27Effects6PlayerFPPQ23EGG6EffectUiUiUi = 0x806a1b68
 __ct__Q23EGG14EffectResourceFPvPv = 0x80225c98
 
 #Sound
@@ -1325,7 +1331,7 @@ LoadGraphics__Q24Item3ObjFPCcPCcPCcUcPQ34Item7ObjBase8AnmParamQ44nw4r3g3d6ScnMdl
 LoadGraphicsImplicitBRRES__Q24Item3ObjFPCcPCcUcPQ34Item7ObjBase8AnmParamQ44nw4r3g3d6ScnMdl12BufferOptionPv = 0x8079ffdc
 LoadGraphicsImplicitBRRESNoFunc__Q24Item3ObjFPCcPCcPQ34Item7ObjBase8AnmParamQ44nw4r3g3d6ScnMdl12BufferOptionUi = 0x8079ff5c
 __ct__Q24Item13ObjPropertiesFRCQ24Item13ObjProperties = 0x80790e7c
-DeployBlooper__Q24Item8GessoMgrFUc = 0x807a9128
+DeployBlooper__Q24Item8GessoMgrFUs = 0x807a9128
 AddEVENTEntry__Q24Item7ObjBaseF9ItemObjIdUc = 0x8079c220
 
 #Lakitu

@@ -24,7 +24,7 @@ public:
     void UpdateShadow() override; //0x70 806b6eac
 
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806b6874
-    ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer,
+    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
         ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806b6a18
 
     //ObjectCycleManager vtable 808c2198 at 0xb0

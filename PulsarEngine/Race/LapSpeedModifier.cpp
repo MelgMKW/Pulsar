@@ -5,7 +5,8 @@
 #include <MarioKartWii/Kart/KartValues.hpp>
 #include <MarioKartWii/Kart/KartMovement.hpp>
 #include <MarioKartWii/Lakitu/LakituManager.hpp>
-#include <MarioKartWii/Item/Obj/ItemObj.hpp>
+#include <MarioKartWii/Item/Obj/ObjProperties.hpp>
+#include <MarioKartWii/3D/Model/ModelDirector.hpp>
 #include <Race/200ccParams.hpp>
 
 namespace Pulsar {

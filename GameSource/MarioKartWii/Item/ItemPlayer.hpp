@@ -107,7 +107,9 @@ public:
     PlayerInventory inventory; //0x88
     PlayerObj itemPlayerSub; //0xb4
     u32 hudSlotId; //0x234
-    u8 unknown_0x238[0x248 - 0x238];
+    u8 unknown_0x238[0x240 - 0x238];
+    s32 decrementTimer; //0x240
+    u8 unknown_0x244[4];
 }; //Total Size 0x248
 size_assert(Player, 0x248);
 }//namespace Item

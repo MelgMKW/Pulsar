@@ -61,7 +61,7 @@ public:
     float GetwheelCountReciprocal() const; //805902fc
     float GetwheelCountPlus1Reciprocal() const; //8059030c
     const Vec3& GetWheelPosition(u32 wheelIdx) const; //8059031c
-    bool WheelHasFloorCollision(u32 wheelIdx) const; //80590338
+    bool WheelHasFloorCollision(u32 wheelIdx) const; //80590338f
     void SetKartBody0x94(float f0x94); //80590350
     void SetKartBodyHandleDistance(float handleDistance); //80590368
     void SetStartBoost(s32 startBoost); //80590380
@@ -191,6 +191,7 @@ public:
     float GetStartBoostCharge() const;	//805914e4
     Entity* GetEntity() const; //80591520
     ClipInfo* GetClipInfo() const; //8059152c
+    bool AreKartModelsVisible() const; //80591608
     Killer& GetKiller() const; //80591618
     void GetBillViewMtx(Mtx34& dest); //80591624
     void ResetInertia(const Vec3& scale) const; //80591664

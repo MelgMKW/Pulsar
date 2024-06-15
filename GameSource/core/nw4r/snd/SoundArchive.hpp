@@ -143,7 +143,7 @@ struct SoundArchive::SoundInfo { //https://wiki.tockdom.com/wiki/BRSAR_(File_For
 struct SoundArchive::StrmSoundInfo { //https://wiki.tockdom.com/wiki/BRSAR_(File_Format)#RSTM
     u32 startPosition;
     u16 allocChannelCount;
-    u16 rstmAllocTrack;
+    u16 allocTrackCount;
 }; //total size 0x8
 
 struct SeqSoundInfo {

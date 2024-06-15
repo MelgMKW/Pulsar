@@ -16,7 +16,7 @@ public:
     u8 GetShadowListIdx() override; //0x80 80770374
 
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80770068
-    ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer,
+    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
         ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 807701f8
     const Vec3& GetCollisionTranslation() const override; //0xd4 8077036c
 

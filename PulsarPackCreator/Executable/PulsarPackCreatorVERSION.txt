@@ -1,3 +1,16 @@
+·Updated to 1.3.6
+Creator Changes:
+-Fixed alphabetization ignoring versions.
+-Icon count is now correctly written to Config files.
+Engine Changes:
+-Offline Menu BG music can now be customized like Wifi Music by putting a brstm called "offline_bg.brstm" in My Stuff.
+-Fixed Wifi Music streams not playing in the correct sequence. The streams now match the vanilla ones.
+-Track blocking now works in Friend Rooms.
+-Track blocking now takes Random votes into account.
+-Blooper no longer has an erroneous initial timer.
+-Pressing watch replay after finishing a Time Trial no longer crashes the game. The crash was due to the game trying to extract data from the fanfare BRSTM which wasn't loaded if music was disabled.
+-Fixed the friend room Title BMG being hidden due to Settings.
+
 ·Updated to 1.3.5
 Creator Changes:
 -Staff ghosts will now be put in an Experts folder. This folder no longer needs to be moved to the NAND.

@@ -79,25 +79,24 @@ public:
 
     EmitterParameter parameter;
     EvaluateStatus evalStatus;
-    EmitterResource* resource;
-    Effect* effectMgr;
-    ActivityList activityList;
-    bool isFirstEmission;
-    u16 waitTime;
-    u16 emitIntervalWait;
-    u32 tick;
-    u16 calcRemain;
-    u16 randSeed;
-    Random random;
-    EmitterForm* form;
-    Emitter* parent;
-    Particle* referenceParticle;
-    EmitterInheritSetting inheritSetting;
-    nw4r::math::VEC3 globalPosition;
-    nw4r::math::VEC3 prevGlobalPosition;
-    bool txDirty;
-    math::MTX34 globalMtx;
-};
+    EmitterResource* resource; //0xb8
+    Effect* effectMgr; //0xbc
+    ActivityList activityList; //0xc0
+    bool isFirstEmission; //0xdc
+    u16 waitTime; //0xde
+    u16 emitIntervalWait; //0xe0
+    u32 tick; //0xe4
+    u16 calcRemain; //0xe8
+    u16 randSeed; //0xea
+    Random random; //0xef
+    EmitterForm* form; //0xf0
+    Emitter* parent; //0xf4
+    Particle* referenceParticle; //0xf8
+    EmitterInheritSetting inheritSetting; //0xfc
+    bool mtxDirty; //0x106
+    u8 padding;
+    math::MTX34 globalMtx; //0x108
+}; //0x138
 
 
 }//namespace ef

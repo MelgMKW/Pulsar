@@ -1,6 +1,7 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Audio/AudioManager.hpp>
 #include <MarioKartWii/Audio/Other/AudioStreamsMgr.hpp>
+#include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
 
 namespace Pulsar {
 namespace Sound {
@@ -9,12 +10,22 @@ the game will check the BRASR's entry channel count against the current BRSTM's,
 the channel switch will not happen*/
 
 int CheckChannelCount(const Audio::StreamsMgr&, u32 channel, const nw4r::snd::detail::BasicSound& sound) {
-    if(Audio::Manager::sInstance->soundArchivePlayer->soundArchive->GetSoundType(sound.soundId) !=
-        snd::SoundArchive::SOUND_TYPE_STRM) return sound.soundId;
-    const nw4r::snd::detail::StrmSound& strmSound = static_cast<const nw4r::snd::detail::StrmSound&>(sound);
-    const u32 need = strmSound.strmPlayer.channelsNeeded;
-    const u32 channelCount = strmSound.strmPlayer.strmInfo.channelCount;
-    return (channelCount < need) ? -1 : sound.soundId;
+
+    u32 soundId = sound.soundId;
+    const snd::SoundArchive* soundArchive = Audio::Manager::sInstance->soundArchivePlayer->soundArchive;
+    if(soundArchive->GetSoundType(soundId) != snd::SoundArchive::SOUND_TYPE_STRM) return soundId;
+
+    //cannot use StrmPlayer::channelsNeeded because it may have been overwritten by LoadBRSTMVolumeAndFixTrackCount; therefore, must fetch from the BRSAR entry again
+    snd::SoundArchive::StrmSoundInfo info;
+    soundArchive->detail_ReadStrmSoundInfo(soundId, &info);
+    const u32 need = info.allocChannelCount;
+    const u32 channelCount =  static_cast<const nw4r::snd::detail::StrmSound&>(sound).strmPlayer.strmInfo.channelCount;
+    if(soundId == SOUND_ID_KC) {
+        const SectionId section = SectionMgr::sInstance->curSection->sectionId;
+        if(section >= SECTION_SINGLE_P_FROM_MENU && section <= SECTION_SINGLE_P_LIST_RACE_GHOST || section == SECTION_LOCAL_MULTIPLAYER) soundId = SOUND_ID_OFFLINE_MENUS;
+        else if(section >= SECTION_P1_WIFI && section <= SECTION_P2_WIFI_FROOM_COIN_VOTING) soundId = SOUND_ID_WIFI_MUSIC;
+    }
+    return (channelCount < need) ? -1 : soundId;
 }
 
 asmFunc ConditionalChannelSwitch() {
@@ -29,8 +40,14 @@ asmFunc ConditionalChannelSwitch() {
     mr r4, r28;
     mtlr r29;
     blr;
-    );
+        );
 }
 kmCall(0x806fab78, ConditionalChannelSwitch);
+
+
+
+
+
+
 }//namespace Audio
 }//namespace Pulsar

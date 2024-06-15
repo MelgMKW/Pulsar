@@ -40,6 +40,25 @@ public:
     u32 bufferSize; //0xC 32-bits aligned
 }; //0x10
 
+namespace StateGX {
+void InvalidateTexAllGX(); //80240e18
+void ResetGXCache(); //80240eb4
+void ResetGX(); //80240f68
+void ResetGXAttr(); //80240fb0
+void ResetGXChans(); //802410ec
+void ResetGXIndirect(); //802411c8
+void ResetGXTexObjs(); //80241240
+void SetTexCoordGen(); //802412c8
+void ResetGXTevs(); //80241380
+void SetPE(); //80241530
+void SetAlpha(); //802415e8
+void SetPixelFmt(GX::PixelFmt pix_fmt, GX::ZFmt16 z_fmt); //80241668
+void SetProjection(GX::ProjectionType projType, Mtx44 projMtx); //802416fc
+void ChangeProjection(float* p); //802417fc first float is GX::ProjectionType as a float
+void SetViewport(float xOrigin, float yOrigin, float width, float height, float near, float far); //802418d0
+void SetScissor(u32 left, u32 top, u32 width, u32 heigh); //802419fc
+void SetScissorBoxOffset(s32 xOffset, s32 yOffset); //80241acc
+}//namespace StateGX
 
 namespace DrawGX {
 struct ZModes {

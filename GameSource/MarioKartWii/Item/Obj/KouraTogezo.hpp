@@ -22,6 +22,11 @@ public:
     void UpdateThunk(); //807a38f8
     void Update(); //807ad118
 
+    bool AcquireTarget(u32 playerId); //807b45b0 returns true if acquired
+
+    u8 unknown_0x24c[0x330 - 0x24c]; //will document later
+
+    Item::Player* playerTargeted; //0x280
     u8 unknown_0x24c[0x330 - 0x24c]; //will document later
     ModelDirector* bombCore; //0x330
     u8 unknown_0x334[4];

@@ -16,6 +16,7 @@ class Light {
     bool isInUse; //0x8
     u8 padding[3];
     virtual ~Light(); //80561f00 vtable 808b4a98
+    void Update(); //80560d20
     u8 lightSetId; //0x10 idx + 8, 8 reserved?
     u8 padding2[3];
     EGG::LightMgr* lightMgr; //0x14
@@ -46,7 +47,7 @@ public:
     virtual ~LightMgrHolder(); //0x14 80561948 vtable 808b4a7c
     virtual void LoadBLIGHT(); //805612e8
     virtual void vf_0x10(); //80561450
-    virtual void vf_0x14(); //8056156c
+    virtual void Update(); //8056156c or Draw
     virtual void LoadBLMAP(); //805615f0
     ScnMgr* scnManager; //0x1C
     EGG::LightMgr* lightMgr; //0x20

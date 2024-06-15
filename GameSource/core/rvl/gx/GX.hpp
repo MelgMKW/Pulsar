@@ -28,7 +28,6 @@ void SetFog(FogType type, float startz, float endz, float nearz, float farz, Col
 void SetBlendMode(BlendMode type, BlendFactor src_factor, BlendFactor dst_factor, LogicOp op);
 void SetZMode(bool compare_enable, Compare func, bool update_enable);
 void SetZCompLoc(bool before_tex);
-void SetProjection(const float mtx[4][4], ProjectionType type);
 void LoadPosMtxImm(const float mtx[3][4], u32 pnidx);
 void SetCurrentMtx(u32 mtx);
 void LoadPosMtxIndx(u32 indx);

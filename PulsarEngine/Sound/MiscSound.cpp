@@ -2,6 +2,7 @@
 #include <core/nw4r/snd.hpp>
 #include <MarioKartWii/Audio/RaceMgr.hpp>
 #include <MarioKartWii/Audio/RSARPlayer.hpp>
+#include <MarioKartWii/Audio/Other/AudioStreamsMgr.hpp>
 #include <Sound/MiscSound.hpp>
 #include <Settings/Settings.hpp>
 
@@ -44,9 +45,9 @@ static void DisableAndChangeBGMusic(Audio::SinglePlayer& singlePlayer, u32 sound
             }
         }
         else if(soundId == SOUND_ID_OFFLINE_MENUS) {
-            soundId = SOUND_ID_KC;
             s32 entryNum = DVDConvertPathToEntryNum(wifiMusicFile);
             if(entryNum >= 0) {
+                soundId = SOUND_ID_KC;
                 singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
             }
         }
@@ -54,6 +55,31 @@ static void DisableAndChangeBGMusic(Audio::SinglePlayer& singlePlayer, u32 sound
     }
 }
 kmCall(0x806fa664, DisableAndChangeBGMusic);
+
+static snd::SoundArchive::SoundType PatchPrepareStreamsBG(snd::SoundArchive& archive, u32 soundId) {
+
+    if(soundId == SOUND_ID_KC) {
+        const SectionId section = SectionMgr::sInstance->curSection->sectionId;
+
+        u8 type = 0;
+        if(section >= SECTION_SINGLE_P_FROM_MENU && section <= SECTION_SINGLE_P_LIST_RACE_GHOST || section == SECTION_LOCAL_MULTIPLAYER) type = 1;
+        else if(section >= SECTION_P1_WIFI && section <= SECTION_P2_WIFI_FROOM_COIN_VOTING) type = 2;
+        if(type != 0) {
+            register Audio::StreamsMgr* streams;
+            asm(mr streams, r30;);
+            snd::StrmSoundHandle strmHandle(streams->curHandle);
+            for(int i = 0; i < 4; ++i) {
+                float volume = 0.0f;
+                if((type == 2 && (i % 3) != 0) || (type == 1 && i == 0)) volume = 1.0f;
+                streams->streamsVolume[i].curValue = volume;
+                strmHandle.SetTrackVolume(1 << i, volume);
+            }
+            return snd::SoundArchive::SOUND_TYPE_INVALID;
+        }
+    }
+    return archive.GetSoundType(soundId);
+}
+kmCall(0x806fa2fc, PatchPrepareStreamsBG);
 
 static void ToggleMenuMusic() {
     const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;

@@ -83,11 +83,20 @@ static void DecideTrack(CustomSELECTHandler* select) {
     const CupsConfig* cupsConfig = CupsConfig::sInstance;
     const RKNet::Controller* controller = RKNet::Controller::sInstance;
     const RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
-    if(select->mode == RKNet::ONLINEMODE_PUBLIC_VS && !CupsConfig::IsRegsSituation()) {
+
+    if(select->mode == RKNet::ONLINEMODE_PRIVATE_VS && Info::IsHAW(true)) {
+        const u8 hostAid = controller->subs[controller->currentSub].hostAid;
+        select->toSendPacket.winningVoterAid = hostAid;
+        u16 hostVote = select->toSendPacket.pulSELPlayerData[0].pulCourseVote;
+        if(hostVote == 0xFF) hostVote = cupsConfig->RandomizeTrack(&random);
+        select->toSendPacket.pulWinningCourse = hostVote;
+    }
+    else if((select->mode == RKNet::ONLINEMODE_PUBLIC_VS || select->mode == RKNet::ONLINEMODE_PRIVATE_VS) && !CupsConfig::IsRegsSituation()) {
 
         const u32 availableAids = sub.availableAids;
         u8 aids[12];
         u8 newVotesAids[12];
+        PulsarId votes[12];
         int playerCount = 0;
         int newVoters = 0;
         for(u8 aid = 0; aid < 12; aid++) {
@@ -95,7 +104,9 @@ static void DecideTrack(CustomSELECTHandler* select) {
             aids[playerCount] = aid;
             ++playerCount;
             bool isRepeatVote = false;
-            const PulsarId aidVote = static_cast<PulsarId>(aid == sub.localAid ? select->toSendPacket.pulSELPlayerData[0].pulCourseVote : select->receivedPackets[aid].pulSELPlayerData[0].pulCourseVote);
+            PulsarId aidVote = static_cast<PulsarId>(aid == sub.localAid ? select->toSendPacket.pulSELPlayerData[0].pulCourseVote : select->receivedPackets[aid].pulSELPlayerData[0].pulCourseVote);
+            if(aidVote == 0xFF) aidVote = cupsConfig->RandomizeTrack(&random);
+            votes[aid] = aidVote;
             for(int i = 0; i < Info::GetTrackBlocking(); ++i) {
                 if(system->lastTracks[i] == aidVote) {
                     isRepeatVote = true;
@@ -109,19 +120,12 @@ static void DecideTrack(CustomSELECTHandler* select) {
         u8 winner;
         if(newVoters > 0) winner = newVotesAids[random.NextLimited(newVoters)];
         else winner = aids[random.NextLimited(playerCount)];
-        u16 vote = static_cast<PulsarId>(winner == sub.localAid ? select->toSendPacket.pulSELPlayerData[0].pulCourseVote : select->receivedPackets[winner].pulSELPlayerData[0].pulCourseVote);
-        if(vote == 0xFF) vote = cupsConfig->RandomizeTrack(&random);
+        u16 vote = votes[winner];
+
         select->toSendPacket.pulWinningCourse = vote;
         select->toSendPacket.winningVoterAid = winner;
         system->lastTracks[system->curBlockingArrayIdx] = static_cast<PulsarId>(vote);
         system->curBlockingArrayIdx = (system->curBlockingArrayIdx + 1) % Info::GetTrackBlocking();
-    }
-    else if(select->mode == RKNet::ONLINEMODE_PRIVATE_VS && Info::IsHAW(true)) {
-        const u8 hostAid = controller->subs[controller->currentSub].hostAid;
-        select->toSendPacket.winningVoterAid = hostAid;
-        u16 hostVote = select->toSendPacket.pulSELPlayerData[0].pulCourseVote;
-        if(hostVote == 0xFF) hostVote = cupsConfig->RandomizeTrack(&random);
-        select->toSendPacket.pulWinningCourse = hostVote;
     }
     else reinterpret_cast<RKNet::SELECTHandler*>(select)->DecideTrack();
 }
@@ -240,7 +244,7 @@ asmFunc GetPhase_3D_r0_r24() {
     lbz r0, 0x3D + 2 (r24);
     rlwinm r0, r0, 28, 28, 31;
     blr;
-    )
+        )
 }
 kmCall(0x80661578, GetPhase_3D_r0_r24);
 kmCall(0x806617b8, GetPhase_3D_r0_r24);
@@ -251,7 +255,7 @@ asmFunc GetPhase_75_r0_r28() {
     lbz r0, 0x75 + 2 (r28);
     rlwinm r0, r0, 28, 28, 31;
     blr;
-    )
+        )
 }
 //kmCall(0x806617e8, GetPhase_75_r0_r28);
 kmCall(0x80661880, GetPhase_75_r0_r28);
@@ -263,7 +267,7 @@ asmFunc StorePhase_3D_r30_r24() {
     rlwimi r12, r30, 4, 24, 27;
     stb r12, 0x3D + 2 (r24);
     blr;
-    )
+        )
 }
 kmCall(0x8066163c, StorePhase_3D_r30_r24);
 //kmCall(0x806617f4, StorePhase_3D_r30_r24);
@@ -275,7 +279,7 @@ asmFunc StorePhase_3D_r31_r24() {
     rlwimi r12, r31, 4, 24, 27;
     stb r12, 0x3D + 2 (r24);
     blr;
-    )
+        )
 }
 kmCall(0x806617a8, StorePhase_3D_r31_r24);
 kmCall(0x8066188c, StorePhase_3D_r31_r24);
@@ -302,7 +306,7 @@ asmFunc GetEngine_3D_r0_r28() {
     lbz r0, 0x77 (r28);
     rlwinm r0, r0, 0, 28, 31;
     blr;
-    )
+        )
 }
 kmCall(0x806615bc, GetEngine_3D_r0_r28);
 //kmCall(0x806617e0, GetEngine_3D_r0_r28);
@@ -331,7 +335,7 @@ end:
     stb r12, 0x3F (r24);
     li r0, 0;
     blr;
-    )
+        )
 }
 kmCall(0x806617e8, CheckEngineClass);
 

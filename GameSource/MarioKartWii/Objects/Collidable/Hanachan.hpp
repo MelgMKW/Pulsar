@@ -44,7 +44,7 @@ public:
     void UpdateModelMatrix() override; //0x6c 806cca14
     bool vf_0x84() override; //0x84 0x84 806cca0c
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806c6c94
-    ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer,
+    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
         ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806c6e40
 
     virtual void vf_0xec() = 0; //0xec 

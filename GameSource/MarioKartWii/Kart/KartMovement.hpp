@@ -123,6 +123,8 @@ public:
 
 class Movement {
 public:
+
+    static s16 blooperDuration; //808b5bb4, 808b12f4 ntsc-u
     static s16 GetStarDuration(); //80589024
 
     Movement(); //80577fc4
@@ -148,7 +150,7 @@ public:
     void ApplyLightningEffect(int frames, int unk0, int unk1); //80580778
     void ActivateTc(); //80581a28
     void DeactivateTc(); //80581a40
-    void UpdateInk(); //80581b1c
+    void UpdateCharacterInk(); //80581b1c
     void ApplyStartBoost(int frames); //8058212c
     void TryEndJumpPad(); //80582530
     void UpdateBoost(); //80582694, always inlined
@@ -175,7 +177,7 @@ public:
     virtual void Reset(bool unk0, bool unk1); //0x14 805784d4
     virtual void ActivateStar(); //0x18 80580268
     virtual void ActivateMega(); //0x1c 80580b14
-    virtual void ApplyInk(int unk); //0x20 80581a58
+    virtual void ApplyInk(bool self); //0x20 80581a58 self true if the user of the blooper is the player of this instance
     virtual void vf_0x24(); //0x24 8058348c
     virtual void OnOOB(); //0x28 80583658
     virtual void vf_0x2c(); //0x2c 805837cc
@@ -260,7 +262,7 @@ public:
     s16 starTimer; //0x18A, timer for Star
     s16 shockTimer; //0x18C, used when shocked by KC Zappers, TC, or Shock
     s16 blooperCharacterInk; //0x18E, timer for ink on kart
-    u8 field_0x190; //set to 1 when the blooper state is applied
+    bool inked; //0x190 set to 1 when the blooper state is applied
     u8 unknown_0x191;
     s16 crushTimer; //0x192, timer for being crushed by Thwomp & Mega
     s16 megaTimer; //0x194, timer for Mega mushroom

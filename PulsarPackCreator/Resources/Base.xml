@@ -36,9 +36,11 @@
 	<patch id="CTGPLoad">
 		<folder external="/ctgpr/My Stuff" />
 		<file external="/ctgpr/My Stuff/wifi_bg.brstm" disc="/sound/strm/wifi_bg.brstm" create="true" />
+		<file external="/ctgpr/My Stuff/offline_bg.brstm" disc="/sound/strm/offline_bg.brstm" create="true" />
 	</patch>	
 	<patch id="{$pack}Load">
 		<folder external="/{$pack}/My Stuff" />
 		<file external="/{$pack}/My Stuff/wifi_bg.brstm" disc="/sound/strm/wifi_bg.brstm" create="true" />
+		<file external="/{$pack}/My Stuff/offline_bg.brstm" disc="/sound/strm/offline_bg.brstm" create="true" />
 	</patch>
 </wiidisc>

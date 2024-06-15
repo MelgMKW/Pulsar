@@ -1,6 +1,7 @@
 #include <MarioKartWii/Item/ItemManager.hpp>
 #include <MarioKartWii/Input/InputManager.hpp>
 #include <MarioKartWii/Item/Obj/Gesso.hpp>
+#include <MarioKartWii/Item/Obj/ObjProperties.hpp>
 #include <MarioKartWii/CourseMgr.hpp>
 #include <MarioKartWii/3D/Model/ModelDirector.hpp>
 #include <MarioKartWii/Driver/DriverManager.hpp>
@@ -30,9 +31,6 @@ void UseBlooperOrFeather(Item::Player& itemPlayer) {
     else itemPlayer.UseBlooper();
 };
 kmWritePointer(0x808A5894, UseBlooperOrFeather);
-//kmBranch(0x807a81b4, UseBlooperOrFeather); //replaces UseBlooper
-
-
 
 void ReplaceBlooperUseOtherPlayers(Item::GessoMgr& gessoMgr, u8 id) {
     if(Info::IsFeather()) {
@@ -113,7 +111,7 @@ static u32 ConditionalBlooperTimer(u32 timer) {
     return timer;
 }
 kmCall(0x807bba64, ConditionalBlooperTimer);
-
+kmWrite32(0x807bba68, 0x907f003c); //store r3, the return value of the function
 /* for spraying, useless
 void ConditionalFeatherBRRES(g3d::ResFile& file, ArchiveSource type, const char* brresName) {
     if(Info::IsFeather()) brresName = "feather.brres";

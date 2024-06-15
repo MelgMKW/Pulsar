@@ -18,6 +18,7 @@ public:
     virtual void Draw(const nw4r::ef::DrawInfo& drawInfo, int additionalGroupID); //80224558
     virtual void CreateEffect(const char* name); //802245ac
 
+
     int idx; //0x10
     int groupID; //0x14
 }; //total size 0x18

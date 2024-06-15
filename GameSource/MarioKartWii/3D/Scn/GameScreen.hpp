@@ -15,7 +15,7 @@ public:
     void CalcDimensions(u32 screenCount); //80566e38 splits the TV space based on idx and total screen count
     void SetAndLoadProjection(u32 projType, u32 r5); //80566020
     void SetProjection(u32 projType, u32 r5); //805661e8
-    void Set4_3AspectRatio();  //80566c20 sets width and height to 832/456
+    void Set4_3AspectRatio();  //80566c20 sets width and height to 832/456, or rather by EGG::Screen::InitParams values
     void Set16_9AspectRatio(); //80566bb8 sets width and height to 608/456
     void SetAndLoadOrthoProj(u32 r4); //80565da0
 

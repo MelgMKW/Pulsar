@@ -64,9 +64,9 @@ void CtrlRaceSpeedo::OnUpdate() {
     const Kart::Physics* physics = pointers.kartBody->kartPhysicsHolder->physics;
 
     Vec3 sum;
-    PSVECAdd(&physics->engineSpeed, &physics->speed2, &sum);
-    PSVECAdd(&physics->speed3, &sum, &sum);
-    float speed = PSVECMag(&sum);
+    MTX::PSVECAdd(&physics->engineSpeed, &physics->speed2, &sum);
+    MTX::PSVECAdd(&physics->speed3, &sum, &sum);
+    float speed = MTX::PSVECMag(&sum);
     float speedCap = pointers.kartMovement->hardSpeedLimit;
     if(speed > speedCap) speed = speedCap;
 

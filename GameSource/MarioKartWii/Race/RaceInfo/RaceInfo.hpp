@@ -133,7 +133,7 @@ public:
     RaceInfoPlayer** players; //pointer to an array of pointers, length is player count
     GMData* gamemodeData; //0x10
     RaceTimerMgr* timerMgr; //0x14
-    u8* playerIdInEachPosition; //pointer to an array of player ids, 0 is the id in 1st, 1 is 2nd...
+    u8* playerIdInEachPosition; //0x18 pointer to an array of player ids, 0 is the id in 1st, 1 is 2nd...
     u8 unknown_0x1c[2];
     s16 introTimer;
     u32 raceFrames; //0x20

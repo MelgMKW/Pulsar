@@ -23,7 +23,7 @@ struct EmitterInheritSetting {
     u8 flag;
     u8 alphaFuncPri;
     u8 alphaFuncSec;
-};
+}; //0x12
 
 struct EmitterDrawSetting {
     struct TevStageColor {

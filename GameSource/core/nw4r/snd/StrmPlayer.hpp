@@ -48,7 +48,7 @@ public:
         void Execute() override; //800a8070
         void Cancel() override; //800a80c0
         void OnCancel() override; //800a80d0
-        StrmPlayer* strmPlayer;
+        StrmPlayer* strmPlayer; //0x10
         ut::FileStream* stream; //0x14
         StartOffsetType type; //copied from 0x168 of the strm player
         s32 startOffset;
@@ -152,8 +152,8 @@ public:
 
     int currentlyStreamedBufferBlockCount; //0x150
     int currentlyStreamedBufferBlockIdx; //0x154
-    int currentlyStreamedBlockID; //0x158
-    int loopBlockIdx; //0x15c ID of the block that matches the loopStartSample
+    int currentlyStreamedBlockIdx; //0x158
+    int loopStartBlockIdx; //0x15c ID of the block that matches the loopStartSample
     int lastBlockIdx; //0x160
     int loadWaitCount; //0x164
     StartOffsetType type; //0x168
@@ -164,8 +164,8 @@ public:
     StrmDataLoadTask dataTasks[maxBlockBufferCount]; //0x1a0
     StrmBufferPool* strmBufferPool; //0x820
     ut::FileStream* stream; //0x824 mostly DVDFileStream
-    s32 trackCount; //channel / 2 0x828
-    s32 channelsNeeded; //0x82c sound ID dependant
+    u32 trackCount; //channel / 2 0x828, it can be different because it's obtained from the number of bit set in the brsar entry allocTrackFlag, but it's mostly always /2
+    u32 channelsNeeded; //0x82c sound ID dependant
     s32 voiceOutCount;
     StrmChannel channels[maxChannelCount]; //channel count active 
     StrmTrack tracks[maxTrackCount]; //0xb74 0x38 struct

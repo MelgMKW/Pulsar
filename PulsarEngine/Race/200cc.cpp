@@ -1,7 +1,7 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Input/InputManager.hpp>
 #include <MarioKartWii/Kart/KartManager.hpp>
-#include <MarioKartWii/3D/Effect/EffectMgr.hpp> 
+#include <MarioKartWii/Effect/EffectMgr.hpp> 
 #include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
 #include <MarioKartWii/Item/Obj/ItemObj.hpp>
 #include <MarioKartWii/KMP/KMPManager.hpp>
@@ -103,34 +103,34 @@ normal:
     rlwinm r28, r0, 31, 31, 31;
     rlwinm r30, r0, 0, 31, 31;
     blr;
-    )
+        )
 }
 kmCall(0x806faff8, BrakeDriftingSoundWrapper);
 
 kmWrite32(0x80698f88, 0x60000000);
-static int BrakeEffectBikes(PlayerEffects& effects) {
+static int BrakeEffectBikes(Effects::Player& effects) {
     const Kart::Player* kartPlayer = effects.kartPlayer;
     if(Info::Is200cc()) {
-        if(IsBrakeDrifting(*kartPlayer->link.pointers->kartStatus)) effects.DisplayEffects2(effects.bikeDriftEffects, 25, 26, true);
-        else effects.FadeEffects2(effects.bikeDriftEffects, 25, 26, true);
+        if(IsBrakeDrifting(*kartPlayer->link.pointers->kartStatus)) effects.CreateAndUpdateEffectsByIdxVelocity(effects.bikeDriftEffects, 25, 26, 1);
+        else effects.FollowFadeEffectsByIdxVelocity(effects.bikeDriftEffects, 25, 26, 1);
     }
     return kartPlayer->GetDriftState();
 }
 kmCall(0x80698f8c, BrakeEffectBikes);
 
 kmWrite32(0x80698048, 0x60000000);
-static int BrakeEffectKarts(PlayerEffects& effects) {
+static int BrakeEffectKarts(Effects::Player& effects) {
     Kart::Player* kartPlayer = effects.kartPlayer;
     if(Info::Is200cc()) {
-        if(IsBrakeDrifting(*kartPlayer->link.pointers->kartStatus)) effects.DisplayEffects2(effects.kartDriftEffects, 34, 36, true);
-        else effects.FadeEffects2(effects.kartDriftEffects, 34, 36, true);
+        if(IsBrakeDrifting(*kartPlayer->link.pointers->kartStatus)) effects.CreateAndUpdateEffectsByIdxVelocity(effects.kartDriftEffects, 34, 36, 1);
+        else effects.FollowFadeEffectsByIdxVelocity(effects.kartDriftEffects, 34, 36, 1);
     }
     return kartPlayer->GetDriftState();
 }
 kmCall(0x8069804c, BrakeEffectKarts);
 
 
-void FastFallingBody(Kart::Status& status, Kart::Physics& physics) { //weird thing 0x96 padding byte used
+static void FastFallingBody(Kart::Status& status, Kart::Physics& physics) { //weird thing 0x96 padding byte used
     if(Info::Is200cc()) {
         if((status.airtime >= 2) && (!status.bool_0x96 || (status.airtime > 19))) {
             Input::ControllerHolder& controllerHolder = status.link->GetControllerHolder();
@@ -145,7 +145,7 @@ kmCall(0x805967a4, FastFallingBody);
 
 
 kmWrite32(0x8059739c, 0x38A10014); //addi r5, sp, 0x14 to align with the Vec3 on the stack
-Kart::WheelPhysicsHolder& FastFallingWheels(Kart::Sub& sub, u8 wheelIdx, Vec3& gravityVector) { //weird thing 0x96 status
+static Kart::WheelPhysicsHolder& FastFallingWheels(Kart::Sub& sub, u8 wheelIdx, Vec3& gravityVector) { //weird thing 0x96 status
     float gravity = -1.3f;
     if(Info::Is200cc()) {
         Kart::Status* status = sub.kartStatus;

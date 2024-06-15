@@ -38,7 +38,7 @@ public:
     MiiTexObj* texObj[7]; //0x8
     //Array of pointers to MiiTexObj arrays, each of size MiiCount
     //Each TexObj array has its own role, and their attached buffers have a different size (sub struct of size 0x10 80896328 has u16 size)
-    //Role yet to be determined, but idx 2 seems to be for UI?
+    //Role yet to be determined, but idx 2 seems to be for UI, facing to the left
 
     void* buffer; //0x24 size = sum of miiCount * a size param * isUsedTexObjSlot for each 7 slots
     u32 miiCount; //0x28

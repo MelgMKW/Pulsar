@@ -54,9 +54,9 @@ struct LightObj {
 
 struct RenderModeObj {
     VI::TVMode viTVmode;
-    u16 efbWidth;
-    u16 efbHeight;
-    u16 xfbHeight;
+    u16 efbWidth; //0x4 xfb has the same width, it can only scale y dimension
+    u16 efbHeight; //0x6
+    u16 xfbHeight; //0x8
     u16 viXOrigin;
     u16 viYOrigin;
     u16 viWidth;

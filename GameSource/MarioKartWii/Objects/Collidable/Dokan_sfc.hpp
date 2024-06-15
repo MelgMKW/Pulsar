@@ -15,7 +15,7 @@ public:
     void UpdateShadow() override; //0x70 80778ea8
     void UpdateCollision() override; //0x74 80778d50
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80778c0c
-    ObjToItemInteraction GetItemCollisionType(const Kart::Player& kartPlayer,
+    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
         ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 80778cc4
     virtual bool vf_0xec(); //80778fdc
 

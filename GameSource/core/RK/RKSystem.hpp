@@ -1,61 +1,30 @@
 #ifndef _RKSYSTEM_
 #define _RKSYSTEM_
 #include <types.hpp>
-#include <core/egg/mem/ExpHeap.hpp>
-#include <core/egg/Audio/AudioMgr.hpp>
-#include <core/egg/ProcessMeter.hpp>
-#include <core/egg/Display.hpp>
-#include <core/RK/RKSceneManager.hpp>
-#include <core/rvl/gx/GXStruct.hpp>
+#include <core/egg/System.hpp>
 
-//using namespace EGG;
 
-struct Video {
-    GX::RenderModeObj* mode;
-    u32 unknown[2];
-};//total size 0xc
-
-class RKSystem {
+//_sinit_ at 800099cc
+class RKSystem : public EGG::TSystem { //probably an intermediate class in btw
 public:
-    static RKSystem mInstance; //802a4080
-    static RKSystem* sInstance; //80385fc8
+
     static RKSystem* GetStaticInstance(); //80008e84
-    RKSystem(); //not a true ctor 800099cc
-    virtual Video* GetVideo(); //0x8
-    virtual EGG::Heap* GetHeapSystem2(); //0xC
-    virtual EGG::AsyncDisplay* GetDisplay(); //0x10
-    virtual void* GetXFBManager(); //0x14
-    virtual EGG::PerformanceView* GetPerformanceView(); //0x18
-    virtual SceneManager* GetSceneManager(); //0x1C
-    virtual EGG::ExpAudioMgr* GetAudioManager(); //0x20
-    void* MEM1ArenaLo;
-    void* MEM1ArenaHi;
-    void* MEM2ArenaLo;
-    void* MEM2ArenaHi;
-    u32 memorySize; //0x14
-    EGG::ExpHeap* EGGRootMEM1; //0x18
-    EGG::ExpHeap* EGGRootMEM2;  //0x1C
-    EGG::ExpHeap* EGGRootDebug; //0x20
-    EGG::ExpHeap* EGGSystem;  //0x24
-    void* heapSystem; //thread
-    u32 unknown_0x2C; //just the start of mem1?
-    u32 unknown_0x30; //idk
-    u32 sysHeapSize;
-    u32 gxFifoBufSize;
-    GX::RenderModeObj* mode;
-    EGG::ExpAudioMgr* audioManager; //0x40
-    Video* video; //0x44
-    void* xfbManager; //0x48
-    EGG::AsyncDisplay* asyncDisplay; //0x4c
-    EGG::ProcessMeter* processMeter; //0x50
-    RKSceneManager* sceneManager; //0x54
-    EGG::ExpHeap* kpadWorkHeap;
-    u32 unknown_0x5c;
-    EGG::ExpHeap* relLinkHeap;
-    EGG::ExpHeap* heapSystem2; //the one I use 0x64
+    Heap* GetSystemHeap() override; //0xC 80008fac
+    void Run() override; //0x34 8000951c
+    void Initialize() override; //0x38 80009194
+
+    void* WPADAlloc(u32  size); //80008e90
+    u8 WPADFree(void* ptr); //80008eb0
+    void Main(u32 r3, u32 r4); //80008ef0
+
+    ExpHeap* kpadWorkHeap;
+    Allocator* wpadAllocator; //0x5c
+    ExpHeap* relLinkHeap;
+    ExpHeap* heapSystem2;
     u8 frameClock;
     u8 unknown_0x68;
     bool drawFrame; //0x69
     u8 unknown_0x6b[0x74 - 0x6b];
 }; //total size 0x74
+size_assert(RKSystem, 0x74);
 #endif

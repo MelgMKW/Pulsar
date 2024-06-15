@@ -62,15 +62,15 @@ public:
 
     ItemObjId itemObjId;
     u16 idx; //0x8
-    u16 r5; //0xa
+    u16 effectIdx; //0xa see item effects
     u8 unknown_0xc[0x10 - 0xc];
     Quat quaternion; //0x10
     Vec3 unknownVec_0x20[2];
     Vec3 basePosition; //0x38
     Vec3 curPosition; //0x44
     Vec3 speed; //0x50
-    float unknown_0x5c;
-    u8 unknown_0x60[0x6c - 0x60];
+    Vec3 scale; //0x5c
+    float scaleFactor; //0x68
     u8 playerUsedItemId; //0x6c player id of who used the item in the 1st place
     u8 unknown_0x6d[0x7c - 0x6d];
     u32 bitfield; //0x7c
@@ -100,7 +100,7 @@ class Obj : public ObjBase {
 public:
     Obj(); //807a6928
     //808d1c50 somehow has a different vtable
-    void Init(u32 idx, u32 r5, ItemObjId id); //8079e224
+    void Init(u32 idx, u16 effectIdx, ItemObjId id); //8079e224
     void Set(ItemObjId objId); //8079e5f4
     void Spawn(ItemObjId objId, u8 playerId, const Vec3& position, bool r7); //8079e550
 

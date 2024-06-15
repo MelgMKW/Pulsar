@@ -75,7 +75,12 @@ public:
     ut::Link link; //0x1c
 }; //0x24
 
-
+enum ScnGroupId { //matches GameScnProc names
+    GROUP_SHADOW = 9,
+    GROUP_SHADOW2 = 0x14,
+    GROUP_EFFECT = 0x15,
+    GROUP_EFFECT_SELF_ITEM = 0x17
+};
 
 class ScnMgr : public EGG::Disposer {
 public:
@@ -119,6 +124,7 @@ public:
     void DrawModelsImpl(bool r4); //805625a8
     void UpdateScnRoot(); //80562888 calcs world, view etc..., allows proper drawing of models
     void RemoveGroup(u32 idx); //8056410c removes groupHolder[idx]->group[curScnRoot]
+    g3d::ScnGroup* GetScnGroup(u32 scnRootIdx, ScnGroupId groupId); //8056417c 0x3C is used to convert id to idx
     //checks if some directors could be inserted into a common ScnGroupEx (if they share the same model and the same draw options)
     void RearrangeDirectorGroups(); //80563a78 
     //this uses a user-specified root; vt uses self
@@ -127,7 +133,7 @@ public:
     void UpdateModelDrawPriority(ModelDirector* mdlDirector, u32 scnObjDrawOptionsIdx); //80564074
     void Finalize(); //805650b0 creates/inits scngroupex's and loads the blmap
 
-
+    void DrawLights(); //805624cc
     static Light* AcquireLight(); //80565630
     EGG::Heap* curHeap; //0x10
     EGG::Heap* heap2; //0x14
@@ -139,7 +145,8 @@ public:
     EGG::ScnRenderer* scnRenderer; //0x30
     LightMgrHolder* lightMgrHolder; //0x34
     FogManager* fogManager; //0x38
-    u8 unknown_0x3c[0x44 - 0x3c];
+    void* subStructConvGroupIdToIdxAndMore; //0x3c
+    u8 unknown_0x40[0x44 - 0x40];
     ut::List scnGroupExList; //0x44 offset 0x28
     u8 unknown_0x50[4];
     u32 groupHoldersCount; //0x54

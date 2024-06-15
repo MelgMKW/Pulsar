@@ -120,7 +120,7 @@ public:
     s8 realControllerChannel; //id of the controller at the console for this player, -1 if not controlled by one
     u8 unknown_0x7; //possibly padding
     KartId kartId; //http://wiki.tockdom.com/wiki/List_of_Identifiers#Vehicles 0x8
-    CharacterId characterId; //http://wiki.tockdom.com/wiki/List_of_Identifiers#Characters 0xC
+    CharacterId characterId; //0xC http://wiki.tockdom.com/wiki/List_of_Identifiers#Characters
     PlayerType playerType; //0x10
     Mii mii; //0x14
     Team team; //0xcc
