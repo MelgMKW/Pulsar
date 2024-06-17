@@ -82,7 +82,7 @@ public:
     void Update(); //8082a8f4
     void CreateAllObjects(bool r4); //80826e8c
     void CreateObject(const KMP::Holder<GOBJ>& gobj); //80821e14 "ObjectGenerator"
-    void HandleDroppedItem(ItemObj* itemEntity, const Vec3& position, float unknown); //8082adbc
+    void HandleItemCollision(ItemObj* itemObj, const Vec3& position, float unknown); //8082adbc
     void AddObject(Object* object); //8082b0e8
     void ProcessCollision(const Kart::Player& kartPlayer, ObjectCollisionPolyhedra* collision); //8082ab04
     int GetManagedObjectsCount(); //8082b3b8
@@ -97,7 +97,7 @@ public:
     GeoHitTableKartObjHolder* geoHitTableKartObj; //0x14
     ObjectArray arrays[5]; //0x18, 0x20, 0x28, 0x30, 0x38 use enum, doesn't have ObjectKCLs
     Object* object_0x40; //0x40
-    Vec3** positions; //0x44, no idea,size 0xC8
+    Vec3* collisionsSpeeds; //0x44
     ObjToKartHit* kartInteractionArray; //0x48
     u8 unknown_0x4C[4];
     Object* pseaOrVenice_Nami; //0x50

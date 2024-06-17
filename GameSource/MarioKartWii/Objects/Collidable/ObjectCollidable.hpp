@@ -29,7 +29,7 @@ class ObjectCollidable : public Object { //collision is added as there is no KCL
     virtual ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const; //0xc0 8068179c
     //depends on factors like speed and obviously the kartToObj as a goomba does not do anything to a player in a mega
     virtual ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj) const; //0xc4 806817a4
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const; //0xc4 806817a4
     //same as above but with items
     virtual void OnWallCollision(const Kart::Player& kartPlayer, Vec3 position); //0xc8 8081f548 sound and playereffectsx
     //for objects that behave like walls such as goombas at low speeds
@@ -39,7 +39,7 @@ class ObjectCollidable : public Object { //collision is added as there is no KCL
     virtual const Vec3& GetCollisionTranslation() const; //0xd4 8068173c
     virtual bool IsSolid() const; //0xd8 80681734
     virtual void RegisterManagedObject(); //0xdc 8081f170
-    virtual void UpdateEntity(float f1); //0xe0 806816d8 not sure
+    virtual void InitEntity(float maxSpeed); //0xe0 806816d8 not sure
     virtual void RegisterEntity(float radius, float maxSpeed); //0xe4 8081f180 inserts it in EntityManager
     virtual const Vec3& GetSolidityCenter() const; //0xe8 806816b8
 

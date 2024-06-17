@@ -35,7 +35,7 @@ class FlamePole : public ObjectExternKCL, public ObjectCycleManager { //ObjectNu
     void CalcOtherEntityDistance(CollisionInfo::ObjInfo* otherEntityObjInfo, const Vec3& otherEntityInitialPosition) override; //0x110 8067fdf4
     void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir) override; //0x118 8067fe1c
     int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 806814a4
-    const Mtx34& GetTransformationMatrix() const override; //0x12c 8067fbb8
+    const Mtx34& GetTransformationMatrix(u32 framesOffset) const override; //0x12c 8067fbb8
     float GetYScale() const override; //0x130 8067fc50
     bool IsCollidingNoTriangleCheckImpl(const Vec3& pos, const Vec3& prevPos,
         KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, u32 initialTime, float radius) override; //0x148 8067fe88

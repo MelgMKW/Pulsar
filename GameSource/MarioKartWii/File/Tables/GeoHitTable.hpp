@@ -66,7 +66,7 @@ enum ObjToKartHit {
 
 enum KartToObjHit {
     KART_NORMAL = 0,
-    KART_INVINCIBLE = 0x5, //the kart is invincible to the object, star/mega/bill, depends on the object
+    KART_IMPERVIOUS = 0x5, //the kart is invincible to /unaffected to the object, star/mega/bill/being a ghost, depends on the object
     KART_OBJ_STATE_2 = 0x6, //unused
 };
 

@@ -17,7 +17,7 @@ class Kuribo : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 
     void LoadAnimations() override; //0x5c 806dd278
 
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806db764
-    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc0 806dba98
+    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc0 806dba98
     //ObjectCycleManager vtable 808c5efc at 0xB0
     //~Kuribo() override; thunk 806dd2d0
     //int vf_0xC() override; //806dd270 returns 2 this might be wrong since kart_truck has no such function

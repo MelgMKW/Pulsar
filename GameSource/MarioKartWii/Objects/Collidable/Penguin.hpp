@@ -16,7 +16,7 @@ public:
 
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80775c58
     ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 80775ce0
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 80775ce0
 
     virtual void vf_0xec(); //0xec 8077731c
     virtual void UpdateWithRot(); //0xf0 807757a0

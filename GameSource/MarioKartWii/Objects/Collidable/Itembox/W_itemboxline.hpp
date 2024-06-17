@@ -70,7 +70,7 @@ public:
         const char* GetSubFileName() const override; //0x38 8076ea00 
         ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 8076e4e8
         ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-            ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 8076e5d8
+            ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 8076e5d8
 
         u8 unknown_0xb0[8];
         EGG::Effect* rk_block; //0xb8

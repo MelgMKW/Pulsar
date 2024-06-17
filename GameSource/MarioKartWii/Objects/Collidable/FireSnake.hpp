@@ -47,7 +47,7 @@ public:
     void LoadAnimations() override; //0x5c 806c2a10
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806c1818
     ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806c18a8
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 806c18a8
     void vf_0xec(const Vec3& vec3) override; //0xec 806c23c8
     void RequestShoot() override; //0xf0 806c29fc
     //ObjectCycleManager vtable 808c3434 at 0xb4

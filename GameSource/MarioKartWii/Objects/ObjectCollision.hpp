@@ -9,13 +9,13 @@ enum PlayerItemState {
     PLAYERITEMSTATE_BULLET
 };
 
-class ObjectCollision { //very likely completely wrong names
+class ObjectCollision {
     virtual ~ObjectCollision(); //unknown as abstract
     virtual void SetPositionAndScale(const Mtx34& transformationMtx, float objScale) = 0; //c no translation
     virtual void SetPositionAndScale(const Mtx34& transformationMtx, float objScale, const Vec3& collisionTranslation) = 0; //10 called on collision
     virtual const Vec3& GetPosition(const Vec3& unknown) const = 0; //0x14
     virtual float GetRadius() const = 0; //0x18
-    bool ProcessCollision(ObjectCollision& other, Vec3& position); //80834348 position is filled
+    bool ProcessCollision(ObjectCollision& other, Vec3& destPosition); //80834348 position is filled
     Vec3 position;
     Vec3 speed; //0x10
 }; //0x1c

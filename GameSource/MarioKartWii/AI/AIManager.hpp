@@ -15,6 +15,13 @@ class EnemyRouteHolder {
     u32 addedKartAIs;
 }; //0x38
 
+class AiMgrSub84 {
+public:
+    AiMgrSub84(); //80740d1c
+    void AddKartAIController(KartAIController* ai); //807414b8
+    u8 unknown_[0x194];
+}; //0x194
+
 class AIMgrSub90 { //related to objects
     AIMgrSub90(); //80739054
     virtual ~AIMgrSub90(); //80739d7c vtable 808cafe0

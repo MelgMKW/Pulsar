@@ -17,7 +17,7 @@ public:
 
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80770068
     ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 807701f8
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 807701f8
     const Vec3& GetCollisionTranslation() const override; //0xd4 8077036c
 
     u32 someSortOfState; //0xb0 changed to 1 which causes a func call and then back to 0

@@ -192,6 +192,22 @@ typedef Actions<CPUDrivingRace> CPUDrivingAction; //808ca608
 //AI::Actions<CPUDrivingRace> void Update() override; //0x10 80730AC8
 //AI::Actions<CPUDrivingRace> void OnEnd() override; //0x14 80730AF8
 
+class CPUDrivingRaceSub8c {
+public:
+    CPUDrivingRaceSub8c(Inputs& inputs); //8073f37c
+    virtual ~CPUDrivingRaceSub8c(); //8073f3c0 vtable 808cb294
+    void Init(); //8073f400
+    void Update(); //8073f43c
+    Inputs& inputs; //0x4
+    u8 unknown_0x8[2];
+    void* aiPlayer148; //0xC
+    u32 position;
+    u32 unknown_0x18;
+    float unknown_0x1c;
+    float distance; //0x20 CKPT Total Distance * race completion
+    float unknown_0x24;
+}; //0x28
+
 class CPUDrivingRace : public CPUDriving {
     CPUDrivingRace(Inputs& inputs); //80730198
     ~CPUDrivingRace() override; //80730364 vtable 808ca598
@@ -203,7 +219,8 @@ class CPUDrivingRace : public CPUDriving {
 
 
     CPUDrivingAction action; //0x60
-    u8 unknown_0x8c[0x98 - 0x8c];
+    CPUDrivingRaceSub8c* _0x8c;
+    u8 unknown_0x90[0x8];
 };
 
 }//namespace AI

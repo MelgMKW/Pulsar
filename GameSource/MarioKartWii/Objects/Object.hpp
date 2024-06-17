@@ -34,6 +34,7 @@ public:
     explicit Object(const KMP::Holder<GOBJ>& gobj); //8081f828
     Object(u16 objId, const Vec3& position, const Vec3& rotation, const Vec3& scale); //8081f9bc
     Object(const char* name, const Vec3& position, const Vec3& rotation, const Vec3& scale, u32 r8); //8081fb04 used for sub objects
+    static Random& GetRaceInfoRandom(); //80782f74
 
     virtual ~Object(); //8067e3c4 vtable 808d6ecc
     virtual void OnStart(); //0xC 8081fc68

@@ -48,7 +48,7 @@ class Wanwan : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 
     void UpdateModelMatrix() override; //0x6c 806e9464
     ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806e526c
     //depends on factors like speed and obviously the kartToObj as a goomba does not do anything to a player in a mega
-    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj) const override; //0xc4 806e546c
+    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 806e546c
 
     //CycleManager vtable 808c72b0 at 0xb0, 7 ptmfs
     //~Wanwan() override; thunk 806e95a8 

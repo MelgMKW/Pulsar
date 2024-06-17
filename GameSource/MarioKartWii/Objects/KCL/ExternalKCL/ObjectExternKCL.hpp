@@ -97,7 +97,7 @@ public:
     virtual void UpdateCollisionPosition(u32 r4); //0x120 8081ad6c
     virtual void SetYScale(); //0x124 8081af28 //something vertical scale
     virtual void UpdateDiffPosVector(const Vec3& src); //0x128 80681450
-    virtual const Mtx34& GetTransformationMatrix() const; //0x12c 807feac0
+    virtual const Mtx34& GetTransformationMatrix(u32 framesOffset) const; //0x12c 807feac0
     virtual float GetYScale() const; //0x130 80687db0
     virtual float GetPeriod() const; //0x134 8068143c
     virtual bool HasCurrentCollision(); //0x138 806808ec
