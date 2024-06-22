@@ -46,9 +46,10 @@ public:
     virtual void SetScale(const Vec3& scale); //0x14 8055b05c
     virtual void SetScale(float scale); //0x18 8055f894
     virtual void GetScale(Vec3& scale) const; //0x1c 8055f848
-    // best used aftr calling Enable/Disable Screen as this selectively makes a model visible/invisible for a specific hudSlotId
-    //(since the ScnMdl will match that id and so will isVisible, calculated from the bitfield)
-    virtual void SetScnOptions(g3d::ScnMdl* scnMdl, bool isVisible, bool doNotCalcWorldMatVtx); //0x20 8055cd68
+    //calls ScnObj::SetScnObjOption with isRendered bool as the value, best used aftr calling Enable/Disable Screen as this selectively toggles rendering of the model for a specific screen
+    //(since the ScnMdl will match that screen and so will isRendered, calculated from the bitfield)
+    //onlyDisableDraw: if set to true, only sets DRAW_OPA/XLU and CALC_VIEW (see ScnObj::OptID enum), otherwise disable every option
+    virtual void SetScnMdlOptions(g3d::ScnMdl* scnMdl, bool isRendered, bool onlyDisableDraw); //0x20 8055cd68
     virtual void AppendToScnManager(); //0x24 8055bed4
 
     //Mii is 
@@ -73,13 +74,13 @@ public:
     //Constructs a ScnMdl1Mat1Shp (single shape, single material), this is for example used for Kart shadows
     void LoadScnMdl1Mat1SHp(const char* mdlName, g3d::ResFile& brres, Light* light); //8055c520
 
-    void UpdateVisibility(u8 hudSlotId); //8055cc0c calls ToggleVisible
+    void UpdateVisibility(u32 screenIdx); //8055cc0c calls ToggleVisible
     void EnableScreen(u32 screenIdx); //8055cce0 the model will be visible on that screen
     void DisableScreen(u32 screenIdx); //8055ccf8
     bool IsVisibleOnScreen(u32 screenIdx); //8055cd10
 
     void Update(u32 scnMdlIdx); //8055d23c
-    ModelTransformator* CreateTransformator(); //8055d9f0 mostly inlined
+    ModelTransformator* CreateTransformator(); //8055d9f0 mostly inlinedf
     void SetAudioActor(Audio::LinkedRaceActor& actor); //8055dce4 
 
     void LinkEmptyAnm(u32 animId); //8055e274 will create an empty AnmHolder, used for conditional animations to prevent nullptr reads 
@@ -99,14 +100,29 @@ public:
     void ToggleTransparent(bool isTransparent); //8055f34c used to prevent this https://imgur.com/hUjHk6b
     void ReplaceMatGXTexObj(const char* matName, GX::TexObj* texObj); //8055f3e8
 
+    //Both of these use ClipInfo's bitfield to essentially decide whether the model should be rendered
+    void SetAllScnOptionsFromClipInfo(); //8055d448
+    void SetDisableDrawScnOptionsFromClipInfo(u32 screenIdx); //8055d554
+
     u32 bitfield; //0x4
     /*
-    24: removed from ScnGroups
-    20: last ToggleFromScn isVisible value
-    16-19: if set, model is visible on screen (bit idx - 16)
-    8: register in the scn manager
+    0x8         3  screen specific model: gesso, POW, lakitu models ie models that may not render on a given screen, uses the identically named list in scnMgr
+    0x100       8  register in the scn manager
+    0x10000     16 if set, model is visible on screen0 (bit idx - 16)
+    0x20000     17 if set, model is visible on screen1 (bit idx - 16)
+    0x40000     18 if set, model is visible on screen2 (bit idx - 16)
+    0x80000     19 if set, model is visible on screen3 (bit idx - 16)
+    0x100000    20 last ToggleFromScn isVisible value
+    0x200000    21 inserted into the ScnGroups
+    0x1000000   24 removed from the ScnGroups
+    0x8000000   28 uses ScnMgr 1
+    0x20000000  29 clip info related, set to true if clipinfo's bitfield has an even 4 (0x40, 0x4000 etc....)
     */
-    u32 unknown_0x8;
+
+    u16 bitfield2; //0x8 this bitfield is only used by the FromClipInfo funcs, it doesn't do anything on its own
+    /*
+    0-3 model will render for that screen
+    */
     g3d::ResMdl rawMdl; //0xC
     EGG::ScnMdlEx* curScnMdlEx; //0x10 chooses which one to use based on 1st bit of bitfield
     EGG::ScnMdlEx* scnMdlEx[2]; //0x14

@@ -97,7 +97,7 @@ void MTX34Scale(MTX34* dest, const MTX34* sourceMatrix, const VEC3* sourceVector
 void MTX34Trans(MTX34* dest, const MTX34* sourceMatrix, const VEC3* sourceVector);
 void MTX34RotAxisFIdx(MTX34* dest, const VEC3* vector, float fidx);
 void MTX34RotXYZFIdx(MTX34* dest, float x, float y, float z);
-void VEC3TransformNormal(VEC3* dest, const MTX34* sourceMatrix, const VEC3* sourceVector);
+void VEC3TransformNormal(VEC3* dest, const MTX34* sourceMatrix, const VEC3* sourceVector); //transforms a vector from a space to another using the transMtx
 void MTX44Identity(MTX44* mtx);
 void MTX44Copy(MTX44* dest, const MTX44* source);
 

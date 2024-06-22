@@ -19,7 +19,7 @@ public:
     void LoadKartShadowModel(ShadowModelDirector& shadow); //80577d7c
     void LoadKillerModels(const nw4r::g3d::ResFile&, ModelDirector& kartKillerModel, ShadowModelDirector& kartKillerShadowModel); //80577e00
 
-    bool LoadBodyModel(ModelDirector& dest, void* unknown); //80577064
+    bool LoadBodyModel(ModelDirector& dest, bool* is4thNonPlayerScreen); //80577064 stores the bool
     bool LoadArmModel(u32 idx, ModelDirector& dest, bool* r6); //805776d4
     bool LoadSuspensionsModel(ModelDirector& dest); //805775d0
 

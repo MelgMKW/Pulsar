@@ -45,7 +45,9 @@ public:
     u8 unknown_0x108[0x168 - 0x108];
     Mtx34 unknown_0x168;
     Mtx34 unknown_0x198;
-    u8 unknown_0x1c8[0x230 - 0x1c8];
+    u8 unknown_0x1c8[0x228 - 0x1c8];
+    bool* is4thNonPlayerScreen; //0x228
+    u8 unknown_0x22c[4];
     float wheelForwardRotationSpeed; //from KartPartsDispParam/BikePartsDispParam
     float wheelBackwardRotationSpeed; //same
 

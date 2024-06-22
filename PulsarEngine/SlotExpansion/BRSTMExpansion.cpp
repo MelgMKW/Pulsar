@@ -38,12 +38,14 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
         const SectionId section = SectionMgr::sInstance->curSection->sectionId;
         register SoundIDs toPlayId;
         asm(mr toPlayId, r20;);
-        if(toPlayId == SOUND_ID_KC && section >= SECTION_P1_WIFI && section <= SECTION_P2_WIFI_FROOM_COIN_VOTING) {
-            extFilePath = wifiMusicFile; //guaranteed to exist because it's been checked before
+        const char* customBGPath = nullptr;
+        if(toPlayId == SOUND_ID_KC) { //files are guaranteed to exist because it's been checked before
+            if(section >= SECTION_MAIN_MENU_FROM_BOOT && section <= SECTION_MAIN_MENU_FROM_LICENSE) customBGPath = titleMusicFile;
+            else if(section >= SECTION_SINGLE_P_FROM_MENU && section <= SECTION_SINGLE_P_LIST_RACE_GHOST || section == SECTION_LOCAL_MULTIPLAYER) customBGPath = offlineMusicFile;
+            else if(section >= SECTION_P1_WIFI && section <= SECTION_P2_WIFI_FROOM_COIN_VOTING) customBGPath = wifiMusicFile;
+
         }
-        if(toPlayId == SOUND_ID_KC && (section >= SECTION_SINGLE_P_FROM_MENU && section <= SECTION_SINGLE_P_LIST_RACE_GHOST || section == SECTION_LOCAL_MULTIPLAYER)) {
-            extFilePath = offlineMusicFile; //guaranteed to exist because it's been checked before
-        }
+        if(customBGPath != nullptr) extFilePath = customBGPath;
         else if(!CupsConfig::IsReg(track)) {
             bool isFinalLap = false;
             register u32 strLength;
@@ -64,5 +66,5 @@ nw4r::ut::FileStream* MusicSlotsExpand(nw4r::snd::DVDSoundArchive* archive, void
 }
 kmCall(0x8009e0e4, MusicSlotsExpand);
 
-}//namespace Audio
+}//namespace Sound
 }//namespace Pulsar

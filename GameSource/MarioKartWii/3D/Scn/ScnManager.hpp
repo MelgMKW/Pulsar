@@ -32,7 +32,7 @@ struct ScnObjDrawOptions {
 class Light;
 class LightMgrHolder;
 class ModelDirector;
-
+class MatModelDirector;
 using namespace nw4r;
 
 class ScnMgrCreator { //akin to EGG's sceneCreator
@@ -114,14 +114,18 @@ public:
     virtual void SetModelXluDrawPriority(u32 scnIdx, ModelDirector* mdlDirector, const ScnObjDrawOptions& options); //0x44 80562f60
 
     void Register(u32 idx); //8056539c
-    void AppendModelDirector1(ModelDirector* mdlDirector); //805635b4 list 1
-    void AppendModelDirector2(ModelDirector* mdlDirector); //805635cc list 2
+    void AppendScnGroupExHolder(ScnGroupExHolder* holder); //805635b4 inlined in ModelDirector::InitG3D
+    void AppendModelDirector(ModelDirector* mdlDirector); //805635bc
+    void RemoveModelDirector(ModelDirector* mdlToRemove); //805635c4
+    void AppendScreenSpecificModelDirector(ModelDirector* mdlDirector); //805635cc
+    void AppendMatModelDirector(MatModelDirector* hardcodedMatNamesMdlDirector); //805635d4
+    void RemoveMatModelDirector(MatModelDirector* hardcodedMatNamesMdlDirector); //805635dc
     void InitImpl(EGG::Heap* heap, u32 lightObjCount, u32 lightSetCount); //80562180
 
     void CreateAllGroups(); //80562358
     void SwitchScnRoot(); //805635e4 changes scnRoot
     void CreateScnGroupEx(); //805638fc
-    void DrawModelsImpl(bool r4); //805625a8
+    void DrawModelsImpl(GameScreen* screen = 0); //805625a8
     void UpdateScnRoot(); //80562888 calcs world, view etc..., allows proper drawing of models
     void RemoveGroup(u32 idx); //8056410c removes groupHolder[idx]->group[curScnRoot]
     g3d::ScnGroup* GetScnGroup(u32 scnRootIdx, ScnGroupId groupId); //8056417c 0x3C is used to convert id to idx
@@ -147,12 +151,12 @@ public:
     FogManager* fogManager; //0x38
     void* subStructConvGroupIdToIdxAndMore; //0x3c
     u8 unknown_0x40[0x44 - 0x40];
-    ut::List scnGroupExList; //0x44 offset 0x28
+    ut::List scnGroupExHolderList; //0x44 offset 0x28
     u8 unknown_0x50[4];
     u32 groupHoldersCount; //0x54
-    ut::List modelDirectors1; //0x58
-    ut::List modelDirectors2; //0x64
-    ut::List list_0x70; //0x70
+    ut::List modelDirectors; //0x58 contains all, even screen specific ones
+    ut::List screenSpecificModelDirectors; //0x64 gesso, POW, lakitu models ie models that may not render on a given screen
+    ut::List hardcodedMatNamesModelDirectors; //0x70
     u32 curScnRootIdx; //0x7c
     ScnGroupHolder** scnGroupHolders; //0x80 as many as groupCount
     TextureHolder* efbCopy; //0x84 for example used for WLscreenGC which just displays a copy of the player's screen
@@ -173,7 +177,7 @@ class ScnMgrMenu : public ScnMgr {
     g3d::ScnGroup* CreateScnGroup() override; //0x40 8059e920
 
     u8 unknown_0x98[0xa4 - 0x98];
-    g3d::ScnRoot* scnRoot2;
+    g3d::ScnRoot* dummyRoot; //used to contain earth_with_dummy_tex.brres, this also means the AnmScn is dummy
 };
 
 class ScnMgrRace : public ScnMgr {

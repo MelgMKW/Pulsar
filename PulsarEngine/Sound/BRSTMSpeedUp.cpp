@@ -56,5 +56,5 @@ kmCall(0x8070b2f8, MusicSpeedup);
 kmWrite32(0x8070b2c0, 0x60000000);
 kmWrite32(0x8070b2d4, 0x60000000);
 
-}//namespace Audio
+}//namespace Sound
 }//namespace Pulsar

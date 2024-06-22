@@ -68,6 +68,9 @@ public:
 //no children
 class ScnLeaf : public ScnObj {
 public:
+    enum OptID { //see scnobj's enum for the rest
+        OPTID_DISABLE_DRAW = 0x00010001
+    };
     bool IsDerivedFrom(TypeObj type) const override; //0x8 8006f040 vtable 80273118
     ~ScnLeaf() override; //0x10 8006f0d0
     TypeObj GetTypeObj() const override; //0x14 8006f0c0
@@ -117,6 +120,7 @@ public:
     virtual void ExecCallback_DRAW_XLU(Timing, ScnObj* scnObj, u32 args, void* info);
 }; //0x4
 
+//class used by ScnRoot's GatherDrawScnObj to gather ScnObj to be rendered
 class IScnObjGather {
 public:
     enum CullingStatus {

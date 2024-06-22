@@ -452,7 +452,7 @@ namespace Pulsar_Pack_Creator
             }
             string[] sortedArray = new string[ctsCupCount * 4];
             Array.Copy(indexedArray, sortedArray, indexedArray.Length);
-            sortedArray = sortedArray.OrderBy(x => Regex.Replace(x, @"\\[mMxzuc]{.*?}", "")).ToArray();
+            sortedArray = sortedArray.OrderBy(x => Regex.Replace(x, @"\\[mMxzuc]{.*?}", "").Trim()).ToArray();
             return (sortedArray, indexedArray);            
         }
         private void OnAlphabetizeClick(object sender, RoutedEventArgs e)

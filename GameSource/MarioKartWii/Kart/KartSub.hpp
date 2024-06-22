@@ -30,7 +30,7 @@ public:
     virtual void Init(const Values& values); //0xc 80595d48
     virtual void SetPointers(KartPointers& dest); //0x10 80596454
 
-    Movement* kartMovement;
+    Movement* kartMovement; //0x10
     Damage* kartDamage; //0x1c
     Collision* kartCollision; //0x18 contains kart body collision data
     Status* kartStatus; //0x1c contains input-related state

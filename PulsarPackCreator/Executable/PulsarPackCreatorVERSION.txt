@@ -1,3 +1,11 @@
+·Updated to 1.3.7
+Creator Changes:
+-Fixed alphabetization incorrectly sorting escape sequences due to whitespace.
+Engine Changes:
+-Title BG music can now be customized like Wifi and Offline Menu Music by putting a brstm called "title_bg.brstm" in My Stuff.
+-Fixed silent BG music and related crashes when someone would have My Stuff on but no bg brstms. Riivolution would create an empty file no matter what.
+-Rewrote BuildPulsar.bat (previously BuildCode.bat) to use generic paths so that it works as is.
+
 ·Updated to 1.3.6
 Creator Changes:
 -Fixed alphabetization ignoring versions.

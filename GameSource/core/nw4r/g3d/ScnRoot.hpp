@@ -9,7 +9,7 @@
 namespace nw4r {
 namespace g3d {
 
-//Root of scene; renders and calls it, hols every ScnObj that needs to be rendered
+//Root of scene; renders and calls it, holds every ScnObj that needs to be rendered
 class ScnRoot : public ScnGroup {
 public:
     static ScnRoot* Construct(G3dHeap* heap, u32* size, u32 maxChildren, u32 maxScnObj, u32 lightObjCount, u32 lightSetCount); //8006f1a0
@@ -20,8 +20,10 @@ public:
     const char* GetTypeName() const override; //0x18 80070ce0
 
     LightSet GetLightSet(int lightSetId); //8006f4a0
+    //Gathers ScnObj objects to be drawn in the scene.
+    void GatherDrawScnObj(); //8006fad0
 
-    void* func;
+    IScnObjGather* collection;
     u32 drawMode;
     u32 scnRootFlags;
     u8 curCameraIdx;

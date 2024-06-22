@@ -772,6 +772,7 @@ enum SoundIDs {
 
     SOUND_ID_GALAXY_COLOSSEUM               = 0xC9,
 
+    SOUND_ID_TITLE                          = 0x54,
     SOUND_ID_OFFLINE_MENUS                  = 0x55, //the music on cupselect
     SOUND_ID_RACE_INTRO                     = 0x56,
     SOUND_ID_WIFI_RACE_INTRO                = 0x5B,

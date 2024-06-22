@@ -27,9 +27,6 @@ public:
     u32 type; //0x4
     u32 unknown_0x8[0x8];
     virtual ~ScnMdlEx(); //0x10 s80230690 vtable 802a31c8
-
-
-
 }; //0x14
 
 class ScnRootEx {

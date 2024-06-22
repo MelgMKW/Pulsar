@@ -37,18 +37,19 @@ kmCall(0x806fa64c, DisableMenuMusic);
 static void DisableAndChangeBGMusic(Audio::SinglePlayer& singlePlayer, u32 soundId) {
     const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
     if(isEnabled) {
-        if(soundId == SOUND_ID_WIFI_MUSIC) {
-            s32 entryNum = DVDConvertPathToEntryNum(wifiMusicFile);
-            if(entryNum >= 0) {
-                soundId = SOUND_ID_KC;
-                singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
-            }
-        }
-        else if(soundId == SOUND_ID_OFFLINE_MENUS) {
-            s32 entryNum = DVDConvertPathToEntryNum(wifiMusicFile);
-            if(entryNum >= 0) {
-                soundId = SOUND_ID_KC;
-                singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
+        const char* customBGPath = nullptr;
+        if(soundId == SOUND_ID_TITLE) customBGPath = titleMusicFile;
+        else if(soundId == SOUND_ID_OFFLINE_MENUS) customBGPath = offlineMusicFile;
+        else if(soundId == SOUND_ID_WIFI_MUSIC) customBGPath = wifiMusicFile;
+        if(customBGPath != nullptr) {
+            DVDFileInfo info;
+            BOOL ret = DVDOpen(customBGPath, &info);
+            if(ret) {
+                if(info.length > 0) {
+                    soundId = SOUND_ID_KC;
+                    singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
+                }
+                DVDClose(&info);
             }
         }
         singlePlayer.PlaySound(soundId, 0);
@@ -122,5 +123,5 @@ kmWrite32(0x80719920, 0x48000010);
 
 //disable THP and demo by blring SinglePlayer::CalcTitlePageNext
 kmWrite32(0x806fa738, 0x4e800020);
-}//namespace Audio
+}//namespace Sound
 }//namespace Pulsar

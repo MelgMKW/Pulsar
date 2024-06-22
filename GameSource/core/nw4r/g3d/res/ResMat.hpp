@@ -21,8 +21,24 @@ struct ResIndMtxAndScaleDL {};
 struct ResTexCoordGenDL {};
 struct ResTevData {};
 
-struct ResTevColorDL {
-    u8 tevKColor[4][10];
+struct ResTevColorDL { //DL = display list, mat colors
+    union {
+        struct
+        {
+            // GDSetTevColor/GDSetTevColorS10 GX_TEVREG0-2
+            u8 tevColor[3][20];
+
+            // Padding (always contains zeroes)
+            u8 padding[4];
+
+            // GDSetTevKColor GX_KCOLOR0-3
+            u8 tevKColor[4][10];
+
+            // Padding (always contains zeroes)
+            u8 padding2[24];
+        } dl;
+        u8 data[128];
+    };
 };
 
 struct ResTexPlttInfoData { //https://wiki.tockdom.com/wiki/MDL0_(File_Format)#Layers

@@ -855,16 +855,16 @@ namespace Pulsar_Pack_Creator.IO
             xml[31] = xml[31].Replace("{$pack}", parameters.modFolderName);
             xml[32] = xml[32].Replace("{$pack}", parameters.modFolderName);
             xml[33] = xml[33].Replace("{$pack}", parameters.modFolderName);
-            xml[41] = xml[41].Replace("{$pack}", parameters.modFolderName);
             xml[42] = xml[42].Replace("{$pack}", parameters.modFolderName);
             xml[43] = xml[43].Replace("{$pack}", parameters.modFolderName);
-
+            xml[44] = xml[44].Replace("{$pack}", parameters.modFolderName);
+            xml[45] = xml[45].Replace("{$pack}", parameters.modFolderName);
 
             uint rand = (uint)new Random().Next(1 << 8); ;
             xml[6] = xml[6].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
             xml[14] = xml[14].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
             xml[19] = xml[19].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
-            xml[40] = xml[40].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
+            xml[41] = xml[41].Replace("{$pack}", $"{parameters.modFolderName}{rand}");
             File.WriteAllLines($"output/Riivolution/{parameters.modFolderName}.xml", xml);
         }
 

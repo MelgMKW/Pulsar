@@ -44,5 +44,5 @@ kmCall(0x80091354, BRSAREntrySizePatch);
 
 
 
-}//namespace Audio
+}//namespace Sound
 }//namespace Pulsar

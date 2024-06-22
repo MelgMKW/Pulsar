@@ -8,13 +8,13 @@
 struct SoftWallInfo {
     static float initValue; //80892788 0.0f
     SoftWallInfo() { //inlined
-        float value = initValue;
-        min.x = value;
-        min.y = value;
-        min.z = value;
-        max.x = value;
-        max.y = value;
-        max.z = value;
+        //float value = initValue;
+        //min.x = value;
+        //min.y = value;
+        //min.z = value;
+        //max.x = value;
+        //max.y = value;
+        //max.z = value;
     }
     Vec3 min;
     Vec3 max;
@@ -27,11 +27,11 @@ struct SoftWallInfo {
 //_sinit_ at 80790ac0
 class CourseMgr {
 public:
-    static CourseMgr* sInstance; //0x809c2F44
+    static CourseMgr* sInstance; //809c2F44
     static CourseMgr* CreateInstance(); //8078dfe8
     static void DestroyInstance(); //8078e124
-    static void LoadModels(bool hasTevColors, nw4r::g3d::ResFile* brresDest, ModelDirector** modelDest, const char* courseMdl0,
-        const char* vrcornMdl0, u32 modelDirectorCtorArg); //8078e1b0 will fill model and ResFile's brres
+    static void LoadModels(bool isCourse, nw4r::g3d::ResFile* brresDest, ModelDirector** modelDest, const char* brresName,
+        const char* mdlName, u32 scnObjDrawOptionsIdx); //8078e1b0 will fill model and ResFile's brres
 
     CourseMgr(); //8078e33c
     ~CourseMgr(); //8078e454
@@ -73,6 +73,7 @@ public:
     SoftWallInfo* info; //0x10
 
     static float modelScale; //808a4be0 ModelDirectors' ScnObj Mtx is set with a MakeS mtx using that float
+    static u32 mhSetNamesMatCount; //809c2f40 12
 }; //0x14
 
 #endif

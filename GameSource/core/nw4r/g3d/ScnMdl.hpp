@@ -9,28 +9,31 @@ namespace nw4r {
 namespace g3d {
 
 struct DrawResMdlReplacement {
+    u32  flag;    //0
+    u8* visArray; //0x4
+    ResTexObjData* texObjDataArray; //0x8
+    ResTlutObjData* tlutObjDataArray; //0xc
+    ResTexSrtData* texSrtDataArray; //0x10
+    ResChanData* chanDataArray; //0x14
+    ResGenModeData* genModeDataArray; //0x18
+    ResMatMiscData* matMiscDataArray; //0x1c
+    ResPixDL* pixDLArray; //0x20
+    ResTevColorDL* tevColorDLArray; //0x24
+    ResIndMtxAndScaleDL* indMtxAndScaleDLArray; //0x28
+    ResTexCoordGenDL* texCoordGenDLArray; //0x2c
+    ResTevData* tevDataArray; //0x30
+    ResVtxPosData** vtxPosTable; //0x34
+    ResVtxNrmData** vtxNrmTable; //0x38
+    ResVtxClrData** vtxClrTable; //0x3c
+}; //0x40
 
-    u32  flag;
-    u8* visArray;
-    ResTexObjData* texObjDataArray;
-    ResTlutObjData* tlutObjDataArray;
-    ResTexSrtData* texSrtDataArray;
-    ResChanData* chanDataArray;
-    ResGenModeData* genModeDataArray;
-    ResMatMiscData* matMiscDataArray;
-
-    ResPixDL* pixDLArray;
-    ResTevColorDL* tevColorDLArray;
-    ResIndMtxAndScaleDL* indMtxAndScaleDLArray;
-    ResTexCoordGenDL* texCoordGenDLArray;
-    ResTevData* tevDataArray;
-    ResVtxPosData** vtxPosTable;
-    ResVtxNrmData** vtxNrmTable;
-    ResVtxClrData** vtxClrTable;
-};
-
+//same as ScnMdlSimple, but with possibility for a shape animation and copies of model res used for animation via CopyMatAccess
+//this allows the possibility to execute animations separately even if multiple ScnMdl share the same ResMdl
 class ScnMdl : public ScnMdlSimple {
 public:
+    enum OptID { //see scnmdlsimple's enum for the rest
+        OPTID_REFRESH_VISIBILITY = 0x00030001
+    };
     enum AnmObjType {
         ANMOBJTYPE_CHR = 0,
         ANMOBJTYPE_UNKNOWN,
@@ -106,10 +109,10 @@ public:
     void ScnMdl_G3DPROC_CALC_MAT(u32 param, void* info); //80074000
 
     AnmObjShp* anmObjShp; //0x138
-    u32 unknown; //0x13c
-    u32* matBufferDirtyFlag;
-    DrawResMdlReplacement replacement;
-    u32 replacementFlag;
+    u32 flagVisBuffer; //0x13c
+    u32* matBufferDirtyFlag; //0x140
+    DrawResMdlReplacement replacement; //0x144
+    u32 replacementFlag; //0x184
 };
 
 

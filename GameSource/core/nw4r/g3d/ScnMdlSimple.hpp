@@ -14,6 +14,10 @@ namespace g3d {
 
 class ScnMdlSimple : public ScnLeaf {
 public:
+    enum OptID { //see scnleaf's enum for the rest
+        OPTID_IGNORE_ANMCHR_TRANS  = 0x00020001
+    };
+
     enum AnmObjType {
         ANMOBJTYPE_CHR = 0,
         ANMOBJTYPE_VIS,
