@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+BuildCode.bat
 /cw
 /PulsarPackCreator/Executable/output
 /PulsarPackCreator/Executable/input
@@ -55,5 +56,3 @@ BuildTesting.bat
 *.vsidx
 PulsarPackCreator/Executable/Pulsar Pack Creator.dll.config
 *.v2
-BuildCode.bat
-BuildCode.bat
