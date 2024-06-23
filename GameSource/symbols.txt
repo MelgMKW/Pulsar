@@ -17,6 +17,7 @@ RipFromDiscAsync__13SystemManagerFPcPvUiUiPv = 0x8000b308
 wcstombs = 0x8000f138
 memmove = 0x8000f1f0
 snprintf = 0x80011938
+sprintf = 0x80011a2c
 qsort = 0x80011b00
 rand = 0x80011c70
 srand = 0x80011c90
@@ -1242,7 +1243,13 @@ Patch_AuthServerOverride = 0x800ecaac
 Patch_HostHeader = 0x800ed868
 SSL_Initialised = 0x80386d4c
 
+Real_DWCi_Auth_SendRequest = 0x800ed6ec
+s_auth_work = 0x8038633c
+s_auth_error = 0x802f1cB8
 
+NHTTPDestroyResponse__FPv = 0x801d92f8
+NHTTPSendRequestAsync__FPv = 0x801d925c
+NHTTPCreateRequest__FPCciPvUiPvPv = 0x801d8ff8
 
 #Effects
 Reset__Q27Effects3MgrFv = 0x8067b8f0
@@ -1710,4 +1717,4 @@ GXTokenInterruptHandler= 0x8016eccc
 StateGX_ChangeProjectionv= 0x802417fc
 TPLGetGXTexObjFromPalette= 0x801b7544
 
-
+WWFC_CUSTOM_REGION = 0x80005efc

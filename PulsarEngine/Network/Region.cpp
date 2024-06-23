@@ -4,12 +4,14 @@
 #include <MarioKartWii/RKNet/RKNetController.hpp>
 #include <Info.hpp>
 #include <PulsarSystem.hpp>
+#include <Network/WiiLink.hpp>
 
 namespace Pulsar {
 namespace Network {
 //Region Patch (Leseratte)
 static void PatchLoginRegion() {
     u32 region = Info::GetWiimmfiRegion();
+    WWFC_CUSTOM_REGION = region;
     char path[0x9];
     snprintf(path, 0x9, "%08d", region + 100000);
     for(int i = 0; i < 8; ++i) {
