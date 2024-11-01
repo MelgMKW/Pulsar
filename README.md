@@ -8,6 +8,11 @@ Core:
 - Up to four time-trial modes (150cc, 150cc feather, 200cc and 200cc feather)
 - Ghost saving on all tracks and all four modes (on the SD on console and on the NAND on dolphin)
 - Support for staff ghosts should the creator make them
+- KO mode
+- OnlineTT mode
+- LEX support
+- [XPF support](https://github.com/Gabriela-Orzechowska/LE-CODE-XPF)
+- [USB GCN Support](https://github.com/Gabriela-Orzechowska/MKW-Cosmos/blob/main/code/System/WUP028.hpp)
 
 
 UI:
