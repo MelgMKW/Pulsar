@@ -11,7 +11,7 @@ public:
     static const PageId id = PAGE_BATTLE_PAUSE_MENU;
     BattlePause(); //80624c28 
     ~BattlePause() override; //80633284 vtable 808bdcf8
-    int GetRuntimeTypeInfo() const override; //0x60 806332f0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806332f0
     int GetMessageBMG() const override; //0x68 80633238
     u32 GetButtonCount() const override; //0x6c 8063327c
     const u32* GetVariantsIdxArray() const override; //0x70 80633270

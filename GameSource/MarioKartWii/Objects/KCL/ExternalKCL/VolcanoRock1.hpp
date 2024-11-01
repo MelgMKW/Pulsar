@@ -10,7 +10,7 @@ class VolcanoRock1 : public ObjectExternKCL { //ObjectNum 0x1f7 = 503
     void Update() override; //0x14 8081a370
     u32 GetPropertiesBitfield() override; //0x2c 8081a688
     const char* GetSubFileName() const override; //0x38 8081a668
-    const Mtx34& GetTransformationMatrix(u32 framesOffset) const override; //0x12c 8081a60c
+    const Mtx34& GetTransformationMatrix(u32 framesOffset)override; //0x12c 8081a60c
     float GetPeriod() const override; //0x134 8081a5d0
 
 

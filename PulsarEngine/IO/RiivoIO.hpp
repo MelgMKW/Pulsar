@@ -2,7 +2,6 @@
 #define _RIIVOIO_
 
 #include <kamek.hpp>
-#include <PulsarSystem.hpp>
 #include <IO/IO.hpp>
 namespace Pulsar {
 

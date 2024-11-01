@@ -10,7 +10,7 @@ DoFuncsHook::DoFuncsHook(Func& f, DoFuncsHook** prev) : func(f) {
     *prev = this;
 }
 
-void DoFuncsHook::exec(DoFuncsHook* first) {
+void DoFuncsHook::Exec(DoFuncsHook* first) {
     for(DoFuncsHook* p = first; p; p = p->next) {
         p->func();
     }
@@ -18,10 +18,10 @@ void DoFuncsHook::exec(DoFuncsHook* first) {
 
 nw4r::ut::List BootHook::list ={ nullptr, nullptr, 0, offsetof(BootHook, link) };
 
-//kmBranch(0x80001500, BootHook2::exec);
-kmBranch(0x800074d4, BootHook::exec);
-kmBranch(0x80554728, RaceLoadHook::exec);
-kmBranch(0x8053369c, RaceFrameHook::exec); //RaceInfo::Update()
+//kmBranch(0x80001500, BootHook2::Exec);
+kmCall(0x80543bb4, BootHook::Exec); //800074d4
+kmBranch(0x80554728, RaceLoadHook::Exec);
+kmBranch(0x8053369c, RaceFrameHook::Exec); //Raceinfo::Update()
 
 //kmBranch(0x8063507c, SectionLoadHook::exec);
 

@@ -19,8 +19,8 @@ public:
     virtual ~NandMgr(); //8052bf44 vtable 808b3244
     NandUtils::Result ReadRKSYS(void* buffer, u32 size, u32 offset, bool r7); //8052c0b0
     NandUtils::Result ReadFile(const char* path, void* buffer, u32 size, u32 offset); //8052c168
-    bool CheckRKSYSLength(u32 length); //8052c20c
-    NandUtils::Result WriteToRKSYS(const void* buffer, u32 size, u32 offset); //8052c2d0
+    NandUtils::Result CheckRKSYSLength(u32 length); //8052c20c
+    NandUtils::Result WriteToRKSYS(const void* buffer, u32 size, u32 offset, bool r7); //8052c2d0
     NandUtils::Result WriteFile(const void* path, const void* buffer, u32 size, u32 offset); //8052c428
     NandUtils::Result CreateRKSYS(u32 length); //8052c68c
     NandUtils::Result DeleteRKSYS(u32 length, bool r5); //8052c7e4 r5 same as r7 for read

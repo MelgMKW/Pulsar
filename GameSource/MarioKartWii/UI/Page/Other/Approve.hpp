@@ -20,7 +20,7 @@ class Approve : public Page {//ID 0x52
     void OnActivate() override; //0x30 805c208c
     void OnDeactivate() override; //0x34 805c2118
     void BeforeEntranceAnimations() override; //0x38 805c2324
-    int GetRuntimeTypeInfo() const override; //0x60 805c2364
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805c2364
     virtual void Reset(); //sets texts to empty bmgs
     void OnClick(PushButton& button, u32 hudSlotId); //805c21c0
     void OnBackButtonClick(CtrlMenuBackButton& button, u32 hudSlotId); //805c223c

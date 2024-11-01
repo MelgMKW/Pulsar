@@ -6,7 +6,7 @@
 namespace Objects {
 
 class DKturibashiGCc : public ObjectKCL { //ObjectNum 0x202 = 514 rDKM bridge
-    explicit DKturibashiGCc(KMP::Holder<GOBJ>& gobj); //80805a4c
+    explicit DKturibashiGCc(const KMP::Holder<GOBJ>& gobj); //80805a4c
     ~DKturibashiGCc(); //80806514 vtable 808d52d8
     void OnStart() override; //0xC 80805ad8
     void Update() override; //0x14 80805c24

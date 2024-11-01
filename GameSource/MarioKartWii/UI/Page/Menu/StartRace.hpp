@@ -13,7 +13,7 @@ class StartRace : public MenuInteractable { //ID 0x4B //tied to one OK button "S
     void OnInit() override; //0x28 80842464
     void OnActivate() override; //0x30 808428a0
     void AfterControlUpdate() override; //0x4c 80842914
-    int GetRuntimeTypeInfo() const override; //0x60 80842a58
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80842a58
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64  808429a4
     int GetActivePlayerBitfield() const override; //0x68 808425e0
     int GetPlayerBitfield() const override; //0x6C 808429c8

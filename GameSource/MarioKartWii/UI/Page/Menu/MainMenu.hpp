@@ -15,7 +15,7 @@ class MainMenu : public MenuInteractable { //ID 0x5a
     void OnActivate() override; //0x30 80850db0
     void OnDeactivate() override; //0x34 80851b88
     void AfterControlUpdate() override; //0x4C 80851108
-    int GetRuntimeTypeInfo() const override; //0x60 80851d2c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80851d2c
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64 8085151c 
     int GetActivePlayerBitfield() const override; //0x68 80851c8c
     int GetPlayerBitfield() const override; //0x6C 80851c84
@@ -23,7 +23,7 @@ class MainMenu : public MenuInteractable { //ID 0x5a
     UIControl* CreateExternalControl(u32 externControlId) override; //0x84 808504e4
     UIControl* CreateControl(u32 controlId) override; //0x88 80850580
     void SetButtonHandlers(PushButton& button) override; //0x8C 80850d54
-    void ResetSectionParamsAndRaceDataScenario1(u8 localPlayerCount); //player count = 1 except for 2P/3P/4P buttons
+    void ResetSectionParamsAndRacedataScenario1(u8 localPlayerCount); //player count = 1 except for 2P/3P/4P buttons
     void ShowMessageBox(); //80851b8c "Unable to connect to nintendo wi-fi", no idea how to trigger, inlined
     void OnButtonClick(PushButton& button, u32 hudSlotId); //8085110c
     void OnButtonDeselect(PushButton& button, u32 hudSlotId); //808515a0

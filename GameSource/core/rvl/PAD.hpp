@@ -28,15 +28,15 @@ enum Error {
 
 struct Status {
     u16 buttons; //bitfield of Buttons enum
-    s8 stickX; //-128 to 127
-    s8 stickY; //-127 to 127
-    s8 cStickX;
-    s8 cStickY;
+    s8 stickX; //0x2 -128 to 127
+    s8 stickY; //0x3 -127 to 127
+    s8 cStickX; //0x4
+    s8 cStickY; //0x5
     u8 triggerL;
     u8 triggerR;
-    u8 analogA;
-    u8 analogB;
-    s8 error; //see enum
+    u8 analogA; //0x8
+    u8 analogB;  //0x9
+    s8 error; //0xa see enum
 };
 size_assert(Status, 0xC);
 

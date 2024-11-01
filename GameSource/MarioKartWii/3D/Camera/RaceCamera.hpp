@@ -55,9 +55,18 @@ public:
     void Load(const BCP* raw); //805a6f44
     void Init(); //805a70a0
     void Update(u16 r4); //805a7358
-    GameCamera& camera;
-    Vec3* positions;
-    u8 unknown_0xc[0x7c - 0xc];
+    GameCamera& camera; //0x4
+    Vec3* positions; //0x8
+    u8 unknown_0xc[0x6c - 0xc];
+    u16 bitfield; //0x6c
+    /*
+    1 : initialized, ready to start
+    2 : in progress
+    4 : finishing
+    8 : finished, the game also removes 1/2, presumably meaning Init needs to be called again
+    */
+    u8 padding[2];
+    u8 unknown_0x70[0xc];
     BCPInfo info; //0x7c
     u8 unknown_0xb4[4];
 }; //0xb8
@@ -74,25 +83,25 @@ class AutoCameraMoverRace : public AutoCameraMover { //CameraMover?
     virtual void vf_0x14(); //0x14 805a1478
     virtual void vf_0x18(); //0x18 805a1480
 
-    void OnAction0Start(); //805abecc
-    void OnAction0Update(); //805abed0
+    void OnStartAction0(); //805abecc
+    void UpdateAction0(); //805abed0
 
-    void OnAction1Start(); //805abfb4
-    void OnAction1Update(); //805abfe0
+    void OnStartAction1(); //805abfb4
+    void UpdateAction1(); //805abfe0
 
-    void OnAction2Start(); //805ac118
-    void OnAction2Update(); //805ac1f0
+    void OnStartAction2(); //805ac118
+    void UpdateAction2(); //805ac1f0
 
     void OnRaceEndStart(); //805ac328
     void OnRaceEndUpdate(); //805ac384
 
-    void OnAction4Start(); //805ac4a4
-    void OnAction4Update(); //805ac560
+    void OnStartAction4(); //805ac4a4
+    void UpdateAction4(); //805ac560
 
-    void OnAction5Start(); //805ac66c
-    void OnAction5Update(); //805ac744
-    void OnAction6Start(); //805ac8bc
-    void OnAction6Update(); //805aca2c
+    void OnStartAction5(); //805ac66c
+    void UpdateAction5(); //805ac744
+    void OnStartAction6(); //805ac8bc
+    void UpdateAction6(); //805aca2c
 
     CamMove action0; //0x70
     CamMove action1; //0x9c

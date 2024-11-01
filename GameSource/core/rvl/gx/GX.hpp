@@ -4,14 +4,19 @@
 #include <types.hpp>
 #include <core/rvl/GX/GXEnum.hpp>
 #include <core/rvl/GX/GXStruct.hpp>
-#include <core/rvl/os/thread.hpp>
+#include <core/rvl/os/OSthread.hpp>
 
 namespace GX {
 
 FifoObj* Init(void* buffer, u32 size);
 void SetVtxDesc(Attr attr, AttrType type);
 void ClearVtxDesc();
-void SetVtxAttrFmt(VtxFmt vtxfmt, Attr attr, CompCnt cnt, CompType type, u8 frac);
+void SetVtxAttrFmt(VtxFmt vtxfmt, Attr attr, CompCnt component, CompType componentFormat, u8 frac);
+/*for example:
+SetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S8, 0) would create format 0 where position is a 3-elem coord (xyz) of type s8, with 0 fractional
+GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0); and color is a 4element (rgba) where each element is a u8
+*/
+
 void SetNumTexGens(u8 nr);
 void Begin(Primitive type, VtxFmt vtxfmt, u16 nverts);
 void SetCullMode(CullMode mode);

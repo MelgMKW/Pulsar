@@ -13,7 +13,7 @@
 
 
 namespace Kart {
-class Player {
+class Player : public Link {
 public:
     Player(u8 idx, KartId kart, CharacterId character, bool isBike, const StatsAndBsp& statsAndBsp, void* unknown,
         KartDriverDispParam::Entry* kartDriverDispEntry, KartPartsDispParam::Entry* kartPartsDispEntry,
@@ -27,7 +27,6 @@ public:
     u16 GetDriftState() const; //805911d8
     void CreateModel(); //8058f820
 
-    Link link;
     virtual ~Player(); //8058def0 vtable 808b63ec
     virtual void InitSub(); //8058e188
     virtual void CreateBody(); //8058e5f8

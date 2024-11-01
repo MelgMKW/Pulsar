@@ -15,11 +15,11 @@ public:
 
     void* WPADAlloc(u32  size); //80008e90
     u8 WPADFree(void* ptr); //80008eb0
-    void Main(u32 r3, u32 r4); //80008ef0
+    static void Main(u32 argc, u8* argv[]); //80008ef0
 
     ExpHeap* kpadWorkHeap;
     Allocator* wpadAllocator; //0x5c
-    ExpHeap* relLinkHeap;
+    ExpHeap* relLinkHeap; //0x60
     ExpHeap* heapSystem2;
     u8 frameClock;
     u8 unknown_0x68;

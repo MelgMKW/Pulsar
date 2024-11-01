@@ -3,6 +3,7 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Objects/KCL/ExternalKCL/VolcanoPiece.hpp>
 #include <MarioKartWii/Objects/Collidable/ObjectCollidable.hpp>
+#include <MarioKartWii/System/StatePtmfTrigger.hpp>
 
 namespace Objects {
 
@@ -21,7 +22,7 @@ public:
     u8 unknown_0xbc[0x4];
 }; //0xc0
 
-class FlamePole : public ObjectExternKCL, public ObjectCycleManager { //ObjectNum 0x1fd = 509
+class FlamePole : public ObjectExternKCL, public StatePtmfTrigger<FlamePole> { //ObjectNum 0x1fd = 509
     explicit FlamePole(const KMP::Holder<GOBJ>& gobjHolder); //8067e6f4
     ~FlamePole() override; //8067ebe0 vtable 808c1098
     void OnStart() override; //0xc 8067ec94
@@ -35,13 +36,13 @@ class FlamePole : public ObjectExternKCL, public ObjectCycleManager { //ObjectNu
     void CalcOtherEntityDistance(CollisionInfo::ObjInfo* otherEntityObjInfo, const Vec3& otherEntityInitialPosition) override; //0x110 8067fdf4
     void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir) override; //0x118 8067fe1c
     int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 806814a4
-    const Mtx34& GetTransformationMatrix(u32 framesOffset) const override; //0x12c 8067fbb8
+    const Mtx34& GetTransformationMatrix(u32 framesOffset)override; //0x12c 8067fbb8
     float GetYScale() const override; //0x130 8067fc50
     bool IsCollidingNoTriangleCheckImpl(const Vec3& pos, const Vec3& prevPos,
         KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, u32 initialTime, float radius) override; //0x148 8067fe88
     bool IsCollidingImpl(const Vec3& pos, const Vec3& prevPos,
         KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, u32 initialTime, float radius) override; //0x14c 80680218
-    //ObjectCycleManager vtable 808c11e8 at 0x104
+    //StatePtmfTrigger vtable 808c11e8 at 0x104
     //~FlamePole() override; //thunk 80681868
 
     u8 unknown_0x124[0x154 - 0x124]; //0x124

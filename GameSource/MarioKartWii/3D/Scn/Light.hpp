@@ -1,7 +1,7 @@
 #ifndef _LIGHTMGR_HOLDER_
 #define _LIGHTMGR_HOLDER_
 #include <kamek.hpp>
-#include <core/egg/3D/Light.hpp>
+#include <core/egg/3D/PostEffects/LightMgr.hpp>
 #include <core/egg/3D/Scn.hpp>
 #include <core/nw4r/ut/List.hpp>
 

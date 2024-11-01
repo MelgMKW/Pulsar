@@ -17,7 +17,7 @@ class BattleCupSelect : public MenuInteractable { //ID 0x78
     void BeforeExitAnimations() override; //0x40 80839df4
     void AfterControlUpdate() override; //0x4c 808393f4
     void OnResume() override; //0x54 80839b7c
-    int GetRuntimeTypeInfo() const override; //0x60 8083a0b4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8083a0b4
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64  80839904
     int GetActivePlayerBitfield() const override; //0x68 80839f54
     int GetPlayerBitfield() const override; //80839f4c0x6C

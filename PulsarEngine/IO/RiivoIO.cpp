@@ -83,7 +83,7 @@ void RiivoIO::ReadFolder(const char* path) {
             count++;
         }
 
-        IOS::IPCPath* namesArray = new (RKSystem::mInstance.EGGSystem) IOS::IPCPath[count]; //here
+        IOS::IPCPath* namesArray = new (System::sInstance->heap) IOS::IPCPath[count]; //here
         memcpy(namesArray, tmpArray, sizeof(IOS::IPCPath) * count);
         this->fileCount = count;
         this->fileNames = namesArray;

@@ -7,7 +7,7 @@
 
 //_sinit_ at 807a9a58
 namespace Item {
-class ObjGesso : public Obj {
+class ObjGesso : public ObjMiddle {
 public:
     static Obj** CreateArray(u32 count); //807a8138
     void InitSelf() override; //0x8 807a8378 vtable 808d1e48

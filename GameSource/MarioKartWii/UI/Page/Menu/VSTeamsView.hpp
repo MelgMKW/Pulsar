@@ -14,7 +14,7 @@ class VSTeamsView : public MenuInteractable { //ID 0x74
     void OnInit() override; //0x28 8084fdac
     void OnActivate() override; //0x30 8084fea8
     void AfterControlUpdate() override; //0x4c 8084feac
-    int GetRuntimeTypeInfo() const override; //0x60 808502ac
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 808502ac
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64 8084ff80
     int GetActivePlayerBitfield() const override; //0x68 808501a8
     int GetPlayerBitfield() const override; //0x6C 808501a0

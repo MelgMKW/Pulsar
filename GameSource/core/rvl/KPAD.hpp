@@ -6,14 +6,9 @@
 
 namespace KPAD { //KPAD, high-level wii remote library
 
-struct Vec2 {
-    float x;
-    float y;
-};
-
 union EXStatus { //extension status +0x60 to all offsets
     struct { //nunchuck
-        Vec2 stick; //0x0 clamp_stick_cross
+        Vec2D stick; //0x0 clamp_stick_cross
         Vec accelometer; //0x8
         float accValue; //0x14
         float accSpeed; //0x18
@@ -23,8 +18,8 @@ union EXStatus { //extension status +0x60 to all offsets
         u32 hold; //0x0
         u32 trig; //0x4
         u32 release; //0x8
-        Vec2 stickL; //0xc
-        Vec2 stickR; //0x14
+        Vec2D stickL; //0xc
+        Vec2D stickR; //0x14
         float triggerl; //0x1c
         float triggerR; //0x20
     } cl;
@@ -65,18 +60,18 @@ struct Status {
     float accVariation;   //0x1c 
 
     //read_kpad_dpd and calc_dpd_variable
-    Vec2 pointerPos;   //0x20
-    Vec2 angle;   //0x28
+    Vec2D pointerPos;   //0x20
+    Vec2D angle;   //0x28
     float pointerMag; //0x30
-    Vec2 horizon; //0x34
-    Vec2 horiVec; //0x3c added to horizon
+    Vec2D horizon; //0x34
+    Vec2D horiVec; //0x3c added to horizon
     float horizonMag; //0x44
     float dist; //0x48
     float distVec; //0x4c added to distance
     float distVariation; //0x50
 
     //calc_acc_vertical
-    Vec2 accVertical; //0x54
+    Vec2D accVertical; //0x54
 
     u8 extension; //0x5c see wpad's deviceType enum
     u8 error; //0x5d see wpad error
@@ -114,6 +109,8 @@ struct UnifiedWpadStatus {
 };
 size_assert(UnifiedWpadStatus, 0x38);
 
+void DisableDPD(s32 channel); //80197da0
+void EnableDPD(s32 channel); //80197dbc
 void SetFSStickClamp(s8 min, s8 max); //801950a0
 void SetPosParam(s32 channel, float play_radius, float sensitivity); //801950b4
 void SetHoriParam(s32 channel, float play_radius, float sensitivity); //801950d0

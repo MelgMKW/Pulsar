@@ -11,7 +11,7 @@ class PadControl : LayoutUIControl {
     ~PadControl() override; //806012f8 808ba4f8
     void InitSelf() override; //80601410 0x18
     void OnUpdate() override; //8060147c 0x1c
-    int GetRuntimeTypeInfo() const override; //0x28 8060194c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8060194c
     const char* GetClassName() const override; //0x2c 806012b0
     void Load(const char* folderName, const char* ctrName, const char* variant, u32 hudSlotId, u8 team, u32 unknown_0x180, u32 padID); //80601350
     void SetParams(u32 hudSlotId, u8 team, u32 unknown_0x180); //80601554
@@ -32,7 +32,7 @@ class RecognizePadWindow : public LayoutUIControl {
     void InitSelf() override; //806018f4 0x18
     void OnUpdate() override; //806018f8 0x1c
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //806018fc 0x20
-    int GetRuntimeTypeInfo() const override; //0x28 80601934
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 80601934
     const char* GetClassName() const override; //0x2c 806017d4
     void Load(const char* folderName, const char* ctrName, const char* variant); //80601878
 };
@@ -49,7 +49,7 @@ class RecognizePad : public System {
     void BeforeEntranceAnimations() override; //0x38 8061c384
     void AfterExitAnimations() override; //0x44 8061c3c8
     void AfterControlUpdate() override; //0x4c 8061c2e4
-    int GetRuntimeTypeInfo() const override; //0x60 8061d1e0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8061d1e0
     bool CheckForConditions() override; //0x64 8061c40c checks if controller has been disconnected obviously
     bool isVisible() override; //0x68 8061c518
     PadControl padControl; //0x44
@@ -73,7 +73,7 @@ class RecognizePadMenu : public RecognizePad {
     void BeforeExitAnimations() override; //0x40 8061c76c
     void AfterExitAnimations() override; //0x44 8061c780
     void BeforeControlUpdate() override; //0x48 8061c7c4
-    int GetRuntimeTypeInfo() const override; //8061d1d4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8061d1d4
 }; //0x4c0
 }//namespace Pages
 

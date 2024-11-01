@@ -38,7 +38,7 @@ public:
         void Update() override; //0x14 8076daf4
         u16 GetID() const override; //0x24 8076e9e4
         u32 GetPropertiesBitfield() override; //0x2c 8076e9c4
-        ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 8076e0bc
+        ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 8076e0bc
 
         u8 unknown_0xc8[4];
         Press* press; //0xcc
@@ -68,7 +68,7 @@ public:
         u32 GetPropertiesBitfield() override; //0x2c 8076e9ec
         const char* GetBRRESName() const override; //0x34 8076e9f4
         const char* GetSubFileName() const override; //0x38 8076ea00 
-        ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 8076e4e8
+        ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 8076e4e8
         ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
             ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 8076e5d8
 

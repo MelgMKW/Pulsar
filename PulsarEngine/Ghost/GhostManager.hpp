@@ -5,9 +5,7 @@
 #include <MarioKartWii/UI/Page/Other/GhostManager.hpp>
 #include <MarioKartWii/UI/Page/Other/TTSplits.hpp>
 #include <PulsarSystem.hpp>
-#include <Settings/Settings.hpp>
 #include <Ghost/PULLeaderboard.hpp>
-
 
 namespace Pulsar {
 namespace UI {
@@ -17,7 +15,7 @@ void BeforeEntranceAnimations(Pages::TTSplits* page);
 namespace Ghosts {
 
 //Implements MultiGhost and handles leaderboards/expert
-class Manager {
+class  Mgr {
 public:
     enum CBTiming {
         IS_LOADING_LEADERBOARDS,
@@ -26,8 +24,8 @@ public:
     };
     typedef void(*RKGCallback)(const RKG& decompressed, CBTiming timing, int index);
 
-    static const Manager* GetInstance() { return sInstance; }
-    static Manager* CreateInstance();
+    static const Mgr* GetInstance() { return sInstance; }
+    static Mgr* CreateInstance();
     static void DestroyInstance();
     static void SetCb(RKGCallback userCb) { cb = userCb; }
     const Leaderboard& GetLeaderboard() const { return this->leaderboard; }
@@ -37,6 +35,7 @@ public:
     bool HasExpert() const { return this->expertGhost.isActive; }
     const PulsarId GetPulsarId() const { return this->pulsarId; }
     const Timer& GetExpert() const { return this->expertGhost; }
+    u32 GetFavGhostFileIndex(TTMode mode) const { return this->favGhostFileIndex[mode]; }
     void ToggleGhostSaving(bool savingIsEnabled) {
         areGhostsSaving = savingIsEnabled;
     }
@@ -47,7 +46,7 @@ public:
 
     static inline u32 GetRKGcrc32(const RKG& rkg) {
         u32 crc32;
-        if(rkg.header.compressed) crc32 = *(u32*)((u32)&rkg + reinterpret_cast<const CompressedRKG*>(&rkg)->dataLength + 0x8C);
+        if (rkg.header.compressed) crc32 = *(u32*)((u32)&rkg + reinterpret_cast<const CompressedRKG*>(&rkg)->dataLength + 0x8C);
         else crc32 = rkg.uncompressedCRC32;
         return crc32;
     }
@@ -55,46 +54,55 @@ public:
         return rkg.dataLength + sizeof(RKGHeader) + 0x4 + 0x4;
     }
     static inline u32 GetRKGLength(const RKG& rkg) {
-        if(rkg.header.compressed) return GetCompressedRKGLength(reinterpret_cast<const CompressedRKG&>(rkg));
+        if (rkg.header.compressed) return GetCompressedRKGLength(reinterpret_cast<const CompressedRKG&>(rkg));
         else return sizeof(RKG);
     }
-
+    static const char* GetGhostFileName(u32 fileIndex) {
+        if (fileIndex == expertFileIdx) return "?";
+        else return IO::sInstance->GetFileName(fileIndex);
+    }
+    //u32 GetGhostIndex(const GhostListEntry& entry) const;
+    bool LoadGhost(RKG& dest, u32 index) const;
 
 
 private:
-    Manager() : pulsarId(PULSARID_NONE), files(nullptr), areGhostsSaving(true) {
-        RaceData* racedata = RaceData::sInstance;
-        for(int i = 0; i < 4; ++i) racedata->ghosts[i].ClearBuffer();
+    Mgr() : pulsarId(PULSARID_NONE), files(nullptr), areGhostsSaving(true) {
+        Racedata* racedata = Racedata::sInstance;
+        for (int i = 0; i < 4; ++i) racedata->ghosts[i].ClearBuffer();
     }
-    ~Manager() {
+    ~Mgr() {
         delete[] this->files; //in case Reset wasn't called before
     }
-    static Manager* sInstance;
+    static Mgr* sInstance;
     void Init(PulsarId id);
     void Reset();
-    bool SaveGhost(const TimeEntry& entry, u32 ldbPosition, bool isFlap);
+    void SaveLeaderboard();
+    bool SaveGhost(const RKSYS::LicenseLdbEntry& entry, u32 ldbPosition, bool isFlap);
     bool EnableGhost(const GhostListEntry& entry, bool isMain);
     void DisableGhost(const GhostListEntry& entry);
-    bool LoadGhost(RKG& dest, u32 index);
     void LoadAllGhosts(u32 maxGhosts, bool isGhostRace);
-    void CreateGhost(TimeEntry* entry, u32 position);
-    static void CreateAndSaveFiles(Manager* manager);
+    void CreateGhost(RKSYS::LicenseLdbEntry* entry, u32 position);
+    void SetFavGhost(const GhostListEntry& entry, TTMode mode, bool add) { this->leaderboard.SetFavGhost(entry.padding[0], mode, add); }
+    static void CreateAndSaveFiles(Mgr* self);
     static char folderPath[IOS::ipcMaxPath];
     static RKGCallback cb; //int = ghost index
 
+
     GhostData* files;
     PulsarId pulsarId;
-    Timer expertGhost;
-    u32 rkgCount;
-    u32 mainGhostIndex; //from the watch replay;
-    u32 selGhostsIndex[3];
-    u32 lastUsedSlot;
-    bool areGhostsSaving;
-    s32 expertEntryNum;
-    u32 padding[19];
-    RKG rkg; //aligned for file operations
+    Timer expertGhost; //0x8
+    u32 rkgCount; //0x14
+    u32 mainGhostIndex; //0x18 from the watch replay;
+    u32 selGhostsIndex[3]; //0x1c
+    u32 lastUsedSlot; //0x28
+    u32 favGhostFileIndex[2]; //0x34 for saving and loading
+    bool areGhostsSaving; //0x3C
+
+    s32 expertEntryNum; //0x40
+    u32 padding[0xf]; //0x44
+    RKG rkg; //0x80 aligned for file operations
     Leaderboard leaderboard; //aligned for file operations
-    TimeEntry entry;
+    RKSYS::LicenseLdbEntry entry;
 
     static const u32 expertFileIdx = 39;
     friend class UI::ExpGhostSelect; //UI backend

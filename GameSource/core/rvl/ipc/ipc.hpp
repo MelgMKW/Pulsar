@@ -36,7 +36,18 @@ enum IOCtlType {
     IOCTL_FS_SETFILEVERCTRL = 0xA,
     IOCTL_FS_GETFILESTATS = 0xB,
     IOCTL_FS_GETUSAGE = 0xC,
-    IOCTL_FS_SHUTDOWN = 0xD
+    IOCTL_FS_SHUTDOWN = 0xD,
+
+    IOCTL_HID4_GET_DEVICE_CHANGE = 0x0,
+    IOCTL_HID4_INTERRUPT_IN = 0x3,
+    IOCTL_HID4_INTERRUPT_OUT = 0x4,
+    IOCTL_HID4_GET_VERSION = 0x6,
+    IOCTL_HID5_GET_VERSION = 0x0,
+    IOCTL_HID5_GET_DEVICE_CHANGE = 0x1,
+    IOCTL_HID5_GET_DEVICE_PARAMETERS = 0x3,
+    IOCTL_HID5_ATTACH_FINISH = 0x6,
+    IOCTL_HID5_SET_RESUME = 0x10,
+    IOCTL_HID5_INTERRUPT = 0x13,
 };
 
 enum SeekType {
@@ -90,6 +101,7 @@ struct Request
         FileStats stats;
     };
 }; //total size 0x80
+typedef void (*AsyncCallback)(s32 ret, void* arg);
 
 s32 Open(const char* path, Mode mode);
 s32 Read(s32 fd, void* buffer, s32 length);
@@ -97,6 +109,9 @@ s32 Write(s32 fd, const void* buffer, s32 length);
 s32 Seek(s32 fd, s32 offset, SeekType whence); //returns length until the end, best to get file length
 s32 Close(s32 fd);
 s32 IOCtl(s32 fd, IOCtlType ioctl, void* buffer_in, s32 len_in, void* buffer_io, s32 len_io);
+s32 IOCtlAsync(s32 fd, IOCtlType ioctl, void* buffer_in, s32 len_in, void* buffer_io, s32 len_io, AsyncCallback cb, void* ctxt);
+
+s32 IOCtlAsync(); //80194158
 s32 IOCtlv(s32 fd, IOCtlType ioctl, s32 countIv, s32 countIO, IOCtlvRequest* argv);
 s32 Open2ndInst(const char* path, Mode mode);
 extern s32 fs_fd;

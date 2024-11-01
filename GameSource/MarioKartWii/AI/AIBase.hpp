@@ -18,12 +18,12 @@ class ActionsBase {
 };
 
 template<class T = Base>
-class Actions {
+class Actions : public ActionsBase { //the funcs obviously have the same body for every single instantiation, but nonetheless, one set of fucns per class
     //Actions(); inlined, sets the ptmfs to 0,0,0 and the subject to nullptr
-    virtual ~Actions(); //80721c54 vtable 808cbc30
-    virtual void OnStart(); //0xc 8074afec
-    virtual void Update(); //0x10 8074b034
-    virtual void OnEnd(); //0x14 8074b064
+    ~Actions() override; //80721c54 vtable 808cbc30 for base
+    void OnStart() override; //0xc 8074afec
+    void Update() override; //0x10 8074b034
+    void OnEnd() override; //0x14 8074b064
 
     T* subject; //0x4
     Ptmf_0A<T, void> actionStartPtmf; //0x8 

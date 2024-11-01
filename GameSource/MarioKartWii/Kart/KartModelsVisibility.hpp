@@ -7,10 +7,10 @@
 
 namespace Kart {
 
-class ModelsVisibility { //controls visibility of kart models
+class ModelsVisibility : public Link { //controls visibility of kart models
 public:
     ModelsVisibility(); //8056a264
-    Link link;
+
     virtual void SetModelDraw(ModelDirector& direction); //8056a580 vtable 808b5028 calls model's enabledraw
     virtual ~ModelsVisibility(); //0xc 8056a59c
 

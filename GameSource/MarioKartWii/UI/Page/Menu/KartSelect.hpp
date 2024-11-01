@@ -73,7 +73,7 @@ public:
     ~ButtonMachine() override; //80847ca8 vtable 808d9918
     void InitSelf() override; //0x18 80847810
     void OnUpdate() override; //0x1c 808476f0
-    int GetRuntimeTypeInfo() const override; //0x28 80847c9c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 80847c9c
     const char* GetClassName() const override; //0x2c 808448dc
     u8 unknown_0x254[0x260 - 0x254];
 }; //total size 0x260
@@ -90,7 +90,7 @@ public:
     void BeforeEntranceAnimations() override; //0x38 80847630
     void BeforeExitAnimations() override; //0x44 80847690
     void AfterControlUpdate() override; //0x4c 80846a2c
-    int GetRuntimeTypeInfo() const override; //0x60 80847c90
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80847c90
     void OnExternalButtonSelect(PushButton& button, u32 r5) override; //0x64 80846ea4
     int GetActivePlayerBitfield() const override; //0x68 80846a24
     int GetPlayerBitfield() const override; //0x6c 80847bec

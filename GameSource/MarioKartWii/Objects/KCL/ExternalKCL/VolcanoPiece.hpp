@@ -54,7 +54,7 @@ class VolcanoPiece : public ObjectExternKCL { //ObjectNum 0x1fc = 508
     void UpdateCollisionPosition(u32 r4) override; //0x120 80818334
     void SetYScale() override; //0x124 80818674
     void UpdateDiffPosVector(const Vec3& src) override; //0x128 80805924
-    const Mtx34& GetTransformationMatrix(u32 framesOffset) const override; //0x12c 8080595c
+    const Mtx34& GetTransformationMatrix(u32 framesOffset)override; //0x12c 8080595c
     bool IsCollidingNoTriangleCheckImpl(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
         KCLTypeHolder* ret, u32 initialTime, float radius) override; //0x148 808199a8
     bool IsCollidingImpl(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,

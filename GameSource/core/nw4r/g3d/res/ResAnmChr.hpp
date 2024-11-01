@@ -8,7 +8,11 @@
 
 namespace nw4r {
 namespace g3d {
+
+
+
 struct ChrAnmResult {
+    void GetScale(math::VEC3* scale) const; //800555c0
     enum Flag {};
     u32 flags;
     math::VEC3 ratio;
@@ -40,7 +44,34 @@ struct ResAnmChrData { //https://wiki.tockdom.com/wiki/CHR0_(File_Format)
     //data
 };
 
-class ResAnmChr: public ResCommon<ResAnmChrData> {};
+struct ResAnmChrNodeData {
+    s32 nameOffset;
+    union AnmData {
+        s32 offsetToResAnmChrAnmData;
+        float    constValue;
+    } anms[1];
+};
+
+typedef void (*FuncGetAnmResult)(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame);
+
+
+
+class ResAnmChr : public ResCommon<ResAnmChrData> {
+    static const FuncGetAnmResult gGetAnmResultTable[8]; //802474a0
+    static void GetAnmResult_(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame); //80055130
+    static void GetAnmResult_S(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame); //80055250
+    static void GetAnmResult_R(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame); //800551e0
+    static void GetAnmResult_SR(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame); //80055340
+    static void GetAnmResult_T(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame); //80055150
+    static void GetAnmResult_ST(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame); //800553e0
+    static void GetAnmResult_RT(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame); //80055290
+    static void GetAnmResult_SRT(ChrAnmResult* result, const ResAnmChrInfoData& info, const ResAnmChrNodeData* nodeAnm, float frame); //80055480
+
+
+
+
+    void GetAnmResult(ChrAnmResult* result, u32 anmIdx, float frame) const; //80055540
+};
 
 }//namespace g3d
 }//namespace nw4r

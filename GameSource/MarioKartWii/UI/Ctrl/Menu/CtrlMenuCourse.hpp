@@ -12,7 +12,7 @@ public:
     ~CourseButton() override; //80628130 vtable 808d3100 for CtrlMenuMovieHandler
 
     //virtual ~CourseButton(); //thunk 807e5654 function 80628130 vtable 808d3118 for PushButton
-    int GetRuntimeTypeInfo() const override; //0x28 thunk 807e5664 function 807e5604
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 thunk 807e5664 function 807e5604
     const char* GetClassName() const override; //0x2c thunk 807e565c function 807e443c
 }; //total size 0x26C
 size_assert(CourseButton, 0x26c);
@@ -23,7 +23,7 @@ public:
     ~CtrlMenuCourseSelectCupSub() override; //80627fa8 vtable 808d31b8
     void InitSelf() override; //807e47c8
     void OnUpdate() override; //807e4864
-    int GetRuntimeTypeInfo() const override; //807e561c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //807e561c
     const char* GetClassName() const override; //807e4410
     virtual void SetRelativePosition(const PositionAndScale& parentPosition); //807e4744
     u8 unknown_0x174[0x17c - 0x174];
@@ -37,7 +37,7 @@ public:
     //ctor inlined
     ~CtrlMenuCourseSelectCup() override; //80628000 vtable 808d3178
     void InitSelf() override; //807e45c0 0x18
-    int GetRuntimeTypeInfo() const override; //0x28 807e5610
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807e5610
     const char* GetClassName() const override; //0x2c 807e441c
     void Load(); //807e444c
     CtrlMenuCourseSelectCupSub cupIcons[8]; //0x174 <=> 0x83c cup icons after clicking the cup (above the 4 tracks)
@@ -49,7 +49,7 @@ public:
     static CourseId idxToCourseId[32]; //808a8088
     ~CtrlMenuCourseSelectCourse() override; //80628190 vtable 808d30c0
     void InitSelf() override; //807e5118 0x18
-    int GetRuntimeTypeInfo() const override; //0x28 807e55f8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807e55f8
     const char* GetClassName() const override; //0x2c 807e442c
     void OnCourseButtonClick(PushButton& courseButton, u32 hudSlotId); //807e5434
     void OnCourseButtonSelect(PushButton& courseButton, u32 hudSlotId); //807e548c

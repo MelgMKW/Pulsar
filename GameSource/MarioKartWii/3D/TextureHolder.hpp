@@ -10,8 +10,7 @@ public:
     virtual ~TextureHolder(); //805641d8 vtable 808b4ac0
     void CopyFromEFB(u16 left, u16 top, bool mipmap, bool r7, bool r8); //80563db0
 
-
-    EGG::MatTexture* texture; //0x4
+    EGG::LightTexture* texture; //0x4
     GX::TexObj texObj; //0x8
 }; //0x28
 

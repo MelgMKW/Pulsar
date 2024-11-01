@@ -1,8 +1,8 @@
-#ifndef _FOGHOLDER_
-#define _FOLHOLDER_
+#ifndef _FOGMANAGER_
+#define _FOLMANAGER_
 
 #include <kamek.hpp>
-#include <core/egg/3D/Fog.hpp>
+#include <core/egg/3D/PostEffects/Fog.hpp>
 #include <MarioKartWii/File/BFG.hpp>
 
 class BFGHolder {

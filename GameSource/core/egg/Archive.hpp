@@ -23,7 +23,7 @@ public:
     static void* LoadFromDisc(const char* path, EGG::Heap* heap, int alignment); //8020fb78
     u32 usedCount; //0x10 how many times this archive is referenced (ie used)
     BOOL hasLoaded; //0x14 
-    ARCHandle handle; //0x18
+    ARC::Handle handle; //0x18
     nw4r::ut::Link archiveList; //0x34
 }; //0x3c
 }//namespace EGG

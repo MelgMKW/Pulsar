@@ -35,7 +35,7 @@ public:
     bool LoadLabelStringData(void* buffer, u32 size); //80091420
 
     detail::SoundArchiveFileReader fileReader; //0x108
-    DVDFileInfo fileInfo; //0x14c
+    DVD::FileInfo fileInfo; //0x14c
     bool isOpen; //0x188
     u8 padding[3];
 }; //total size 0x18c

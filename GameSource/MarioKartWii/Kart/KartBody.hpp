@@ -35,6 +35,12 @@ public:
 
     void Init(KartPartsDispParam* kartPartsDispParams, BikePartsDispParam* bikePartsDispParams); //8056c458
 
+    /*
+    Replace Always: if false, only set the anm if the previously active one had oldAnmIdx
+    SetActive: if false, prepares the anm
+    */
+    void SetChrAnm(u32 anmIdx, u32 oldAnmIdx, bool replaceAlways, bool setActive);
+
     PhysicsHolder* kartPhysicsHolder; //0x90
     float unknown_0x94;
     float rightHandleDistance; //0x98
@@ -74,7 +80,7 @@ public:
     void vf_0x24() override; //0x24 8056d230
     void ApplyStarColors() override; //0x28 8056d280
     void vf_0x2c() override; //0x2c 8056d2f8
-    void vf_0x30() override; //0x30 8056d370
+    void SetTEVSwapMode() override; //0x30 8056d370
     void UpdateModelDrawPriority(u32 scnObjDrawOptionsIdx) override; //0x34 8056d3e8
 
 
@@ -112,7 +118,7 @@ class BodyBike : public Body {
     void vf_0x24() override; //0x24 8056e094
     void ApplyStarColors() override; //0x28 8056e0b4
     void vf_0x2c() override; //0x2c 8056e108
-    void vf_0x30() override; //0x30 8056e15c
+    void SetTEVSwapMode() override; //0x30 8056e15c
     void UpdateModelDrawPriority(u32 scnObjDrawOptionsIdx) override; //0x34 8056e1b0
     void GetMatrix(Mtx34& dest) const override; //0x44 8056dd54
     void UpdateWheelMatrix(Wheel& wheel, u32 wheelIdx) override; //0x48 8056de94

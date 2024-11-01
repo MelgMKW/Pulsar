@@ -1,6 +1,6 @@
 #ifndef _PUL_MATCH_COMMAND_
 #define _PUL_MATCH_COMMAND_
-#include <core/rvl/DWC/MatchCommand.hpp>
+#include <core/rvl/DWC/DWCMatch.hpp>
 #include <core/rvl/ipc/ipc.hpp>
 
 namespace Pulsar {
@@ -20,11 +20,11 @@ struct ResvInfo {
     ResvInfo() {
         padding[0] = 0;
         padding[1] = 0;
-        padding[2] = 0;
     }
     u32 roomKey;
     char modFolderName[IOS::ipcMaxFileName];
-    u8 padding[3];
+    u8 statusData;
+    u8 padding[2];
     UserInfo userInfo;
 };
 size_assert(ResvInfo, 0x24);

@@ -1,12 +1,12 @@
 #ifndef _NW4R_SNDHEAP_
 #define _NW4R_SNDHEAP_
 #include <types.hpp>
-#include <core/rvl/os/mutex.hpp>
+#include <core/rvl/os/OSmutex.hpp>
 #include <core/nw4r/snd/FrameHeap.hpp>
 #include <core/nw4r/snd/SoundMemoryAllocatable.hpp>
 namespace  nw4r {
 namespace snd {
-class SoundHeap: public SoundMemoryAllocatable {
+class SoundHeap : public SoundMemoryAllocatable {
 public:
     SoundHeap(); //800a2ed0
     ~SoundHeap() override; //800a2f20 vtable 80274a30

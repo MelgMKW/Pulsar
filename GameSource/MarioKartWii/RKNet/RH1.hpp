@@ -6,6 +6,7 @@
 
 namespace RKNet {
 struct RACEHEADER1Packet {
+    static const u32 idx = 1;
     u32 timer;
     u32 selectId; //0x4
     u16 team[2]; //0x8
@@ -13,7 +14,7 @@ struct RACEHEADER1Packet {
     u16 kartAndCharacter[2]; //0xe treated as a u16 ingame
     u16 countdownTime; //0x12
     u8 starRank[2]; //0x14
-    u8 trackId;         //0x16
+    u8 trackId; //0x16
     u8 unknown_0x17;
     u8 aidsBelongingToPlayerIds[12]; //0x18
     u8 engineClass; //0x24
@@ -65,7 +66,8 @@ public:
     u32 unknown_0xc;
     u8 unknown_0x10;
     u8 padding2[3];
-    u64 time; //0x18
+    u8 osTimeAlignmentPadding[4];
+    OS::Time time; //0x18
     RH1Data rh1Data[12]; //0x20
 }; //total size 0x260
 size_assert(RH1Handler, 0x260);

@@ -3,12 +3,13 @@
 #include <kamek.hpp>
 #include <core/egg/Effect/Effect.hpp>
 #include <MarioKartWii/Objects/Collidable/ObjectCollidable.hpp>
+#include <MarioKartWii/System/StatePtmfTrigger.hpp>
 
 namespace Objects {
 
 class BasabasaMgr;
 
-class Basabasa : public ObjectCollidable, public ObjectCycleManager {
+class Basabasa : public ObjectCollidable, public StatePtmfTrigger<Basabasa> {
 public:
     static u32 curIdx; //809c21f8
     Basabasa(const KMP::Holder<GOBJ>& gobjHolder, BasabasaMgr* mgr); //806b5c84
@@ -23,11 +24,11 @@ public:
     void LoadAnimations() override; //0x5c 806b76a4
     void UpdateShadow() override; //0x70 806b6eac
 
-    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806b6874
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 806b6874
     ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 806b6a18
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) override; //0xc4 806b6a18
 
-    //ObjectCycleManager vtable 808c2198 at 0xb0
+    //StatePtmfTrigger vtable 808c2198 at 0xb0
     // ~Basabasa() override; thunk 806b7708 
 
     BasabasaMgr* mgr; //0xd0

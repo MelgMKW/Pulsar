@@ -13,7 +13,7 @@ public:
         ~EditLetter() override; //805cab2c vtable 808b82f8
         void Init() override; //0xc 805cac0c
         void Update() override; //0x10 805cac8c
-        int GetRuntimeTypeInfo() const override; //0x28 805cad84
+        const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805cad84
         const char* GetClassName() const override; //0x2c 805caae0
         void Load(const char* folderName, const char* ctrName, const char* variant); //805cab84
         void AddDigit(u32 digit); //805cac90 inlined
@@ -27,7 +27,7 @@ public:
     ~NumericEditBox() override; //805c99f8 vtable 808b82b8
     void Init() override; //0xc 805ca438
     void Update() override; //0x10 805ca53c
-    int GetRuntimeTypeInfo() const override; //0x28 805cad78
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805cad78
     const char* GetClassName() const override; //0x2c 805c9894
     virtual void vf_0x3c(); //0x3c 805c9ebc
 
@@ -38,7 +38,7 @@ public:
     void RemoveAllDigits(); //805c9f34
     bool HasFullDigits(); //805c9fe8
     bool HasUnusedDigit(); //805ca028
-    u64 ComputeSum(); //805ca068 returns sum(digits[i] * pow(10, i))
+    u64 ComputeSum(); //805ca068 returns sum(digits[i] * pow(10, digitCount -i)) ie the friendcode as a concatenated number
     void AddDigit(u32 digit); //805ca0c8 also resets all "unused" editletters
     void RemoveDigit(); //805ca250
     void HandleUpPress(u32 hudSlotId, u32 r5); //805ca6e8

@@ -3,7 +3,7 @@
 #include <kamek.hpp>
 #include <core/egg/mem/Disposer.hpp>
 #include <MarioKartWii/3D/Scn/GameScreen.hpp>
-#include <MarioKartWii/3D/Scn/ScnManager.hpp>
+#include <MarioKartWii/3D/Scn/ScnMgr.hpp>
 
 
 class Renderer : public EGG::Disposer {
@@ -14,7 +14,7 @@ public:
 
     Renderer(GameScreen& screen); //805642b8
     ~Renderer() override; //8056430c vtable 808b4bd0
-    virtual void vf_0xC() = 0; //0xc
+    virtual void Calc() = 0; //0xc
     virtual void Draw() = 0; //0x10
 
     void Remove(); //80564fbc uses the internal idx to choose the list
@@ -38,7 +38,7 @@ class RendererWithModels : public Renderer {
 public:
     RendererWithModels(GameScreen& screen); //80564378
     ~RendererWithModels() override; //805643cc vtable 808b4bb8
-    virtual void vf_0xC() override; //0xc 80564444
+    virtual void Calc() override; //0xc 80564444
 
     void Draw() override; //0x10 80564458 sets proj to type currently held by Screen and then calls ScnMgr's DrawModels
     virtual void DrawWithProjection(u32 projType, u32 r5); //0x14 805644a8
@@ -61,14 +61,14 @@ class RendererRaceUIOrtho : public Renderer { //the screen it's tied with covers
 public:
     RendererRaceUIOrtho(GameScreen& screen); //805b423c
     ~RendererRaceUIOrtho() override; //805b4280 vtable 808b7278
-    void vf_0xC() override; //805b4314
+    void Calc() override; //805b4314
     void Draw() override; //805b42d8 sets proj to ortho then draws the cur section
 };
 
 class RendererRaceUIScreen : public Renderer { //renders UI that is specific to a single part of the TV, which in mkwii is only racers names (?)
     RendererRaceUIScreen(GameScreen& screen); //805b4110 
     ~RendererRaceUIScreen() override; //805b4154 vtable 808b728c
-    void vf_0xC() override; //805b4318
+    void Calc() override; //805b4318
     void Draw() override; //0x10 805b41ac
 };
 
@@ -86,7 +86,7 @@ class RendererMenu : public RendererMixed { //draws the UI in menu scenes but ca
 public:
     RendererMenu(GameScreen& screen); //8059eca8 also creates a CameraLook
     ~RendererMenu() override; //805671ac vtable 808b69b0
-    void vf_0xC() override; //8059ed30
+    void Calc() override; //8059ed30
     void Draw() override; //8059f508
     void DrawModels() override; //0x18 8059ed68 
 
@@ -106,7 +106,7 @@ public:
     RendererMii(GameScreen& screen); //80564688
     ~RendererMii() override; //805647bc vtable 808b4b88
     void DrawModels() override; //0x1c 80564760
-    u8 unknown_0x24;
+    bool minimapExists; //0x24 unsure
     u8 padding[3];
 }; //0x28
 

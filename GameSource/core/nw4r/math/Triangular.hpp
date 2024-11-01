@@ -8,6 +8,7 @@ namespace nw4r {
 namespace math {
 
 extern const float F_PI; //803878F8
+//40.7437 = 256 / (2 * PI) = the constant to convert an angle to fidx: fidx = 40.7437 * rad
 float SinFIdx(float fidx);
 float CosFIdx(float fidx);
 void SinCosFIdx(float* sin, float* cos, float fidx);

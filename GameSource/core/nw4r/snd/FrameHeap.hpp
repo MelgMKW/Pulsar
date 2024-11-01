@@ -1,7 +1,7 @@
 #ifndef _NW4R_SNDFRAMEHEAP_
 #define _NW4R_SNDFRAMEHEAP_
 #include <types.hpp>
-#include <core/rvl/os/mutex.hpp>
+#include <core/rvl/os/OSmutex.hpp>
 #include <core/nw4r/ut/LinkList.hpp>
 #include <core/nw4r/snd/DisposeCallbackManager.hpp>
 

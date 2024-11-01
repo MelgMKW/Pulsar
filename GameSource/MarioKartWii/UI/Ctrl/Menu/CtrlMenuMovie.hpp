@@ -37,7 +37,7 @@ class CtrlMenuMovieLayout : public CtrlMenuMovieHandler, public LayoutUIControl 
     //virtual ~CtrlMenuMovieLayout(); //thunk 807e91fc function 80627a80 vtable 808d34c8
     void InitSelf() override; //0x18 thunk 807e91f4 function 807e8e0c
     void OnUpdate() override; //0x1c thunk 807e91ec function 807e8ff8
-    int GetRuntimeTypeInfo() const override; //0x28 thunk 807e920c function 80
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 thunk 807e920c function 80
     const char* GetClassName() const override; //0x2c thunk 807e9204 function 807e8c4c
     void OnDeactivate(); //807e8c5c
 }; //total size 0x18C
@@ -53,7 +53,7 @@ public:
     //virtual ~CtrlMenuMovieButton(); //807e91a4 vtable 808d35a8 for PushButton
     void InitSelf() override; //0x18 thunk 807e2574 function 807e8698
     void OnUpdate() override; //0x1c thunk 807e256c function 807e84ac
-    int GetRuntimeTypeInfo() const override; //0x28 thunk 807e91b4 function 807e9170
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 thunk 807e91b4 function 807e9170
     const char* GetClassName() const override; //0x2c thunk 807e91ac function 807e82f4
     void OnDeactivate() override; //0x3c thunk 807e257c function 807e8300
 
@@ -67,7 +67,7 @@ class CtrlMenuSingleTopMovieButton : public CtrlMenuMovieHandler, public PushBut
     //virtual ~CtrlMenuSingleTopMovieButton(); thunk 807e91d4 func 807e9114 vtable 808d3530 for pushbutton
     void InitSelf() override; //0x18 thunk 807e91c4 function 807e895c
     void OnUpdate() override; //0x1c thunk 807e91bc function 807e8b48
-    int GetRuntimeTypeInfo() const override; //0x28 thunk 807e91e4 function 807e9108
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 thunk 807e91e4 function 807e9108
     const char* GetClassName() const override; //0x2c thunk 807e91dc function 807e879c
     void OnDeactivate() override; //0x3c thunk 807e91cc function 807e87ac
 }; //total size 0x26c

@@ -13,7 +13,7 @@ class LicenseRecords : public MenuInteractable { //ID 0xCE ID 0xD0 ID 0xD1 ID 0x
     void OnInit() override; //0x28 8085f1bc
     void OnActivate() override; //0x30 8085f470
     void AfterControlUpdate() override; //0x4c 8085f4dc
-    int GetRuntimeTypeInfo() const override; //0x60 8085ffb4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8085ffb4
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64 8085f5bc
     int GetActivePlayerBitfield() const override; //0x68 8085fec8
     int GetPlayerBitfield() const override; //0x6C 8085fec0

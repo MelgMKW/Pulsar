@@ -1,11 +1,8 @@
 #ifndef _PUL_LEADERBOARD_
 #define _PUL_LEADERBOARD_
 #include <kamek.hpp>
-#include <MarioKartWii/UI/SectionMgr/SectionPad.hpp>
-#include <MarioKartWii/System/SaveDataManager.hpp>
-#include <MarioKartWii/System/Timer.hpp>
+#include <MarioKartWii/RKSYS/RKSYSMgr.hpp>
 #include <PulsarSystem.hpp>
-
 
 namespace Pulsar {
 namespace Ghosts {
@@ -25,9 +22,9 @@ enum EntryLaps {
     ENTRY_10TH,
     ENTRY_FLAP
 };
-#pragma pack(push, 1)
-struct PULTimeEntry {
-    PULTimeEntry() {
+
+struct PULLdbEntry {
+    PULLdbEntry() {
         minutes = 0;
         seconds = 0;
         milliseconds = 0;
@@ -45,7 +42,8 @@ struct PULTimeEntry {
     KartId kart; //0x5C
     ControllerType controllerType; //0x60
 };//total size 0x64
-#pragma pack(pop)
+size_assert(PULLdbEntry, 0x64);
+
 
 //Should be fine having "affecting" functions public as this class can only be access through a const getter in manager (or from manager itself)
 class alignas(0x20) Leaderboard {
@@ -55,19 +53,21 @@ class alignas(0x20) Leaderboard {
     static const char filePathFormat[];
 public:
     Leaderboard();
-    Leaderboard(const char* folderPath, PulsarId id);
+    Leaderboard(const char* folderPath, PulsarId id, bool createNew);
     void SetTrack(PulsarId id);
     //void SwapEntries(LeaderboardEntry *entry1, LeaderboardEntry *entry2);
     s32 GetPosition(const Timer& other) const;
     s8 GetRepeatCount(const RKG& rkg) const;
-    void Update(u32 position, const TimeEntry& entry, u32 rkgCRC32);
+    void Update(u32 position, const RKSYS::LicenseLdbEntry& entry, u32 rkgCRC32);
     void Save(const char* folderPath);
     void AddTrophy() { this->hasTrophy[System::sInstance->ttMode] = true; }
-    const PULTimeEntry& GetPulEntry(EntryLaps lap) const { return this->entries[System::sInstance->ttMode][lap]; }
+    const PULLdbEntry& GetPulEntry(EntryLaps lap) const { return this->entries[System::sInstance->ttMode][lap]; }
     void EntryToTimer(Timer& dest, u8 id) const;
-    void EntryToTimeEntry(TimeEntry& dest, u8 id) const;
+    void EntryToGameEntry(RKSYS::LicenseLdbEntry& dest, u8 id) const;
+    void SetFavGhost(u32 fileIdx, TTMode mode, bool add);
+    const char* GetFavGhost(TTMode mode) const { return this->favGhost[mode]; }
     static void CreateFile(PulsarId id);
-    static const TimeEntry* GetEntry(u32 index); //pointer as the game expects as such
+    static const RKSYS::LicenseLdbEntry* GetEntry(u32 index); //pointer as the game expects as such
     static int ExpertBMGDisplay();
 private:
     u32 magic; //PULL
@@ -75,13 +75,13 @@ private:
     u32 crc32; //of the track
     char name[trackNameLen]; //0xC
     bool hasTrophy[4]; //0x3c
-    u32 reserved[4]; //0x40
-    PULTimeEntry entries[4][11]; //0x50 11th = flap
-
+    u8 reserved[0x10];
+    PULLdbEntry entries[4][11]; //0x50 11th = flap
+    char favGhost[4][0x10];
 };
 static_assert(sizeof(Leaderboard) % 0x20 == 0, "Leaderboard Size Check");
 
-PULTimeEntry* GetPULTimeEntry(u32 index);
+PULLdbEntry* GetPULLdbEntry(u32 index);
 
 }//namespace Ghosts
 }//namespace Pulsar

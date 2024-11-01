@@ -14,7 +14,7 @@ public:
     ~DisconnectMgr() override; //806494bc vtable 808bfbb4
     void OnInit() override; //0x28 80649524
     void OnUpdate(); //0x50 80649590
-    int GetRuntimeTypeInfo() const override; //0x60 8064a058
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8064a058
     ManipulatorManager manipulatorManager; //0x44
     u8 status; //0x54
     u8 padding[3];
@@ -31,7 +31,7 @@ public:
     void OnActivate() override; //80649b90
     void BeforeEntranceAnimations() override; //80649d60
     void AfterControlUpdate() override; //80649d18
-    int GetRuntimeTypeInfo() const override; //8064a04c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8064a04c
 
     void OnClick(u32 hudSlotId); //80649fd8
     static u32 GetErrorBMGId(u32 error); //80649da4

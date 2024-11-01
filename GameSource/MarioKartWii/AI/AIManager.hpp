@@ -36,6 +36,7 @@ class AIMgrSub94 : public Base { //battle only
 
 
 class Manager {
+public:
     static Manager* sInstance; //809c2be8
     static Manager* CreateInstance(); //80738e50
     static void DestroyInstance(); //80738ea0

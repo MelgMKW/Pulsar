@@ -14,7 +14,7 @@ public:
     void OnInit() override; //0x28 80853e18
     void OnActivate() override; //0x30 80854104
     void AfterControlUpdate() override; //0x4c 80854320
-    int GetRuntimeTypeInfo() const override; //0x60 808551e0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 808551e0
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64 80854748
     int GetActivePlayerBitfield() const override; //0x68 808550c4
     int GetPlayerBitfield() const override; //0x6C 808550bc

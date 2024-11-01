@@ -1,3 +1,74 @@
+·Updated to 2.0.0
+DISCLAIMER:
+-This update is very large and there are only 2 people working on Pulsar as a whole. It is likely that a lot of bugs made it through, most notably in KO. Some may lead to crashes and as a consequence, large packs should be make the decision to use this update cautiously. Bug fixes will happen as reports come in and hopefully the engine gets stable quickly.
+
+MAJOR CHANGES:
+-Added KO mode. 
+-Added OnlineTT mode.
+-Variants are now supported and can be edited through the creator.
+-LEX files are now supported.
+-XPF files are now supported, using Gabriela's port to Kamek.
+-Added Gabriela's USB GCN package. (Major thanks to her for both of these features)
+
+KO Features:
+-It is largely identical to CTGP's implementation.
+-Bonus items are not included as that is MrBean's creative idea and the point isn't to make a straight copy of his work.
+-The mode has its own settings page:
+	-Force 1v1 final; if 2 players would be eliminated in a 3P room, only 1 player will be eliminated and a 1v1 final race will be played.
+	-Races between KOs
+	-KO per race
+-Non-hosts players who get eliminated can choose to spectate or to leave immediately. Hosts must stay until the end.
+-Host always wins is not available in KO. It wouldn't make sense for the host to be able to select the track even if they're out.
+-At the end of a KO, a page with various stats of the winner is displayed: 
+	-Average placement percent, lower values mean the winner finished in good positions on average.
+	-Total time in danger, which is the total amount of frames you were in a KO position during the last 5s of every race.
+	-Almost KO'd count, which is the amount of races you were in danger for at least 1s out of the last 5s.
+
+OnlineTT Features:
+-Playable in every VS mode.
+-A regional category for OnlineTT is available, separate from normal regionals.
+-Has all the features of the original mode. (TT cycles, other players are ghosts, no collision, slipstream, setting to mute other players and the position tracker etc...).
+-You can start with 3 mushrooms or 3 feathers:
+	-Offline, there is a setting to choose.
+	-Online, in regionals, you will always start with mushrooms; in friend rooms the host has a setting to choose.
+-Online, you can change your combo after the race has been selected. The host gets to choose whether this is allowed or not in friend rooms.
+-Will display time difference to the player behind if in 1st or to 1st and the player ahead.
+-You can select a ghost on every track for every TT mode (on the Ghost Select page or after setting a ghost) that will appear offline and in online OTT races under 12 players.
+-No ghost saving for now as there are a ton of syncing issues and/or corrupted ghosts getting created from previous tests.
+
+Variants:
+-Up to 8 variants per track are available.
+-A button on the creator under each track allows you to specify each variant.
+-A common name that will be the name displayed on the cup select must be inputted. (for example, Animal Crossing would be the common name of Animal Crossing Summer etc...)
+-We are aware that the current UI is not optimal, but it requires a large overhaul which may happen in the future.
+-BRSTM expansion supports variants, either via the variant name or by using X_Y where X is the track index and Y the variant index (0-indexed).
+
+Creator Changes:
+-File names can now be mass imported.
+-Fixed alphabetization not working correctly when tracks had no version.
+-Fixed various out-of-bounds exceptions (alphabetization and mass import mainly).
+-Fixed FolderToTrackName.txt file. It was using file names instead of track names.
+-Fixed custom icons not working in-game.
+
+Engine Changes:
+-Upon starting a room, the gamemode will now be displayed via the host message.
+-Settings page improvements; see below. 
+-Check rankings has been replaced by "Go To Wiimmfi" as the previous button was non-functional.
+-Network packets are now expanded. Developers can add their own data to any of the packet and parse it however they want.
+-Fixed offline the track randomizer selecting wrong tracks. Do not spam buttons while the track is being randomized or you'll be sent back to drift select.
+-Fixes various sound related bugs.
+
+Linker Changes:
+-Better implementation of region specific writes; requires a new Loader.pul.
+
+Misc Changes:
+-Substantial documentation (UI, objects, 3D rendering etc...)
+
+Settings changes:
+-You can now have an infinite amount of settings Page
+-Custom pack settings are completely independant from base Pulsar settings. This change unfortunately means that for this update custom pack settings will be lost.
+-To add your custom settings, go to SettingsParam.cpp and edit the arrays. Add 0x60000 to the usual settings BMGs for custom pack settings.
+
 ·Updated to 1.3.7
 Creator Changes:
 -Fixed alphabetization incorrectly sorting escape sequences due to whitespace.

@@ -1,13 +1,14 @@
 #ifndef _NW4R_UTIOSTREAM_
 #define _NW4R_UTIOSTREAM_
 #include <types.hpp>
+#include <core/nw4r/ut/RuntimeTypeInfo.hpp>
 
 namespace nw4r {
 namespace ut {
 class IOStream {
 public:
     typedef void (*IOStreamCallback)(s32 result, IOStream* stream, void* arg);
-    virtual void* GetRuntimeTypeInfo() const; //0x8 
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //0x8 
     virtual ~IOStream(); //0xc
     virtual void Close() = 0; //0x10
     virtual s32 Read(void* buf, u32 length); //0x14

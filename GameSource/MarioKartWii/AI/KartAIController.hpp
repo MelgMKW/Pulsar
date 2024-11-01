@@ -5,7 +5,7 @@
 #include <MarioKartWii/Kart/KartLink.hpp>
 
 
-class KartAIController {
+class KartAIController : public Kart::Link {
 public:
     KartAIController(bool isBike); //80725fdc 
     void Init(); //80726110
@@ -25,10 +25,9 @@ public:
 
     bool IsInABill() const; //80726560
 
-    Kart::Link link;
     virtual ~KartAIController(); //80726088 vtable 808c98d8
     AI::Player* playerAI; //0x10
-    Vec2 stick;; //0x14
+    Vec2 stick; //0x14
     u32 unknown_0x1c;
     u32 team;
 

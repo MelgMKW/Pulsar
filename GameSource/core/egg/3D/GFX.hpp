@@ -24,6 +24,7 @@ public:
     static GFXEngine* sInstance; //80386E78
     static void Create(u16 efbWidth, u16 efbHeight, EGG::Heap* heap); //8022900c
     static void Initialize(const GFXEngineInitParams& params, EGG::Heap* heap); //802290a8
+    static void BeginDraw(); //80229214
     static u16 efbHeight; //80386F48
     static u16 efbWidth; //80386f4a
     static nw4r::ut::Color clearColor; //80386f5c

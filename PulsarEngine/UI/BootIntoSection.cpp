@@ -3,8 +3,8 @@
 #include <core/rvl/kpad.hpp>
 #include <core/System/SystemManager.hpp>
 #include <MarioKartWii/Input/InputManager.hpp>
-#include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
-#include <MarioKartWii/Race/racedata.hpp>
+#include <MarioKartWii/UI/Section/SectionMgr.hpp>
+#include <MarioKartWii/System/NdevArgsExtractor.hpp>
 #include <Settings/Settings.hpp>
 
 namespace Pulsar {
@@ -23,7 +23,7 @@ static bool CheckControllerStrap() {
     if(ret == 1) { //GCN
         register PAD::Status* gcnStatus;
         asm(addi gcnStatus, sp, 0x10;);
-        for(u8 channel = 0; channel < 4; channel++) {
+        for(u8 channel = 0; channel < 4; ++channel) {
             if(gcnStatus[channel].buttons != 0) {
                 usedChannel = channel + 1;
                 break;
@@ -41,16 +41,16 @@ static bool CheckControllerStrap() {
 }
 kmCall(0x800079b0, CheckControllerStrap);
 
-char bootParams[17] = "-s132 -l0 -p274";
-SectionId BootIntoSection() {
+char bootParams[17];
+SectionId BootIntoSection(const NdevArgsExtractor& extractor) {
     SectionId section = SECTION_NONE;
-    const u8 bootSetting = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_SCROLL_BOOT);
+    const u8 bootSetting = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_SCROLL_BOOT);
     u8 license = 0;
     if(bootSetting != MENUSETTING_BOOT_DISABLED) {
-        const SaveDataManager* save = SaveDataManager::sInstance;
-        if(save->CheckLicenseMagic(bootSetting - 1)) {
-            const LicenseManager* licenseManager = &save->licenses[bootSetting - 1];
-            if(licenseManager->miiID.intIds.avatarId != 0) {
+        const RKSYS::Mgr* rksysMgr = RKSYS::Mgr::sInstance;
+        if(rksysMgr->CheckLicenseMagic(bootSetting - 1)) {
+            const RKSYS::LicenseMgr* licenseMgr = &rksysMgr->licenses[bootSetting - 1];
+            if(licenseMgr->createID.miiId != 0) {
                 section = SECTION_P1_WIFI;
                 //section = SECTION_SINGLE_PLAYER_FROM_MENU;
                 license = bootSetting - 1;
@@ -59,7 +59,7 @@ SectionId BootIntoSection() {
     }
     snprintf(bootParams, 17, "-s132 -l%d -p%d", license, controllerOnStrap);
     SystemManager::sInstance->ndevArg = bootParams;
-    SetupSectionLoad();
+    extractor.ExtractAllArgs();
     return section;
 }
 kmCall(0x80634f20, BootIntoSection);
@@ -67,7 +67,7 @@ kmCall(0x80634f20, BootIntoSection);
 //kmWrite32(0x805243e4, 0x7F65DB78); //mr r5, r27 to get slot
 using namespace Input;
 //r4 usually uses Input::Manager dummy which is slot and controller independant
-static void SetUpCorrectController(RealControllerHolder* realControllerHolder, const Controller* controller) {
+static void SetUpCorrectController(RealControllerHolder* realControllerHolder, Controller* controller) {
     SectionPad& pad = SectionMgr::sInstance->pad;
     const u32 controllerID = pad.padInfos[0].controllerID;  //technically hooking into a loop 
     const ControllerType controllerType = pad.GetType(pad.padInfos[0].controllerID);
@@ -75,7 +75,7 @@ static void SetUpCorrectController(RealControllerHolder* realControllerHolder, c
     register u32 loopIndex;
     asm(mr loopIndex, r27;);
     if(channel == loopIndex) {
-        register const Manager* input;
+        register Manager* input;
         asm(mr input, r30;);
         if(controllerType == GCN) controller = &input->gcnControllers[channel];
         else controller = &input->wiiControllers[channel];

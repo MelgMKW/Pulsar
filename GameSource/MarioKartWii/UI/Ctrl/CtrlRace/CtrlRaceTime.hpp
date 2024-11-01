@@ -11,7 +11,7 @@ public:
     void InitSelf() override; //0x1C 807f7c6c
     void OnUpdate() override; //0x1c 807f7ec0
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 807f8768
-    int GetRuntimeTypeInfo() const override; //0x28 807f8968
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807f8968
     virtual void OnFocus(); //0x50 807f88e8
     virtual void OnDefocus(); //0x54 807f88c0
     virtual int func_0x58(); //807f88b8
@@ -24,10 +24,10 @@ public:
     void DisableFlashingAnimation(); //807f8840
     void EnableFlashingAnimation(); //807f8878 if new best time or flap
 
-    static const RaceData& GetRacedata(); //807f7eb4
-    static bool IsBattle(const RaceData& racedata); //807f82f4
-    static bool IsOnlineVS(const RaceData& racedata); //807f83a4
-    static bool IsModeFlag4(const RaceData& racedata); //807f83c4
+    static const Racedata& GetRacedata(); //807f7eb4
+    static bool IsBattle(const Racedata& racedata); //807f82f4
+    static bool IsOnlineVS(const Racedata& racedata); //807f83a4
+    static bool IsModeFlag4(const Racedata& racedata); //807f83c4
     static void CheckTimer(const Timer& timer, u8* minutes, u8* seconds, u16* milliseconds); //807f8320, fills the ptrs if minutes < 99
     static bool IsTimerInvalid(const Timer& timer); //807f8360
     static void ResetTimer(Timer& timer, u16 minutes, u8 seconds, u16 milliseconds); //807f8380

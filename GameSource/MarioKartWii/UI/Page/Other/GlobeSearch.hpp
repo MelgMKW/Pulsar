@@ -7,14 +7,25 @@
 #include <MarioKartWii/UI/Ctrl/CountDown.hpp>
 
 //_sinit_ at 805e6b2c
-namespace Pages {
+class MatchingMessageWindow : public LayoutUIControl {
+public:
+    MatchingMessageWindow(); //80607d98
+    ~MatchingMessageWindow(); //80607dd4 vtable 808bab40
+    void InitSelf() override; //0x18 80607e90
+    void OnUpdate() override; //0x1c 80607ef4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8060a68c
+    const char* GetClassName() const override; //0x2c 80607d88
+    void Load(const char* variant); //80607e2c
+    void SetMessage(u32 bmgId, const Text::Info* text = nullptr); //80607ef8
+    void Hide(); //80607fb0
+}; //0x174
 
 class RandomMatchingPlayer : public LayoutUIControl {
     RandomMatchingPlayer(); //80607158
     ~RandomMatchingPlayer(); //806071cc vtable 808bab7c
     void InitSelf() override; //0x18 80607368
     void OnUpdate() override; //0x1c 806074c0
-    int GetRuntimeTypeInfo() const override; //0x28 8060a698
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8060a698
     const char* GetClassName() const override; //0x2c 8060714c
     void Load(u32 idx); //80607224
     void SetMii(); //80607b58 inlined
@@ -34,19 +45,7 @@ class RandomMatchingPlayer : public LayoutUIControl {
 
 }; //0x1b8
 
-class MatchingMessageWindow : public LayoutUIControl {
-public:
-    MatchingMessageWindow(); //80607d98
-    ~MatchingMessageWindow(); //80607dd4 vtable 808bab40
-    void InitSelf() override; //0x18 80607e90
-    void OnUpdate() override; //0x1c 80607ef4
-    int GetRuntimeTypeInfo() const override; //0x28 8060a68c
-    const char* GetClassName() const override; //0x2c 80607d88
-    void Load(const char* variant); //80607e2c
-    void SetMessage(u32 bmgId, const Text::Info* text = nullptr); //80607ef8
-    void Hide(); //80607fb0
-}; //0x174
-
+namespace Pages {
 class GlobeSearch : public Page { //ID 0x8f
 public:
     static const PageId id = PAGE_GLOBE_SEARCH;
@@ -61,7 +60,7 @@ public:
     void BeforeControlUpdate() override; //0x48 80608d6c
     void AfterControlUpdate() override; //0x4c 806092c0
     void OnResume() override; //0x54 80609a30
-    int GetRuntimeTypeInfo() const override; //0x60 8060a680
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8060a680
 
     void PrepareLiveView(); //80609e84
     u8 unknown_0x44[4];
@@ -78,7 +77,9 @@ public:
     CountDown countdown; //0x1cbc
     PtmfHolder_0A<GlobeSearch, void> unknown_0x1cc8; //0x1cc8
     PtmfHolder_0A<GlobeSearch, void> unknown_0x1cdc; //0x1cdc
-    u8 unknown_0x1cf0[0x1d00 - 0x1cf0]; //0x1cf0
+    u8 unknown_0x1cf0[4]; //0x1cf0
+    u32 searchType; //0x1cf4 0 = WW, 1 = regional
+    u8 unknown_0x1cf8[8]; //0x1cf0
     PageId nextPageId; //0x1d00
 
 };

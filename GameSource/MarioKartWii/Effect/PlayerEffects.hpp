@@ -14,8 +14,8 @@ public:
         Color& operator=(Color& other); //806ae380
     };
 
-    static RaceData* GetRaceData(); //8068e830
-    static CourseId* GetCourseId(RaceData* racedata); //8068e83c
+    static Racedata* GetRacedata(); //8068e830
+    static CourseId* GetCourseId(Racedata* racedata); //8068e83c
 
     explicit Player(Kart::Player* kartPlayer); //8068df98
     virtual ~Player(); //8068e888 vtable 808c1f64
@@ -56,6 +56,7 @@ public:
 
     void OnBushCollision(); //806a66a4 creates WeedWall effect, plays bushcollisionsound
 
+    void CreateSpinEffect(Kart::Damage::SpinType spinType, u32 r5); //806a67f8
     //Create = called when the effect should be drawn
     //Update = called every frame and checks for whether the effect should be created
     void UpdateCollisionEffects(); //80697be0 the ones below
@@ -290,7 +291,7 @@ public:
     ModelDirector* iceModel; //for rSL 0x160
     u32 unknown_0x164[12]; //0x164
     Color offroadColors[16]; //0x194 sand is 0
-    Color offroadColors2[4]; //0x1d4 grass is 0th
+    Color offroadColors2[4]; //0x1d4 graess is 0th
     Color class_0x1e4[2];
     Color class_0x1ec[1];
 

@@ -14,7 +14,7 @@ class BattleSettings : public MenuInteractable { //ID 0x77
     void OnInit() override; //0x28 8083bc5c
     void OnActivate() override; //0x30 8083c3a4
     void AfterControlUpdate() override; //0x4c 8083c504
-    int GetRuntimeTypeInfo() const override; //0x60 8083ca78
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8083ca78
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64  8083c50c
     int GetActivePlayerBitfield() const override; //0x68 8083c944
     int GetPlayerBitfield() const override; //0x6C 8083c93c

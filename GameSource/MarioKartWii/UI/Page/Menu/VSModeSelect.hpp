@@ -13,7 +13,7 @@ class VSModeSelect : public MenuInteractable { //ID 0x72
     void OnActivate() override; //0x30 80852450
     void OnDeactivate() override; //80852b28
     void AfterControlUpdate() override; //0x4c 808529fc
-    int GetRuntimeTypeInfo() const override; //0x60 80852c60
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80852c60
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64  80852ae0
     int GetActivePlayerBitfield() const override; //0x68 80852b7c
     int GetPlayerBitfield() const override; //0x6C 80852b74

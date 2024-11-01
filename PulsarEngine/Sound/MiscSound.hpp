@@ -3,7 +3,6 @@
 
 #include <kamek.hpp>
 #include <core/nw4r/snd.hpp>
-#include <MarioKartWii/Archive/ArchiveRoot.hpp>
 #include <MarioKartWii/Audio/SinglePlayer.hpp>
 
 namespace Pulsar {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -22,6 +21,7 @@ namespace Pulsar_Pack_Creator
         public int firstTrackRow = 1;
         public int firstTrackCol = 1;
 
+
         protected override void OnClosing(CancelEventArgs e)
         {
             IO.IOBase.cancelToken.Cancel();
@@ -34,6 +34,8 @@ namespace Pulsar_Pack_Creator
         }
         private void OnMassImportTracksClick(object sender, RoutedEventArgs e)
         {
+            UpdateMassImport();
+            importWindow.Init(); //MASSIMPORT
             importWindow.Show();
         }
 
@@ -42,6 +44,12 @@ namespace Pulsar_Pack_Creator
             cupsImportWindow.Show();
         }
 
+        private void OnVariantClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            importWindow.Init(Grid.GetRow(button)); //VARIANT
+            importWindow.Show();
+        }
         private void OnCrashClick(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
@@ -147,7 +155,7 @@ namespace Pulsar_Pack_Creator
                         box.Text = fileName;
 
                     }
-                    cups[cupIdx].fileNames[row - firstTrackRow] = fileName;
+                    cups[cupIdx].tracks[row - firstTrackRow].main.fileName = fileName;
                     row++;
                     if (row == 4 + firstTrackRow)
                     {
@@ -203,12 +211,12 @@ namespace Pulsar_Pack_Creator
 
                     }
 
-                    if (cups[cupIdx].expertFileNames[row, col - 1] != "RKG File" && cups[cupIdx].expertFileNames[row, col - 1] != "")
+                    if (cups[cupIdx].tracks[row].expertFileNames[col - 1] != "RKG File" && cups[cupIdx].tracks[row].expertFileNames[col - 1] != "")
                     {
                         trophyCount[col - 1]++;
                     }
 
-                    cups[cupIdx].expertFileNames[row, col - 1] = fileName;
+                    cups[cupIdx].tracks[row].expertFileNames[col - 1] = fileName;
                     row++;
                     if (row == 4)
                     {
@@ -223,7 +231,7 @@ namespace Pulsar_Pack_Creator
 
                         int curRow = i % 4;
                         //TextBlock ghostLabel = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == curRow + 1 && Grid.GetColumn(x) == 0) as TextBlock;
-                        string curTrack = cups[i / 4].trackNames[curRow];
+                        string curTrack = cups[i / 4].tracks[curRow].main.trackName;
                         if (fileName.Contains(curTrack, StringComparison.InvariantCultureIgnoreCase))
                         {
                             //int idx = cups.FindIndex(x => x.trackNames[0] == curTrack || x.trackNames[1] == curTrack || x.trackNames[2] == curTrack || x.trackNames[3] == curTrack);
@@ -232,7 +240,7 @@ namespace Pulsar_Pack_Creator
                                 box = GhostGrid.Children.Cast<UIElement>().First(x => Grid.GetRow(x) == curRow + 1 && Grid.GetColumn(x) == col) as TextBox;
                                 box.Text = fileName;
                             }
-                            if (cups[i / 4].expertFileNames[curRow, col - 1] != "RKG File" && cups[i / 4].expertFileNames[curRow, col - 1] != "")
+                            if (cups[i / 4].tracks[curRow].expertFileNames[col - 1] != "RKG File" && cups[i / 4].tracks[curRow].expertFileNames[col - 1] != "")
                             {
                                 trophyCount[col - 1]++;
                             }
@@ -327,7 +335,7 @@ namespace Pulsar_Pack_Creator
                 HAWTimer.Text = $"{parameters.chooseNextTrackTimer}";
 
                 Array.Copy(importer.regsExperts, regsExperts, regsExperts.Length);
-                
+
                 DateTime importDate;
                 bool dateParse = DateTime.TryParse(date, out importDate);
                 if (dateParse)
@@ -339,7 +347,7 @@ namespace Pulsar_Pack_Creator
                 UpdateCurCup(0);
                 UpdateCurRegsPage(0);
                 UpdateMassImport();
-                
+
             }
             string msg = "";
             switch (ret)
@@ -454,27 +462,37 @@ namespace Pulsar_Pack_Creator
 
         private void UpdateMassImport()
         {
-            string[] massImportText = new string[5];
+            string[] massImportText = new string[6];
             string[] massImportCupsNamesText = new string[2];
+
+            bool isDone = false;
             foreach (Cup cup in cups)
             {
-                for (int i = 0; i < 4; i++)
+                if (!isDone)
                 {
-                    massImportText[0] += cup.trackNames[i] + "\n";
-                    massImportText[1] += cup.authorNames[i] + "\n";
-                    massImportText[2] += cup.versionNames[i] + "\n";
-                    massImportText[3] += PulsarGame.MarioKartWii.idxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cup.slots[i])] + "\n";
-                    massImportText[4] += PulsarGame.MarioKartWii.musicIdxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cup.musicSlots[i])] + "\n";
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Cup.Track.Variant cur = cup.tracks[i].main;
+                        bool hasFile = cur.fileName != "" && cur.fileName != Cup.defaultFile;
+                        bool hasName = cur.trackName != "" && cur.trackName != Cup.defaultTrack;
+                        if (!(hasFile || hasName))
+                        {
+                            isDone = true;
+                            break;
+                        }
+                        massImportText[0] += cur.fileName + "\n";
+                        massImportText[1] += cur.trackName + "\n";
+                        massImportText[2] += cur.authorName + "\n";
+                        massImportText[3] += cur.versionName + "\n";
+                        massImportText[4] += PulsarGame.MarioKartWii.idxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.idxToCourseId, cur.slot)] + "\n";
+                        massImportText[5] += PulsarGame.MarioKartWii.musicIdxToFullNames[Array.IndexOf(PulsarGame.MarioKartWii.musicIdxToCourseId, cur.musicSlot)] + "\n";
+                    }
+                    massImportCupsNamesText[0] += cup.name + "\n";
+                    massImportCupsNamesText[1] += cup.iconName + "\n";
                 }
-                massImportCupsNamesText[0] += cup.name + "\n";
-                massImportCupsNamesText[1] += cup.iconName + "\n";
-            }
-            importWindow.NamesImport.Text = massImportText[0];
-            importWindow.AuthorsImport.Text = massImportText[1];
-            importWindow.VersionsImport.Text = massImportText[2];
-            importWindow.SlotsImport.Text = massImportText[3];
-            importWindow.MusicSlotsImport.Text = massImportText[4];
 
+            }
+            importWindow.FillMassImport(massImportText);
             cupsImportWindow.CupsNameImport.Text = massImportCupsNamesText[0];
             cupsImportWindow.CupsIconImport.Text = massImportCupsNamesText[1];
         }

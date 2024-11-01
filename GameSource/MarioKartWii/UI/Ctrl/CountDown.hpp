@@ -22,7 +22,7 @@ public:
     ~CountDownTimerControl() override; //805c3d18 808b7dc0
     void InitSelf() override; //0x18 805c3dfc
     void OnUpdate() override; //0x1c 805c407c
-    int GetRuntimeTypeInfo() const override; //0x28 805c4748
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805c4748
     const char* GetClassName() const override; //0x2c 805c3cc8
     void Load(CountDown& countdown); //805c3d70
     void AnimateCurrentCountDown(); //805c4380 changes tpls based on current countdown

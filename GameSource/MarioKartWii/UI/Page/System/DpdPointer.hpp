@@ -14,7 +14,7 @@ class DpdPointerControl : public LayoutUIControl {
     ~DpdPointerControl() override; //805c8a08 vtable 808b8164
     void InitSelf() override; //0x18 805c8d6c
     void OnUpdate() override; //0x1c 805c8ebc
-    int GetRuntimeTypeInfo() const override; //0x28 805c9744
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805c9744
     const char* GetClassName() const override; //0x2c 805c89b8
     void Load(u8 idx); //805c8a60
     u8 idx; //0x174
@@ -39,7 +39,7 @@ public:
     void OnInit() override; //0x28 805c960c
     void OnActivate() override; //0x30 805c9698
     void BeforeControlUpdate() override; //0x48 805c96a4
-    int GetRuntimeTypeInfo() const override; //0x60 805c9738
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805c9738
     bool CheckForConditions() override; //0x64 805c970c
     bool isVisible() override; //0x68 805c9724
     DpdPointerControl controls[4]; //0x44 1 per local player

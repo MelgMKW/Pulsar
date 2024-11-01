@@ -68,7 +68,7 @@ struct TrickProperties {
     float angleDiffMulDec;
 }; //total size 0x10
 
-class Trick {
+class Trick : public Link {
 public:
     Trick(); //80575a44
     void UpdateNext(); //80575b38
@@ -76,7 +76,6 @@ public:
     void Update(); //805763e4
     void End(); //805766b8
 
-    Link link;
     virtual ~Trick(); //0xC 80575aa8 vtable 808b58b0
     virtual void Start(const Vec3& left); //80575ee8
     virtual void StartInner(TrickCategory category); //8057616c
@@ -110,22 +109,18 @@ public:
     void UpdateRot() override; //80576994
 }; //total size 0x50
 
-class Zipper {
+class Zipper : public Link {
 public:
     Zipper(); //80574114
     void Update(); //80574340
     void End(int unk0); //805758e4
 
-    Link link;
     virtual ~Zipper(); //80574170 vtable 808b5798
     u8 unknown_0x10[0x90 - 0x10];
 }; //total size 0x90
 
-class Movement {
+class Movement : public Link {
 public:
-
-    static s16 blooperDuration; //808b5bb4, 808b12f4 ntsc-u
-    static s16 GetStarDuration(); //80589024
 
     Movement(); //80577fc4
     void ResetMaxSpeed(); //8057b9ac
@@ -148,6 +143,7 @@ public:
     void TryStartJumpPad(); //8057fd18
     void ApplyLightning(); //80580438
     void ApplyLightningEffect(int frames, int unk0, int unk1); //80580778
+    void UpdateScale(); //8058160c
     void ActivateTc(); //80581a28
     void DeactivateTc(); //80581a40
     void UpdateCharacterInk(); //80581b1c
@@ -170,9 +166,11 @@ public:
     s32 GetSMTMaxCharge() const; //8057efec
     void SetScale(const Vec& scale); //80581720
 
-    Link link;
+    void UpdateFromPseaVenice(); //8058677c func responsible for the "kcl" of psea and venice nami
+
+
     virtual ~Movement(); //offset 0xC 80587b78 vtable 808b5f60
-    virtual void CreateTrickZipper(); //0xC 8057821c
+    virtual void CreateTrickZipper(const Values& values); //0xC 8057821c
     virtual int SetTurnParams(); //0x10 8057829c
     virtual void Reset(bool unk0, bool unk1); //0x14 805784d4
     virtual void ActivateStar(); //0x18 80580268
@@ -286,13 +284,23 @@ public:
       4 jump pad
     */
     u8 unknown_0x254[0x258 - 0x254];
-    Trick* trick;
-    Zipper* zipper;
+    Trick* trick; //0x258
+    Zipper* zipper; //0x25c
     u8 unknown_0x260[0x288 - 0x260];
     float rawTurn;
     float unknown_0x28c;
     s16 ghostVanishTimer;
     u8 unknown_0x292[2];
+
+    struct CannonParams {
+        float speed;
+        float height;
+        float decelerationFactor;
+        float endDeceleration;
+    };
+    static CannonParams params[3]; //808b5ce8
+    static s16 blooperDuration; //808b5bb4, 808b12f4 ntsc-u
+    static s16 GetStarDuration(); //80589024
 }; //Total size 0x294
 
 class MovementRemote : public Movement {
@@ -314,7 +322,7 @@ public:
 
     ~MovementBike() override; //80589704 vtable 808b5ee8
 
-    void CreateTrickZipper() override; //0xC 80587bb8
+    void CreateTrickZipper(const Values& values) override; //0xC 80587bb8
     int SetTurnParams() override; //0x10 80587c54
     void Reset(bool unk0, bool unk1) override; //0x14 80587d00
     void vf_0x24() override; //0x24 80588950

@@ -8,6 +8,7 @@ That means the "enter/do not enter" flag can be switched at will that way */
 
 class ElineController {
 public:
+    ElineController(); //8052d298 inlined
     KMP::Holder<GOBJ>* gobjHolder;
     ElineController* next;
     u16 frameCounter; //0x8
@@ -17,10 +18,11 @@ public:
     u8 padding[2];
 }; //0x10
 
-class ElineManager {
+class ElineMgr {
 public:
-    ElineManager(); //8052d46c
+    ElineMgr(); //8052d46c
     void Update(); //8052d888
+    ElineController* GetController(KMP::Holder<GOBJ>* gobj); //8052d828
     ElineController** initialControllers; //0x0 those whose ENPH section (setting 8) is not -1
     u16 eline_controlCount; //0x4 count of the object in the KMP
 }; // Total size 0x8

@@ -4,14 +4,14 @@
 #include <MarioKartWii/Item/Obj/ItemObj.hpp>
 
 namespace Item {
-class ObjKumo : public Obj { //TC
+class ObjKumo : public ObjMiddle { //TC
 public:
     static Obj** CreateArray(u32 count); //807af140
-    virtual void InitSelf(); //0x8 807af534 vtable 808d2480
-    virtual void UpdateModelPosition();  //0x10 807af39c
-    virtual void SpawnModel(); //0x18 807af200
-    virtual void OnCollision(); //0x24 807b123c
-    virtual void vf_0x2c(); //0x2c 807b0960
+    void InitSelf() override; //0x8 807af534 vtable 808d2480
+    void UpdateModelPosition() override;  //0x10 807af39c
+    void SpawnModel() override; //0x18 807af200
+    int OnKill() override; //0x24 807b123c
+    void OnFinishKill() override; //0x2c 807b0960
 
     void UpdateThunk(); //807a3908
     void Update(); //807af76c

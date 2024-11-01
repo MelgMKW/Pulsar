@@ -1,18 +1,26 @@
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Kamek
 {
     class Program
     {
-
-        
+        struct CombinedHeader
+        {
+            public byte[] ToBytes()
+            {
+                byte[] ret = new byte[4 * 4];
+                Buffer.BlockCopy(sizes, 0, ret, 0, 4 * 4);
+                return ret;
+            }
+            public CombinedHeader() { }
+            public int[] sizes = new int[4];
+        }
+        public static string _curVer;
         static void Main(string[] args)
         {
             Console.WriteLine("Kamek 2.0 by Ninji/Ash Wolf - https://github.com/Treeki/Kamek");
@@ -25,6 +33,7 @@ namespace Kamek
             string inputDolPath = null, outputDolPath = null;
             string outputMapPath = null;
             List<byte> combined = new List<byte>();
+            CombinedHeader header = new CombinedHeader();
             var externals = new Dictionary<string, uint>();
             VersionInfo versions = null;
             Debug debug = null;
@@ -35,15 +44,15 @@ namespace Kamek
 
                 string mapPath = args.First(x => x.StartsWith("-map=")).Substring(5);
                 string readElfPath = args.First(x => x.StartsWith("-readelf=")).Substring(9);
-                if(mapPath != null && readElfPath != null)
+                if (mapPath != null && readElfPath != null)
                 {
                     debug = new Debug(mapPath, readElfPath);
-                }                  
+                }
 
             }
             foreach (var arg in args)
             {
-                
+
                 if (arg.StartsWith("-"))
                 {
                     if (arg == "-h" || arg == "-help" || arg == "--help")
@@ -91,7 +100,7 @@ namespace Kamek
                 else
                 {
                     Console.WriteLine("adding {0} as object..", arg);
-                    
+
                     if (debug != null)
                     {
                         //debug.AnalyzeFile(arg);
@@ -100,7 +109,7 @@ namespace Kamek
                     {
                         modules.Add(new Elf(stream));
                     }
-                    
+
                 }
             }
             if (debug != null) debug.Save();
@@ -116,7 +125,7 @@ namespace Kamek
                 Console.WriteLine("no input files specified");
                 return;
             }
-            if (outputKamekPath == null && outputRiivPath == null && outputDolphinPath == null && outputGeckoPath == null && outputARPath == null 
+            if (outputKamekPath == null && outputRiivPath == null && outputDolphinPath == null && outputGeckoPath == null && outputARPath == null
                 && outputCodePath == null && outputDolPath == null && outputCombinedPath == null)
             {
                 Console.WriteLine("no output path(s) specified");
@@ -148,7 +157,6 @@ namespace Kamek
                 }
             }
 
-            
 
 
             foreach (var version in versions.Mappers)
@@ -159,7 +167,7 @@ namespace Kamek
                     continue;
                 }
                 Console.WriteLine("linking version {0}...", version.Key);
-
+                _curVer = version.Key;
                 var linker = new Linker(version.Value);
                 foreach (var module in modules)
                     linker.AddModule(module);
@@ -184,7 +192,21 @@ namespace Kamek
                 if (outputCodePath != null)
                     File.WriteAllBytes(outputCodePath.Replace("$KV$", version.Key), kf.CodeBlob);
                 if (outputCombinedPath != null)
+                {
+                    uint index = 0;
+                    switch (version.Key)
+                    {
+                        case "P": index = 0; break;
+                        case "E": index = 1; break;
+                        case "J": index = 2; break;
+                        case "K": index = 3; break;
+                    }
+                    byte[] packed = kf.Pack();
+                    header.sizes[index] = BinaryPrimitives.ReverseEndianness(packed.Length);
                     combined.AddRange(kf.Pack());
+                }
+
+
 
                 if (outputDolPath != null)
                 {
@@ -202,13 +224,14 @@ namespace Kamek
                 {
                     linker.WriteSymbolMap(outputMapPath.Replace("$KV$", version.Key));
                 }
-
-                if(outputCombinedPath != null)
-                {
-                    File.WriteAllBytes(outputCombinedPath, combined.ToArray());
-                }
             }
-            
+
+            if (outputCombinedPath != null)
+            {
+                combined.InsertRange(0, header.ToBytes());
+                File.WriteAllBytes(outputCombinedPath, combined.ToArray());
+            }
+
         }
 
         private static void ReadExternals(Dictionary<string, uint> dict, string path)

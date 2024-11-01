@@ -69,13 +69,13 @@ enum Directions {
 
 class ButtonInfo {
 public:
-    ButtonInfo(); //inlined for pageactionHandler, 805eee24 for pages
+    ButtonInfo(); //805eee24
     virtual ~ButtonInfo(); //805eeed0 vtable 808b9a80
     virtual void Reset();  //0xc 805eef10, calls reset
     virtual void Update(const Input::ControllerHolder* controllerHolder); //0x10 805eef20
     virtual void Init(); //0x14 805ef138
-    u32 pressTimes[9]; //see actions enum
-    bool buttonHeld[9]; //0x28 set to true if button is held
+    u32 pressTimes[9]; //0x4 see actions enum
+    bool lockAction[9]; //0x28 set to true if button was held OR manually; this is used to prevent rapidfire non-stick presses
     u8 padding[3];
 }; //total size 0x34
 size_assert(ButtonInfo, 0x34);
@@ -87,12 +87,15 @@ public:
     void Reset() override;  //0xc 805ef888, calls reset
     void Update(const Input::ControllerHolder* controllerHolder) override; //0x10 805ef898
     void Init() override; //0x14 805ef958
+    void LockNonDirectionalActions(); //805ef9ec only for 1 frame
+    bool IsADirectionHeldForMultipleOf15(bool allowMultiples); //805efa70 otherwise only 0 frames will return true, which is used to know if a direction has JUST been held
+    u32 GetFramesOnCurControl() const; //805efadc
     Directions direction; //0x34, almost certainly wrong
     u32 framesOnCurControl; //0x38
     bool isPointerActive; //0x3c
     u8 unknown_0x3D[3]; //padding?
-    Vec2 pointerPosition;
-    bool enabled; //if this control button info is taking inputs
+    Vec2 pointerPosition; //0x40
+    bool enabled; //0x48 if this control button info is taking inputs
     u8 unknown_0x49[3]; //padding?
     ControlManipulator* childManipulator; //set by controls that have children like RadioControl or TabControl
     u8 unknown_0x50[0x54 - 0x50];
@@ -113,7 +116,7 @@ size_assert(ControlManipulatorHolder, 0x5C);
 class ManipulatorManager { //PARENT
 public:
     ManipulatorManager(); //805eeb68  808b9a98
-    virtual int GetRuntimeTypeInfo() const; //805bd704 vtable 808b9a98
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //805bd704 vtable 808b9a98
     virtual ~ManipulatorManager(); //805eeb8c
     virtual void Init(u32 localPlayerBitfield, bool isMultiplayer); //0x10 805eebcc r4 related to inputs
     virtual void* GetHolderList() const; //805f2cf4, just a blr as no list
@@ -142,7 +145,7 @@ size_assert(ManipulatorManager, 0x10);
 class PageManipulatorManager : public ManipulatorManager { //sets actions for page, equivalent to ControlsManipulatorManager but for pages 80601d04 checks actions
 public:
     PageManipulatorManager(); //805ef240
-    int GetRuntimeTypeInfo() const override; //805f2cf8 vtable 808b9a48
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //805f2cf8 vtable 808b9a48
     ~PageManipulatorManager() override; //0xc 805ef2fc
     void Init(u32 localPlayerBitfield, bool isMultiplayer) override; //0x10 805ef364
     void CheckActions() override; //0x18 805ef43c
@@ -160,12 +163,12 @@ class ControlsManipulatorManager : public ManipulatorManager { //contains multip
 public:
     typedef int(*CalcDistanceFunc)(const ControlManipulator& subject, const ControlManipulator& other, Directions direction);
     ControlsManipulatorManager(); //805f09a8
-    int GetRuntimeTypeInfo() const override; //805f2cdc vtable 808b99e8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //805f2cdc vtable 808b99e8
     ~ControlsManipulatorManager() override; //805f0bd4
     void Init(u32 localPlayerBitfield, bool isMultiplayer) override; //0x10 805f0c48
     void* GetHolderList() const override; //805f0e30
     void CheckActions() override; //0x18 805f0e94
-    void Activate(u32 hudSlotId, u32 localPlayerBitfield2, bool isMultiplayer) override; //805f1bc0
+    void Activate(u32 activeLocalPlayerBitfield, u32 localPlayerBitfield, bool isMultiplayer) override; //805f1bc0
     void OnDeactivate(bool isMultiplayer) override; //805f1cf4 //0x20
     void OnReset() override; //0x24 805f1e14
     void OnActivate() override; //0x28 805f1f3c
@@ -218,7 +221,7 @@ size_assert(ControlBoundingBox, 0x28);
 class ControlManipulator {
 public:
     ControlManipulator(); //805efaf8 
-    nw4r::ut::LinkListNode link;
+    EGG::Link link;
     virtual ~ControlManipulator(); //805efbd4 vtable 808b9a20
     void Init(u32 childCount, bool r5, bool inaccessible); //805efc48
     void SetAction(Action id, const PtmfHolder_2A<LayoutUIControl, void, u32, u32>& handler, bool repeatable); //805efcf8
@@ -251,7 +254,7 @@ public:
     bool unknown_0x74; //r5 from init
     bool inaccessible; //0x75
     u8 unknown_0x76[2]; //padding?
-    u32 allowedPlayerId; //0 in single, else 1 2 3 4 (5 is everyone is allowed to select the control)
+    u32 allowedPlayerId; //0x78 0 in single, else 1 2 3 4 (5 is everyone is allowed to select the control)
     u32 activeFrames; //probably same thing as above
     u32 distance; //converted from a float
 }; //total size 0x84

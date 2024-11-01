@@ -14,7 +14,7 @@ public:
     void OnInit() override; //0x28 805f8e48
     void OnActivate() override; //0x30 805f8eb8
     void AfterControlUpdate() override; //805f8edc
-    int GetRuntimeTypeInfo() const override; //0x60 805f9698
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805f9698
     virtual void Reset(); //0x64 805f8f40
     virtual void SetMessageWindowText(u32 bmgId, const Text::Info* text = nullptr) = 0; //0x68 805f9244
     virtual void SetButtonImage() = 0; //0x6c 805f92d4
@@ -35,7 +35,7 @@ public:
     void OnInit() override; //0x28 805f90e8
     void BeforeEntranceAnimations() override; //0x38 805f924c
     void AfterExitAnimations() override; //0x44 805f9290
-    int GetRuntimeTypeInfo() const override; //0x60 805f968c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805f968c
     void Reset() override; //0x64 805f9224
     void SetMessageWindowText(u32 bmgId, const Text::Info* text = nullptr) override; //0x68 805f9244
     void SetButtonImage() override; //0x6c 805f92d4
@@ -55,7 +55,7 @@ public:
     ~MessageBox() override; //805f93dc vtable 808b9c90
     PageId GetNextPage() const override; //0x10 805f9678
     void OnInit() override; //0x28 805f9474
-    int GetRuntimeTypeInfo() const override; //0x60 805f9680
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805f9680
     void Reset() override; //0x64 805f95c0
     void SetMessageWindowText(u32 bmgId, const Text::Info* text = nullptr) override; //0x68 805f9628 
     void SetButtonImage() override; //0x6c 805f9630

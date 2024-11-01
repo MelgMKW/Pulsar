@@ -1,6 +1,9 @@
 #include <kamek.hpp>
-#include <Settings/UI/ExpSinglePlayer.hpp>
-
+#include <MarioKartWii/UI/Page/Menu/SinglePlayer.hpp>
+#include <MarioKartWii/Item/ItemManager.hpp>
+#include <PulsarSystem.hpp>
+#include <UI/UI.hpp>
+#include <Settings/UI/SettingsPanel.hpp>
 //Implements 4 TT modes by splitting the "Time Trials" button
 
 
@@ -8,15 +11,12 @@ namespace Pulsar {
 static void SetCC();
 namespace UI {
 
-PageId ExpSinglePlayer::topSettingsPage = SettingsPanel::firstId;
-
-
 
 
 void CorrectButtonCount(Pages::SinglePlayer* page) {
     const System* system = System::sInstance;
-    const bool hasFeather = Info::HasFeather();
-    const bool has200cc = Info::Has200cc();
+    const bool hasFeather = system->GetInfo().HasFeather();
+    const bool has200cc = system->GetInfo().Has200cc();
     page->externControlCount = 4 + hasFeather + has200cc + (hasFeather && has200cc) + 1;
     new (page) Page;
 }
@@ -50,7 +50,7 @@ static void LoadCorrectBRCTR(PushButton& button, const char* folder, const char*
             case(6):
                 ctr = "PulTTTwo";
                 if(idx != 1) {
-                    if(Info::Has200cc()) varId = 1;
+                    if(system->GetInfo().Has200cc()) varId = 1;
                     else varId = 2;
                 }
                 break;
@@ -77,8 +77,8 @@ kmCall(0x8084f084, LoadCorrectBRCTR);
 
 //Hacky custom CalcDistance so that the navigating the single player menu is intuitive
 static int FixCalcDistance(const ControlManipulator& subject, const ControlManipulator& other, Directions direction) {
-    const u32 subId = static_cast<PushButton*>(subject.actionHandlers[0]->subject)->buttonId;
-    const u32 destId = static_cast<PushButton*>(other.actionHandlers[0]->subject)->buttonId;
+    const s32 subId = static_cast<PushButton*>(subject.actionHandlers[0]->subject)->buttonId;
+    const s32 destId = static_cast<PushButton*>(other.actionHandlers[0]->subject)->buttonId;
     switch(subId) {
         case(0):
             if(direction == DIRECTION_DOWN && destId == 1) return 1;
@@ -102,7 +102,7 @@ kmCall(0x8084ef68, SetDistanceFunc);
 
 
 void OnButtonSelect(Pages::SinglePlayer* page, PushButton& button, u32 hudSlotId) {
-    const u32 id = button.buttonId;
+    const s32 id = button.buttonId;
     u32 count = page->externControlCount;
     if(count > 5 && (id == 1 || id > 3)) {
 
@@ -117,7 +117,7 @@ void OnButtonSelect(Pages::SinglePlayer* page, PushButton& button, u32 hudSlotId
             switch(page->externControlCount) {
                 case(6):
                     if(id > 3) {
-                        if(Info::Has200cc()) bmgId += 1;
+                        if(system->GetInfo().Has200cc()) bmgId += 1;
                         else bmgId += 2;
                     }
                     break;
@@ -138,13 +138,9 @@ kmWritePointer(0x808D9F64, &OnButtonSelect);
 void OnButtonClick(Pages::SinglePlayer* page, PushButton& button, u32 hudSlotId) {
     const u32 id = button.buttonId;
     if(page->externControlCount > 4 && id == page->externControlCount - 1) {
-        const Section* section = SectionMgr::sInstance->curSection;
-        for(int i = 0; i < SettingsPanel::pageCount; ++i) {
-            section->Get<SettingsPanel>(static_cast<PageId>(SettingsPanel::firstId + i))->prevPageId = PAGE_SINGLE_PLAYER_MENU;
-        }
-
-        page->nextPageId = ExpSinglePlayer::topSettingsPage;
-        page->EndStateAnimated(button.GetAnimationFrameSize(), 0);
+        ExpSection::GetSection()->GetPulPage<SettingsPanel>()->prevPageId = PAGE_SINGLE_PLAYER_MENU;
+        page->nextPageId = static_cast<PageId>(SettingsPanel::id);
+        page->EndStateAnimated(0, button.GetAnimationFrameSize());
         return;
     }
 
@@ -157,7 +153,7 @@ void OnButtonClick(Pages::SinglePlayer* page, PushButton& button, u32 hudSlotId)
         switch(page->externControlCount) {
             case(6):
                 if(id > 3) {
-                    if(Info::Has200cc()) mode = TTMODE_200;
+                    if(system->GetInfo().Has200cc()) mode = TTMODE_200;
                     else mode = TTMODE_150_FEATHER;
                 }
                 break;
@@ -177,21 +173,9 @@ static void SetCC() {
     const System* system = System::sInstance;
     EngineClass cc = CC_150;
     if(system->ttMode == TTMODE_200 || system->ttMode == TTMODE_200_FEATHER) cc = CC_100;
-    RaceData::sInstance->menusScenario.settings.engineClass = cc;
+    Racedata::sInstance->menusScenario.settings.engineClass = cc;
 }
 kmBranch(0x805e1ef4, SetCC);
 kmBranch(0x805e1d58, SetCC);
-
-//3 feathers in TTs, the game has already checked the gamemode so no need to do it again
-void SetStartingItem(Item::PlayerInventory& inventory, ItemId id, u8 r5) {
-    const System* system = System::sInstance;
-    const TTMode mode = system->ttMode;
-    if(mode == TTMODE_150_FEATHER || mode == TTMODE_200_FEATHER) {
-        inventory.SetItem(BLOOPER, r5);
-        inventory.currentItemCount = 3;
-    }
-    else inventory.SetItem(id, r5);
-}
-kmCall(0x80799808, SetStartingItem);
 
 }//namespace Pulsar

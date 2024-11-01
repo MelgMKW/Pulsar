@@ -30,14 +30,14 @@ enum ErrCode {
 };
 
 enum DataSource {
-    RFLDataSource_Official, //table DB, store data
+    RFLDataSource_Official, //table DB, store data, user miis are here
     RFLDataSource_Hidden,
     RFLDataSource_Controller1,
     RFLDataSource_Controller2,
     RFLDataSource_Controller3,
     RFLDataSource_Controller4,
     RFLDataSource_Default, //default player miis
-    RFLDataSource_Middle, //middleDB
+    RFLDataSource_Middle, //middleDBStore
     RFLDataSource_Max
 };
 
@@ -109,9 +109,28 @@ enum ExpressionFlag {
     RFLExpFlag_OpenMouth = 0x1 << RFLExp_OpenMouth
 };
 
+#pragma pack(push, 1)
 struct CreateID {
-    u8 data[8];
+    union {
+        struct {
+            u32 miiId;
+            u32 systemId;
+        };
+        struct {
+            u8 miiID0; //0x1a
+            u8 miiID1;
+            u8 miiID2;
+            u8 miiID3;
+            u8 systemID0; //0x1a
+            u8 systemID1;
+            u8 systemID2;
+            u8 systemID3;
+        };
+    };
 };
+size_assert(CreateID, 0x8);
+#pragma pack(pop)
+
 typedef u16 IDX;
 
 struct AdditionalInfo { //rlwinm (dolphin masks)
@@ -162,20 +181,12 @@ struct StoreData { //http://wiibrew.org/wiki/Mii_data#Mii_format
     u16 favColor : 4;
     u16 isFavorite : 1;
     wchar_t miiName[10]; //0x2
-    // addr: 0x16 - 0x17
+    //addr: 0x16 - 0x17
     u8 height;
     u8 weight;
-    // addr: 0x18 - 0x1B
-    u8 miiID1;
-    u8 miiID2;
-    u8 miiID3;
-    u8 miiID4;
-    // addr: 0x1C through 0x1F
-    u8 systemID0;
-    u8 systemID1;
-    u8 systemID2;
-    u8 systemID3;
-    // addr: 0x20 & 0x21
+    //addr: 0x18 - 0x1B ultimately what constitude a RFL::CreateID
+    RFL::CreateID createID; //0x18
+    //addr: 0x20 & 0x21
     u16 faceShape : 3;
     u16 skinColor : 3;
     u16 facialFeature : 4;
@@ -183,12 +194,12 @@ struct StoreData { //http://wiibrew.org/wiki/Mii_data#Mii_format
     u16 mingleOff : 1;
     u16 unknown2 : 1;
     u16 downloaded : 1;
-    // addr: 0x22 & 0x23
+    //addr: 0x22 & 0x23
     u16 hairType : 7;
     u16 hairColor : 3;
     u16 hairPart : 1;
     u16 unknown3 : 5;
-    // addr: 0x24 through 0x27
+    //addr: 0x24 through 0x27
     u32 eyebrowType : 5;
     u32 unknown4 : 1;
     u32 eyebrowRotation : 4;
@@ -197,7 +208,7 @@ struct StoreData { //http://wiibrew.org/wiki/Mii_data#Mii_format
     u32 eyebrowSize : 4;
     u32 eyebrowVertPos : 5;
     u32 eyebrowHorizSpacing : 4;
-    // addr: 0x28 through 0x2B
+    //addr: 0x28 through 0x2B
     u32 eyeType : 6;
     u32 unknown6 : 2;
     u32 eyeRotation : 3;
@@ -207,36 +218,36 @@ struct StoreData { //http://wiibrew.org/wiki/Mii_data#Mii_format
     u32 eyeSize : 3;
     u32 eyeHorizSpacing : 4;
     u32 unknown8 : 5;
-    // addr: 0x2C & 0x2D
+    //addr: 0x2C & 0x2D
     u16 noseType : 4;
     u16 noseSize : 4;
     u16 noseVertPos : 5;
     u16 unknown9 : 3;
-    // addr: 0x2E & 2F
+    //addr: 0x2E & 2F
     u16 lipType : 5;
     u16 lipColor : 2;
     u16 lipSize : 4;
     u16 lipVertPos : 5;
-    // addr: 0x30 & 0x31
+    //addr: 0x30 & 0x31
     u16 glassesType : 4;
     u16 glassesColor : 3;
     u16 unknown10 : 1;
     u16 glassesSize : 3;
     u16 glassesVertPos : 5;
-    // addr: 0x32 & 33
+    //addr: 0x32 & 33
     u16 mustacheType : 2;
     u16 beardType : 2;
     u16 facialHairColor : 3;
     u16 mustacheSize : 4;
     u16 mustacheVertPos : 5;
-    // addr: 0x34 & 0x35
+    //addr: 0x34 & 0x35
     u16 moleOn : 1;
     u16 moleSize : 4;
     u16 moleVertPos : 5;
     u16 moleHorizPos : 5;
     u16 unknown11 : 1;
     wchar_t creatorName[10]; //0x36
-    u16 crc16;
+    u16 crc16; //0x4a
 }; //total size 0x4C
 size_assert(StoreData, 0x4c);
 #pragma pack(pop)
@@ -258,9 +269,21 @@ struct Manager {
     u8 heapBuffer[0x620A4]; //heap of size 0x620e0
 };
 
+struct WiFiInformation {
+    u8 miiPerAid;
+    u8 maxAid;
+    u16 localAid;
+    u32 unknown_0x4[2];
+    void* buffer; //0xc just an array of WiFiPackets
+};
 
-
-
+struct WiFiPacket {
+    u32 presentMiis; //bitfield
+    u16 maxMiiCount; //0x4
+    u16 unknown_0x6;
+    RFL::StoreData rawMiis[2]; //0x8 technically not 2 but in mariokartwii, exclusively 2
+}; //0xa0
+size_assert(WiFiPacket, 0xa0);
 
 }//namespace RFL
 

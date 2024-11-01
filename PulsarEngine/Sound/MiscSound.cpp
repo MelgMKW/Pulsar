@@ -1,8 +1,8 @@
 #include <kamek.hpp>
-#include <core/nw4r/snd.hpp>
-#include <MarioKartWii/Audio/RaceMgr.hpp>
-#include <MarioKartWii/Audio/RSARPlayer.hpp>
+#include <MarioKartWii/Audio/AudioManager.hpp>
+#include <MarioKartWii/Audio/SinglePlayer.hpp>
 #include <MarioKartWii/Audio/Other/AudioStreamsMgr.hpp>
+#include <MarioKartWii/UI/Section/SectionMgr.hpp>
 #include <Sound/MiscSound.hpp>
 #include <Settings/Settings.hpp>
 
@@ -12,7 +12,7 @@ using namespace nw4r;
 
 //RaceAudioMgr SetRaceState patch that skips the entire func, effectively disabling the mgr
 static void DisableRaceMusic(Audio::SinglePlayer& singlePlayer, u32 soundId, s16 delay) {
-    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
+    const bool isEnabled = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
     if(isEnabled) singlePlayer.PlaySound(soundId, delay);
 }
 kmCall(0x80711fcc, DisableRaceMusic); //RaceMgr::SetRaceState
@@ -23,33 +23,34 @@ kmCall(0x8064a398, DisableRaceMusic); //wifi waiting, hook at Page::LiveViewWait
 kmCall(0x8064a340, DisableRaceMusic); //wifi waiting
 
 static void PreventPrepareRaceMusic(u32 unused, Audio::Handle* handle, u32 soundId) {
-    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
+    const bool isEnabled = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
     if(isEnabled) Audio::Manager::sInstance->PrepareSound(handle, soundId);
 }
 kmCall(0x806f8eb4, PreventPrepareRaceMusic);
 
 static void DisableMenuMusic(Audio::SinglePlayer& singlePlayer, u32 soundId, s16 delay) {
-    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
+    const bool isEnabled = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
     if(isEnabled) singlePlayer.PlaySound(soundId, delay);
 }
 kmCall(0x806fa64c, DisableMenuMusic);
 
 static void DisableAndChangeBGMusic(Audio::SinglePlayer& singlePlayer, u32 soundId) {
-    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
+    const bool isEnabled = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
     if(isEnabled) {
         const char* customBGPath = nullptr;
         if(soundId == SOUND_ID_TITLE) customBGPath = titleMusicFile;
         else if(soundId == SOUND_ID_OFFLINE_MENUS) customBGPath = offlineMusicFile;
         else if(soundId == SOUND_ID_WIFI_MUSIC) customBGPath = wifiMusicFile;
         if(customBGPath != nullptr) {
-            DVDFileInfo info;
-            BOOL ret = DVDOpen(customBGPath, &info);
+            DVD::FileInfo info;
+            BOOL ret = DVD::Open(customBGPath, &info);
             if(ret) {
+                DVD::Close(&info);
                 if(info.length > 0) {
                     soundId = SOUND_ID_KC;
                     singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
                 }
-                DVDClose(&info);
+
             }
         }
         singlePlayer.PlaySound(soundId, 0);
@@ -83,7 +84,7 @@ static snd::SoundArchive::SoundType PatchPrepareStreamsBG(snd::SoundArchive& arc
 kmCall(0x806fa2fc, PatchPrepareStreamsBG);
 
 static void ToggleMenuMusic() {
-    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
+    const bool isEnabled = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) != MENUSETTING_MUSIC_DISABLE_ALL;
     Audio::SinglePlayer* singlePlayer = Audio::SinglePlayer::sInstance;
     if(isEnabled) singlePlayer->PlayBGSound(2);
     else singlePlayer->StopSound();
@@ -91,7 +92,7 @@ static void ToggleMenuMusic() {
 Settings::Hook ToggleMenuMusicHook(ToggleMenuMusic);
 
 static float CheckFanfare(const Audio::SinglePlayer& singlePlayer) {
-    const bool isEnabled = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
+    const bool isEnabled = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_MENU, SETTINGMENU_RADIO_MUSIC) == MENUSETTING_MUSIC_DEFAULT;
     if(isEnabled) return singlePlayer.GetFanfareLength();
     else return -1.0f;
 }
@@ -102,7 +103,7 @@ snd::SoundStartable::StartResult PlayExtBRSEQ(snd::SoundStartable& startable, Au
     startInfo.seqSoundInfo.startLocationLabel = labelName;
     startInfo.enableFlag |= snd::SoundStartable::StartInfo::ENABLE_SEQ_SOUND_INFO;
 
-    void* file = ArchiveRoot::sInstance->GetFile(ARCHIVE_HOLDER_COMMON, fileName);
+    void* file = ArchiveMgr::sInstance->GetFile(ARCHIVE_HOLDER_COMMON, fileName);
     if(file != nullptr) {
         startInfo.seqSoundInfo.seqDataAddress = file;
         if(hold) return startable.detail_HoldSound(&handle, SOUND_ID_MINITURBO, &startInfo);

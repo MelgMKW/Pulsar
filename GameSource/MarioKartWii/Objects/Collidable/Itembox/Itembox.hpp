@@ -8,7 +8,7 @@ namespace Objects {
 
 class Itembox : public ObjectCollidable { //ObjectNum 0x65 = 101
     explicit Itembox(const KMP::Holder<GOBJ>& gobjHolder); //808285b0
-
+    explicit Itembox(const Vec3& position); //8082876c
     ~Itembox() override; //806c4f74 vtable 808d7bc0
     void Update() override; //0x14 80828860
     u32 GetPropertiesBitfield() override; //0x2c 806c69fc
@@ -16,7 +16,7 @@ class Itembox : public ObjectCollidable { //ObjectNum 0x65 = 101
     void UpdateModelMatrix() override; //0x6c 806c69e4
     void UpdateShadow() override; //0x70 806c6a84
     void UpdateModelScale() override; //0x78 806c69e0
-    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 80828cb8
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 80828cb8
     void OnWallCollision(const Kart::Player& kartPlayer, Vec3 position) override; //0xc8 806c69dc
     bool IsSolid() const override; //806c69d4
     virtual bool IsActive() const; //0xec 806c69c0

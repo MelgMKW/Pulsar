@@ -6,7 +6,7 @@
 #include <MarioKartWii/System/Random.hpp>
 #include <MarioKartWii/Mii/MiiHeadsModel.hpp>
 #include <MarioKartWii/3D/Model/ModelDirector.hpp>
-
+#include <MarioKartWii/System/StatePtmfTrigger.hpp>
 
 class GlobeMii {
 public:
@@ -37,16 +37,11 @@ public:
 };
 size_assert(GlobeMii, 0x1a8);
 
-class EarthModel {
+class EarthModel : public StatePtmfTrigger<EarthModel> {
 public:
     EarthModel(); //8074d700
-    virtual ~EarthModel(); //8074dcc8 vtable 808cbdb0
-    u8 unknown_0x4[0x10 - 0x4];
-    u16 unknown_0x10;
-    u8 unknown_0x12[0x2];
-    u16* unknown_array0x14; //0x14 44 u16
-    void* ptmfStruct; //0x18
-    EarthModel* self; //0x1c probably a substruct
+    ~EarthModel() override; //8074dcc8 vtable 808cbdb0
+
     ModelDirector* earth; //0x20 earth.mdl0 of dummy_tex.brres below
     ModelDirector* ef_galaxy; //0x24 mdl0 of galaxy.brres
     ModelDirector* blackBoard; //0x28 of same name brres

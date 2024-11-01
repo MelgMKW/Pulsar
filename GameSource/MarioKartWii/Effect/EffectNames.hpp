@@ -32,7 +32,7 @@ enum RaceEffects {
     rk_startMiss, //0x258
     rk_effect_0x25c,
     rk_spinHalfL, //0x260
-    rk_spinL,
+    rk_spinL,     //0x264
     rk_spinHalfL_2, //0x268
     rk_spinL_2,
     rk_crashWater, //0x270

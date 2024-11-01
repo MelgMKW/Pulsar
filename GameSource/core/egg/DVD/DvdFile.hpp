@@ -1,8 +1,8 @@
 #ifndef _EGGDVDFILE_
 #define _EGGDVDFILE_
 #include <types.hpp>
-#include <core/rvl/OS/Mutex.hpp>
-#include <core/rvl/OS/Message.hpp>
+#include <core/rvl/os/OSMutex.hpp>
+#include <core/rvl/os/OSMessage.hpp>
 #include <core/rvl/dvd/dvd.hpp>
 #include <core/nw4r/ut/List.hpp>
 
@@ -19,7 +19,7 @@ class DvdFile {
     virtual bool open2(const char* path); //80222530 calls open so idk
 
     void Initiate(); //80222408
-    void doneProcess(u32 r3, DVDFileInfo* fileInfo); //802226bc
+    void doneProcess(u32 r3, DVD::FileInfo* fileInfo); //802226bc
     static void initialize(); //8022231c
 
     bool isBusy; //0x4
@@ -27,7 +27,7 @@ class DvdFile {
     OS::Mutex mutex; //0x8
     OS::Mutex mutex2; //0x20
     u32 unknown_0x38;
-    DVDFileInfo fileInfo; //0x3c might be file info
+    DVD::FileInfo fileInfo; //0x3c might be file info
     u32 unknown_0x78;
     OS::MessageQueue msgqueue; //0x7c
     OS::Message msg; //0x9c idk the exact type

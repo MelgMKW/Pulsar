@@ -1,15 +1,15 @@
 #include <kamek.hpp>
 #include <MarioKartWii/KMP/KMPManager.hpp>
-#include <MarioKartWii/Race/RaceInfo/RaceInfo.hpp>
+#include <MarioKartWii/Race/Raceinfo/Raceinfo.hpp>
 #include <MarioKartWii/Kart/KartPointers.hpp>
 
-s16 COOB(KMP::Manager* kmpMgr, const Vec& position, u32 areaIdToTestFirst, u8 areaType) {
+s16 COOB(KMP::Manager* kmpMgr, const Vec3& position, u32 areaIdToTestFirst, u8 areaType) {
 
     s16 foundIdx = kmpMgr->FindAREA(position, areaIdToTestFirst, areaType);
     if(foundIdx >= 0) {
         register Kart::Collision* collision;
         asm(mr collision, r31;);
-        RaceInfoPlayer* raceInfoPlayer = RaceInfo::sInstance->players[collision->link.pointers->values->playerIdx];
+        RaceinfoPlayer* raceInfoPlayer = Raceinfo::sInstance->players[collision->pointers->values->playerIdx];
 
         AREA* area = kmpMgr->areaSection->holdersArray[foundIdx]->raw;
         u16 s1 = area->setting1;

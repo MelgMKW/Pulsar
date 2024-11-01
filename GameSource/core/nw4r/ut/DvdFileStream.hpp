@@ -9,13 +9,13 @@ namespace ut {
 class DvdFileStream : public FileStream {
 public:
     class DvdFileStreamInfo {
-        DVDFileInfo dvdInfo;
+        DVD::FileInfo dvdInfo;
         DvdFileStream* stream;
     };
     explicit DvdFileStream(s32 entryNum); //800b00d0
-    explicit DvdFileStream(const DVDFileInfo* openedFile, bool closeEnable = true); //800b0190
+    explicit DvdFileStream(const DVD::FileInfo* openedFile, bool closeEnable = true); //800b0190
 
-    void* GetRuntimeTypeInfo() const override; //800b0690 vtable 80274c40
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //800b0690 vtable 80274c40
     ~DvdFileStream() override; //0xc 800b02c0
     void Close() override; //0x10 800b0340
     s32 Read(void* buf, u32 length) override; //0x14 800b0390
@@ -41,8 +41,8 @@ public:
     virtual s32 Peek(void* buffer, u32 length); //0x5c 800b0520
     virtual bool PeekAsync(void* buffer, u32 length, IOStreamCallback callback, void* cbArg); //0x60 800b0560
 
-    static void DvdAsyncCallback_(s32 result, DVDFileInfo* fileInfo); //800b0070
-    static void DvdCBAsyncCallback_(s32 result, DVDCommandBlock* block); //800b00a0
+    static void DvdAsyncCallback_(s32 result, DVD::FileInfo* fileInfo); //800b0070
+    static void DvdCBAsyncCallback_(s32 result, DVD::CommandBlock* block); //800b00a0
 
 
     FilePosition position; //14

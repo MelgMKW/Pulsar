@@ -9,7 +9,7 @@
 
 namespace Kart {
 
-class Killer { //bullet bill
+class Killer : public Link { //bullet bill
 public:
     class ModelCalc : public ModelCalcCallback {
     public:
@@ -27,7 +27,7 @@ public:
     void UpdateDuration(); //8059cc60 this function controls don't drop, the bill's duration etc...
     void Init(); //8059be8c
     void ToggleVisible(bool isVisible); //8059c0b8
-    Link link;
+
     virtual ~Killer(); //8059de9c vtable 808b687c at 0xC
     u8 nextITPT;
     u8 curITPT;

@@ -8,9 +8,9 @@ namespace ut {
 class DvdLockedFileStream : public DvdFileStream {
 public:
     explicit DvdLockedFileStream(s32 entryNum); //800b06b0
-    explicit DvdLockedFileStream(const DVDFileInfo* openedFile, bool closeEnable = true); //800b0740
+    explicit DvdLockedFileStream(const DVD::FileInfo* openedFile, bool closeEnable = true); //800b0740
 
-    void* GetRuntimeTypeInfo() const override; //80091610 vtable 80274ca8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //80091610 vtable 80274ca8
     ~DvdLockedFileStream() override; //0xc 800b07d0
     void Close() override; //0x10 800b0830
     s32 Read(void* buf, u32 length) override; //0x14 800b0870

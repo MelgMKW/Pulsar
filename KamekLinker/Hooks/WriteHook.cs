@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Kamek.Commands;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Kamek.Commands;
 
 namespace Kamek.Hooks
 {
     class WriteHook : Hook
     {
-        public WriteHook(bool isConditional, Word[] args, AddressMapper mapper)
+        public WriteHook(Linker.HookData data, AddressMapper mapper)
         {
-            if (args.Length != (isConditional ? 4 : 3))
+            uint dataType = data.type;
+            Word[] args = data.args;
+            bool isConditional = dataType == 2;
+            bool isRegion = dataType == 3;
+            if (args.Length != ((isConditional || isRegion) ? 4 : 3))
                 throw new InvalidDataException("wrong arg count for WriteCommand");
 
+            if (isRegion)
+            {
+                char region = (char)GetValueArg(args[3]).Value;
+                if (region != Program._curVer.ToCharArray()[0]) return;
+            }
             // expected args:
             //   address  : pointer to game code
             //   value    : value, OR pointer to game code or to Kamek code
@@ -23,7 +27,8 @@ namespace Kamek.Hooks
             Word address, value;
             Word? original = null;
 
-            address = GetAbsoluteArg(args[1], mapper);
+            if (isRegion) address = args[1];
+            else address = GetAbsoluteArg(args[1], mapper);
             if (type == WriteCommand.Type.Pointer)
             {
                 value = GetAnyPointerArg(args[2], mapper);

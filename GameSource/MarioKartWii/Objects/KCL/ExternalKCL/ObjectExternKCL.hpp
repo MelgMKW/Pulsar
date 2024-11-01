@@ -49,22 +49,22 @@ public:
     void InitCollision() override; //0xb8 8081ab4c
 
     bool vf_0xc0(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xc0 806810f8
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xc0 806810f8
     bool vf_0xc4(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xc4 806811b0
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xc4 806811b0
     bool vf_0xc8(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xc8 80681268
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xc8 80681268
     bool vf_0xcc(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xcc 80681320
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xcc 80681320
 
     bool IsCollidingNoTerrainInfoNoTriangleCheck(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xd0 80680df4
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xd0 80680df4
     bool IsCollidingAddEntryNoTerrainInfoNoTriangleCheck(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xd4 80680ef0
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xd4 80680ef0
     bool IsColliding(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xd8 80680fec
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xd8 80680fec
     bool IsCollidingNoTriangleCheck(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xdc 806810e8
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xdc 806810e8
     void UpdateKCL(const Vec3& position, KCLBitfield accepted, bool isBiggerThanDefaultScale, float radius) override; //0xe0 806807e8
 
     bool IsCollidingNoTerrainInfo(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
@@ -77,13 +77,13 @@ public:
         KCLTypeHolder* ret) override; //0xf0 80680d3c
 
     bool IsCollidingNoTerrainInfo(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xf4 806807f0
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xf4 806807f0
     bool IsCollidingAddEntryNoTerrainInfo(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xf8 806808fc
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xf8 806808fc
     bool vf_0xfc(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0xfc 80680a08
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0xfc 80680a08
     bool IsCollidingAddEntry(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
-        KCLTypeHolder* ret, u32 initialTime, float radius) override; //0x100 80680b04
+        KCLTypeHolder* ret, u32 timeOffset, float radius) override; //0x100 80680b04
 
 
     bool AreItemsAllowed() override; //0x104 80687d68
@@ -94,25 +94,25 @@ public:
     void UpdateOtherEntityPosWithRot(CollisionInfo::ObjInfo* otherEntityObjInfo, Vec3& newEntityPos, Vec3& newEntityDir) override; //0x118 80687d58
     int vf_0x11c(CollisionInfo::ObjInfo* otherEntityObjInfo) override; //0x11c 807fea58
 
-    virtual void UpdateCollisionPosition(u32 r4); //0x120 8081ad6c
+    virtual void UpdateCollisionPosition(u32 timeOffset = 0); //0x120 8081ad6c has check in place to only update once per frame
     virtual void SetYScale(); //0x124 8081af28 //something vertical scale
     virtual void UpdateDiffPosVector(const Vec3& src); //0x128 80681450
-    virtual const Mtx34& GetTransformationMatrix(u32 framesOffset) const; //0x12c 807feac0
+    virtual const Mtx34& GetTransformationMatrix(u32 framesOffset); //0x12c 807feac0
     virtual float GetYScale() const; //0x130 80687db0
     virtual float GetPeriod() const; //0x134 8068143c
     virtual bool HasCurrentCollision(); //0x138 806808ec
     virtual bool IsSolidForLakitu(); //0x13c 806808f4
-    virtual bool vf_0x140(); //0x140 806809f8
+    virtual bool HasCollision(); //0x140 806809f8
     virtual bool IsDriveable(); //0x144 80680a00
     virtual bool IsCollidingNoTriangleCheckImpl(const Vec3& pos, const Vec3& prevPos,
-        KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, u32 initialTime, float radius); //0x148 8081afb4
+        KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, u32 timeOffset, float radius); //0x148 8081afb4
     virtual bool IsCollidingImpl(const Vec3& pos, const Vec3& prevPos,
-        KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, u32 initialTime, float radius); //0x14c 8081b16c
+        KCLBitfield accepted, CollisionInfo* info, KCLTypeHolder* ret, u32 timeOffset, float radius); //0x14c 8081b16c
 
     ObjectKCLController* kclController; //0xAC
     Vec3 diffPrevCurPosition; //0xB0 Cur - Prev 
     u8 unknown_0xbc[0xFC - 0xbc];
-    u32 timer; //0xFC resets when equal to raceinfo's global timer
+    u32 timer; //0xFC resets when equal to raceinfo's global timer, this prevents the collision from updating more than once per frame
     u8 unknown_0x100[4];
 };
 size_assert(ObjectExternKCL, 0x104);

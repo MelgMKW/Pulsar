@@ -1,6 +1,7 @@
 #ifndef _WPAD_
 #define _WPAD_
 #include <types.hpp>
+#include <core/rvl/WUD.hpp>
 
 namespace WPAD { //Wireless PAD, low-level wii remote library
 
@@ -188,6 +189,7 @@ s32 GetStatus(); //801bf64c
 
 
 u8 GetRadioSensitivity(s32 channel); //801bf650
+void GetAddress(s32 chan, WUD::BTD_ADDR* addr); //801bf694
 u8 GetSensorBarPosition(); //801bf714
 void GetAccGravityUnit(s32 channel, u32 type, Acc* acc); //801c07d0
 void Disconnect(s32 channel); //801c08cc

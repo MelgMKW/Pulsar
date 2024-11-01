@@ -1,5 +1,4 @@
 #include <kamek.hpp>
-#include <PulsarSystem.hpp>
 #include <IO/NANDIO.hpp>
 
 namespace Pulsar {

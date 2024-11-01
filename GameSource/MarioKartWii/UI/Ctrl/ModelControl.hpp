@@ -10,7 +10,7 @@ class BackGroundModelControl : public LayoutUIControl {
     ~BackGroundModelControl() override; //805f2d6c vtable 808b9b84
     void InitSelf() override; //0x18 805f2ea4
     void OnUpdate() override; //0x1c 805f2ea8
-    int GetRuntimeTypeInfo() const override; //0x28 805f4fa0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805f4fa0
     const char* GetClassName() const override; //0x2c 805f2d24
     void Load(const char* ctrName, u8 type); //805f2dc4
     void RequestModel(BackModelType type); //805f2e84
@@ -29,7 +29,7 @@ public:
     void InitSelf() override; //805f44c0
     void OnUpdate() override; //805f45f8
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //805f4cfc
-    int GetRuntimeTypeInfo() const override; //805f4f7c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //805f4f7c
     const char* GetClassName() const override; //805f42a4
     void Load(const char* ctrName, u8 hudSlotId); //805f4348
     void SetAnimationType(PageId id); //805f44a0
@@ -49,7 +49,7 @@ public:
     void InitSelf() override; //0x18 805f3c8c
     void OnUpdate() override; //0x1c 805f3cf8
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 805f40a4
-    int GetRuntimeTypeInfo() const override; //805f4f88
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //805f4f88
     const char* GetClassName() const override; //805f39ac
     void Load(const char* ctrName, u8 hudSlotId); //805f3a50
     void RequestModel(KartId id); //805f3bc4
@@ -71,7 +71,7 @@ public:
     void InitSelf() override; //0x18 805f3568
     void OnUpdate() override; //0x1c 805f356c
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 805f37e4
-    int GetRuntimeTypeInfo() const override; //805f4f94
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //805f4f94
     const char* GetClassName() const override; //805f3238
     void Load(const char* ctrName, u8 hudSlotId); //805f32dc
     void SetAnimationType(PageId id); //805f346c sets 0x180

@@ -26,7 +26,7 @@ class W_Itembox : public ObjectCollidable { //ObjectNum 0xd3 = 211
         u32 GetPropertiesBitfield() override; //0x2c 8076cf70
         const char* GetBRRESName() const override; //0x34 8076cf58
         const char* GetSubFileName() const override; //0x38 8076cf64
-        ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 8076cefc
+        ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 8076cefc
         ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
             ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 8076cf34
 

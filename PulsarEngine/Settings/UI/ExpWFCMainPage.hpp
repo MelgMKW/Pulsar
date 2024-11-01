@@ -21,7 +21,23 @@ private:
     PtmfHolder_2A<ExpWFCMain, void, PushButton&, u32> onSettingsClick;
     PushButton settingsButton;
 public:
-    PageId topSettingsPage;
+    PulPageId topSettingsPage;
+};
+
+class ExpWFCModeSel : public Pages::WFCModeSelect {
+public:
+    ExpWFCModeSel() : lastClickedButton(0) {
+        this->onButtonSelectHandler.ptmf = &ExpWFCModeSel::OnModeButtonSelect;
+        this->onModeButtonClickHandler.ptmf = &ExpWFCModeSel::OnModeButtonClick;
+    }
+    static void InitOTTButton(ExpWFCModeSel& self);
+    static void OnActivatePatch();
+private:
+    void OnModeButtonSelect(PushButton& modeButton, u32 hudSlotId); //8064c718
+    void OnModeButtonClick(PushButton& PushButton, u32 r5);
+    PushButton ottButton;
+    u32 lastClickedButton;
+    static const u32 ottButtonId = 4;
 };
 }//namespace UI
 }//namespace Pulsar

@@ -1,6 +1,5 @@
 #include <kamek.hpp>
-#include <MarioKartWii/Kart/KartManager.hpp>
-#include <MarioKartWii/Race/RaceInfo/RaceInfo.hpp>
+#include <MarioKartWii/Race/Raceinfo/Raceinfo.hpp>
 #include <MarioKartWii/Audio/RSARPlayer.hpp>
 #include <MarioKartWii/Audio/RaceMgr.hpp>
 #include <MarioKartWii/Audio/Actors/KartActor.hpp>
@@ -20,11 +19,11 @@ using namespace nw4r;
 static void MusicSpeedup(Audio::RaceRSARPlayer* rsarSoundPlayer, u32 jingle, u8 hudSlotId) {
     //static u8 hudSlotIdFinalLap;
 
-    u8 isSpeedUp = Settings::Mgr::GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SPEEDUP);
+    u8 isSpeedUp = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_RACE, SETTINGRACE_RADIO_SPEEDUP);
     Audio::RaceMgr* raceAudioMgr = Audio::RaceMgr::sInstance;
     const u8 maxLap = raceAudioMgr->maxLap;
     const u8 curLap = raceAudioMgr->lap;
-    const RacedataSettings& raceDataSettings = RaceData::sInstance->racesScenario.settings;
+    const RacedataSettings& raceDataSettings = Racedata::sInstance->racesScenario.settings;
     //const u8 idFirstFinalLap = hudSlotIdFinalLap;
     if(maxLap == 1) return;
     if(maxLap == raceDataSettings.lapCount) {
@@ -33,7 +32,7 @@ static void MusicSpeedup(Audio::RaceRSARPlayer* rsarSoundPlayer, u32 jingle, u8 
         asm(mr kartActor, r29;);
         snd::detail::BasicSound& sound =  kartActor->soundArchivePlayer->soundPlayerArray[0].soundList.GetFront();
         if(isSpeedUp == RACESETTING_SPEEDUP_ENABLED || sound.soundId == SOUND_ID_GALAXY_COLOSSEUM) {
-            const RaceInfo* raceInfo = RaceInfo::sInstance;
+            const Raceinfo* raceInfo = Raceinfo::sInstance;
             const Timer& raceTimer = raceInfo->timerMgr->timers[0];
             const Timer& playerTimer = raceInfo->players[raceDataSettings.hudPlayerIds[hudSlotId]]->lapSplits[maxLap - 2];
             const Timer difference = CtrlRaceGhostDiffTime::SubtractTimers(raceTimer, playerTimer);

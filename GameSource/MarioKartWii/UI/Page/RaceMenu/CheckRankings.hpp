@@ -9,7 +9,7 @@ public:
     static const PageId id = PAGE_CHECK_RANKINGS;
     CheckRankings(); //806250ac
     ~CheckRankings() override; //8063259c vtable 808bd440
-    int GetRuntimeTypeInfo() const override; //0x60 80632608
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80632608
     int GetMessageBMG() const override; //0x68 8063256c
     u32 GetButtonCount() const override; //0x6c 80632594
     const u32* GetVariantsIdxArray() const override; //0x70 80632588

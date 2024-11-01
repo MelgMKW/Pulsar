@@ -13,7 +13,7 @@ public:
     ~TTLeaderboard() override; //8085e438 vtable 808daabc
     PageId GetNextPage() const override; //0x10 8085dc44
     void OnInit() override; //0x28 8085d564
-    int GetRuntimeTypeInfo() const override; //0x60 8085e4b8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8085e4b8
     void FillRows() override; //0x68 8085d78c
     int GetRowCount() const override; //0x70 8085d784 returns 6
 

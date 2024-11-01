@@ -42,12 +42,16 @@ public:
     virtual void Calc(); //0x18 800338b0
     virtual void Draw(const DrawInfo& drawInfo); //0x1c 80034f80
 
+    void Modifier_SetSimpleLightAmbient(const GX::Color& ambient); //802238d0
+    void Modifier_SetSimpleLightType(u8 type); //802238f4
+    void Modifier_SetScale(math::VEC2& newScale); //80223a1c
+    void Modifier_SetRotate(const math::VEC3& newRotate); //80223b50
     Emitter* managerEM; //0x20
     EmitterResource* resource; //0x24
     u32 flag; //0x28
     DrawStrategy* drawStrategy; //0x2c
     ut::Link drawOrderLink; //0x30
-    ActivityList activityList; //0x38
+    ActivityList activityList; //0x38 list of Particle
     Particle* lastCalced; //0x54
     ParticleModifier modifier; //0x58
     u8 padding[2];

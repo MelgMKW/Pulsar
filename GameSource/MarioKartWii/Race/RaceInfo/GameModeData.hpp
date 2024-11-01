@@ -7,7 +7,7 @@
 #include <MarioKartWii/KMP/KMPManager.hpp>
 #include <MarioKartWii/RKNet/RH2.hpp>
 
-class RaceInfo;
+class Raceinfo;
 class GMData { //Abstract
 public:
     virtual bool CanRaceEnd() = 0;
@@ -17,13 +17,13 @@ public:
     virtual const KMP::Holder<JGPT>* GetRespawnPoint(u8 playerId); //0x18 80535ef4
     virtual void Init(); //0x1c 8053308c
     virtual void vf_0x20(); //0x20 80533be8
-    virtual void vf_0x24(); //0x24 80533c34
+    virtual bool vf_0x24(u32 playerThatHaveFinished, u32 playerCount); //0x24 80533c34
     virtual void vf_0x28(); //0x28 805371a4
-    RaceInfo* raceinfo;
+    Raceinfo* raceinfo;
 }; //Total size 0x8
 
 class GMDataGP : public GMData {
-    GMDataGP(RaceInfo* raceinfo); //80532124 inlined
+    GMDataGP(Raceinfo* raceinfo); //80532124 inlined
     bool CanRaceEnd() override; //0x8 80535f28 vtable 808b344c
     void Update() override; //0x10 80535fe4
     KRT* rawKRT; //0x8 ranktimeGP.krt
@@ -114,7 +114,7 @@ public:
     void Update() override; //0x10 8053f2a4
     void HandlePositionTracking() override; //0x14 8053f4a0
     void Init() override; //0x1c 8053e370
-    void vf_0x24() override; //0x24 8053fb38
+    bool vf_0x24(u32 playerThatHaveFinished, u32 playerCount) override; //0x24 8053fb38
     GMDataOnlineVSPlayer players[12];
     RKNet::RACEHEADER2Packet rh2Packet; //0xf8
     u8 unknown_0x120[0xc];
@@ -123,7 +123,7 @@ public:
 
 class GMDataOnlineBalloonBattle : public GMDataBattle {
 public:
-    GMDataOnlineBalloonBattle(RaceInfo* raceinfo); //80539f88
+    GMDataOnlineBalloonBattle(Raceinfo* raceinfo); //80539f88
     bool CanRaceEnd() override; //0x8 8053d914 vtable 808b3570
     void Update() override; //0x10 8053bbf4
     void Init() override; //0x1c 80539c3c

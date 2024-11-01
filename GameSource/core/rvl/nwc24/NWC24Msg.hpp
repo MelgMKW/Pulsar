@@ -2,7 +2,7 @@
 #define _NWC24MSG_
 #include <types.hpp>
 #include <core/rvl/nwc24/NWC24Types.hpp>
-#include <core/rvl/OS/OS.hpp>
+#include <core/rvl/os/OS.hpp>
 
 namespace NWC24 { //this is C, but don't care
 

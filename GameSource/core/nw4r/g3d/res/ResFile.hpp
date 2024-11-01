@@ -32,7 +32,7 @@ struct ResFileData {
     ResTopLevelDictData dict;
 };
 
-class ResFile: public ResCommon<ResFileData> { //BRRES
+class ResFile : public ResCommon<ResFileData> { //BRRES
 public:
     bool CheckRevision() const; //8004d900
     void Init(); //8004d630
@@ -61,7 +61,9 @@ public:
     ResAnmShp GetResAnmShp(const char* str) const; //8004cd80
     ResAnmShp GetResAnmShp(const ResName name) const; //8004cdf0
     u32 GetResAnmShpNumEntries() const; //8004ce90
-
+    ResTex GetResTex(int idx) const; //8004c5d0
+    ResTex GetResTex(u32 idx) const; //8004c670
+    u32 GetResTexNumEntries() const; //8004c710
 
 };
 

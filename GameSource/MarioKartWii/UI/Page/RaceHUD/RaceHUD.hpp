@@ -8,12 +8,15 @@
 #include <MarioKartWii/UI/Ctrl/CtrlRace/CtrlRaceBalloon.hpp>
 
 class Pause;
+namespace Item {
+class Obj;
+}//namespace Item
 
 namespace Pages {
 class RaceHUD : public Page {
 public:
     //ctor inlined
-    static RaceHUD* sInstance;
+    static RaceHUD* sInstance; //809c4680
     ~RaceHUD() override; //80624764 vtable 808da710
     PageId GetNextPage() const override; //80633510
     void ChangeSectionByReinit() override; //80858a34
@@ -22,7 +25,7 @@ public:
     void OnDeactivate() override; //80858a18
     void BeforeControlUpdate() override; //0x48 80856cec extensively patched in advanced watch replay
     void AfterControlUpdate() override; //0x4c 808574b8 also patched in advanced watch replay
-    int GetRuntimeTypeInfo() const override; //0x60 80858c10 returns 809C4640
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80858c10 returns 809C4640
     virtual PageId GetPausePageId() const = 0; //0x64
     virtual int GetEnabledCtrlRaceBases() const = 0; //0x68, used for initctrlracebase
     virtual int GetCtrlRaceNameBalloonCount() const; //0x6c 80633d44, returns 0, 3 (as 0 counts) in vs mode, 1 in TTracepage etc...
@@ -36,16 +39,18 @@ public:
     void ChangeFocusedPlayer(u32 hudSlotId, u8 direction); //80856b74 direction = 0 -> next, direction = 1 -> prev
     void OnNextPlayerSwitch(u32 hudSlotId); //808569ac
     void OnPrevPlayerSwitch(u32 hudSlotId); //808569b4
+    void OnItemObjTargeting(const Item::Obj& objTargeting); //80858a50 calls RaceBalloons::OnObjTargeting
+    static void UpdateRaceBalloons(); //80858ae4
     static int GetLocalPlayerCount(); //80856ccc
-    u32 nextPageId;
+    u32 nextPageId; //0x44
     Timer timer; //0x48
     u8 countDown; //0x54 0 1 2 3 4, 4 at GO
     u8 unknown_0x55[3]; //probs padding
     CtrlRaceCount* ctrlRaceCountArray;  //0x58, 2 elements per hudSlot
     LayoutUIControl* ghostMessage; //GHOST CANNOT BE SAVED //0x5C
     bool hudHasPlayer[4]; //is true if there's a player 0x60
-    u32 focusedPlayerIdx;
-    bool hasChangePlayerRequest; //8085629c
+    u32 focusedPlayerIdx; //0x64
+    bool hasChangePlayerRequest; //0x68 8085629c
     u8 unknown_0x69[0x70 - 0x69];
     CtrlRaceWifiStartMessage** ctrlRaceWifiStartMessageArray; //0x70 one per hud slot only online
     CtrlRaceWifiFinishMessage** CtrlRaceWifiFinishMessageArray; //0x74 one per hud slot
@@ -53,7 +58,7 @@ public:
     Pause* pausePage; //0x7C, only set when in an actual pause, as an added page layer
     PageManipulatorManager manipulatorManager;
     PtmfHolder_1A<Page, void, u32>* onPauseHandler; //0x1c4
-    PtmfHolder_1A<Page, void, u32>* onNextPlayerSwitchHandler; //0x1c8
+    PtmfHolder_1A<Page, void, u32>* onNextPlayerSwitchHandler; //0x1c8 camera
     PtmfHolder_1A<Page, void, u32>* onPrevPlayerSwitchHandler; //0x1cc
     CtrlRaceNameBalloon* ctrlRaceNameBalloonArray; //0x1d0 as many as GetCtrlRaceNameBalloonCount, 3 names max?
     RaceBalloons* balloonClassArray; //0x1D4 one per hudslot

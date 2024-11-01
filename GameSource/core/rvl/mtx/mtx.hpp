@@ -4,6 +4,7 @@
 
 typedef float Mtx[3][4];
 struct Quaternion { float x, y, z, w; };
+struct Vec2D { float x, z; };
 struct Vec { float x, y, z; };
 typedef float Mtx44[4][4];
 
@@ -68,7 +69,7 @@ float PSVECSquareDistance(const Vec* sourceA, const Vec* sourceB); //8019ade0 (x
 
 
 void C_QUATMtx(Quaternion* dest, const Mtx source); //8019af48 mtx to quat
-void C_QUATLerp(const Quaternion* p, const Quaternion* q, Quaternion* r, f32 t); //8019b114 linear interpolation of two quat
+void C_QUATLerp(const Quaternion* p, const Quaternion* q, Quaternion* r, float t); //8019b114 linear interpolation of two quat
 void C_QUATSlerp(const Quaternion* sourceA, const Quaternion* sourceB, Quaternion* dest, float value); //8019b178 spherical linear interpolation
 
 

@@ -1,7 +1,7 @@
 #ifndef _NW4R_SNDPLAYERHEAP_
 #define _NW4R_SNDPLAYERHEAP_
 #include <types.hpp>
-#include <core/rvl/os/mutex.hpp>
+#include <core/rvl/os/OSmutex.hpp>
 #include <core/nw4r/snd/FrameHeap.hpp>
 #include <core/nw4r/snd/SoundMemoryAllocatable.hpp>
 namespace nw4r {

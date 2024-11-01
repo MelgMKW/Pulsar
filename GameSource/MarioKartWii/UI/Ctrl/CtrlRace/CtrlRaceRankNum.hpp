@@ -10,9 +10,9 @@ public:
     ~CtrlRaceRankNum() override; //807f4de0 vtable 808d3e98
     void Init() override; //0xc 807f48fc
     void OnUpdate() override; //0x1c 807f4a08
-    int GetRuntimeTypeInfo() const override; //0x28 807f4e3c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807f4e3c
     const char* GetClassName() const override; //0x2c 807f48f0
-    bool IsActive() override; //0x48 807f4d40
+    bool IsInactive() override; //0x48 807f4d40
 
     void Load(const char* variant, u8 hudSlotId); //807f4bb4
     u8 prevPosition; //0x198 compared against raceinfo's

@@ -3,8 +3,8 @@
 
 #include <types.hpp>
 #include <core/nw4r/snd.hpp>
-#include <core/rvl/os/thread.hpp>
-#include <core/rvl/os/message.hpp>
+#include <core/rvl/os/OSthread.hpp>
+#include <core/rvl/os/OSmessage.hpp>
 #include <core/rvl/arc/arc.hpp>
 #include <core/egg/mem/Heap.hpp>
 #include <core/egg/Audio/ArcPlayer.hpp>
@@ -66,7 +66,7 @@ public:
     ~SimpleAudioMgr() override; //thunk 802136a4 function 802133d4
     void* OpenDVDArchive(const char* filePath, snd::SoundHeap* heap) override; //thunk 802119fc function 8021361c
     void* OpenNANDArchive(const char* filePath, snd::SoundHeap* heap) override; //thunk 802119f4 function 80213624
-    void* OpenMemoryArchive(const char* filePath, ARCHandle* handle, snd::SoundHeap* heap) override; //thunk 802119ec function 8021362c
+    void* OpenMemoryArchive(const char* filePath, ARC::Handle* handle, snd::SoundHeap* heap) override; //thunk 802119ec function 8021362c
     int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap) override; //thunk 802119a4 function 80213634
     void CloseArchive() override; //thunk 8021199c function 8021363c
     //void Calc() override; //thunk 802119b4 func 802135d0
@@ -97,7 +97,7 @@ public:
     bool LoadState(u32 level) override; //thunk 802119ac func 80211900
     //ArcPlayer vtable 802a27b4
     ~ExpAudioMgr() override; //thunk 80211a0c func 802113b8
-    void* OpenArchive(const char* filePath, snd::SoundHeap* heap, u32 type, ARCHandle* handle) override; //thunk 80211a04 func 802115dc
+    void* OpenArchive(const char* filePath, snd::SoundHeap* heap, u32 type, ARC::Handle* handle) override; //thunk 80211a04 func 802115dc
     int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap) override; //thunk 802119dc 8021167c
     int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap, s32 r6) override; //thunk 802119e4 func 8021198c
     void CloseArchive() override; //thunk 802119d4 func 80211718

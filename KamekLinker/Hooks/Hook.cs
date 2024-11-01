@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Kamek.Hooks
 {
@@ -13,16 +10,12 @@ namespace Kamek.Hooks
         {
             switch (data.type)
             {
-                case 1:
-                    return new WriteHook(false, data.args, mapper);
-                case 2:
-                    return new WriteHook(true, data.args, mapper);
-                case 3:
-                    return new BranchHook(false, data.args, mapper);
-                case 4:
-                    return new BranchHook(true, data.args, mapper);
-                case 5:
-                    return new PatchExitHook(data.args, mapper);
+                case <= 3:
+                    return new WriteHook(data, mapper);
+                case <= 7:
+                    return new BranchHook(data, mapper);
+                case 8:
+                    return new PatchExitHook(data, mapper);
                 default:
                     throw new NotImplementedException("unknown command type");
             }

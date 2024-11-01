@@ -41,19 +41,22 @@ public:
     void dispose(); //destroys disposers
     void dump();
     static void dumpAll();
-    Heap* BecomeCurrentHeap() const; //returns old heap
+    Heap* BecomeCurrentHeap() const; //returns old heap there's an unused r4 arg
     Heap* becomeCurrentHeapWithoutLocking();
 private:
-    nw4r::ut::Link parentLink;
     MEM::iHeapHead* rvlHeap; //0x10
     void* parentHeapMBlock; //0x14
     Heap* parentHeap; //0x18
     u16 dameFlag; //0x1C
+    u8 padding[2];
     nw4r::ut::Link globalLink; //0x20
-    nw4r::ut::List childList; //0x28
+    nw4r::ut::List childList; //0x28 list of disposers
     const char* name; //0x34
 }; //total size 0x38
+size_assert(Heap, 0x38);
+
 }//namespace EGG
+
 
 void* operator new(size_t size, int alignment);
 
@@ -71,8 +74,8 @@ void* operator new[](size_t size, int alignment);
 void* operator new[](size_t size, EGG::Heap* heap, int alignment);
 
 inline void* operator new[](size_t size, EGG::Heap* heap)
-    {
-        return operator new[](size, heap, 4);
-    }
+{
+    return operator new[](size, heap, 4);
+}
 
 #endif

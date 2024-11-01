@@ -11,20 +11,39 @@ Contributors:
 -Melg
 */
 //_sinit_ at 8064d804
+
+//Anims do no follow the brctr, instead:
+/*
+Group State:
+0 Offline, 1 RandomMatching, 2 FriendParent
+Group State2:
+0 Offline2, 1 RandomMatching2, 2 FriendParent2
+*/
 class FriendStatusButton : public PushButton {
+public:
+    static const char stateAnmGroup[]; //80899984
+    static const char state2AnmGroup[]; //808999b8
+    static const char offlineAnm[]; //80899990
+    static const char randomMatchingAnm[]; //8089998
+    static const char friendParentAnm[]; //808999a8
+    static const char offline2Anm[]; //808999c0
+    static const char randomMatching2Anm[]; //808999d0
+    static const char friendParent2Anm[]; //808999e0
+
     FriendStatusButton(); //8064b2c0 inlined
     ~FriendStatusButton() override; //8064b2fc vtable 808bffc0
     void InitSelf(); //0x18 8064b444
     void OnUpdate(); //0x1c 8064b450
-    int GetRuntimeTypeInfo() const override; //0x28 8064d69c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8064d69c
     const char* GetClassName() const override; //0x2c 8064b2b4
-    void OnSelect() override; //0x40 8064b4c0
-    void OnDeselect() override; //0x44 8064b4c4
+    void OnSelect(u32 hudSlotId, u32 r5) override; //0x40 8064b4c0
+    void OnDeselect(u32 hudSlotId, u32 r5) override; //0x44 8064b4c4
 
     void Load(const char* folderName, const char* ctrName, const char* variant); //8064b354
     void UpdateButtonStatus(); //8064b4c8
-    u32 frames; //increments by 1 each frame, resets at 300
-    u32 unknown_0x25C; //idk
+    u32 frames; //increments by 1 each frame, resets at 300, used to know when to call updatestatus
+    u32 curStatus; //0x258 0 = nothing, 1 = public, 2 = froom 
+
 }; //total size 0x25C
 
 namespace Pages {
@@ -38,7 +57,7 @@ class Approve2PWFC : public Page { //ID 0x8a, just a wrapper that activates Appr
     void BeforeEntranceAnimations() override; //0x38 8064b15c
     void BeforeExitAnimations() override; //0x40 8064b160
     void OnResume() override; //0x54 8064b164
-    int GetRuntimeTypeInfo() const override; //0x60 8064d6a8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8064d6a8
 
     void OnApprove(Approve& approvePage); //8064b23c
 
@@ -55,7 +74,7 @@ public:
     PageId GetNextPage() const override; //8064d688
     void OnInit() override; //8064b910 
     void OnActivate() override; //8064bc90
-    int GetRuntimeTypeInfo() const override; //8064d690
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8064d690
 
     void OnWorldwideButtonClick(PushButton& button, u32 hudSlotId); //8064bce8
     void OnRegionalButtonClick(PushButton& button, u32 hudSlotId); //8064bdc4
@@ -85,15 +104,15 @@ class WFCModeSelect : public Page { //ID 0x8C
 public:
     static const PageId id = PAGE_WFC_MODE_SELECT;
     WFCModeSelect(); //8064bfd8
-    ~WFCModeSelect() override; //8064c170 vtable 808bfec8
+    ~WFCModeSelect() override; //8064c170
     PageId GetNextPage() const override; //8064d674
     void OnInit() override; //8064c220
     void OnActivate() override; //8064c4f8
-    int GetRuntimeTypeInfo() const override; //8064d67c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8064d67c
 
     void OnModeButtonClick(PushButton& modeButton, u32 hudSlotId); //8064c610
-    void OnModeButtonSelect(PushButton& modeButton, u32 hudSlotId); //8064c718
-    void OnBackButtonClick(CtrlMenuBackButton& backButton, u32 hudSlotId); //8064c75c
+    void OnBackButtonClick(CtrlMenuBackButton& backButton, u32 hudSlotId); //8064c718
+    void OnModeButtonSelect(PushButton& modeButton, u32 hudSlotId); //8064c75c
     void OnBackPress(u32 hudSlotId); //8064c7b0
 
     PtmfHolder_2A<WFCModeSelect, void, PushButton&, u32> onModeButtonClickHandler; //0x44 8064c610
@@ -107,7 +126,7 @@ public:
     CtrlMenuInstructionText bottomText; //0x914
     ControlsManipulatorManager manipulatorManager; //0xa88
     PageId nextPage; //0xCAC
-};//total size 0xf34
+};//total size 0xcb0
 size_assert(WFCModeSelect, 0xcb0);
 
 class WFCFriendsMenu : public Page { //ID 0x8D
@@ -119,7 +138,7 @@ public:
     void OnInit() override; //8064ca98
     void OnActivate() override; //8064cf18
     void OnDeactivate() override; //8064cff8
-    int GetRuntimeTypeInfo() const override; //8064d668
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8064d668
 
     void OnRosterButtonClick(FriendStatusButton& button, u32 hudSlotId); //8064d0a0
     void OnRegisterButtonClick(PushButton& button, u32 hudSlotId); //8064d1e8

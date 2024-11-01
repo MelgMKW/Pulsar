@@ -16,7 +16,7 @@ class MenuBG : public Menu { //ID 0x5B, also ID 0x5D just a layoutUIControl whic
 
     void BeforeEntranceAnimations() override; //0x38 80838dbc
     void AfterControlUpdate() override; //0x4c 80838da0
-    int GetRuntimeTypeInfo() const override; //0x60 80838e40
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80838e40
     int GetActivePlayerBitfield() const override; //0x68 80838dac
     int GetPlayerBitfield() const override; //0x6C; 80838da4
     ManipulatorManager& GetManipulatorManager() override; //0x70 80838db4

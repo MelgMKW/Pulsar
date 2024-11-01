@@ -2,6 +2,7 @@
 #include <core/nw4r/ut/Misc.hpp>
 #include <core/nw4r/snd/StrmFile.hpp>
 #include <core/nw4r/snd/StrmSound.hpp>
+#include <core/nw4r/snd/SoundStartable.hpp>
 #include <core/nw4r/snd/DVDSoundArchive.hpp>
 
 namespace Pulsar {
@@ -26,13 +27,25 @@ bool LoadBRSTMVolumeAndFixTrackCount(snd::detail::StrmFileLoader& fileLoader, sn
     }
     bool ret = fileLoader.ReadStrmInfo(&info);
     if(ret) {
-        sound->strmPlayer.channelsNeeded = ut::Min(sound->strmPlayer.channelsNeeded, info.channelCount);
-        sound->strmPlayer.trackCount = ut::Min(sound->strmPlayer.trackCount, info.channelCount / 2);
+        //sound->strmPlayer.channelsNeeded = ut::Max(2U, ut::Min(sound->strmPlayer.channelsNeeded, info.channelCount));
+        //sound->strmPlayer.trackCount = ut::Max(1U, ut::Min(sound->strmPlayer.trackCount, info.channelCount / 2));
+
+        snd::detail::StrmPlayer& player = sound->strmPlayer;
+        u32 brsarChannel = player.channelsNeeded;
+        u32 actual = ut::Min(sound->strmPlayer.channelsNeeded, info.channelCount);
+        for(int index = actual; index < brsarChannel; ++index) {
+            if(player.channels[index].bufferAddress == nullptr) continue;
+            player.strmBufferPool->Free(player.channels[index].bufferAddress);
+            player.channels[index].bufferAddress = nullptr;
+        }
+        player.channelsNeeded = actual;
+        sound->strmPlayer.trackCount = ut::Min(sound->strmPlayer.trackCount, (info.channelCount + 1) / 2);
     }
     return ret;
 }
 kmCall(0x800a66f4, LoadBRSTMVolumeAndFixTrackCount);
 //kmWrite32(0x800a66f0, 0x389DFF00);
+
 
 //Automatic BRSAR patching from Elias_
 void BRSAREntrySizePatch(snd::DVDSoundArchive::DVDFileStream* stream, s32 offset, u32 origin) {

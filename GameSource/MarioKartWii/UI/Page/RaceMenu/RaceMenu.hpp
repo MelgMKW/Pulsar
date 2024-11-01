@@ -19,7 +19,7 @@ public:
     void BeforeEntranceAnimations() override; //0x38 80859f30
     void BeforeExitAnimations() override; //0x40 80859f34
     void AfterControlUpdate() override; //0x4c 80859e98
-    int GetRuntimeTypeInfo() const override; //0x60 8085bd58
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8085bd58
     virtual void SetNextPage(PageId id); //0x64 8063240c
     virtual int GetMessageBMG() const = 0; //0x68
     virtual u32 GetButtonCount() const = 0; //0x6c
@@ -42,7 +42,7 @@ public:
     PtmfHolder_2A<RaceMenu, void, PushButton&, u32> onButtonClickHandler; //0xF4 8085a0f4
     PtmfHolder_1A<RaceMenu, void, u32> onStartHandler; //0x108 8085a098
     ControlsManipulatorManager manipulatorManager; //0x11c
-    u32 controlBMGId; //0x340, used for message control 
+    u32 messageBMGId; //0x340, used for message control 
 };//0x344
 size_assert(RaceMenu, 0x344);
 

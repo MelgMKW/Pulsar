@@ -1,0 +1,389 @@
+#include <kamek.hpp>
+#include <MarioKartWii/RKNet/RKNetController.hpp>
+#include <MarioKartWii/Archive/ArchiveMgr.hpp>
+#include <PulsarSystem.hpp>
+#include <Gamemodes/KO/KOMgr.hpp>
+#include <Network/Network.hpp>
+#include <Network/PulSELECT.hpp>
+#include <Settings/Settings.hpp>
+
+
+namespace Pulsar {
+namespace Network {
+
+void BeforeSELECTSend(RKNet::PacketHolder<PulSELECT>* packetHolder, PulSELECT* src, u32 len) {
+    const System* system = System::sInstance;
+    if(!system->IsContext(PULSAR_CT)) {
+        PulSELECT copy = *src;
+        RKNet::SELECTPacket* normalPacket = reinterpret_cast<RKNet::SELECTPacket*>(&copy);
+        normalPacket->playersData[0].courseVote = (u8)CupsConfig::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->base.pulSELPlayerData[0].pulCourseVote));
+        normalPacket->playersData[1].courseVote = (u8)CupsConfig::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->base.pulSELPlayerData[1].pulCourseVote));
+        normalPacket->winningCourse = CupsConfig::ConvertTrack_PulsarIdToRealId(static_cast<PulsarId>(src->base.pulWinningCourse));
+        normalPacket->playersData[0].prevRaceRank = src->base.pulSELPlayerData[0].prevRaceRank;
+        normalPacket->playersData[1].prevRaceRank = src->base.pulSELPlayerData[1].prevRaceRank;
+        normalPacket->phase = src->base.phase;
+        normalPacket->engineClass = src->base.engineClass;
+        src = reinterpret_cast<PulSELECT*>(&copy);
+    }
+    else src->base.pulSELPlayerData[1].starRank |= 0x80; //set leftmost bit to specify PULSELECT
+    packetHolder->Copy(src, len);
+    if(system->IsContext(PULSAR_CT)) {
+        packetHolder->packetSize += sizeof(PulSELECT) - sizeof(RKNet::SELECTPacket); //this has been changed by copy so it's safe to do this
+        PulSELECT* destPacket = packetHolder->packet;
+        const Settings::Mgr& settings = Settings::Mgr::Get();
+        destPacket->allowChangeComboAfterVote = settings.GetSettingValue(Settings::SETTINGSTYPE_OTT, SETTINGOTT_ALLOWCHANGECOMBO);
+        destPacket->koPerRace = settings.GetSettingValue(Settings::SETTINGSTYPE_KO, SETTINGKO_KOPERRACE) + 1;
+        destPacket->racesPerKO = settings.GetSettingValue(Settings::SETTINGSTYPE_KO, SETTINGKO_RACESPERKO) + 1;
+
+    }
+}
+kmCall(0x80661040, BeforeSELECTSend);
+
+static void AfterSELECTReception(PulSELECT* dest, PulSELECT* src, u32 packetSize) {
+    if(!System::sInstance->IsContext(PULSAR_CT) || (src->base.pulSELPlayerData[1].starRank & 0x80 == 0)) {
+        RKNet::SELECTPacket* normalPacket = reinterpret_cast<RKNet::SELECTPacket*>(src);
+        const u8 courseVoteHud0 = CupsConfig::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->playersData[0].courseVote));
+        const u8 courseVoteHud1 = CupsConfig::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->playersData[1].courseVote));
+        const u8 winningId = CupsConfig::ConvertTrack_RealIdToPulsarId(static_cast<CourseId>(normalPacket->winningCourse));
+        const u8 prevRaceRankHud0 = normalPacket->playersData[0].prevRaceRank;
+        const u8 prevRaceRankHud1 = normalPacket->playersData[1].prevRaceRank;
+        const u8 phase = normalPacket->phase;
+        const u8 engineClass = normalPacket->engineClass;
+        src->base.pulSELPlayerData[0].pulCourseVote = courseVoteHud0;
+        src->base.pulSELPlayerData[1].pulCourseVote = courseVoteHud1;
+        src->base.pulSELPlayerData[0].prevRaceRank = prevRaceRankHud0;
+        src->base.pulSELPlayerData[1].prevRaceRank = prevRaceRankHud1;
+        src->base.pulWinningCourse = winningId;
+        src->base.phase = phase;
+        src->base.engineClass = engineClass;
+    }
+    else {
+        src->base.pulSELPlayerData[1].starRank &= ~0x80;
+    }
+
+    memcpy(dest, src, sizeof(PulSELECT::Base));
+}
+kmCall(0x80661130, AfterSELECTReception);
+
+static u8 GetEngineClass(const ExpSELECTHandler& select) {
+    if(select.toSendPacket.phase != 0) return select.toSendPacket.engineClass;
+    return 0;
+}
+kmBranch(0x8066048c, GetEngineClass);
+
+static u16 GetWinningCourse(const ExpSELECTHandler& select) {
+    if(select.toSendPacket.phase == 2) return select.toSendPacket.pulWinningCourse;
+    else return 0xFF;
+}
+kmBranch(0x80660450, GetWinningCourse);
+
+static bool IsTrackDecided(const ExpSELECTHandler& select) {
+    return select.toSendPacket.pulWinningCourse != 0xFF;
+}
+kmBranch(0x80660d40, IsTrackDecided);
+
+
+PulsarId FixRandom(Random& random) {
+    return CupsConfig::sInstance->RandomizeTrack();
+}
+kmCall(0x80661f34, FixRandom);
+
+static void DecideTrack(ExpSELECTHandler* select) {
+    Random random;
+    System* system = System::sInstance;
+    const CupsConfig* cupsConfig = CupsConfig::sInstance;
+    RKNet::Controller* controller = RKNet::Controller::sInstance;
+    RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
+    const u8 hostAid = controller->subs[controller->currentSub].hostAid;
+    if(select->mode == RKNet::ONLINEMODE_PRIVATE_VS && system->IsContext(PULSAR_MODE_KO)) {
+        system->koMgr->PatchAids(sub);
+
+    }
+
+
+    if(select->mode == RKNet::ONLINEMODE_PRIVATE_VS && Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_HOSTWINS) && !system->IsContext(PULSAR_MODE_KO)) {
+
+        select->toSendPacket.winningVoterAid = hostAid;
+        u16 hostVote = select->toSendPacket.pulSELPlayerData[0].pulCourseVote;
+        if(hostVote == 0xFF) hostVote = cupsConfig->RandomizeTrack();
+        select->toSendPacket.pulWinningCourse = hostVote;
+    }
+    else if((select->mode == RKNet::ONLINEMODE_PUBLIC_VS || select->mode == RKNet::ONLINEMODE_PRIVATE_VS) && system->IsContext(PULSAR_CT)) {
+
+        const u32 availableAids = sub.availableAids; //has been modified to remove KO'd player if KO is on
+        u8 aids[12];
+        u8 newVotesAids[12];
+        PulsarId votes[12];
+        int playerCount = 0;
+        int newVoters = 0;
+        for(u8 aid = 0; aid < 12; aid++) {
+            if((1 << aid & availableAids) == 0) continue;
+            aids[playerCount] = aid;
+            ++playerCount;
+            bool isRepeatVote = false;
+            PulsarId aidVote = static_cast<PulsarId>(aid == sub.localAid ? select->toSendPacket.pulSELPlayerData[0].pulCourseVote : select->receivedPackets[aid].pulSELPlayerData[0].pulCourseVote);
+            if(aidVote == 0xFF) aidVote = cupsConfig->RandomizeTrack();
+            votes[aid] = aidVote;
+            for(int i = 0; i < system->GetInfo().GetTrackBlocking(); ++i) {
+                if(system->lastTracks[i] == aidVote) {
+                    isRepeatVote = true;
+                }
+            }
+            if(!isRepeatVote) {
+                newVotesAids[newVoters] = aid;
+                ++newVoters;
+            }
+        }
+        u8 winner;
+        if(newVoters > 0) winner = newVotesAids[random.NextLimited(newVoters)];
+        else winner = aids[random.NextLimited(playerCount)];
+        PulsarId vote = static_cast<PulsarId>(votes[winner]);
+
+        select->toSendPacket.pulWinningCourse = vote + (cupsConfig->RandomizeVariant(vote) << 12);
+        select->toSendPacket.winningVoterAid = winner;
+        system->lastTracks[system->curBlockingArrayIdx] = vote;
+        system->curBlockingArrayIdx = (system->curBlockingArrayIdx + 1) % system->GetInfo().GetTrackBlocking();
+    }
+    else reinterpret_cast<RKNet::SELECTHandler*>(select)->DecideTrack();
+}
+kmCall(0x80661490, DecideTrack);
+
+//Patches GetWinningCOURSE call so that non-hosts prepare the correct track
+CourseId SetCorrectSlot(ExpSELECTHandler* select) {
+    CourseId id = reinterpret_cast<RKNet::SELECTHandler*>(select)->GetWinningCourse();
+    if(select->toSendPacket.engineClass != 0) id = CupsConfig::sInstance->GetCorrectTrackSlot();
+    return id;
+}
+kmCall(0x80650ea8, SetCorrectSlot);
+
+static void SetCorrectTrack(ArchiveRoot* root, PulsarId winningCourse) {
+    CupsConfig* cupsConfig = CupsConfig::sInstance;
+    //System* system = System::sInstance; ONLY STORE IF NON HOST
+    //system->lastTracks[system->curBlockingArrayIdx] = winningCourse;
+    //system->curBlockingArrayIdx = (system->curBlockingArrayIdx + 1) % Info::GetTrackBlocking();
+    cupsConfig->SetWinning(winningCourse, false);
+    root->RequestLoadCourseAsync(static_cast<CourseId>(winningCourse));
+}
+kmCall(0x80644414, SetCorrectTrack);
+
+//Overwrites CC rules -> 10% 100, 65% 150, 25% mirror and/or in frooms, overwritten by host setting
+static void DecideCC(ExpSELECTHandler& handler) {
+    System* system = System::sInstance;
+    if(!system->IsContext(PULSAR_CT)) reinterpret_cast<RKNet::SELECTHandler&>(handler).DecideEngineClass();
+    else {
+        const u8 ccSetting = Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_CC);
+        RKNet::Controller* controller = RKNet::Controller::sInstance;
+        const RKNet::RoomType roomType = controller->roomType;
+        u8 ccClass = 1; //1 100, 2 150, 3 mirror
+        if(roomType == RKNet::ROOMTYPE_VS_REGIONAL
+            || roomType == RKNet::ROOMTYPE_FROOM_HOST && ccSetting == HOSTSETTING_CC_NORMAL) {
+            Random random;
+            const u32 result = random.NextLimited(100); //25
+            System* system = System::sInstance;
+            u32 prob100 = system->GetInfo().GetProb100(); //100
+            u32 prob150 = system->GetInfo().GetProb150(); //00
+            if(result < 100 - (prob100 + prob150)) ccClass = 3;
+            else if(result < 100 - prob100) ccClass = 2;
+        }
+        else if(ccSetting == HOSTSETTING_CC_150) ccClass = 2;
+        else if(ccSetting == HOSTSETTING_CC_MIRROR) ccClass = 3;
+        handler.toSendPacket.engineClass = ccClass;
+    }
+
+}
+kmCall(0x80661404, DecideCC);
+
+
+
+//Swap of rank and courseVote
+//CourseVote
+//Get
+//GetCourseVote
+kmWrite32(0x8066059c, 0xA0630018);
+kmWrite32(0x806605a0, 0x60000000); //nop extsb
+kmWrite32(0x806605b8, 0xA0630050);
+kmWrite32(0x806605bc, 0x60000000); //nop extsb
+//EveryoneHasVoted
+kmWrite32(0x80660de0, 0xA0030018);
+//PrepareAndExportPacket
+kmWrite32(0x8066141c, 0xA01C0018);
+//ProcessNewPacketVoting
+kmWrite32(0x80661810, 0xA0180018);
+kmWrite32(0x806618e4, 0xA01C0050);
+//Decide Track
+kmWrite32(0x80661e90, 0xA01F0018); //extsb -> lhz
+kmWrite32(0x80661ef0, 0xA0030050); //extsb -> lhz
+
+//Set
+//InitPackets
+kmWrite32(0x80660004, 0xB3540018);
+kmWrite32(0x80660140, 0xB3730050);
+//SetPlayerData
+kmWrite32(0x80660760, 0xB0C30018);
+//ResetSendPacket
+kmWrite32(0x80660908, 0xB3B80018);
+
+//Fixes
+kmWrite32(0x806440c0, 0x2c030100); //if id >= 0x100 or id <= 31 -> correct courseId
+kmWrite32(0x806440c8, 0x40a00020);
+kmWrite32(0x8064411c, 0x2c0300FF); //cmpwi 0xFFFF -> 0xFF for battle
+kmWrite32(0x80644150, 0x386000ff); //li r3, 0xFF for battle
+kmWrite32(0x80644154, 0x2c0300FF); //cmpwi 0xFFFF -> 0xFF for battle
+kmWrite32(0x80644338, 0x2C0300FF); //cmpwi 0xFFFF -> 0xFF
+kmWrite32(0x8064433c, 0x418200dc);
+
+//Rank
+//Get
+kmWrite32(0x80651374, 0x88030006); //lha -> lbz
+//Store
+kmWrite32(0x806600b0, 0x9813001E);
+kmWrite32(0x806600c0, 0x9B73001E);
+kmWrite32(0x806609b0, 0x981F001E);
+kmWrite32(0x806609c0, 0x9B9F001E);
+
+
+//Winning course u8->u16
+//Get
+//EveryoneHasAccurateAidPidMap
+kmWrite32(0x80660e54, 0xA003003C); //extsb -> lhz
+kmWrite32(0x80660e58, 0x2c0000ff); //cmpwi 0xFFFF -> 0xFF
+//PrepareAndExportPacket
+kmWrite32(0x80661480, 0xA01C003C); //extsb -> lhz
+kmWrite32(0x80661484, 0x2c0000ff); //cmpwi 0xFFFF -> 0xFF
+//ProcessNewPacketVoting
+kmWrite32(0x80661648, 0xa078003c); //extsb -> lhz
+kmWrite32(0x8066164c, 0x2c0300ff); //cmpwi 0xFFFF -> 0xFF
+kmWrite32(0x80661658, 0xA01C0074); //extsb -> lhz
+kmWrite32(0x80661754, 0xA018003C); //extsb -> lhz
+kmWrite32(0x80661758, 0x2c0000ff); //cmpwi 0xFFFF -> 0xFF
+kmWrite32(0x8066184c, 0xA0DC0074); //extsb -> lhz
+kmWrite32(0x80661854, 0x2c0600ff); //cmpwi 0xFFFF -> 0xF
+//DecideTrack
+kmWrite32(0x80661f0c, 0xA01F003C); //extsb -> lhz
+kmWrite32(0x80661f10, 0x2c0000ff); //cmpwi 0xFFFF -> 0xFF
+
+//Store
+//InitPackets
+kmWrite32(0x80660018, 0x386000ff);
+kmWrite32(0x80660020, 0xB07F003C);
+kmWrite32(0x80660150, 0xB3D50074);
+
+//ResetPacket
+kmWrite32(0x80660b48, 0xB3D90010);
+kmWrite32(0x80660b5c, 0x388000ff);
+kmWrite32(0x80660b64, 0xB0980034);
+
+//ResetSendPacket
+kmWrite32(0x80660924, 0xB07F003C);
+//ProcessNewPacketVoting
+kmWrite32(0x80661878, 0xB0D8003C);
+//DecideTrack
+kmWrite32(0x80661e94, 0xB01F003C);
+kmWrite32(0x80661ef4, 0xB01F003C);
+kmWrite32(0x80661f94, 0xB3DF003C);
+kmWrite32(0x8066200c, 0xB01F003C);
+
+//Merging
+asmFunc GetPhase_3D_r0_r24() {
+    ASM(
+        nofralloc;
+    lbz r0, 0x3D + 2 (r24);
+    rlwinm r0, r0, 28, 28, 31;
+    blr;
+        )
+}
+kmCall(0x80661578, GetPhase_3D_r0_r24);
+kmCall(0x806617b8, GetPhase_3D_r0_r24);
+
+asmFunc GetPhase_75_r0_r28() {
+    ASM(
+        nofralloc;
+    lbz r0, 0x75 + 2 (r28);
+    rlwinm r0, r0, 28, 28, 31;
+    blr;
+        )
+}
+//kmCall(0x806617e8, GetPhase_75_r0_r28);
+kmCall(0x80661880, GetPhase_75_r0_r28);
+
+asmFunc StorePhase_3D_r30_r24() {
+    ASM(
+        nofralloc;
+    lbz r12, 0x3D + 2 (r24);
+    rlwimi r12, r30, 4, 24, 27;
+    stb r12, 0x3D + 2 (r24);
+    blr;
+        )
+}
+kmCall(0x8066163c, StorePhase_3D_r30_r24);
+//kmCall(0x806617f4, StorePhase_3D_r30_r24);
+
+asmFunc StorePhase_3D_r31_r24() {
+    ASM(
+        nofralloc;
+    lbz r12, 0x3D + 2 (r24);
+    rlwimi r12, r31, 4, 24, 27;
+    stb r12, 0x3D + 2 (r24);
+    blr;
+        )
+}
+kmCall(0x806617a8, StorePhase_3D_r31_r24);
+kmCall(0x8066188c, StorePhase_3D_r31_r24);
+kmCall(0x80661908, StorePhase_3D_r31_r24);
+
+GetPhase(0x80660434, 0x3d, 0, 3);
+GetPhase(0x80660470, 0x3D, 0, 3);
+GetPhase(0x806604a8, 0x3D, 0, 3);
+GetPhase(0x80660654, 0x3D, 0, 3);
+GetPhase(0x80660710, 0x3D, 0, 3);
+
+
+kmWrite32(0x8066003c, 0x60000000); //nop because it's already being init to 0 via the engine class
+//StorePhase(0x8066003c, 0x3D, 27, 31);
+kmWrite32(0x80660168, 0x60000000); //nop because it's already being init to 0 via the engine class
+//StorePhase(0x80660168, 0x75, 28, 21);
+
+//StorePhase(0x8066093c, 0x3D, 28, 31);   //inlined funcs
+//StorePhase(0x80660b70, 0x35, 3, 24);    //inlined funcs
+
+asmFunc GetEngine_3D_r0_r28() {
+    ASM(
+        nofralloc;
+    lbz r0, 0x77 (r28);
+    rlwinm r0, r0, 0, 28, 31;
+    blr;
+        )
+}
+kmCall(0x806615bc, GetEngine_3D_r0_r28);
+//kmCall(0x806617e0, GetEngine_3D_r0_r28);
+
+GetEngine(0x806615b8, 0x3f, 3, 24);
+
+
+//StoreEngine(0x80660040, 0x3F, 27, 31); //uneeded, this is an init to 0
+//StoreEngine(0x80660170, 0x77, 28, 21); //uneeded, this is an init to 0
+//StoreEngine(0x80660940, 0x3f, 28, 31); //inlined   
+//StoreEngine(0x80660b74, 0x37, 3, 24);  //inlined  
+//StoreEngine(0x806617e4, 0x3f, 0, 24);
+StoreEngine(0x80661cb8, 0x3f, 28, 29);
+
+asmFunc CheckEngineClass() { //copies the engineclass part of the engine/phase bitfield, then checks if phase of host == 0, and if it isn't, changes own phase to r30 (1)
+    //r24 == rkNetSelectHandler, r28 == receivedPackets[loopIdx] - 0x40
+    ASM(
+        nofralloc;
+    lbz r0, 0x77 (r28);
+    lbz r12, 0x3F (r24);
+    rlwimi r12, r0, 0, 28, 31; //r12.engineClass = r0.engineClass
+    rlwinm.r0, r0, 28, 28, 31;
+    beq + end;
+    rlwimi r12, r30, 4, 24, 27; //r12.phase = r30
+end:
+    stb r12, 0x3F (r24);
+    li r0, 0;
+    blr;
+        )
+}
+kmCall(0x806617e8, CheckEngineClass);
+
+}//namespace Network
+}//namespace Pulsar

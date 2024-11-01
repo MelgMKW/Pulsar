@@ -7,18 +7,10 @@
 
 namespace Pulsar {
 namespace UI {
-kmWrite32(0x80624200, 0x60000000); //nop the new
+
 kmWrite32(0x805d8260, 0x60000000); //nop initcontrolgroup
-
-ExpFroom* CreateFroomPage() {
-    TeamSelect* teamSelect = new(TeamSelect);
-    SectionMgr::sInstance->curSection->Set(teamSelect, PAGE_MII_SELECT);
-    teamSelect->Init(PAGE_MII_SELECT);
-    return new(ExpFroom);
-}
-kmCall(0x8062420c, CreateFroomPage);
-
 void ExpFroom::OnInit() {
+
     this->InitControlGroup(7); //5 usually + settings button + teams button
     FriendRoom::OnInit();
 
@@ -27,7 +19,7 @@ void ExpFroom::OnInit() {
     this->settingsButton.buttonId = 5;
     this->settingsButton.SetOnClickHandler(this->onSettingsClickHandler, 0);
     this->settingsButton.SetOnSelectHandler(this->onButtonSelectHandler);
-    this->topSettingsPage = SettingsPanel::firstId;
+    this->topSettingsPage = SettingsPanel::id;
 
     this->AddControl(6, teamsButton, 0);
     this->teamsButton.Load(UI::buttonFolder, "FroomButton", "Teams", 1, 0, false);
@@ -55,16 +47,13 @@ void ExpFroom::ExtOnButtonSelect(PushButton& button, u32 hudSlotId) {
 
 void ExpFroom::OnSettingsButtonClick(PushButton& button, u32 hudSlotId) {
     this->areControlsHidden = true;
-    const Section* section = SectionMgr::sInstance->curSection;
-    for(int i = 0; i < SettingsPanel::pageCount; ++i) {
-        section->Get<SettingsPanel>(static_cast<PageId>(SettingsPanel::firstId + i))->prevPageId = PAGE_FRIEND_ROOM;
-    }
-    this->AddPageLayer(this->topSettingsPage, 0);
+    ExpSection::GetSection()->GetPulPage<SettingsPanel>()->prevPageId = PAGE_FRIEND_ROOM;
+    this->AddPageLayer(static_cast<PageId>(this->topSettingsPage), 0);
 }
 
 void ExpFroom::OnTeamsButtonClick(PushButton& button, u32 hudSlotId) {
     this->areControlsHidden = true;
-    this->AddPageLayer(PAGE_MII_SELECT, 0);
+    this->AddPageLayer(static_cast<PageId>(PULPAGE_TEAMSELECT), 0);
 }
 
 void ExpFroom::AfterControlUpdate() {

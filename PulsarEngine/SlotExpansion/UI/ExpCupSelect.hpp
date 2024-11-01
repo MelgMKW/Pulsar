@@ -10,10 +10,6 @@ namespace UI {
 class ExpCupSelect : public Pages::CupSelect {
 public:
     ExpCupSelect();
-    ~ExpCupSelect() override {
-        Settings::Mgr::GetInstance()->SetLastSelectedCup(CupsConfig::sInstance->lastSelectedCup);
-        Settings::Mgr::GetInstance()->RequestSave();
-    }
     static void UpdateCupData(PulsarCupId id, LayoutUIControl& control);
     void OnActivate() override;
     void AfterControlUpdate() override;

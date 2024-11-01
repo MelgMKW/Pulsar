@@ -10,7 +10,7 @@ class CtrlMenuBattleCupSelectCup : public LayoutUIControl {
     //no ctor
     ~CtrlMenuBattleCupSelectCup() override; //80629858 vtable 808d2ec4
     void InitSelf() override;  //807e0b50 0x18
-    int GetRuntimeTypeInfo() const override; //0x28 807e1254
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807e1254
     const char* GetClassName() const override; //0x2c 807e093c
     void Load(u32 localPlayerBitfield, u32 r8); //807e0958 r8 is pushbutton's load r8
     PushButton cupButtons[2]; //0x174
@@ -26,7 +26,7 @@ class CtrlMenuBattleCupSelectStage : public LayoutUIControl {
     ~CtrlMenuBattleCupSelectStage() override; //806298e0 vtable 808d2e88
     void InitSelf() override; //807e0fd0 0x18
     void OnUpdate() override; //807e10d4 0x1c
-    int GetRuntimeTypeInfo() const override; //0x28 807e1248
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807e1248
     const char* GetClassName() const override; //0x2c 807e0948
     void Load(); //807e0dc0
     void UpdateStageList(u32 cupIndex); //807e0ee4

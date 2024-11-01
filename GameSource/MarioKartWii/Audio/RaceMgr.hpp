@@ -44,6 +44,9 @@ public:
     RaceMgr(); //80710688 also appends the Sound3DListeners (one per local player) to the 3DManager list
     ~RaceMgr(); //807108e8
 
+
+    SoundIDs GetEndFanfareId() const; //807121c0
+
     void SetRaceState(RaceState raceState); //80711ac4 changes music accordingly etc...
     void SetKartActor(KartActor* sound); //80713754
     void Init(); //80710a00
@@ -88,7 +91,6 @@ public:
     Mtx34 playerMats[4]; //0x84 used for Sound3DListener's mtx
     Vec3 playerTargetPos[4]; //0x144 
     u8 unknown_0x174[4];
-    static CourseIdxToCourseID trackIdxToCourseID[42];
 };//Total Size 0x178
 size_assert(RaceMgr, 0x178);
 }//namespace Audio

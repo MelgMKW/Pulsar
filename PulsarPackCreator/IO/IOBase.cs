@@ -32,6 +32,13 @@ namespace Pulsar_Pack_Creator.IO
         WSZST,
         UnknownError,
     };
+
+    public enum BMGIds : uint
+    {
+        BMG_CUPS = 0x10000,
+        BMG_TRACKS = 0x20000,
+        BMG_AUTHORS = 0x30000
+    };
     abstract class IOBase
     {
 
@@ -54,16 +61,16 @@ namespace Pulsar_Pack_Creator.IO
         protected static string wiimmFolderPath = "";
 
         protected static readonly uint SECTIONCOUNT = 4;
-        protected static readonly uint CONFIGVERSION = 2;
+        protected static readonly uint CONFIGVERSION = 3;
         protected static readonly uint INFOVERSION = 1;
-        protected static readonly uint CUPSVERSION = 2;
+        protected static readonly uint CUPSVERSION = 3;
         protected static readonly uint TEXTVERSION = 1;
 
         public string error;
         public static CancellationTokenSource cancelToken = new CancellationTokenSource();
 
         protected Result RequestBMGAction(bool isEncode) //else will decode
-        {           
+        {
             ProcessStartInfo processInfo = new ProcessStartInfo();
             processInfo.FileName = $"{wiimmFolderPath}wbmgt.exe";
             processInfo.Arguments = isEncode ? "encode BMG.txt" : "decode bmg.bmg --no-header --export";
@@ -133,11 +140,11 @@ namespace Pulsar_Pack_Creator.IO
             {
                 bool hasWiimm = false;
                 string envPath = Environment.GetEnvironmentVariable("Path");
-                if(envPath != null)
+                if (envPath != null)
                 {
-                    hasWiimm = envPath.Contains(@"Wiimm\SZS");                  
+                    hasWiimm = envPath.Contains(@"Wiimm\SZS");
                 }
-                                          
+
                 if (!hasWiimm)
                 {
                     wiimmFolderPath = "temp/";
@@ -151,7 +158,7 @@ namespace Pulsar_Pack_Creator.IO
                     await File.WriteAllBytesAsync("temp/wbmgt.exe", PulsarRes.wbmgt);
                 }
 
-               
+
                 await File.WriteAllBytesAsync("temp/UIAssets.szs", PulsarRes.UIAssets);
 
                 ProcessStartInfo wszstProcessInfo = new ProcessStartInfo();
@@ -193,7 +200,7 @@ namespace Pulsar_Pack_Creator.IO
                     else await wimgtProcess.WaitForExitAsync(cancelToken.Token);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MsgWindow.Show(ex.Message);
             }

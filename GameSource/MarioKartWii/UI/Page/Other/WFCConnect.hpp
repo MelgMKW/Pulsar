@@ -25,7 +25,7 @@ public:
     void AfterExitAnimations() override; //0x44 80646dfc
     void AfterControlUpdate() override; //0x4c 80646eb0
     void OnResume() override; //0x54 806474e8
-    int GetRuntimeTypeInfo() const override; //0x60 806492f0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806492f0
 
     void SetText(); //806479dc title, globe etc...
     static u32 GetTitleBMGId(); //80647cec
@@ -46,7 +46,7 @@ public:
     ~WFCDataStatement() override; //80647fe4 vtable 808bfa28
     void OnInit() override; //0x28 80648084
     void OnActivate() override; //0x30 80648220
-    int GetRuntimeTypeInfo() const override; //0x60 806492e4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806492e4
 
     void OnButtonClick(PushButton& button, u32 hudSlotId); //80648404
     void OnBackPress(); //80648480
@@ -71,7 +71,7 @@ public:
     void OnInit() override; //0x28 806486bc
     void OnActivate() override; //0x30 806488b4
     void OnResume() override; //0x54 80648a24
-    int GetRuntimeTypeInfo() const override; //0x60 806492d8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806492d8
 
     void OnButtonClick(PushButton& button, u32 hudSlotId); //80648afc
     void OnBackButtonClick(CtrlMenuBackButton& backButton, u32 hudSlotId); //80648afc
@@ -101,7 +101,7 @@ public:
     void BeforeEntranceAnimations() override; //0x38 80649124
     void BeforeExitAnimations() override; //0x40 80649128
     void OnResume() override; //0x54 806491dc
-    int GetRuntimeTypeInfo() const override; //0x60 806492cc
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806492cc
 
     void OnYesNoYesClick(PushButton& button, u32 buttonId); //806491ec
 

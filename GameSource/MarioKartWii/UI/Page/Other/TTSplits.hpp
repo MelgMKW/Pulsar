@@ -17,7 +17,7 @@ public:
     void BeforeEntranceAnimations() override; //0x38 80855b30
     void BeforeExitAnimations() override; //0x40 8085616c
     void AfterControlUpdate() override; //0x4c 80855adc
-    int GetRuntimeTypeInfo() const override; //0x60 80856228
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80856228
     void Unload(); //80855854 inlined
     static void TriggerAction(PtmfHolder_1A<TTSplits, void, u32>& triggeredHandler, u32 hudSlotId); //80856234
     CtrlRaceTime** ctrlRaceTimeArray; //size splitsRowCount

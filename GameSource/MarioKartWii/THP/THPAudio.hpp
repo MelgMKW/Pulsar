@@ -1,7 +1,7 @@
 #ifndef _THPAUDIO_
 #define _THPAUDIO_
 #include <kamek.hpp>
-#include <core/rvl/OS/Message.hpp>
+#include <core/rvl/os/OSMessage.hpp>
 #include <MarioKartWii/THP/THPStructs.hpp>
 
 namespace THP {

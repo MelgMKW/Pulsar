@@ -16,15 +16,13 @@ namespace Kart {
 
 class KartPointers;
 
-class Sub {
+class Sub : public Link {
 public:
 
     void Update(); //80596480
     void InitEntity(Pointers& pointers); //8059828c
     void ResetPhysics(); //8059617c
     void InitParts(); //80595f78
-
-    Link link;
 
     virtual ~Sub(); //offset 0xc 80598ac8 vtable 808b659c
     virtual void Init(const Values& values); //0xc 80595d48

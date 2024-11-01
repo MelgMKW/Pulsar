@@ -29,7 +29,7 @@ public:
         void* callbackArg;
     }; //0x28
     SeqSound(SeqSoundInstanceManager* manager, int priority, int ambientPriority); //8009a410
-    int GetRuntimeTypeInfo() override; //8009ac90 vtable 802748b8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8009ac90 vtable 802748b8
     ~SeqSound() override; //0xc 8009a8a0
     void Shutdown() override; //0x10 8009a7c0
     bool IsPrepared() override; //0x14 8009ac80
@@ -39,19 +39,19 @@ public:
     BasicPlayer& GetBasicPlayer() override; //0x24 8009ac60
     const BasicPlayer& GetBasicPlayer() const override; //0x28 8009ac70
     void OnUpdatePlayerPriority() override; //0x2c 8009a940
-    SeqPlayer::SetupResult SeqSound::Setup(SeqTrackAllocator* trackAllocator, u32 allocTracks, NoteOnCallback* callback); //8009a550
-    void SeqSound::Prepare(const void* seqBase, s32 seqOffset, SeqPlayer::OffsetType startOffsetType, int startOffset); //8009a5d0
-    void SeqSound::Prepare(ut::FileStream* fileStream, s32 seqOffset, SeqPlayer::OffsetType startOffsetType, int startOffset); //8009a640
-    static void SeqSound::NotifyLoadAsyncEndSeqData(bool result, const void* seqBase, void* seqSound); //8009a740
-    void SeqSound::SetTempoRatio(float tempoRatio); //8009a910
-    void SeqSound::SetChannelPriority(int priority); //8009a920
-    void SeqSound::SetReleasePriorityFix(bool fix); //8009a930
-    void SeqSound::SetTrackVolume(u32 trackBitFlag, float volume); //8009aa30
-    void SeqSound::SetTrackPitch(u32 trackBitFlag, float pitch); //8009aa40
+    SeqPlayer::SetupResult Setup(SeqTrackAllocator* trackAllocator, u32 allocTracks, NoteOnCallback* callback); //8009a550
+    void Prepare(const void* seqBase, s32 seqOffset, SeqPlayer::OffsetType startOffsetType, int startOffset); //8009a5d0
+    void Prepare(ut::FileStream* fileStream, s32 seqOffset, SeqPlayer::OffsetType startOffsetType, int startOffset); //8009a640
+    static void NotifyLoadAsyncEndSeqData(bool result, const void* seqBase, void* seqSound); //8009a740
+    void SetTempoRatio(float tempoRatio); //8009a910
+    void SetChannelPriority(int priority); //8009a920
+    void SetReleasePriorityFix(bool fix); //8009a930
+    void SetTrackVolume(u32 trackBitFlag, float volume); //8009aa30
+    void SetTrackPitch(u32 trackBitFlag, float pitch); //8009aa40
 
     void WriteVariable(int varIdx, s16 var); //8009aa50
     static bool WriteGlobalVariable(int varNo, s16 var); //8009aa80
-    u32 SeqSound::GetTick() const; //8009aab0
+    u32 GetTick() const; //8009aab0
 
     SeqPlayer seqPlayer; //0x100
     SeqSoundHandle* tempSpecialHandle; //0x278

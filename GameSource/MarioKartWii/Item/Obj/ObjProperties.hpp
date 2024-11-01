@@ -2,6 +2,7 @@
 #define _ITEMOBJPROPERTIES_
 #include <kamek.hpp>
 #include <MarioKartWii/System/Identifiers.hpp>
+#include <MarioKartWii/Item/Obj/ItemEVENT.hpp>
 
 namespace Item {
 class Obj;
@@ -15,7 +16,7 @@ struct ObjProperties {
 
     ObjProperties(const ObjProperties& rel); //80790e7c copy constructor from rodata's static array "copyFromRel"
     static void ComputeCapacities(); //80790fb8
-    Obj** (*CreateArray)(u32 count);
+    Obj** (*CreateArray)(u32 count); //0
     u32 limit; //0x4
     u32 competitionLimit;
     u32 capacity; //0xc
@@ -23,21 +24,27 @@ struct ObjProperties {
     u8 unknown_0x14[4];
 
     Ptmf_0A<Obj, void> updateObjThunkPtmf; //0x18
-    int (*CalcEventPacketSize)(u32 r3, Obj* obj, u32 r5); //0x24 also stores stuff, but unsure
+    int (*PrepareEVENTPacket)(const EVENTBuffer::Entry* recvEntry, Obj* obj, u32 r5); //0x24 also stores stuff, but unsure, returns size of the packet
     u32 eventPacketSize; //0x28
     u8 unknown_0x2c[4];
     float backwardDrawDistance; //0x30
-    float forwardDrawDistance;
-    float unknown_0x38[7];
+    float forwardDrawDistance; //0x34   
+    float unknown_0x38; //0x38
+    float entitySmallRadius; //0x3c
+    float entityBigRadius; //0x40
+    float unknown_0x44;
+    float entityScale; //0x48
+    float unknown_0x4c[2];
     u8 unknown_0x54[0x58 - 0x54];
     bool canFallOnTheGround; //0x58
     bool canFallOnTheGround2; //0x59
-    bool unknown_0x5a[2];
+    bool killOnCollision; //0x5a
     u8 unknown_0x5b[0x6c - 0x5b];
     float unknown_0x6c;
     bool unknown_0x70;
     u8 unknown_0x71[0x74 - 0x71];
 }; // Total size 0x74
+size_assert(ObjProperties, 0x74);
 
 extern float greenShellSpeed;
 extern float redShellInitialSpeed;

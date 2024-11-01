@@ -2,155 +2,116 @@
 #define _PULSAR_
 
 #include <kamek.hpp>
-#include <core/rvl/ipc/ipc.hpp>
-#include <core/RK/RKSystem.hpp>
-#include <MarioKartWii/UI/Text/Text.hpp>
+#include <core/egg/mem/ExpHeap.hpp>
 #include <MarioKartWii/System/Identifiers.hpp>
+#include <MarioKartWii/UI/Text/Text.hpp>
 #include <Debug/Debug.hpp>
 #include <IO/IO.hpp>
 #include <Info.hpp>
-#include <SlotExpansion/CupsConfig.hpp>
+#include <Config.hpp>
+#include <Network/Network.hpp>
 #include <Network/MatchCommand.hpp>
 
+namespace LECODE {
+class Mgr;
+}//namespace LECODE
+
 namespace Pulsar {
+namespace KO {
+class Mgr;
+}//namespace KO
 
-enum TTMode {
-    TTMODE_150,
-    TTMODE_200,
-    TTMODE_150_FEATHER,
-    TTMODE_200_FEATHER
+class ConfigFile;
+
+
+enum Context {
+    PULSAR_CT = 0,
+    PULSAR_200,
+    PULSAR_FEATHER,
+    PULSAR_UMTS,
+    PULSAR_MEGATC,
+    PULSAR_HAW,
+    PULSAR_MIIHEADS,
+    PULSAR_MODE_OTT,
+    PULSAR_MODE_KO,
+    PULSAR_CONTEXT_COUNT,
 };
 
-enum SectionIndexes {
-    SECTION_INFO,
-    SECTION_CUPS,
-    SECTION_BMG
-};
 
-struct BinaryHeader {
-    static const u32 curVersion = 2;
-    u32 magic;
-    s32 version;
-    s32 offsets[3];
-    //s32 offsetToInfo; //from start of the header
-    //s32 offsetToCups;
-    //s32 offsetToBMG;
-    char modFolderName[IOS::ipcMaxFileName + 1];
-};
-
-struct SectionHeader {
-    u32 magic;
-    u32 version;
-    u32 size;
-}; //0xc
-
-struct InfoHolder {
-    static const u32 magic = 'INFO';
-    static const u32 index = SECTION_INFO;
-    static const u32 curVersion = 1;
-    SectionHeader header;
-    Info info;
-};
-struct CupsHolder {
-    static const u32 magic = 'CUPS';
-    static const u32 index = SECTION_CUPS;
-    static const u32 curVersion = 2;
-    SectionHeader header;
-    u16 ctsCupCount;
-    u8 regsMode;
-    u8 padding[1];
-    u16 trophyCount[4];
-    Track tracks[1];
-    //u16 alphabeticalIdx[1]; //slot 0's value = track index of the first track by alphabetical order
-};
-
-struct PulBMG {
-    static const u32 index = SECTION_BMG;
-    BMGHeader header;
-};
-
-struct ConfigFile {
-    void Destroy(u32 size) {
-        memset(this, 0, size);
-        delete(this);
-    }
-    static const char error[];
-    static ConfigFile* LoadConfig(u32* readBytes);
-    template <typename T>
-    inline const T& GetSection() const {
-        const T& section = *reinterpret_cast<const T*>(ut::AddU32ToPtr(this, this->header.offsets[T::index]));
-        return section;
-    }
-
-    template <class T>
-    static inline void CheckSection(const T& t) { if(t.header.magic != T::magic || t.header.version != T::curVersion) Debug::FatalError(error); }
-
-    static const u32 magic = 'PULS';
-    BinaryHeader header;
-    //InfoHolder infoHolder;
-    //CupsHolder cupsHolder;
-    //BMGHeader rawBmg;
-};
-
-template<>
-static inline void ConfigFile::CheckSection<PulBMG>(const PulBMG& bmg) {
-    if(bmg.header.magic != 0x4D455347626D6731) Debug::FatalError(error);
-}
 
 class System {
 protected:
     System();
 private:
     //System functions
-    void Init(const ConfigFile& bin);
-    void InitInstances(const ConfigFile& bin, IOType type) const {
-        CupsConfig::sInstance = new CupsConfig(bin.GetSection<CupsHolder>());
-        Info::sInstance = new Info(bin.GetSection<InfoHolder>().info);
-        this->InitIO(type);
-        this->InitSettings(defaultSettingsPageCount, &bin.GetSection<CupsHolder>().trophyCount[0]);
-    }
+    void Init(const ConfigFile& conf);
+    void InitInstances(const ConfigFile& conf, IOType type);
     void InitIO(IOType type) const;
-    void InitCups(const ConfigFile& bin);
-    void InitSettings(u32 pageCount, const u16* totalTrophyCount) const;
-
+    void InitCups(const ConfigFile& conf);
+    void InitSettings(const u16* totalTrophyCount) const;
+    void UpdateContext();
 protected:
-    static const u32 defaultSettingsPageCount = 5;
     //Virtual
     virtual void AfterInit() {};
-
 public:
+    static System* sInstance;
+
     virtual void SetUserInfo(Network::ResvInfo::UserInfo& userInfo) {};
     virtual bool CheckUserInfo(const Network::ResvInfo::UserInfo& userInfo) { return true; };
-    virtual u8 SetPackROOMMsg() { return 0; } //Only called for hosts
-    virtual void ParsePackROOMMsg(u8 msg) {}  //Only called for non-hosts
+    //Deprecated because you can now freely expand ROOM packets and do what you need to with them
+    //virtual u8 SetPackROOMMsg() { return 0; } //Only called for hosts
+    //virtual void ParsePackROOMMsg(u8 msg) {}  //Only called for non-hosts
+    const Info& GetInfo() const { return this->info; }
 
-    static System* sInstance;
+    bool IsContext(Context context) const { return (this->context & (1 << context)) != 0; }
+    static s32 OnSceneEnter(Random& random);
+
     const char* GetModFolder() const { return modFolderName; }
     static void CreateSystem();
 
     //Network
     static asmFunc GetRaceCount();
 
+    //Modes
+    static asmFunc GetNonTTGhostPlayersCount();
+
     //BMG
     const BMGHolder& GetBMG() const { return customBmgs; }
-
-    EGG::ExpHeap* const heap;
-    EGG::TaskThread* const taskThread;
+    /*
+    #define PatchRegion(addr)\
+        static inline u64 GetWiimmfiRegionStatic##addr(u64 src) {\
+            register const Info *info = &System::sInstance->GetInfo();\
+            asmVolatile(lwz r7, Info.wiimmfiRegion(info););\
+            return src;\
+        };\
+        kmBranch(addr, GetWiimmfiRegionStatic##addr);\
+        kmPatchExitPoint(GetWiimmfiRegionStatic##addr, ##addr + 4);
+    */
+    //VARIABLES
+    EGG::ExpHeap* const heap; //0x4
+    EGG::TaskThread* const taskThread; //0x8
     //Constants
 
 private:
-    char modFolderName[IOS::ipcMaxFileName + 1];
+    char modFolderName[IOS::ipcMaxFileName + 1]; //0xC
+    u8 padding[2];
+    Info info; //0x1c
+    u32 context;
 
 public:
-    //Network
-    bool hasHAW;
-    bool disableMiiHeads;
-    bool isCustomDeny;
-    u8 deniesCount;
-    u8 curBlockingArrayIdx;
-    u8 racesPerGP;
-    PulsarId* lastTracks;
+    //Network variables only set when reading a ROOM packet that starts the GP; they are only ever used in UpdateState; no need to clear them as ROOM will reupdat ethem
+    Network::Mgr netMgr;
+
     TTMode ttMode;
+
+    //LECODE data
+    LECODE::Mgr* lecodeMgr;
+
+    //Modes
+    KO::Mgr* koMgr;
+    u32 ottVoteState;
+    bool ottHideNames;
+    u8 nonTTGhostPlayersCount; //because a ghost can be added in vs, racedata's playercount is not reliable
 
 private:
     //Custom BMGS

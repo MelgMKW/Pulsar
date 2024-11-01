@@ -2,7 +2,7 @@
 #define _MEMHEAP_
 #include <types.hpp>
 #include <core/rvl/MEM/MEMlist.hpp>
-#include <core/rvl/os/mutex.hpp>
+#include <core/rvl/os/OSmutex.hpp>
 namespace MEM {
 enum HeapType {
     HEAPTYPE_EXP,    //Expanded

@@ -14,25 +14,10 @@ Contributors:
 #include <core/rvl/wpad.hpp>
 #include <MarioKartWii/Input/InputState.hpp>
 #include <MarioKartWii/Input/GhostWriter.hpp>
+#include <MarioKartWii/System/Identifiers.hpp>
+#include <core/nw4r/ut/RuntimeTypeInfo.hpp>
 
-enum ControllerType {
-    WHEEL = 0x0, //0xCHANNEL11
-    NUNCHUCK = 0x1, //0xCHANNEL12
-    CLASSIC = 0x2, //0xCHANNEL13
-    GCN = 0x3, //0xCHANNEL14
-    DUMMY = 0x4,
-    CPU = 0x5,
-    CONTROLLER_TYPE_NONE = -1
-};
-
-enum ControllerType2 {
-    TYPE2_WHEEL = 0x0, //0xCHANNEL11
-    TYPE2_NUNCHUCK = 0x1, //0xCHANNEL12
-    TYPE2_CLASSIC = 0x2, //0xCHANNEL13
-    TYPE2_GCN = 0x3, //0xCHANNEL14
-    TYPE2_NONE = 0x4
-};
-
+using namespace nw4r;
 namespace Input {
 
 class Controller {
@@ -44,14 +29,14 @@ public:
     virtual bool HasRumble() const; //0x14 80521d84
     virtual void ActivateRumble(); //0x18 8052208c
     virtual void StopRumble(); //0x1c 805220a4
-    virtual void Connect(); //0x20 8051f00c
+    virtual void ResetSelf(); //0x20 8051f00c
     virtual double func_0x24(); //0x24 80522834
     virtual void TogglePointer(bool enablePointer); //0x28 80522824
     virtual bool isPointerEnabled() const; //0x2c 8052281c
     virtual void UpdateBatteryField(); //0x30 8051f010
     virtual int GetChannel() const; //0x34 80522494
     virtual void SetDriftType(bool isDriftAuto); //0x38 8051f37c
-    virtual int GetRuntimeTypeInfo() const; //0x3c 8051f07c
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //0x3c 8051f07c
     virtual u8 GetRemainingBattery() const; //0x40 8051f074 
     virtual void Init(bool isDriftAuto); //0x44 8051f308 could be called init too
 
@@ -85,7 +70,7 @@ public:
     bool HasRumble() const override; //0x14 805228dc checks wiimote internal setting
     void ActivateRumble() override; //0x18 805228d0
     void StopRumble() override; //0x1c 805228c4
-    void Connect() override; //0x20 805228b4
+    void ResetSelf() override; //0x20 805228b4
     void TogglePointer(bool enablePointer) override; //0x28 8051ffb8
     bool isPointerEnabled() const override; //0x2c 805228f4
     int GetChannel() const override; //0x34 80522924
@@ -130,7 +115,7 @@ public:
     bool HasRumble() const override; //0x14 805206fc checks RKSYS setting
     void ActivateRumble() override; //0x18 80522858
     void StopRumble() override; //0x1c 8052284c
-    void Connect() override; //0x20 80522840
+    void ResetSelf() override; //0x20 80522840
     int GetChannel() const override; //0x34 80522864
     void Init(bool isDriftAuto) override; //0x44 80520118
     PAD::Status padStatus; //0x90
@@ -150,6 +135,7 @@ class GhostController : public Controller {
     double func_0x24() override; //0x24 80520a60
     void SetDriftType(bool isDriftAuto); //0x38 80522828
     void Init(bool isDriftAuto) override; //0x44 80520998
+    bool HasRKGInputs() const; //80520a4c
     RKGInputs* ghostInputs; //0x90
     GhostActionStream* actionStream; //0x94
     GhostDirectionStream* directionStream; //0x98

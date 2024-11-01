@@ -23,7 +23,7 @@ public:
     virtual void DetachAll(); //0x44 80058990
     const int bindingCount;  //0x10
     u16* const binding; //0x14 node to anim
-};
+}; //0x18
 
 class AnmObjTexPatRes : public AnmObjTexPat, public FrameCtrl {
 public:
@@ -41,9 +41,9 @@ public:
     bool Bind(const ResMdl resMdl) override; //0x30 800597d0
     const TexPatAnmResult* GetResult(TexPatAnmResult* result, u32 matID) override; //0x38 800598d0
 
-    const ResAnmTexPat res;
-    TexPatAnmResult* const  resultCache;
-};
+    const ResAnmTexPat res; //0x2c
+    TexPatAnmResult* const  resultCache; //0x30
+}; //0x34
 
 class AnmObjTexPatNode : public AnmObjTexPat {
 public:
@@ -62,9 +62,9 @@ public:
     AnmObjTexPatRes* Attach(int idx, AnmObjTexPatRes* obj) override; //0x3c 80058a50
     AnmObjTexPatRes* Detach(int idx) override; //0x40 80058b40
     void DetachAll() override; //0x44 80058c60
-    const int childrenArraySize;
-    AnmObjTexPatRes** const childrenArray;
-};
+    const int childrenArraySize; //0x18
+    AnmObjTexPatRes** const childrenArray; //0x1c
+}; //0x20
 
 class AnmObjTexPatOverride : public AnmObjTexPatNode {
     static AnmObjTexPatOverride* Construct(G3dHeap* Heap, u32* size, ResMdl resMdl, int  maxChildren); //80059160
@@ -73,7 +73,7 @@ class AnmObjTexPatOverride : public AnmObjTexPatNode {
     TypeObj GetTypeObj() const override; //0x14 80059e10
     const char* GetTypeName() const override; //0x18 80059de0
     const TexPatAnmResult* GetResult(TexPatAnmResult* result, u32 matID) override; //0x38 800592a0
-};
+}; //0x20
 
 }//namespace g3d
 }//namespace nw4r

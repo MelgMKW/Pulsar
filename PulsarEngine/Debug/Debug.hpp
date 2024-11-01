@@ -1,14 +1,7 @@
 #ifndef _PUL_Debug_
 #define _PUL_Debug_
-#include <core/System/SystemManager.hpp>
-#include <core/RK/RKSystem.hpp>
-#include <core/rvl/ipc/ipc.hpp>
-#include <core/rvl/base/ppc.hpp>
-#include <core/rvl/devfs/isfs.hpp>
-#include <core/rvl/os/OS.hpp>
-#include <core/rvl/os/Error.hpp>
-#include <core/rvl/os/thread.hpp>
-#include <core/egg/Exception.hpp>
+
+#include <core/rvl/os/OSError.hpp>
 
 namespace Pulsar {
 namespace Debug {
@@ -30,7 +23,7 @@ struct FPR {
         name = 'f00:' + regValue;
     }
     u32 name;
-    f64 fpr;
+    double fpr;
 };
 
 struct StackFrame {

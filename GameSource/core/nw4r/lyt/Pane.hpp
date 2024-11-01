@@ -7,6 +7,7 @@
 #include <core/nw4r/ut/LinkList.hpp>
 #include <core/nw4r/ut/List.hpp>
 #include <core/nw4r/ut/Color.hpp>
+#include <core/nw4r/ut/RuntimeTypeInfo.hpp>
 #include <core/nw4r/ut/Rect.hpp>
 #include <core/nw4r/math.hpp>
 
@@ -27,10 +28,9 @@ public:
 
 class Pane : public detail::PaneBase {
 public:
-    //Pane(nw4r::lyt::res::Pane const *); // todo: this struct
-    Pane(res::Pane* src); //80078980
+    Pane(const res::Pane* res); //80078980 
     ~Pane() override; //80078ac0 vtable 80273438
-    virtual void* GetRuntimeTypeInfo() const; //0xc 800798f0
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //0xc 800798f0
     virtual void CalculateMtx(const DrawInfo& info); //0x10 80078ef0
     virtual void Draw(const DrawInfo& info); //0x14 800791f0
     virtual void DrawSelf(const DrawInfo& info); //0x18 80079280

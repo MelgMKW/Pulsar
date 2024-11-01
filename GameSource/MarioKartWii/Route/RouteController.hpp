@@ -60,7 +60,7 @@ class RouteStraightController : public RouteController {
 }; //0x5c
 
 class RouteCurvedController : public RouteController { //Uses a cubic bezier curve
-    RouteCurvedController(); //806ee830
+    RouteCurvedController(u16 routeId, float baseSpeed); //806ee830
     ~RouteCurvedController() override; //806ef944 vtable 808c76d8 
     void SetParams() override; //0xC 806eead8
     void Init(u16 firstPoint, float startingPercent) override; //0x10 806ee924

@@ -61,8 +61,8 @@ size_assert(GhostData, 0xd8);
 
 class GhostGroup {
 public:
-    GhostGroup(EGG::Heap* heap, u32 type); //8051ce94 vtable 808b2d38
-    virtual ~GhostGroup(); //8051cff8
+    GhostGroup(EGG::Heap* heap, u32 type); //8051ce94 
+    virtual ~GhostGroup(); //8051cff8 vtable 808b2d38
     void DisableGhostData(u16 id); //8051d064 set isValid to false
     const GhostData* GetGhostData(u16 id) const; //8051d084 only if valid
     bool ReadRKG(u16 id, const RKG& src); //8051d0bc

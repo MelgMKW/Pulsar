@@ -1,8 +1,8 @@
 #ifndef _NW4R_UT_MISC_
 #define _NW4R_UT_MISC_
 #include <types.hpp>
-#include <core/rvl/OS/OS.hpp>
-#include <core/rvl/OS/Mutex.hpp>
+#include <core/rvl/os/OS.hpp>
+#include <core/rvl/os/OSMutex.hpp>
 
 namespace nw4r {
 namespace ut {
@@ -46,6 +46,12 @@ static inline void* AddU32ToPtr(void* pointer, u32 offset) {
 template<typename T>
 static inline const void* AddOffsetToPtr(const void* pointer, T offset) {
     return reinterpret_cast<const void*>(GetIntPtr(pointer) + offset);
+}
+
+template<typename T>
+inline const T*
+ConvertOffsToPtr(const void* baseAddress, unsigned int offset) {
+    return reinterpret_cast<const T*>(static_cast<const u8*>(baseAddress) + offset);
 }
 
 static inline const void* AddU32ToPtr(const void* pointer, u32 offset) {

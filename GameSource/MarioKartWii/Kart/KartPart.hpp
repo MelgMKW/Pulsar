@@ -7,10 +7,10 @@
 
 namespace Kart {
 
-class Part {
+class Part : public Link {
 public:
     Part(const Values& kartValues, u32 r5); //80592848
-    Link link;
+
     virtual ~Part(); //offset 0xc 8056c0cc vtable 808b6450
     virtual void vf_0xC(); //0xC 80592cbc
     virtual void Load(); //0x10 80592b54
@@ -22,7 +22,7 @@ public:
     virtual void vf_0x24(); //0x24 8056e46c
     virtual void ApplyStarColors(); //0x28 80592df8
     virtual void vf_0x2c(); //0x2c 80592e5c
-    virtual void vf_0x30(); //0x30 80592ee0
+    virtual void SetTEVSwapMode(); //0x30 80592ee0
     virtual void UpdateModelDrawPriority(u32 scnObjDrawOptionsIdx); //0x34 80592f4c
     virtual void SetModelScale(const Vec3& scale); //0x38 80592cdc
     virtual void SetModelMtx(const Mtx34& mtx); //0x3c 80592d04

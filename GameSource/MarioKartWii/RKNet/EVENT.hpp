@@ -18,8 +18,8 @@ enum EVENTAction {
     EVENTACTION_NONE,
     EVENTACTION_USE,
     EVENTACTION_SHOOT,
-    EVENTACTION_BREAKDRAGGED,
-    EVENTACTION_BREAK,
+    EVENTACTION_HITDRAGGED,
+    EVENTACTION_HITFREE,
     EVENTACTION_TC_LOST,
     EVENTACTION_6,
     EVENTACTION_DROP
@@ -38,24 +38,23 @@ struct EVENTType {
 size_assert(EVENTType, 0x1);
 
 struct EVENTPacket {
+    static const u32 idx = 7;
     EVENTType entryTypes[0x18]; //24 slots a value of 0x10 indicates no DATA on that slot
     u8 entryData[0xe0]; //not ordered, but each entry has its length
 };
 size_assert(EVENTPacket, 0xf8); //only as the types array and the used data entries are sent, so most times much smaller data is sent
-#pragma pack(pop)
 
-
-
-struct EVENTEntry {
-    u32 time;
-    u8 data[0x15]; //0x4 exact size depends on action
+struct EVENTEntry { //this means each entry has size up to 0x21
+    u16 time;
+    u8 data[0x17]; //0x2 exact size depends on action
     u8 state; //0x19 see enum
-    u8 ItemObjId; //0x1a
+    u8 itemObjId; //0x1a
     u8 action; //0x1b see enum
     u8 dataLength; //0x1c
-    u8 unknown_0x1d[0x1f - 0x1d];
+    u8 unknown_0x1d[3];
 };
 size_assert(EVENTEntry, 0x20);
+#pragma pack(pop)
 
 class EVENTHandler {
 public:

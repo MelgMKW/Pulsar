@@ -8,11 +8,13 @@ using namespace EGG;
 class ExpHeapGroup {
 public:
     void SetHeapsGroupId(u32 groupId); //80009bc0
-    ExpHeap* heaps[3];
+    void CalculateGroupSizes(); //80009c24
+    ExpHeap* heaps[3]; //mem1, mem2, debug
     ExpHeap::GroupSizeHolder groupSizes[3]; //0xC, one per heap
 }; //0xc0c
 
 class RKScene : public Scene {
+public:
     ~RKScene() override; //800073f0 vtable 802585d8
     ExpHeapGroup expHeapGroup; //0x30
     u8 unknown_0xc3c[0xc70 - 0xc3c]; //0xc3c

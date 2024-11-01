@@ -14,7 +14,7 @@ public:
         GroupSizeHolder(); //80226dd0
         void Reset(); //80226e00
         void Add(u16 groupId, u32 size); //adds size to the entry of groupId
-        u32 groupSize[0x100]; //in byte, the total size in bbytes of every block of a given groupId
+        u32 groupSize[0x100]; //in byte, the total size in bytes of every block of a given groupId
     }; //0x400
 
     static ExpHeap* Create(int size, Heap* parent, u16 flags); //80226ac8

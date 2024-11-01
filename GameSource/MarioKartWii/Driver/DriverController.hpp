@@ -43,7 +43,7 @@ class DriverModelBones {
     //0x54
 }; //0x60
 
-class DriverController {
+class DriverController : public Kart::Link {
 public:
     static char** characterNames; //808d6c58 "M Mii AM" for medium mii male outfit A
     DriverController(); //807c7364
@@ -53,8 +53,9 @@ public:
     void Update(); //807cb360
     void CreateModelDirectors(ModelDirector** driver, ModelDirector** driver_lod, Kart::BRRESHandle& handle, bool areTransparent); //807d21f8
     u32 GetBoneMatId(u32 boneId); //807d976c
+    void SetModels48Float(float value48Struct); //807d0898
+    void SetClipDistance(float distance); //807d0938
 
-    Kart::Link link;
     Audio::CharacterActor* characterActor; //0xC
     u8 unknown_0x10;
     u8 unknown_0x11[3];
@@ -72,7 +73,7 @@ public:
     g3d::ResFile driverModelBRRES; //0x68
     ModelDirector* driverModel; //0x6c linked to mdl0 of the brres above
     ModelDirector* driverModel_lod; //0x70 linked to mdl0_lod of the brres above
-    UnkType* opacityRelatedStruct;
+    ModelDirectorPair* mainAndLodPair; //0x74
     Mtx modelTransMtx; //0x78
     bool isCpu;
     u8 unknown_0xa9[0xB8 - 0xA9];

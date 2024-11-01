@@ -15,7 +15,7 @@ class MKChannelExplanation : public Page { //ID 0xca
     PageId GetNextPage() const override; //0x10 805bf1ac
     void OnInit() override; //0x28 805bf004 
     void OnActivate() override; //0x30 805bf1a0
-    int GetRuntimeTypeInfo() const override; //0x60 805bf2dc
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805bf2dc
     void OnButtonClick(CtrlMenuBackButton& button, u32 hudSlotId); //805bf1e4
     void OnBackPress(u32 hudSlotId); //805bf290
     static void TriggerButtonPtmf(PtmfHolder_2A<AddMKChannel, void, PushButton&, u32>&, u32); //805bf2f4
@@ -39,7 +39,7 @@ class AddMKChannel : public Page { //ID 0xcb
     void OnDispose() override; //0x2c 805beb28
     void OnActivate() override; //0x30 805beb2c
     void OnDeactivate() override; //0x34 805beb30
-    int GetRuntimeTypeInfo() const override; //0x60 805bf2e8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805bf2e8
 
     void OnAddButtonClick(PushButton& button, u32 hudSlotId); //805beb4c
     void OnCancelButtonClick(PushButton& button, u32 hudSlotId); //805bed74

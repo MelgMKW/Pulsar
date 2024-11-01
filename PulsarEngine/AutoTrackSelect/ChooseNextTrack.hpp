@@ -1,28 +1,13 @@
 #ifndef _CHOOSENEXTTRACK_
 #define _CHOOSENEXTTRACK_
 #include <kamek.hpp>
+#include <MarioKartWii/RKNet/RKNetController.hpp>
 #include <MarioKartWii/UI/Ctrl/SheetSelect.hpp>
 #include <MarioKartWii/UI/Page/RaceMenu/RaceMenu.hpp>
-#include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
-#include <MarioKartWii/Audio/RSARPlayer.hpp>
-#include <MarioKartWii/RKNet/RKNetController.hpp>
-#include <MarioKartWii/RKNet/EVENT.hpp>
-#include <MarioKartWii/UI/Ctrl/CountDown.hpp>
-#include <MarioKartWii/Race/RaceInfo/RaceInfo.hpp>
-#include <SlotExpansion/CupsConfig.hpp>
+#include <UI/UI.hpp>
+
 
 namespace Pulsar {
-
-namespace Network {
-
-struct PulEVENT {
-    PulEVENT(PulsarId id) : nextTrack(id) {}
-    PulsarId nextTrack;
-    u32 frames;
-};
-
-}//namespace Network
-
 namespace UI {
 
 class RaceControlButtonInfo : public ControlButtonInfo { //needed because inputs are inverted online in mirror
@@ -32,24 +17,22 @@ public:
 
 class ChooseNextTrack : public Pages::RaceMenu { //use page 0x27
 public:
+    static const PageId fakeId = PAGE_GHOST_RACE_ENDMENU; //never exists in an online race, and RaceMenu uses this id to know what/how to init and activate the page
+    static const PulPageId id = PULPAGE_CHOOSENEXT;
     enum Status {
-        STATUS_HOST,
-        STATUS_HOST_TRACK_SENT,
-        STATUS_HOST_FINALSENT,
-
         STATUS_NOTRACK,
-        STATUS_TRACKRECEIVED,
-        STATUS_CONFIRMATIONSENT,
-        STATUS_FINALHOSTRECEIVED,
-
+        STATUS_TRACK,
+        STATUS_HOST_START,
+        STATUS_RH1_READY,
         STATUS_NONE = -1
     };
+    static const u32 maxButtonCount = 5;
 
     ChooseNextTrack();
-    ~ChooseNextTrack() override { ++SectionMgr::sInstance->sectionParams->currentRaceNumber; }
+    ~ChooseNextTrack() override { ++SectionMgr::sInstance->sectionParams->onlineParams.currentRaceNumber; }
     void OnActivate() override;
     void OnUpdate() override;
-    //int GetRuntimeTypeInfo() const override;
+    //const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override;
     int GetMessageBMG() const override;
     u32 GetButtonCount() const override;
     const u32* GetVariantsIdxArray() const override;
@@ -62,54 +45,17 @@ private:
     void OnButtonClick(PushButton& button, u32 hudSlotId); //8055a0f4
 
 public:
-    bool IsHost() const { return this->status <= STATUS_HOST_FINALSENT; }
-    bool IsReady() const {
-        if(this->status == STATUS_FINALHOSTRECEIVED) return true;
-        else if(status == STATUS_HOST_FINALSENT) return true;
-        {
-            //++this->readyWait;
-            //if(readyWait >= maxTimeDiff) return true;
-        }
-        return false;
-    }
+    SectionId ProcessHAW(SectionId defaultId);
+    PageId GetPageAfterWifiResults(PageId defaultId) const;
 
-    void SendPacket(RKNet::EVENTAction action) {
-        RKNet::EVENTHandler* event = RKNet::EVENTHandler::sInstance;
-        if(!event->HasFreeEntries()) event->toSendEntries[23].state = RKNet::EVENTENTRYSTATE_FREE;
-        Network::PulEVENT packet(CupsConfig::sInstance->winningCourse);
-        u32 frames = RaceInfo::sInstance->raceFrames;
-        packet.frames = frames;
-        //this->lastSentFrames = frames;
-        event->AddEntry(static_cast<ItemObjId>(0x11), action, &packet, sizeof(Network::PulEVENT));
-    }
-
-    Status UpdateStatusHost() {
-        if(this->status == STATUS_HOST) { this->status = STATUS_HOST_TRACK_SENT; }
-        else {
-            const RKNet::ControllerSub& sub = RKNet::Controller::sInstance->subs[RKNet::Controller::sInstance->currentSub];
-            for(u8 aid = 0; aid < 12; aid++) {
-                if(aid == sub.localAid || (1 << aid & sub.availableAids) == 0) continue;
-                if(!this->hasReceivedHostTrack[aid]) return STATUS_NONE;
-            }
-            this->status = UI::ChooseNextTrack::STATUS_HOST_FINALSENT; //Final Confirmation
-        }
-        return this->status;
-    }
-
-    Status UpdateStatusNonHost() {
-        if(this->status == STATUS_TRACKRECEIVED) {
-            this->status = STATUS_CONFIRMATIONSENT;
-            return this->status;
-        }
-        return STATUS_NONE;
-    }
 
 private:
     void UpdateButtonInfo(s32 direction);
-
+    void UpdateRH1();
 public:
     const bool isBattle;
     Status status;
+    bool isHost;
     //u32 lastSentFrames;
 
     //HOST VARIABLES

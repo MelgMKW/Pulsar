@@ -13,7 +13,7 @@ class BattleModeSelect : public MenuInteractable { //ID 0x75
     void OnActivate() override; //0x30 8083b400
     void OnDeactivate() override; //0x34 8083b9f4
     void AfterControlUpdate() override; //0x4c 8083b8cc
-    int GetRuntimeTypeInfo() const override; //0x60 8083bb2c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8083bb2c
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64 8083b9ac
     int GetActivePlayerBitfield() const override; //0x68 8083ba48
     int GetPlayerBitfield() const override; //0x6C 8083ba40

@@ -77,6 +77,7 @@ class EntityManager : public EGG::Disposer {
 
     bool IsPrepared(const Vec3& position, u32 params); //80786e60 checks if cur entity is already of the type indicated by params
 
+    void RemoveEntiy(Entity** entity); //80786578
     Sub* subs; //0x10
     Sub* subs2; //0x14
     Entity* entities; //0x18 array size 100

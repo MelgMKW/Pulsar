@@ -5,11 +5,11 @@
 
 //_sinit_ at 8084edf8
 namespace Pages {
-class TopMenuOverlay : public Menu { //ID 0x5e but also 0xcc simply a MenuPage in its simplest form with no actions etc...
+class TopMenuOverlay : public Menu { //ID 0x5e but also 0xcc, 0xAB simply a MenuPage in its simplest form with no actions etc...
     static const PageId id = PAGE_TOP_MENU_OVERLAY;
     TopMenuOverlay(); //806261e8
     ~TopMenuOverlay() override; //8084ed6c vtable 808d9e48
-    int GetRuntimeTypeInfo() const override; //0x60 8084edec
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8084edec
     int GetActivePlayerBitfield() const override; //0x68 8084ed5c
     int GetPlayerBitfield() const override; //0x6C 8084ed54
     ManipulatorManager& GetManipulatorManager() override; //0x70 8084ed64

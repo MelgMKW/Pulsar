@@ -7,7 +7,7 @@
 #include <MarioKartWii/3D/Model/ModelDirector.hpp>
 #include <MarioKartWii/3D/Model/ShadowModelDirector.hpp>
 #include <MarioKartWii/Mii/MiiHeadsModel.hpp>
-#include <MarioKartWii/Race/RaceData.hpp>
+#include <MarioKartWii/Race/Racedata.hpp>
 
 using namespace nw4r;
 

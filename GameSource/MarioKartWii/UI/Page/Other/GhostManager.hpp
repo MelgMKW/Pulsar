@@ -21,14 +21,15 @@ enum GhostManagerPageState {
     STAFF_GHOST_REPLAY = 0xc
 };
 
+namespace Pages {
 class GhostManager;
+}//namespace Pages
 struct GhostListEntry {
-
     const GhostData* data; //0x0
     u32 ghostGroupId; //0x4
     u32 index; //0x8 ghost group ghostdata array index
     bool isNew; //0xC
-    u8 unknown_0xD[3];
+    u8 padding[3]; //in pulsar, this is used as the file index
 }; //total size 0x10
 
 class GhostList {
@@ -39,19 +40,19 @@ public:
     void FillWithAllDLdGhosts(); //805e2198
     void Init(CourseId id); //805e2200
     void Reset(); //805e22c8 inlined sets count to 0
-
     void FillFromGroup(u32 ghostGroupId, const GhostGroup& group, CourseId course, bool* isNew); //805e22d4 isNew only passed for downloaded ghosts
+
     void Sort(); //805e241c inlined
     static int CompareEntries(GhostListEntry* entry, GhostListEntry* entry2); //805e2430 returns distance between the 2?
     void EraseEntry(u32 entryIndex); //805e2610 erases it from the license too
     GhostData* GetGhostData(u32 entryIndex); //805e2500
     bool CheckIsNew(u32 entryIndex) const; //805e2528
     bool AreAllGhostsNew() const; //805e2554
-    void InitSectionParamsParams(s32 entryIndex) const; //805e2588
+    void SetSectionParamsGhostValues(s32 entryIndex) const; //805e2588
 
     GhostListEntry entries[38];
     u32 count; //0x260
-    GhostManager* ghostManagerPage; //0x264
+    Pages::GhostManager* ghostManagerPage; //0x264
 }; //total size 0x268
 
 //_sinit_ at 805e272c
@@ -68,7 +69,7 @@ public:
     void BeforeExitAnimations() override; //805e10fc
     void AfterControlUpdate() override; //805e1104
     void OnSectionChange() override; //805e1108
-    int GetRuntimeTypeInfo() const override; //805e2720
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //805e2720
 
     void UpdateState(); //805e1214
     void RequestAllGhosts(); //805e11b0 appears to be unused
@@ -96,10 +97,6 @@ public:
     RKG rkgBuffer; //0x30c
 };//total size 0x2b0c
 size_assert(GhostManager, 0x2B0C);
-}
-extern "C" {
-    CourseId GetCourseIdBySlot(u32 slot); //just the nbr of the track
-    void LoadStaffGhost(u32 ghostType, u32 courseId, RKG* rkgBuffer);
-    int CourseIdToGhostIndex(CourseId id);
+
 }//namespace Pages
 #endif

@@ -23,7 +23,7 @@ class ClipInfo { //as with entity, used by items, karts, objects...
     void Init(Vec3* position, bool isDefaultyEnabled, u16 area8GroupIds, AREARenderType type, u32 r7, u32 r8,
         float near, float maxSpeed, float farDistance); //80787c24
 
-    Vec3* position;
+    Vec3* position; //0
     float nearDistance; //0x4
     float farDistanceSquared; //0x8
     float unknown_0xC[4]; //0xC

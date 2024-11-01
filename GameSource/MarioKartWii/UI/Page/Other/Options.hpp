@@ -21,7 +21,7 @@ public:
     void OnInit() override; //805fd6e4
     void OnDispose() override; //805fd8e4
     void OnActivate() override; //805fd8e8
-    int GetRuntimeTypeInfo() const override; //80601068 returns809c1ce8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //80601068 returns809c1ce8
 
     void OnButtonClick(PushButton& pushButton, u32 hudSlotId); //805fd90c
     void OnBackPress(u32 hudSlotId); //805fda80
@@ -48,7 +48,7 @@ class WiFiOptions : public Page { //ID 0xC1
     PageId GetNextPage() const override; //0x10 8060104c
     void OnInit() override; //0x28 805fdc9c
     void OnActivate() override; //0x30 805fdf34
-    int GetRuntimeTypeInfo() const override; //0x60 80601054
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80601054
     void OnButtonClick(PushButton& pushButton, u32 hudSlotId); //805fdf58
     void OnBackPress(u32 hudSlotId); //805fe110
     static void TriggerPtmf(PtmfHolder_2A<WiFiOptions, void, PushButton&, u32>* handler, PushButton& button, u32 hudSlotId); //80601104
@@ -73,7 +73,7 @@ class OptionExplanation : public Page {//ID 0xc2 a message box with explanations
     ~OptionExplanation() override; //805fe240 vtable 808ba2f4
     void OnInit() override; //0x28 805fe2e0
     void OnActivate() override; //0x30 805fe460
-    int GetRuntimeTypeInfo() const override; //0x60 80601040
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80601040
     void OnButtonClick(PushButton& pushButton, u32 hudSlotId); //805fe48c
     void OnBackPress(u32 hudSlotId); //805fe57c
     static void TriggerPtmf(PtmfHolder_2A<OptionExplanation, void, PushButton&, u32>* handler, PushButton& button, u32 hudSlotId); //806010d4
@@ -97,7 +97,7 @@ class OptionChoice : public Page { //ID 0xc3 (2used buttons) and ID 0xc4(3 butto
     void OnInit() override; //0x28 805fe7d4
     void OnActivate() override; //0x30 805fea58
     void OnResume() override; //0x54 805fea88
-    int GetRuntimeTypeInfo() const override; //0x60 80601034
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80601034
     void OnButtonClick(PushButton& pushButton, u32 hudSlotId); //805febe4
     void OnBackPress(u32 hudSlotId); //805fed8c
     void SetTitleText(u32 bmgId); //805feb60 inlined
@@ -128,7 +128,7 @@ class RegionOptions : public Page {//ID 0xc5
     PageId GetNextPage() const override; //0x10 805ff134
     void OnInit() override; //0x28 805fef9c
     void OnActivate() override; //0x30 805ff128
-    int GetRuntimeTypeInfo() const override; //0x60 80601028
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80601028
     void OnButtonClick(PushButton& pushButton, u32 hudSlotId); //805ff194
     void OnBackButtonClick(CtrlMenuBackButton& backButton, u32 hudSlotId); //805ff1e0
     void OnBackPress(u32 hudSlotId); //805ff2a0
@@ -157,7 +157,7 @@ class MasterOptions : public Page { //ID 0xc6 chooses which option to load depen
     void BeforeExitAnimations() override; //0x40 805ff4dc
     void AfterControlUpdate() override; //0x4c 805ff4e0
     void OnResume() override; //0x54 805ff6c4 sets the option in rksys too
-    int GetRuntimeTypeInfo() const override; //0x60 8060101c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8060101c
     void SetNextPageType(u32 r4); //806000c4 inlined at 805fe070, no idea what r4 is
     void LoadOptionChoice(u32 r4); //806003e0 called by OnDeactivate r4 is add page layer r5, called if type = 0
     void LoadOptionFirstExplanation(u32 r4); //80600128 same, called if type >= 1

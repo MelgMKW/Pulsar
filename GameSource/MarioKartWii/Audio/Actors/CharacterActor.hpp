@@ -1,7 +1,7 @@
 #ifndef _CHARACTERACTOR_
 #define _CHARACTERACTOR_
 #include <kamek.hpp>
-#include <MarioKartWii/Race/RaceData.hpp>
+#include <MarioKartWii/Race/Racedata.hpp>
 #include <MarioKartWii/Audio/Other/RandomAudioMgr.hpp>
 #include <MarioKartWii/Audio/Actors/RaceActor.hpp>
 

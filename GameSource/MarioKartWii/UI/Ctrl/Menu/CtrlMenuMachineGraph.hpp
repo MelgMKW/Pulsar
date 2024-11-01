@@ -17,7 +17,7 @@ public:
     CtrlMenuMachineGraph(); //80627338
     ~CtrlMenuMachineGraph() override; //80627374 vtable 808d3420
     void OnUpdate() override; //807e7e1c
-    int GetRuntimeTypeInfo() const override; //0x28 807e8118
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807e8118
     const char* GetClassName() const override; //0x2c 807e7a2c
     void Load(u32 statsCountPerKart, u32 hudSlotId, bool isMultiplayer); //
     void OnDeactivate(CharacterId character, KartId kart); //807e7e20

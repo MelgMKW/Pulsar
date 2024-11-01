@@ -17,7 +17,7 @@ public:
     MatModelDirector(u32 scnMgrIdx, u32 scnObjDrawOptionsIdx, u32 bitfield); //805b906c
 
     ~MatModelDirector() override; //805b9124 vtable 808b7368
-    void AppendToScnManager() override; //0x24 805b918c
+    void AppendToScnMgr() override; //0x24 805b918c
     virtual void SetMatsTEVColors(u32 screenIdx) = 0; //8078de60
     void CopyMaterialsTevColors(); //805b91e0 copies ALL the materials' tev colors
     void SetMaterialNames(const char** names, u16 matCount, bool r6); //805b91d0
@@ -26,19 +26,19 @@ public:
     //DisposerVtable 808b7390 at 0x4c
     //~MatModelDirector() override; //thunk 805b92f8 func 805b9124
 
-    u8 unknown_0x5c[0x68 - 0x5c]; //0x5c
-
+    ut::Link scnMgrMatMdlDirectorLink; //0x5c
     g3d::ResTevColorDL** matsResTevColorCopy; //0x64 array of array of tevColors, one array per screen
     const char** matNames; //0x68
-    u8 unknown_0x5c[4]; //0x6c
+    u8 unknown_0x6c[4]; //0x6c
     u16 matCount; //0x70
     bool r6; //0x72
-    u8 padding[2];
+    u8 padding;
 }; //total size 0x74
-size_assert(MatModelDirector, 0x84);
+size_assert(MatModelDirector, 0x74);
 
 class MHModelDirector : public MatModelDirector {
 public:
+    static const char* matNames[12]; //808d1860
     static ut::Color torchColor; //808a4b5c
     MHModelDirector(u32 scnObjDrawOptionsIdx);  //8078de04 ctor inlined
     ~MHModelDirector() override; //80790a68 vtable 808d1890

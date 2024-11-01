@@ -1,18 +1,13 @@
-#include <kamek.hpp>
-#include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
-#include <MarioKartWii/Audio/RaceMgr.hpp>
-#include <PulsarSystem.hpp>
 #include <AutoTrackSelect/ExpFroomMessages.hpp>
-#include <SlotExpansion/UI/ExpansionUIMisc.hpp>
 #include <Settings/Settings.hpp>
-#include <UI/UI.hpp>
-
-#include <PulsarSystem.hpp>
+#include <SlotExpansion/CupsConfig.hpp>
+#include <SlotExpansion/UI/ExpansionUIMisc.hpp>
+#include <Gamemodes/OnlineTT/OTTRegional.hpp>
 
 namespace Pulsar {
 namespace UI {
 bool ExpFroomMessages::isOnModeSelection = false;
-u32 ExpFroomMessages::clickedButtonIdx = 0;
+s32 ExpFroomMessages::clickedButtonIdx = 0;
 
 void ExpFroomMessages::OnModeButtonClick(PushButton& button, u32 hudSlotId) {
     this->clickedButtonIdx = button.buttonId;
@@ -22,10 +17,10 @@ void ExpFroomMessages::OnModeButtonClick(PushButton& button, u32 hudSlotId) {
 void ExpFroomMessages::OnCourseButtonClick(PushButton& button, u32 hudSlotId) {
     CupsConfig* cupsConfig = CupsConfig::sInstance;
     u32 clickedIdx = clickedButtonIdx;
-    u32 id = button.buttonId;
+    s32 id = button.buttonId;
     PulsarId pulsarId = static_cast<PulsarId>(id);
-    if(clickedIdx < 2) {
-        if(id == this->msgCount - 1) {
+    if (clickedIdx < 2) {
+        if (id == this->msgCount - 1) {
             pulsarId = cupsConfig->RandomizeTrack();
         }
         else {
@@ -35,7 +30,7 @@ void ExpFroomMessages::OnCourseButtonClick(PushButton& button, u32 hudSlotId) {
         }
     }
     else pulsarId = static_cast<PulsarId>(pulsarId + 0x20U); //Battle
-    cupsConfig->winningCourse = pulsarId;
+    cupsConfig->SetWinning(pulsarId);
     PushButton& clickedButton = this->messages[0].buttons[clickedIdx];
     clickedButton.buttonId = clickedIdx;
     Pages::FriendRoomMessages::OnModeButtonClick(clickedButton, 0); //hudslot is unused
@@ -46,15 +41,15 @@ static void OnStartButtonFroomMsgActivate() {
     register ExpFroomMessages* msg;
     asm(mr msg, r31;);
 
-    if(!Info::IsHAW(true)) {
+    if (!Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_HOSTWINS)) {
         msg->onModeButtonClickHandler.ptmf = &Pages::FriendRoomMessages::OnModeButtonClick;
         msg->msgCount = 4;
     }
     else {
-        for(int i = 0; i < 4; ++i) msg->messages[0].buttons[i].HandleDeselect(0, -1);
-        if(msg->isOnModeSelection) {
+        for (int i = 0; i < 4; ++i) msg->messages[0].buttons[i].HandleDeselect(0, -1);
+        if (msg->isOnModeSelection) {
             msg->isOnModeSelection = false;
-            if(msg->clickedButtonIdx >= 2) msg->msgCount = 10;
+            if (msg->clickedButtonIdx >= 2) msg->msgCount = 10;
             else msg->msgCount = CupsConfig::sInstance->GetEffectiveTrackCount() + 1;
             msg->onModeButtonClickHandler.ptmf = &ExpFroomMessages::OnCourseButtonClick;
 
@@ -71,8 +66,8 @@ kmCall(0x805dc480, OnStartButtonFroomMsgActivate);
 //kmWrite32(0x805dc4c0, 0x60000000);
 
 static void OnBackPress(ExpFroomMessages& msg) {
-    if(Info::IsHAW(true) && msg.location == 1) {
-        if(!msg.isOnModeSelection) {
+    if (Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_HOSTWINS) && msg.location == 1) {
+        if (!msg.isOnModeSelection) {
             msg.isEnding = false;
             msg.OnActivate();
         }
@@ -93,25 +88,41 @@ u32 CorrectModeButtonsBMG(const RKNet::ROOMPacket& packet) {
     asm(mr rowIdx, r22;);
     register const ExpFroomMessages* messages;
     asm(mr messages, r19;);
-    if(Info::IsHAW(true) && !messages->isOnModeSelection) {
-        if(messages->clickedButtonIdx >= 2 && messages->clickedButtonIdx < 4) {
-            return BMG_BATTLE + messages->curPageIdx * 4 + rowIdx;
+    if (Settings::Mgr::Get().GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_HOSTWINS) && !messages->isOnModeSelection) {
+        if (messages->clickedButtonIdx >= 2 && messages->clickedButtonIdx < 4) {
+            return BMG_BATTLE + messages->curPageIdx * 4 + rowIdx + DELFINO_PIER;
         }
         else {
-            if(rowIdx + messages->curPageIdx * 4 == messages->msgCount - 1) {
+            if (rowIdx + messages->curPageIdx * 4 == messages->msgCount - 1) {
                 return BMG_RANDOM_TRACK;
             }
             else {
                 CupsConfig* cupsConfig = CupsConfig::sInstance;
                 bool hasRegs = cupsConfig->HasRegs();
                 u32 idx = messages->curPageIdx;
-                if(!hasRegs) idx += 8;
-                return GetTrackBMGId(cupsConfig->ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(idx), rowIdx)); //FIX HERE
+                if (!hasRegs) idx += 8;
+                return GetTrackBMGId(cupsConfig->ConvertTrack_PulsarCupToTrack(CupsConfig::ConvertCup_IdxToPulsarId(idx), rowIdx), true);
             }
         }
     }
     else return Pages::FriendRoomManager::GetMessageBmg(packet, 0);
 }
 kmCall(0x805dcb74, CorrectModeButtonsBMG);
+
+void CorrectRoomStartButton(Pages::Globe::MessageWindow& control, u32 bmgId, Text::Info* info) {
+    Network::SetGlobeMsgColor(control, -1);
+    if (bmgId == BMG_PLAY_GP || bmgId == BMG_PLAY_TEAM_GP) {
+        const u32 hostContext = System::sInstance->netMgr.hostContext;
+        const bool isOTT = hostContext & (1 << PULSAR_MODE_OTT);
+        const bool isKO = hostContext & (1 << PULSAR_MODE_KO);
+        if (isOTT || isKO) {
+            const bool isTeam = bmgId == BMG_PLAY_TEAM_GP;
+            bmgId = (BMG_PLAY_OTT - 1) + isOTT + isKO * 2 + isTeam * 3;
+        }
+    }
+    control.SetMessage(bmgId, info);
+}
+kmCall(0x805e4df4, CorrectRoomStartButton);
+
 }//namespace UI
 }//namespace Pulsar

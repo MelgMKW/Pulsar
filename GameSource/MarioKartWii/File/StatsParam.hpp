@@ -48,8 +48,7 @@ struct StatsParamFile {
         Vec2 rotatingItemsRadius; //0x170
         Vec2 rotatingItemsDistance;
         float vertical_tilt; //0x184
-        float megaScale;
-        float unknown_0x188;
+        float megaScale; //0x188
     }; //total size 0x18c
     u32 entryCount; //kart/driver count
     Entry entries[1]; //array of size entrycount

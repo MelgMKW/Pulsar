@@ -10,7 +10,7 @@ public:
     void Init() override; //0xc 807ed098
     void OnUpdate() override; //0x1c 807ed134
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 807ecfac
-    int GetRuntimeTypeInfo() const override; //0x28 807edc48
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807edc48
     const char* GetClassName() const override; //0x2c 807ecd88
     void SetPanePosition() override; //0x40 807ecd98
 
@@ -25,7 +25,7 @@ public:
     ~CtrlRaceBattleAddPoint() override; //807edc60 vtable 808d3b88
     void InitSelf() override; //0x18 807ec9ac
     void OnUpdate(); //0x1c 807eca8c
-    int GetRuntimeTypeInfo() const override; //0x28 807edc54
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807edc54
     const char* GetClassName() const override; //0x2c 807ec90c
 
     void Load(const char* ctrName, u8 hudSlotId); //807ec918
@@ -44,7 +44,7 @@ public:
     ~CtrlRaceBattleTotalPoint() override; //807edb84 vtable 808d3ae8
     void Init() override; //0xc 807ed268
     void OnUpdate(); //0x1c 807ed364
-    int GetRuntimeTypeInfo() const override; //0x28 807edbe0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807edbe0
     const char* GetClassName() const override; //0x2c 807ed258
 
     void Load(); //807ed9e8

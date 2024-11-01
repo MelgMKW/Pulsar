@@ -7,6 +7,7 @@
 #include <MarioKartWii/Objects/ObjectCollision.hpp>
 #include <MarioKartWii/Item/Obj/ItemObj.hpp>
 #include <MarioKartWii/KMP/KMPManager.hpp>
+#include <MarioKartWii/Mii/MiiCreationParams.hpp>
 
 
 class ObjFlowHolder {
@@ -80,7 +81,7 @@ public:
     virtual ~ObjectsMgr(); //8082a694 vtable 808d7fec
     void Start(); //8082a2b4
     void Update(); //8082a8f4
-    void CreateAllObjects(bool r4); //80826e8c
+    void CreateAllObjects(bool isMii); //80826e8c
     void CreateObject(const KMP::Holder<GOBJ>& gobj); //80821e14 "ObjectGenerator"
     void HandleItemCollision(ItemObj* itemObj, const Vec3& position, float unknown); //8082adbc
     void AddObject(Object* object); //8082b0e8
@@ -88,7 +89,9 @@ public:
     int GetManagedObjectsCount(); //8082b3b8
     Object* GetManagedObject(u32 idx); //8082b3a8
     void RegisterManagedObject(Object* object); //8082b3a0
-
+    static float GetPseaVeniceHeightDiff(float height); //8082b3d4 height - psea/venice height
+    static float GetPseaVeniceHeight(); //8082b3ec height - psea/venice height
+    static float GetPseaVeniceHeightMinus260(); //8082b400
 
     ObjFlowHolder* objFlow; //0x4
     GeoHitTableItemHolder* geoHitTableItem; //0x8
@@ -105,7 +108,7 @@ public:
     bool isTT; //0x55
     u8 padding6[2];
     ManagedObjects* managedObjects; //0x58 only for DC, MH, DC, rSGB, rDH, galaxy colosseum ie tracks with a object that is managed
-    u8 unknown_0x5c[4];
+    MiiCreationParams* miiCreationParams; //0x5c to create official miis randomly for objects that require it, at most one exists and it is initiated by whichever object needs it first
     bool unknown_0x60;
     u8 padding7[3];
     Mtx34 transformationMatrixes[4]; //0x64

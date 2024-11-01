@@ -8,8 +8,9 @@
 namespace RKNet {
 
 struct ITEMPacket {
+    static const u32 idx = 6;
     u8 timer; //start time in 8/60s
-    u8 storedItem;
+    u8 storedItem; //0x1
     u8 draggedItem;
     u8 mode; //0x3 0 = no item, 1-7 = handshake, 1 means newItem, start handshake
     u8 tailMode;
@@ -56,7 +57,7 @@ public:
     int GetModeRelatedInt(u8 playerId) const;
 
     ITEMPacket toSendPackets[2]; //one per player at console
-    ITEMPacket receivedPackets[12];
+    ITEMPacket receivedPackets[12]; //0x10
     u32 itemStatus[12]; //0x70 0 none, 1 valid item, 2 invalid (over the limit?)
     u32 startTimes[12]; //0xa0 60x packets timers
     u32 itemObjSums[15][3]; //0xb0 row is itemObj, col is stored/dragged/unknown

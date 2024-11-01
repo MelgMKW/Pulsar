@@ -22,25 +22,19 @@ enum ObjectType {
 };
 
 class Object;
-struct CyclePtmfs {
-    u16 id;
-    u8 padding[2];
-    Ptmf_0A<Object, void> ptmfs[2];
-}; //0x1c
-
 
 class Object {
 public:
     explicit Object(const KMP::Holder<GOBJ>& gobj); //8081f828
     Object(u16 objId, const Vec3& position, const Vec3& rotation, const Vec3& scale); //8081f9bc
     Object(const char* name, const Vec3& position, const Vec3& rotation, const Vec3& scale, u32 r8); //8081fb04 used for sub objects
-    static Random& GetRaceInfoRandom(); //80782f74
+    static Random& GetRaceinfoRandom(); //80782f74
 
     virtual ~Object(); //8067e3c4 vtable 808d6ecc
     virtual void OnStart(); //0xC 8081fc68
     virtual void vf_0x10(); //0x10 806807dc just a blr
     virtual void Update(); //0x14 806bf448
-    virtual void vf_0x18(); //0x18 0x18 806807d8 just a blr
+    virtual void vf_0x18(); //0x18 806807d8 just a blr
     virtual void UpdateModel(); //0x1c 808217b8
     virtual void Init() = 0; //0x20
     virtual u16 GetID() const; //0x24 80572574
@@ -52,8 +46,8 @@ public:
     virtual void* vf_0x3c(); //0x3c 806806d4
     virtual const char* GetShadowResName() const; //0x40 806806cc
     virtual void LoadModels(); //0x44 8081fcec calls loadgraphics
-    virtual void LoadModels(void* r4); //0x48 8081fd00 same
-    virtual void LoadGraphics(void* r4); //0x4c 8081fd10
+    virtual void LoadModels(Light* light); //0x48 8081fd00 same
+    virtual void LoadGraphics(Light* light); //0x4c 8081fd10
     virtual void LoadShadow(); //0x50 808205dc
     virtual void LoadSound(); //0x54 80820360
     virtual void LoadClipInfo(); //0x58 80821070
@@ -76,9 +70,9 @@ public:
     virtual Vec3& GetPosition(); //0x9c 80681598
     virtual float GetCollisionDiameter() const; //0xa0 8080bdc0 
     virtual bool IsLodDisbled(); //0xa4 80680610
-    virtual void vf_0xa8(); //0xa8 80680608
+    virtual bool IsMat1Shp1(); //0xa8 80680608 only has a single material so can use the simpler/smaller g3d class
     virtual bool DoCalcShadowMtx(); //0xac 80680600 if false, just copies the main model's mtx
-    virtual u32 GetDrawType() const = 0; //0xb0
+    virtual u32 GetScnObjDrawOptionsIdx() const = 0; //0xb0
 
     void LoadAnimationByType(u32 idx, AnmType type); //80820a90
     void LinkAnimations(char** brasd, char** idk, u32 brsadCount, u32 idkCount); //80820eb8
@@ -132,23 +126,6 @@ public:
     u8 padding3[3];
 }; //total size 0xac
 size_assert(Object, 0xaC);
-
-class ObjectCycleManager {
-    static CyclePtmfs cyclePtmfs;
-    virtual ~ObjectCycleManager();
-    //virtual int vf_0xC() = 0; //0xC this might be wrong since kart_truck has no such function 
-    u16 curPtmfArrayIdx;
-    u8 padding[2];
-    u32 nextPtmfArrayIdx; //0x8 
-    //set to -1 initially, setting it to 1 resets the route, for example a HeyHoBallGBA gets rethrown
-    //works similar to a state, where the specific object decides when to set the state
-    u32 frames; //resets when the object reaches the end of its route//its cycle
-    u16 cyclePtmfsCount; //unsure
-    u8 padding2[2];
-    u16* idsArray; //0x14 ptmfs used
-    CyclePtmfs* ptmfs; //0x18 808c5da0
-    Object* parent; //0x1c
-}; //0x20
 
 class ObjectEffect : public EGG::Effect {
 public:

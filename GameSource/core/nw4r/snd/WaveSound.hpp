@@ -13,7 +13,7 @@ namespace detail {
 class WaveSound : public BasicSound {
 public:
     WaveSound(WaveSoundInstanceManager* manager, int priority, int ambientPriority); //800ad4a0
-    int GetRuntimeTypeInfo() override; //800ad840
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //800ad840
     ~WaveSound() override; //800ad690 vtable 80274b80
     void Shutdown() override; //800ad5f0
     bool IsPrepared() override; //800ad830

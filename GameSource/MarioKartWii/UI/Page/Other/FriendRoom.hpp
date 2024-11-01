@@ -11,16 +11,16 @@
 #include <MarioKartWii/UI/Ctrl/MessageWindowControl.hpp>
 #include <MarioKartWii/RKNet/Room.hpp>
 
-
+//_sinit_ at 805de9bc
 namespace Pages {
 class FriendRoomMessages;
-}
+} //namespace Pages
 
 class UnkUnkFriendRoomManager {
     RKNet::ROOMPacket packet;
     u8 index; //id * 2 + isGuest
     u8 unknown_0x5[0x8 - 0x5];
-};
+}; size_assert(UnkUnkFriendRoomManager, 0x8);
 
 class UnkFriendRoomManager {
     ~UnkFriendRoomManager(); //805dae80
@@ -29,20 +29,20 @@ class UnkFriendRoomManager {
     u8 unknown[0xf0 - 0x60];
     u32 lastSentAid;
     RKNet::ROOMPacket receivedPackets[24]; //0xf4 arranged by pairs
+    u8 unknown_0x154[4];
 }; //0x158
-
-
+size_assert(UnkFriendRoomManager, 0x158);
 
 class FriendMatchingPlayer : public LayoutUIControl {
     FriendMatchingPlayer(); //805d945c
     ~FriendMatchingPlayer() override; //805d94d0 vtable 808b8f90
     void InitSelf() override; //0x18 805d9614
     void OnUpdate() override; //0x1c 805d9700
-    int GetRuntimeTypeInfo() const override; //0x28 805de884
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805de884
     const char* GetClassName() const override; //0x2c 805d944c
     void Load(MiiGroup* miiGroup, u8 id, bool isGuest); //805d9528
     void OnMessageSent(Mii& mii); //805d9aa8 just does the animation, mii isn't actually used
-    PtmfHolder_1A<FriendMatchingPlayer, void, Mii&> onMessageSentHandler; //0x174 805d9aa8
+    PtmfHolder_1A<FriendMatchingPlayer, void, Mii&> onMessageSentHandler; //0x174 805d9aa8 808b8fcc
     MiiGroup* miiGroup; //0x188
     u8 id; //0x18c
     bool isGuest; //0x18d
@@ -62,7 +62,7 @@ public:
     void InitSelf() override; //0x18 805db8ec
     void OnUpdate() override; //0x1c 805db8f0
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20  805db9e8
-    int GetRuntimeTypeInfo() const override; //0x28 805de86c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805de86c
     const char* GetClassName() const override; //0x2c 805db6b8
     void Load(); //805db798
     void Activate(); //805dba20 plays show anim + sets playerbitfield
@@ -81,6 +81,21 @@ size_assert(MessageSelectControl, 0xAC4);
 
 namespace Pages {
 
+class FriendJoinMgr : public Page { //ID 0x9a when joining via channel
+public:
+    static const PageId id = PAGE_FRIEND_JOIN_MGR;
+    FriendJoinMgr(); //805d796c
+    ~FriendJoinMgr() override; //805d79b0
+    PageId GetNextPage() const override; //0x10 805d7d6c
+    void OnInit() override; //0x28 805d7a18
+    void OnActivate() override; //0x30 805D7A84
+    void BeforeEntranceAnimations() override; //0x38 805D7D54
+    void AfterEntranceAnimations() override; //0x3c 805d7d58
+    void BeforeExitAnimations() override; //0x40 805d7d68
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805d7d74
+    ManipulatorManager manipulatorManager;
+    PageId nextPage; //0x54
+}; //0x58
 class FriendRoomWaiting : public Page { //ID 0x9b
 public:
     static const PageId id = PAGE_FRIEND_ROOM_WAITING;
@@ -95,7 +110,8 @@ public:
     void BeforeExitAnimations() override; //0x40 805dd7c0
     void AfterControlUpdate() override; //0x4c 805dd7c4
     void OnResume() override; //0x54 805ddcc8
-    int GetRuntimeTypeInfo() const override; //0x60 805de854
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805de854
+    void StartRoom(); //805de090 resets SectionParams, sets initial countdown, goes to character select etc..
     ManipulatorManager manipulatorManager; //0x44
     MatchingMessageWindow messageWindow; //0x54
     CountDownTimerControl countdownControl; //0x1c8
@@ -116,7 +132,7 @@ public:
     void AfterEntranceAnimations() override; //0x3c 805d9f20
     void BeforeExitAnimations() override; //0x40 805da028
     void AfterControlUpdate() override; //0x4c 805da140
-    int GetRuntimeTypeInfo() const override; //0x60 805de878
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805de878
     static u32 GetMessageBmg(const RKNet::ROOMPacket& packet, u32 r4); //805dacb0
     void SetToSendPacket(const RKNet::ROOMPacket& packet); //805dae30
     void SetPacket(const RKNet::ROOMPacket& packet, u8 id); //805dae58
@@ -134,8 +150,8 @@ public:
     u32 waitingDuration; //0x2aec at 3600 frames something happens with the globe (reset?)
     bool isWaiting; //0x2af0 if true, busySymbol is made visible
     u8 unknown_0x2af1[0x2af8 - 0x2af1];
-    u8 lastMessageId; //1 to 4 
-    u8 unknown_0x2af8[0x2b08 - 0x2af8]; //0x2af1
+    u8 lastMessageId; //0x2af8 1 to 4 
+    u8 unknown_0x2af9[0x2b08 - 0x2af9];
     UnkFriendRoomManager unknownStruct; //0x2b08
     RKNet::ROOMPacket lastSentPacket; //0x2c60
     u8 localAid; //0x2c64
@@ -153,7 +169,7 @@ public:
     void OnDeactivate() override; //0x34 805d84fc
     void AfterControlUpdate() override; //0x4c 805d8508
     void OnResume() override; //0x54 805d8c98
-    int GetRuntimeTypeInfo() const override; //0x60 805de890
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805de890
     void SetStatus(u32 status); //805d8f40
     void OnMessagesButtonClick(PushButton& button, u32 hudSlotId); //805d8f84
     void OnStartButtonClick(PushButton& button, u32 hudSlotId); //805d906c
@@ -193,7 +209,7 @@ public:
     void OnActivate() override; //0x30 805dc378
     void OnDeactivate() override; //0x34 805dc71c
     void BeforeControlUpdate() override; //0x48 805dc7b8
-    int GetRuntimeTypeInfo() const override; //0x60 805de860
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805de860
     void UpdateMessages(); //805dcab4
     void OnMessageButtonClick(PushButton& button, u32 hudSlotId); //805dcc70
     void OnModeButtonClick(PushButton& button, u32 hudSlotId); //805dcd78

@@ -5,6 +5,7 @@
 #include <MarioKartWii/Objects/Collidable/ObjectCollidable.hpp>
 #include <MarioKartWii/Math/Vector.hpp>
 #include <MarioKartWii/Route/Linked3DPoints.hpp>
+#include <MarioKartWii/System/StatePtmfTrigger.hpp>
 
 namespace Objects {
 
@@ -16,20 +17,6 @@ class HanachanPart;
 
 using namespace nw4r;
 
-class UnkCycleParent { //extremely similar to CycleManager but vf_0xC does not return anything
-public:
-    virtual ~UnkCycleParent();
-    virtual void vf_0xC(); //0xC 
-    u16 unknown_0x4;
-    u8 padding[2];
-    u32 unknown_0x8;
-    u32 frames; //resets when the object reaches the end of its route//its cycle
-    u16 routePtmfsCount; //unsure
-    u8 padding2[2];
-    u16* idsArray; //0x14 ptmfs used
-    CyclePtmfs* ptmfs; //0x18 808c5da0
-    Object* parent; //0x1c
-};
 
 class HanachanPart : public ObjectCollidable {
 public:
@@ -43,9 +30,9 @@ public:
     void LoadRoute() override; //0x64 806ccacc
     void UpdateModelMatrix() override; //0x6c 806cca14
     bool vf_0x84() override; //0x84 0x84 806cca0c
-    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806c6c94
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 806c6c94
     ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 806c6e40
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) override; //0xc4 806c6e40
 
     virtual void vf_0xec() = 0; //0xec 
     virtual void vf_0xf0() = 0; //0xf0 
@@ -124,7 +111,7 @@ public:
 
 }; //0x104
 
-class Hanachan : public ObjectCollidable, public UnkCycleParent { //ObjectNum 0xe2 = 226 Hanachan
+class Hanachan : public ObjectCollidable, public StatePtmfTrigger<Hanachan> { //ObjectNum 0xe2 = 226 Hanachan
 public:
     explicit Hanachan(const KMP::Holder<GOBJ>& gobjHolder); //806c8a5c
     ~Hanachan() override; //806c9598 vtable 808c43b8
@@ -136,9 +123,9 @@ public:
     void LoadClipInfo() override; //0x58 806cc9f0
     void LoadCollision() override; //0x60 806cc9f4
 
-    //UnkCycleParent vtable 808c44a4 at 0xB0 4 ptmfs
+    //StatePtmfTrigger vtable 808c44a4 at 0xB0 4 ptmfs
     //~Hanachan() override; thunk 806cce88
-    void vf_0xC() override; //0xC 806ca24c
+    virtual void vf_0xC(); //0xC 806ca24c
 
     u8 partCount; //0xd0 init at 7
     u8 padding[3];

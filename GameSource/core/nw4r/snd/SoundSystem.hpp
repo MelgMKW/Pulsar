@@ -1,7 +1,7 @@
 #ifndef _NW4R_SND_SOUNDSYSTEM_
 #define _NW4R_SND_SOUNDSYSTEM_
 #include <types.hpp>
-#include <core/rvl/os/thread.hpp>
+#include <core/rvl/os/OSthread.hpp>
 
 namespace nw4r {
 namespace snd {

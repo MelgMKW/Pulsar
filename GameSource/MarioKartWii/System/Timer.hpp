@@ -5,6 +5,9 @@
 class Timer {
 public:
     Timer(); // 8051c374
+    Timer(bool setActive); //805442c0 if bool is true, timer is init at 99:99.999
+    void SetActive(bool isActive); //80544310
+
     Timer& operator=(const Timer& src) {
         this->minutes = src.minutes;
         this->seconds = src.seconds;
@@ -19,6 +22,9 @@ public:
         else if(src.minutes == this->minutes && src.seconds < this->seconds) return true;
         else if(src.minutes == this->minutes && src.seconds == this->seconds && src.milliseconds <= this->milliseconds) return true;
         return false;
+    }
+    const bool operator<(const Timer& src) const {
+        return !(*this > src);
     }
 
     virtual ~Timer(); //8051c334 vtable 808b2d44

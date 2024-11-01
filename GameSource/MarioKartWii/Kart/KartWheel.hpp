@@ -10,13 +10,13 @@
 
 namespace Kart {
 
-class WheelPhysics {
+class WheelPhysics : public Link {
 public:
     WheelPhysics(u32 wheelIdx, u32 bspWheelIdx); //8059940c
     void Reset(); //80599508
     void InitHitboxGroup(); //80599470
     void Realign(const Vec3& bottomDirection, const Vec3& unknown); //80599ad0
-    Link link;
+
     virtual ~WheelPhysics(); //0xC 8059a9c4 vtable 808b66a4
     u32 wheelIdx; //0x10
     u32 bspWheelIdx;
@@ -34,14 +34,14 @@ public:
     Vec3 topmostPosition;
 }; //Total size 0x84
 
-class WheelPhysicsHolder {
+class WheelPhysicsHolder : public Link {
 public:
     WheelPhysicsHolder(u32 wheelIdx, bool xMirroredKart, u32 bspWheelIdx); //80599ed4
     void Reset(); //80599f54
     void Update(const Vec3& gravity, const Mtx34& wheelMat, float unknown); //8059a278
     void ApplySuspensions(const Vec3& forwardDirection, const Vec3& unknown); //8059a574
     void UpdateCollision(Vec3& bottomPos, Vec3& topmostPosition); //80599690
-    Link link;
+
     //vtable 808b66b0
     BSP::Wheel* bspWheel; //http://wiki.tockdom.com/wiki/BSP_(File_Format)
     WheelPhysics* wheelPhysics;

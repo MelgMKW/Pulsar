@@ -40,7 +40,8 @@ public:
         ANMOBJTYPE_MATCLR,
         ANMOBJTYPE_TEXPAT,
         ANMOBJTYPE_TEXSRT,
-        ANMOBJTYPE_SHP
+        ANMOBJTYPE_SHP,
+        ANMOBJTYPE_NOT_SPECIFIED
     };
     enum BufferOption {
         BUFFER_RESTEXOBJ = 0x00000001,

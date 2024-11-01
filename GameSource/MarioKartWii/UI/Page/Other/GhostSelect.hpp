@@ -29,7 +29,7 @@ class GhostSelectSupporting : public Page { //ID 0x70
     void BeforeExitAnimations() override; //80639148
     void AfterControlUpdate() override; //8063914c
     void OnResume() override; //80639260
-    int GetRuntimeTypeInfo() const override; //8063a4d4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8063a4d4
     void InitGhostList(); //based on state 806393c8
     ManipulatorManager controller; //0x44 to 0x54
     PageId nextPageId; //set to -1 by OnDeactivate, then by 0x71 by
@@ -48,7 +48,7 @@ public:
     void OnActivate() override; //80639bd0
     void BeforeEntranceAnimations() override; //80639d34
     void OnResume() override; //80639d6c
-    int GetRuntimeTypeInfo() const override; //8063a4c0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8063a4c0
 
     void OnChallengeGhostPress(PushButton& button, u32 hudSlotId);
     void OnWatchReplayPress(PushButton& button, u32 hudSlotId);
@@ -75,7 +75,7 @@ public:
     PtmfHolder_2A<Page, void, PushButton&, u32> onSoloTimeTrialClickHandler; //8063a3e0 0x18DC
     PtmfHolder_2A<Page, void, CtrlMenuBackButton&, u32> onBackButtonClickHandler; //8063a444 0x18F0
     PtmfHolder_1A<Page, void, u32> onBackPress; //8063a400 0x1904
-    GhostList* ghostList; //0x1918 from page 0xA7
+    GhostList* ghostList; //0x1918 from ghostmanager
     u32 page; //0x191C
     PageId nextPageId; //0x1920
 }; //total size 0x1924

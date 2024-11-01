@@ -21,7 +21,7 @@ public:
     void OnDispose() override; //0x2C 80853a8c
     void OnActivate() override; //0x30 8085354c
     void AfterControlUpdate() override; //80853650
-    int GetRuntimeTypeInfo() const override; //0x60 returns 809c4538 80853bd8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 returns 809c4538 80853bd8
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64 80853684
     int GetActivePlayerBitfield() const override; //0x68 80853aa4
     int GetPlayerBitfield() const override; //0x6C 80853a9c
@@ -60,6 +60,7 @@ public:
     PtmfHolder_2A<Page, void, UpDownControl&, u32>* upDownClickHandler; //0x1E04
     PtmfHolder_2A<Page, void, UpDownControl&, u32>* upDownSelectHandler; //0x1E08
     PtmfHolder_2A<Page, void, TextUpDownValueControl::TextControl&, u32>* onTextChangeHandler; //0x1E0C
+    static ut::detail::RuntimeTypeInfo* typeInfo;
 }; //0x1E10
 size_assert(VSSettings, 0x1e10);
 }//namespace Pages

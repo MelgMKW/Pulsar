@@ -20,9 +20,9 @@ public:
 
 class ArcResourceAccessor {
     bool Attach(void* archiveStart, const char* dir); //80083f80
-    void FindNameResource(ARCHandle* handle, const char* stringPool); //80083d10
-    void* GetResourceSub(ARCHandle* handle, const char* folderName, u32 type, const char* fileName, u32 r7); //80083de0
-    ARCHandle handle;
+    void FindNameResource(ARC::Handle* handle, const char* stringPool); //80083d10
+    void* GetResourceSub(ARC::Handle* handle, const char* folderName, u32 type, const char* fileName, u32 r7); //80083de0
+    ARC::Handle handle;
     void* arcBuffer;
     ut::LinkList<FontRefLink, offsetof(FontRefLink, link)> fontList;
     char folderName[0x80];

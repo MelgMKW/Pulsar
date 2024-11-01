@@ -9,7 +9,7 @@ public:
     static const PageId id = PAGE_GP_ENDMENU;
     GPRaceEnd(); //80624dc0
     ~GPRaceEnd() override; //80632c2c vtable 808bd89c
-    int GetRuntimeTypeInfo() const override; //0x60 80632c98
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80632c98
     int GetMessageBMG() const override; //0x68 80632ba8
     u32 GetButtonCount() const override; //0x6c 80632bfc
     const u32* GetVariantsIdxArray() const override; //0x70 80632bf0

@@ -13,7 +13,7 @@ class GPClassSelect : public MenuInteractable { //ID 0x6a
     void OnActivate() override; //0x30 8083f838
     void OnDeactivate() override; //0x34 8083fbc4
     void AfterControlUpdate() override; //0x4c 8083f914
-    int GetRuntimeTypeInfo() const override; //0x60 808401c4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 808401c4
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64  8083fb2c
     int GetActivePlayerBitfield() const override; //0x68 808400d4
     int GetPlayerBitfield() const override; //0x6C 808400cc

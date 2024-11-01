@@ -29,9 +29,9 @@ public:
     virtual void incoming_child_destroy(); //0x20 80007f38
     virtual void outgoing_child_create(); //0x24 80007f34
     ExpHeap* parentHeap; //0x10
-    ExpHeap* mem1Heap; //0x14
-    ExpHeap* mem2Heap; //0x18
-    void* unknown_0x1c; //0x1c
+    ExpHeap* otherMEMHeap; //0x14 every scene is created with mem2 as the main MEM therefore this is mem1
+    ExpHeap* mainMEMHeap; //0x18 mem2
+    ExpHeap* debugHeap; //0x1c
     Scene* parent; //0x20
     Scene* child;
     u32 id; //0x28
@@ -41,6 +41,10 @@ size_assert(Scene, 0x30);
 
 class SceneManager {
 public:
+    static ExpHeap* creatingSceneOtherMEMHeap; //80386f04
+    static ExpHeap* creatingSceneMainMEMHeap; //80386f08
+    static Scene* creatingSceneDebugHeap; //80386f0c
+
     SceneManager(SceneCreator* creator); //8023addc
     virtual void calc();                //0x8  8023ae60 vtable 802a3e08
     virtual void draw();                //0xc  8023aeac 
@@ -76,7 +80,7 @@ public:
     u32 someKindOfSceneId; //0x1c
     u32 actionAfterFade; //0x20 0 changeUncle, 1 changeSibling, 2 outgoingParent, 4 destroyToSelect, 3 reinit
     ColorFader* colorFader; //0x24
-    u32 nextSceneMEM; //0x28, 1 for mem2, unsure
+    u32 nextSceneMainMEM; //0x28, 1 for mem2, unsure
     SceneCreator* nextSceneCreator; //0x2c
 
 

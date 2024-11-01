@@ -20,7 +20,7 @@ public:
     void BeforeEntranceAnimations() override; //0x38 808405c0
     void BeforeExitAnimations() override; //0x40 80840b1c
     void AfterControlUpdate() override; //0x4c 8084060c
-    int GetRuntimeTypeInfo() const override; //0x60 80840dcc
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80840dcc
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64  80840aac
     int GetActivePlayerBitfield() const override; //0x68 80840c7c
     int GetPlayerBitfield() const override; //0x6C 80840c74

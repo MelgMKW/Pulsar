@@ -12,7 +12,7 @@ class GPVSLeaderboardUpdate : public Leaderboard { //ID 0x2f
 public:
     struct Player {
         u32 totalScore;
-        u32 lastRaceScore;
+        u32 lastRaceScore; //the score just obtained
         u8 playerId; //0x8
         u8 padding[3];
     }; //total size 0xC
@@ -21,7 +21,7 @@ public:
     ~GPVSLeaderboardUpdate() override; //8085e5bc vtable 808dac18
     PageId GetNextPage() const override; //0x10 8085c974
     void OnInit() override; //0x28 8085c3e0
-    int GetRuntimeTypeInfo() const override; //0x60 8085e62c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8085e62c
     bool CanEnd() override; //0x64 8085c504
     void FillRows() override; //0x68 8085c858
     virtual void func_0x6c(); //0x6c 8085c5a0

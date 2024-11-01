@@ -29,4 +29,9 @@ public:
     ~ScnProcEffectsSelfItem() override; //805b3ea8
 };
 
+class ScnProcCourseFilterEffect : public EGG::IScnProc { //star, bill, mega, thunder
+public:
+    void Draw(u16 scnProcIdx) override; //0x8 805b3ad4 vtable 808b7050
+    ~ScnProcCourseFilterEffect() override; //805b3f00
+};
 #endif

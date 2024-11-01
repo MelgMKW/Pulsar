@@ -11,8 +11,8 @@
 */
 
 extern "C" {
-
-    extern char Patch_LoginPrintHeader[], Patch_WiimmfiURLs[];
+    extern char Patch_LoginPrintHeader[]; //part of DWC::iLoginInit strings, the **** header, effectively unused so free and used for the header
+    extern char Patch_WiimmfiURLs[];
     extern const char* Patch_AuthserverHosts[3];
 
     extern s32 DWC_AuthServer, SSL_Initialised;
@@ -28,15 +28,15 @@ static asmFunc wiimmfiAsm1() {
     ASM(
         nofralloc;
 
-    // Original instruction
+    //Original instruction
     cmpwi r3, 0;
 
-    // Return workaround
+    //Return workaround
     mflr r23;
 
     ble end;
 
-    // r13 replacements
+    //r13 replacements
     lis r11, DWC_AuthServer@ha;
     lis r12, SSL_Initialised@ha;
 
@@ -50,7 +50,7 @@ static asmFunc wiimmfiAsm1() {
     stw r0, DWC_AuthServer@l(r11);
     b end;
 
-    // Execute payload
+    //Execute payload
 cont:
     addi r4, r3, 3;
     rlwinm r4, r4, 0, 0, 29;
@@ -60,16 +60,16 @@ cont:
     mtlr r5;
     blrl;
 
-    // Original instruction
+    //Original instruction
 end:
     li r3, -1;
     cmpwi r3, 0;
 
-    // Return workaround
+    //Return workaround
     mtlr r23;
     li r23, 0;
     blr;
-    )
+        )
 }
 
 kmCall(0x800ee3a0, wiimmfiAsm1);
@@ -78,26 +78,26 @@ asmFunc wiimmfiAsm2() {
     ASM(
         nofralloc;
 
-    // Return workaround
+    //Return workaround
     stwu sp, -8 (sp);
     mflr r3;
     stw r3, 4 (sp);
 
     lis r12, SSL_Initialised@ha;
 
-    // Check if inited
+    //Check if inited
     lwz r4, SSL_Initialised@l(r12);
     cmplwi r4, 1;
     ble nomatch;
 
-    // Push stack
+    //Push stack
     stwu sp, -0x80 (sp);
 
-    // Call NETSHA1Init
+    //Call NETSHA1Init
     addi r3, sp, 0x20;
     bl NETSHA1Init;
 
-    // Call NETSHA1Update
+    //Call NETSHA1Update
     addi r3, sp, 0x20;
     lis r12, SSL_Initialised@ha;
     lwz r4, SSL_Initialised@l(r12);
@@ -105,19 +105,19 @@ asmFunc wiimmfiAsm2() {
     stw r5, 0xC4 (r28);
     bl NETSHA1Update;
 
-    // Call NETSHA1GetDigest
+    //Call NETSHA1GetDigest
     addi r3, sp, 0x20;
     addi r4, sp, 0x10;
     bl NETSHA1GetDigest;
 
-    // Setup loop
+    //Setup loop
     lis r3, (expectedHash - 4)@h;
     ori r3, r3, (expectedHash - 4)@l;
     addi r4, sp, 0xC;
     li r5, 5;
     mtctr r5;
 
-    // Loop it!
+    //Loop it!
 loop:
     lwzu r5, 0x4(r3);
     lwzu r6, 0x4(r4);
@@ -125,7 +125,7 @@ loop:
     bne out;
     bdnz + loop;
 
-    // Check if we found a match and pop the stack
+    //Check if we found a match and pop the stack
 out:;
     cmpw r6, r5;
     addi sp, sp, 0x80;
@@ -133,17 +133,17 @@ out:;
     lwz r4, SSL_Initialised@l(r12);
     beq end;
 
-    // Return 0 otherwise
+    //Return 0 otherwise
 nomatch:
     li r4, 0;
 
 end:
-    // Return workaround
+    //Return workaround
     lwz r3, 4 (sp);
     mtlr r3;
     addi sp, sp, 8;
     blr;
-    )
+        )
 }
 
 kmCall(0x801d4efc, wiimmfiAsm2);
@@ -155,12 +155,12 @@ static void patchURL(u32 offset, const char* string)
 
 static int stringPatch()
 {
-    strcpy(Patch_LoginPrintHeader, "Pulsar"); // set patcher name
+    strcpy(Patch_LoginPrintHeader, "Pulsar"); //set patcher name
 
     Patch_AuthserverHosts[0] = "http://ca.nas.wiimmfi.de/ca";
     Patch_AuthserverHosts[1] = "http://naswii.wiimmfi.de/ac";
 
-    // Get path
+    //Get path
     const char* path;
     switch(*(char*)0x80000003)
     {
@@ -179,24 +179,24 @@ static int stringPatch()
     }
 
     patchURL(0xA8, "://naswii.wiimmfi.de/pr");
-    patchURL(0x964, "wiimmfi.de"); // Available
-    patchURL(0x10D4, "wiimmfi.de"); // GPCM
-    patchURL(0x1AEC, "wiimmfi.de"); // GPSP
-    patchURL(0x2C8D, "wiimmfi.de"); // Master
-    patchURL(0x38A7, "wiimmfi.de"); // Natneg
-    patchURL(0x38C3, "wiimmfi.de");
-    patchURL(0x38DF, "wiimmfi.de");
-    patchURL(0x3A2F, "wiimmfi.de"); // MS
-    patchURL(0x3AB3, "wiimmfi.de"); // SAKE
+    patchURL(0x964, "wiimmfi.de"); //Available
+    patchURL(0x10D4, "wiimmfi.de"); //GPCM
+    patchURL(0x1AEC, "wiimmfi.de"); //GPSP
+    patchURL(0x2C8D, "wiimmfi.de"); //Master
+    patchURL(0x38A7, "wiimmfi.de"); //Natneg1
+    patchURL(0x38C3, "wiimmfi.de"); //Natneg2
+    patchURL(0x38DF, "wiimmfi.de"); //Natneg2
+    patchURL(0x3A2F, "wiimmfi.de"); //MS
+    patchURL(0x3AB3, "wiimmfi.de"); //SAKE
 
     return 0;
 }
 kmOnLoad(stringPatch);
 
-// Force DWC_AUTHSERVER_DEBUG
+//Force DWC_AUTHSERVER_DEBUG
 kmWrite32(0x800ecaac, 0x3bc00000);
 
-// Nop host header
+//Nop host header
 kmWrite32(0x800ed868, 0x60000000);
 
 #endif

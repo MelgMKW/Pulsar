@@ -30,7 +30,7 @@ public:
         TextControl(); // 806410e0
         ~TextControl() override; //8064111c vtable 808bf430
         void InitSelf() override; //0x18 806411e8
-        int GetRuntimeTypeInfo() const override; //0x28 80642998
+        const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 80642998
         const char* GetClassName() const override; //0x2c 806410d0
         void Load(const char* folderName, const char* ctrName, const char* variant); //80641174 inlined
         void ToggleSelect(bool state); //806412f8
@@ -41,7 +41,7 @@ public:
     ~TextUpDownValueControl() override; //8064063C
     void Init() override; //0xc 806407dc
     void Update() override; //0x10 806408fc
-    int GetRuntimeTypeInfo() const override; //0x28 8064298c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8064298c
     const char* GetClassName() const override; //0x2c 806405c0
     //UpDownDisplayText vtable 808bf3d8 at 0x174
     LayoutUIControl* GetTextControl() const override; //0x8 thunk 80642a98 func 80642988 just a blr
@@ -79,7 +79,7 @@ public:
         ~UpDownButton() override; //8063fdfc vtable 808bf4b0
         void Init() override; //0xc 8063ff18
         void Update() override; //0x10 8063ffb0
-        int GetRuntimeTypeInfo() const override; //0x28 806429b4
+        const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 806429b4
         const char* GetClassName() const override; //0x2c 8063fdb0
         void Load(const char* folderName, const char* ctrName, const char* variant, ControlBoundingBox* boudingBox); //8063fe54 inlined
         void SetIsVisibleOnIdle(bool isVisible); //806405b0
@@ -99,7 +99,7 @@ public:
     ~UpDownControl() override; //8063eb5c vtable 808bf46c
     void Init() override; //0xc 8063f16c
     void Update() override; //0x10 8063f2a8
-    int GetRuntimeTypeInfo() const override; //0x28 806429a8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 806429a8
     const char* GetClassName() const override; //0x2c 8063e954
     virtual void OnDeactivateingEnd(); //0x3c 8063f01c called at the end of load
     virtual void func_0x40(); //806429a4

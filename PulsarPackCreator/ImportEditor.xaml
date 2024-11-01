@@ -1,0 +1,88 @@
+﻿<Window x:Class="Pulsar_Pack_Creator.ImportWindow"
+        Name="Import"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="Paste lists of tracks, authors and slots" Height="825" Width="1250" Background="{DynamicResource AppBg}"
+        HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Window.Resources>
+        <Style x:Key="Blocks" TargetType="TextBlock">
+            <Setter Property="Foreground"           Value="{DynamicResource fg}"/>
+            <Setter Property="Background"           Value="Transparent"/>
+            <Setter Property="HorizontalAlignment"  Value="Center" />
+            <Setter Property="VerticalAlignment"    Value="Top" />
+            <Setter Property="FontSize"             Value="12"/>
+            <Setter Property="FontWeight"           Value="Bold"/>
+            <Setter Property="TextDecorations"      Value="Underline"/>
+        </Style>
+
+
+        <Style x:Key="ColorMode" TargetType="Control">
+            <Setter Property="Background"               Value="{DynamicResource bg}"/>
+            <Setter Property="Foreground"               Value="{DynamicResource fg}"/>
+        </Style>
+
+        <Style BasedOn="{StaticResource ColorMode}" x:Key="Boxes" TargetType="TextBox">
+            <Setter Property="VerticalContentAlignment"     Value="Top"/>
+            <Setter Property="FontSize"                     Value="14"/>
+            <Setter Property="BorderThickness"              Value="2"/>
+            <Setter Property="TextAlignment"                Value="Center"/>
+            <Setter Property="TextWrapping"                 Value="Wrap"/>
+            <Setter Property="VerticalScrollBarVisibility"  Value="Auto"/>
+            <Setter Property="AcceptsReturn"                Value="True"/>
+        </Style>
+        <ImageBrush x:Key="importBg" ImageSource="{DynamicResource imageBg}" />
+    </Window.Resources>
+
+    <Border BorderBrush="Black" BorderThickness="2">
+        <Grid Background="{StaticResource importBg}" x:Name="GridImport" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="11.5*"/>
+                <ColumnDefinition Width="11.5*"/>
+                <ColumnDefinition Width="11.5*"/>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="9*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="14*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <Button x:Name="SaveImport" Grid.Row="2" Grid.Column="4"
+                        Margin="024,0,0,0" Height="25" Width="60"
+                        Content="Save"  
+                        Click="OnSaveImportClick" />
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="0">
+                <TextBox x:Name="FilesImport"        Width="220"  Style="{StaticResource Boxes}"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="1">
+                <TextBox x:Name="NamesImport"        Width="220"  Style="{StaticResource Boxes}"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="2">
+                <TextBox x:Name="AuthorsImport"      Width="220" Style="{StaticResource Boxes}"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="3">
+                <TextBox x:Name="VersionsImport"     Width="170"  Style="{StaticResource Boxes}"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="4">
+                <TextBox x:Name="SlotsImport"        Width="170"  Style="{StaticResource Boxes}"/>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="2" >
+                <TextBox x:Name="MusicSlotsImport"   Width="170" Style="{StaticResource Boxes}"/>
+            </Border>
+            <TextBlock x:Name="FilesImportLabel"        Grid.Row="0" Grid.Column="0" Margin="56,8,55,0" Text="Track Names"         Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="NamesImportLabel"        Grid.Row="0" Grid.Column="1" Margin="56,8,55,0" Text="Track Names"         Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="AuthorsImportLabel"      Grid.Row="0" Grid.Column="2" Margin="56,8,55,0" Text="Track Authors"       Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="VersionsImportLabel"     Grid.Row="0" Grid.Column="3" Margin="18,8,18,0" Text="Versions (optional)" Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="SlotsImportLabel"        Grid.Row="0" Grid.Column="4" Margin="18,8,18,0" Text="Slots"               Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="MusicSlotsImportLabel"   Grid.Row="0" Grid.Column="5" Margin="18,8,18,0" Text="Music Slots"         Style="{StaticResource Blocks}"/>
+            <TextBlock x:Name="CommonNameLabel"         Grid.Row="4" Grid.Column="1" Margin="0,12,-110,0" Text="Common Name" FontSize="14"       Style="{StaticResource Blocks}"/>
+            <TextBox   x:Name="CommonName"              Grid.Row="2" Grid.Column="2" Margin="6,8,6,8" Text="Common Name"         Width="210" Height="30"  Style="{StaticResource Boxes}"/>
+        </Grid>
+    </Border>
+</Window>

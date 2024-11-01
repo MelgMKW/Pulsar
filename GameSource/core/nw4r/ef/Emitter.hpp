@@ -17,34 +17,34 @@ class Effect;
 
 struct EmitterParameter {
     u32 comFlags;
-    u32 emitFlags;
-    float emitRatio;
-    float emitRandom;
-    u16 emitInterval;
-    u16 emitEmitDiv;
-    float emitIntervalRandom;
-    float emitCount;
-    u16 emitSpan; /* Emit time */
-    float lODNear;
-    float lODFar;
-    float lODMinEmit;
-    float params[6];
-    u8 inherit;
-    s8 inheritTranslate;
+    u32 emitFlags; //0x4
+    float emitRatio; //0x8
+    float emitRandom; //0xc
+    u16 emitInterval; //0x10
+    u16 emitEmitDiv; //0x12
+    float emitIntervalRandom; //0x14
+    float emitCount; //0x18
+    u16 emitSpan; //0x1c Emit time
+    float lODNear; //0x20
+    float lODFar; //0x24
+    float lODMinEmit; //0x28
+    float params[6]; //0x2c
+    u8 inherit; //0x44
+    s8 inheritTranslate; //0x45
     s8 velInitVelocityRandom;
     s8 velMomentumRandom;
-    float velPowerRadiationDir;
-    float velPowerYAxis;
-    float velPowerRandomDir;
-    float velPowerNormalDir;
-    float velDiffusionEmitterNormal;
-    float velPowerSpecDir;
-    float velDiffusionSpecDir;
-    math::VEC3 velSpecDir;
-    math::VEC3 translate;
-    math::VEC3 scale;
-    math::VEC3 rotate;
-};
+    float velPowerRadiationDir; //0x48
+    float velPowerYAxis; //0x4c
+    float velPowerRandomDir; //0x50 
+    float velPowerNormalDir; //0x54
+    float velDiffusionEmitterNormal; //0x58
+    float velPowerSpecDir; //0x5c
+    float velDiffusionSpecDir; //0x60
+    math::VEC3 velSpecDir; //0x64
+    math::VEC3 translate; //0x70
+    math::VEC3 scale; //0x7c
+    math::VEC3 rotate; //0x88
+}; //0x94
 
 //source of generated particles
 class Emitter : public ReferencedObject {
@@ -76,12 +76,14 @@ public:
     u32 RetireParticleManagerAll(); //80027ec0
     u32 RetireParticleAll(); //80027c80
     void SetMtxDirty(); //80029bb0
+    u16 GetNumParticleManager() const; //80029cc0
+    ParticleManager* GetParticleManager(u16 idx); //80029cd0
 
-    EmitterParameter parameter;
-    EvaluateStatus evalStatus;
+    EmitterParameter parameter; //0x20
+    EvaluateStatus evalStatus; //0xb4
     EmitterResource* resource; //0xb8
     Effect* effectMgr; //0xbc
-    ActivityList activityList; //0xc0
+    ActivityList activityList; //0xc0 list of particleManager
     bool isFirstEmission; //0xdc
     u16 waitTime; //0xde
     u16 emitIntervalWait; //0xe0

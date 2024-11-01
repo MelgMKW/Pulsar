@@ -14,7 +14,7 @@ public:
     void LoadCollision() override; //0x60 807fd798
     void UpdateCollision() override; //0x74 807fd794
     float GetCollisionDiameter() const override; //0xa0 807fd784
-    u32 GetDrawType() const override; //0xb0 807fd930
+    u32 GetScnObjDrawOptionsIdx() const override; //0xb0 807fd930
     void vf_0xb4() override; //0xb4 807fd790
 
     bool vf_0xc0(const Vec3& pos, const Vec3& prevPos, KCLBitfield accepted, CollisionInfo* info,
@@ -71,7 +71,7 @@ size_assert(Belt, 0xB0);
 class BeltEasy : public Belt { //ObjectNum 0x25a = 602
     explicit BeltEasy(const KMP::Holder<GOBJ>& gobjHolder); //807fc578
     ~BeltEasy() override; //807fd8f0 vtable 808d4638
-    u32 GetDrawType() const override; //0xb0 807fd8e8
+    u32 GetScnObjDrawOptionsIdx() const override; //0xb0 807fd8e8
     void vf_0x124() override; //0x124 807fc62c
     void vf_0x128() override; //0x128 807fc6c8
     float unknown_0xB0;
@@ -81,7 +81,7 @@ class BeltCrossing : public Belt { //ObjectNum 0x25b = 603
 public:
     explicit BeltCrossing(const KMP::Holder<GOBJ>& gobjHolder); //807fc764
     ~BeltCrossing() override; //807fd8a8 vtable 808d4508
-    u32 GetDrawType() const override; //0xb0 807fd8a0
+    u32 GetScnObjDrawOptionsIdx() const override; //0xb0 807fd8a0
     void vf_0x124() override; //0x124 807fc7d8
     void vf_0x128() override; //0x128 807fc874
     float unknown_0xB0;
@@ -95,7 +95,7 @@ class BeltCurveA : public Belt { //ObjectNum 0x25c = 604
     void LoadModels() override; //0x44 807fccfc
     void LoadAnimations() override; //0x5c 807fcde8
     void UpdateModelMatrix() override; //0x6c 807fd0e8
-    u32 GetDrawType() const override; //0xb0 807fd7b4
+    u32 GetScnObjDrawOptionsIdx() const override; //0xb0 807fd7b4
     void SetObjInfoIsFilled(CollisionInfo::ObjInfo* objInfo) const override; //0x10c 807fd7a4
     void vf_0x124() override; //0x124 807fc9d4
     void vf_0x128() override; //0x128 807fcca4

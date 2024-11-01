@@ -3,11 +3,12 @@
 #include <types.hpp>
 #include <core/nw4r/lyt.hpp>
 #include <core/nw4r/ut/TagProcessorBase.hpp>
-
+#include <core/rvl/MEM/MEMallocator.hpp>
 namespace nw4r {
 namespace lyt {
 class Layout {
 public:
+    static MEM::Allocator* spAllocator; //80396170
     Layout(); //8007a000
     virtual ~Layout(); //8007a040 vtable 802734c0
     virtual bool Build(const void* lytResBuffer, ResourceAccessor* resAcc); //8007a170

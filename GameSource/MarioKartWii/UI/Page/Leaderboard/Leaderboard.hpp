@@ -12,7 +12,7 @@ public:
     virtual void OnInit() = 0; //0x28
     void OnActivate() override; //0x30 8085bf94
     void AfterControlUpdate() override; //0x4c 8085c0c4
-    int GetRuntimeTypeInfo() const override; //0x60 8085c390
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8085c390
     virtual bool CanEnd() = 0; //0x64
     virtual void FillRows() = 0; //0x68
 

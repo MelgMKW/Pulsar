@@ -34,7 +34,7 @@ public:
     void OnResume() override; //0x54 80837d44
     //virtual void OnMenuChange(); 0x58
     //virtual void func_0x5C(); 0x5c
-    int GetRuntimeTypeInfo() const override; //0x60 805de838
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805de838
     virtual void OnExternalButtonSelect(PushButton& button, u32 hudSlotId); //0x64 808375ec
     virtual int GetActivePlayerBitfield() const = 0; //0x68
     virtual int GetPlayerBitfield() const = 0; //0x6C;

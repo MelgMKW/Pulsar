@@ -13,7 +13,7 @@ public:
         ~OptionButton() override; //8063813c vtable 808beb80
         void Init() override; //80638370
         void Update() override; //8063851c
-        int GetRuntimeTypeInfo() const override; //80638e30
+        const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //80638e30
         const char* GetClassName() const override; //80638038
         void Load(u32 buttonId, const char* folderName, const char* ctrName, const char* variant,
             const char** anims, bool r8, bool inaccessible); //806381a4
@@ -38,7 +38,7 @@ public:
     ~TabControl() override; //80637b2c vtable 808beb3c
     void Init() override; //80637EC0
     void Update() override; //80637f94
-    int GetRuntimeTypeInfo() const override; //80638e24
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //80638e24
     const char* GetClassName() const override; //80637ac4
     virtual void OnDeactivateingEnd(); //0x3c 80637d20
     virtual void func_0x40(); //80638e20

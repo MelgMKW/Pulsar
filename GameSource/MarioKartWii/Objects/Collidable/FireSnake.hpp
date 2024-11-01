@@ -3,11 +3,13 @@
 #include <kamek.hpp>
 #include <core/egg/Effect/Effect.hpp>
 #include <MarioKartWii/Objects/Collidable/MapObjSniper.hpp>
+#include <MarioKartWii/System/StatePtmfTrigger.hpp>
 
 namespace Objects {
 
 class FireSnake_ball : public ObjectCollidable {
 public:
+    explicit FireSnake_ball(const KMP::Holder<GOBJ>& gobjHolder); //806c0d18 inlined
     ~FireSnake_ball() override; //806c2acc vtable 808c356c
     void OnStart() override; //0xc 806c0d88
     void Update() override; //0x14 806c0e24
@@ -16,7 +18,7 @@ public:
     void ToggleVisible(bool isVisible) override; //0x68 806c0e20
     void vf_0x8c() override; //0x8c 806c2968
     const Entity& GetEntity() const override; //0x98 806c2904
-    void UpdateEntity(float f1) override; //0xe0 806c290c
+    void InitEntity(float f1) override; //0xe0 806c290c
     virtual void vf_0xec(); //0xec 806c0e00
     virtual void vf_0xf0(); //0xf0 806c2b0c
     virtual void SetScale(float scale); //0xf4 806c12c4
@@ -37,7 +39,7 @@ public:
 }; //0xb0
 
 
-class FireSnake : public MapObjProjectile, public ObjectCycleManager { //ObjectNum 0x1a4 = 420
+class FireSnake : public MapObjProjectile, public StatePtmfTrigger<FireSnake> { //ObjectNum 0x1a4 = 420
 public:
     explicit FireSnake(const KMP::Holder<GOBJ>& gobjHolder); //806c0f30
     ~FireSnake() override; //806c1344 vtable 808c3340
@@ -45,12 +47,12 @@ public:
     void Update() override; //0x14 806c14e4
     u32 GetPropertiesBitfield() override; //0x2c 806c2a5c
     void LoadAnimations() override; //0x5c 806c2a10
-    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806c1818
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 806c1818
     ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 806c18a8
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) override; //0xc4 806c18a8
     void vf_0xec(const Vec3& vec3) override; //0xec 806c23c8
     void RequestShoot() override; //0xf0 806c29fc
-    //ObjectCycleManager vtable 808c3434 at 0xb4
+    //StatePtmfTrigger vtable 808c3434 at 0xb4
     //~FireSnake() override; //thunk 806c2b68
     virtual void OnCycleEnd(); //0x100 806c1930
     virtual void OnCycleEnd2(); //0x104 806c19e4
@@ -85,7 +87,7 @@ public:
 
     void OnStart() override; //0xc 806c2cbc
     void Update() override; //0x14 806c2d54
-    //ObjectCycleManager vtable 808c391c at 0xb4 these funcs are offset FROM objectcyclemanager
+    //StatePtmfTrigger vtable 808c391c at 0xb4 these funcs are offset FROM PtmfStateTrigger
     //~FireSnake_v() override; //thunk 806c35a0
     void OnCycleEnd() override; //0x100 806c30f0
     void OnCycleEnd2() override; //0x104 806c30f4

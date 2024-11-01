@@ -317,12 +317,12 @@ public class PulsarGame
                     for (int i = 0; i < arrayLength; i++)
                     {
                         Array.Reverse(data, arrayOffset + i * elementSize, elementSize);
-                    }                       
+                    }
                 }
                 else for (int i = arrayOffset; i < arrayOffset + elementSize * arrayLength; i += elementSize)
-                {
-                    RespectEndianness(elementType, data, i);
-                }
+                    {
+                        RespectEndianness(elementType, data, i);
+                    }
             }
             else if (!field.Field.FieldType.IsPrimitive) //or !field.Field.FiledType.GetFields().Length == 0
             {
@@ -358,7 +358,7 @@ public class PulsarGame
         return result;
     }
 
-    
+
     public static byte[] BytesFromStruct<T>(T structure, bool respectEndianness = true) where T : struct
     {
         int size = Marshal.SizeOf(structure);
@@ -493,7 +493,7 @@ public class PulsarGame
         [Endian(Endianness.BigEndian)]
         public uint version;
         [Endian(Endianness.BigEndian)]
-        public uint dataSize; //size without the header
+        public uint size; //size without the header
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
@@ -562,11 +562,18 @@ public class PulsarGame
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct Track
     {
+        public Track(MainWindow.Cup.Track.Variant variant, uint crc32)
+        {
+            slot = variant.slot;
+            musicSlot = variant.musicSlot;
+            this.crc32 = crc32;
+        }
         public byte slot;
         public byte musicSlot;
         [Endian(Endianness.BigEndian)]
         public uint crc32;
     }
+
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct CupV1
@@ -575,17 +582,19 @@ public class PulsarGame
         {
             tracks = new Track[4];
             idx = uiCup.idx;
-            for (int i = 0; i < 4; i++) {             
-                tracks[i].slot = uiCup.slots[i];
-                tracks[i].musicSlot = uiCup.musicSlots[i];
+            for (int i = 0; i < 4; i++)
+            {
+                MainWindow.Cup.Track track = uiCup.tracks[i];
+                tracks[i].slot = track.main.slot;
+                tracks[i].musicSlot = track.main.musicSlot;
                 tracks[i].crc32 = crc32[i];
-            }            
+            }
         }
         [Endian(Endianness.BigEndian)]
         public uint idx;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4), Endian(Endianness.BigEndian)]
         public Track[] tracks;
-    }  
+    }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct CupsV1
@@ -615,30 +624,18 @@ public class PulsarGame
         public CupsV1 cups;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct Config
-    {
-        [Endian(Endianness.BigEndian)]
-        public BinaryHeader header;
-        [Endian(Endianness.BigEndian)]
-        public InfoHolder infoHolder;
-        [Endian(Endianness.BigEndian)]
-        public CupsHolder cupsHolder;
-        //BMG rawBmg;
-    }
-
-
     //V2
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct Cup
+    public struct CupV2
     {
-        public Cup(MainWindow.Cup uiCup, uint[] crc32)
+        public CupV2(MainWindow.Cup uiCup, uint[] crc32)
         {
             tracks = new Track[4];
             for (int i = 0; i < 4; i++)
             {
-                tracks[i].slot = uiCup.slots[i];
-                tracks[i].musicSlot = uiCup.musicSlots[i];
+                MainWindow.Cup.Track track = uiCup.tracks[i];
+                tracks[i].slot = track.main.slot;
+                tracks[i].musicSlot = track.main.musicSlot;
                 tracks[i].crc32 = crc32[i];
             }
         }
@@ -656,13 +653,12 @@ public class PulsarGame
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4), Endian(Endianness.BigEndian)]
         public ushort[] trophyCount;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1), Endian(Endianness.BigEndian)]
-        public Cup[] cupsArray; //CUPS
+        public CupV2[] cupsArray; //CUPS
     };
-
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
-    public struct CupsHolder
+    public struct CupsHolderV2
     {
-        public CupsHolder(uint magic, uint curVersion)
+        public CupsHolderV2(uint magic, uint curVersion)
         {
             this.header.magic = magic;
             this.header.version = curVersion;
@@ -672,5 +668,73 @@ public class PulsarGame
         public SectionHeader header;
         [Endian(Endianness.BigEndian)]
         public Cups cups;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct Config
+    {
+        [Endian(Endianness.BigEndian)]
+        public BinaryHeader header;
+        [Endian(Endianness.BigEndian)]
+        public InfoHolder infoHolder;
+        [Endian(Endianness.BigEndian)]
+        public CupsHolderV3 cupsHolder;
+        //BMG rawBmg;
+    }
+
+
+    //V3
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct Variant
+    {
+        public Variant(MainWindow.Cup.Track.Variant variant)
+        {
+            slot = variant.slot;
+            musicSlot = variant.musicSlot;
+        }
+        public byte slot;
+        public byte musicSlot;
+    }
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct TrackV3
+    {
+        public TrackV3(MainWindow.Cup.Track.Variant variant, uint crc32, short variantCount)
+        {
+            slot = variant.slot;
+            musicSlot = variant.musicSlot;
+            this.crc32 = crc32;
+            this.variantCount = variantCount;
+        }
+        public void SetVariantCount(short count) { variantCount = count; }
+        public byte slot;
+        public byte musicSlot;
+        [Endian(Endianness.BigEndian)]
+        public short variantCount;
+        [Endian(Endianness.BigEndian)]
+        public uint crc32;
+    }
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+    public struct CupsHolderV3
+    {
+        public CupsHolderV3(uint magic, uint curVersion)
+        {
+            this.header.magic = magic;
+            this.header.version = curVersion;
+        }
+
+        [Endian(Endianness.BigEndian)]
+        public SectionHeader header;
+        [Endian(Endianness.BigEndian)]
+        public ushort ctsCupCount;
+        public byte regsMode;
+        public byte padding;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4), Endian(Endianness.BigEndian)]
+        public ushort[] trophyCount;
+        [Endian(Endianness.BigEndian)]
+        public int totalVariantCount;
+        //[Endian(Endianness.BigEndian)]
+        //public TrackV3[] tracksArray;
+        //[Endian(Endianness.BigEndian)]
+        //public Variant[] variantsArray;
     }
 }

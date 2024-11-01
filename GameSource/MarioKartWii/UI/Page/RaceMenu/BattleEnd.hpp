@@ -11,7 +11,7 @@ public:
     static const PageId id = PAGE_BATTLEENDMENU;
     BattleEnd(); //80624e8c
     ~BattleEnd() override; //80632a34 vtable 808bd7a4
-    int GetRuntimeTypeInfo() const override; //0x60 80632aa0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80632aa0
     int GetMessageBMG() const override; //0x68 80632a04
     u32 GetButtonCount() const override; //0x6c 80632a2c
     const u32* GetVariantsIdxArray() const override; //0x70 80632a20
@@ -25,7 +25,7 @@ public:
     static const PageId id = PAGE_BATTLE_FINALRACE_ENDMENU;
     BattleFinalRaceEnd(); //80624ed0
     ~BattleFinalRaceEnd() override; //8063298c vtable 808bd728
-    int GetRuntimeTypeInfo() const override; //0x60 806329f8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806329f8
     int GetMessageBMG() const override; //0x68 8063295c
     u32 GetButtonCount() const override; //0x6c 80632984
     const u32* GetVariantsIdxArray() const override; //0x70 80632978

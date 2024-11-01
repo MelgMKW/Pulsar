@@ -2,6 +2,7 @@
 #define _WANWAN_
 #include <kamek.hpp>
 #include <MarioKartWii/Objects/Collidable/ObjectCollidable.hpp>
+#include <MarioKartWii/System/StatePtmfTrigger.hpp>
 
 //Chomp with a wedge (pile)
 namespace Objects {
@@ -32,12 +33,12 @@ class Wanwan_Chn : public ObjectCollidable {
     void LoadCollision() override; //0x60 806e41a4
     void UpdateCollision() override; //0x74 806e4220
     float GetCollisionDiameter() const override; //0xa0 806e94c4
-    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806e4218
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 806e4218
     float unknown_0xb0[4];
 }; //0xc0
 
 
-class Wanwan : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 0x196 = 406
+class Wanwan : public ObjectCollidable, public StatePtmfTrigger<Wanwan> { //ObjectNum 0x196 = 406
     Wanwan(const KMP::Holder<GOBJ>& gobjHolder); //806e4224
     ~Wanwan() override; //806e4aec vtable 808c71c4
     void OnStart() override; //0xC 806e4b9c
@@ -46,11 +47,11 @@ class Wanwan : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 
     u32 GetPropertiesBitfield() override; //0x2c 806e94bc
     void LoadAnimations() override; //0x5c 806e9468
     void UpdateModelMatrix() override; //0x6c 806e9464
-    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806e526c
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 806e526c
     //depends on factors like speed and obviously the kartToObj as a goomba does not do anything to a player in a mega
-    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 806e546c
+    ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer, ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) override; //0xc4 806e546c
 
-    //CycleManager vtable 808c72b0 at 0xb0, 7 ptmfs
+    //StatePtmfTrigger vtable 808c72b0 at 0xb0, 7 ptmfs
     //~Wanwan() override; thunk 806e95a8 
     //int vf_0xC() override; //806e94b4 returns 1 this might be wrong since kart_truck has no such function
 
@@ -75,7 +76,7 @@ class Wanwan : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 
     Wanwan_Chn** chainLinks; //0xd4
     Pile* pile; //0xd8
     void* unknown_0xdc;
-    void* unknown_0xe0;
+    UnkCollidableSub* sub; //0xe.0
     u8 unknown_0xe4[0x438 - 0xe4];
     float chainLength; //0x438 kmp setting
     float setting3; //0x43c
@@ -91,7 +92,7 @@ class Wanwan : public ObjectCollidable, public ObjectCycleManager { //ObjectNum 
     Mtx34 unknown_0x520; //0x520
 }; //total size 0x550
 size_assert(Wanwan, 0x550);
-}
+}//namespace Objects
 
 
 

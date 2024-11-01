@@ -1,8 +1,8 @@
 #ifndef _NW4R_DB_EXCEPTION_
 #define _NW4R_DB_EXCEPTION_
 #include <types.hpp>
-#include <core/rvl/os/Message.hpp>
-#include <core/rvl/os/thread.hpp>
+#include <core/rvl/os/OSMessage.hpp>
+#include <core/rvl/os/OSthread.hpp>
 #include <core/rvl/gx/GX.hpp>
 #include <core/nw4r/db/Console.hpp>
 

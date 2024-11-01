@@ -9,7 +9,7 @@ public:
     TitleImage(); //8063a598 inlined
     ~TitleImage() override; //8063a5d4 vtable 808bef0c
     void InitSelf() override; //0x18 8063a6cc
-    int GetRuntimeTypeInfo() const override; //0x28 8063c3ac
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8063c3ac
     const char* GetClassName() const override; //0x2c 8063a58c
     void Load(); //8063a62c
     void ChangeImage(bool isMirrorUnlocked, u32 tplID); //8063a8d4 0 1 2 3 4 5 for mario1, mario2, peach, luiji, koopa, mario_luiji
@@ -21,7 +21,7 @@ class TitleMovieControl : public LayoutUIControl {
     ~TitleMovieControl() override; //8063b840 vtable 808bee08
     void InitSelf() override; //0x18 8063b938
     void OnUpdate() override; //0x1c 8063b970
-    int GetRuntimeTypeInfo() const override; //0x28 8063c380
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8063c380
     const char* GetClassName() const override; //0x2c 8063b7f4
     void Load(); //8063b898
 }; //0x174
@@ -43,7 +43,9 @@ public:
     void AfterExitAnimations() override; //0x44 8063af90
     void AfterControlUpdate() override; //0x4c 8063afc8
     void OnResume() override; //0x54 8063b124
-    int GetRuntimeTypeInfo() const override; //0x60 8063c3a0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8063c3a0
+
+    void PrepareDemo(); //8063b130 randomizes course and characters etc....
     ManipulatorManager manipulatorManager; //0x44
     CtrlMenuPressStart pressStart; //0x54
     TitleImage titleImage; //0x1c8
@@ -64,7 +66,7 @@ class BlurryTitle : public Page { //ID 0x58 behind main menu
     void OnInit() override; //0x28 8062d5d4
     void OnActivate() override; //0x30 8063b698
     void BeforeEntranceAnimations() override; //0x38 8063b7f0
-    int GetRuntimeTypeInfo() const override; //0x60 8063c38c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8063c38c
     LayoutUIControl blurryTitleImage; //0x44
     ManipulatorManager manipulatorManager; //0x1b8
 }; //total size 0x1c8
@@ -80,7 +82,7 @@ class TitleMovie : public Page { //ID 0x59
     void AfterExitAnimations() override; //0x44 8063be44
     void BeforeControlUpdate() override; //0x48 8063be9c
     void AfterControlUpdate() override; //0x4c 8063bfcc
-    int GetRuntimeTypeInfo() const override; //8063c374
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8063c374
     TitleMovieControl movie;
     ManipulatorManager manipulatorManager; //0x1b8
     u32 movieDuration; //0x20
@@ -97,7 +99,7 @@ class BlinkingPressA : public Page { //ID 0x5F the blinking "press A" on demo
     void OnActivate() override; //0x30 8063c210
     void OnDeactivate() override; //0x34 8063c268
     void AfterControlUpdate() override; //0x4c 8063c27c
-    int GetRuntimeTypeInfo() const override; //8063c368
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //8063c368
     ManipulatorManager manipulatorManager; //0x44
     bool hasController; //0x54
     u8 padding[3];

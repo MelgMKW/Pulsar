@@ -10,14 +10,14 @@
 class LicenseControl : public LayoutUIControl {
     //no ctor
     ~LicenseControl() override; //805ebf10 vtable 808b992c
-    int GetRuntimeTypeInfo() const override; //0x28 805ee678
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805ee678
     const char* GetClassName() const override; //0x2c 805ea818
 }; //total size 0x174
 
 class LicenseButton : public PushButton {
     LicenseButton(); //805eaa6c
     ~LicenseButton() override; //805eaaa8 vtable 808b98e0
-    int GetRuntimeTypeInfo() const override; //0x28 805ee66c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805ee66c
     const char* GetClassName() const override; //0x2c 805ea824
 
 };
@@ -32,7 +32,7 @@ class LicenseSelect : public Page { //ID 0x65
     void OnActivate() override; //0x30 805eb774
     void AfterControlUpdate() override; //0x4c 805eb79c
     void OnResume() override; //0x54 805eb798
-    int GetRuntimeTypeInfo() const override; //0x60 805ee660
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805ee660
     static void SetControlMii(UnkType* unusedArg, LicenseButton* licenseButton, u8 curLicenseId, MiiGroup* miiGroup, u32 index); //805eae94
     void OnLicenseButtonClick(LicenseButton& button, u32 hudSlotId); //805eb7a0
     void OnOptionsButtonClick(PushButton& button, u32 hudSlotId); //805ebb44
@@ -66,7 +66,7 @@ class LicenseChangeMii : public Page { //ID 0x66 comes after choose mii
     PageId GetNextPage() const override; //0x10 805ee644
     void OnInit() override; //0x28 805ec008
     void OnActivate() override; //0x30 805ec274
-    int GetRuntimeTypeInfo() const override; //0x60 805ee64c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805ee64c
     void OnClick(MessageBox& messageBoxPage); //805ed2d4
     void OnMiiValidate(Approve& validatePage); //85ed450 validate function
     void OnMiiDisapprove(Approve& validatePage); //805ed45c disapprove function
@@ -93,7 +93,7 @@ class LicenseSettings : public Page { //ID 0x67
     PageId GetNextPage() const override; //0x10 805ee630
     void OnInit() override; //0x28 805ed7e4
     void OnActivate() override; //0x30 805edbf8
-    int GetRuntimeTypeInfo() const override; //0x60 805ee638
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805ee638
 
     PtmfHolder_2A<LicenseSettings, void, PushButton&, u32> onRecordsButtonClick; //0x44 805edc50 vt 808b97ac
     PtmfHolder_2A<LicenseSettings, void, PushButton&, u32> onChangeMiiButtonClick; //0x58 805edc94 vt 808b97ac
@@ -122,7 +122,7 @@ class LicenseErase : public Page { //ID 0x68
     void OnInit() override; //0x28 805ee030
     void OnActivate() override; //0x30 805ee238 just a blr   
     void OnResume() override; //0x54 805ee244
-    int GetRuntimeTypeInfo() const override; //0x60 805ee624
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805ee624
     PtmfHolder_2A<LicenseSettings, void, PushButton&, u32> onYesButtonClick; //0x44 805ee434 vt 808b9730
     PtmfHolder_2A<LicenseSettings, void, PushButton&, u32> onNoButtonClick; //0x58 805ee578
     PtmfHolder_1A<LicenseSettings, void, u32> onBackPress; //0x6c 805ee5cc

@@ -1,6 +1,7 @@
 #ifndef _PUL_OPTIONS_
 #define _PUL_OPTIONS_
 #include <kamek.hpp>
+#include <UI/UI.hpp>
 #include <MarioKartWii/UI/Page/Other/Options.hpp>
 
 //Extends Options to add a settings button
@@ -15,8 +16,6 @@ public:
 private:
     void ExpandedOnButtonClick(PushButton& pushButton, u32 hudSlotId);
     PushButton settingsButton;
-public:
-    PageId topSettingsPage;
 };
 }//namespace UI
 }//namespace Pulsar

@@ -2,6 +2,7 @@
 #define _RFL_MIDDLE_DB_
 #include <types.hpp>
 #include <core/rvl/RFL/RFLTypes.hpp>
+#include <core/rvl/RFL/Internal/RFLHidden.hpp>
 
 //Revolution Face Library
 namespace RFL {
@@ -18,18 +19,18 @@ enum MiddleDBType {
 struct MiddleDB {
     MiddleDBType type; //0x0
     u32 data; //0x4
-    void* workBuffer; //0x8
+    HiddenStoreData* store; //0x8
     u16 maxCharactersCount; //0xc
-    u8 data2[2]; //0xe
+    u16 storeCount; //0xe
     union {
         struct {
             u8 sex;
             u8 age;
             u8 race;
             u8 unknown3;
-        } masks;
+        };
         u32 mask; //0x10
-    } mask;
+    };
     u8 data3[4];
 }; //0x18
 size_assert(MiddleDB, 0x18);
@@ -42,7 +43,7 @@ u16 GetMiddleDBStoredSize(MiddleDB* middleDB); //800c9710
 void SetMiddleDBRandomMask(MiddleDB* middleDB, Sex sex, Age age, Race race); //800c97c0
 void SetMiddleDBHiddenMask(MiddleDB* middleDB, Sex sex); //800c97e0
 ErrCode AddMiddleDBStoreData(MiddleDB* db, const StoreData* data); //800c9920
-
+ErrCode iAddMiddleDBUserData(MiddleDB* db, const StoreData* data); //800c9810
 }//namespace RFL
 
 

@@ -67,7 +67,7 @@ class LayoutUIControl;
 struct PositionAndScale {
     Vec3 position;
     Vec2 scale; //0xc 
-    u8 opacity; //0x10
+    u8 opacity; //0x14
     u8 unknown_0x15[0x18 - 0x15];
 }; //Total Size 0x18
 
@@ -82,7 +82,7 @@ public:
     virtual void OnUpdate();    //0x1c 805bd2e0 just a blr
     virtual void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame); //0x20 8063d194
     virtual void OnPlayAnimSound();   //0x24 805bd2dc just a blr
-    virtual int GetRuntimeTypeInfo() const; //0x28 80606bdc returns 809c1e80 0x28
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //0x28 80606bdc returns 809c1e80 0x28
     virtual const char* GetClassName() const; //0x2c 8063d3c0 how the class name was found
     virtual void vf_0x30();   //0x30 8063d608
     virtual void vf_0x34();   //0x34 805bd2d8 just a blr
@@ -126,7 +126,7 @@ public:
     //virtual void OnUpdate(); //0x1c 805bd2e0
     //virtual void SetPositionAnim(PositionAndScale &positionAndScale, float curFrame); //0x20 8063d194
     //virtual void OnPlayAnimSound(); //0x24 805bd2dc
-    int GetRuntimeTypeInfo() const override; //0x28 80636bd0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 80636bd0
     const char* GetClassName() const override; //0x2c 8063d788
     void vf_0x30() override; //0x30 8063e61c
     //virtual void func_0x34(); //0x34 805bd2d8
@@ -140,6 +140,7 @@ public:
     void SetTextBoxMessage(const char* textBoxName, u32 bmgId, const Text::Info* text = nullptr); //8063dcbc
     void SetRootPane(const char* paneName); //8063da00
     void SetPicturePane(const char* mainPane, const char* picturePane);
+    void SetPaneVisibility(const char* paneName, bool isVisible); //8063e54c
     void SetMiiPane(const char* pane, const MiiGroup& miiGroup, u32 miiIdx, u8 texMapIdx); //8063e3dc
     bool PicturePaneExists(const char* paneName); //8063e328
     void CropMovie(const char* paneName, const nw4r::ut::Rect& rect); //8063e58c
@@ -175,7 +176,7 @@ public:
     LayoutUIControlScaleFade(); //8063e674
     ~LayoutUIControlScaleFade() override; //8063e7a8 vtable 808bef78
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 8063e840 
-    int GetRuntimeTypeInfo() const override; //0x28 8063e924
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8063e924
     const char* GetClassName() const override; //0x2c 8063e664
 };
 

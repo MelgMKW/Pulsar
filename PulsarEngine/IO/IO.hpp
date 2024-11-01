@@ -2,6 +2,9 @@
 #define _PULSARIO_
 
 #include <kamek.hpp>
+#include <core/rvl/devfs/isfs.hpp>
+#include <core/egg/mem/Heap.hpp>
+#include <core/egg/Thread.hpp>
 
 namespace Pulsar {
 
@@ -61,8 +64,28 @@ public:
     const char* GetFolderName() const { return this->folderName; };
     //void RequestCreateFolder(const char* path); //up to 2 simultaneous
     void CloseFolder();
-    void GetFolderFilePath(char* dest, u32 index) const;
-    s32 ReadFolderFile(void* buffer, u32 index, u32 maxLength);
+    void PrintFullFilePath(char* path, const char* fileName) const {
+        snprintf(path, IOS::ipcMaxPath, "%s/%s", &this->folderName, fileName);
+    }
+    void GetFolderFilePath(char* dest, u32 index) const {
+        this->PrintFullFilePath(dest, reinterpret_cast<const char*>(&this->fileNames[index]));
+    }
+    const char* GetFileName(u32 index) const {
+        return reinterpret_cast<const char*>(&this->fileNames[index]);
+    }
+
+    s32 ReadFolderFileFromPath(void* buffer, const char* path, u32 maxLength);
+
+    s32 ReadFolderFile(void* bufferIn, u32 index, u32 maxLength) {
+        char path[IOS::ipcMaxPath];
+        this->GetFolderFilePath(path, index);
+        return this->ReadFolderFileFromPath(bufferIn, path, maxLength);
+    }
+    s32 ReadFolderFileFromName(void* bufferIn, const char* name, u32 maxLength) {
+        char path[IOS::ipcMaxPath];
+        this->PrintFullFilePath(path, name);
+        return this->ReadFolderFileFromName(bufferIn, path, maxLength);
+    }
 
     const IOType type;
 

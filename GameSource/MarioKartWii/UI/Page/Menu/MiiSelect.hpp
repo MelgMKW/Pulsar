@@ -12,7 +12,7 @@ class MiiName : public LayoutUIControl {
 public:
     ~MiiName() override; //80626640 vtable 808d9a58
     void InitSelf() override; //0x18 80849284
-    int GetRuntimeTypeInfo() const override; //0x28 80849504
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 80849504
     const char* GetClassName() const override; //0x2c 80847e34
 }; //0x174
 
@@ -25,7 +25,7 @@ class MiiSelect : public MenuInteractable { //ID 0x60
     void OnActivate() override; //0x30 80848568
     void OnDeactivate() override; //0x34 80848bd4
     void AfterControlUpdate() override; //0x4c 808487e8
-    int GetRuntimeTypeInfo() const override; //0x60 808494f8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 808494f8
     void OnExternalButtonSelect(PushButton& button, u32 hudSlotId) override; //0x64  80848ae8
     int GetActivePlayerBitfield() const override; //0x68 808481cc
     int GetPlayerBitfield() const override; //0x6C 80849448

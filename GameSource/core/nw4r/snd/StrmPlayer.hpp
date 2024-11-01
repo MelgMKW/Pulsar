@@ -96,7 +96,7 @@ public:
     void OnUpdateVoiceSoundThread() override; //thunk 800a8450 func 800a83f0
     void OnShutdownSoundThread() override; //thunk 800a8440 func 800a8400
 
-    int Setup(StrmBufferPool* buffer, int, u16, int); //800a5b20
+    int Setup(StrmBufferPool* buffer, int allocChannelCount, u16 allocTrackFlag, int voiceOutCount); //800a5b20
     void Shutdown(); //800a5d40
     int Prepare(ut::FileStream* stream, StartOffsetType type, int startOffset);  //800a5dd0
     bool ReadStrmDataInfo(StrmDataInfo* info) const; //800a6490

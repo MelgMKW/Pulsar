@@ -11,7 +11,7 @@ class Picture : public Pane {
 public:
     Picture(const res::TextBox* src, const ResBlockSet& resBlockSet); //8007ad90
     ~Picture() override; //0x8 8007aee0 vtable 80273500
-    void* GetRuntimeTypeInfo() const override; //0xc 8007b300
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0xc 8007b300
     void DrawSelf(const DrawInfo& info) override; //0x18 8007b220
     ut::Color GetVtxColor(u64 id) const override; //0x24 8007b180
     void SetVtxColor(u64 id, ut::Color color) override; //0x28 8007b1b0

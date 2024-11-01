@@ -9,13 +9,13 @@ namespace nw4r {
 namespace g3d {
 struct ResTexData { //https://wiki.tockdom.com/wiki/TEX0_(File_Format)
     ResBlockHeaderData header;
-    u32 version;
-    s32 offsetToBRRES;
-    s32 offsetToTexData;
-    s32 offsetToName;
-    u32 flag;
-    u16 width;
-    u16 height;
+    u32 version; //0x8
+    s32 offsetToBRRES; //0xc
+    s32 offsetToTexData; //0x10
+    s32 offsetToName; //0x14
+    u32 flag; //0x18
+    u16 width; //0x1c
+    u16 height; //0x1e
     union {
         GX::TexFmt       fmt;
         GX::CITexFmt     cifmt;

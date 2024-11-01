@@ -5,6 +5,7 @@
 #include <MarioKartWii/Kart/KartDamage.hpp>
 #include <MarioKartWii/Kart/KartKiller.hpp>
 #include <MarioKartWii/Kart/KartPart.hpp>
+#include <MarioKartWii/Kart/KartMatTEVHandler.hpp>
 #include <MarioKartWii/Kart/KartModelsVisibility.hpp>
 #include <MarioKartWii/Kart/KartMovement.hpp>
 #include <MarioKartWii/Kart/KartValues.hpp>
@@ -26,6 +27,7 @@
 class RaceCamera;
 
 namespace Kart {
+
 
 class Pointers {
 public:
@@ -50,7 +52,7 @@ public:
     ClipInfo* clipInfo; //0x50
     StarAnmMgr* kartStarAnm; //0x54
     ModelsVisibility* kartModelsVisibility; //0x58
-    int* unknown_0x5c;
+    MatTEVHandler* kartMatTevHandler; //0x5c
     Killer* kartKiller; //0x60
 }; //Total size 0x64
 size_assert(Pointers, 0x64);

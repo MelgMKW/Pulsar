@@ -16,7 +16,7 @@ public:
     void OnInit() override; //0x28 80652430
     void OnActivate() override; //0x30 806524c4
     void AfterControlUpdate() override; //0x4c 80652564
-    int GetRuntimeTypeInfo() const override; //0x60 806531a0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806531a0
     virtual void Reset(); //0x64 806525a0
 
     void SetMessageBoxMsg(u32 bmgId, Text::Info* text); //806525fc
@@ -50,7 +50,7 @@ public:
         Container(); //80652be0
         ~Container() override; //80652c1c
         void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 80652d44
-        int GetRuntimeTypeInfo() const override; //0x28 80653194
+        const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 80653194
         const char* GetClassName() const override; //0x2c 80652bd0
         void Load(const char* folderName, const char* ctrName, const char* variant); //80652c74
     };
@@ -59,7 +59,7 @@ public:
     void OnInit() override; //0x28 806528fc
     void BeforeEntranceAnimations() override; //0x38 80652b48
     void AfterExitAnimations() override; //0x44 80652b8c
-    int GetRuntimeTypeInfo() const override; //0x60 80653188
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80653188
     void Reset() override; //80652ce8
     BlackBackControlForMessage blackMsgBoxBg; //0x8b8
     Container container; //0xa2c
@@ -73,7 +73,7 @@ public:
     void OnInit() override; //80652ef0
     void BeforeEntranceAnimations() override; //0x38 80653144
     void AfterExitAnimations() override; //0x44 80653160
-    int GetRuntimeTypeInfo() const override; //0x60 8065317c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8065317c
     void Reset() override; //806530d0
     void SetTitleMsg(u32 bmgId, Text::Info* textInfo = nullptr); //8065313c
     CtrlMenuPageTitleText titleText; //0x8b8

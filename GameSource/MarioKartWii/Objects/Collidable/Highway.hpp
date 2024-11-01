@@ -3,6 +3,7 @@
 #include <kamek.hpp>
 #include <core/egg/Effect/Effect.hpp>
 #include <MarioKartWii/Objects/Collidable/ObjectCollidable.hpp>
+#include <MarioKartWii/System/StatePtmfTrigger.hpp>
 
 namespace Objects {
 class HighwayCar;
@@ -58,7 +59,7 @@ public:
 
 
 //ObjectNum 0xd0 = 208 kart_truck, ObjectNum 0xd1 = 209  car_body, ObjectNum 0xde = 222 K_bomb_car, ObjectNum 0xf3 = 243 K_bomb_car1
-class HighwayCar : public ObjectCollidable, public ObjectCycleManager {
+class HighwayCar : public ObjectCollidable, public StatePtmfTrigger<HighwayCar> {
 public:
     enum Type {
         TYPE_CAR_BODY,
@@ -80,13 +81,13 @@ public:
     void UpdateShadow() override; //0x70 806da728
     void UpdateCollision() override; //0x74 806d7bf8
     float GetCollisionDiameter() const override; //0xa0 806d69c0
-    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 806d7328
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 806d7328
     ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const override; //0xc4 806d7780
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) override; //0xc4 806d7780
     void ProcessCollision(ObjectCollision* collision, Vec3 position) override; //0xd0 806da660
     const Vec3& GetSolidityCenter() const override; //0xe8 806d7cf8
 
-    //ObjectCycleManager vtable 808c59d4 at 0xb0
+    //StatePtmfTrigger vtable 808c59d4 at 0xb0
     //~HighwayCar thunk 806da90c
 
     K_bomb_tire00* bomb_tire; //0xd0 only if type == bomb

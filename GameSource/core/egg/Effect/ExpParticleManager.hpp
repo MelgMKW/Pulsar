@@ -15,15 +15,15 @@ public:
     void Calc() override; //0x18 80226308
     virtual ~ExpParticleManager(); //0x20 80226250
     virtual void SetLife(u16 life); //0x24 802263dc
-    virtual void vf_0x28(Vector2f& vec); //0x28 802263f0
-    virtual void vf_0x2c(Vector3f& vec); //0x2c 80226410
+    virtual void SetSize(Vector2f& vec); //0x28 802263f0
+    virtual void SetRotate(Vector3f& vec); //0x2c 80226410
     virtual void Reset(); //0x30 80226438 resets vecs
 
-    u32 bitfield; //0xc0
-    u16 life; //0xc4
+    u32 bitfield; //0xc0 dirtyFlags, 1 = lifeUpdated, 2 = sizeUpdated, 4 = rotUpdated
+    u16 life; //0xc4 
     u8 padding[2];
-    Vector2f vec_0xc8; //0xc8
-    Vector3f vec_0xd0; //0xd0
+    Vector2f size; //0xc8
+    Vector3f rotation; //0xd0
 
 }; //total size 0xdc
 size_assert(ExpParticleManager, 0x30);

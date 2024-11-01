@@ -34,6 +34,7 @@ class Movement;
 class Damage;
 class Collision;
 class Killer;
+class Part;
 class ModelsVisibility;
 class Suspensions;
 class Wheel;
@@ -42,7 +43,10 @@ class CollisionData;
 class WheelPhysicsHolder;
 class StarAnmMgr;
 class Zipper;
+class MatTEVHandler;
 class Trick;
+
+typedef void (*CallOnAllPartsFunc)(Part& part);
 
 class Link {
 public:
@@ -50,7 +54,7 @@ public:
     static void LinkKartList(Pointers* pointers); //80590138 adds KartPointers to all Base objects
 
     Link();	//8059018c
-    void SetPointersFromHolder(u8 playerId);	//805901d0
+    void SetPointersFromPlayer(u8 playerId);	//805901d0
     const Vec3& GetPosition() const;	//8059020c
     void SetKartPosition(const Vec3& position);	//80590238
     const Mtx34& GetMtx() const;	//80590264
@@ -71,7 +75,7 @@ public:
     Physics& GetPhysics(); //805903cc
     const Physics& GetPhysics() const; //805903e0
     Input::ControllerHolder& GetControllerHolder() const; //805903f4
-    void ActivateRumble(u32 length, u32 r5, float intensity) const; //8059041c
+    void ActivateRumble(u32 krmEntryIdx, bool replaceActiveIfNoFreeRumble, float f1) const; //8059041c use 3 for idx
     void ActivateRumble(bool r4) const; //80590478 checks item using Status' bitfield
     void ActivateRumble() const; //80590570
     bool IsLocal() const; //80590650
@@ -142,13 +146,14 @@ public:
     const Damage& GetDamage() const;	//80590d2c
     void Func80590d38(const Vec3& src); //80590d38 sets a vec in KartDamage
     void SetDamageType(DamageType newDamage); //80590d5c
+    void SetAffectedByPOW(bool isAffected); //80590d88
     DamageType GetCurDamageType() const; //80590da4
     void CancelBoost() const; //80590db4
     float GetSpeedRatioCapped() const;	//80590dc0
     float GetSpeedRatio() const; //80590dd0
     bool HasCamera() const; //80590de0
 
-    void ResetEndCamera() const; //80590ed8 removes 0x40 from camera bitfield
+    void StopCloseCamera() const; //80590ed8 removes 0x40 from camera bitfield
 
     void SetCamera(RaceCamera* camera); //80590def8
     u32 GetScreenIdx() const; //80590e04
@@ -163,9 +168,10 @@ public:
     void UpdateStarAnm(); //8059102c
     void StopStarAnm(); //80591038
     StarAnmMgr& GetStarAnm(); //80591070
+    const ut::Color GetStarColor() const; //8059107c
     ModelsVisibility& GetModelsVisibility(); //8059108c
     const ModelsVisibility& GetModelsVisibility() const; //80591098
-    const ut::Color GetStarColor() const; //8059107c
+    MatTEVHandler& GetMatTEVHandler(); //805910a4
     float GetBaseSpeed() const; //805910b0
     KartAIController& GetAIController(); //805910c0
     u32 GetBodyClosestFloorFlags() const; //805910cc
@@ -191,12 +197,16 @@ public:
     float GetStartBoostCharge() const;	//805914e4
     Entity* GetEntity() const; //80591520
     ClipInfo* GetClipInfo() const; //8059152c
+    void CallFuncOnAllParts(CallOnAllPartsFunc func); //80591538
     bool AreKartModelsVisible() const; //80591608
     Killer& GetKiller() const; //80591618
     void GetBillViewMtx(Mtx34& dest); //80591624
     void ResetInertia(const Vec3& scale) const; //80591664
     void StartOobWipe(u32 state); //80591784
     u32 GetOobWipeState() const; //805917a0
+    void IncrementItemsHitCount() const; //805918bc
+    void IncrementItemsCollisionCount() const; //805918e0   
+
     Zipper& GetZipper() const; //80591904
     Trick& GetTrick() const; //80591914
     void InitLights(u8 srcLightObjIdx); //80591924

@@ -13,15 +13,16 @@ public:
         void Init() override; //0xc 806367f8 
         void Update() override; //0x10 806369e4
         void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 80637344
-        int GetRuntimeTypeInfo() const override; //0x28 806374ac
+        const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 806374ac
         const char* GetClassName() const override; //0x2c 80636460
         void Load(u32 buttonId, const char* folderName, const char* ctrName, const char* variant,
             const char** anims, bool r8, bool inaccessible); //806365cc
-        void HandleSelect(u32 hudSlotId); //80636d08
+        void HandleSelect(u32 hudSlotId, u32 childIdx); //80636d08
+        void HandleDeselect(u32 hudSlotId, u32 childIdx); //80636fc4
+        void HandleScroll(u32 hudSlotId, u32 childIdx); //806371ac
         void AfterSelect(u32 hudSlotId); //806371ac
         void SetEnabledHudSlots(u32 playerBitField); //80636c2c
         void Toggle(bool enabled); //80636c48
-        void Select(u32 hudSlotId); //806371ac
         static void Trigger2APtmf(PtmfHolder_2A<LayoutUIControl, void, u32, u32>* handler, u32 hudSlotId, u32 childId); //806374b8
         SheetSelectControl* GetParentControl() const; //80636c6c
         ControlManipulator manipulator;
@@ -38,7 +39,7 @@ public:
     SheetSelectControl(); //80635ec4 
     ~SheetSelectControl() override; //8063607c vtable 808be950
     void Init() override; //806362e8
-    int GetRuntimeTypeInfo() const override; //0x28 806374a0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 806374a0
     const char* GetClassName() const override; //0x2c 80635eb8
     virtual void func_0x38(); //0x38 806361e4 just a blr
     virtual void AfterRightScroll(); //0x3c 806363d4 just a blr
@@ -67,7 +68,7 @@ class SheetSelectControlScaleFade : public SheetSelectControl {
 public:
     SheetSelectControlScaleFade() {}
     ~SheetSelectControlScaleFade() override; //805dbfdc vtable 808BE908
-    int GetRuntimeTypeInfo() const override; //0x28 80637494
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 80637494
     const char* GetClassName() const override; //0x2c 8063747c
     int GetArrowAnimationType() const override; //0x44 8063748c
 };

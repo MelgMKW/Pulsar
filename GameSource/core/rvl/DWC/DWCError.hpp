@@ -1,0 +1,54 @@
+#ifndef _DWCERROR_
+#define _DWCERROR_
+#include <types.hpp>
+
+//Credit Seeky
+
+namespace DWC { //this is probably C, but don't care
+
+enum Error {
+    DWC_ERROR_NONE,
+    DWC_ERROR_DS_MEMORY_ANY,
+    DWC_ERROR_AUTH_ANY,
+    DWC_ERROR_AUTH_OUT_OF_SERVICE,
+    DWC_ERROR_AUTH_STOP_SERVICE,
+    DWC_ERROR_AC_ANY,
+    DWC_ERROR_NETWORK,
+    DWC_ERROR_GHTTP_ANY,
+    DWC_ERROR_DISCONNECTED,
+    DWC_ERROR_FATAL,
+    DWC_ERROR_FRIENDS_SHORTAGE,
+    DWC_ERROR_NOT_FRIEND_SERVER,
+    DWC_ERROR_SERVER_FULL,
+    DWC_ERROR_ND_ANY,
+    DWC_ERROR_ND_HTTP,
+    DWC_ERROR_SVL_ANY,
+    DWC_ERROR_SVL_HTTP,
+    DWC_ERROR_PROF_PARSEERR,
+    DWC_ERROR_PROF_HTTP,
+    DWC_ERROR_DB_ANY,
+    DWC_ERROR_SC_CONNECT_BLOCK,
+    DWC_ERROR_NETWORK_LIGHT,
+    DWC_ERROR_NUM
+};
+
+enum ErrorType { //how to process the error
+    DWC_ERRORTYPE_NO_ERROR = 0,
+    DWC_ERRORTYPE_LIGHT,
+    DWC_ERRORTYPE_SHOW_ERROR,
+    DWC_ERRORTYPE_SHUTDOWN_FM,
+    DWC_ERRORTYPE_SHUTDOWN_GHTTP,
+    DWC_ERRORTYPE_SHUTDOWN_ND,
+    DWC_ERRORTYPE_DISCONNECT,
+    DWC_ERRORTYPE_FATAL,
+    DWC_ERRORTYPE_NUM
+};
+
+extern int lastErrorCode; //803862AC
+extern Error lastError; //803862a8
+Error GetLastErrorEx(u32* errorCode, ErrorType* errorType); //800ccb64
+
+}//namespace DWC
+
+
+#endif

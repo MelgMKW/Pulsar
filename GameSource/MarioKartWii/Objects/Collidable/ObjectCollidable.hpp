@@ -20,16 +20,16 @@ class ObjectCollidable : public Object { //collision is added as there is no KCL
     void LoadCollision() override; //0x60 8081f224
     void UpdateCollision() override; //0x74 8081f7c8
     float GetCollisionDiameter() const override; //0xa0 806815a0
-    u32 GetDrawType() const override; //0xb0 806817ac
+    u32 GetScnObjDrawOptionsIdx() const override; //0xb0 806817ac
 
     virtual ObjectCollision* GetCollision() const; //0xb4 80573518
     virtual void BeforeKartCollision(const Kart::Player& kartPlayer, ObjToKartHit* objToKart, KartToObjHit& kartToObj); //0xb8 8081f66c
     virtual void BeforeItemCollision(const ItemObj& item,
         ObjToItemInteraction* objToItem, ItemToObjInteraction& itemToObj); //0xbc 8081f778
-    virtual ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const; //0xc0 8068179c
+    virtual ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj); //0xc0 8068179c
     //depends on factors like speed and obviously the kartToObj as a goomba does not do anything to a player in a mega
     virtual ObjToItemInteraction OnItemCollision(const Kart::Player& kartPlayer,
-        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed) const; //0xc4 806817a4
+        ObjToItemInteraction default, ItemToObjInteraction itemToObj, const Vec3& itemSpeed); //0xc4 806817a4
     //same as above but with items
     virtual void OnWallCollision(const Kart::Player& kartPlayer, Vec3 position); //0xc8 8081f548 sound and playereffectsx
     //for objects that behave like walls such as goombas at low speeds
@@ -46,5 +46,21 @@ class ObjectCollidable : public Object { //collision is added as there is no KCL
     ObjectCollision* objCollision; //0xAC
 }; //0xb0
 size_assert(ObjectCollidable, 0xb0);
+
+class UnkCollidableSub {
+public:
+    UnkCollidableSub(); //8074792c
+    virtual ~UnkCollidableSub(); //80747974 vtable 808cb8e8
+    virtual void Reset(); //0xc 807479b4
+    virtual void Update(const Vec3& vec, float f1, float f2); //0x10 807479d4
+    virtual bool vf_0x14() const; //80747c18
+
+    u8 unknown_0x4[0x10 - 0x4];
+    u32 unknown_0x10;
+    u32 playerCount; //0x14
+    u32 unknown_0x18[3];
+    float unknown_0x24;
+
+}; //0x28
 
 #endif

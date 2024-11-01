@@ -21,7 +21,7 @@ public:
     bool IsLoopData() const; //800829e0
     u16 GetFrameSize(); //800829d0
     ut::LinkListNode link; //0x4
-    const res::AnimationBlock* resource;
+    const res::AnimationBlock* resource; //0xc
     float curFrame; //0x10
 };
 

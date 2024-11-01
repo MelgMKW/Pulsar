@@ -23,7 +23,7 @@ class Press : public ObjectCollidable { //ObjectNum 0x19d = 413
     void LoadCollision() override; //0x60 8077840c
     u8 GetShadowListIdx() override; //0x80 8076ea18
     float GetCollisionDiameter() const override; //0xa0 8076ea0c
-    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) const override; //0xc0 807782d4
+    ObjToKartHit OnCollision(const Kart::Player& kartPlayer, ObjToKartHit default, KartToObjHit kartToObj) override; //0xc0 807782d4
     virtual void TryFall(); //0xec 80777a90
     virtual void UpdateEffect(); //0xec 80777ef8
 

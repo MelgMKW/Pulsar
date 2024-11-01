@@ -3,7 +3,6 @@
 #include <kamek.hpp>
 #include <MarioKartWii/UI/Ctrl/UIControl.hpp>
 #include <MarioKartWii/UI/Ctrl/PushButton.hpp>
-#include <MarioKartWii/UI/Page/Other/CountDownTimer.hpp>
 
 //_sinit_ at 807e43ec
 class CtrlMenuCharacterSelect : public LayoutUIControl {
@@ -14,7 +13,7 @@ public:
         ~ButtonDriver() override; //807e2844 vtable 808d3074
         void InitSelf() override; //0x18 807e3e10
         void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //0x20 807e3eac
-        int GetRuntimeTypeInfo() const override; //0x28 807e43e0
+        const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807e43e0
         const char* GetClassName() const override; //0x2c 807e3e00
 
         void SetButtonColours(u32 hudSlotId); //807e4130 
@@ -29,7 +28,7 @@ public:
     ~CtrlMenuCharacterSelect() override; //80627008 vtable 808d3038
     void InitSelf() override; //0x18 807e2d18
     void OnUpdate() override; //0x1c 807e30ac
-    int GetRuntimeTypeInfo() const override; //0x28 807e43d4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 807e43d4
     const char* GetClassName() const override; //0x2c 807e259c
     ButtonDriver* GetButtonDriver(CharacterId characterId); //807e35b0
     void GetUnlockedStatus() const; //807e289c inlined, fills the bool array

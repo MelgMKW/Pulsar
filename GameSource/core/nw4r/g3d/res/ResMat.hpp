@@ -111,6 +111,20 @@ struct TexSrtTypedef {
     };
 };
 
+struct TexSrt : public TexSrtTypedef {
+    enum Flag {
+        FLAG_ANM_EXISTS = 0x1,
+        FLAG_SCALE_ONE = 0x2,
+        FLAG_ROT_ZERO = 0x4,
+        FLAG_TRANS_ZERO = 0x8,
+        FLAGSET_IDENTITY = 0xf,
+        NUM_OF_FLAG = 4
+    };
+    float Su, Sv;
+    float R;
+    float Tu, Tv;
+};
+
 class ResMat : public ResCommon<ResMatData> {};
 
 class ResMatTevColor : public ResCommon<ResTevColorDL> {};

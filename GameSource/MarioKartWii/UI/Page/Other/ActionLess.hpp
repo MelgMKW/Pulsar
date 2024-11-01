@@ -14,7 +14,7 @@ class ActionLess : public Page { //has to be ended by another Page
     void OnInit() override; //0x28 805babec
     void OnActivate() override; //0x30 805bac40  
     void AfterControlUpdate() override; //0x4c 805bac4c, ends the page
-    int GetRuntimeTypeInfo() const override; //0x60 805bb28c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805bb28c
     virtual void ResetText() = 0; //0x64
     virtual void SetMessageWindowText(u32 bmgId, const Text::Info* text = nullptr) = 0; //0x68
     void RequestEnd(bool canEnd); //805bac84
@@ -29,7 +29,7 @@ public:
     AutoEndingTransparent(); //805bac90
     ~AutoEndingTransparent() override; //805bacf8
     void OnInit() override; //0x28 805bad8c
-    int GetRuntimeTypeInfo() const override; //0x60 805bb280
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805bb280
     void ResetText() override; //0x64 805bae80
     void SetMessageWindowText(u32 bmgId, const Text::Info* text = nullptr) override; //0x68 805bae90
     BusySymbol busySymbol; //0x58
@@ -43,7 +43,7 @@ public:
     AutoEnding(); //805bae98
     ~AutoEnding() override; //805baf68 vtable 808b73a8
     void OnInit() override; //0x28 805bb024
-    int GetRuntimeTypeInfo() const override; //0x60 805bb26c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805bb26c
     void ResetText() override; //0x64 805bb1c0
     void SetMessageWindowText(u32 bmgId, const Text::Info* text = nullptr) override; //0x68 805bb218
     void SetTitleText(u32 bmgId, const Text::Info* text = nullptr); //805bb210

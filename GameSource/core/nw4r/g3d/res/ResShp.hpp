@@ -2,9 +2,28 @@
 #define _NW4R_G3D_RESSHP_
 #include <types.hpp>
 #include <core/nw4r/g3d/res/ResCommon.hpp>
+#include <core/nw4r/g3d/res/ResVtx.hpp>
 
 namespace nw4r {
 namespace g3d {
+
+struct ShpAnmVtxSet {
+    ResVtxPos   resVtxPos;
+    ResVtxNrm   resVtxNrm;
+    ResVtxClr   resVtxClr;
+};
+
+struct ShpAnmResult {
+    struct BlendVtx {
+        ShpAnmVtxSet    vtxSet;
+        float             weight;
+    };
+    u32 flags;
+    u32             numKeyShape;
+    ShpAnmVtxSet    baseShapeVtxSet;
+    float             baseShapeWeight;
+    BlendVtx keyShape[32];
+};
 
 struct ResMtxSetUsed {
     u32 numMtxID; // Number of matrix IDs stored in vecMtxID
@@ -34,9 +53,9 @@ struct ResShpData {
     ResMtxSetUsed msu;
 };
 
-class ResShp : public ResCommon<ResShpData> { //BRRES
+class ResShp : public ResCommon<ResShpData> {
 public:
-
+    void GetAnmResult(ShpAnmResult* result, u32 anmId, float frame, const ShpAnmVtxSet* shpArray) const; //80056da0
 };
 
 }//namespace g3d 

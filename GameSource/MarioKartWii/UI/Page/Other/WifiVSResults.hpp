@@ -14,7 +14,7 @@ public:
     WifiAwardResultItem(); //806455dc
     ~WifiAwardResultItem(); //80645618 vtable 808bf854
     void InitSelf() override; //0x18 806457e8
-    int GetRuntimeTypeInfo() const override; //0x28 80646764
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 80646764
     const char* GetClassName() const override; //0x2c 806455cc
     void Load(u8 idx, bool hasTwoColumns); //80645670 bools depends on isTeamVS and localPlayerCount
 };
@@ -30,7 +30,7 @@ public:
     void AfterEntranceAnimations() override; //0x3c 8064615c
     void BeforeExitAnimations() override; //0x40 806461b4
     void AfterControlUpdate() override; //0x4c 806461c8
-    int GetRuntimeTypeInfo() const override; //0x60 80646758
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80646758
 
     void OnClick(u32 hudSlotId); //80646200
     PtmfHolder_1A<WiFiVSResults, void, u32> onClickHandler; //0x44 80646200

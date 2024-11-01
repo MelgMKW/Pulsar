@@ -38,15 +38,23 @@ public:
         KartDriverDispParam::Entry* kartDriverDispEntry, KartPartsDispParam::Entry* kartPartsDispEntry,
         BikePartsDispParam::Entry* bikePartsDispEntry, DriverDispParam::Entry* driverDispEntry); //80592fc0
 
+    struct Tallies {
+        float totalDistance; //speednorm added every frame
+        float totalDistanceIn1st; //speednorm added every frame
+        u32 itemsHitCount; //0x8 on others
+        u32 itemsCollisionCount; //0xc
+        u32 tricksCount;
+    }; //0x14
+
     u32 isBike;
     KartId kart;
-    CharacterId character;
+    CharacterId character; //0x8
     u16 wheelCount0; //0xc
     u16 wheelCount1; //0xe
     u8 playerIdx; //0x10
     u8 unknown_0x11[2];
     const StatsAndBsp& statsAndBsp; //0x14
-    int* unknown_0x18; //0x18
+    int* unknown_0x18; //0x18 808b63b8
     KartDriverDispParam::Entry* kartDriverDispEntry; //0x1c
     KartPartsDispParam::Entry* kartPartsDispEntry; //0x20
     BikePartsDispParam::Entry* bikePartsDispEntry; //0x24
@@ -54,7 +62,7 @@ public:
     float wheelCountReciprocal; //0x2c
     float wheelCountPlus1Reciprocal; //1.0f / (wheelCount + 1.0f)
     GpStats* gpStats; //0x34
-    u8 unknown_0x38[0x3C - 0x38];
+    Tallies* tallies;
 }; //Total size 0x3c
 
 class DriverParams {

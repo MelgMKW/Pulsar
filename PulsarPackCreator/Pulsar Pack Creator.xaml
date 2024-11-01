@@ -51,6 +51,12 @@
             <Setter Property="Margin"                   Value="15,23,15,28"/>
         </Style>
 
+        <Style x:Key="VariantButton" TargetType="Button">
+            <Setter Property="Content" Value="Variants"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Margin" Value="18,61,0,21"/>
+        </Style>
+
         <Style BasedOn="{StaticResource Boxes}" TargetType="TextBox" x:Key="FileBoxes">
             <Setter Property="Text" Value="File"/>
         </Style>
@@ -191,6 +197,11 @@
                         <TextBlock x:Name="CupsLabel3" Grid.Row="3" Grid.Column="0" Text="Track3" Style="{StaticResource TrackLabels}"/>
                         <TextBlock x:Name="CupsLabel4" Grid.Row="4" Grid.Column="0" Text="Track4" Style="{StaticResource TrackLabels}"/>
 
+                        <Button x:Name = "Variants1"  Grid.Row="1" Grid.Column="0" Click="OnVariantClick" Style="{StaticResource VariantButton}"/>
+                        <Button x:Name = "Variants2"  Grid.Row="2" Grid.Column="0" Click="OnVariantClick" Style="{StaticResource VariantButton}"/>
+                        <Button x:Name = "Variants3"  Grid.Row="3" Grid.Column="0" Click="OnVariantClick" Style="{StaticResource VariantButton}"/>
+                        <Button x:Name = "Variants4"  Grid.Row="4" Grid.Column="0" Click="OnVariantClick" Style="{StaticResource VariantButton}"/>
+
                         <TextBox x:Name="File1" Grid.Row="1" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
                         <TextBox x:Name="File2" Grid.Row="2" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
                         <TextBox x:Name="File3" Grid.Row="3" Grid.Column="1" TextChanged="OnFilenameChange" PreviewDragOver="OnDrag" PreviewDrop="OnSZSDrop"  Style="{StaticResource FileBoxes}"/>
@@ -286,7 +297,7 @@
 
                     <TextBox   x:Name="HAWTimer" Text="10" Grid.Row="1" Grid.Column="4" Width="40" Margin="70,40,70,60" Height="24" TextChanged="OnHAWTimerChange" DataObject.Pasting="NumbersOnlyPasting" PreviewTextInput="NumbersOnlyBox" Style="{StaticResource Boxes}" />
                     <TextBlock Text="Host Always Wins Timer" Grid.Row="1" Grid.Column="4" Margin="0,33,0,0" Style="{StaticResource Blocks}" />
-                    
+
                     <DatePicker xml:lang="en-GB" x:Name="dateSelector" Language="en-GB" Foreground="{DynamicResource fg}" SelectedDateChanged="OnDateChange"
                                    Grid.Row="1" Grid.Column="3" Width="185" >
 

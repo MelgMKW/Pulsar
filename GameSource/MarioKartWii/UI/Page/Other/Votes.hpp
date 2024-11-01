@@ -5,15 +5,16 @@
 #include <MarioKartWii/UI/Ctrl/Menu/CtrlMenuText.hpp>
 #include <MarioKartWii/UI/Page/Other/Message.hpp>
 
+//_sinit_ at 80644694
 class VoteControl : public LayoutUIControl {
 public:
     VoteControl(); //80642aac
     ~VoteControl() override; //80642ae8 808bf67c
     void InitSelf() override; //80642bec
     void OnUpdate() override; //80642ca0
-    int GetRuntimeTypeInfo() const override; //80644658
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //80644658
     const char* GetClassName() const override; //80642aa0
-    void StartRoulette(); //806441e8
+
     void Load(u32 index); //80642b40
     void Fill(bool isCourseIdInvalid, u32 bmgId, const MiiGroup& miiGroup, u32 playerId, bool isLocalPlayer, u32 team); //80642ca4 
     void AnimateDeselect(); //80642e68 inlined removes yellow border
@@ -37,9 +38,9 @@ public:
     void BeforeEntranceAnimations() override; //0x38 806433cc
     void BeforeExitAnimations() override; //0x40 80643e98
     void BeforeControlUpdate() override; //0x48 806437e8
-    int GetRuntimeTypeInfo() const override; //0x60 8064464c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8064464c
     void SetVotedCourseId(CourseId course); //80643f48
-    void FillVoteControls(u32 id);  //80643f8c
+    bool FillVoteControl(u32 playerId);  //80643f8c
     void FillVotesCounter(); //80644430
     void OnMessageBoxClick(MessageBox& messageBox);
     PtmfHolder_1A<Vote, void, MessageBox*> onMessageBoxClick; //806445a8 disconnected message box
@@ -49,8 +50,8 @@ public:
     CtrlMenuInstructionText bottomText; //0x1e0
     LayoutUIControl votesCounter; //0x354 0/X bottom right
     VoteControl votes[12]; //0x4c8
-    u32 order[12]; //0x1668 order the votes got handled/displayed
-    u32 lastHandledVote; //0x1698
+    u32 order[12]; //0x1668 order the votes got handled/displayed, order[playerId] = index of the voteControl used for that player
+    u32 lastHandledVote; //0x1698 voteCount
     u32 isBattle; //0x169c
     u32 connectionState; //0x16a0, unsure, but if 3, loads the disconnected box 
     u32 localPlayerCount; //0x16a4
@@ -63,5 +64,6 @@ public:
 }; //total size 0x16c0
 size_assert(Vote, 0x16c0);
 }//namespace Pages
+
 
 #endif

@@ -1,7 +1,7 @@
 #include <kamek.hpp>
 #include <MarioKartWii/Audio/AudioManager.hpp>
 #include <MarioKartWii/Audio/Other/AudioStreamsMgr.hpp>
-#include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
+#include <MarioKartWii/UI/Section/SectionMgr.hpp>
 
 namespace Pulsar {
 namespace Sound {

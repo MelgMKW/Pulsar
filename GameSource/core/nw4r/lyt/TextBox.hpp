@@ -10,7 +10,7 @@ class TextBox : public Pane {
 public:
     TextBox(const res::TextBox* src, const ResBlockSet& resBlockSet); //8007b320
     ~TextBox() override; //8007b610 vtable 80273578
-    void* GetRuntimeTypeInfo() const override; //0xc 8007cc10
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0xc 8007cc10
     void DrawSelf(const DrawInfo& info) override; //0x18 8007b870
     ut::Color GetVtxColor(u64 id) const override; //0x24 8007b7b0
     void SetVtxColor(u64 id, ut::Color color) override; //0x28 8007b7e0

@@ -13,7 +13,7 @@ public:
         ~OptionButton() override; //80606894 vtable 808baa24
         void Init() override; //80606994
         void Update() override; //0x10 80606a14
-        int GetRuntimeTypeInfo() const override; //0x28 806070f4
+        const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 806070f4
         const char* GetClassName() const override; //0x2c 80606848
         void Load(const char* folderName, const char* ctrName, const char* variant); //806068ec inlined
         void ToggleSelect(bool State); //80606e24
@@ -29,7 +29,7 @@ public:
     ~RadioButtonControl() override; //806058c8 vtable 808ba9e0
     void Init() override; //0xc 80605f24
     void Update() override; //0x10 80606100
-    int GetRuntimeTypeInfo() const override; //0x28 806070e8
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 806070e8
     const char* GetClassName() const override; //0x2c 80605718
     virtual void OnDeactivateingEnd(); //0x3c 80605d50
     virtual void func_0x40(); //0x40 806070e4

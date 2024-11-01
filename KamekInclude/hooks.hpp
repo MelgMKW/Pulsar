@@ -7,10 +7,12 @@
 // hook type IDs _must_ match what's in the Kamek source!
 #define kctWrite 1
 #define kctConditionalWrite 2
-#define kctInjectBranch 3
-#define kctInjectCall 4
-#define kctPatchExit 5
-
+#define kctRegionWrite 3
+#define kctInjectBranch 4
+#define kctInjectCall 5
+#define kctRegionInjectBranch 6
+#define kctRegionInjectCall 7
+#define kctPatchExit 8
 
 #define kmIdentifier(key, counter) \
 	_k##key##counter
@@ -48,6 +50,18 @@
 #define kmWrite32(addr, value) kmHook3(kctWrite, 2, (addr), (value))
 #define kmWrite16(addr, value) kmHook3(kctWrite, 3, (addr), (value))
 #define kmWrite8(addr, value) kmHook3(kctWrite, 4, (addr), (value))
+
+
+//kmRegionWrite 'E', 'P', 'J', 'K'
+#define kmRegionWritePointer(addr, ptr, region) kmHook4(kctRegionWrite, 1, (addr), (ptr), (region))
+#define kmRegionWrite32(addr, value, region) kmHook4(kctRegionWrite, 2, (addr), (value), (region))
+#define kmRegionWrite16(addr, value, region) kmHook4(kctRegionWrite, 3, (addr), (value), (region))
+#define kmRegionWrite8(addr, value, region) kmHook4(kctRegionWrite, 4, (addr), (value), (region))
+
+//kmRegionWrite 'E', 'P', 'J', 'K'
+#define kmRegionBranch(addr, ptr, region) kmHook3(kctRegionInjectBranch, (addr), (ptr), (region))
+#define kmRegionCall(addr, ptr, region) kmHook3(kctRegionInjectCall, (addr), (ptr), (region))
+
 
 // kmPatchExitPoint
 //   Force the end of a Kamek function to always jump to a specific address
@@ -100,26 +114,6 @@
 
 #define kmOnLoadDefAsm() \
     kmOnLoadDefInt(__COUNTER__, asm int)
-
-//Custom Hooks
-extern char gameID[4];
-template <unsigned int address, unsigned int instruction, char region>
-int PatchRegion() {
-    if(gameID[3] == region) {
-        register unsigned int* addressPtr = (unsigned int*)address;
-        *addressPtr = instruction;
-        asm{
-            ASM(
-            dcbst 0, addressPtr;
-            sync;
-            icbi 0, addressPtr;
-            )
-        }
-    }
-    return 0;
-}
-#define kmWriteRegionInstruction(address, instruction, region) \
-	static int kmIdentifier(Int, __COUNTER__) = PatchRegion<address, instruction, region>()
 
 #define kmWrite24(address, instruction) \
 	kmWrite16(address, (instruction & 0xFFFF00) >> 0x8); \

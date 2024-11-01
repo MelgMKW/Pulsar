@@ -11,7 +11,7 @@ class BackModel : public Page { //ID 0x5c
     BackModel(); //805fb5bc
     ~BackModel() override; //805fb610 vtable 808b9ffc
     void OnInit() override; //0x28 805fb690
-    int GetRuntimeTypeInfo() const override; //0x60 805fb800
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805fb800
     ManipulatorManager manager; //0x44
     LayoutUIControl bg; //0x54
     BackGroundModelControl backgroundModel; //0x1c8

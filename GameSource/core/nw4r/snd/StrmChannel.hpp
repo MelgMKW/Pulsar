@@ -6,6 +6,8 @@ namespace snd {
 namespace detail {
 class StrmBufferPool {
 public:
+    void* Alloc(); //800a4d20
+    void Free(void* p); //800a4e10
     void* buffer; //0
     u32 bufferSize; //4
     u32 blockSize; //8

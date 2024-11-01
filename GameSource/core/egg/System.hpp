@@ -1,8 +1,8 @@
 #ifndef _EGGSYSTEM_
 #define _EGGSYSTEM_
 #include <types.hpp>
-#include <core/rvl/os/Context.hpp>
-#include <core/rvl/os/Alarm.hpp>
+#include <core/rvl/os/OSContext.hpp>
+#include <core/rvl/os/OSAlarm.hpp>
 #include <core/egg/mem/ExpHeap.hpp>
 #include <core/egg/Audio/AudioMgr.hpp>
 #include <core/egg/3D/XFB.hpp>
@@ -19,7 +19,7 @@ class TSystem { //names obtained from BBA
 public:
     static TSystem mInstance; //802a4080
     static TSystem* sInstance; //80385fc8
-
+    static TSystem* sInstance2; //80386F60
     virtual Video* GetVideo(); //0x8 800099ac vtable 80270c2c
     virtual Heap* GetSystemHeap(); //0xC 800099b4
     virtual Display* GetDisplay(); //0x10 80009818
@@ -54,7 +54,7 @@ public:
     void* xfbManager; //0x48
     AsyncDisplay* asyncDisplay; //0x4c
     ProcessMeter* processMeter; //0x50
-    RKSceneManager* sceneManager; //0x54
+    SceneManager* sceneManager; //0x54 //actually a RKSceneManager
 };
 }//namespace EGG
 

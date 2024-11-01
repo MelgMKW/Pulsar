@@ -40,10 +40,10 @@ extern ParamBins paramBins; //809c1910
 void InitParamBinsFromCommon(); //805919f4
 void InitParamBinsFromRace(); //80591b74
 void ResetParamBins(); //80591c9c
-void* GetParamBinFromCommon(const char* name); //80591ce8 calls ArchiveRoot::GetFile
-void* GetParamBinFromRace(const char* name); //80591d00 prints the path to parameter/name then calls ArchiveRoot::GetFile
+void* GetParamBinFromCommon(const char* name); //80591ce8 calls ArchiveMgr::GetFile
+void* GetParamBinFromRace(const char* name); //80591d00 prints the path to parameter/name then calls ArchiveMgr::GetFile
 void* GetParamBin(const char* name, bool fromRace); //80591d4c from common if fromRace false
-BSP* GetBSP(u8 playerIdx); //80591dbc calls ArchiveRoot::GetBSP
+BSP* GetBSP(u8 playerIdx); //80591dbc calls ArchiveMgr::GetBSP
 
 //FROM COMMON BELOW
 void LoadKartAndDriverParamBins(); //80591dd0

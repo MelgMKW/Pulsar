@@ -20,7 +20,7 @@ public:
     void AfterEntranceAnimations() override; //0x3c 805c3750
     void BeforeExitAnimations() override; //0x40 805c3754
     void AfterControlUpdate() override; //0x4c 805c3758
-    int GetRuntimeTypeInfo() const override; //0x60 805c3b74
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805c3b74
     ManipulatorManager manipulatorManager; //0x44
     PageId nextPage;
 }; //total size 0x58
@@ -35,7 +35,7 @@ class LowBattery : public Page { //ID 0x56
     void BeforeEntranceAnimations() override; //0x38 805c3ad8
     void AfterExitAnimations() override; //0x44 805c3b1c
     void AfterControlUpdate() override; //0x4c 805c3a8c
-    int GetRuntimeTypeInfo() const override; //0x60 805c3b60
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805c3b60
     void OnClick(u32 hudSlotId); //805c3ac4
     PtmfHolder_1A<LowBattery, void, u32> onClickHandler; //0x44 805c3ac4
     PageManipulatorManager manipulatorManager; //0x58

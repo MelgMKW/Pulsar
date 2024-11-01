@@ -3,8 +3,8 @@
 
 #include <types.hpp>
 #include <core/nw4r/snd.hpp>
-#include <core/rvl/os/thread.hpp>
-#include <core/rvl/os/message.hpp>
+#include <core/rvl/os/OSthread.hpp>
+#include <core/rvl/os/OSmessage.hpp>
 #include <core/rvl/arc/arc.hpp>
 #include <core/egg/mem/Heap.hpp>
 

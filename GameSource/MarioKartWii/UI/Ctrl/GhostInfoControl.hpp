@@ -12,7 +12,7 @@ public:
     ~GhostInfoControl() override; //805e27dc vtable 808b92c0
     void InitSelf() override; //0x18 805e2964
     void OnUpdate() override; //0x1c 805e2968
-    int GetRuntimeTypeInfo() const override; //0x28 805e2f40
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805e2f40
     const char* GetClassName() const override; //0x2c 805e2740
     void Load(const char* variantName); //805e2844
     void UpdateInfoAnimate(const GhostData& data, bool isNew, u32 animationId); //805e2d40

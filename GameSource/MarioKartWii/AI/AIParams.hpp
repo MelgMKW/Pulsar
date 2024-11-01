@@ -1,7 +1,7 @@
 #ifndef _AIPARAMS_
 #define _AIPARAMS_
 #include <kamek.hpp>
-#include <MarioKartWii/Archive/ArchiveRoot.hpp>
+#include <MarioKartWii/Archive/ArchiveMgr.hpp>
 
 struct BinAIParamAction {
     float probRocketBoost;

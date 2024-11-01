@@ -90,9 +90,7 @@ void IO::CloseFolder() {
     this->fileCount = 0;
 }
 
-s32 IO::ReadFolderFile(void* bufferIn, u32 index, u32 maxLength) {
-    char path[IOS::ipcMaxPath];
-    this->GetFolderFilePath(path, index);
+s32 IO::ReadFolderFileFromPath(void* bufferIn, const char* path, u32 maxLength) {
     this->OpenFile(path, FILE_MODE_READ);
     const u32 size = this->GetFileSize();
     const u32 length = size <= maxLength ? size : maxLength;
@@ -100,12 +98,5 @@ s32 IO::ReadFolderFile(void* bufferIn, u32 index, u32 maxLength) {
     this->Close();
     return ret;
 }
-
-void IO::GetFolderFilePath(char* path, u32 index) const {
-    snprintf(path, IOS::ipcMaxPath, "%s/%s", &this->folderName, &this->fileNames[index]);
-}
-
-
-
 
 }//namespace Pulsar

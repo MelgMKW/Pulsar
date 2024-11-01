@@ -9,9 +9,9 @@ struct LoaderParams;
 typedef void (*OSReport_t) (const char* str, ...);
 typedef void (*OSFatal_t) (u32* fg, u32* bg, const char* str, ...);
 typedef int (*DVDConvertPathToEntrynum_t) (const char* path);
-typedef bool (*DVDFastOpen_t) (int entrynum, DVDFileInfo* fileInfo);
-typedef int (*DVDReadPrio_t) (DVDFileInfo* fileInfo, void* buffer, int length, int offset, int unk);
-typedef bool (*DVDClose_t) (DVDFileInfo* fileInfo);
+typedef bool (*DVDFastOpen_t) (int entrynum, DVD::FileInfo* fileInfo);
+typedef int (*DVDReadPrio_t) (DVD::FileInfo* fileInfo, void* buffer, int length, int offset, int unk);
+typedef bool (*DVDClose_t) (DVD::FileInfo* fileInfo);
 typedef int (*sprintf_t) (char* str, const char* format, ...);
 
 enum Region {
@@ -31,6 +31,7 @@ struct LoaderParams {
     sprintf_t sprintf;
     RKSystem* rkSystem;
     Region region;
+    u32 relStart;
 };
 
 

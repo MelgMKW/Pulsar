@@ -10,6 +10,14 @@ namespace nw4r {
 namespace g3d {
 
 //Root of scene; renders and calls it, holds every ScnObj that needs to be rendered
+//Order of operations:
+/*
+1)The transformation matrixes (world and view) are calculated
+2)ScnObjs are gathered using GatherDrawScnObj and added to a IScnObjGather, most ScnObjGather in game, which also checks for culling
+3)Sort the selected ScnObjs via ZSort() or Sort()
+3)Draw the objs via DrawOpa and DrawXLU in the order they have been sorted into
+4)GX::DrawDone to wait for render processing to finish
+*/
 class ScnRoot : public ScnGroup {
 public:
     static ScnRoot* Construct(G3dHeap* heap, u32* size, u32 maxChildren, u32 maxScnObj, u32 lightObjCount, u32 lightSetCount); //8006f1a0
@@ -22,6 +30,17 @@ public:
     LightSet GetLightSet(int lightSetId); //8006f4a0
     //Gathers ScnObj objects to be drawn in the scene.
     void GatherDrawScnObj(); //8006fad0
+
+    void SetCurrentCamera(int camIdx); //8006f430
+
+    void CalcWorld(); //8006f9c0
+    void CalcMaterial(); //8006fa10
+    void CalcVtx(); //8006fa30
+    void CalcView(); //8006fa50
+
+    void ZSort(); //8006fbc0
+    void DrawOpa(); //8006fc20
+    void DrawXlu(); //8006fca0
 
     IScnObjGather* collection;
     u32 drawMode;

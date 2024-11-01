@@ -30,7 +30,6 @@ struct TexObj {
     u16 loadCnt; //0x1c
     u8  loadFmt; //0x1e
     u8  flags; //0x1f
-
     //u32 dummy[8];
 }; //0x20
 
@@ -52,7 +51,7 @@ struct LightObj {
     //u32 dummy[16];
 };
 
-struct RenderModeObj {
+struct  RenderModeObj {
     VI::TVMode viTVmode;
     u16 efbWidth; //0x4 xfb has the same width, it can only scale y dimension
     u16 efbHeight; //0x6
@@ -64,8 +63,8 @@ struct RenderModeObj {
     VI::XFBMode xFBmode;
     u8 field_rendering;
     u8 aa;
-    u8 sample_pattern[12][2];
-    u8 vfilter[7];
+    u8 sample_pattern[12][2]; //aa sample pattern
+    u8 vfilter[7]; //vertical filter coeffs
 };
 
 }//namespace GX

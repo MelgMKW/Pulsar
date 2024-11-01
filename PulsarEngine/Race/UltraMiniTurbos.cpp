@@ -1,5 +1,5 @@
 #include <MarioKartWii/Kart/KartManager.hpp>
-#include <MarioKartWii/Race/RaceData.hpp>
+#include <MarioKartWii/Race/Racedata.hpp>
 #include <Race/UltraMiniTurbos.hpp>
 #include <Sound/MiscSound.hpp>
 #include <PulsarSystem.hpp>
@@ -24,13 +24,12 @@ const char* ExpPlayerEffects::UMTNames[8] ={
 //Needed so that other players display the correct effect
 bool umtState[12]; //false = no UMT  true = UMT buff active expanding Kart::Movement just for this doesn't seem like the plan
 
-
 kmWrite32(0x8057ee5c, 0x2c050004); //changes >= 3 to >= 4 for UMT
 kmWrite32(0x8057ef30, 0x2c000001); //changes check from if != 2 to if = 1, so that when in a SMT the function keeps going
 kmWrite32(0x8057ef38, 0x418200A4); //ensure mtSpeedMultiplier gets reset when driftState = 1, by sending to where CreateUMT hooks
 kmWrite32(0x8057efb4, 0x48000028); //skips the SMT charge check and sends unconditionally to CreateUMT
 void CreateUMT(Kart::Movement& movement) {
-    bool isUMTs = Info::IsUMTs();
+    bool isUMTs = System::sInstance->IsContext(PULSAR_UMTS);
     const s16 smtCharge = movement.smtCharge;
     if(smtCharge >= 550 && isUMTs) movement.driftState = 4;
     else if(smtCharge >= 300) movement.driftState = 3;
@@ -39,8 +38,8 @@ kmBranch(0x8057efdc, CreateUMT);
 
 //Buffs MTStats and updates umtState
 int BuffUMT(const Kart::Movement& movement) {
-    const u8 idx = movement.link.GetPlayerIdx();
-    u32 mtStat = movement.link.GetStats().mt;
+    const u8 idx = movement.GetPlayerIdx();
+    u32 mtStat = movement.GetStats().mt;
     bool* state = umtState;
     if(movement.driftState == 4) state[idx] = true;
     if(state[idx] == true) mtStat = 3 * mtStat / 2; //50% longer
@@ -56,7 +55,7 @@ bool UpdateSpeedMultiplier(Kart::Boost& boost, bool* boostEnded) {
     const bool isBoosting = boost.Update(boostEnded);
     register Kart::Movement* movement;
     asm(mr movement, r28;);
-    const u8 id = movement->link.GetPlayerIdx();
+    const u8 id = movement->GetPlayerIdx();
     bool* state = umtState;
     const float umtMultiplier = 1.32f; //10% faster
     const float defaultMTMultiplier = 1.2f;
@@ -72,15 +71,15 @@ kmCall(0x8057934c, UpdateSpeedMultiplier);
 
 //Expanded player effect, also hijacked to add custom breff/brefts to Effects::Mgr
 static void CreatePlayerEffects(Effects::Mgr& mgr) { //adding the resource here as all other breff have been loaded at this point
-    if(Info::IsUMTs()) {
-        const ArchiveRoot* root = ArchiveRoot::sInstance;
+    if(System::sInstance->IsContext(PULSAR_UMTS)) {
+        const ArchiveMgr* root = ArchiveMgr::sInstance;
         void* breff = root->GetFile(ARCHIVE_HOLDER_COMMON, System::breff, 0);
         void* breft = root->GetFile(ARCHIVE_HOLDER_COMMON, System::breft, 0);
         EGG::EffectResource* res = new EGG::EffectResource(breff, breft);
         if(mgr.resCount != 9) mgr.resources[mgr.resCount] = res;
         else pulEffects = res;
     }
-    for(int i = 0; i < RaceData::sInstance->racesScenario.playerCount; ++i) {
+    for(int i = 0; i < Racedata::sInstance->racesScenario.playerCount; ++i) {
         mgr.players[i] = new(ExpPlayerEffects)(Kart::Manager::sInstance->GetKartPlayer(i));
     }
 }
@@ -97,7 +96,7 @@ kmCall(0x8051b198, DeleteEffectRes);
 //Loads the custom effects
 static void LoadCustomEffects(ExpPlayerEffects& effects) {
     effects.LoadEffects();
-    if(effects.isBike == false && Info::IsUMTs()) {
+    if(effects.isBike == false && System::sInstance->IsContext(PULSAR_UMTS)) {
         effects.rk_purpleMT = new EGG::Effect * [ExpPlayerEffects::UmtEffectsCount];
         for(int i = 0; i < ExpPlayerEffects::UmtEffectsCount; ++i) {
             effects.rk_purpleMT[i] = new(EGG::Effect)(ExpPlayerEffects::UMTNames[i], effects.playerIdPlus2);
@@ -108,8 +107,8 @@ kmCall(0x8068e9c4, LoadCustomEffects);
 
 //Left and Righ sparks when the SMT charge is over 550
 void LoadLeftPurpleSparkEffects(ExpPlayerEffects& effects, EGG::Effect** effectArray, u32 firstEffectIndex, u32 lastEffectIndex, const Mtx34& playerMat2, const Vec3& wheelPos, bool updateScale) {
-    const u32 smtCharge = effects.kartPlayer->link.pointers->kartMovement->smtCharge;
-    if(smtCharge >= 550 && Info::IsUMTs()) {
+    const u32 smtCharge = effects.kartPlayer->pointers.kartMovement->smtCharge;
+    if(smtCharge >= 550 && System::sInstance->IsContext(PULSAR_UMTS)) {
         effects.CreateAndUpdateEffectsByIdx(effects.rk_purpleMT, 0, 2, playerMat2, wheelPos, updateScale);
         effects.FollowFadeEffectsByIdx(effectArray, firstEffectIndex, lastEffectIndex, playerMat2, wheelPos, updateScale);
     }
@@ -118,8 +117,8 @@ void LoadLeftPurpleSparkEffects(ExpPlayerEffects& effects, EGG::Effect** effectA
 kmCall(0x80698a94, LoadLeftPurpleSparkEffects);
 
 void LoadRightPurpleSparkEffects(ExpPlayerEffects& effects, EGG::Effect** effectArray, u32 firstEffectIndex, u32 lastEffectIndex, const Mtx34& playerMat2, const Vec3& wheelPos, bool updateScale) {
-    const u32 smtCharge = effects.kartPlayer->link.pointers->kartMovement->smtCharge;
-    if(smtCharge >= 550 && Info::IsUMTs()) {
+    const u32 smtCharge = effects.kartPlayer->pointers.kartMovement->smtCharge;
+    if(smtCharge >= 550 && System::sInstance->IsContext(PULSAR_UMTS)) {
         effects.CreateAndUpdateEffectsByIdx(effects.rk_purpleMT, 2, 4, playerMat2, wheelPos, updateScale);
         effects.FollowFadeEffectsByIdx(effectArray, firstEffectIndex, lastEffectIndex, playerMat2, wheelPos, updateScale);
     }
@@ -129,7 +128,7 @@ kmCall(0x80698af0, LoadRightPurpleSparkEffects);
 
 //Fade the sparks
 void FadeLeftPurpleSparkEffects(ExpPlayerEffects& effects, EGG::Effect** effectArray, u32 firstEffectIndex, u32 lastEffectIndex, const Mtx34& playerMat2, const Vec3& wheelPos, bool updateScale) {
-    if(Info::IsUMTs()) effects.FollowFadeEffectsByIdx(effects.rk_purpleMT, 0, 2, playerMat2, wheelPos, updateScale);
+    if(System::sInstance->IsContext(PULSAR_UMTS)) effects.FollowFadeEffectsByIdx(effects.rk_purpleMT, 0, 2, playerMat2, wheelPos, updateScale);
     effects.FollowFadeEffectsByIdx(effectArray, firstEffectIndex, lastEffectIndex, playerMat2, wheelPos, updateScale);
 };
 kmCall(0x80698dac, FadeLeftPurpleSparkEffects);
@@ -138,7 +137,7 @@ kmCall(0x80698664, FadeLeftPurpleSparkEffects);
 kmCall(0x80698ab4, FadeLeftPurpleSparkEffects);
 
 void FadeRightPurpleSparkEffects(ExpPlayerEffects& effects, EGG::Effect** effectArray, u32 firstEffectIndex, u32 lastEffectIndex, const Mtx34& playerMat2, const Vec3& wheelPos, bool updateScale) {
-    if(Info::IsUMTs()) effects.FollowFadeEffectsByIdx(effects.rk_purpleMT, 2, 4, playerMat2, wheelPos, updateScale);
+    if(System::sInstance->IsContext(PULSAR_UMTS)) effects.FollowFadeEffectsByIdx(effects.rk_purpleMT, 2, 4, playerMat2, wheelPos, updateScale);
     effects.FollowFadeEffectsByIdx(effectArray, firstEffectIndex, lastEffectIndex, playerMat2, wheelPos, updateScale);
 };
 kmCall(0x80698248, FadeRightPurpleSparkEffects);
@@ -162,7 +161,7 @@ void PatchBoostOnUMTSpeedBoost(EGG::Effect* boostEffect) { //have to mod loop in
     register ExpPlayerEffects* effects;
     asm(mr effects, r30;);
 
-    Kart::Movement* movement = effects->kartPlayer->link.pointers->kartMovement;
+    Kart::Movement* movement = effects->kartPlayer->pointers.kartMovement;
     if(umtState[effects->playerId]) boostEffect = effects->rk_purpleMT[rk_purpleBoost + loopIndex % 4];
     boostEffect->Create();
 };
@@ -180,7 +179,7 @@ void PatchBoostMatrix(EGG::Effect* boostEffect, const Mtx34& boostMat) {
     asm(mr loopIndex, r29;);
     register ExpPlayerEffects* effects;
     asm(mr effects, r30;);
-    if(!effects->isBike && Info::IsUMTs()) {
+    if(!effects->isBike && System::sInstance->IsContext(PULSAR_UMTS)) {
         boostEffect = effects->rk_purpleMT[rk_purpleBoost + loopIndex % 4];
         if(boostEffect->effectHandle.GetPtr()) {
             boostEffect->SetMtx(boostMat);
@@ -200,7 +199,7 @@ void PatchFadeBoost(EGG::Effect* boostEffect) {
     asm(mr loopIndex, r30;);
     register ExpPlayerEffects* effects;
     asm(mr effects, r31;);
-    if(!effects->isBike && Info::IsUMTs()) effects->rk_purpleMT[rk_purpleBoost + loopIndex % 4]->FollowFade();
+    if(!effects->isBike && System::sInstance->IsContext(PULSAR_UMTS)) effects->rk_purpleMT[rk_purpleBoost + loopIndex % 4]->FollowFade();
 }
 kmCall(0x8069c0a4, PatchFadeBoost);
 

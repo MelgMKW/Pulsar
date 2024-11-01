@@ -12,6 +12,7 @@
 #include <core/nw4r/lyt/Pane.hpp>
 #include <core/nw4r/lyt/Textbox.hpp>
 #include <core/nw4r/lyt/Picture.hpp>
+#include <core/nw4r/lyt/Window.hpp>
 #include <core/nw4r/lyt/ResourceAccessor.hpp>
 #include <core/nw4r/lyt/resources.hpp>
 #include <core/nw4r/lyt/TexMap.hpp>

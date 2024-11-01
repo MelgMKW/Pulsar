@@ -19,7 +19,10 @@ public:
     void Set16_9AspectRatio(); //80566bb8 sets width and height to 608/456
     void SetAndLoadOrthoProj(u32 r4); //80565da0
 
-    u8 unknown_0x60[0x68 - 0x60]; //0x48
+    bool GetViewToScreen(Vec3* screenPos, const Vec3& viewPos) const; //80566fc0
+    void GetAbsoluteToScreen(Vec3* screenPos, const Vec3& absolutePos) const; //80566fc4
+    void GetAbsoluteToView(Vec3* viewPos, const Vec3& absolutePos) const; //80566f6c
+
     u32 idx; //0x68
     GameCamera* perspectiveCam; //0x6c
     EGG::OrthoCamera uiCamera; //0x70 used for UI, but essentially always kept at the default parameters

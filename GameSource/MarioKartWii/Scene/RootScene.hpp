@@ -4,7 +4,7 @@
 
 class RootScene : public BaseScene {
 public:
-    RootScene* sInstance; //809bd740
+    static RootScene* sInstance; //809bd740
     static void RequestRootScene(); //80543b10 creates a GameSceneCreator and request a scene change with it, only works if no gamescene has been created yet
     RootScene(); //80542878
     ~RootScene() override; //805129a8 vtable 808b3c48
@@ -15,6 +15,18 @@ public:
 
     void CreateInstances(); //80542d4c creates stuff like AudioManager, Manager etc...
     void InitInstances(); //805438b4
+
+    //Inlined funcs
+    void SetHeapsGroupId(u32 groupId); //80542a10
+    void CreateArchiveMgr(); //80542a18 
+    void CreateGroup1Instances(); //80542a80 nandmgr, rksysmgr, inputmgr, mimgr, cins
+    void CreateAudioMgr(); //80542ae0
+    void CreateScnMgrCreator(); //80542b5c
+    void CreateRacedata(); //80542ba0
+    void CreateEffectsMgr(); //80542be4
+    void CreateHomeMenuMgr(); //80542c2c
+    void CreateRKNetInstances(); //80542c74
+    void CreateUIInstances(); //80542cc4
 
     u8 unknown_0xc70[8];
     EGG::ExpHeap* audioHeap; //0xc78

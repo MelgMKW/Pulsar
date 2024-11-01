@@ -5,6 +5,7 @@
 #include <core/nw4r/snd/MoveValue.hpp>
 #include <core/nw4r/snd/Misc.hpp>
 #include <core/nw4r/ut/LinkList.hpp>
+#include <core/nw4r/ut/RuntimeTypeInfo.hpp>
 
 namespace nw4r {
 namespace snd {
@@ -92,7 +93,7 @@ public:
         PAUSE_STATE_UNPAUSING
     };
     BasicSound(int priority, int ambientPriority); //8008e0e0, size seems to be headerSize
-    virtual int GetRuntimeTypeInfo(); //8008f950 vtable 80274278
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //8008f950 vtable 80274278
     virtual ~BasicSound(); //0xc 8008f910
     virtual void Shutdown(); //0x10 8008f2c0
     virtual bool IsPrepared() = 0; //0x14

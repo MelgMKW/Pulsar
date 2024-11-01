@@ -20,6 +20,7 @@ public:
     void Init(u32 r4, u32 r5, u32 r6, u32 r7); //807dc048
     void* InitModel(Mii* mii, MiiDriverModel* driverModel, u32 r6, g3d::ScnMdl::BufferOption option, u32 r8, u32 id); //8055c580
     void UpdateParams(u32 r4, MiiDriverModel* driverModel, u32 r6, Mii* mii); //807dc2c0
+    void SetExpression(u32 value); //807dc3e8
     Mii* mii; //0x4c
     MiiDriverModel* driverModel; //0x50
     MiiId id; //0x54

@@ -1,8 +1,8 @@
 #ifndef _EGG_THREAD_
 #define _EGG_THREAD_
 #include <types.hpp>
-#include <core/rvl/os/thread.hpp>
-#include <core/rvl/os/message.hpp>
+#include <core/rvl/os/OSthread.hpp>
+#include <core/rvl/os/OSmessage.hpp>
 #include <core/rvl/mtx/mtx.hpp>
 #include <core/nw4r/ut/LinkList.hpp>
 #include <core/nw4r/ut/List.hpp>

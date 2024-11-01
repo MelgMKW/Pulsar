@@ -33,18 +33,18 @@ public:
     virtual void SetDisableCalcDraw(bool disable); //0x24 80223030
     virtual void SetLife(u16 life); //0x28 802230cc
     virtual void SetEmitRatio(float ratio); //0x2c 8022318c
-    virtual void vf_0x30(); //0x30 80223220
+    virtual void SetEmitInterval(u16 interval); //0x30 80223220
     virtual void SetEmitEmitDiv(u16 emitDiv); //0x34 802232b4
     virtual void SetPowerRadiationDir(float dir); //0x38 80223348
     virtual void SetPowerSpecDir(float dir); //0x3c 802233dc
-    virtual void vf_0x40(); //0x40 80223470
+    virtual void SetPowerSpecDirAddBase(float dir); //0x40 80223470 adds the dir to the EmitterResource value
     virtual void SetSpecDir(const Vector3f& dir); //0x44 80223528
-    virtual void vf_0x48(); //0x48 80223620
+    virtual void SetSpecDirAddBase(const Vector3f& dir); //0x48 80223620
     virtual void SetVelocity(const Vector3f& velocity); //0x4c 802237d0
     virtual void SetColor(u8 r, u8 g, u8 b, u8 a); //0x50 80223834
-    virtual void vf_0x54(); //0x54 802238fc
-    virtual void SetParticleScale(Vector2f& scale); //0x58 802239bc
-    virtual void vf_0x5c(); //0x5c 80223a30
+    virtual void SetParticleSize(const Vector2f& size); //0x54 802238fc
+    virtual void SetParticleScale(const Vector2f& scale); //0x58 802239bc
+    virtual void SetExpParticleManagerRotate(const Vector3f& rot); //0x5c 80223a30
     virtual void SetParticleRotate(const Vector3f& rot); //0x60 80223af0
     virtual void SetLocalScale(const Vector3f& locScale); //0x64 80223b6c
     virtual void SetDynamicsScale(const Vector3f& scale, const Vector2f*); //068 80223c18
@@ -52,7 +52,7 @@ public:
     virtual void SetScale(const Vector3f& scale); //0x70 80223d30
     virtual void SetPos(const Vector3f& pos); //0x74 80223d58
     virtual void SetMtx(const Matrix34f& mtx); //0x78 80223d80
-    virtual void vf_0x7c(); //0x7c 80223d9c
+    virtual void SetAnimStop(u32 index, bool enable); //0x7c 80223d9c
     virtual void Update(); //0x80 80223f58
     virtual void Reset(); //0x84 802242dc
 

@@ -63,6 +63,7 @@ namespace Pulsar_Pack_Creator {
         /// <summary>
         ///   Looks up a localized string similar to #BMG
         ///
+        ///   3f7  = Wiimmfi (1P)
         ///   58a  = {CC}cc
         ///   7dd	= Wiimmfi
         ///   7de	= Riivolution Channel
@@ -75,8 +76,7 @@ namespace Pulsar_Pack_Creator {
         ///   841	= \z{602,0} and \z{802,120000}\nwill connect to Wiimmfi\ntogether. Is this OK?
         ///   bbf  = {CC}cc\n\z{800,32}Bikes Only
         ///   bc3  = {CC}cc\n\z{800,32}Karts and Bikes
-        ///   d54  = {CC}cc
-        ///   d58  = {CC}cc clas [rest of string was truncated]&quot;;.
+        ///   d54  = {CC}c [rest of string was truncated]&quot;;.
         /// </summary>
         public static string BMG {
             get {

@@ -1,5 +1,6 @@
+#ifndef _PUL_200CCPARAMS_
+#define _PUL_200CCPARAMS_
 #include <kamek.hpp>
-#include <Info.hpp>
 
 namespace Pulsar {
 namespace Race {
@@ -11,3 +12,5 @@ const float fastFallingWheelGravity = 0.3f;
 
 }//namespace Race
 }//namespace Pulsar
+
+#endif

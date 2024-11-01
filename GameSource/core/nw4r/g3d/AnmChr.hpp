@@ -55,7 +55,6 @@ class AnmObjChrRes : public AnmObjChr, public FrameCtrl {
     const ChrAnmResult* GetResult(ChrAnmResult* result, u32 nodeId) override; //0x38 8005d130
     bool Bind(const ResMdl resMdl, u32 nodeId, BindOption opt = BIND_PARTIAL) override; //0x50 8005cd60
     void Release(const ResMdl resMdl, u32 nodeId, BindOption opt = BIND_PARTIAL) override; //0x54 8005cf60
-    void UpdateCache(); //80055540
 
     const ResAnmChr resAnm; //0x2C
     ChrAnmResult* const resultCache;

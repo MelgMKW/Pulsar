@@ -13,6 +13,24 @@ struct Color : public GX::Color {
         *(u32*)(this) = color;
         return *this;
     }
+    operator GX::ColorS10() const {
+        GX::ColorS10 color10 = { this->r, this->g, this->b, this->a };
+        return color10;
+    }
+    u32& ToU32ref() {
+        return *reinterpret_cast<u32*>(this);
+    }
+    const u32& ToU32ref() const {
+        return *reinterpret_cast<const u32*>(this);
+    }
+
+    operator u32() const {
+        return ToU32ref();
+    }
+
+    //bool operator ==(const Color& rhs) const { return u32(this) == u32(rhs); }
+
+
 }; // Total size 0x4
 size_assert(Color, 0x4);
 }//namespace ut

@@ -1,7 +1,7 @@
 #ifndef _GAMESCENE_
 #define _GAMESCENE_
 #include <core/RK/RKSceneManager.hpp>
-#include <MarioKartWii/Archive/ArchiveRoot.hpp>
+#include <MarioKartWii/Archive/ArchiveMgr.hpp>
 
 /*
 Scenes are the topmost cog of how Mario Kart Wii runs. They sit just below the main loop function of the game.
@@ -20,12 +20,12 @@ and to create the class instances that need to exist no matter where in the game
 The class instances that it creates are essential and some of the most important:
 -Inputs (via Input::Mgr)
 -NAND file loading (via NAND::Mgr)
--Disc file loading (via ArchiveRoot)
+-Disc file loading (via ArchiveMgr)
 -UI (present anywhere in the game, via SectionMgr, which then creates a Section, the class describing a SPECIFIC location in the game, for example a Time Trial solo race)
 -Online capabilities (present in online races, globe parts but also online menus like voting, via RKNet::Controller, etc...)
 -Audio (via Audio::Mgr) the game uses a RootScene that always exists.
 -Font (via Font::Mgr)
--Race information (via RaceData, describes race information that is useful for the next race such as the characters, the race count etc...)
+-Race information (via Racedata, describes race information that is useful for the next race such as the characters, the race count etc...)
 -Miis (via MiiManager)
 -Effects (via Effects::Mgr)
 
@@ -49,6 +49,9 @@ enum SceneId {
 
 class GameSceneCreator : public RKSceneCreator { //also creates the rootscene
 public:
+    GameSceneCreator* CreateInstance(); //8054aa30
+    static GameSceneCreator* sInstance; //809bd754 not actually used, as RootScene creates a heap allocated one
+    static bool hasInstance; //809bd750
     Scene* create(u32 sceneId) override; //8054aa64 vtable 808b3cb0
     void destroy(u32 sceneId) override;  //8054ab28
 };
@@ -63,6 +66,8 @@ public:
     void reinit() override; //0x1c 8051c01c
     void incoming_child_destroy() override; //0x20 8051c010
     void outgoing_child_create() override; //0x24 8051c00c
+
+    static void ResetRacedataScenarios();
 }; //0xc70
 
 class ArchiveLink {
@@ -74,6 +79,13 @@ class ArchiveLink {
 class GameScene : public BaseScene {
 public:
     static const GameScene* GetCurrent(); //8051bed0, gets current scene from SceneManager and if id != 0 and != 5, returns it
+    static u32 stateBitfield; //809c1874
+    /*
+        0x1 0: paused
+        0x2 1: disable 3d rendering
+        0x4 2: creating instances?
+        0x8 3: scn is being create?
+    */
     GameScene(); //8051a1e0
     ~GameScene() override; //8051a3c0 vtable 808b2c98
     void calc() override;   //0xc  8051b3c8

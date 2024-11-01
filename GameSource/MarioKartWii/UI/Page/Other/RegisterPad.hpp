@@ -12,7 +12,7 @@ public:
     ~ConnectController() override; //80603404 vtable 808ba868
     void InitSelf() override; //0x18 806035d8
     void OnUpdate() override; //0x1c 80603690
-    int GetRuntimeTypeInfo() const override; //0x28 8060560c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8060560c
     const char* GetClassName() const override; //0x2c 806033b8
     void Load(u32 hudSlotId); //8060345c
     u32 controllerID; //0x174 same as SectionPad's
@@ -25,7 +25,7 @@ public:
     ~EasyPairingController() override; //806040c0 vtable 808ba7b0
     void InitSelf() override; //0x18 806042a8
     void OnUpdate() override; //0x1c 806043b8
-    int GetRuntimeTypeInfo() const override; //0x28 806055ec
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 806055ec
     const char* GetClassName() const override; //0x2c 80604074
     void Load(u8 hudSlotId); //80604118
     u32 controllerID; //0x174 same as SectionPad's
@@ -48,7 +48,7 @@ public:
     void AfterEntranceAnimations() override; //0x3c 80603254
     void AfterExitAnimations() override; //0x44 80603304
     void AfterControlUpdate() override; //0x4c 80603258
-    int GetRuntimeTypeInfo() const override; //0x60 80605618
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80605618
     void Register(u32 hudSlotId); //80603350
     PadControl padControls[4]; //0x44
     ManipulatorManager manipulatorManager; //0x654
@@ -71,7 +71,7 @@ public:
     void OnInit() override; //0x28 806039a4
     void OnActivate() override; //0x30 80603b90
     void AfterControlUpdate() override; //0x4c 80603ba4
-    int GetRuntimeTypeInfo() const override; //0x60 80605600
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80605600
 
     void OnBackPress(u32 hudSlotId); //80603f70
     void OnStartPress(u32 hudSlotId); //80603fbc display the register wiimote page "press 1 and 2 simultaneously"
@@ -102,7 +102,7 @@ public:
     void AfterEntranceAnimations() override; //0x3c 806049c0
     void BeforeExitAnimations() override; //0x40 806049d8
     void AfterControlUpdate() override; //0x4c 80604a88
-    int GetRuntimeTypeInfo() const override; //0x60 806055e0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806055e0
 
     void SyncWiimotes(); //80604b00 also unsyncs based on status
     void OnBackAndStartPress(u32 hudSlotId); //80604c84
@@ -127,7 +127,7 @@ public:
     void OnInit() override; //0x28 80604f50
     void OnActivate() override; //0x30 80605198
     void OnDeactivate() override; //0x34 806051e4
-    int GetRuntimeTypeInfo() const override; //0x60 806055d4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 806055d4
 
     void OnOkButtonClick(PushButton& button, u32 hudSlotId);     //80605204
     void OnChangeButtonClick(PushButton& button, u32 hudSlotId); //80605260

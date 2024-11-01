@@ -4,6 +4,7 @@
 #include <core/egg/Effect/Effect.hpp>
 #include <MarioKartWii/Objects/Collidable/MapObjSniper.hpp>
 #include <MarioKartWii/Objects/Collidable/FireSnake.hpp>
+#include <MarioKartWii/System/StatePtmfTrigger.hpp>
 
 namespace Objects {
 
@@ -13,7 +14,7 @@ public:
     ~SunDSManager() override; //806de780 vtable 808c6420
 }; //0xc0
 
-class SunDS : public MapObjShooter, public ObjectCycleManager { //ObjectNum 0x72 = 114
+class SunDS : public MapObjShooter, public StatePtmfTrigger<SunDS> { //ObjectNum 0x72 = 114
 public:
     explicit SunDS(const KMP::Holder<GOBJ>& gobjHolder); //806dddd8
     ~SunDS() override; //806ddf68 vtable 808c6310
@@ -22,7 +23,7 @@ public:
     u32 GetPropertiesBitfield() override; //0x2c 806de614
     void LoadAnimations() override; //0x5c 806de5d0
     int GetShootFromRoutePointID() const override; //0xec 806de598
-    //ObjectCycleManager vtable 808c6400 at 0xb0
+    //StatePtmfTrigger vtable 808c6400 at 0xb0
     //~SunDS() override; //thunk 806de61c
 
     float speed; //0xd0

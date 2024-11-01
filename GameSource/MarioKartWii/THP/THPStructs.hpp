@@ -1,7 +1,7 @@
 #ifndef _THPSTRUCTS_
 #define _THPSTRUCTS_
 #include <kamek.hpp>
-#include <core/rvl/OS/Message.hpp>
+#include <core/rvl/os/OSMessage.hpp>
 #include <core/rvl/dvd/dvd.hpp>
 #include <core/rvl/VI/vi.hpp>
 #include <core/rvl/AI.hpp>
@@ -42,7 +42,7 @@ enum PlayerState {
 
 struct Player {
     static Player activePlayer; //809beb00
-    DVDFileInfo fileInfo; //0x0
+    DVD::FileInfo fileInfo; //0x0
     Header header; //0x3c
     FrameCompInfo compInfo; //0x6c
     VideoInfo videoInfo; //0x80
@@ -60,6 +60,7 @@ struct Player {
     s32 initOffset; //0xb8
     s32 initReadSize; //0xbc
     s32 initReadFrame; //0xc0
+    u8 s64padding[4];
     s64 retraceCount; //0xc8
     s32 prevCount; //0xd0
     s32 curCount; //0xd4

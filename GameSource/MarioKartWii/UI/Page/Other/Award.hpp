@@ -6,7 +6,9 @@
 #include <MarioKartWii/UI/Page/Page.hpp>
 
 class AwardCupModel;
-
+namespace Audio {
+class PlayersVolumeMgr;
+}//namespace Audio
 namespace Pages {
 
 //__sinit__ at 805bd370
@@ -16,7 +18,7 @@ public:
     AwardDemoCongratulations(); //805bb734
     ~AwardDemoCongratulations() override; //805bb770 vtable 808b75d4
     void InitSelf() override; //0x18 805bb8a0
-    int GetRuntimeTypeInfo() const override; //0x28 805bd2f0
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805bd2f0
     const char* GetClassName() const override; //0x2c 805bb724
 
     void Load(bool isOnline, bool isSomeSections); //805bb7c8
@@ -27,7 +29,7 @@ public:
     AwardDemoResultItem(); //805bb958
     ~AwardDemoResultItem() override; //805bb994 vtable 808b7598
     void InitSelf() override; //0x18 805bbb98
-    int GetRuntimeTypeInfo() const override; //0x28 805bb2e4
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 805bb2e4
     const char* GetClassName() const override; //0x2c 805bb948
 
     void Load(u32 idx, bool isOnline, bool isSomeSections); //805bb9ec
@@ -36,6 +38,7 @@ public:
 
 class AwardFade : public Page { //ID 0x3b
 public:
+    static Audio::PlayersVolumeMgr* GetPlayersVolumeMgr(); //805bb2b8
     static const PageId id = PAGE_AWARD_FADE;
     AwardFade(); //805bb2c4
     ~AwardFade() override; //805bb348 vtable 808b7610
@@ -46,7 +49,7 @@ public:
     void BeforeEntranceAnimations() override; //0x38 805bb528
     void BeforeExitAnimations() override; //0x40 805bb52c
     void AfterControlUpdate() override; //0x4c 805bb530
-    int GetRuntimeTypeInfo() const override; //0x60 805bd304
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805bd304
     void HandleClick(u32 hudSlotId); //805bb678
 
     Ptmf_1A<AwardFade, void, u32> onClickHandler; //0x54 805bb678
@@ -66,7 +69,7 @@ public:
     void OnActivate() override; //0x30 805bc620
     void BeforeEntranceAnimations() override; //0x38 805bc640
     void AfterControlUpdate() override; //0x4c 805bc660
-    int GetRuntimeTypeInfo() const override; //0x60 805bb2cc
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805bb2cc
 
     void HandleClick(u32 hudSlotId); //805bc73c 
     void InitConfig(); //805bc8dc

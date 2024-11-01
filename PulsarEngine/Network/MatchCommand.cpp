@@ -1,4 +1,5 @@
 #include <MarioKartWii/RKNet/RKNetController.hpp>
+#include <MarioKartWii/UI/Ctrl/UIControl.hpp>
 #include <Network/MatchCommand.hpp>
 #include <PulsarSystem.hpp>
 
@@ -7,8 +8,11 @@ namespace Network {
 
 ResvPacket::ResvPacket(const DWC::Reservation& src) {
     memcpy(this, &src, sizeof(DWC::Reservation));
+
     const System* system = System::sInstance;
-    pulInfo.roomKey = Info::GetKey();
+    const Mgr& mgr = system->netMgr;
+    pulInfo.statusData = mgr.ownStatusData;
+    pulInfo.roomKey = system->GetInfo().GetKey();
     strncpy(pulInfo.modFolderName, system->GetModFolder(), IOS::ipcMaxFileName);
 }
 
@@ -18,7 +22,7 @@ asmFunc MoveSize() { //needed to get datasize later
     mr r25, r28;
     li r28, 255;
     blr;
-    )
+        )
 }
 kmCall(0x800dc3bc, MoveSize);
 
@@ -28,43 +32,50 @@ DWC::MatchCommand Process(DWC::MatchCommand type, const void* data, u32 dataSize
         || roomType == RKNet::ROOMTYPE_VS_REGIONAL || roomType == RKNet::ROOMTYPE_JOINING_REGIONAL;
 
     Pulsar::System* system = Pulsar::System::sInstance;
-    system->isCustomDeny = false;
+    Mgr& mgr = system->netMgr;
+    DenyType denyType = DENY_TYPE_NORMAL;
 
     if(type == DWC::MATCH_COMMAND_RESV_OK && isCustom) {
         const ResvPacket* packet = reinterpret_cast<const ResvPacket*>(data);
-        System* system = System::sInstance;
-        if(dataSize != (sizeof(ResvPacket) / sizeof(u32)) || packet->pulInfo.roomKey != Info::GetKey()
+        if(dataSize != (sizeof(ResvPacket) / sizeof(u32)) || packet->pulInfo.roomKey != system->GetInfo().GetKey()
             || strcmp(packet->pulInfo.modFolderName, system->GetModFolder()) != 0
             || !system->CheckUserInfo(packet->pulInfo.userInfo)) {
-            system->isCustomDeny = true;
-            if(roomType == RKNet::ROOMTYPE_VS_REGIONAL) system->deniesCount++;
+
+            DenyType denyType = DENY_TYPE_BAD_PACK;
+            if(roomType == RKNet::ROOMTYPE_VS_REGIONAL) mgr.deniesCount++;
             type = DWC::MATCH_COMMAND_RESV_DENY;
         }
+        else if(roomType == RKNet::ROOMTYPE_VS_REGIONAL) {
+            if(packet->pulInfo.statusData != mgr.ownStatusData) {
+                denyType = DENY_TYPE_OTT;
+                type = DWC::MATCH_COMMAND_RESV_DENY;
+            }
+        }
     }
+    mgr.denyType = denyType;
     return type;
 }
 
 
 static int GetSuspendType(int r3, const char* string) {
     DWC::Printf(r3, string);
-    int errorType = 0x12000000;
-    if(Pulsar::System::sInstance->isCustomDeny) errorType = 0x13000000;
+    const u32 errorType = 0x120000000 + Pulsar::System::sInstance->netMgr.denyType << 28;
     return errorType;
 }
 kmCall(0x800dc9e8, GetSuspendType);
 kmWrite32(0x800dc9f4, 0x906100d8);
 
-static void HasBeenPulsarDenied(int r3, const char* string) {
+static void HasBeenPulsarDenied(u32 level, const char* string) {
     register u32 error;
     asm(mr error, r0);
-    bool isCustomDeny = false;
-    Pulsar::System* system = Pulsar::System::sInstance;
-    if(error == 0x13) {
-        isCustomDeny = true;
-        if(RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_VS_REGIONAL) system->deniesCount++;
+    DenyType type = DENY_TYPE_NORMAL;
+    Mgr& mgr = Pulsar::System::sInstance->netMgr;
+    if(error != 0x12) {
+        type = static_cast<DenyType>(error & 0xf);
+        if(RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_VS_REGIONAL && type == DENY_TYPE_BAD_PACK) mgr.deniesCount++;
     }
-    Pulsar::System::sInstance->isCustomDeny = isCustomDeny;
-    DWC::Printf(r3, string);
+    Pulsar::System::sInstance->netMgr.denyType = type;
+    DWC::Printf(level, string);
 }
 kmCall(0x800dd054, HasBeenPulsarDenied);
 kmWrite32(0x800dd044, 0x60000000);
@@ -79,7 +90,7 @@ asmFunc ProcessWrapper() {
     mtlr r31;
     rlwinm r0, r3, 0, 24, 31;
     blr;
-    )
+        )
 }
 kmCall(0x800dc4a0, ProcessWrapper);
 
@@ -100,7 +111,7 @@ kmCall(0x800df078, Send);
 static void ResetDenyCounter(UIControl* control, u32 soundId, u32 r5) {
     control->PlaySound(soundId, r5);
     if(RKNet::Controller::sInstance->roomType == RKNet::ROOMTYPE_VS_REGIONAL) {
-        Pulsar::System::sInstance->deniesCount = 0;
+        Pulsar::System::sInstance->netMgr.deniesCount = 0;
     }
 }
 kmCall(0x80609110, ResetDenyCounter);

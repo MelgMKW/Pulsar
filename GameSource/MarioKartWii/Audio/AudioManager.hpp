@@ -78,7 +78,7 @@ public:
     void AudioUtilityCallback(bool isExit); //807178d4
     void LoadControlsGroup(); //807175a0
     void EnterHBM(); //807177d4
-    void ExitHBM(bool result); //8071784c
+    void ExitHBM(u32 hbmSelectedBtn); //8071784c
     void Lock(); //807178ec
     void Unlock(); //807178f8
     void PauseOnDVDBusy(); //80717904 pauses/unpauses all sounds following DVD busy status

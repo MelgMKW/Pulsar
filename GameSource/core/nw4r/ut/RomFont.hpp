@@ -2,7 +2,7 @@
 #define _NW4R_UT_ROMFONT_
 #include <types.hpp>
 #include <core/nw4r/ut/Font.hpp>
-#include <core/rvl/os/font.hpp>
+#include <core/rvl/os/OSfont.hpp>
 
 namespace nw4r {
 namespace ut {

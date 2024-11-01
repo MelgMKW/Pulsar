@@ -3,8 +3,8 @@
 
 #include <types.hpp>
 #include <core/nw4r/snd.hpp>
-#include <core/rvl/os/thread.hpp>
-#include <core/rvl/os/message.hpp>
+#include <core/rvl/os/OSthread.hpp>
+#include <core/rvl/os/OSmessage.hpp>
 #include <core/rvl/arc/arc.hpp>
 #include <core/egg/mem/Heap.hpp>
 
@@ -16,10 +16,10 @@ class ArcPlayer {
 public:
     ArcPlayer(snd::SoundArchivePlayer* soundArchivePlayer, snd::SoundHeap* heap); //80210590
     virtual ~ArcPlayer(); //0x8 80210624 vtable 802a2730
-    virtual void* OpenArchive(const char* filePath, snd::SoundHeap* heap, u32 type, ARCHandle* handle); //0xc 802106b8 type 0 = dvd, 1 nand, 2 memory
+    virtual void* OpenArchive(const char* filePath, snd::SoundHeap* heap, u32 type, ARC::Handle* handle); //0xc 802106b8 type 0 = dvd, 1 nand, 2 memory
     virtual void* OpenDVDArchive(const char* filePath, snd::SoundHeap* heap); //0x10 80210748
     virtual void* OpenNANDArchive(const char* filePath, snd::SoundHeap* heap); //0x14 802108bc
-    virtual void* OpenMemoryArchive(const char* filePath, ARCHandle* handle, snd::SoundHeap* heap); //0x18 80210a30
+    virtual void* OpenMemoryArchive(const char* filePath, ARC::Handle* handle, snd::SoundHeap* heap); //0x18 80210a30
     virtual int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap); //0x1c 80210bd8
     virtual int SetupMemoryArchive(const void* soundArchiveData, snd::SoundHeap* heap, s32 r6); //0x20 80211048
     virtual void CloseArchive(); //0x24 80210ce4

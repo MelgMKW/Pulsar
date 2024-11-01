@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Versioning;
 using System.Windows;
 using static Pulsar_Pack_Creator.MainWindow;
 
@@ -66,10 +64,12 @@ namespace Pulsar_Pack_Creator
 
             for (int i = 0; i < iconImport.Length; i++)
             {
-                string curIMGPath = $"input/CupIcons/{iconImport[i]}";
-                if (!File.Exists(curIMGPath))
+                bool isDefault = MainWindow.Cup.defaultNames.Contains(iconImport[i].Remove(iconImport[i].Length - 4));
+                string folder = isDefault ? "temp" : "input/CupIcons";
+                string realIconName = $"{folder}/{iconImport[i]}";
+                if (!File.Exists(realIconName))
                 {
-                    MsgWindow.Show($"{iconImport[i]} could not be found in input/CupIcons. Make sure to specify the extension at the end of the filename.");
+                    MsgWindow.Show($"{iconImport[i]} could not be found in {folder}. Make sure to specify the extension at the end of the filename.");
                     return;
                 }
                 parent.cups[i].iconName = iconImport[i];

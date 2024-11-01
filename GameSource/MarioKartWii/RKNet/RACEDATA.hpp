@@ -10,6 +10,7 @@ namespace RKNet {
 #pragma pack(push, 1)
 
 struct RACEDATAPacket {
+    static const u32 idx = 4;
     u8 _[0x40];
 };
 /*

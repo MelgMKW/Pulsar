@@ -1,21 +1,19 @@
 #include <kamek.hpp>
-#include <MarioKartWii/Race/racedata.hpp>
-#include <MarioKartWii/Race/RaceInfo/RaceInfo.hpp>
-#include <MarioKartWii/KMP/KMPManager.hpp>
+#include <MarioKartWii/Race/Raceinfo/Raceinfo.hpp>
+#include <MarioKartWii/3D/Model/ModelDirector.hpp>
 #include <MarioKartWii/Kart/KartValues.hpp>
 #include <MarioKartWii/Kart/KartMovement.hpp>
-#include <MarioKartWii/Lakitu/LakituManager.hpp>
 #include <MarioKartWii/Item/Obj/ObjProperties.hpp>
-#include <MarioKartWii/3D/Model/ModelDirector.hpp>
 #include <Race/200ccParams.hpp>
+#include <PulsarSystem.hpp>
 
 namespace Pulsar {
 namespace Race {
 //Mostly a port of MrBean's version with better hooks and arguments documentation
-RaceInfoPlayer* LoadCustomLapCount(RaceInfoPlayer* player, u8 id) {
+RaceinfoPlayer* LoadCustomLapCount(RaceinfoPlayer* player, u8 id) {
     const u8 lapCount = KMP::Manager::sInstance->stgiSection->holdersArray[0]->raw->lapCount;
-    RaceData::sInstance->racesScenario.settings.lapCount = lapCount;
-    return new(player) RaceInfoPlayer(id, lapCount);
+    Racedata::sInstance->racesScenario.settings.lapCount = lapCount;
+    return new(player) RaceinfoPlayer(id, lapCount);
 }
 kmCall(0x805328d4, LoadCustomLapCount);
 
@@ -40,7 +38,7 @@ Kart::Stats* ApplySpeedModifier(KartId kartId, CharacterId characterId) {
     SpeedModConv speedModConv;
     speedModConv.kmpValue = (KMP::Manager::sInstance->stgiSection->holdersArray[0]->raw->speedMod << 16);
     if(speedModConv.speedMod == 0.0f) speedModConv.speedMod = 1.0f;
-    float factor = Info::Is200cc() ? speedFactor : 1.0f;
+    float factor = System::sInstance->IsContext(PULSAR_200) ? speedFactor : 1.0f;
     factor *= speedModConv.speedMod;
 
     Item::greenShellSpeed = 105.0f * factor;

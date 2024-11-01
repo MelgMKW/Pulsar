@@ -31,7 +31,7 @@ public:
     bool isRecursive; //0x34
     bool isActive; //0x35
     u8 unknown_0x36[2];
-    u32 curAnimation;
+    u32 curAnimation; //0x38
     float curFrame;
     float unknown_0x40;
 }; //total size 0x44

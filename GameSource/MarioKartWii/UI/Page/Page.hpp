@@ -69,7 +69,7 @@ public:
     virtual PageId GetNextPage() const; //0x10 805bb278 returns -1 
     virtual int IsHomeMenuWorking() const; //0x14 805bb254 returns 3 if homebutton is not allowed
     virtual bool IsDVDEnabled(); //0x18 805bb24c 
-    virtual void ChangeSectionBySceneChange(SectionId sectionId, u32 animDirection, float delay); //0x1c 806024b0, will initiate a scene change
+    virtual void ChangeSectionBySceneChange(SectionId sectionId, u32 animDirection, float animLength); //0x1c 806024b0, will initiate a scene change
     virtual void ChangeSectionByReinit(); //0x20 80602530, reinits scene, so can lead to a crash if changing to section of != sceneId
     virtual void AddPageLayer(PageId id, u32 animDirection); //0x24 806025b0
     virtual void OnInit(); //0x28 80601ad8 just a blr 
@@ -86,7 +86,7 @@ public:
     virtual void OnResume(); //0x54 805bb228 just a blr called when a layer on top of the page is removed
     virtual void OnSectionChange(); //0x58 805bb224 just a blr
     virtual void func_0x5C(); //0x5c 805bb220 just a blr
-    virtual int GetRuntimeTypeInfo() const; //0x60 805bed68 returns 809C1d10
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //0x60 805bed68 returns 809C1d10
 
     void Init(PageId pageId); //80601a60
     void Dispose(); //80601adc
@@ -101,10 +101,9 @@ public:
     void Update(); //80602338
     void Draw(u32 curZIdx); //8060235c
     void ResetManipulatorManager(); //80602378
-    //8060238c
     void Resume(); //80602390
     void HandleSectionChange(); //80602428 calls OnSectionChange
-    void SetAnimDirection(); //8060244c
+    void SetAnimDirection(u32 animDirection); //8060244c
     void InitControlGroup(u32 controlCount); //8060245C
     void AddControl(u8 controlIdx, UIControl& control, u32 zIdx); //8060246c
     void SetManipulatorManager(ManipulatorManager& manager); //00602474
@@ -116,7 +115,7 @@ public:
     void EndEntrance(); //806029f4
     void StartExit(); //80602b04
     void EndExit(); //80602c40 inlined in Exit
-    void PlaySound(u32 soundId, u32 r5); //80602cf8
+    void PlaySound(SoundIDs soundId, u32 r5); //80602cf8
     void SetTransitionSound(u32 entranceSoundId, u32 exitSoundId); //80602d20
     //static Page* GetPageById(PageId type);
 
@@ -160,6 +159,7 @@ public:
 
 }; //Total Size 0x44
 size_assert(Page, 0x44);
+
 
 
 #endif

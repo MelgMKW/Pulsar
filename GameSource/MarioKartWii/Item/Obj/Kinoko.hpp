@@ -5,7 +5,7 @@
 
 //_sinit_ at 807a9dac
 namespace Item {
-class ObjKinoko : public Obj {
+class ObjKinoko : public ObjMiddle {
 public:
     static Obj** CreateArray(u32 count); //807a9cc0
     void InitSelf() override; //0x8 807a9d90 vtable 808d1fb0

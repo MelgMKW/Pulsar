@@ -11,7 +11,7 @@ public:
     static const PageId id = PAGE_TT_PAUSE_MENU;
     TTPause(); //80624be4 
     ~TTPause() override; //80633498 vtable 808bde6c
-    int GetRuntimeTypeInfo() const override; //0x60 80633504
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 80633504
     int GetMessageBMG() const override; //0x68 80633468
     u32 GetButtonCount() const override; //0x6c 80633490
     const u32* GetVariantsIdxArray() const override; //0x70 80633484

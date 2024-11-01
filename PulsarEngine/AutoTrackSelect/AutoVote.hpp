@@ -2,16 +2,15 @@
 #define _AUTOVOTE_
 
 #include <kamek.hpp>
-#include <MarioKartWii/UI/Page/Other/CountDownTimer.hpp>
-#include <MarioKartWii/UI/Page/Other/FriendRoom.hpp>
-#include <MarioKartWii/UI/SectionMgr/SectionMgr.hpp>
-#include <MarioKartWii/RKNet/RKNetController.hpp>
-#include <MarioKartWii/RKNet/Select.hpp>
+#include <MarioKartWii/UI/Page/Other/SELECTStageMgr.hpp>
+#include <UI/UI.hpp>
+
 
 namespace Pulsar {
 namespace UI {
-class AutoVote : public Pages::CountDownTimer {
+class AutoVote : public Pages::SELECTStageMgr {
 public:
+
     AutoVote() : readyDuration(0) {}
     void OnInit() override;
     void OnDispose() override;

@@ -31,9 +31,9 @@ struct KBHeader {
 #define kBranchLink 65
 
 
-static void DisplayError(const LoaderParams* funcs, const char* str) {
+static void DisplayError(const LoaderParams* params, const char* str) {
     u32 fg = 0xFFFFFFFF, bg = 0;
-    funcs->OSFatal(&fg, &bg, str);
+    params->OSFatal(&fg, &bg, str);
 }
 
 
@@ -138,26 +138,26 @@ inline void cacheInvalidateAddress(register u32 address) {
     asm(icbi 0, address;);
 }
 
-static void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryLength, bool isDol) {
+static void LoadKamekBinary(LoaderParams* params, const void* binary, u32 binaryLength, bool isDol) {
 
     static u32 text = 0;
     const KBHeader* header = (const KBHeader*)binary;
     if(header->magic1 != 'Kame' || header->magic2 != 'k\0')
-        DisplayError(funcs, "FATAL ERROR: Corrupted file, please check your game's Kamek files");
+        DisplayError(params, "FATAL ERROR: Corrupted file, please check your game's Kamek files");
     if(header->version != 3) {
         char err[512];
-        funcs->sprintf(err, "FATAL ERROR: Incompatible file (version %d), please upgrade your Kamek Loader", header->version);
-        DisplayError(funcs, err);
+        params->sprintf(err, "FATAL ERROR: Incompatible file (version %d), please upgrade your Kamek Loader", header->version);
+        DisplayError(params, err);
     }
 
-    funcs->OSReport("header: bssSize=%u, codeSize=%u, ctors=%u-%u\n",
+    params->OSReport("header: bssSize=%u, codeSize=%u, ctors=%u-%u\n",
         header->bssSize, header->codeSize, header->ctorStart, header->ctorEnd);
 
     u32 textSize = header->codeSize + header->bssSize;
 
-    EGG::ExpHeap* heap = funcs->rkSystem->EGGSystem;
+    EGG::ExpHeap* heap = params->rkSystem->EGGSystem;
     if(isDol) text = (u32)heap->alloc(textSize, 0x20);
-    if(!text) DisplayError(funcs, "FATAL ERROR: Out of code memory");
+    if(!text) DisplayError(params, "FATAL ERROR: Out of code memory");
 
     const u8* input = ((const u8*)binary) + sizeof(KBHeader);
     const u8* inputEnd = ((const u8*)binary) + binaryLength;
@@ -184,8 +184,8 @@ static void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryL
         if(address == 0xFFFFFE) {
             // Absolute address
             address = *((u32*)input);
-            if(address < 0x80510238 && !isDol) continue;
-            else if(address >= 0x80510238 && isDol) continue;
+            if(address < params->relStart && !isDol) continue;
+            else if(address >= params->relStart && isDol) continue;
             input += 4;
         }
         else {
@@ -238,7 +238,7 @@ static void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryL
                 input = kHandleBranchLink(input, text, address);
                 break;
             default:
-                funcs->OSReport("Unknown command: %d\n", cmd);
+                params->OSReport("Unknown command: %d\n", cmd);
         }
 
         cacheInvalidateAddress(address);
@@ -247,7 +247,7 @@ static void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryL
     asmVolatile(isync;);
 
     typedef void (*Func)();
-    if(!isDol) {
+    if(isDol) {
         for(Func* f = (Func*)(text + header->ctorStart); f < (Func*)(text + header->ctorEnd); f++) {
             (*f)();
         }
@@ -255,10 +255,10 @@ static void LoadKamekBinary(LoaderParams* funcs, const void* binary, u32 binaryL
 }
 
 
-static void LoadKamekBinaryFromDisc(LoaderParams* params)
+void LoadKamekBinaryFromDisc(LoaderParams* params)
 {
     static void* codePulBuf = nullptr;
-    static u32 fileLength = 0;
+    static u32 sectionLength = 0;
     params->OSReport("{Kamek by Treeki}\nLoading Kamek binary");
 
     bool isDol = false;
@@ -273,25 +273,30 @@ static void LoadKamekBinaryFromDisc(LoaderParams* params)
             DisplayError(params, err);
         }
 
-        DVDFileInfo fileInfo;
+        DVD::FileInfo fileInfo;
         if(!params->DVDFastOpen(entrynum, &fileInfo)) DisplayError(params, "FATAL ERROR: Failed to open file!");
         params->OSReport("DVD file located: addr=%p, size=%d\n", fileInfo.startAddr, fileInfo.length);
 
-        alignas(0x20) KBHeader header;
-        u32 roundedHeaderLength = nw4r::ut::RoundUp(sizeof(KBHeader), 32);
-        params->DVDReadPrio(&fileInfo, &header, roundedHeaderLength, 0, 2);
+        alignas(0x20) u32 sizes[4];
+        u32 roundedHeaderLength = nw4r::ut::RoundUp(sizeof(u32) * 4, 32);
+        params->DVDReadPrio(&fileInfo, &sizes, roundedHeaderLength, 0, 2);
 
-        fileLength = header.length;
-        u32 length = header.length;
-        u32 roundedLength = nw4r::ut::RoundUp(length, 32);
+        sectionLength = sizes[params->region];
+        u32 roundedLength = nw4r::ut::RoundUp(sectionLength, 32);
 
         isDol = true;
         codePulBuf = heap->alloc(roundedLength, -0x20);
         if(!codePulBuf) DisplayError(params, "FATAL ERROR: Out of file memory");
-        params->DVDReadPrio(&fileInfo, codePulBuf, roundedLength, length * params->region, 2);
+        u32 offset = sizeof(u32) * 4;
+        u32 region = PAL;
+        while(region < params->region) {
+            offset += sizes[region];
+            ++region;
+        }
+        params->DVDReadPrio(&fileInfo, codePulBuf, roundedLength, offset, 2);
         params->DVDClose(&fileInfo);
     }
 
-    LoadKamekBinary(params, codePulBuf, fileLength, isDol);
+    LoadKamekBinary(params, codePulBuf, sectionLength, isDol);
     if(!isDol) heap->free(codePulBuf);
 }

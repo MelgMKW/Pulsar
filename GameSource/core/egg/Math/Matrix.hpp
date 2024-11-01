@@ -9,7 +9,7 @@ namespace EGG {
 //Everything is assumed to be in an euclidean space
 /* Transformation Matrixes are used to map linearly a vector from one euclidean space to another
 For example, a goomba defines an euclidean space centered on itself
-https://cdn.discordapp.com/attachments/739985181389094975/1052953626462666782/image.png
+(Rot'*S'  transVec)
 this is how it looks, with rotation, scale and translation components in game*/
 
 //_sinit_ at 8023040c

@@ -54,7 +54,7 @@ public:
     void BeforeEntranceAnimations() override; //0x38 805f56d4
     void BeforeExitAnimations() override; //0x40 805f56d8
     void BeforeControlUpdate() override; //0x48 805f56dc
-    int GetRuntimeTypeInfo() const override; //0x60 805f5fdc
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 805f5fdc
     void RequestCharacterModel(u8 hudSlotId, CharacterId id); //805f56e0
     void RequestKartModel(u8 hudSlotId, KartId id); //805f5958
     void RequestBackgroundModel(BackModelType type); //805f5984

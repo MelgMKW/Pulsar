@@ -8,7 +8,7 @@
 namespace Item {
 class Player;
 
-class PlayerObj { //most of the values are only updated when an item is used or tethered
+class PlayerObj : public Kart::Link { //most of the values are only updated when an item is used or tethered
 public:
     enum UseType {
         ONLY_USE, //mushroom
@@ -41,11 +41,12 @@ public:
     void UpdateRemote(); //80795668
 
     void UseItem(bool isRemote); //80791910 r4 might be isRemote?
-    void LoseItem(u32 playerIdx); //80795350 unsure what playerIdx does, only used in onlineRaces
+    void LoseItem(u32 playerIdx); //80795350 loses the tethered item only; unsure what playerIdx does, only used in onlineRaces
     bool UpdateParams(); //80791e5c positions, matrixes etc... returns true if scale was changed
 
     void ComputeWheelPosRelativeToKart(); //807955c4
-    Kart::Link kartLink; //0x0
+    float CalcInitialObjSpeedAndDir(PlayerObj& playerObj, bool r4, Vec3& directionDest); //80794e88
+
     Player* itemPlayer; //0xC
     u8 playerId; //0x10
     u8 padding[3];

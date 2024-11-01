@@ -10,11 +10,13 @@
 
 //_sinit_ at 8061e87c
 class FriendMatchingPlayer;
+class RegisterFriend;
+
 namespace Pages {
-class xA5 : public Page { //ID 0xA5
+class RegisteringFriend : public Page { //ID 0xA5
 public:
-    xA5(); //8061d214
-    ~xA5(); //8061d288 vtable 808bb740
+    RegisteringFriend(); //8061d214
+    ~RegisteringFriend(); //8061d288 vtable 808bb740
     virtual PageId GetNextPage() const; //0x10 8061dc40
     virtual int IsHomeMenuWorking() const; //0x14 8061dc9c
     virtual void OnInit(); //0x28 8061d300
@@ -23,17 +25,20 @@ public:
     virtual void BeforeExitAnimations(); //0x40 8061d4cc
     virtual void AfterControlUpdate(); //0x4c 8061d4d0
     virtual void OnResume(); //0x54 8061d628
-    virtual int GetRuntimeTypeInfo() const; //0x60 8061e810
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //0x60 8061e810
 
     CtrlMenuPageTitleText titleText; //0x44
-    u32 unknown_0x1b8; //0x1b8
+    u32 status; //0x1b8
     ManipulatorManager manipulatorManager;
-    Text::Info textInfo1; //0x1cc
+    Text::Info friendCodeIntPass; //0x1cc
     Text::Info textInfo2; //0x1cc
-    u8 unknown_0x354[0x368 - 0x354];
+    u8 unknown_0x354[4];
+    u64 friendCode; //0x358
+    RegisterFriend* registerFriend; //0x360
+    u8 unknown_0x364[4];
 
 };
-size_assert(xA5, 0x368);
+size_assert(RegisteringFriend, 0x368);
 
 class RegisterFriend : public Page { //ID 0xA6
 public:
@@ -42,7 +47,7 @@ public:
     ~RegisterFriend(); //8061def0 vtable 808bb6ac
     virtual void OnInit(); //0x28 8061dfb4
     virtual void OnActivate(); //0x30 8061e270
-    virtual int GetRuntimeTypeInfo() const; //0x60 8061e804
+    virtual const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const; //0x60 8061e804
 
     void OnDigitClick(PushButton& digit, u32 hudSlotId); //8061e348
     void OnBackSpaceClick(PushButton& backSpace, u32 hudSlotId); //8061e3b4

@@ -19,7 +19,7 @@ public:
     CharaName(); //8083d840
     ~CharaName() override; //8062912c vtable 808d9358
     void InitSelf() override; //0x18 8083f09c
-    int GetRuntimeTypeInfo() const override; //0x28 8083f368
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x28 8083f368
     const char* GetClassName() const override; //0x2c 8083d440
     u32 unknown_0x178;
 }; //total size 0x178
@@ -38,7 +38,7 @@ public:
     void BeforeExitAnimations() override; //0x40 8083eff4
     void AfterControlUpdate() override; //0x4c 8083ddbc
     void OnResume() override; //0x54 8083eebc
-    int GetRuntimeTypeInfo() const override; //0x60 8083f35c
+    const ut::detail::RuntimeTypeInfo* GetRuntimeTypeInfo() const override; //0x60 8083f35c
     void OnExternalButtonSelect(PushButton& button, u32 r5) override; //0x64 8083e8d8
     int GetActivePlayerBitfield() const override; //0x68 8083f268
     int GetPlayerBitfield() const override; //0x6c 8083f260
