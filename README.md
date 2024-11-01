@@ -11,8 +11,8 @@ Core:
 - KO mode
 - OnlineTT mode
 - LEX support
-- [XPF support](https://github.com/Gabriela-Orzechowska/LE-CODE-XPF)
-- [USB GCN Support](https://github.com/Gabriela-Orzechowska/MKW-Cosmos/blob/main/code/System/WUP028.hpp)
+- [XPF support](https://github.com/Gabriela-Orzechowska/LE-CODE-XPF) (from Gabriela)
+- [USB GCN Support](https://github.com/Gabriela-Orzechowska/MKW-Cosmos/blob/main/code/System/WUP028.hpp) (from Gabriela)
 
 
 UI:
