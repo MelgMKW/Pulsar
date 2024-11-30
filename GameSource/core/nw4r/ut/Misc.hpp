@@ -13,7 +13,7 @@ template <typename T>
 static inline T Abs(T a) { return (a < 0) ? static_cast<T>(-a) : a; }
 
 template<>
-static inline float Abs<float>(register float value) {
+inline float Abs<float>(register float value) {
     register float ret;
     asmVolatile(fabs ret, value;);
     return ret;

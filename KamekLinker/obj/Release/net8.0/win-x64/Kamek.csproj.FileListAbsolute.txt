@@ -390,5 +390,5 @@ C:\Modding\Coding\Kamek\Common\KamekLinker\obj\Release\net8.0\win-x64\refint\Kam
 C:\Modding\Coding\Kamek\Common\KamekLinker\obj\Release\net8.0\win-x64\Kamek.pdb
 C:\Modding\Coding\Kamek\Common\KamekLinker\obj\Release\net8.0\win-x64\Kamek.genruntimeconfig.cache
 C:\Modding\Coding\Kamek\Common\KamekLinker\obj\Release\net8.0\win-x64\ref\Kamek.dll
-C:\Modding\Coding\Kamek\Common\KamekLinker\bin\Release\net8.0\win-x64\mscordaccore_amd64_amd64_8.0.224.6711.dll
 C:\Modding\Coding\Kamek\Common\KamekLinker\obj\Release\net8.0\win-x64\Kamek.csproj.Up2Date
+C:\Modding\Coding\Kamek\Common\KamekLinker\bin\Release\net8.0\win-x64\mscordaccore_amd64_amd64_8.0.1024.46610.dll

@@ -23,7 +23,7 @@ private:
     bool CalcDefinitionObjectCondition(GOBJ* gobj, bool neg);
     bool CalcPredefinedCondition(u16 value);
     bool CalcConditionBits(u16 val, u8 field);
-    s8 randScenario;
+    s32 randScenario;
 };
 }//namespace LECODE
 

@@ -32,7 +32,7 @@ void Mgr::Save() {
 };
 
 void Mgr::Init(const u16* totalTrophyCount, const char* path/*, const char *curMagic, u32 curVersion*/) {
-    this->pulsarPageCount = Settings::Params::pageCount;
+    this->pulsarPageCount = Settings::Params::pulsarPageCount;
     this->userPageCount = Settings::Params::userPageCount;
 
     for(int i = 0; i < 4; ++i) this->totalTrophyCount[i] = totalTrophyCount[i];
@@ -246,9 +246,9 @@ void Mgr::AdjustSectionsSizes() {
     //PAGES
     //Pages offset should never be modified in this function
     PagesHolder& destPages = buffer->GetSection<PagesHolder>();
+    memcpy(&destPages, &srcPages, srcPages.header.size - sizeof(Page) * srcPages.userPageCount); //start by copying the pulsarPages (and the header)
     destPages.pulsarPageCount = this->pulsarPageCount;
     destPages.userPageCount = this->userPageCount;
-    memcpy(&destPages, &srcPages, srcPages.header.size - sizeof(Page) * srcPages.userPageCount); //start by copying the pulsarPages (and the header)
 
     Page& destUserPages = destPages.pages[destPages.pulsarPageCount]; //start of the user Page array
     Page& srcUserPages = srcPages.pages[srcPages.pulsarPageCount];

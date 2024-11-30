@@ -70,5 +70,13 @@ static void RaceinfoNoSpectating() {
     raceInfo->isSpectating = !system->IsContext(PULSAR_MODE_KO); //default instruction would store 1, here we only store 1 if it's not ko
 }
 kmCall(0x80532cf8, RaceinfoNoSpectating);
+
+static bool SkipOpeningPanCheck(const RaceCameraMgr& cameraMgr) {
+    const System* system = System::sInstance;
+    if(system->IsContext(PULSAR_MODE_KO) && system->koMgr->isSpectating) return true;
+    else return cameraMgr.HasEveryOpeningPanEnded();
+}
+kmCall(0x8053342c, SkipOpeningPanCheck);
+
 }//namespace Race
 }//namespace Pulsar

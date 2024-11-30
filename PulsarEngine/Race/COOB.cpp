@@ -3,6 +3,8 @@
 #include <MarioKartWii/Race/Raceinfo/Raceinfo.hpp>
 #include <MarioKartWii/Kart/KartPointers.hpp>
 
+namespace Pulsar {
+namespace Race {
 s16 COOB(KMP::Manager* kmpMgr, const Vec3& position, u32 areaIdToTestFirst, u8 areaType) {
 
     s16 foundIdx = kmpMgr->FindAREA(position, areaIdToTestFirst, areaType);
@@ -32,3 +34,5 @@ s16 COOB(KMP::Manager* kmpMgr, const Vec3& position, u32 areaIdToTestFirst, u8 a
     return foundIdx;
 }
 kmCall(0x80571870, COOB);
+}//namespace Race
+}//namespace Pulsar

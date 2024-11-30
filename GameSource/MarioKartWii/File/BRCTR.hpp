@@ -2,7 +2,7 @@
 #define _BRCTR_
 #include <kamek.hpp>
 
-typedef struct BRCTR;
+
 struct BRCTRAnimSubHeader {
     u16 firstGroupOffset; //0x0
     u16 groupsCount; //0x2
@@ -61,5 +61,17 @@ struct BRCTRPicture {
     u16 offsetToSourceBRLYTPaneName;
 }; //total size 0x4
 
+struct BRCTRHeader {
+    char magic[4]; //bctr
+    u16 subHeaderCount;
+    u16 offsetToBLYTName;
+    u16 offsetToBMGName;
+    u16 offsetToPictureBLYTName;
+    u16 offsetToAnimSubHeader;
+    u16 offsetToLayoutSubHeader; //0xe
+    u16 offsetToNameTable; //0x10
+    u8 padding[2];
+}; //0x14
 
+typedef BRCTRHeader BRCTR;
 #endif

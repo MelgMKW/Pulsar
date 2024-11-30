@@ -36,6 +36,7 @@ public:
 };
 
 class SoundArchivePlayerEGG : public snd::SoundArchivePlayer { //yes, that's the official name
+public:
     //SoundArchivePlayer
     //callback vtable 802a2920
     ~SoundArchivePlayerEGG() override; //8021337c

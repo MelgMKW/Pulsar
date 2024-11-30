@@ -30,6 +30,7 @@ public:
 }; //total size 0x174
 
 class BlackBackControlForMessage : public LayoutUIControl {
+public:
     BlackBackControlForMessage(); //805f9abc
     ~BlackBackControlForMessage() override; //805f9af8 vtable 808b9e2c
     void SetPositionAnim(PositionAndScale& positionAndScale, float curFrame) override; //805f9bc4

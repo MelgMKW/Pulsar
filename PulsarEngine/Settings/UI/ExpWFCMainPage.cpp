@@ -11,6 +11,12 @@ kmWrite32(0x8064b984, 0x60000000); //nop the InitControl call in the init func
 kmWrite24(0x80899a36, 'PUL'); //8064ba38
 kmWrite24(0x80899a5B, 'PUL'); //8064ba90
 
+ExpWFCMain::ExpWFCMain() {
+    this->onSettingsClick.subject = this;
+    this->onSettingsClick.ptmf = &ExpWFCMain::OnSettingsButtonClick;
+    this->onButtonSelectHandler.ptmf = &ExpWFCMain::ExtOnButtonSelect;
+}
+
 void ExpWFCMain::OnInit() {
     this->InitControlGroup(6); //5 controls usually + settings button
     WFCMainMenu::OnInit();
@@ -42,6 +48,12 @@ void ExpWFCMain::ExtOnButtonSelect(PushButton& button, u32 hudSlotId) {
 
 //ExpWFCModeSel
 kmWrite32(0x8064c284, 0x38800001); //distance func
+
+ExpWFCModeSel::ExpWFCModeSel() : lastClickedButton(0) {
+    this->onButtonSelectHandler.ptmf = &ExpWFCModeSel::OnModeButtonSelect;
+    this->onModeButtonClickHandler.ptmf = &ExpWFCModeSel::OnModeButtonClick;
+}
+
 void ExpWFCModeSel::InitOTTButton(ExpWFCModeSel& self) {
     self.InitControlGroup(6);
     self.AddControl(5, self.ottButton, 0);
@@ -78,10 +90,12 @@ void ExpWFCModeSel::OnActivatePatch() {
             button = &page->battleButton;
             bmgId = UI::BMG_BATTLE_WITH6P;
             break;
-            case
-            ottButtonId: button = &page->ottButton;
+        case ottButtonId:
+            if(!isHidden) {
+                button = &page->ottButton;
                 bmgId = UI::BMG_OTT_WW_BOTTOM;
-                break;
+            }
+            break;
     }
     page->bottomText.SetMessage(bmgId);
     button->SelectInitial(0);

@@ -12,34 +12,34 @@ namespace OTT {
 
 
 bool IsVSGhost(u32 playerId) {
-    if (System::sInstance->IsContext(PULSAR_MODE_OTT)) {
+    if(System::sInstance->IsContext(PULSAR_MODE_OTT)) {
         const Racedata* racedata = Racedata::sInstance;
-        if (racedata->racesScenario.players[playerId].playerType == PLAYER_GHOST) return true;
+        if(racedata->racesScenario.players[playerId].playerType == PLAYER_GHOST) return true;
     }
     return false;
 }
 inline s32 GetVSGhostId() {
     const u32 playerId = Racedata::sInstance->racesScenario.playerCount - 1;
-    if (IsVSGhost(playerId)) return playerId;
+    if(IsVSGhost(playerId)) return playerId;
     return -1;
 }
 
-void AddGhostToOfflineVS() {
+void AddGhostToVS() {
     const System* system = System::sInstance;
     Racedata* racedata = Racedata::sInstance;
-    if (GameScene::GetCurrent()->id == SCENE_ID_RACE && system->IsContext(PULSAR_MODE_OTT) && racedata->menusScenario.settings.gametype != GAMETYPE_ONLINE_SPECTATOR) {
+    if(GameScene::GetCurrent()->id == SCENE_ID_RACE && system->IsContext(PULSAR_MODE_OTT) && racedata->menusScenario.settings.gametype != GAMETYPE_ONLINE_SPECTATOR) {
         u8 playerCount;
         u8 screenCount;
         u8 localCount;
         racedata->menusScenario.ComputePlayerCounts(&playerCount, &screenCount, &localCount);
-        if (racedata->menusScenario.settings.gamemode >= MODE_PRIVATE_VS) {
-            if (playerCount == 12) return; //we do not want to replace a human player
+        if(racedata->menusScenario.settings.gamemode >= MODE_PRIVATE_VS) {
+            if(playerCount == 12) return; //we do not want to replace a human player
         }
-        if (playerCount < 12) ++playerCount; //add a player to be the ghost
+        if(playerCount < 12) ++playerCount; //add a player to be the ghost
 
         const EngineClass cc = racedata->menusScenario.settings.engineClass;
-        if (racedata->menusScenario.settings.modeFlags & 0x1 != 0) return; //mirror
-        if (cc == CC_100 && system->GetInfo().Has200cc() == false) return; //100 but the pack does not have 200 so no ghost to be found
+        if(racedata->menusScenario.settings.modeFlags & 0x1 != 0) return; //mirror
+        if(cc == CC_100 && system->GetInfo().Has200cc() == false) return; //100 but the pack does not have 200 so no ghost to be found
         //only 150 and 200 are possible
 
         char folderPath[IOS::ipcMaxPath];
@@ -52,7 +52,7 @@ void AddGhostToOfflineVS() {
         const char* favGhost = leaderboard.GetFavGhost(ttMode);
         char initial = favGhost[0];
 
-        if (initial == '\0') return; //no fav ghost for this track
+        if(initial == '\0') return; //no fav ghost for this track
 
 
         IO* io = IO::sInstance;
@@ -60,7 +60,7 @@ void AddGhostToOfflineVS() {
 
         racedata->ghosts[0].ClearBuffer();
         char ghostPath[IOS::ipcMaxPath];
-        if (initial == '?') { //the fav is the expert
+        if(initial == '?') { //the fav is the expert
             cupsConfig->GetExpertPath(ghostPath, id, ttMode);
             DVD::FileInfo info;
             DVD::Open(ghostPath, &info);
@@ -73,11 +73,11 @@ void AddGhostToOfflineVS() {
             io->Read(sizeof(RKG), rkg);
             io->Close();
         }
-        if (rkg->CheckValidity()) {
-            if (rkg->header.kartId > HONEYCOUPE || rkg->header.driftType == 1 || system->IsContext(PULSAR_UMTS)) {
+        if(rkg->CheckValidity()) {
+            if(rkg->header.kartId > HONEYCOUPE || rkg->header.driftType == 1 || system->IsContext(PULSAR_UMTS)) {
                 RKG* dest = &racedata->ghosts[0];
                 racedata->menusScenario.rkg = dest;
-                if (rkg->header.compressed) {
+                if(rkg->header.compressed) {
                     rkg->DecompressTo(*dest); //0x2800
                 }
                 else memcpy(dest, rkg, sizeof(RKG));
@@ -93,7 +93,7 @@ void FinishGhostRace() {
     asm(mr stream, r31;);
     stream->mode = Input::GhostStream::MODE_OFF;
     s32 id = GetVSGhostId();
-    if (id != -1) {
+    if(id != -1) {
         Timer timer(0);
         Raceinfo::sInstance->players[id]->EndRace(timer, false, 1);
     }
@@ -103,7 +103,7 @@ kmCall(0x80523010, FinishGhostRace);
 kmCall(0x8078d0b8, System::GetNonTTGhostPlayersCount);
 
 bool CPUItemFix(KartAIController& kartAI) {
-    if (IsVSGhost(kartAI.pointers->values->playerIdx)) return true;
+    if(IsVSGhost(kartAI.pointers->values->playerIdx)) return true;
     return kartAI.IsCPU();
 }
 //kmCall(0x807414d8, CPUItemFix);
@@ -117,7 +117,7 @@ kmBranch(0x8085c500, LdbRows);
 void FixPositions(RaceinfoPlayer& player) {
     register u32 idx;
     asm(mr idx, r29);
-    if (IsVSGhost(idx)) {
+    if(IsVSGhost(idx)) {
         GhostData ghost(Racedata::sInstance->ghosts[0]);
         SectionMgr* sectionMgr = SectionMgr::sInstance;
         sectionMgr->sectionParams->playerMiis.LoadMii(idx, &ghost.miiData);
@@ -131,7 +131,7 @@ kmCall(0x80533040, FixPositions);
 
 
 void DoNotSetGhostsDCd(Raceinfo& raceInfo, u8 playerId) {
-    if (IsVSGhost(playerId)) return;
+    if(IsVSGhost(playerId)) return;
     raceInfo.SetPlayerDisconnected(playerId);
 }
 kmCall(0x80654478, DoNotSetGhostsDCd);

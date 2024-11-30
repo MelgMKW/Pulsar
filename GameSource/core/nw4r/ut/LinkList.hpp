@@ -39,7 +39,7 @@ public:
         ++itNext;
         return Erase(it, itNext);
     }
-    IteratorImpl LinkListImpl::Insert(IteratorImpl it, LinkListNode* node); //800af340
+    IteratorImpl Insert(IteratorImpl it, LinkListNode* node); //800af340
 
 
     void PopFront() { this->Erase(GetBeginIter()); }

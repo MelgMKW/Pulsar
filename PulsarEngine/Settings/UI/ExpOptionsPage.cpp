@@ -7,6 +7,8 @@ namespace UI {
 
 kmWrite32(0x805fd754, 0x60000000); //nop the InitControl call in the init func
 
+ExpOptions::ExpOptions() { this->onButtonClickHandler.ptmf = &ExpOptions::ExpandedOnButtonClick; }
+
 void ExpOptions::OnInit() {
     this->InitControlGroup(5 + 1);
     Options::OnInit();

@@ -11,7 +11,7 @@ Leaderboard::Leaderboard() {
     memset(this, 0, sizeof(Leaderboard));
     this->magic = Leaderboard::fileMagic;
     this->version = curVersion;
-    for (int mode = 0; mode < 4; ++mode) this->hasTrophy[mode] = false;
+    for(int mode = 0; mode < 4; ++mode) this->hasTrophy[mode] = false;
 }
 
 //CTOR to build it from the raw file
@@ -20,10 +20,10 @@ Leaderboard::Leaderboard(const char* folderPath, PulsarId id, bool createNew) {
     snprintf(path, IOS::ipcMaxPath, filePathFormat, folderPath);
     IO* io = IO::sInstance;
     s32 ret = io->OpenFile(path, FILE_MODE_READ_WRITE);
-    if (ret) ret = io->Read(sizeof(Leaderboard), this);
+    if(ret) ret = io->Read(sizeof(Leaderboard), this);
 
-    if (!ret || this->crc32 != crc32 || magic != fileMagic) {
-        if (createNew) this->CreateFile(id);
+    if(!ret || this->crc32 != crc32 || magic != fileMagic) {
+        if(createNew) this->CreateFile(id);
         //System::sInstance->taskThread->Request(&Leaderboard::CreateFile, id, 0);
         new (this) Leaderboard;
         this->SetTrack(id);
@@ -44,7 +44,7 @@ void Leaderboard::CreateFile(PulsarId id) {
 };
 
 void Leaderboard::SetTrack(PulsarId id) {
-    if (CupsConfig::IsReg(id)) return;
+    if(CupsConfig::IsReg(id)) return;
     this->crc32 = CupsConfig::sInstance->GetCRC32(id);
     char trackName[0x100];
     UI::GetTrackBMG(trackName, id);
@@ -56,9 +56,9 @@ void Leaderboard::SetTrack(PulsarId id) {
 s32 Leaderboard::GetPosition(const Timer& other) const {
     s32 position = -1;
     Timer timer;
-    for (int i = ENTRY_10TH; i >= 0; i--) {
+    for(int i = ENTRY_10TH; i >= 0; i--) {
         this->EntryToTimer(timer, i);
-        if (timer > other) position = i;
+        if(timer > other) position = i;
     }
     return position;
 }
@@ -67,9 +67,9 @@ s8 Leaderboard::GetRepeatCount(const RKG& rkg) const {
     const TTMode mode = System::sInstance->ttMode;
     const RKGHeader& header = rkg.header;
     s8 repeats = 0;
-    for (int i = 0; i < 11; ++i) {
+    for(int i = 0; i < 11; ++i) {
         const PULLdbEntry& cur = this->entries[mode][i];
-        if (cur.milliseconds == header.milliseconds && cur.seconds == header.seconds && cur.minutes == header.minutes) repeats++;
+        if(cur.milliseconds == header.milliseconds && cur.seconds == header.seconds && cur.minutes == header.minutes) repeats++;
     }
     return repeats;
 }
@@ -77,8 +77,8 @@ s8 Leaderboard::GetRepeatCount(const RKG& rkg) const {
 //updates the ldb with a new entry and a rkg crc32
 void Leaderboard::Update(u32 position, const RKSYS::LicenseLdbEntry& entry, u32 rkgCRC32) {
     const TTMode mode = System::sInstance->ttMode;
-    if (position != ENTRY_FLAP) { //if 10 then flap
-        for (int i = ENTRY_10TH; i > position; i--) memcpy(&this->entries[mode][i], &this->entries[mode][i - 1], sizeof(PULLdbEntry));
+    if(position != ENTRY_FLAP) { //if 10 then flap
+        for(int i = ENTRY_10TH; i > position; i--) memcpy(&this->entries[mode][i], &this->entries[mode][i - 1], sizeof(PULLdbEntry));
         this->entries[mode][position].rkgCRC32 = rkgCRC32;
     }
     memcpy(&this->entries[mode][position].mii, &entry.miiData, sizeof(RFL::StoreData));
@@ -142,17 +142,16 @@ int Leaderboard::ExpertBMGDisplay() {
     Mgr* manager = Mgr::sInstance;
     manager->GetLeaderboard().EntryToTimer(manager->entry.timer, ENTRY_1ST);
     const Timer& expert = manager->GetExpert();
-    if (expert.isActive && expert > manager->entry.timer) return 2;
+    if(expert.isActive && expert > manager->entry.timer) return 2;
     return 1;
 }
 kmCall(0x8085dc0c, Leaderboard::ExpertBMGDisplay);
 kmWrite32(0x8085dc10, 0x38000002);
 
 void Leaderboard::SetFavGhost(u32 fileIdx, TTMode mode, bool add) {
-    const char* ghostName;
-    if (add) ghostName = Mgr::GetGhostFileName(fileIdx);
-    else ghostName = '\0';
-    strncpy(&this->favGhost[mode][0], ghostName, IOS::ipcMaxFileName);
+    char* dest = &this->favGhost[mode][0];
+    dest[0] = '\0';
+    if(add) strncpy(dest, Mgr::GetGhostFileName(fileIdx), IOS::ipcMaxFileName);
 }
 }//namespace Ghosts
 }//namespace Pulsar

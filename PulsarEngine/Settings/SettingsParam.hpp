@@ -11,7 +11,7 @@ namespace Settings {
 class Params {
 public:
     static const int pulsarPageCount = 5;
-    static const int userPageCount = 0;
+    static const int userPageCount = 7;
     static const int pageCount = pulsarPageCount + userPageCount;
 
     static const int maxRadioCount = 6; //per page, due to space
@@ -32,6 +32,13 @@ enum Type {
     SETTINGSTYPE_HOST,
     SETTINGSTYPE_OTT,
     SETTINGSTYPE_KO,
+    SETTINGSTYPE_TEST1,
+    SETTINGSTYPE_TEST2,
+    SETTINGSTYPE_TEST3,
+    SETTINGSTYPE_TEST4,
+    SETTINGSTYPE_TEST5,
+    SETTINGSTYPE_TEST6,
+    SETTINGSTYPE_TEST7,
 };
 
 //If you want to add settings to your packs, they go in this enum, and GetUserSettingValue should be used to obtain the value of a given setting
@@ -84,6 +91,73 @@ enum KOSettings {
 
 };
 
+enum Test1 {
+    SETTINGS_TEST_11 = 0,
+    SETTINGS_TEST_12 = 1,
+    SETTINGS_TEST_13 = 2,
+    SETTINGS_TEST_14 = 3,
+    SETTINGS_TEST_15 = 4,
+
+    SETTINGS_TEST_16 = 0 + 6
+};
+
+enum Test2 {
+    SETTINGS_TEST_20 = 0,
+    SETTINGS_TEST_21 = 1,
+    SETTINGS_TEST_22 = 2,
+    SETTINGS_TEST_23 = 3,
+
+    SETTINGS_TEST_24 = 0 + 6,
+    SETTINGS_TEST_25 = 0 + 7
+};
+
+enum Test3 {
+    SETTINGS_TEST_30 = 0,
+    SETTINGS_TEST_31 = 1,
+    SETTINGS_TEST_32 = 2,
+    SETTINGS_TEST_33 = 3,
+    SETTINGS_TEST_34 = 4,
+
+    SETTINGS_FONT = 0 + 6
+};
+
+enum Test4 {
+    SETTINGMENU_TEST_40 = 0,
+    SETTINGS_TEST_41 = 1,
+    SETTINGS_TEST_42 = 2,
+    SETTINGS_TEST_43 = 3,
+    SETTINGS_TEST_44 = 4,
+
+    SETTINGMENU_TEST_45 = 0 + 6
+};
+
+enum Test5 {
+    SETTINGS_TEST_50 = 0,
+    SETTINGS_TEST_51 = 1,
+    SETTINGS_TEST_52 = 2,
+    SETTINGS_TEST_53 = 3,
+    SETTINGS_TEST_54 = 4
+};
+
+enum Test6 {
+    SETTINGS_TEST_60 = 0,
+    SETTINGS_TEST_61 = 1,
+    SETTINGS_TEST_62 = 2,
+    SETTINGS_TEST_63 = 3,
+    SETTINGS_TEST_64 = 4,
+    
+    SETTINGS_TEST_65 = 0 + 6
+};
+
+enum Test7 {
+    SETTINGS_TEST_70 = 0,
+    SETTINGS_TEST_71 = 1,
+    SETTINGS_TEST_72 = 2,
+    SETTINGS_TEST_73 = 3,
+
+    SETTINGS_TEST_74 = 0 + 6
+};
+
 //MENU SETTINGS
 enum MenuSettingFastMenus {
     MENUSETTING_FASTMENUS_DISABLED = 0x0,
@@ -122,7 +196,8 @@ enum RaceSettingSPEEDUP {
 
 enum RaceSettingBATTLE {
     RACESETTING_BATTLE_GLITCH_DISABLED = 0x0,
-    RACESETTING_BATTLE_GLITCH_ENABLED = 0x1
+    RACESETTING_BATTLE_GLITCH_ENABLED = 0x1,
+    RACESETTING_BATTLE_GLITCH_NONE = 0x2
 };
 
 enum RaceSettingBLUES {
@@ -218,6 +293,258 @@ enum KOSettingRacesPerKO {
     KOSETTING_RACESPERKO_4
 };
 //KOSETTINGS
+
+//Test1
+enum TestSetting1 {
+    TEST_SETTING_TOGGLE_0 = 0x0,
+    TEST_SETTING_TOGGLE_1 = 0x1
+};
+
+enum TestSetting2 {
+    TEST_SETTING_TOGGLE_2 = 0x0,
+    TEST_SETTING_TOGGLE_3 = 0x1
+};
+
+enum TestSetting3 {
+    TEST_SETTING_TOGGLE_4 = 0x0,
+    TEST_SETTING_TOGGLE_5 = 0x1
+};
+
+enum TestSetting4 {
+    TEST_SETTING_TOGGLE_6 = 0x0,
+    TEST_SETTING_TOGGLE_7 = 0x1
+};
+
+enum TestSetting5 {
+    TEST_SETTING_TOGGLE_8 = 0x0,
+    TEST_SETTING_TOGGLE_9 = 0x1
+};
+
+enum  TestSetting6 {
+    TEST_SETTING_TOGGLE_A,
+    TEST_SETTING_TOGGLE_B,
+    TEST_SETTING_TOGGLE_C,
+    TEST_SETTING_TOGGLE_D,
+    TEST_SETTING_TOGGLE_E,
+    TEST_SETTING_TOGGLE_F,
+    TEST_SETTING_TOGGLE_G,
+    TEST_SETTING_TOGGLE_H,
+    TEST_SETTING_TOGGLE_I
+};
+
+//Test2
+enum TestSetting7 {
+    TEST_SETTING_TOGGLE_J = 0x0,
+    TEST_SETTING_TOGGLE_K = 0x1
+};
+
+enum TestSetting8 {
+    TEST_SETTING_TOGGLE_L = 0x0,
+    TEST_SETTING_TOGGLE_M = 0x1
+};
+
+enum TestSetting9 {
+    TEST_SETTING_TOGGLE_N = 0x0,
+    TEST_SETTING_TOGGLE_O = 0x1
+};
+
+enum TestSettingA {
+    TEST_SETTING_TOGGLE_P,
+    TEST_SETTING_TOGGLE_Q
+};
+
+enum TestSettingB {
+    TEST_SETTING_TOGGLE_R,
+    TEST_SETTING_TOGGLE_S,
+    TEST_SETTING_TOGGLE_T,
+    TEST_SETTING_TOGGLE_U,
+    TEST_SETTING_TOGGLE_V
+};
+
+enum TestSettingC {
+    TEST_SETTING_TOGGLE_W,
+    TEST_SETTING_TOGGLE_X,
+    TEST_SETTING_TOGGLE_Y,
+    TEST_SETTING_TOGGLE_Z,
+    TEST_SETTING_TOGGLE_10
+};
+
+//Test3
+enum TestSettingD {
+    TEST_SETTING_TOGGLE_11 = 0x0,
+    TEST_SETTING_TOGGLE_12 = 0x1
+};
+
+enum TestSettingE {
+    TEST_SETTING_TOGGLE_13 = 0x0,
+    TEST_SETTING_TOGGLE_14 = 0x1
+};
+
+enum TestSettingF {
+    TEST_SETTING_TOGGLE_15 = 0x0,
+    TEST_SETTING_TOGGLE_16 = 0x1
+};
+
+enum TestSettingG {
+    TEST_SETTING_TOGGLE_17 = 0x0,
+    TEST_SETTING_TOGGLE_18 = 0x1
+};
+
+enum TestSettingH {
+    TEST_SETTING_TOGGLE_19 = 0x0,
+    TEST_SETTING_TOGGLE_1A = 0x1
+};
+
+enum TestSettingI {
+    TEST_SETTING_TOGGLE_1B,
+    TEST_SETTING_TOGGLE_1C,
+    TEST_SETTING_TOGGLE_1D,
+    TEST_SETTING_TOGGLE_1E,
+    TEST_SETTING_TOGGLE_1F,
+    TEST_SETTING_TOGGLE_1G,
+    TEST_SETTING_TOGGLE_1H,
+    TEST_SETTING_TOGGLE_1I
+};
+
+//Test4
+enum TestSettingJ {
+    TEST_SETTING_TOGGLE_1J = 0x0,
+    TEST_SETTING_TOGGLE_1K = 0x1,
+    TEST_SETTING_TOGGLE_1L = 0x2,
+    TEST_SETTING_TOGGLE_1M = 0x3
+};
+
+enum TestSettingK {
+    TEST_SETTING_TOGGLE_1N = 0x0,
+    TEST_SETTING_TOGGLE_1O = 0x1
+};
+
+enum TestSettingL {
+    TEST_SETTING_TOGGLE_1P = 0x0,
+    TEST_SETTING_TOGGLE_1Q = 0x1
+};
+
+enum TestSettingM {
+    TEST_SETTING_TOGGLE_1R = 0x0,
+    TEST_SETTING_TOGGLE_1S = 0x1
+};
+
+enum TestSettingN {
+    TEST_SETTING_TOGGLE_1T = 0x0,
+    TEST_SETTING_TOGGLE_1U = 0x1,
+    TEST_SETTING_TOGGLE_1V = 0x2
+};
+
+enum TestSettingO {
+    TEST_SETTING_TOGGLE_1W,
+    TEST_SETTING_TOGGLE_1X,
+    TEST_SETTING_TOGGLE_1Y
+};
+
+//Test5
+enum TestSettingP {
+    TEST_SETTING_TOGGLE_1Z = 0x0,
+    TEST_SETTING_TOGGLE_20 = 0x1
+};
+
+enum TestSettingQ {
+    TEST_SETTING_TOGGLE_21 = 0x0,
+    TEST_SETTING_TOGGLE_22 = 0x1
+};
+
+enum TestSettingR {
+    TEST_SETTING_TOGGLE_23 = 0x0,
+    TEST_SETTING_TOGGLE_24 = 0x1
+};
+
+enum TestSettingS {
+    TEST_SETTING_TOGGLE_25 = 0x0,
+    TEST_SETTING_TOGGLE_26 = 0x1
+};
+
+enum TestSettingT {
+    TEST_SETTING_TOGGLE_27 = 0x0,
+    TEST_SETTING_TOGGLE_28 = 0x1
+};
+
+//Test6
+enum TestSettingU {
+    TEST_SETTING_TOGGLE_29 = 0x0,
+    TEST_SETTING_TOGGLE_2A = 0x1,
+    TEST_SETTING_TOGGLE_2B = 0x2,
+    TEST_SETTING_TOGGLE_2C = 0x3
+};
+
+enum TestSettingV {
+    TEST_SETTING_TOGGLE_2D = 0x0,
+    TEST_SETTING_TOGGLE_2E = 0x1,
+    TEST_SETTING_TOGGLE_2F = 0x2,
+    TEST_SETTING_TOGGLE_2G = 0x3
+};
+
+enum TestSettingW {
+    TEST_SETTING_TOGGLE_2H = 0x0,
+    TEST_SETTING_TOGGLE_2I = 0x1,
+    TEST_SETTING_TOGGLE_2J = 0x2,
+    TEST_SETTING_TOGGLE_2K = 0x3
+};
+
+enum TestSettingX {
+    TEST_SETTING_TOGGLE_2L = 0x0,
+    TEST_SETTING_TOGGLE_2M = 0x1,
+    TEST_SETTING_TOGGLE_2N = 0x2,
+    TEST_SETTING_TOGGLE_2O = 0x3
+};
+
+enum TestSettingY {
+    TEST_SETTING_TOGGLE_2P = 0x0,
+    TEST_SETTING_TOGGLE_2Q = 0x1,
+    TEST_SETTING_TOGGLE_2R = 0x2,
+    TEST_SETTING_TOGGLE_2S = 0x3
+};
+
+enum TestSettingZ {
+    TEST_SETTING_TOGGLE_2T = 0x0,
+    TEST_SETTING_TOGGLE_2U = 0x1,
+    TEST_SETTING_TOGGLE_2V = 0x2,
+    TEST_SETTING_TOGGLE_2W = 0x3
+};
+
+//Test7
+enum TestSettingAA {
+    TEST_SETTING_TOGGLE_2X = 0x0,
+    TEST_SETTING_TOGGLE_2Y = 0x1,
+    TEST_SETTING_TOGGLE_2Z = 0x2,
+    TEST_SETTING_TOGGLE_30 = 0x3
+};
+
+enum TestSettingBB {
+    TEST_SETTING_TOGGLE_31 = 0x0,
+    TEST_SETTING_TOGGLE_32 = 0x1,
+    TEST_SETTING_TOGGLE_33 = 0x2,
+    TEST_SETTING_TOGGLE_34 = 0x3
+};
+
+enum TestSettingCC {
+    TEST_SETTING_TOGGLE_35 = 0x0,
+    TEST_SETTING_TOGGLE_36 = 0x1,
+    TEST_SETTING_TOGGLE_37 = 0x2,
+    TEST_SETTING_TOGGLE_38 = 0x3
+};
+
+enum TestSettingDD {
+    TEST_SETTING_TOGGLE_39 = 0x0,
+    TEST_SETTING_TOGGLE_3A = 0x1,
+    TEST_SETTING_TOGGLE_3B = 0x2,
+    TEST_SETTING_TOGGLE_3C = 0x3
+};
+
+enum TestSettingEE {
+    TEST_SETTING_TOGGLE_3D = 0x0,
+    TEST_SETTING_TOGGLE_3E = 0x1,
+    TEST_SETTING_TOGGLE_3F = 0x2,
+    TEST_SETTING_TOGGLE_69 = 0x3
+};
 
 }//namespace Pulsar
 

@@ -5,6 +5,7 @@
 #include <MarioKartWii/Race/Racedata.hpp>
 #include <MarioKartWii/3D/Model/MatModelDirector.hpp>
 
+namespace Pulsar {
 //A bunch of patches to prevent common slot related crashes
 kmWrite32(0x8068dfc8, 0x60000000);
 KartType PreventRSLCrash(Effects::Player* effects, const Kart::Link& link) {
@@ -61,3 +62,4 @@ const KMP::Holder<KTPT>* SecondaryKTPT(const KMP::Manager& manager, u32 idx) {
     return holder;
 }
 kmCall(0x807ea670, SecondaryKTPT);
+}//namespace Pulsar

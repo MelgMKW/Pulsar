@@ -430,6 +430,8 @@ CalcCRC32__2OSFPvUi = 0x801d1ca0
 #PAD
 Read__3PADFPQ23PAD6Status = 0x801af44c
 
+#VI
+ResetSIIdle__2VIFv = 0x801bb0d0
 #NET
 NETSHA1Init = 0x801d24f4
 NETSHA1Update = 0x801d2544
@@ -788,6 +790,7 @@ mInstance__13ScreensHolder = 0x809C1868
 #Camera
 SetInstance__9CameraMgrFP9CameraMgr = 0x805a1a64
 __ct__10RaceCameraFUcR10GameScreenP3BCPUc = 0x805a1d10
+HasEveryOpeningPanEnded__13RaceCameraMgrCFv = 0x805a8fbc
 sInstance__13RaceCameraMgr = 0x809c19b8
 
 ##MII
@@ -800,10 +803,11 @@ __vt__3Mii = 0x808b3148
 InitModel__13MiiHeadsModelFP3MiiP14MiiDriverModelUiQ44nw4r3g3d6ScnMdl12BufferOptionUiUi = 0x8055c580
 
 #MiiGroup
+AddMii__8MiiGroupFUcP3Mii = 0x805fa3fc
 LoadMii__8MiiGroupFUcPQ23RFL9StoreData = 0x805fa610
 LoadMii__8MiiGroupFUcUs = 0x805fa748
 GetMii__8MiiGroupFUc = 0x805fa930
-
+DeleteMii__8MiiGroupFUc = 0x805faa84
 
 
 
@@ -1707,6 +1711,7 @@ sInstance__11CourseMgr = 0x809c2F44
 #ItemObjProperties
 __ct__Q24Item13ObjPropertiesFRCQ24Item13ObjProperties = 0x80790e7c
 itemObjProperties = 0x809c2f48
+behaviourTable__Q24Item8Behavior = 0x809c36a0
 
 #Player
 Update__19ItemHolderPlayerSubFv = 0x80795668

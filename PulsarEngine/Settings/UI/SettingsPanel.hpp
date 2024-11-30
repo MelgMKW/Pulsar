@@ -29,7 +29,7 @@ public:
     static const PulPageId id = PULPAGE_SETTINGS;
 
     static inline void CreatePanels(Section* section);
-    SettingsPanel(); //max 8 radios and 8 scrollers per instance
+    SettingsPanel(); //max 8 radios and 8 scrollers per page
     ~SettingsPanel() override;
     void OnInit() override; //To be defined
     void OnActivate() override; //TO BE DEFINED

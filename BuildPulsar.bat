@@ -7,7 +7,7 @@ del build\*.o
 ::DEBUG only works if you have the map and readelf (which is part of MinGW)
 SET "debug="
 ::SET "cwDWARF="
-::if "%1" equ "-d" SET "debug=-debug -map=^"Dolphin Emulator\Maps\RMCP01.map^" -readelf=^"C:\MinGW\bin\readelf.exe^""
+::if "%1" equ "-d" SET "debug=-debug=0x803992E0 -map=^"Dolphin Emulator\Maps\RMCP01.map^" -readelf=^"C:\MinGW\bin\readelf.exe^""
 ::if "%1" equ "-d" SET "cwDWARF=-g"
 
 :: Sources and Compiler

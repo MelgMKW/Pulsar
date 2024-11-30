@@ -7,6 +7,14 @@
 
 namespace Pulsar {
 namespace KO {
+
+WinnerPage::WinnerPage() {
+    status = WAITING_STATS;
+    timeRecvStats = 0;
+    onClickHandler.subject = this;
+    onClickHandler.ptmf = &WinnerPage::HandleClick;
+}
+
 void WinnerPage::OnInit() {
     this->InitControlGroup(6);
     for(int i = 0; i < 3; ++i) {
@@ -132,31 +140,3 @@ kmBranch(0x8085cc70, LoadCorrectPageAfterOnlineLdb);
 
 }//namespace KO
 }//namespace Pulsar
-
-
-
-
-//8085cc70 patch gpvsleaderboardtotal get nextpatch on the last race, and load KOWinner instead of VSResults
-//80646754 patch vsresults getnextpage on the last race, careful since this is where choosenext already hooks
-//same place, patch self kicking
-
-/*
-WISHLIST:
-
-*Implement KO system:
-    -calc and change racecount
-    -check which players should be KO'd (the last X players)
-    -kick them out of the room, maybe spectating
-
-*UI:
-    -highlight kicked players in red on the total ldb page
-    -custom KO winning screen
-    -position tracker
- */
-
- /*NOTES:
- -4th anm of CtrlRaceResult is row filling
- */
-
-
-

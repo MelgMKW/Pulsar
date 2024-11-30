@@ -5,6 +5,7 @@
 #include <core/egg/mem/ExpHeap.hpp>
 #include <MarioKartWii/System/Identifiers.hpp>
 #include <MarioKartWii/UI/Text/Text.hpp>
+#include <Extensions/LECODE/LECODEMgr.hpp>
 #include <Debug/Debug.hpp>
 #include <IO/IO.hpp>
 #include <Info.hpp>
@@ -12,9 +13,6 @@
 #include <Network/Network.hpp>
 #include <Network/MatchCommand.hpp>
 
-namespace LECODE {
-class Mgr;
-}//namespace LECODE
 
 namespace Pulsar {
 namespace KO {
@@ -105,7 +103,7 @@ public:
     TTMode ttMode;
 
     //LECODE data
-    LECODE::Mgr* lecodeMgr;
+    LECODE::Mgr lecodeMgr;
 
     //Modes
     KO::Mgr* koMgr;

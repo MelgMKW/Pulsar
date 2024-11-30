@@ -15,7 +15,7 @@ enum VoteState {
     SELECT_READY,
 };
 
-void AddGhostToOfflineVS();
+void AddGhostToVS();
 
 }//namespace OTT
 }//namespace Pulsar

@@ -9,9 +9,7 @@ namespace Pulsar {
 namespace UI {
 class ExpOptions : public Pages::Options {
 public:
-    ExpOptions() {
-        this->onButtonClickHandler.ptmf = &ExpOptions::ExpandedOnButtonClick;
-    }
+    ExpOptions();
     void OnInit() override;
 private:
     void ExpandedOnButtonClick(PushButton& pushButton, u32 hudSlotId);

@@ -10,6 +10,18 @@ RaceEndPage::RaceEndPage() {
     this->onButtonClickHandler.ptmf = &RaceEndPage::OnButtonClick;
 }
 
+void RaceEndPage::OnActivate() {
+    this->countdown.SetInitial(10.0f);
+    this->countdown.isActive = true;
+    this->countdownControl.AnimateCurrentCountDown();
+}
+
+void RaceEndPage::BeforeControlUpdate() {
+    this->countdown.Update();
+    this->countdownControl.AnimateCurrentCountDown();
+    if(this->duration == 10 * 60) this->OnButtonClick(this->buttons[0], 0);
+}
+
 int RaceEndPage::GetMessageBMG() const {
     return this->messageBMGId;
 }
@@ -44,6 +56,7 @@ void RaceEndPage::OnButtonClick(PushButton& button, u32 hudSlotId) {
             break;
     }
 }
+
 
 }//namespace KO
 }//namespace Pulsar

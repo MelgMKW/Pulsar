@@ -264,12 +264,12 @@ void SettingsPanel::SaveSettings(bool writeFile) {
         for(int i = 0; i < Settings::Params::radioCount[count]; ++i) {
             const u8 value = this->radioSettings[count][i];
             if(isPulsarPage) settings->SetSettingValue(static_cast<Settings::Type>(count), i, value);
-            else settings->SetUserSettingValue(static_cast<Settings::UserType>(count), i, value);
+            else settings->SetUserSettingValue(static_cast<Settings::UserType>(count - Settings::Params::pulsarPageCount), i, value);
         }
         for(int i = 0; i < Settings::Params::scrollerCount[count]; ++i) {
             const u8 value = this->scrollerSettings[count][i];
             if(isPulsarPage) settings->SetSettingValue(static_cast<Settings::Type>(count), i + Settings::Params::maxRadioCount, value);
-            else settings->SetUserSettingValue(static_cast<Settings::UserType>(count), i + Settings::Params::maxRadioCount, value);
+            else settings->SetUserSettingValue(static_cast<Settings::UserType>(count - Settings::Params::pulsarPageCount), i + Settings::Params::maxRadioCount, value);
         }
     }
     settings->Update();

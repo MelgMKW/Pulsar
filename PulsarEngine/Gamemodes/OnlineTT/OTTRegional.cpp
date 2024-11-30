@@ -9,25 +9,6 @@
 
 namespace Pulsar {
 namespace Network {
-void UnbindRLMC(lyt::Material* mat) {
-    for(ut::LinkList<lyt::AnimationLink, offsetof(lyt::AnimationLink, link)>::Iterator it = mat->animLinkList.GetBeginIter();
-        it != mat->animLinkList.GetEndIter(); ++it) {
-        if(!it->disable) {
-            lyt::AnimTransform* anim = it->animTrans;
-            u32 idx = it->idx;
-            const lyt::res::AnimationBlock* res = anim->resource;
-            u32 animOffsets = ut::ConvertOffsToPtr<u32>(res, res->animOffsetToAnimOffsetsArray)[idx];
-            const lyt::res::AnimationContent* animContent = ut::ConvertOffsToPtr<lyt::res::AnimationContent>(res, animOffsets);
-
-            const u32* animInfoOffsets = ut::ConvertOffsToPtr<u32>(animContent, sizeof(*animContent));
-            for(int i = 0; i < animContent->infoCount; ++i) {
-                const lyt::res::AnimationInfo* animInfo = ut::ConvertOffsToPtr<lyt::res::AnimationInfo>(animContent, animInfoOffsets[i]);
-                if(animInfo->kind == lyt::res::ANIMATIONTYPE_RLMC) mat->UnbindAnimation(anim);
-            }
-        }
-        if(mat->animLinkList.GetSize() == 0) break;
-    }
-}
 
 static const ut::Color colors[5] = { 0xffff00ff, 0x00ff00ff, 0xffa000ff, 0x00ffffff, 0x00a0ffff };
 
@@ -46,17 +27,7 @@ ut::Color GetFriendColor(u32 friendIdx) {
     }
 }
 
-void ResetMatColor(lyt::Pane* pane, u32 color) {
-    lyt::Material* mat = pane->material;
-    mat->tevColours[0].r = color;
-    mat->tevColours[0].g = color;
-    mat->tevColours[0].b = color;
-    mat->tevColours[0].a = 0;
-    mat->tevColours[1].r = 0xff;
-    mat->tevColours[1].g = 0xff;
-    mat->tevColours[1].b = 0xff;
-    mat->tevColours[1].a = 0xff;
-}
+
 
 //wiimmfi hook forces the u64 trick
 u64 AddModeToStatusData(const RKNet::StatusData* own) {
@@ -120,28 +91,28 @@ void WifiMenuButtonColor(LayoutUIControl& control, u32 friendIdx) {
     ut::Color color = GetFriendColor(friendIdx);
     lyt::TextBox* text = reinterpret_cast<lyt::TextBox*>(control.layout.GetPaneByName("text_meet"));
     text->color1[0] = color;
-    ResetMatColor(text, 0xa0);
-    UnbindRLMC(text->material);
+    UI::ResetMatColor(text, 0xa0a0a000);
+    UI::UnbindRLMC(text->material);
     lyt::Picture* smiley = reinterpret_cast<lyt::Picture*>(control.layout.GetPaneByName("nikoyellow_waku"));
     smiley->vertexColours[0] = color;
     smiley->vertexColours[1] = color;
     smiley->vertexColours[2] = color;
     smiley->vertexColours[3] = color;
-    ResetMatColor(smiley, 0);
-    UnbindRLMC(smiley->material);
+    UI::ResetMatColor(smiley, 0);
+    UI::UnbindRLMC(smiley->material);
     smiley = reinterpret_cast<lyt::Picture*>(control.layout.GetPaneByName("nikoyellow_light"));
     smiley->vertexColours[0] = color;
     smiley->vertexColours[1] = color;
     smiley->vertexColours[2] = color;
     smiley->vertexColours[3] = color;
-    ResetMatColor(smiley, 0xa0);
-    UnbindRLMC(smiley->material);
+    UI::ResetMatColor(smiley, 0xa0a0a000);
+    UI::UnbindRLMC(smiley->material);
     lyt::Material* border = reinterpret_cast<lyt::Window*>(control.layout.GetPaneByName("Window_00"))->frames->material;
     border->tevColours[0].r = color.r;
     border->tevColours[0].g = color.g;
     border->tevColours[0].b = color.b;
     border->tevColours[0].a = 0;
-    UnbindRLMC(border);
+    UI::UnbindRLMC(border);
 }
 
 void FriendStatusButtonColor(AnimationGroup& group, u32 idx, float frame) {
@@ -164,21 +135,21 @@ void FriendButtonWindowColor(FriendButton& button) {
     smiley->vertexColours[1] = color;
     smiley->vertexColours[2] = color;
     smiley->vertexColours[3] = color;
-    ResetMatColor(smiley, 0);
-    UnbindRLMC(smiley->material);
+    UI::ResetMatColor(smiley, 0);
+    UI::UnbindRLMC(smiley->material);
     smiley = reinterpret_cast<lyt::Picture*>(button.layout.GetPaneByName("nikoyellow_base"));
     smiley->vertexColours[0] = color;
     smiley->vertexColours[1] = color;
     smiley->vertexColours[2] = color;
     smiley->vertexColours[3] = color;
-    UnbindRLMC(smiley->material);
-    //ResetMatColor(smiley); don't do that as this is a light
+    UI::UnbindRLMC(smiley->material);
+    //UI::ResetMatColor(smiley); don't do that as this is a light
     lyt::Material* border = reinterpret_cast<lyt::Window*>(button.layout.GetPaneByName("Window_00"))->frames->material;
     border->tevColours[0].r = color.r;
     border->tevColours[0].g = color.g;
     border->tevColours[0].b = color.b;
     border->tevColours[0].a = 0;
-    UnbindRLMC(border);
+    UI::UnbindRLMC(border);
 }
 
 
@@ -221,8 +192,8 @@ void SetGlobeMsgColor(Pages::Globe::MessageWindow& msg, ut::Color color) {
         picture->vertexColours[2] = color;
         picture->vertexColours[3] = color;
         if(color == -1) continue;
-        ResetMatColor(picture, 0);
-        UnbindRLMC(picture->material);
+        UI::ResetMatColor(picture, 0);
+        UI::UnbindRLMC(picture->material);
         //lyt::Material* mat = picture->material;
         //mat->tevColours[1].r = color.r;
         //mat->tevColours[1].g = color.g;

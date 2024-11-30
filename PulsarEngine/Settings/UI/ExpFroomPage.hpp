@@ -16,13 +16,7 @@ namespace Pulsar {
 namespace UI {
 class ExpFroom : public Pages::FriendRoom {
 public:
-    ExpFroom() : areControlsHidden(false) {
-        this->onSettingsClickHandler.subject = this;
-        this->onSettingsClickHandler.ptmf = &ExpFroom::OnSettingsButtonClick;
-        this->onTeamsClickHandler.subject = this;
-        this->onTeamsClickHandler.ptmf = &ExpFroom::OnTeamsButtonClick;
-        this->onButtonSelectHandler.ptmf = &ExpFroom::ExtOnButtonSelect;
-    }
+    ExpFroom();
     void OnInit() override;
     void AfterControlUpdate() override;
     void OnResume() override;

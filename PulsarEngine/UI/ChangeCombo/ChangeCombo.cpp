@@ -158,6 +158,12 @@ kmCall(0x8062eaf8, AddChangeComboPages); //0x65
 kmCall(0x8062eb88, AddChangeComboPages); //0x66
 kmCall(0x8062ec18, AddChangeComboPages); //0x67
 
+ExpCharacterSelect::ExpCharacterSelect() : rouletteCounter(-1) {
+    randomizedCharIdx[0] = CHARACTER_NONE;
+    randomizedCharIdx[1] = CHARACTER_NONE;
+    rolledCharIdx[0] = CHARACTER_NONE;
+    rolledCharIdx[1] = CHARACTER_NONE;
+}
 
 void ExpCharacterSelect::BeforeControlUpdate() {
     //CtrlMenuCharacterSelect::ButtonDriver* array = this->ctrlMenuCharSelect.driverButtonsArray;
@@ -190,6 +196,8 @@ void ExpCharacterSelect::BeforeControlUpdate() {
 }
 //store correct buttons in sectionParams
 
+ExpBattleKartSelect::ExpBattleKartSelect() :selectedKart(-1) {}
+
 void ExpBattleKartSelect::BeforeControlUpdate() {
 
     const s32 kart = this->selectedKart;
@@ -204,6 +212,8 @@ void ExpBattleKartSelect::BeforeControlUpdate() {
         kartButton->HandleClick(0, -1);
     }
 }
+
+ExpKartSelect::ExpKartSelect() : randomizedKartPos(-1), rolledKartPos(-1), rouletteCounter(-1) {}
 
 void ExpKartSelect::BeforeControlUpdate() {
     s32 roulette = this->rouletteCounter;
@@ -237,6 +247,11 @@ void ExpKartSelect::BeforeControlUpdate() {
 ButtonMachine* ExpKartSelect::GetKartButton(u32 idx) const {
     const UIControl* globalButtonHolder = this->controlGroup.GetControl(2); //holds the 6 controls (6 rows) that each hold a pair of buttons
     return globalButtonHolder->childrenGroup.GetControl(idx / 2)->childrenGroup.GetControl<ButtonMachine>(idx % 2);
+}
+
+ExpMultiKartSelect::ExpMultiKartSelect() : rouletteCounter(-1) {
+    rolledKartPos[0] = -1;
+    rolledKartPos[1] = -1;
 }
 
 void ExpMultiKartSelect::BeforeControlUpdate() {

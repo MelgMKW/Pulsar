@@ -1,3 +1,42 @@
+·Updated to 2.0.1
+Remaining bugs (if you get them, PLEASE report how it happened):
+-At the end of a KO with HAW, Miis are sometimes wrong.
+-In OTT KO, the wrong track is sometimes selected (multiple rooms have been made, unable to replicate).
+-Packs crash if there is exactly 1 CT cup (unable to replicate).
+-Issues on large tracks with LEX files (like Plain of Atlantis) crashing on NTSC-J (might be fixed with the correct loader).
+-TT Replays can softlock on NTSC-J (might be fixed with the correct loader).
+-Custom Menu music (offline_bg.brstm) stops after some seconds by itself (unable to replicate).
+
+Creator Changes:
+-The wrong Loader.pul was included in the previous version, which caused NTSC-K to be completely broken and non-PAL versions to have various bugs such as cannons not working.
+-May have fixed the bug where invalid and unusable configs would get built.
+-Fixed experts not outputting correctly.
+-Fixed trophyCount ignoring CT experts.
+
+Engine Changes:
+-Host Always Wins now works in KO and OTT.
+-Fixed bad port causing the starting item to be missing on NTSC-U.
+-Fixed CT experts not loading and causing a hang.
+-Fixed the OTT Ghost toggle crashing the game when unselecting a ghost.
+-Fixed custom pack settings saving but not loading.
+-Fixed "Change Character" button in TTs crashing the game.
+-Fixed custom BRSTMs not working if using slot indexes.
+
+KO Changes:
+-Various rule changes:
+	-If races per KO is 1, KOs are position based.
+	-If it's more than 1, KOs are score based, and player points reset every time KOs occur.
+	-If players who should be KOd are tied, the race is played again (the players with less points than the tie are still KOd).
+	-Fixed the "Spectate/Quit" BMG and added a 10s countdown.
+-Fixed incorrect players being forced in spectating.
+-Team KO is no longer a thing.	
+	
+OTT Fixes:
+-Fixed the OTT regional button getting selected even when clicking Worldwide.
+
+Kamek Linker:
+-Massively improved debugging outputs (much faster, displays every function with the proper full name).
+
 ·Updated to 2.0.0
 DISCLAIMER:
 -This update is very large and there are only 2 people working on Pulsar as a whole. It is likely that a lot of bugs made it through, most notably in KO. Some may lead to crashes and as a consequence, large packs should be make the decision to use this update cautiously. Bug fixes will happen as reports come in and hopefully the engine gets stable quickly.

@@ -138,7 +138,7 @@ public:
     LayoutResources resources; //0x1c
     LayoutFont fonts[6]; //0x28
     char folderName[0x40]; //0x370
-    LayoutResourceAccessor* prev;
+    LayoutResourceAccessor* prev; //0x3b0
 }; //total size 0x3b4
 size_assert(LayoutResourceAccessor, 0x3b4);
 

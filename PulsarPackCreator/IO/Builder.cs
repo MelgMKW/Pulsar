@@ -33,7 +33,7 @@ namespace Pulsar_Pack_Creator.IO
             this.createXML = createXML;
 
             string[] info = Directory.GetFiles("input/", "*", SearchOption.AllDirectories);
-            inputFiles = info.Select(s => s.ToLowerInvariant()).ToArray();
+            inputFiles = info.Select(s => s.Replace('\\', '/').ToLowerInvariant()).ToArray();
         }
 
 
@@ -335,7 +335,8 @@ namespace Pulsar_Pack_Creator.IO
             for (uint i = 0; i < 4; i++)
             {
                 Cup.Track curTrack = cup.tracks[i];
-                WriteMainTrack(curTrack, cupIdx * 4 + i, curTrack.expertFileNames, isFake);
+                Result ret = WriteMainTrack(curTrack, cupIdx * 4 + i, curTrack.expertFileNames, isFake);
+                if (ret != Result.Success) return ret;
             }
             return Result.Success;
         }
@@ -851,7 +852,7 @@ namespace Pulsar_Pack_Creator.IO
                             {
                                 if (buildParams != BuildParams.ConfigOnly)
                                 {
-                                    string rkgName = $"input/{PulsarGame.ttModeFolders[mode, 1]}\\{expertName}.rkg".ToLowerInvariant();
+                                    string rkgName = $"input/{PulsarGame.ttModeFolders[mode, 1]}/{expertName}.rkg".ToLowerInvariant();
                                     if (!inputFiles.Contains(rkgName))
                                     {
                                         error = expertName;

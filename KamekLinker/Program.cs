@@ -2,8 +2,8 @@ using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Kamek
 {
@@ -21,7 +21,7 @@ namespace Kamek
             public int[] sizes = new int[4];
         }
         public static string _curVer;
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.WriteLine("Kamek 2.0 by Ninji/Ash Wolf - https://github.com/Treeki/Kamek");
             Console.WriteLine();
@@ -39,18 +39,21 @@ namespace Kamek
             Debug debug = null;
             var selectedVersions = new List<String>();
 
-            if (args.Contains("-debug"))
+            uint debugStartAddr = 0;
+            string debugMapPath = "";
+            string debugReadElfPath = "";
+            foreach (string arg in args)
             {
-
-                string mapPath = args.First(x => x.StartsWith("-map=")).Substring(5);
-                string readElfPath = args.First(x => x.StartsWith("-readelf=")).Substring(9);
-                if (mapPath != null && readElfPath != null)
-                {
-                    debug = new Debug(mapPath, readElfPath);
-                }
-
+                if (arg.StartsWith("-map=")) debugMapPath = arg.Substring(5);
+                if (arg.StartsWith("-readelf=")) debugReadElfPath = arg.Substring(9);
+                if (arg.StartsWith("-debug=")) debugStartAddr = Convert.ToUInt32(arg.Substring(7), 16);
             }
-            foreach (var arg in args)
+            if (debugStartAddr != 0 && debugMapPath != null && debugReadElfPath != null)
+            {
+                debug = new Debug(debugMapPath, debugReadElfPath, debugStartAddr);
+            }
+
+            foreach (string arg in args)
             {
 
                 if (arg.StartsWith("-"))
@@ -63,7 +66,7 @@ namespace Kamek
 
                     if (arg == "-dynamic")
                         baseAddress = null;
-                    else if (arg == "-debug" || arg.StartsWith("-map=") || arg.StartsWith("-readelf=")) { }
+                    else if (arg.StartsWith("-debug") || arg.StartsWith("-map=") || arg.StartsWith("-readelf=")) { }
                     else if (arg.StartsWith("-static=0x"))
                         baseAddress = uint.Parse(arg.Substring(10), System.Globalization.NumberStyles.HexNumber);
                     else if (arg.StartsWith("-output-kamek="))
@@ -103,7 +106,7 @@ namespace Kamek
 
                     if (debug != null)
                     {
-                        //debug.AnalyzeFile(arg);
+                        debug.AnalyzeFile(arg, modules.Count);
                     }
                     using (var stream = new FileStream(arg, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
@@ -112,7 +115,7 @@ namespace Kamek
 
                 }
             }
-            if (debug != null) debug.Save();
+
 
             // We need a default VersionList for the loop later
             if (versions == null)
@@ -155,6 +158,7 @@ namespace Kamek
                     Console.WriteLine("add the $KV$ placeholder to your output paths, or use -select-version=.. to only build one version");
                     return;
                 }
+
             }
 
 
@@ -230,6 +234,10 @@ namespace Kamek
             {
                 combined.InsertRange(0, header.ToBytes());
                 File.WriteAllBytes(outputCombinedPath, combined.ToArray());
+            }
+            if (debug != null)
+            {
+                debug.Save();
             }
 
         }

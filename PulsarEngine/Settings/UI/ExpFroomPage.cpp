@@ -9,6 +9,15 @@ namespace Pulsar {
 namespace UI {
 
 kmWrite32(0x805d8260, 0x60000000); //nop initcontrolgroup
+
+ExpFroom::ExpFroom() : areControlsHidden(false) {
+    this->onSettingsClickHandler.subject = this;
+    this->onSettingsClickHandler.ptmf = &ExpFroom::OnSettingsButtonClick;
+    this->onTeamsClickHandler.subject = this;
+    this->onTeamsClickHandler.ptmf = &ExpFroom::OnTeamsButtonClick;
+    this->onButtonSelectHandler.ptmf = &ExpFroom::ExtOnButtonSelect;
+}
+
 void ExpFroom::OnInit() {
 
     this->InitControlGroup(7); //5 usually + settings button + teams button

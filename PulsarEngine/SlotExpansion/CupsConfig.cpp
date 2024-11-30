@@ -246,19 +246,6 @@ PulsarId CupsConfig::ConvertTrack_IdxToPulsarId(u32 idx) const {
     return static_cast<PulsarId>(idx);
 }
 
-/*
-bool CupsConfig::IsRegsSituation() {
-    const RKNet::Controller* rkNet = RKNet::Controller::sInstance;
-    if(rkNet->connectionState == RKNet::CONNECTIONSTATE_SHUTDOWN) return false;
-    switch(rkNet->roomType) {
-        case(RKNet::ROOMTYPE_VS_REGIONAL):
-        case(RKNet::ROOMTYPE_JOINING_REGIONAL): return false;
-        case(RKNet::ROOMTYPE_FROOM_HOST):
-        case(RKNet::ROOMTYPE_FROOM_NONHOST): return IsBattle();
-        default: return true;
-    }
-}
-*/
 
 const u8 CupsConfig::idToCourseId[32] ={
     0x08, 0x01, 0x02, 0x04, //mushroom cup

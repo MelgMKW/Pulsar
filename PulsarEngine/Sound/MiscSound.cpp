@@ -50,14 +50,13 @@ static void DisableAndChangeBGMusic(Audio::SinglePlayer& singlePlayer, u32 sound
                     soundId = SOUND_ID_KC;
                     singlePlayer.PrepareSound(soundId, false); //needed so that the streamsMgr has its internal handle set
                 }
-
             }
         }
         singlePlayer.PlaySound(soundId, 0);
     }
 }
 kmCall(0x806fa664, DisableAndChangeBGMusic);
-
+kmWrite32(0x8085a674, 0x60000000); //no use in preparing the TT jingle if you're going to the change character menu
 static snd::SoundArchive::SoundType PatchPrepareStreamsBG(snd::SoundArchive& archive, u32 soundId) {
 
     if(soundId == SOUND_ID_KC) {

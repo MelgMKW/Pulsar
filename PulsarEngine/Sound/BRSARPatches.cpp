@@ -19,22 +19,22 @@ bool LoadBRSTMVolumeAndFixTrackCount(snd::detail::StrmFileLoader& fileLoader, sn
     asm(subi sound, r29, 0x100);
 
     u8 volume = *reinterpret_cast<const u8*>(ut::AddU32ToPtr(fileLoader.fileReader.header, 0x3F));
-    if(volume != 0) {
+    if (volume != 0) {
 
         const u32 maxVolume = 0x7F;
-        if(volume > maxVolume) volume = maxVolume;
+        if (volume > maxVolume) volume = maxVolume;
         sound->mainOutVolume = (float)volume / (float)maxVolume;
     }
     bool ret = fileLoader.ReadStrmInfo(&info);
-    if(ret) {
+    if (ret) {
         //sound->strmPlayer.channelsNeeded = ut::Max(2U, ut::Min(sound->strmPlayer.channelsNeeded, info.channelCount));
         //sound->strmPlayer.trackCount = ut::Max(1U, ut::Min(sound->strmPlayer.trackCount, info.channelCount / 2));
 
         snd::detail::StrmPlayer& player = sound->strmPlayer;
         u32 brsarChannel = player.channelsNeeded;
         u32 actual = ut::Min(sound->strmPlayer.channelsNeeded, info.channelCount);
-        for(int index = actual; index < brsarChannel; ++index) {
-            if(player.channels[index].bufferAddress == nullptr) continue;
+        for (int index = actual; index < brsarChannel; ++index) {
+            if (player.channels[index].bufferAddress == nullptr) continue;
             player.strmBufferPool->Free(player.channels[index].bufferAddress);
             player.channels[index].bufferAddress = nullptr;
         }

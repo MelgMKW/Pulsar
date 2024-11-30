@@ -9,6 +9,11 @@
 //spectating.hpp handles the spectating side of things
 namespace Pulsar {
 namespace KO {
+enum Status {
+    NORMAL,
+    TIE,
+    KOD,
+};
 class Mgr {
 public:
     struct Stats {
@@ -43,6 +48,10 @@ public:
             stats.boolCountArray = 0;
             this->posTrackerAnmFrames[i] = 0;
         }
+        for(int i = 0; i < 12; ++i) {
+            if(this->status[i][0] == TIE) this->status[i][0] = NORMAL;
+            if(this->status[i][1] == TIE) this->status[i][1] = NORMAL;
+        }
 
     }
     static void Update(); //static because RaceFrameHook
@@ -53,29 +62,43 @@ public:
     SectionId GetSectionAfterKO(SectionId defaultId) const;
     u32 GetAidAndSlotFromPlayerId(u8 playerId) const;
     u8 GetBaseLocalPlayerCount() const { return this->baseLocPlayerCount; }
+
+    Status GetAidStatus(u8 aid, u8 hudslotId) const {
+        return static_cast<Status>(this->status[aid][hudslotId]);
+    }
+    Status GetPlayerStatus(u8 playerId) const {
+        u32 aidSlot = this->GetAidAndSlotFromPlayerId(playerId);
+        return this->GetAidStatus(aidSlot & 0xFFFF, aidSlot >> 16);
+    }
     bool IsKOdAid(u8 aid, u8 hudslotId) const {
-        return this->isKOd[aid][hudslotId];
+        return GetAidStatus(aid, hudslotId) == KOD;
     }
     bool IsKOdPlayerId(u8 playerId) const {
-        u32 aidSlot = this->GetAidAndSlotFromPlayerId(playerId);
-        return this->IsKOdAid(aidSlot & 0xFFFF, aidSlot >> 16);
+        return GetPlayerStatus(playerId) == KOD;
     }
-    void SetKOd(u8 playerId) {
-        u32 aidSlot = this->GetAidAndSlotFromPlayerId(playerId);
-        this->isKOd[aidSlot & 0xFFFF][aidSlot >> 16] = true;
+
+    void SetKOd(u8 playerId) { this->SetStatus(playerId, KOD); }
+    void SetTie(u8 playerId, u8 playerId2) {
+        this->SetStatus(playerId, TIE);
+        this->SetStatus(playerId2, TIE);
     }
-    bool GetWouldBeKnockedOut(u8 hudSlotId) const { return this->wouldBeOut[hudSlotId]; }
+    bool GetWouldBeKnockedOut(u8 playerId) const { return this->wouldBeOut[playerId]; }
+
     bool GetIsSwapped() const { return this->hasSwapped; }
     void PatchAids(RKNet::ControllerSub& sub) const;
-    PageId KickPlayersOut();
+    PageId KickPlayersOut(PageId defaultId);
     void SwapControllersAndUI();
 private:
-    bool CalcWouldBeKnockedOut(u8 playerId); //to be used DURING A RACE, returns true if playerId would be out if the race ended NOW
-    bool isKOd[12][2]; //TO BE USED WITH AIDS
+    void SetStatus(u8 playerId, Status status) {
+        u32 aidSlot = this->GetAidAndSlotFromPlayerId(playerId);
+        this->status[aidSlot & 0xFFFF][aidSlot >> 16] = status;
+    }
+    void CalcWouldBeKnockedOut(); //to be used DURING A RACE, returns true if playerId would be out if the race ended NOW
+    u8 status[12][2]; //TO BE USED WITH AIDS, use enum for meaning
     u8 baseLocPlayerCount; //playerCount when the GP started
     bool hasSwapped; //controllers
     //InRaceUpdate
-    bool wouldBeOut[2];
+    bool wouldBeOut[12];
 public:
     //Settings:
     u8 racesPerKO;

@@ -64,6 +64,7 @@ public:
     bool hasReceivedHostTrack[12]; //for the host to send confirmation once everyone has sent their confirmation
 
 private:
+    void InitExtraControls(u32 gameControlCount);
     PtmfHolder_2A<ChooseNextTrack, void, SheetSelectControl&, u32> onRightArrowSelectHandler;
     PtmfHolder_2A<ChooseNextTrack, void, SheetSelectControl&, u32> onLeftArrowSelectHandler;
     SheetSelectControlScaleFade arrows;
@@ -71,8 +72,7 @@ private:
     CountDown countdown;
     u32 curPageIdx;
 
-    friend void AddArrowsToChooseNext(RaceMenu& page, u32 controlCount);
-
+    friend void RaceMenuExtraControls(Pages::RaceMenu& page, u32 gameControlCount);
 };
 }//namespace UI
 }//namespace Pulsar

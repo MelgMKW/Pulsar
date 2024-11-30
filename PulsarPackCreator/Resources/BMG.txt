@@ -107,6 +107,7 @@
   2869  = Quadruple Elimination - Race \z{a02,1000000000}
   286a  = Spectate
   286b  = Quit
+  286c  = Tied!
   2900	= Settings
   2901	= Modify your settings.
   2902	= \z{800,46}Randomize\n\z{800,46}Combo

@@ -85,7 +85,23 @@ void WUP028Manager::CustomPADRead(PAD::Status* status) {
         if (OS::TicksToMilliseconds(OS::GetTime() - this->lastDataWrite) > GCN_TIMEOUT_MS) {
             for (int i = 0; i < 4; i++) this->status[i].error = -1;
         }
-        for (int i = 0; i < 4; i++) status[i] = this->status[i];
+        for (int i = 0; i < 4; i++) {
+            {
+                const u32 compareVal = 3;
+                if (
+                    ut::Abs(status[i].triggerL - this->status[i].triggerL) > compareVal ||
+                    ut::Abs(status[i].triggerR - this->status[i].triggerR) > compareVal ||
+                    ut::Abs(status[i].stickX - this->status[i].stickX) > compareVal ||
+                    ut::Abs(status[i].stickY - this->status[i].stickY) > compareVal ||
+                    ut::Abs(status[i].cStickX - this->status[i].cStickX) > compareVal ||
+                    ut::Abs(status[i].cStickY - this->status[i].cStickY) > compareVal ||
+                    status[i].buttons != this->status[i].buttons) {
+                    VI::ResetSIIdle();
+                }
+            }
+
+            status[i] = this->status[i];
+        }
     }
     else PAD::Read(status);
 }

@@ -29,7 +29,7 @@ enum Error {
 struct Status {
     u16 buttons; //bitfield of Buttons enum
     s8 stickX; //0x2 -128 to 127
-    s8 stickY; //0x3 -127 to 127
+    s8 stickY; //0x3 -128 to 127
     s8 cStickX; //0x4
     s8 cStickY; //0x5
     u8 triggerL;

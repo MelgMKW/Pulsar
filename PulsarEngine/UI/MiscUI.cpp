@@ -7,6 +7,7 @@
 #include <PulsarSystem.hpp>
 #include <AutoTrackSelect/ChooseNextTrack.hpp>
 #include <Gamemodes/KO/KOMgr.hpp>
+#include <Gamemodes/KO/KORaceEndPage.hpp>
 #include <Debug/Debug.hpp>
 #include <UI/UI.hpp>
 
@@ -26,8 +27,8 @@ static PageId AfterWifiResults(PageId id) {
     const SectionMgr* sectionMgr = SectionMgr::sInstance;
     const System* system = System::sInstance;
 
-    if (system->IsContext(PULSAR_MODE_KO)) id = system->koMgr->KickPlayersOut(); //return KO::RaceEndPage with the choice to spectate if the local players are out
-    else if (system->IsContext(PULSAR_HAW)) {
+    if (system->IsContext(PULSAR_MODE_KO)) id = system->koMgr->KickPlayersOut(id); //return KO::RaceEndPage with the choice to spectate if the local players are out 
+    if (id != static_cast<PageId>(KO::RaceEndPage::id) && system->IsContext(PULSAR_HAW)) {
         ChooseNextTrack* chooseNext = ExpSection::GetSection()->GetPulPage<ChooseNextTrack>();
         if (chooseNext != nullptr) id = chooseNext->GetPageAfterWifiResults(id);
     }
@@ -130,6 +131,7 @@ u8 ModifyCheckRankings() {
 }
 kmCall(0x8085b4bc, ModifyCheckRankings);
 kmPatchExitPoint(ModifyCheckRankings, 0x8085bbe0);
+
 
 }//namespace UI
 }//namespace Pulsar

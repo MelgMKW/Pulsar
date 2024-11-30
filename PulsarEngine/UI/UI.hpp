@@ -8,7 +8,8 @@ namespace UI {
 
 void ChangeImage(LayoutUIControl& control, const char* paneName, const char* tplName);
 const wchar_t* GetCustomMsg(s32 bmgId);
-
+void UnbindRLMC(lyt::Material* mat);
+void ResetMatColor(lyt::Pane* pane, u32 color);
 /*Expanded pages: (do not necessitate a PulPageId)
 -ExpGhostSelect
 -ExpFroom
@@ -169,7 +170,7 @@ enum BMG {
     BMG_KO_ELIM_START_QUADRUPLE = 0x2869,
     BMG_KO_RACEEND_SPECTATE = 0x286a,
     BMG_KO_RACEEND_QUIT = 0x286b,
-
+    BMG_KO_TIE = 0x286c,
 
     BMG_SETTINGSBUTTON_BOTTOM = 0x2901,
     BMG_TEAMS_BOTTOM = 0x2910,

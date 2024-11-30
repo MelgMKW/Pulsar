@@ -82,7 +82,7 @@ public:
     u8 alpha; //0xb8
     u8 effectiveAlpha;
     u8 origin;
-    u8 flag; //0xbb visible, infleunced alpha, location adjust, max
+    u8 flag; //0xbb visible, influenced alpha, location adjust, max
 
     char name[0x11]; //0xbc
     char userdata[9]; //0xcd

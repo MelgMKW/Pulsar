@@ -27,11 +27,11 @@ static void BeforeROOMSend(RKNet::PacketHolder<PulROOM>* packetHolder, PulROOM* 
     const RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
     Pulsar::System* system = Pulsar::System::sInstance;
     PulROOM* destPacket = packetHolder->packet;
-    if(destPacket->messageType == 1 && sub.localAid == sub.hostAid) {
+    if (destPacket->messageType == 1 && sub.localAid == sub.hostAid) {
         packetHolder->packetSize += sizeof(PulROOM) - sizeof(RKNet::ROOMPacket); //this has been changed by copy so it's safe to do this
         const Settings::Mgr& settings = Settings::Mgr::Get();
 
-        const u8 koSetting = settings.GetSettingValue(Settings::SETTINGSTYPE_KO, SETTINGKO_ENABLED);
+        const u8 koSetting = settings.GetSettingValue(Settings::SETTINGSTYPE_KO, SETTINGKO_ENABLED) && destPacket->message == 0; //KO only enabled for normal GPs
         //invert mii setting as the first button is enabled, not disabled, so a value of 1 indicates disabled
         const u8 ottOnline = settings.GetSettingValue(Settings::SETTINGSTYPE_OTT, SETTINGOTT_ONLINE);
         destPacket->hostSystemContext = (ottOnline != OTTSETTING_OFFLINE_DISABLED) << PULSAR_MODE_OTT //ott
@@ -42,28 +42,28 @@ static void BeforeROOMSend(RKNet::PacketHolder<PulROOM>* packetHolder, PulROOM* 
             | settings.GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_RADIO_HOSTWINS) << PULSAR_HAW;
 
         u8 raceCount;
-        if(koSetting == KOSETTING_ENABLED) raceCount = 0xFE;
-        else switch(settings.GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_SCROLL_GP_RACES)) {
-            case(0x2):
-                raceCount = 7;
-                break;
-            case(0x4):
-                raceCount = 11;
-                break;
-            case(0x6):
-                raceCount = 23;
-                break;
-            case(0x8):
-                raceCount = 31;
-                break;
-            case(0xA):
-                raceCount = 63;
-                break;
-            case(0xC):
-                raceCount = 1;
-                break;
-            default:
-                raceCount = 3;
+        if (koSetting == KOSETTING_ENABLED) raceCount = 0xFE;
+        else switch (settings.GetSettingValue(Settings::SETTINGSTYPE_HOST, SETTINGHOST_SCROLL_GP_RACES)) {
+        case(0x2):
+            raceCount = 7;
+            break;
+        case(0x4):
+            raceCount = 11;
+            break;
+        case(0x6):
+            raceCount = 23;
+            break;
+        case(0x8):
+            raceCount = 31;
+            break;
+        case(0xA):
+            raceCount = 63;
+            break;
+        case(0xC):
+            raceCount = 1;
+            break;
+        default:
+            raceCount = 3;
         }
         destPacket->raceCount = raceCount;
         ConvertROOMPacketToData(*destPacket);
@@ -78,13 +78,13 @@ static void AfterROOMReception(const RKNet::PacketHolder<PulROOM>* packetHolder,
     const RKNet::Controller* controller = RKNet::Controller::sInstance;
     const RKNet::ControllerSub& sub = controller->subs[controller->currentSub];
     //START msg sent by the host, size check should always be guaranteed in theory
-    if(src.messageType == 1 && sub.localAid != sub.hostAid && packetHolder->packetSize == sizeof(PulROOM)) {
+    if (src.messageType == 1 && sub.localAid != sub.hostAid && packetHolder->packetSize == sizeof(PulROOM)) {
         ConvertROOMPacketToData(src);
 
         //Also exit the settings page to prevent weird graphical artefacts
         Page* topPage = SectionMgr::sInstance->curSection->GetTopLayerPage();
         PageId topId = topPage->pageId;
-        if(topId == UI::SettingsPanel::id) {
+        if (topId == UI::SettingsPanel::id) {
             UI::SettingsPanel* panel = static_cast<UI::SettingsPanel*>(topPage);
             panel->OnBackPress(0);
         }

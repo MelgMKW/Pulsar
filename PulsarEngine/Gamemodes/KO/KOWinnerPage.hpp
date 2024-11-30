@@ -15,12 +15,7 @@ public:
         NO_STATS_TIME_ELAPSED,
     };
     static const UI::PulPageId id = UI::PULPAGE_KOWINNER;
-    WinnerPage() {
-        status = WAITING_STATS;
-        timeRecvStats = 0;
-        onClickHandler.subject = this;
-        onClickHandler.ptmf = &WinnerPage::HandleClick;
-    }
+    WinnerPage();
     PageId GetNextPage() const override { return PAGE_NONE;/*PAGE_WWRACEEND_WAIT;*/ }
     void OnInit() override;
     void OnDeactivate() override;

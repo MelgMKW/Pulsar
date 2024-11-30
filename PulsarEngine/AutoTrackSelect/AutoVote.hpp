@@ -11,7 +11,7 @@ namespace UI {
 class AutoVote : public Pages::SELECTStageMgr {
 public:
 
-    AutoVote() : readyDuration(0) {}
+    AutoVote();
     void OnInit() override;
     void OnDispose() override;
     void OnActivate() override;
